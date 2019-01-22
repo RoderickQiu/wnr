@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- 解决electron环境下jQuery缺失问题 -->
+    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script>
+        var $_GET = (function () {
+            var url = window.document.location.href.toString();
+            var u = url.split("?");
+            if (typeof (u[1]) == "string") {
+                u = u[1].split("&");
+                var get = {};
+                for (var i in u) {
+                    var j = u[i].split("=");
+                    get[j[0]] = j[1];
+                }
+                return get;
+            } else {
+                return {};
+            }
+        })();
+        alert($_GET['title'] + $_GET['work-time'] + $_GET['rest-time'] + $_GET['loop']);
+    </script>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="controller">
+            <a href="javascript:window.close()" class="small rest">X</a>
+        </div>
+        <div id="timer" class="justify-content-center">
+            timer
+        </div>
+    </div>
+</body>
+
+</html>

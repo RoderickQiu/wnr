@@ -1,0 +1,39 @@
+{
+  "name": "wnr",
+  "version": "0.1.0",
+  "description": "The name is a abbr of \"Work & Rest\". It's a timer app with strong expansibility for computers.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "winx64": "electron-builder --win --x64"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoderickQiu/wnr.git"
+  },
+  "author": "RoderickQiu",
+  "license": "MIT",
+  "homepage": "https://github.com/RoderickQiu/wnr/blob/master/README.md",
+  "helppage": "https://github.com/RoderickQiu/wnr/blob/master/README.md",
+  "appId": "com.scrisstudio.wnr",
+  "copyright": "© Roderick Qiu",
+  "productName": "wnr",
+  "dependencies": {
+    "electron-store": "^2.0.0",
+    "fs": ">0.0.0",
+    "cheerio": "^1.0.0-rc.2",
+    "request": "^2.81.0"
+  },
+  "devDependencies": {
+    "electron": "^4.0.1",
+    "electron-builder": "^20.38.4"
+  },
+  "build": {
+    "win": {
+      "target": [
+        "zip"
+      ],
+      "icon": "res/icons/iconWin.ico"
+    }
+  }
+}

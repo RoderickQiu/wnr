@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- 解决electron环境下jQuery缺失问题 -->
+    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script>
+        function keydown(e) {
+            var currKey = 0, e = e || event;
+            if (e.keyCode == 13) {
+                window.location.href = "timer.html?title="+$("#title").val()+"&work-time="+$("#work-time").val()+"&rest-time="+$("#rest-time").val()+"&loop="+$("#loop").val();
+            }
+        }
+        document.onkeydown = keydown;    
+    </script>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="controller">
+            <a href="javascript:window.close()" class="small rest">X</a>
+        </div>
+        <div id="set" class="justify-content-center">
+            <form action="timer.html" method="GET">
+                <input name="title" id="title" placeholder="please enter a title" type="text" class="small" /><br /><br />
+                <input name="work-time" id="work-time" placeholder="work for" type="text" class="work lead" style="ime-mode:Disabled"
+                    autofocus required /><br /><br />
+                <input name="rest-time" id="rest-time" placeholder="then rest for" type="text" class="rest lead" style="ime-mode:Disabled"
+                    required /><br /><br />
+                <input name="loop" id="loop" placeholder="loop for how many times" type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
+                    style="ime-mode:Disabled" class="small" /><br /><!-- control that only numbers are OK -->
+            </form>
+
+        </div>
+    </div>
+</body>
+
+</html>
