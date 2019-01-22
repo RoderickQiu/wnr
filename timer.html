@@ -14,6 +14,17 @@
 </head>
 
 <body>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="controller">
+            <a href="javascript:window.close()" class="small work">X</a>
+        </div>
+        <div id="timer" class="justify-content-center">
+            <div id="title" class="text-center h3">Title</div>
+            <div id="work-rest" class="text-center work small">Working</div>
+            <div id="now-timing" class="h1 work">00:00:00</div>
+        </div>
+    </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
+
     <script>
         var $_GET = (function () {
             var url = window.document.location.href.toString();
@@ -30,16 +41,12 @@
                 return {};
             }
         })();
-        alert($_GET['title'] + $_GET['work-time'] + $_GET['rest-time'] + $_GET['loop']);
+        var title = decodeURI($_GET['title']);
+        var worktime = decodeURI($_GET['work-time']);
+        var resttime = decodeURI($_GET['rest-time']);
+        var loop = decodeURI($_GET['loop']);
+        if (title && title != "undefined") document.getElementById("title").innerHTML = title;
     </script>
-    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
-        <div id="controller">
-            <a href="javascript:window.close()" class="small rest">X</a>
-        </div>
-        <div id="timer" class="justify-content-center">
-            timer
-        </div>
-    </div>
 </body>
 
 </html>
