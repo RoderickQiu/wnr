@@ -18,7 +18,7 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
-                window.location.href = "timer.html?title="+$("#title").val()+"&work-time="+$("#work-time").val()+"&rest-time="+$("#rest-time").val()+"&loop="+$("#loop").val();
+                window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val();
             }
         }
         document.onkeydown = keydown;    
@@ -30,12 +30,12 @@
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
                 <input name="title" id="title" placeholder="please enter a title" type="text" class="small" /><br /><br />
-                <input name="work-time" id="work-time" placeholder="work for" type="text" class="work lead" style="ime-mode:Disabled"
-                    autofocus required /><br /><br />
-                <input name="rest-time" id="rest-time" placeholder="then rest for" type="text" class="rest lead" style="ime-mode:Disabled"
-                    required /><br /><br />
+                <input name="work-time" id="work-time" placeholder="work for (minutes)" type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
+                    style="ime-mode:Disabled" class="work lead" autofocus required /><br /><br />
+                <input name="rest-time" id="rest-time" placeholder="then rest for (minutes)" type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
+                    style="ime-mode:Disabled" class="rest lead" required /><br /><br />
                 <input name="loop" id="loop" placeholder="loop for how many times" type="number" onkeypress="return (/[\d]/.test(String.fromCharCode(event.keyCode)))"
-                    style="ime-mode:Disabled" class="small" /><br /><!-- control that only numbers are OK -->
+                    style="ime-mode:Disabled" class="small" required /><br /><!-- control that only numbers are OK -->
             </form>
 
         </div>

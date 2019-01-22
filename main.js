@@ -1,11 +1,10 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require('electron')
-const Store = require('electron-store');
-const store = new Store();//设置数据读取
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
 let tray = null
+
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
 
 function createWindow() {
     // 创建浏览器窗口。
@@ -63,5 +62,15 @@ app.on('activate', () => {
     // 通常在应用程序中重新创建一个窗口。
     if (win === null) {
         createWindow()
+    }
+})
+
+ipcMain.on('warninggiver', function () {
+    if (win != null) {
+        win.show();
+        win.moveTop();// 强制移到最顶层
+        win.center();
+        win.once('focus', () => win.flashFrame(false));
+        win.flashFrame(true);// 在Windows平台上闪烁任务栏按钮
     }
 })

@@ -16,15 +16,18 @@
 <body>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
+            <a href="index.html" class="small work">Back</a>&nbsp;
             <a href="javascript:window.close()" class="small work">X</a>
         </div>
         <div id="timer" class="justify-content-center">
-            <div id="title" class="text-center h3">Title</div>
+            <div id="title" class="text-center h3"></div>
             <div id="work-rest" class="text-center work small">Working</div>
-            <div id="now-timing" class="h1 work">00:00:00</div>
+            <div id="now-timing" class="text-center h1 work"></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
-
+    <audio id="beeper">
+        <source src="res/sound/beep.wav" />
+    </audio>
     <script>
         var $_GET = (function () {
             var url = window.document.location.href.toString();
@@ -42,10 +45,63 @@
             }
         })();
         var title = decodeURI($_GET['title']);
-        var worktime = decodeURI($_GET['work-time']);
-        var resttime = decodeURI($_GET['rest-time']);
+        var worktime = decodeURI($_GET['work-time']) * 60000;
+        var resttime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
-        if (title && title != "undefined") document.getElementById("title").innerHTML = title;
+        if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
+            $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='text-primary'>Back</a></p>");
+        } else {
+            if (title && title != "undefined") $("#title").html(title);
+            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0;//method: 1-work / 2-rest, times: time-reset times
+            starttime = new Date().getTime();
+            if (loop != 0) int = self.setInterval("clock()", 10);
+            else ender();
+            function warninggiver() {
+                var ipc = require('electron').ipcRenderer;
+                ipc.send('warninggiver');
+                document.getElementById("beeper").play();
+            }
+            function themechanger() {
+                warninggiver();
+                if (method == 1) {
+                    $(".work").addClass("rest");
+                    $(".work").removeClass("work");
+                    $("#work-rest").text("Resting");
+                    method = 2;
+                } else {
+                    $(".rest").addClass("work");
+                    $(".rest").removeClass("rest");
+                    $("#work-rest").text("Working");
+                    method = 1;
+                }
+            }
+            function ender() {
+                window.clearInterval(int);
+                $("#work-rest").text("");
+                $("#now-timing").text("End!");
+                warninggiver();
+            }
+            function clock() {
+                t = new Date().getTime();
+                if (method == 1) seconds = parseInt((worktime - t + starttime) / 1000);
+                else seconds = parseInt((resttime - t + starttime) / 1000);
+                if (seconds > 0) {
+                    hours = parseInt(seconds / 3600);
+                    minutes = parseInt((seconds - hours * 3600) / 60);
+                    seconds = seconds - hours * 3600 - minutes * 60;
+                    $("#now-timing").text(hours + "h " + minutes + "min " + seconds + "s");
+                } else {
+                    times++;
+                    if (times < loop * 2) {
+                        starttime = new Date().getTime();
+                        themechanger();
+                        int = self.setInterval("clock()", 10);
+                    } else if (times == loop * 2) {
+                        ender();
+                    }
+                }
+            }
+        }
     </script>
 </body>
 
