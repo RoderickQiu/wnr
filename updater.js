@@ -17,7 +17,7 @@ function updatechecker(method) {
             } else if (method == 2) {// manually
                 ipc.send("noupdateavailable");
             }
-            if (method == 2) document.getElementById("manually").innerText = "Manually Check for Update";
+            if (method == 2) document.getElementById("manually").innerText = "Manually check for update";
         }
     });
     store.set("last-check-time", nowtime);

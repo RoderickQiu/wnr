@@ -30,6 +30,7 @@
     <audio id="allend" src="res/sound/allend.wav"></audio>
     <audio id="timeend" src="res/sound/timeend.wav"></audio>
     <script>
+        var ipc = require('electron').ipcRenderer;
         const Store = require('electron-store');
         const store = new Store();
         var $_GET = (function () {
@@ -75,7 +76,6 @@
                 }
             }
             function warninggiver(isend) {
-                var ipc = require('electron').ipcRenderer;
                 if (isend == 0) ipc.send('warninggiver-allend');
                 else if (isend == 1) ipc.send('warninggiver-workend');
                 else ipc.send('warninggiver-restend');
