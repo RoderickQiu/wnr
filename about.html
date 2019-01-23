@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>About</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
+    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="controller">
+            <a href="javascript:window.close()" class="small rest">X</a>
+        </div>
+        <div id="about">
+            <p class="lead rest">wnr</p>
+            <p class="small text-muted">
+                <script>document.write("v" + require("./package.json").version)</script>
+            </p>
+            <p class="small">
+                <a href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">Homepage</a>&nbsp;|&nbsp;
+                <a href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">GitHub</a>&nbsp;|&nbsp;
+                <a href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')">Issues</a>&nbsp;|&nbsp;
+                <a href="javascript:require('electron').shell.openExternal(require('./package.json').helppage)">Help</a>
+            </p>
+            <hr />
+            <p class="small">
+                &copy; 2019
+                <a href="javascript:require('electron').shell.openExternal('https://roderickqiu.scris.top/')" class="rest">Roderick
+                    Qiu</a>.
+            </p>
+        </div>
+    </div>
+</body>
+
+</html>

@@ -6,7 +6,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- 解决electron环境下jQuery缺失问题 -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -23,6 +23,7 @@
             <div id="title" class="text-center h3"></div>
             <div id="work-rest" class="text-center work small">Working</div>
             <div id="now-timing" class="text-center h1 work"></div>
+            <div class="text-center small"><a id="stopper" href="javascript:stopper()" class="text-black-50">Stop</a></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <audio id="beeper">
@@ -52,10 +53,23 @@
             $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='text-primary'>Back</a></p>");
         } else {
             if (title && title != "undefined") $("#title").html(title);
-            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0;//method: 1-work / 2-rest, times: time-reset times
+            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isClockWorking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
             if (loop != 0) int = self.setInterval("clock()", 10);
             else ender();
+            function stopper() {
+                if (isClockWorking) {
+                    window.clearInterval(int);
+                    $("#stopper").text("Resume");
+                    isClockWorking = 0;//to stop
+                } else {
+                    if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                    else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                    int = self.setInterval("clock()", 10);
+                    $("#stopper").text("Stop");
+                    isClockWorking = 1;//to restart
+                }
+            }
             function warninggiver() {
                 var ipc = require('electron').ipcRenderer;
                 ipc.send('warninggiver');
@@ -80,6 +94,8 @@
                 $("#work-rest").text("");
                 $("#now-timing").text("End!");
                 warninggiver();
+                isClockWorking = 0;
+                $("#stopper").text("");
             }
             function clock() {
                 t = new Date().getTime();
@@ -95,7 +111,6 @@
                     if (times < loop * 2) {
                         starttime = new Date().getTime();
                         themechanger();
-                        int = self.setInterval("clock()", 10);
                     } else if (times == loop * 2) {
                         ender();
                     }
