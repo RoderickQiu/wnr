@@ -17,6 +17,34 @@ input{
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
     -webkit-appearance: none;
 }
+input[type="range"] {
+    -webkit-appearance: none;/* remove default style */
+    height:4px;
+    padding: 0;
+    border: none;
+    background: #33333333;
+}
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;/* remove default style */
+    cursor: default;
+    top: 0;
+    height: 20px;
+    width: 20px;
+    background: #5490ea;
+    border-radius: 15px;
+}
+input[type="checkbox"] {
+    -webkit-appearance: none;/* remove default style */
+    border: solid #33333333 2px;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+}
+input[type="checkbox"]:checked {
+    background-image: url(./res/icons/check.png);
+    background-repeat: no-repeat;
+    background-position: center;
+}
 
 .work, .work::-webkit-input-placeholder{
     color: #ea5454;
@@ -28,6 +56,13 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
 #main{
     -webkit-app-region: no-drag;/* let it clickable */
     -webkit-user-select: text;
+}
+#settingscontainer{
+    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    top: 45px;
+    left: 25px;
 }
 #controller{
     position: absolute;

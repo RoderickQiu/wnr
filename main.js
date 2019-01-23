@@ -1,4 +1,7 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require('electron')
+const Store = require('electron-store');
+const store = new Store();
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -48,13 +51,13 @@ app.on('will-quit', () => {
     globalShortcut.unregisterAll()
 })
 
-
-
 // Electron 会在初始化后并准备
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on('ready', () => {
     createWindow()
+
+    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true);
 
     tray = new Tray('./res/icons/iconWin.ico')
     const contextMenu = Menu.buildFromTemplate([
@@ -127,6 +130,12 @@ ipcMain.on('warninggiver', function () {
         win.center();
         win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);// 在Windows平台上闪烁任务栏按钮
+    }
+})
+
+ipcMain.on('reload', function () {
+    if (win != null) {
+        win.reload();
     }
 })
 

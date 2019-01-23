@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Settings</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
+    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <div id="controller">
+        <a href="javascript:window.close()" class="small rest">X</a>
+    </div>
+    <div class="d-flex text-dark" id="settingscontainer">
+        <div id="settings" class="text-left">
+            <p class="lead rest">Settings</p>
+            <div class="align-content-center form-text">
+                <label>Default work time: </label>
+                <input id="work-time-set" type="range" min="-1" max="120" value="-1" onchange="worktimeset()" />
+                <span id="work-time-show" class="text-black-50">-1</span>
+                <br /><span class="text-muted small">
+                    Set the default work time for every loop. Set it to "-1" to delete the former setting.
+                </span>
+            </div>
+            <div class="align-content-center form-text">
+                <label>Default rest time: </label>
+                <input id="rest-time-set" type="range" min="-1" max="120" value="-1" onchange="resttimeset()" />
+                <span id="rest-time-show" class="text-black-50">-1</span>
+                <br /><span class="text-muted small">
+                    Set the default rest time for every loop. Set it to "-1" to delete the former setting.
+                </span>
+            </div>
+            <div class="align-content-center form-text">
+                <label>Default number of loops: </label>
+                <input id="loop-time-set" type="range" min="-1" max="12" value="-1" onchange="looptimeset()" />
+                <span id="loop-time-show" class="text-black-50">-1</span>
+                <br /><span class="text-muted small">
+                    Set the default number of loops. Set it to "-1" to delete the former setting.
+                </span>
+            </div>
+            <hr />
+            <div class="align-content-center form-text">
+                <label>Play sound to notify: </label>
+                <input id="sound-set" type="checkbox" onchange="soundset()" checked />
+                <br /><span class="text-muted small">
+                    If it is enabled, every time your time is ended, a notice sound is played.
+                </span>
+            </div>
+            <div class="align-content-center form-text">
+                <label>Always on top: </label>
+                <input id="top-set" type="checkbox" onchange="topset()" checked />
+                <br /><span class="text-muted small">
+                    If it is enabled, every time you start wnr, it will stay on the top of the screen.
+                </span>
+            </div>
+        </div>
+    </div>
+    <script>
+        const Store = require('electron-store');
+        const store = new Store();
+        if (store.get("worktime") != undefined) {
+            $("#work-time-set").val(store.get("worktime"));
+            $("#work-time-show").text(store.get("worktime"));
+        }
+        function worktimeset() {
+            $("#work-time-show").html($("#work-time-set").val());
+            if ($("#work-time-set").val() != -1) store.set("worktime", $("#work-time-set").val());
+            else store.delete("worktime");
+        }
+        if (store.get("resttime") != undefined) {
+            $("#rest-time-set").val(store.get("resttime"));
+            $("#rest-time-show").text(store.get("resttime"));
+        }
+        function resttimeset() {
+            $("#rest-time-show").html($("#rest-time-set").val());
+            if ($("#rest-time-set").val() != -1) store.set("resttime", $("#rest-time-set").val());
+            else store.delete("resttime");
+        }
+        if (store.get("looptime") != undefined) {
+            $("#loop-time-set").val(store.get("looptime"));
+            $("#loop-time-show").text(store.get("looptime"));
+        }
+        function looptimeset() {
+            $("#loop-time-show").html($("#loop-time-set").val());
+            if ($("#loop-time-set").val() != -1) store.set("looptime", $("#loop-time-set").val());
+            else store.delete("looptime");
+        }
+        if (store.get("sound") != undefined) {
+            if (store.get("sound")) $("#sound-set").attr("checked");
+            else $("#sound-set").removeAttr("checked");
+        }
+        function soundset() {
+            if (document.getElementById("sound-set").checked) store.set("sound", true);
+            else store.set("sound", false);
+        }
+        if (store.get("top") != undefined) {
+            if (store.get("top")) $("#top-set").attr("checked");
+            else $("#top-set").removeAttr("checked");
+        }
+        function topset() {
+            if (document.getElementById("top-set").checked) store.set("top", true);
+            else store.set("top", false);
+        }
+    </script>
+</body>
+
+</html>

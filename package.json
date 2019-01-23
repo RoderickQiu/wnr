@@ -1,6 +1,7 @@
 {
   "name": "wnr",
-  "version": "1.0.0",
+  "version": "1.1.0",
+  "update-use-version": "11077",
   "description": "The name is a abbr of \"Work & Rest\". It's a timer app with strong expansibility for computers.",
   "main": "main.js",
   "scripts": {
@@ -21,7 +22,9 @@
   "copyright": "© Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
-    "electron-store": "^2.0.0"
+    "electron-store": "^2.0.0",
+    "request": "^2.88.0",
+    "cheerio": "1.0.0-rc.2"
   },
   "devDependencies": {
     "electron": "^4.0.1",

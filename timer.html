@@ -29,6 +29,8 @@
     <audio id="allend" src="res/sound/allend.wav"></audio>
     <audio id="timeend" src="res/sound/timeend.wav"></audio>
     <script>
+        const Store = require('electron-store');
+        const store = new Store();
         var $_GET = (function () {
             var url = window.document.location.href.toString();
             var u = url.split("?");
@@ -48,8 +50,10 @@
         var worktime = decodeURI($_GET['work-time']) * 60000;
         var resttime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
-        if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
-            $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='text-primary'>Back</a></p>");
+        if (!worktime || worktime == "undefined" || !resttime || resttime == "undefined" || !loop || loop == "undefined") {
+            $("#timer").html("<p class='text-center lead'>Some information wasn't given so we cannot start the timer.<br/><a href='index.html' class='work'>Back</a></p>");
+        } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
+            $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='work'>Back</a></p>");
         } else {
             if (title && title != "undefined") $("#title").html(title);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
@@ -72,8 +76,10 @@
             function warninggiver(isend) {
                 var ipc = require('electron').ipcRenderer;
                 ipc.send('warninggiver');
-                if (isend) document.getElementById("allend").play();
-                else document.getElementById("timeend").play();//different sound for different circumstances
+                if (store.get("sound") == true || store.get("sound") == undefined) {
+                    if (isend) document.getElementById("allend").play();
+                    else document.getElementById("timeend").play();//different sound for different circumstances
+                }
             }
             function themechanger() {
                 warninggiver(0);
