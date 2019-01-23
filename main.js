@@ -8,7 +8,18 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// �
 
 function createWindow() {
     // 创建浏览器窗口。
-    win = new BrowserWindow({ width: 324, height: 233, frame: false, resizable: true, show: false, hasShadow: true, webPreferences: { nodeIntegration: true } })
+    win = new BrowserWindow({
+        width: 324,
+        height: 233,
+        frame: false,
+        resizable: true,
+        show: false,
+        hasShadow: true,
+        webPreferences: { nodeIntegration: true },
+        title: "wnr",
+        icon: "./res/icons/wnrIcon.png",
+        backgroundColor: "#fefefe"
+    })// 为跨平台优化
 
     // 然后加载应用的 index.html。
     win.loadFile('index.html')
@@ -55,6 +66,50 @@ app.on('ready', () => {
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show()
     })//托盘菜单
+
+    if (process.platform === 'darwin') {
+        var template = [{
+            label: 'wnr',
+            submenu: [{
+                label: 'Quit',
+                accelerator: 'CmdOrCtrl+Q',
+                click: function () {
+                    app.quit();
+                }
+            }]
+        }, {
+            label: 'Edit',
+            submenu: [{
+                label: 'Undo',
+                accelerator: 'CmdOrCtrl+Z',
+                selector: 'undo:'
+            }, {
+                label: 'Redo',
+                accelerator: 'Shift+CmdOrCtrl+Z',
+                selector: 'redo:'
+            }, {
+                type: 'separator'
+            }, {
+                label: 'Cut',
+                accelerator: 'CmdOrCtrl+X',
+                selector: 'cut:'
+            }, {
+                label: 'Copy',
+                accelerator: 'CmdOrCtrl+C',
+                selector: 'copy:'
+            }, {
+                label: 'Paste',
+                accelerator: 'CmdOrCtrl+V',
+                selector: 'paste:'
+            }, {
+                label: 'Select All',
+                accelerator: 'CmdOrCtrl+A',
+                selector: 'selectAll:'
+            }]
+        }];
+        var osxMenu = menu.buildFromTemplate(template);
+        menu.setApplicationMenu(osxMenu);
+    }// 应付macOS的顶栏空缺
 })
 
 app.on('activate', () => {
@@ -74,3 +129,8 @@ ipcMain.on('warninggiver', function () {
         win.flashFrame(true);// 在Windows平台上闪烁任务栏按钮
     }
 })
+
+/* 参考：
+- https://blog.avocode.com/4-must-know-tips-for-building-cross-platform-electron-apps-f3ae9c2bffff [need proxy]
+- https://electronjs.org/docs
+*/

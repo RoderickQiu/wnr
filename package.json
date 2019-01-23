@@ -1,11 +1,13 @@
 {
   "name": "wnr",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "The name is a abbr of \"Work & Rest\". It's a timer app with strong expansibility for computers.",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
-    "winx64": "electron-builder --win --x64"
+    "win": "electron-builder --win --x64",
+    "mac": "electron-builder --mac --x64",
+    "linux": "electron-builder --linux --x64"
   },
   "repository": {
     "type": "git",
@@ -31,6 +33,18 @@
         "zip"
       ],
       "icon": "res/icons/iconWin.ico"
+    },
+    "mac": {
+      "target": [
+        "zip"
+      ],
+      "icon": "res/icons/iconMac.icns"
+    },
+    "linux": {
+      "target": [
+        "zip"
+      ],
+      "icon": "res/icons/wnrIcon.png"
     }
   }
 }

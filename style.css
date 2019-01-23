@@ -10,19 +10,6 @@ html, body{
     -webkit-app-region: drag;/* let the app draggable */
 }
 
-a{
-    color: #222222;
-}
-a:hover{
-    color: #222222;
-}
-a:active{
-    color: #333333;
-}
-a:visited{
-    color: #222222;
-}
-
 input{
     outline: none;
     border: none;
@@ -47,5 +34,5 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
     top: 5px;
     right: 8px;
     -webkit-app-region: no-drag;/* let it clickable */
-    -webkit-user-select: text;
+    -webkit-user-select: none;
 }

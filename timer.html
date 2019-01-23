@@ -26,9 +26,8 @@
             <div class="text-center small"><a id="stopper" href="javascript:stopper()" class="text-black-50">Stop</a></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
-    <audio id="beeper">
-        <source src="res/sound/beep.wav" />
-    </audio>
+    <audio id="allend" src="res/sound/allend.wav"></audio>
+    <audio id="timeend" src="res/sound/timeend.wav"></audio>
     <script>
         var $_GET = (function () {
             var url = window.document.location.href.toString();
@@ -53,30 +52,31 @@
             $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='text-primary'>Back</a></p>");
         } else {
             if (title && title != "undefined") $("#title").html(title);
-            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isClockWorking = 1;//method: 1-work / 2-rest, times: time-reset times
+            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
             if (loop != 0) int = self.setInterval("clock()", 10);
             else ender();
             function stopper() {
-                if (isClockWorking) {
+                if (isclockworking) {
                     window.clearInterval(int);
                     $("#stopper").text("Resume");
-                    isClockWorking = 0;//to stop
+                    isclockworking = 0;//to stop
                 } else {
                     if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     int = self.setInterval("clock()", 10);
                     $("#stopper").text("Stop");
-                    isClockWorking = 1;//to restart
+                    isclockworking = 1;//to restart
                 }
             }
-            function warninggiver() {
+            function warninggiver(isend) {
                 var ipc = require('electron').ipcRenderer;
                 ipc.send('warninggiver');
-                document.getElementById("beeper").play();
+                if (isend) document.getElementById("allend").play();
+                else document.getElementById("timeend").play();//different sound for different circumstances
             }
             function themechanger() {
-                warninggiver();
+                warninggiver(0);
                 if (method == 1) {
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
@@ -93,8 +93,8 @@
                 window.clearInterval(int);
                 $("#work-rest").text("");
                 $("#now-timing").text("End!");
-                warninggiver();
-                isClockWorking = 0;
+                warninggiver(1);
+                isclockworking = 0;
                 $("#stopper").text("");
             }
             function clock() {
