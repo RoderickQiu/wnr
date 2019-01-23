@@ -19,9 +19,10 @@
             <a href="javascript:window.close()" class="small rest">X</a>
         </div>
         <div id="about">
-            <p class="lead rest">wnr</p>
+            <p class="lead rest font-weight-bolder">wnr</p>
             <p class="small text-muted">
-                <script>document.write("v" + require("./package.json").version)</script>
+                <script>document.write("v" + require("./package.json").version);</script>&nbsp;|&nbsp;Using Electron v
+                <script>document.write(process.versions.electron);</script>
             </p>
             <p class="small">
                 <a class="rest" href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">Homepage</a>&nbsp;|&nbsp;

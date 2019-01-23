@@ -17,6 +17,7 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="index.html" class="small work">Back</a>&nbsp;
+            <a href="javascript:minimizer()" class="small work">Hide</a>&nbsp;
             <a href="javascript:window.close()" class="small work">X</a>
         </div>
         <div id="timer" class="justify-content-center">
@@ -75,20 +76,23 @@
             }
             function warninggiver(isend) {
                 var ipc = require('electron').ipcRenderer;
-                ipc.send('warninggiver');
+                if (isend == 0) ipc.send('warninggiver-allend');
+                else if (isend == 1) ipc.send('warninggiver-workend');
+                else ipc.send('warninggiver-restend');
                 if (store.get("sound") == true || store.get("sound") == undefined) {
-                    if (isend) document.getElementById("allend").play();
+                    if (!isend) document.getElementById("allend").play();
                     else document.getElementById("timeend").play();//different sound for different circumstances
                 }
             }
             function themechanger() {
-                warninggiver(0);
                 if (method == 1) {
+                    warninggiver(1);
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
                     $("#work-rest").text("Resting");
                     method = 2;
                 } else {
+                    warninggiver(2);
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").text("Working");
@@ -99,7 +103,7 @@
                 window.clearInterval(int);
                 $("#work-rest").text("");
                 $("#now-timing").text("End!");
-                warninggiver(1);
+                warninggiver(0);
                 isclockworking = 0;
                 $("#stopper").text("");
             }
@@ -121,6 +125,9 @@
                         ender();
                     }
                 }
+            }
+            function minimizer() {
+                ipc.send("minimizer");
             }
         }
     </script>

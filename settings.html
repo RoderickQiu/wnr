@@ -19,13 +19,16 @@
     </div>
     <div class="d-flex text-dark" id="settingscontainer">
         <div id="settings" class="text-left">
-            <p class="lead rest">Settings</p>
+            <p class="h3 rest">Settings</p>
+            <br />
+            <p class="lead">Time Settings</p>
+            <hr />
             <div class="align-content-center form-text">
                 <label>Default work time: </label>
                 <input id="work-time-set" type="range" min="-1" max="120" value="-1" onchange="worktimeset()" />
                 <span id="work-time-show" class="text-black-50">-1</span>
                 <br /><span class="text-muted small">
-                    Set the default work time for every loop. Set it to "-1" to delete the former setting.
+                    Set the default work time for every loop. <b>Set it to "-1" to delete the former setting.</b>
                 </span>
             </div>
             <div class="align-content-center form-text">
@@ -33,7 +36,7 @@
                 <input id="rest-time-set" type="range" min="-1" max="120" value="-1" onchange="resttimeset()" />
                 <span id="rest-time-show" class="text-black-50">-1</span>
                 <br /><span class="text-muted small">
-                    Set the default rest time for every loop. Set it to "-1" to delete the former setting.
+                    Set the default rest time for every loop. <b>Set it to "-1" to delete the former setting.</b>
                 </span>
             </div>
             <div class="align-content-center form-text">
@@ -41,9 +44,11 @@
                 <input id="loop-time-set" type="range" min="-1" max="12" value="-1" onchange="looptimeset()" />
                 <span id="loop-time-show" class="text-black-50">-1</span>
                 <br /><span class="text-muted small">
-                    Set the default number of loops. Set it to "-1" to delete the former setting.
+                    Set the default number of loops. <b>Set it to "-1" to delete the former setting.</b>
                 </span>
             </div>
+            <br />
+            <p class="lead">Global Settings</p>
             <hr />
             <div class="align-content-center form-text">
                 <label>Play sound to notify: </label>
@@ -56,14 +61,31 @@
                 <label>Always on top: </label>
                 <input id="top-set" type="checkbox" onchange="topset()" checked />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time you start wnr, it will stay on the top of the screen.
+                    If it is enabled, every time you start wnr, it will stay on the top of the screen. <b>Restart is
+                        required. (<a class="rest" href="javascript:relauncher()">Restart Now</a>) </b>
                 </span>
+            </div>
+            <br />
+            <p class="lead">Other things</p>
+            <hr />
+            <div class="text-muted small">
+                <li>
+                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">Manually Check for Update</span></a>&nbsp;<b>(Now
+                        <script>document.write("v" + require("./package.json").version)</script>)</b>
+                </li>
+                <li>
+                    Open/Hide Hotkey:
+                    <b>
+                        <script>if (process.platform == 'darwin') document.write("Command");
+                            else document.write("Control");//根据平台更换文字</script>+Shift+Alt+W.
+                        (Hide to the system tray)
+                    </b>
+                </li>
             </div>
         </div>
     </div>
+    <script src="updater.js"></script>
     <script>
-        const Store = require('electron-store');
-        const store = new Store();
         if (store.get("worktime") != undefined) {
             $("#work-time-set").val(store.get("worktime"));
             $("#work-time-show").text(store.get("worktime"));
@@ -106,6 +128,9 @@
         function topset() {
             if (document.getElementById("top-set").checked) store.set("top", true);
             else store.set("top", false);
+        }
+        function relauncher() {
+            ipc.send("relauncher");
         }
     </script>
 </body>

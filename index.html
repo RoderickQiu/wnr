@@ -9,37 +9,22 @@
     <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
-    <script src="updater.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script>
-        function about() {
-            const { BrowserWindow } = require('electron').remote;
-            let aboutWin = new BrowserWindow({ width: 233, height: 216, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
-            aboutWin.loadFile("about.html");
-            if (store.get("top") == true || store.get("top") == undefined) aboutWin.setAlwaysOnTop(true);
-            aboutWin.once('ready-to-show', () => {
-                aboutWin.show();
-            })
-        }
-        function settings() {
-            const { BrowserWindow } = require('electron').remote;
-            var ipc = require('electron').ipcRenderer;
-            let settingsWin = new BrowserWindow({ width: 480, height: 540, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
-            settingsWin.loadFile("settings.html");
-            if (store.get("top") == true || store.get("top") == undefined) settingsWin.setAlwaysOnTop(true);
-            settingsWin.once('ready-to-show', () => {
-                settingsWin.show();
-            })
-            settingsWin.on('closed', () => {
-                ipc.send('reload');
-            })
-        }
-    </script>
 </head>
 
-<body onpaste="return false"><!-- prevent people from pasting abnormal content -->
+<body onpaste="return false">
+    <!-- prevent people from pasting abnormal content -->
     <script>
+        function about() {
+            ipc.send("about");
+        }
+        function settings() {
+            ipc.send("settings");
+        }
+        function minimizer() {
+            ipc.send("minimizer");
+        }
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
@@ -52,6 +37,7 @@
         <div id="controller">
             <a href="javascript:settings()" class="small rest">Settings</a>&nbsp;
             <a href="javascript:about()" class="small rest">About</a>&nbsp;
+            <a href="javascript:minimizer()" class="small rest">Hide</a>&nbsp;
             <a href="javascript:window.close()" class="small rest">X</a>
         </div>
         <div id="set" class="justify-content-center">
@@ -66,6 +52,7 @@
             </form>
         </div>
     </div>
+    <script src="updater.js"></script>
     <script>
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));

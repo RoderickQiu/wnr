@@ -1,10 +1,10 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let win, settingsWin, aboutWin
 let tray = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
@@ -13,7 +13,7 @@ function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
         width: 324,
-        height: 233,
+        height: 256,
         frame: false,
         resizable: true,
         show: false,
@@ -57,7 +57,13 @@ app.on('will-quit', () => {
 app.on('ready', () => {
     createWindow()
 
-    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true);
+    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true)
+
+    globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
+        win.isVisible() ? win.hide() : win.show();
+        if (settingsWin) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+        if (aboutWin) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+    })
 
     tray = new Tray('./res/icons/iconWin.ico')
     const contextMenu = Menu.buildFromTemplate([
@@ -123,20 +129,100 @@ app.on('activate', () => {
     }
 })
 
-ipcMain.on('warninggiver', function () {
+ipcMain.on('warninggiver-workend', function () {
     if (win != null) {
-        win.show();
-        win.moveTop();// 强制移到最顶层
-        win.center();
         win.once('focus', () => win.flashFrame(false));
-        win.flashFrame(true);// 在Windows平台上闪烁任务栏按钮
+        win.flashFrame(true);
+        dialog.showMessageBox(win, {
+            title: "Your work time is now ended!",
+            type: "info",
+            message: "Your work time is now ended. Enjoy your rest time!"
+        }, function () {
+            if (!win.isVisible()) win.show()
+        })
     }
 })
 
-ipcMain.on('reload', function () {
+ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
-        win.reload();
+        win.once('focus', () => win.flashFrame(false));
+        win.flashFrame(true);
+        dialog.showMessageBox(win, {
+            title: "Your rest time is now ended!",
+            type: "info",
+            message: "Your rest time is now ended. Start working!"
+        }, function () {
+            if (!win.isVisible()) win.show()
+        })
     }
+})
+
+ipcMain.on('warninggiver-allend', function () {
+    if (win != null) {
+        win.once('focus', () => win.flashFrame(false));
+        win.flashFrame(true);
+        dialog.showMessageBox(win, {
+            title: "Your schedule is now finished!",
+            type: "info",
+            message: "Your schedule is now finished. Enjoy your day!"
+        }, function () {
+            if (!win.isVisible()) win.show()
+        })
+    }
+})
+
+ipcMain.on('updateavailable', function () {
+    dialog.showMessageBox(win, {
+        title: "New version available!",
+        type: "warning",
+        message: "A new version of wnr is now available. To enjoy wnr better, you should download and install the update.",
+        checkboxLabel: "Go to GitHub and download the new release",
+        checkboxChecked: true
+    }, function (response, checkboxChecked) {
+        if (checkboxChecked) {
+            shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+        }
+    })
+})
+
+ipcMain.on('noupdateavailable', function () {
+    dialog.showMessageBox(win, {
+        title: "No update available.",
+        type: "info",
+        message: "No update available. Thanks for using wnr!"
+    })
+})
+
+ipcMain.on('relauncher', function () {
+    app.relaunch();
+    app.exit(0)
+})
+
+ipcMain.on('minimizer', function () {
+    win.hide()
+})
+
+ipcMain.on('about', function () {
+    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 233, height: 216, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    aboutWin.loadFile("about.html");
+    if (store.get("top") == true || store.get("top") == undefined) aboutWin.setAlwaysOnTop(true);
+    aboutWin.once('ready-to-show', () => {
+        aboutWin.show()
+    })
+})
+
+ipcMain.on('settings', function () {
+    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 720, height: 700, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    settingsWin.loadFile("settings.html");
+    if (store.get("top") == true || store.get("top") == undefined) settingsWin.setAlwaysOnTop(true);
+    settingsWin.once('ready-to-show', () => {
+        settingsWin.show();
+    })
+    settingsWin.on('closed', () => {
+        if (win != null) {
+            win.reload()
+        }
+    })
 })
 
 /* 参考：

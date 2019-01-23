@@ -61,7 +61,7 @@ input[type="checkbox"]:checked {
     -webkit-app-region: no-drag;/* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 45px;
+    top: 35px;
     left: 25px;
 }
 #controller{
