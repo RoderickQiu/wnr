@@ -1,7 +1,7 @@
 {
   "name": "wnr",
-  "version": "1.1.1",
-  "update-use-version": "11177",
+  "version": "1.1.2",
+  "update-use-version": "11277",
   "description": "The name is a abbr of \"Work & Rest\". It's a timer app with strong expansibility for computers.",
   "main": "main.js",
   "scripts": {
@@ -16,36 +16,35 @@
   },
   "author": "RoderickQiu",
   "license": "MIT",
-  "homepage": "https://github.com/RoderickQiu/wnr/blob/master/README.md",
-  "helppage": "https://github.com/RoderickQiu/wnr/blob/master/README.md",
+  "homepage": "https://wnr.scris.top",
   "appId": "com.scrisstudio.wnr",
   "copyright": "© Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
     "electron-store": "^2.0.0",
     "request": "^2.88.0",
-    "cheerio": "1.0.0-rc.2"
+    "cheerio": "^1.0.0-rc.2"
   },
   "devDependencies": {
-    "electron": "^4.0.1",
-    "electron-builder": "^20.38.4"
+    "electron": "^4.0.2",
+    "electron-builder": "^20.38.5"
   },
   "build": {
     "win": {
       "target": [
-        "zip"
+        "dir"
       ],
       "icon": "res/icons/iconWin.ico"
     },
     "mac": {
       "target": [
-        "zip"
+        "dir"
       ],
       "icon": "res/icons/iconMac.icns"
     },
     "linux": {
       "target": [
-        "zip"
+        "dir"
       ],
       "icon": "res/icons/wnrIcon.png"
     }

@@ -3,10 +3,10 @@ const store = new Store();
 const ipc = require('electron').ipcRenderer;
 const nowtime = new Date().getTime();
 function updatechecker(method) {
+    if (method == 2) document.getElementById("manually").innerText = "Checking...";
     const version = require("./package.json")["update-use-version"];
     const request = require('request');
     const cheerio = require('cheerio');
-    if (method == 2) document.getElementById("manually").innerText = "Checking...";
     request('https://github.com/RoderickQiu/wnr/releases/latest', function (error, response, body) {
         if (body) {
             const $ = cheerio.load(body);

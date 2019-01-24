@@ -10,29 +10,31 @@
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/font-awesome.css" /><!-- http://www.fontawesome.com.cn/faicons/ -->
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:window.close()" class="small rest">X</a>
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Close" aria-hidden="true"></i></a>
         </div>
-        <div id="about">
+        <div id="about" class="justify-content-center text-center">
             <p class="lead rest font-weight-bolder">wnr</p>
-            <p class="small text-muted font-italic">
-                <script>document.write("v" + require("./package.json").version);</script>&nbsp;|&nbsp;Using Electron
-                v<script>document.write(process.versions.electron);</script>
+            <p class="small text-muted">
+                <script>document.write("version " + require("./package.json").version);</script>
             </p>
-            <p class="small">
-                <a class="rest" href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">Homepage</a>&nbsp;|&nbsp;
-                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">GitHub</a>&nbsp;|&nbsp;
-                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')">Issues</a>&nbsp;|&nbsp;
-                <a class="rest" href="javascript:require('electron').shell.openExternal(require('./package.json').helppage)">Help</a>
+            <p>
+                <a class="rest" href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)"><i
+                        class="fa fa-home" title="Homepage / Need Help" aria-hidden="true"></i></a>&nbsp;
+                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
+                        class="fa fa-github" title="View it on GitHub" aria-hidden="true"></i></a>&nbsp;
+                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
+                        class="fa fa-exclamation-circle" title="Issues" aria-hidden="true"></i></a>
             </p>
             <hr />
             <p class="small">
-                &copy; 2019
+                <i class="fa fa-copyright" aria-hidden="true"></i> 2019
                 <a href="javascript:require('electron').shell.openExternal('https://roderickqiu.scris.top/')" class="rest">Roderick
                     Qiu</a>.
             </p>

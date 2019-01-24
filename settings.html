@@ -10,18 +10,19 @@
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/font-awesome.css" /><!-- http://www.fontawesome.com.cn/faicons/ -->
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest">X</a>
+        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit & Save" aria-hidden="true"></i></a>
     </div>
     <div class="d-flex text-dark" id="settingscontainer">
         <div id="settings" class="text-left">
-            <p class="h3 rest">Settings</p>
+            <p class="h3 rest"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>Settings</p>
             <br />
-            <p class="lead">Time Settings</p>
+            <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Time Settings</p>
             <hr />
             <div class="align-content-center form-text">
                 <label>Default work time: </label>
@@ -48,7 +49,7 @@
                 </span>
             </div>
             <br />
-            <p class="lead">Global Settings</p>
+            <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>Global Settings</p>
             <hr />
             <div class="align-content-center form-text">
                 <label>Play sound to notify: </label>
@@ -62,11 +63,11 @@
                 <input id="top-set" type="checkbox" onchange="topset()" checked />
                 <br /><span class="text-muted small">
                     If it is enabled, every time you start wnr, it will stay on the top of the screen. <b>Restart is
-                        required. (<a class="rest" href="javascript:relauncher()">Restart Now</a>) </b>
+                        required. <span id="restarttip"></span></b>
                 </span>
             </div>
             <br />
-            <p class="lead">Other Things</p>
+            <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>Other Things</p>
             <hr />
             <div class="text-muted small">
                 <li>
@@ -76,8 +77,12 @@
                 <li>
                     Open/Hide hotkey:
                     <b>
-                        <script>if (process.platform == 'darwin') document.write("Command");
-                            else document.write("Control");//根据平台更换文字</script>+Shift+Alt+W.
+                        <kbd>
+                            <kbd>
+                                <script>
+                                    if (process.platform == 'darwin') document.write("Command");
+                                    else document.write("Ctrl");//根据平台更换文字
+                                </script></kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></kbd>.
                         (Hide to the system tray)
                     </b>
                 </li>
@@ -128,6 +133,7 @@
         function topset() {
             if (document.getElementById("top-set").checked) store.set("top", true);
             else store.set("top", false);
+            $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>Restart Now</a>)");
         }
         function relauncher() {
             ipc.send("relauncher");

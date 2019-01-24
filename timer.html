@@ -10,21 +10,22 @@
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/font-awesome.css" /><!-- http://www.fontawesome.com.cn/faicons/ -->
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
 <body>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="index.html" class="small work">Back</a>&nbsp;
-            <a href="javascript:minimizer()" class="small work">Hide</a>&nbsp;
-            <a href="javascript:window.close()" class="small work">X</a>
+            <a href="index.html" class="small rest"><i class="fa fa-chevron-left fa-fw" title="Give up the timer & Back" aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Hide the windows to system tray" aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit" aria-hidden="true"></i></a>
         </div>
         <div id="timer" class="justify-content-center">
             <div id="title" class="text-center h3"></div>
-            <div id="work-rest" class="text-center work small">Working</div>
+            <div id="work-rest" class="text-center work lead"><i class="fa fa-gamepad" aria-hidden="true"></i></div>
             <div id="now-timing" class="text-center h1 work"></div>
-            <div class="text-center small"><a id="stopper" href="javascript:stopper()" class="text-black-50">Stop</a></div>
+            <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-black-50"><i class="fa fa-pause" aria-hidden="true"></i></a></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <audio id="allend" src="res/sound/allend.wav"></audio>
@@ -65,13 +66,13 @@
             function stopper() {
                 if (isclockworking) {
                     window.clearInterval(int);
-                    $("#stopper").text("Resume");
+                    $("#stopper").html("<i class='fa fa-play' aria-hidden='true'></i>");
                     isclockworking = 0;//to stop
                 } else {
                     if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     int = self.setInterval("clock()", 10);
-                    $("#stopper").text("Stop");
+                    $("#stopper").html("<i class='fa fa-pause' aria-hidden='true'></i>");
                     isclockworking = 1;//to restart
                 }
             }
@@ -89,13 +90,13 @@
                     warninggiver(1);
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
-                    $("#work-rest").text("Resting");
+                    $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
                     method = 2;
                 } else {
                     warninggiver(2);
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
-                    $("#work-rest").text("Working");
+                    $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
                     method = 1;
                 }
             }

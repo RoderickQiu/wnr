@@ -10,6 +10,7 @@
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/font-awesome.css" /><!-- http://www.fontawesome.com.cn/faicons/ -->
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
@@ -35,10 +36,10 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:settings()" class="small rest">Settings</a>&nbsp;
-            <a href="javascript:about()" class="small rest">About</a>&nbsp;
-            <a href="javascript:minimizer()" class="small rest">Hide</a>&nbsp;
-            <a href="javascript:window.close()" class="small rest">X</a>
+            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings" aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr" aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Hide the window to system tray" aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit" aria-hidden="true"></i></a>
         </div>
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
