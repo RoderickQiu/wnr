@@ -86,7 +86,23 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     -webkit-user-select: text;
     position: absolute;
     top: 35px;
-    left: 25px;
+    left: 35.5px;
+    overflow-y:scroll;
+    height: 444px;
+    width: 90%;
+}
+#settingscontainer::-webkit-scrollbar-track{
+	background-color: #fefefe;
+}
+#settingscontainer::-webkit-scrollbar{
+	width: 12px;
+	background-color: #f5f5f5;
+}
+#settingscontainer::-webkit-scrollbar-thumb{
+	background-color: #5555558f;
+}
+#settingscontainer::-webkit-scrollbar-thumb:active{
+    background-color: #4a9af68f;
 }
 #controller{
     position: absolute;

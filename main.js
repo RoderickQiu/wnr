@@ -4,9 +4,8 @@ const store = new Store();
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win, settingsWin, aboutWin
+let win, settingsWin = null, aboutWin = null
 let tray = null
-
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
 
 function createWindow() {
@@ -61,19 +60,27 @@ app.on('ready', () => {
 
     globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
         win.isVisible() ? win.hide() : win.show();
-        if (settingsWin) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-        if (aboutWin) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
     })
 
     tray = new Tray('./res/icons/iconWin.ico')
     const contextMenu = Menu.buildFromTemplate([
-        { label: 'Show/Hide', click: () => { win.isVisible() ? win.hide() : win.show() } },
+        {
+            label: 'Show/Hide', click: () => {
+                win.isVisible() ? win.hide() : win.show();
+                if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+                if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+            }
+        },
         { label: 'Exit', click: () => { app.quit() } }
     ])
     tray.setToolTip('wnr')
     tray.setContextMenu(contextMenu)
     tray.on('click', () => {
-        win.isVisible() ? win.hide() : win.show()
+        win.isVisible() ? win.hide() : win.show();
+        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show()
     })//托盘菜单
 
     if (process.platform === 'darwin') {
@@ -209,10 +216,13 @@ ipcMain.on('about', function () {
     aboutWin.once('ready-to-show', () => {
         aboutWin.show()
     })
+    aboutWin.on('closed', () => {
+        aboutWin = null
+    })
 })
 
 ipcMain.on('settings', function () {
-    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 720, height: 700, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 720, height: 500, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     settingsWin.loadFile("settings.html");
     if (store.get("top") == true || store.get("top") == undefined) settingsWin.setAlwaysOnTop(true);
     settingsWin.once('ready-to-show', () => {
@@ -220,9 +230,14 @@ ipcMain.on('settings', function () {
     })
     settingsWin.on('closed', () => {
         if (win != null) {
-            win.reload()
+            win.reload();
         }
+        settingsWin = null
     })
+})
+
+ipcMain.on("progress-bar-set", function (event, message) {
+    win.setProgressBar(1 - message);
 })
 
 /* 参考：

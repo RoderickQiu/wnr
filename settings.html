@@ -68,6 +68,13 @@
                         required. <span id="restarttip"></span></b>
                 </span>
             </div>
+            <div class="align-content-center form-text">
+                <label>Start up with system: </label>
+                <input id="autostart-set" type="checkbox" onchange="autostartset()" checked />
+                <br /><span class="text-muted small">
+                    If it is enabled, every time your system starts, wnr starts. <b>(Only for Windows)</b>
+                </span>
+            </div>
             <br />
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>Other Things</p>
             <hr />
@@ -136,6 +143,25 @@
             if (document.getElementById("top-set").checked) store.set("top", true);
             else store.set("top", false);
             $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>Restart Now</a>)");
+        }
+        if (store.get("autostart") != undefined) {
+            if (store.get("autostart")) $("#autostart-set").attr("checked");
+            else $("#autostart-set").removeAttr("checked");
+        }
+        function autostartset() {
+            var startOnBoot = require('start-on-windows-boot');
+            if (document.getElementById("autostart-set").checked) {
+                store.set("autostart", true);
+                if (process.platform == "win32") {
+                    startOnBoot.enableAutoStart('wnr', __dirname + "\\wnr.exe");
+                }
+            }
+            else {
+                store.set("autostart", false);
+                if (process.platform == "win32") {
+                    startOnBoot.disableAutoStart('wnr');
+                }
+            }
         }
         function relauncher() {
             ipc.send("relauncher");

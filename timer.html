@@ -18,15 +18,19 @@
 <body>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="index.html" class="small work"><i class="fa fa-chevron-left fa-fw" title="Give up the timer & Back" aria-hidden="true"></i></a>&nbsp;
-            <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw" title="Hide the windows to system tray" aria-hidden="true"></i></a>&nbsp;
-            <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" title="Exit" aria-hidden="true"></i></a>
+            <a href="index.html" class="small work"><i class="fa fa-chevron-left fa-fw" title="Give up the timer & Back"
+                    aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw" title="Hide the windows to system tray"
+                    aria-hidden="true"></i></a>&nbsp;
+            <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" title="Exit"
+                    aria-hidden="true"></i></a>
         </div>
         <div id="timer" class="justify-content-center">
             <div id="title" class="text-center h3"></div>
             <div id="work-rest" class="text-center work lead"><i class="fa fa-building" aria-hidden="true"></i></div>
             <div id="now-timing" class="text-center h1 work"></div>
-            <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-black-50"><i class="fa fa-pause" aria-hidden="true"></i></a></div>
+            <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-black-50"><i class="fa fa-pause"
+                        aria-hidden="true"></i></a></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <audio id="allend" src="res/sound/allend.wav"></audio>
@@ -62,7 +66,7 @@
             if (title && title != "undefined") $("#title").html(title);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
-            if (loop != 0) int = self.setInterval("clock()", 10);
+            if (loop != 0) int = self.setInterval("clock()", 100);
             else ender();
             function stopper() {
                 if (isclockworking) {
@@ -72,7 +76,7 @@
                 } else {
                     if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    int = self.setInterval("clock()", 10);
+                    int = self.setInterval("clock()", 100);
                     $("#stopper").html("<i class='fa fa-pause' aria-hidden='true'></i>");
                     isclockworking = 1;//to restart
                 }
@@ -114,6 +118,8 @@
                 if (method == 1) seconds = parseInt((worktime - t + starttime) / 1000);
                 else seconds = parseInt((resttime - t + starttime) / 1000);
                 if (seconds > 0) {
+                    if (method == 1) ipc.send("progress-bar-set", (seconds / worktime) * 1000);
+                    else ipc.send("progress-bar-set", (seconds / resttime) * 1000);
                     hours = parseInt(seconds / 3600);
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
