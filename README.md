@@ -4,10 +4,7 @@
 
 ![Preview](https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-1.png)
 
-Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/)
+- Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/)
+- Need Help: [Go to Homepage](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/)
 
-Need Help: [Go to Homepage](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/)
-
-------
-
-Copyright (c) 2019 Roderick Qiu
+*Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)***
