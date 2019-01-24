@@ -13,7 +13,15 @@ html, body{
 kbd{
     background-color: #5490ea;
 }
+label{
+    display: inline-block;
+    margin-bottom: .5rem;
+}
 input{
+    display: inline-block;
+    line-height: inherit;
+    margin: 0rem;
+    padding: 1px 0px;
     outline: none;
     border: none;
 }

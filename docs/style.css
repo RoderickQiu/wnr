@@ -1,0 +1,29 @@
+html, body{
+    font-family: "方正悠黑", "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    width: 100%;
+    min-height: 100%;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    align-items: center;
+}
+
+a{
+    color: #5490ea;
+}
+
+
+#footer{
+    position: absolute;
+    bottom: 5px;
+    text-align: center;
+}
+@media(max-height:600px){
+    #footer{
+        position: relative;
+    }
+}
+
+#howtodoit{
+    padding: 0 1.5rem;
+}

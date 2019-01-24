@@ -164,7 +164,7 @@ ipcMain.on('warninggiver-allend', function () {
         dialog.showMessageBox(win, {
             title: "Your schedule is now finished!",
             type: "info",
-            message: "Your schedule is now finished. Enjoy your day!"
+            message: "Your schedule is now finished. You can now set another one."
         }, function () {
             if (!win.isVisible()) win.show()
         })
