@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
+const path = require("path");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -21,23 +22,23 @@ function createWindow() {
         title: "wnr",
         icon: "./res/icons/wnrIcon.png",
         backgroundColor: "#fefefe"
-    })// 为跨平台优化
+    });// 为跨平台优化
 
     // 然后加载应用的 index.html。
-    win.loadFile('index.html')
+    win.loadFile('index.html');
 
     //在加载页面时，渲染进程第一次完成绘制时，会发出 ready-to-show 事件。在此事件后显示窗口将没有视觉闪烁
     win.once('ready-to-show', () => {
         win.show()
         //win.webContents.openDevTools()
-    })
+    });
 
     // 当 window 被关闭，这个事件会被触发。
     win.on('closed', () => {
         // 取消引用 window 对象，如果你的应用支持多窗口的话，
         // 通常会把多个 window 对象存放在一个数组里面，
         // 与此同时，你应该删除相应的元素。
-        win = null
+        win = null;
         if (process.platform !== 'darwin') {
             app.quit()
         }
@@ -54,9 +55,9 @@ app.on('will-quit', () => {
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on('ready', () => {
-    createWindow()
+    createWindow();
 
-    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true)
+    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true);
 
     globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
         win.isVisible() ? win.hide() : win.show();
@@ -64,7 +65,8 @@ app.on('ready', () => {
         if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
     })
 
-    tray = new Tray('./res/icons/iconWin.ico')
+    if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+    else tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
     const contextMenu = Menu.buildFromTemplate([
         {
             label: 'Show/Hide', click: () => {
@@ -74,14 +76,14 @@ app.on('ready', () => {
             }
         },
         { label: 'Exit', click: () => { app.quit() } }
-    ])
-    tray.setToolTip('wnr')
-    tray.setContextMenu(contextMenu)
+    ]);
+    tray.setToolTip('wnr');
+    tray.setContextMenu(contextMenu);
     tray.on('click', () => {
         win.isVisible() ? win.hide() : win.show();
         if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
         if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show()
-    })//托盘菜单
+    });//托盘菜单
 
     if (process.platform === 'darwin') {
         var template = [{
@@ -124,7 +126,7 @@ app.on('ready', () => {
             }]
         }];
         var osxMenu = menu.buildFromTemplate(template);
-        menu.setApplicationMenu(osxMenu);
+        menu.setApplicationMenu(osxMenu)
     }// 应付macOS的顶栏空缺
 })
 
@@ -140,13 +142,15 @@ ipcMain.on('warninggiver-workend', function () {
     if (win != null) {
         win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        dialog.showMessageBox(win, {
-            title: "Your work time is now ended!",
-            type: "info",
-            message: "Your work time is now ended. Enjoy your rest time!"
-        }, function () {
-            if (!win.isVisible()) win.show()
-        })
+        if (store.get("fullscreen") == true) win.setFullScreen(true);
+        setTimeout(function () {
+            dialog.showMessageBox(win, {
+                title: "Your work time is now ended!",
+                type: "info",
+                message: "Your work time is now ended. Enjoy your rest time!",
+                silent: true
+            });
+        }, 100)
     }
 })
 
@@ -154,13 +158,16 @@ ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
         win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        dialog.showMessageBox(win, {
-            title: "Your rest time is now ended!",
-            type: "info",
-            message: "Your rest time is now ended. Start working!"
-        }, function () {
-            if (!win.isVisible()) win.show()
-        })
+        if (win.isFullScreen()) win.setFullScreen(false);
+        setTimeout(function () {
+            dialog.showMessageBox(win, {
+                title: "Your rest time is now ended!",
+                type: "info",
+                message: "Your rest time is now ended. Start working!"
+            }, function () {
+                if (!win.isVisible()) win.show();
+            });
+        }, 180)
     }
 })
 
@@ -168,13 +175,16 @@ ipcMain.on('warninggiver-allend', function () {
     if (win != null) {
         win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        dialog.showMessageBox(win, {
-            title: "Your schedule is now finished!",
-            type: "info",
-            message: "Your schedule is now finished. You can now set another one."
-        }, function () {
-            if (!win.isVisible()) win.show()
-        })
+        if (win.isFullScreen()) win.setFullScreen(false);
+        setTimeout(function () {
+            dialog.showMessageBox(win, {
+                title: "Your schedule is now finished!",
+                type: "info",
+                message: "Your schedule is now finished. You can now set another one."
+            }, function () {
+                if (!win.isVisible()) win.show()
+            });
+        }, 100)
     }
 })
 
@@ -214,7 +224,7 @@ ipcMain.on('about', function () {
     aboutWin.loadFile("about.html");
     if (store.get("top") == true || store.get("top") == undefined) aboutWin.setAlwaysOnTop(true);
     aboutWin.once('ready-to-show', () => {
-        aboutWin.show()
+        aboutWin.show();
     })
     aboutWin.on('closed', () => {
         aboutWin = null
@@ -237,7 +247,7 @@ ipcMain.on('settings', function () {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    win.setProgressBar(1 - message);
+    win.setProgressBar(1 - message)
 })
 
 /* 参考：

@@ -33,12 +33,11 @@
                         aria-hidden="true"></i></a></div>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
-    <audio id="allend" src="res/sound/allend.wav"></audio>
-    <audio id="timeend" src="res/sound/timeend.wav"></audio>
     <script>
         var ipc = require('electron').ipcRenderer;
         const Store = require('electron-store');
         const store = new Store();
+        const path = require("path");
         var $_GET = (function () {
             var url = window.document.location.href.toString();
             var u = url.split("?");
@@ -82,13 +81,18 @@
                 }
             }
             function warninggiver(isend) {
+                if (store.get("sound") == true || store.get("sound") == undefined) {
+                    var player = document.createElement("audio");
+                    if (isend != 0) {
+                        player.src = path.join(__dirname, "\\res\\sound\\timeend.wav");
+                    } else {
+                        player.src = path.join(__dirname, "\\res\\sound\\allend.wav");
+                    }
+                    player.play();
+                }//different sound for different circumstances
                 if (isend == 0) ipc.send('warninggiver-allend');
                 else if (isend == 1) ipc.send('warninggiver-workend');
                 else ipc.send('warninggiver-restend');
-                if (store.get("sound") == true || store.get("sound") == undefined) {
-                    if (!isend) document.getElementById("allend").play();
-                    else document.getElementById("timeend").play();//different sound for different circumstances
-                }
             }
             function themechanger() {
                 if (method == 1) {
@@ -97,21 +101,25 @@
                     $(".work").removeClass("work");
                     $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
                     method = 2;
+                    $("#controller").css("display", "none");
                 } else {
                     warninggiver(2);
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
                     method = 1;
+                    $("#controller").css("display", "block");
                 }
             }
             function ender() {
                 window.clearInterval(int);
                 $("#work-rest").text("");
                 $("#now-timing").text("End!");
-                warninggiver(0);
                 isclockworking = 0;
                 $("#stopper").text("");
+                ipc.send("progress-bar-set", -1);
+                $("#controller").css("display", "block");
+                warninggiver(0);
             }
             function clock() {
                 t = new Date().getTime();

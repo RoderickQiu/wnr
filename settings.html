@@ -70,9 +70,16 @@
             </div>
             <div class="align-content-center form-text">
                 <label>Start up with system: </label>
-                <input id="autostart-set" type="checkbox" onchange="autostartset()" checked />
+                <input id="autostart-set" type="checkbox" onchange="autostartset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time your system starts, wnr starts. <b>(Only for Windows)</b>
+                    If it is enabled, every time your system starts, wnr starts. 
+                </span>
+            </div>
+            <div class="align-content-center form-text">
+                <label>Fullscreen rest time: </label>
+                <input id="fullscreen-set" type="checkbox" onchange="fullscreenset()" />
+                <br /><span class="text-muted small">
+                    If it is enabled, when it's rest time, wnr will enter full-screen mode to prevent you from using computer. 
                 </span>
             </div>
             <br />
@@ -145,23 +152,40 @@
             $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>Restart Now</a>)");
         }
         if (store.get("autostart") != undefined) {
-            if (store.get("autostart")) $("#autostart-set").attr("checked");
+            if (store.get("autostart") == true) $("#autostart-set").attr("checked");
             else $("#autostart-set").removeAttr("checked");
         }
         function autostartset() {
-            var startOnBoot = require('start-on-windows-boot');
+            var AutoLaunch = require('auto-launch');
+            var wnrLauncher = new AutoLaunch({ name: 'wnr' });
             if (document.getElementById("autostart-set").checked) {
                 store.set("autostart", true);
-                if (process.platform == "win32") {
-                    startOnBoot.enableAutoStart('wnr', __dirname + "\\wnr.exe");
-                }
+                wnrLauncher.isEnabled()
+                    .then(function (isEnabled) {
+                        if (isEnabled) {
+                            return;
+                        }
+                        wnrLauncher.enable();
+                    })
             }
             else {
                 store.set("autostart", false);
-                if (process.platform == "win32") {
-                    startOnBoot.disableAutoStart('wnr');
-                }
+                minecraftAutoLauncher.isEnabled()
+                    .then(function (isEnabled) {
+                        if (isEnabled) {
+                            wnrLauncher.disable();
+                        }
+                        return;
+                    })
             }
+        }
+        if (store.get("fullscreen") != undefined) {
+            if (store.get("fullscreen") == true) $("#fullscreen-set").attr("checked");
+            else $("#fullscreen-set").removeAttr("checked");
+        }
+        function fullscreenset() {
+            if (document.getElementById("fullscreen-set").checked) store.set("fullscreen", true);
+            else store.set("fullscreen", false);
         }
         function relauncher() {
             ipc.send("relauncher");

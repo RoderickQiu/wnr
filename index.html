@@ -15,8 +15,8 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
-<body >
-    <!-- prevent people from pasting abnormal contentonpaste="return false" -->
+<body onpaste="return false">
+    <!-- prevent people from pasting abnormal content -->
     <script>
         function about() {
             ipc.send("about");
