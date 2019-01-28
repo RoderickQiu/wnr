@@ -24,6 +24,9 @@
         function settings() {
             ipc.send("settings");
         }
+        function winhider() {
+            ipc.send("winhider");
+        }
         function minimizer() {
             ipc.send("minimizer");
         }
@@ -37,10 +40,11 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings" aria-hidden="true"></i></a>&nbsp;
-            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr" aria-hidden="true"></i></a>&nbsp;
-            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Hide the window to system tray" aria-hidden="true"></i></a>&nbsp;
-            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit" aria-hidden="true"></i></a>
+            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings"></i></a>&nbsp;
+            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr"></i></a>&nbsp;
+            <a href="javascript:winhider()" class="small rest"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a>&nbsp;
+            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Minimize to taskbar"></i></a>&nbsp;
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit"></i></a>
         </div>
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">

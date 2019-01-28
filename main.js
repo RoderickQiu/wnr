@@ -140,6 +140,9 @@ app.on('activate', () => {
 
 ipcMain.on('warninggiver-workend', function () {
     if (win != null) {
+        win.show();
+        win.focus();
+        win.center();
         win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
         if (store.get("fullscreen") == true) win.setFullScreen(true);
@@ -215,8 +218,12 @@ ipcMain.on('relauncher', function () {
     app.exit(0)
 })
 
-ipcMain.on('minimizer', function () {
+ipcMain.on('winhider', function () {
     win.hide()
+})
+
+ipcMain.on('minimizer', function () {
+    win.minimize()
 })
 
 ipcMain.on('about', function () {
@@ -248,6 +255,10 @@ ipcMain.on('settings', function () {
 
 ipcMain.on("progress-bar-set", function (event, message) {
     win.setProgressBar(1 - message)
+})
+
+ipcMain.on("logger", function (event, message) {
+    console.log(message)
 })
 
 /* 参考：

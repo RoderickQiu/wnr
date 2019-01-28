@@ -3,21 +3,20 @@ const store = new Store();
 const ipc = require('electron').ipcRenderer;
 const nowtime = new Date().getTime();
 function updatechecker(method) {
-    if (method == 2) document.getElementById("manually").innerText = "Checking...";
+    if (method == 2) document.getElementById("manually").innerHTML = "<i class='fa fa-refresh fa-spin fa-fw'></i>&nbsp;";
     const version = require("./package.json")["update-use-version"];
     const request = require('request');
     const cheerio = require('cheerio');
     request('https://github.com/RoderickQiu/wnr/releases/latest', function (error, response, body) {
         if (body) {
-            const $ = cheerio.load(body);
-            var title = decodeURI($('title').html());
+            var title = decodeURI(cheerio.load(body)('title').html());
             title = title.replace(/[^0-9]/g, "");
+            if (method == 2) document.getElementById("manually").innerHTML = "Manually check for update";
             if (title > version) {
                 ipc.send("updateavailable");
             } else if (method == 2) {// manually
                 ipc.send("noupdateavailable");
             }
-            if (method == 2) document.getElementById("manually").innerText = "Manually check for update";
         }
     });
     store.set("last-check-time", nowtime);

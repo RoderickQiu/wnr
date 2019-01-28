@@ -17,8 +17,7 @@
 
 <body>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit & Save"
-                aria-hidden="true"></i></a>
+        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit & Save"></i></a>
     </div>
     <div class="d-flex text-dark" id="settingscontainer">
         <div id="settings" class="text-left">
@@ -72,14 +71,15 @@
                 <label>Start up with system: </label>
                 <input id="autostart-set" type="checkbox" onchange="autostartset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time your system starts, wnr starts. 
+                    If it is enabled, every time your system starts, wnr starts.
                 </span>
             </div>
             <div class="align-content-center form-text">
                 <label>Fullscreen rest time: </label>
                 <input id="fullscreen-set" type="checkbox" onchange="fullscreenset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, when it's rest time, wnr will enter full-screen mode to prevent you from using computer. 
+                    If it is enabled, when it's rest time, wnr will enter full-screen mode to prevent you from using
+                    computer.
                 </span>
             </div>
             <br />
@@ -135,30 +135,28 @@
             else store.delete("looptime");
         }
         if (store.get("sound") != undefined) {
-            if (store.get("sound")) $("#sound-set").attr("checked");
-            else $("#sound-set").removeAttr("checked");
+            if (store.get("sound")) document.getElementById("sound-set").checked = true;
+            else document.getElementById("sound-set").checked = false;
         }
         function soundset() {
-            if (document.getElementById("sound-set").checked) store.set("sound", true);
+            if (document.getElementById("sound-set").checked == true) store.set("sound", true);
             else store.set("sound", false);
         }
         if (store.get("top") != undefined) {
-            if (store.get("top")) $("#top-set").attr("checked");
-            else $("#top-set").removeAttr("checked");
+            if (store.get("top") == true) document.getElementById("top-set").checked = true;
+            else document.getElementById("top-set").checked = false;
         }
         function topset() {
-            if (document.getElementById("top-set").checked) store.set("top", true);
+            if (document.getElementById("top-set").checked == true) store.set("top", true);
             else store.set("top", false);
             $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>Restart Now</a>)");
         }
-        if (store.get("autostart") != undefined) {
-            if (store.get("autostart") == true) $("#autostart-set").attr("checked");
-            else $("#autostart-set").removeAttr("checked");
-        }
+        if (store.get("autostart") == true) document.getElementById("autostart-set").checked = true;
+        else document.getElementById("autostart-set").checked = false;
         function autostartset() {
             var AutoLaunch = require('auto-launch');
             var wnrLauncher = new AutoLaunch({ name: 'wnr' });
-            if (document.getElementById("autostart-set").checked) {
+            if (document.getElementById("autostart-set").checked == true) {
                 store.set("autostart", true);
                 wnrLauncher.isEnabled()
                     .then(function (isEnabled) {
@@ -170,7 +168,7 @@
             }
             else {
                 store.set("autostart", false);
-                minecraftAutoLauncher.isEnabled()
+                wnrLauncher.isEnabled()
                     .then(function (isEnabled) {
                         if (isEnabled) {
                             wnrLauncher.disable();
@@ -179,12 +177,10 @@
                     })
             }
         }
-        if (store.get("fullscreen") != undefined) {
-            if (store.get("fullscreen") == true) $("#fullscreen-set").attr("checked");
-            else $("#fullscreen-set").removeAttr("checked");
-        }
+        if (store.get("fullscreen") == true) document.getElementById("fullscreen-set").checked = true;
+        else document.getElementById("fullscreen-set").checked = false;
         function fullscreenset() {
-            if (document.getElementById("fullscreen-set").checked) store.set("fullscreen", true);
+            if (document.getElementById("fullscreen-set").checked == true) store.set("fullscreen", true);
             else store.set("fullscreen", false);
         }
         function relauncher() {

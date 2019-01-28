@@ -1,8 +1,8 @@
 {
   "name": "wnr",
-  "version": "1.1.6",
-  "update-use-version": "11677",
-  "description": "The name is a abbr of \"Work & Rest\". It's a timer app with strong expansibility for computers.",
+  "version": "1.1.7",
+  "update-use-version": "11777",
+  "description": "It's a timer app with strong expansibility for computers. The name is a abbr of \"Work & Rest\".",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
