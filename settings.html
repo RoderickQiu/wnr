@@ -89,22 +89,23 @@
                 <li>
                     <a href="javascript:updatechecker(2)" class="rest"><span id="manually">Manually check for update</span></a>&nbsp;<b>(Now
                         <script>document.write("v" + require("./package.json").version)</script>)</b>
-                </li>
-                <li>
+                </li> 
+                <li id="hotkey-tip">
                     Open/Hide hotkey:
                     <b>
                         <kbd>
-                            <kbd>
-                                <script>
-                                    if (process.platform == 'darwin') document.write("Command");
-                                    else document.write("Ctrl");//根据平台更换文字
-                                </script></kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></kbd>.
+                            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></kbd>.
                         (Hide to the system tray)
                     </b>
                 </li>
             </div>
         </div>
     </div>
+    <script>
+        if (process.platform == 'darwin') {
+            $("#hotkey-tip").css("display","none");
+        }
+    </script>
     <script src="updater.js"></script>
     <script>
         if (store.get("worktime") != undefined) {

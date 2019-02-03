@@ -42,7 +42,7 @@
         <div id="controller">
             <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings"></i></a>&nbsp;
             <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr"></i></a>&nbsp;
-            <a href="javascript:winhider()" class="small rest"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a>&nbsp;
+            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;</span>
             <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Minimize to taskbar"></i></a>&nbsp;
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit"></i></a>
         </div>
@@ -63,6 +63,10 @@
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
+        if(process.platform == "darwin") {
+            $("#win-hider").css("display","none");
+            $("#no-use-space").css("display","none");
+        }
     </script>
 </body>
 
