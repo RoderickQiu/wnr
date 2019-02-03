@@ -19,7 +19,8 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="index.html" class="small work"><i class="fa fa-chevron-left fa-fw" title="Give up the timer & Back"></i></a>&nbsp;
-            <a href="javascript:winhider()" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;</span>
+            <a href="javascript:winhider()" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span
+                id="no-use-space">&nbsp;</span>
             <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw" title="Minimize to taskbar"></i></a>&nbsp;
             <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" title="Exit"></i></a>
         </div>
@@ -31,9 +32,9 @@
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <script>
-        if(process.platform == "darwin") {
-            $("#win-hider").css("display","none");
-            $("#no-use-space").css("display","none");
+        if (process.platform == "darwin") {
+            $("#win-hider").css("display", "none");
+            $("#no-use-space").css("display", "none");
         }
         var ipc = require('electron').ipcRenderer;
         const Store = require('electron-store');

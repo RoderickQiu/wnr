@@ -66,18 +66,40 @@ app.on('ready', () => {
     })
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-    else if(process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
+    else if (process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
     const contextMenu = Menu.buildFromTemplate([
         {
-            label: 'Show/Hide', click: () => {
+            label: 'wnr v' + require("./package.json").version
+        }, {
+            type: 'separator'
+        }, {
+            label: 'Website',
+            click: function () {
+                shell.openExternal('https://wnr.scris.top/');
+            }
+        }, {
+            label: 'Help Page',
+            click: function () {
+                shell.openExternal('https://wnr.scris.top/help.html');
+            }
+        }, {
+            label: 'Github',
+            click: function () {
+                shell.openExternal('https://github.com/RoderickQiu/wnr/');
+            }
+        }, {
+            type: 'separator'
+        }, {
+            label: 'Show / Hide', click: () => {
                 win.isVisible() ? win.hide() : win.show();
                 if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
                 if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
             }
-        },
-        { label: 'Exit', click: () => { app.quit() } }
+        }, {
+            label: 'Exit', click: () => { app.quit() }
+        }
     ]);
-    if(tray != null) {
+    if (tray != null) {
         tray.setToolTip('wnr');
         tray.setContextMenu(contextMenu);
         tray.on('click', () => {
@@ -218,7 +240,7 @@ ipcMain.on('minimizer', function () {
 })
 
 ipcMain.on('about', function () {
-    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 233, height: 216, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     aboutWin.loadFile("about.html");
     if (store.get("top") == true || store.get("top") == undefined) aboutWin.setAlwaysOnTop(true);
     aboutWin.once('ready-to-show', () => {

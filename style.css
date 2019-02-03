@@ -76,6 +76,12 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
 .rest:focus::-webkit-input-placeholder, .rest:hover::-webkit-input-placeholder{
     color: #5490eac2;
 }
+.extreme-small{
+    font-size: xx-small;
+    line-break: loose;
+    line-height: 100%;
+    margin: 5px;
+}
 
 #main{
     -webkit-app-region: no-drag;/* let it clickable */

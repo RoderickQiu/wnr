@@ -42,7 +42,8 @@
         <div id="controller">
             <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings"></i></a>&nbsp;
             <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr"></i></a>&nbsp;
-            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;</span>
+            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span
+                id="no-use-space">&nbsp;</span>
             <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Minimize to taskbar"></i></a>&nbsp;
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit"></i></a>
         </div>
@@ -53,7 +54,7 @@
                     style="ime-mode:Disabled" class="work lead" autofocus required /><br /><br />
                 <input name="rest-time" id="rest-time" placeholder="then rest for (minutes)" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
                     style="ime-mode:Disabled" class="rest lead" required /><br /><br />
-                <input name="loop" id="loop" placeholder="loop for how many times" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
+                <input name="loop" id="loop" placeholder="loop for (times)" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
                     style="ime-mode:Disabled" class="small" required /><br /><!-- control that only numbers are OK -->
             </form>
         </div>
@@ -63,9 +64,9 @@
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
-        if(process.platform == "darwin") {
-            $("#win-hider").css("display","none");
-            $("#no-use-space").css("display","none");
+        if (process.platform == "darwin") {
+            $("#win-hider").css("display", "none");
+            $("#no-use-space").css("display", "none");
         }
     </script>
 </body>
