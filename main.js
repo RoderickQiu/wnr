@@ -13,9 +13,9 @@ function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
         width: 324,
-        height: 256,
+        height: 270,
         frame: false,
-        resizable: true,
+        resizable: false,
         show: false,
         hasShadow: true,
         webPreferences: { nodeIntegration: true },
@@ -267,7 +267,7 @@ ipcMain.on('settings', function () {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    win.setProgressBar(1 - message)
+    if (win != null) win.setProgressBar(1 - message)
 })
 
 ipcMain.on("logger", function (event, message) {

@@ -114,6 +114,7 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     position: absolute;
     top: 5px;
     right: 8px;
+    font-size: 18px;
     -webkit-app-region: no-drag;/* let it clickable */
     -webkit-user-select: none;
 }

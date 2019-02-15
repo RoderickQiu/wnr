@@ -6,7 +6,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -40,22 +41,29 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw" title="Settings"></i></a>&nbsp;
-            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" title="About wnr"></i></a>&nbsp;
-            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw" title="Hide the window to system tray"></i></a><span
-                id="no-use-space">&nbsp;</span>
-            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw" title="Minimize to taskbar"></i></a>&nbsp;
+            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw"
+                    title="Settings"></i></a>&nbsp;&nbsp;
+            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw"
+                    title="About wnr"></i></a>&nbsp;&nbsp;
+            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
+                    title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw"
+                    title="Minimize to taskbar"></i></a>&nbsp;&nbsp;
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit"></i></a>
         </div>
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
-                <input name="title" id="title" placeholder="please enter a title" type="text" class="small" maxlength="14" /><br /><br />
-                <input name="work-time" id="work-time" placeholder="work for (minutes)" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
-                    style="ime-mode:Disabled" class="work lead" autofocus required /><br /><br />
-                <input name="rest-time" id="rest-time" placeholder="then rest for (minutes)" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
-                    style="ime-mode:Disabled" class="rest lead" required /><br /><br />
-                <input name="loop" id="loop" placeholder="loop for (times)" type="number" onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))"
-                    style="ime-mode:Disabled" class="small" required /><br /><!-- control that only numbers are OK -->
+                <input name="title" id="title" placeholder="please enter a title" type="text" class="small"
+                    maxlength="14" /><br /><br />
+                <input name="work-time" id="work-time" placeholder="work for (minutes)" type="number"
+                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
+                    class="work lead" autofocus required /><br /><br />
+                <input name="rest-time" id="rest-time" placeholder="then rest for (minutes)" type="number"
+                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
+                    class="rest lead" required /><br /><br />
+                <input name="loop" id="loop" placeholder="loop for (times)" type="number"
+                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
+                    class="small" required /><br /><!-- control that only numbers are OK -->
             </form>
         </div>
     </div>

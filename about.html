@@ -6,7 +6,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -26,11 +27,14 @@
                 <script>document.write("version " + require("./package.json").version);</script>
             </p>
             <p>
-                <a class="rest" href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)"><i
-                        class="fa fa-home" title="Homepage / Need Help"></i></a>&nbsp;
-                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
-                        class="fa fa-github" title="View it on GitHub"></i></a>&nbsp;
-                <a class="rest" href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
+                <a class="rest"
+                    href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)"><i
+                        class="fa fa-home" title="Homepage / Need Help"></i></a>&nbsp;&nbsp;
+                <a class="rest"
+                    href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
+                        class="fa fa-github" title="View it on GitHub"></i></a>&nbsp;&nbsp;
+                <a class="rest"
+                    href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
                         class="fa fa-exclamation-circle" title="Issues"></i></a>
             </p>
             <hr />
