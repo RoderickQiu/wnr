@@ -21,6 +21,8 @@ function updatechecker(method) {
     });
     store.set("last-check-time", nowtime);
 }
-if (store.get("last-check-time") == undefined || store.get("last-check-time") - nowtime > 86400000) {
-    updatechecker(1);
-}// check for updates every day
+if (store.get("autocheck") != false) {
+    if (store.get("last-check-time") == undefined || store.get("last-check-time") - nowtime > 86400000) {
+        updatechecker(1);
+    }// check for updates every day
+}

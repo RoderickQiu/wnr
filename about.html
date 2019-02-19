@@ -46,6 +46,12 @@
             <p class="extreme-small"> some suggestion, just tell me!</p>
         </div>
     </div>
+    <script>
+        var ipc = require('electron').ipcRenderer;
+        const Store = require('electron-store');
+        const store = new Store();
+    </script>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

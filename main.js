@@ -6,7 +6,7 @@ const path = require("path");
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win, settingsWin = null, aboutWin = null
-let tray = null
+let tray = null, contextMenu = null
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
 
 function createWindow() {
@@ -67,9 +67,17 @@ app.on('ready', () => {
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
     else if (process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
-    const contextMenu = Menu.buildFromTemplate([
+    contextMenu = Menu.buildFromTemplate([
         {
             label: 'wnr v' + require("./package.json").version
+        }, {
+            type: 'separator'
+        }, {
+            label: 'Start / Stop',
+            enabled: false,
+            click: function () {
+                win.webContents.send('startorstop')
+            }
         }, {
             type: 'separator'
         }, {
@@ -165,6 +173,8 @@ ipcMain.on('warninggiver-workend', function () {
                 type: "info",
                 message: "Your work time is now ended. Enjoy your rest time!",
                 silent: true
+            }, function (response) {
+                win.webContents.send('warning-closed');
             });
         }, 100)
     }
@@ -180,8 +190,9 @@ ipcMain.on('warninggiver-restend', function () {
                 title: "Your rest time is now ended!",
                 type: "info",
                 message: "Your rest time is now ended. Start working!"
-            }, function () {
+            }, function (response) {
                 if (!win.isVisible()) win.show();
+                win.webContents.send('warning-closed');
             });
         }, 180)
     }
@@ -215,6 +226,7 @@ ipcMain.on('updateavailable', function () {
         if (checkboxChecked) {
             shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
         }
+
     })
 })
 
@@ -272,6 +284,22 @@ ipcMain.on("progress-bar-set", function (event, message) {
 
 ipcMain.on("logger", function (event, message) {
     console.log(message)
+})
+
+ipcMain.on("timer-win", function (event, message) {
+    if (message) {
+        if (tray != null) {
+            contextMenu.items[2].enabled = true;
+        }
+        globalShortcut.register('CommandOrControl+Shift+Alt+S', () => {
+            win.webContents.send('startorstop');
+        })
+    } else {
+        if (tray != null) {
+            contextMenu.items[2].enabled = false;
+        }
+        globalShortcut.unregister('CommandOrControl+Shift+Alt+S');
+    }
 })
 
 /* 参考：

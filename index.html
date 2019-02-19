@@ -68,7 +68,9 @@
         </div>
     </div>
     <script src="updater.js"></script>
+    <script src="renderer.js"></script>
     <script>
+        isTimerWindow(false);
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));

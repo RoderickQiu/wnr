@@ -36,14 +36,17 @@
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <script>
-        if (process.platform == "darwin") {
-            $("#win-hider").css("display", "none");
-            $("#no-use-space").css("display", "none");
-        }
         var ipc = require('electron').ipcRenderer;
         const Store = require('electron-store');
         const store = new Store();
         const path = require("path");
+    </script>
+    <script src="renderer.js"></script>
+    <script>
+        if (process.platform == "darwin") {
+            $("#win-hider").css("display", "none");
+            $("#no-use-space").css("display", "none");
+        }
         var $_GET = (function () {
             var url = window.document.location.href.toString();
             var u = url.split("?");
@@ -65,9 +68,12 @@
         var loop = decodeURI($_GET['loop']);
         if (!worktime || worktime == "undefined" || !resttime || resttime == "undefined" || !loop || loop == "undefined") {
             $("#timer").html("<p class='text-center lead'>Some information wasn't given so we cannot start the timer.<br/><a href='index.html' class='work'>Back</a></p>");
+            isTimerWindow(false);
         } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
             $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='work'>Back</a></p>");
+            isTimerWindow(false);
         } else {
+            isTimerWindow(true);
             if (title && title != "undefined") $("#title").html(title);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
@@ -95,10 +101,12 @@
                         player.src = path.join(__dirname, "\\res\\sound\\allend.wav");
                     }
                     player.play();
-                }//different sound for different circumstances
+                }//different sound for differs11q ent circumstances
                 if (isend == 0) ipc.send('warninggiver-allend');
-                else if (isend == 1) ipc.send('warninggiver-workend');
-                else ipc.send('warninggiver-restend');
+                else {
+                    if (isend == 1) ipc.send('warninggiver-workend');
+                    else ipc.send('warninggiver-restend');
+                }
             }
             function themechanger() {
                 if (method == 1) {
@@ -148,12 +156,15 @@
                     }
                 }
             }
-            function winhider() {
-                ipc.send("winhider");
-            }
-            function minimizer() {
-                ipc.send("minimizer");
-            }
+            ipc.on('startorstop', function () {
+                stopper();
+            })
+        }
+        function winhider() {
+            ipc.send("winhider");
+        }
+        function minimizer() {
+            ipc.send("minimizer");
         }
     </script>
 </body>

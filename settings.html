@@ -6,7 +6,8 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script><!-- solve the electron-jquery conflict -->
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -82,12 +83,20 @@
                     computer.
                 </span>
             </div>
+            <div class="align-content-center form-text">
+                <label>Auto check for update: </label>
+                <input id="autocheck-set" type="checkbox" onchange="autocheckset()" />
+                <br /><span class="text-muted small">
+                    If it is enabled, wnr will automatically check for update (every day).
+                </span>
+            </div>
             <br />
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>Other Things</p>
             <hr />
             <div class="text-muted small">
                 <li>
-                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">Manually check for update</span></a>&nbsp;<b>(Now
+                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">Manually check for
+                            update</span></a>&nbsp;<b>(Now
                         <script>document.write("v" + require("./package.json").version)</script>)</b>
                 </li>
                 <li id="hotkey-tip">
@@ -179,15 +188,22 @@
             }
         }
         if (store.get("fullscreen") == true) document.getElementById("fullscreen-set").checked = true;
-        else document.getElementById("fullscreen-set").checked = false;
+        else document.getElementById("fullscrseen-set").checked = false;
         function fullscreenset() {
             if (document.getElementById("fullscreen-set").checked == true) store.set("fullscreen", true);
             else store.set("fullscreen", false);
+        }
+        if (store.get("autocheck") != false) document.getElementById("autocheck-set").checked = true;
+        else document.getElementById("autocheck-set").checked = false;
+        function autocheckset() {
+            if (document.getElementById("autocheck-set").checked == true) store.set("autocheck", true);
+            else store.set("autocheck", false);
         }
         function relauncher() {
             ipc.send("relauncher");
         }
     </script>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

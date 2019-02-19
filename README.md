@@ -34,13 +34,7 @@ As a timer app, wnr is simple but useful.
 
 ## To-do List
 
-- Chinese support
-
-- natural notification
-
-- history
-
-- ......
+Please go and see [Githhub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
 ## Contact
 
