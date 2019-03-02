@@ -54,6 +54,7 @@ input[type="checkbox"] {
 }
 input[type="checkbox"]:checked {
     background-image: url(./res/icons/check.png);
+    background-size: contain;
 }
 input::-webkit-input-placeholder { 
     color: #999999; 
