@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell }
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
+var i18n = require("i18n");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -57,6 +58,23 @@ app.on('will-quit', () => {
 app.on('ready', () => {
     createWindow();
 
+    i18n.configure({
+        locales: ['en', 'zh'],
+        directory: __dirname + '/locales',
+        register: global
+    });
+    if (store.get("i18n") == undefined) {
+        var lang = app.getLocale();
+        if (lang[0] == 'e' && lang[1] == 'n') {
+            lang = 'en';
+        }
+        if (lang[0] == 'z' && lang[1] == 'h') {
+            lang = 'zh';
+        }//自动去掉不必要的语言尾巴
+        store.set('i18n', lang);
+    }
+    i18n.setLocale(store.get("i18n"));//国际化组件默认设置
+
     if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true);
 
     globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
@@ -69,11 +87,11 @@ app.on('ready', () => {
     else if (process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
     contextMenu = Menu.buildFromTemplate([
         {
-            label: 'wnr v' + require("./package.json").version
+            label: 'wnr' + i18n.__('v') + require("./package.json").version
         }, {
             type: 'separator'
         }, {
-            label: 'Start / Stop',
+            label: i18n.__('startorstop'),
             enabled: false,
             click: function () {
                 win.webContents.send('startorstop')
@@ -81,30 +99,30 @@ app.on('ready', () => {
         }, {
             type: 'separator'
         }, {
-            label: 'Website',
+            label: i18n.__('website'),
             click: function () {
                 shell.openExternal('https://wnr.scris.top/');
             }
         }, {
-            label: 'Help Page',
+            label: i18n.__('helppage'),
             click: function () {
                 shell.openExternal('https://wnr.scris.top/help.html');
             }
         }, {
-            label: 'Github',
+            label: i18n.__('github'),
             click: function () {
                 shell.openExternal('https://github.com/RoderickQiu/wnr/');
             }
         }, {
             type: 'separator'
         }, {
-            label: 'Show / Hide', click: () => {
+            label: i18n.__('showorhide'), click: () => {
                 win.isVisible() ? win.hide() : win.show();
                 if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
                 if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
             }
         }, {
-            label: 'Exit', click: () => { app.quit() }
+            label: i18n.__('exit'), click: () => { app.quit() }
         }
     ]);
     if (tray != null) {
@@ -121,26 +139,26 @@ app.on('ready', () => {
         var template = [{
             label: 'wnr',
             submenu: [{
-                label: 'Quit',
+                label: i18n.__('quit'),
                 accelerator: 'CmdOrCtrl+Q',
                 click: function () {
                     app.quit();
                 }
             }]
         }, {
-            label: 'Help',
+            label: i18n.__('help'),
             submenu: [{
-                label: 'Website',
+                label: i18n.__('website'),
                 click: function () {
                     shell.openExternal('https://wnr.scris.top/');
                 }
             }, {
-                label: 'Help Page',
+                label: i18n.__('helppage'),
                 click: function () {
                     shell.openExternal('https://wnr.scris.top/help.html');
                 }
             }, {
-                label: 'View it on Github',
+                label: i18n.__('ongithub'),
                 click: function () {
                     shell.openExternal('https://github.com/RoderickQiu/wnr/');
                 }
@@ -169,9 +187,9 @@ ipcMain.on('warninggiver-workend', function () {
         if (store.get("fullscreen") == true) win.setFullScreen(true);
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: "Your work time is now ended!",
+                title: i18n.__('worktimeend'),
                 type: "info",
-                message: "Your work time is now ended. Enjoy your rest time!",
+                message: i18n.__('worktimemsg'),
                 silent: true
             }, function (response) {
                 win.webContents.send('warning-closed');
@@ -187,9 +205,9 @@ ipcMain.on('warninggiver-restend', function () {
         if (win.isFullScreen()) win.setFullScreen(false);
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: "Your rest time is now ended!",
+                title: i18n.__('resttimeend'),
                 type: "info",
-                message: "Your rest time is now ended. Start working!"
+                message: i18n.__('resttimemsg')
             }, function (response) {
                 if (!win.isVisible()) win.show();
                 win.webContents.send('warning-closed');
@@ -205,9 +223,9 @@ ipcMain.on('warninggiver-allend', function () {
         if (win.isFullScreen()) win.setFullScreen(false);
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: "Your schedule is now finished!",
+                title: i18n.__('allend'),
                 type: "info",
-                message: "Your schedule is now finished. You can now set another one."
+                message: i18n.__('allmsg')
             }, function () {
                 if (!win.isVisible()) win.show()
             });
@@ -217,10 +235,10 @@ ipcMain.on('warninggiver-allend', function () {
 
 ipcMain.on('updateavailable', function () {
     dialog.showMessageBox(win, {
-        title: "New version available!",
+        title: i18n.__('update'),
         type: "warning",
-        message: "A new version of wnr is now available. To enjoy wnr better, you should download and install the update.",
-        checkboxLabel: "Go to GitHub and download the new release",
+        message: i18n.__('updatemsg'),
+        checkboxLabel: i18n.__('updatechk'),
         checkboxChecked: true
     }, function (response, checkboxChecked) {
         if (checkboxChecked) {
@@ -232,9 +250,9 @@ ipcMain.on('updateavailable', function () {
 
 ipcMain.on('noupdateavailable', function () {
     dialog.showMessageBox(win, {
-        title: "No update available.",
+        title: i18n.__('noupdate'),
         type: "info",
-        message: "No update available. Thanks for using wnr!"
+        message: i18n.__('noupdatemsg')
     })
 })
 
@@ -264,7 +282,7 @@ ipcMain.on('about', function () {
 })
 
 ipcMain.on('settings', function () {
-    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 720, height: 540, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 520, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     settingsWin.loadFile("settings.html");
     if (store.get("top") == true || store.get("top") == undefined) settingsWin.setAlwaysOnTop(true);
     settingsWin.once('ready-to-show', () => {

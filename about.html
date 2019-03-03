@@ -17,37 +17,49 @@
 </head>
 
 <body>
+    <script src="renderer.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Close"></i></a>
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="close"></i></a>
+            <script>
+                $('#close').attr('title', i18n.__('close'));
+            </script>
         </div>
         <div id="about" class="justify-content-center text-center">
             <p class="lead rest font-weight-bolder">wnr</p>
             <p class="small text-muted">
-                <script>document.write("version " + require("./package.json").version);</script>
+                <script>document.write(i18n.__('version') + require("./package.json").version);</script>
             </p>
             <p>
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)"><i
-                        class="fa fa-home" title="Homepage / Need Help"></i></a>&nbsp;&nbsp;
+                        class="fa fa-home" id="homepage"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
-                        class="fa fa-github" title="View it on GitHub"></i></a>&nbsp;&nbsp;
+                        class="fa fa-github" id="ongithub"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
-                        class="fa fa-exclamation-circle" title="Issues"></i></a>
+                        class="fa fa-exclamation-circle" id="issues"></i></a>
+                <script>
+                    $('#homepage').attr('title', i18n.__('homepage'));
+                    $('#ongithub').attr('title', i18n.__('ongithub'));
+                    $('#issues').attr('title', i18n.__('issues'));
+                </script>
             </p>
             <hr />
-            <p class="extreme-small">If you have problems or you want to</p>
-            <p class="extreme-small"> some suggestion, just <a href="mailto:scrisqiu@hotmail.com">tell me</a>!</p>
+            <p class="extreme-small">
+                <script>document.write(i18n.__('tip1'));</script>
+            </p>
+            <p class="extreme-small">
+                <script>document.write(i18n.__('tip2'));</script>
+                <a href="mailto:scrisqiu@hotmail.com" id="emailto">
+                    <script>$("#emailto").attr("title", i18n.__('emailto'));</script>
+                    <script>document.write(i18n.__('tip3'));</script>
+                </a>
+                <script>document.write(i18n.__('tip4'));</script>
+            </p>
         </div>
     </div>
-    <script>
-        var ipc = require('electron').ipcRenderer;
-        const Store = require('electron-store');
-        const store = new Store();
-    </script>
-    <script src="renderer.js"></script>
 </body>
 
 </html>

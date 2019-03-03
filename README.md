@@ -1,8 +1,10 @@
 # wnr
 
-##### Download: [GitHub release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml)
+**Download: [GitHub release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml)**
 
 ## Introduction
+
+**[中文版](https://scris.top/wnr/)**
 
 **The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.**
 
@@ -34,12 +36,14 @@ As a timer app, wnr is simple but useful.
 
 ## To-do List
 
-Please go and see [Githhub Project](https://github.com/RoderickQiu/wnr/projects/1).
+Please go and see [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
 ## Contact
 
 - Homepage: [wnr.scris.top](https://wnr.scris.top/)
+
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/)
+
 - Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/)
 
 ---

@@ -17,94 +17,139 @@
 </head>
 
 <body>
+    <script src="renderer.js"></script>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit & Save"></i></a>
+        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
+        <script>
+            $('#exitsave').attr('title', i18n.__('exitsave'));
+        </script>
     </div>
     <div class="d-flex text-dark" id="settingscontainer">
         <div id="settings" class="text-left">
-            <p class="h3 rest"><i class="fa fa-cog fa-fw" aria-hidden="true"></i>Settings</p>
+            <p class="h3 rest"><i class="fa fa-cog fa-fw" id="settings" aria-hidden="true"></i>
+                <script>document.write(i18n.__('settings'));</script>
+            </p>
             <br />
-            <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>Time Settings</p>
+            <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
+                <script>document.write(i18n.__('timeset'));</script>
+            </p>
             <hr />
             <div class="align-content-center form-text">
-                <label>Default work time: </label>
-                <input id="work-time-set" type="range" min="-1" max="120" value="-1" onchange="worktimeset()" />
-                <span id="work-time-show" class="text-black-50">-1</span>
+                <label>
+                    <script>document.write(i18n.__('defwork'));</script></label>
+                <input id="work-time-set" type="range" min="0" max="120" value="0" onchange="worktimeset()" />
+                <span id="work-time-show" class="text-black-50">0</span>
                 <br /><span class="text-muted small">
-                    Set the default work time for every loop. <b>Set it to "-1" to delete the former setting.</b>
+                    <script>document.write(i18n.__('defworktip'));</script><b>
+                        <script>document.write(i18n.__('resettip'));</script></b>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Default rest time: </label>
-                <input id="rest-time-set" type="range" min="-1" max="120" value="-1" onchange="resttimeset()" />
-                <span id="rest-time-show" class="text-black-50">-1</span>
+                <label>
+                    <script>document.write(i18n.__('defrest'));</script></label>
+                <input id="rest-time-set" type="range" min="0" max="120" value="0" onchange="resttimeset()" />
+                <span id="rest-time-show" class="text-black-50">0</span>
                 <br /><span class="text-muted small">
-                    Set the default rest time for every loop. <b>Set it to "-1" to delete the former setting.</b>
+                    <script>document.write(i18n.__('defworktip'));</script><b>
+                        <script>document.write(i18n.__('resettip'));</script></b>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Default number of loops: </label>
-                <input id="loop-time-set" type="range" min="-1" max="12" value="-1" onchange="looptimeset()" />
-                <span id="loop-time-show" class="text-black-50">-1</span>
+                <label>
+                    <script>document.write(i18n.__('defloop'));</script></label>
+                <input id="loop-time-set" type="range" min="0" max="12" value="0" onchange="looptimeset()" />
+                <span id="loop-time-show" class="text-black-50">0</span>
                 <br /><span class="text-muted small">
-                    Set the default number of loops. <b>Set it to "-1" to delete the former setting.</b>
+                    <script>document.write(i18n.__('deflooptip'));</script><b>
+                        <script>document.write(i18n.__('resettip'));</script></b>
                 </span>
             </div>
             <br />
-            <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>Global Settings</p>
+            <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                <script>document.write(i18n.__('globalset'));</script>
+            </p>
             <hr />
             <div class="align-content-center form-text">
-                <label>Play sound to notify: </label>
+                <label>
+                    <script>document.write(i18n.__('langset'));</script></label>
+                <input id="lang-set" type="checkbox" onchange="langset()" />
+                <br /><span class="text-muted small">
+                    <script>document.write(i18n.__('langtip'));</script>
+                    <br /><b>
+                        <script>document.write(i18n.__('restarttip'));</script><span id="restarttip1"></span>
+                    </b>
+                </span>
+            </div>
+            <div class="align-content-center form-text">
+                <label>
+                    <script>document.write(i18n.__('soundnotify'));</script></label>
                 <input id="sound-set" type="checkbox" onchange="soundset()" checked />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time your time is ended, a notice sound is played.
+                    <script>document.write(i18n.__('soundtip'));</script>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Always on top: </label>
+                <label>
+                    <script>document.write(i18n.__('alwaysontop'));</script></label>
                 <input id="top-set" type="checkbox" onchange="topset()" checked />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time you start wnr, it will stay on the top of the screen. <b>Restart is
-                        required. <span id="restarttip"></span></b>
+                    <script>document.write(i18n.__('alwaystip'));</script>
+                    <br /><b>
+                        <script>document.write(i18n.__('restarttip'));</script><span id="restarttip"></span>
+                    </b>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Start up with system: </label>
+                <label>
+                    <script>document.write(i18n.__('autostart'));</script></label>
                 <input id="autostart-set" type="checkbox" onchange="autostartset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, every time your system starts, wnr starts.
+                    <script>document.write(i18n.__('autotip'));</script>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Fullscreen rest time: </label>
+                <label>
+                    <script>document.write(i18n.__('fullscreenrest'));</script></label>
                 <input id="fullscreen-set" type="checkbox" onchange="fullscreenset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, when it's rest time, wnr will enter full-screen mode to prevent you from using
-                    computer.
+                    <script>document.write(i18n.__('fullscreentip'));</script>
                 </span>
             </div>
             <div class="align-content-center form-text">
-                <label>Auto check for update: </label>
+                <label>
+                    <script>document.write(i18n.__('autocheck'));</script></label>
                 <input id="autocheck-set" type="checkbox" onchange="autocheckset()" />
                 <br /><span class="text-muted small">
-                    If it is enabled, wnr will automatically check for update (every day).
+                    <script>document.write(i18n.__('checktip'));</script>
                 </span>
             </div>
             <br />
-            <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>Other Things</p>
+            <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
+                <script>document.write(i18n.__('otherthings'));</script>
+            </p>
             <hr />
             <div class="text-muted small">
                 <li>
-                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">Manually check for
-                            update</span></a>&nbsp;<b>(Now
-                        <script>document.write("v" + require("./package.json").version)</script>)</b>
+                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">
+                            <script>document.write(i18n.__('manuallycheck'));</script></span></a>&nbsp;
+                    <b>
+                        <script>document.write(i18n.__('checker1') + i18n.__('v') + require("./package.json").version + i18n.__('checker2'))</script>
+                    </b>
                 </li>
                 <li id="hotkey-tip">
-                    Open/Hide hotkey:
+                    <script>document.write(i18n.__('hotkeytip'));</script>
                     <b>
                         <kbd>
                             <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></kbd>.
-                        (Hide to the system tray)
+                        <script>document.write(i18n.__('hotkeyusage'));</script>
+                    </b>
+                </li>
+                <li id="hotkey2-tip">
+                    <script>document.write(i18n.__('hotkey2tip'));</script>
+                    <b>
+                        <kbd>
+                            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd></kbd>.
+                        <script>document.write(i18n.__('hotkey2usage'));</script>
                     </b>
                 </li>
             </div>
@@ -123,7 +168,7 @@
         }
         function worktimeset() {
             $("#work-time-show").html($("#work-time-set").val());
-            if ($("#work-time-set").val() != -1) store.set("worktime", $("#work-time-set").val());
+            if ($("#work-time-set").val() != 0) store.set("worktime", $("#work-time-set").val());
             else store.delete("worktime");
         }
         if (store.get("resttime") != undefined) {
@@ -132,7 +177,7 @@
         }
         function resttimeset() {
             $("#rest-time-show").html($("#rest-time-set").val());
-            if ($("#rest-time-set").val() != -1) store.set("resttime", $("#rest-time-set").val());
+            if ($("#rest-time-set").val() != 0) store.set("resttime", $("#rest-time-set").val());
             else store.delete("resttime");
         }
         if (store.get("looptime") != undefined) {
@@ -141,8 +186,17 @@
         }
         function looptimeset() {
             $("#loop-time-show").html($("#loop-time-set").val());
-            if ($("#loop-time-set").val() != -1) store.set("looptime", $("#loop-time-set").val());
+            if ($("#loop-time-set").val() != 0) store.set("looptime", $("#loop-time-set").val());
             else store.delete("looptime");
+        }
+        if (store.get("i18n") != undefined) {
+            if (store.get("i18n") == 'en') document.getElementById("lang-set").checked = true;
+            else document.getElementById("lang-set").checked = false;
+        }
+        function langset() {
+            if (document.getElementById("lang-set").checked == true) store.set("i18n", 'en');
+            else store.set("i18n", 'zh');
+            $("#restarttip1").html("(<a class='rest' href='javascript:relauncher()'>" + i18n.__('restartnow') + "</a>)");
         }
         if (store.get("sound") != undefined) {
             if (store.get("sound")) document.getElementById("sound-set").checked = true;
@@ -159,7 +213,7 @@
         function topset() {
             if (document.getElementById("top-set").checked == true) store.set("top", true);
             else store.set("top", false);
-            $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>Restart Now</a>)");
+            $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>" + i18n.__('restartnow') + "</a>)");
         }
         if (store.get("autostart") == true) document.getElementById("autostart-set").checked = true;
         else document.getElementById("autostart-set").checked = false;
@@ -203,7 +257,6 @@
             ipc.send("relauncher");
         }
     </script>
-    <script src="renderer.js"></script>
 </body>
 
 </html>

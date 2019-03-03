@@ -9,16 +9,23 @@ html, body{
     align-items: center;/* center in v/h */
     -webkit-app-region: drag;/* let the app draggable */
 }
+@keyframes showTip{
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
 
 kbd{
     background-color: #5490ea;
+    font-weight: lighter;
 }
 label{
     display: inline-block;
+    vertical-align: middle;
     margin-bottom: .5rem;
 }
 input{
     display: inline-block;
+    vertical-align: middle;
     line-height: inherit;
     margin: 0rem;
     padding: 1px 0px;
@@ -63,6 +70,9 @@ input::-webkit-input-placeholder {
 input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder { 
     color: #999999c2; 
     transition: color.5s; 
+}
+li{
+    line-height: 200%;
 }
 
 .work, .work::-webkit-input-placeholder{
@@ -116,6 +126,13 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     top: 5px;
     right: 8px;
     font-size: 18px;
+    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-user-select: none;
+}
+#tip{
+    position: absolute;
+    bottom: 5px;
+    opacity: 0;
     -webkit-app-region: no-drag;/* let it clickable */
     -webkit-user-select: none;
 }

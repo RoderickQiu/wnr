@@ -17,15 +17,22 @@
 </head>
 
 <body>
+    <script src="renderer.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="index.html" class="small work"><i class="fa fa-chevron-left fa-fw"
-                    title="Give up the timer & Back"></i></a>&nbsp;&nbsp;
+                    id="backindex"></i></a>&nbsp;&nbsp;
             <a href="javascript:winhider()" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
-                    title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+                    id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw"
-                    title="Minimize to taskbar"></i></a>&nbsp;&nbsp;
-            <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" title="Exit"></i></a>
+                    id="minimizer"></i></a>&nbsp;&nbsp;
+            <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" id="exit"></i></a>
+            <script>
+                $('#backindex').attr('title', i18n.__('backindex'));
+                $('#winhider').attr('title', i18n.__('winhider'));
+                $('#minimizer').attr('title', i18n.__('minimizer'));
+                $('#exit').attr('title', i18n.__('exit'));
+            </script>
         </div>
         <div id="timer" class="justify-content-center">
             <div id="title" class="text-center h4"></div>
@@ -36,13 +43,7 @@
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <script>
-        var ipc = require('electron').ipcRenderer;
-        const Store = require('electron-store');
-        const store = new Store();
         const path = require("path");
-    </script>
-    <script src="renderer.js"></script>
-    <script>
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
@@ -67,10 +68,10 @@
         var resttime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
         if (!worktime || worktime == "undefined" || !resttime || resttime == "undefined" || !loop || loop == "undefined") {
-            $("#timer").html("<p class='text-center lead'>Some information wasn't given so we cannot start the timer.<br/><a href='index.html' class='work'>Back</a></p>");
+            $("#timer").html("<p class='text-center lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             isTimerWindow(false);
         } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
-            $("#timer").html("<p class='text-center lead'>The time is too long. Please make your work time and your rest time less than a day.<br/><a href='index.html' class='work'>Back</a></p>");
+            $("#timer").html("<p class='text-center lead'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             isTimerWindow(false);
         } else {
             isTimerWindow(true);
@@ -128,7 +129,7 @@
             function ender() {
                 window.clearInterval(int);
                 $("#work-rest").text("");
-                $("#now-timing").text("End!");
+                $("#now-timing").text(i18n.__('ended'));
                 isclockworking = 0;
                 $("#stopper").text("");
                 ipc.send("progress-bar-set", -1);

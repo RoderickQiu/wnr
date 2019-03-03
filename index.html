@@ -18,6 +18,8 @@
 
 <body onpaste="return false">
     <!-- prevent people from pasting abnormal content -->
+    <script src="renderer.js"></script>
+    <script src="updater.js"></script>
     <script>
         function about() {
             ipc.send("about");
@@ -42,33 +44,51 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw"
-                    title="Settings"></i></a>&nbsp;&nbsp;
-            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw"
-                    title="About wnr"></i></a>&nbsp;&nbsp;
+                    id="settings"></i></a>&nbsp;&nbsp;
+            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" id="info"></i></a>&nbsp;&nbsp;
             <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
-                    title="Hide the window to system tray"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+                    id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw"
-                    title="Minimize to taskbar"></i></a>&nbsp;&nbsp;
-            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" title="Exit"></i></a>
+                    id="minimizer"></i></a>&nbsp;&nbsp;
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exit"></i></a>
+            <script>
+                $('#settings').attr('title', i18n.__('settings'));
+                $('#info').attr('title', i18n.__('info'));
+                $('#winhider').attr('title', i18n.__('winhider'));
+                $('#minimizer').attr('title', i18n.__('minimizer'));
+                $('#exit').attr('title', i18n.__('exit'));
+            </script>
+        </div>
+        <div id="tip" class="small font-weight-bold text-black-50">
+            <script>document.write(i18n.__('tip'));</script>
         </div>
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
-                <input name="title" id="title" placeholder="please enter a title" type="text" class="small"
-                    maxlength="14" /><br /><br />
-                <input name="work-time" id="work-time" placeholder="work for (minutes)" type="number"
+                <input name="title" id="title" type="text" class="small" maxlength="14" /><br /><br />
+                <input name="work-time" id="work-time" type="number"
                     onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
                     class="work lead" autofocus required /><br /><br />
-                <input name="rest-time" id="rest-time" placeholder="then rest for (minutes)" type="number"
+                <input name="rest-time" id="rest-time" type="number"
                     onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
                     class="rest lead" required /><br /><br />
-                <input name="loop" id="loop" placeholder="loop for (times)" type="number"
+                <input name="loop" id="loop" type="number"
                     onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
                     class="small" required /><br /><!-- control that only numbers are OK -->
             </form>
+            <script>
+                $('#work-time').attr('placeholder', i18n.__('worktime'));
+                $('#title').attr('placeholder', i18n.__('title'));
+                $('#rest-time').attr('placeholder', i18n.__('resttime'));
+                $('#loop').attr('placeholder', i18n.__('loop'));
+                $("input").mouseenter(function () {
+                    $("#tip").css('opacity', '1');
+                });
+                $("input").mouseleave(function () {
+                    $("#tip").css('opacity', '0');
+                });
+            </script>
         </div>
     </div>
-    <script src="updater.js"></script>
-    <script src="renderer.js"></script>
     <script>
         isTimerWindow(false);
         $("#work-time").val(store.get("worktime"));
