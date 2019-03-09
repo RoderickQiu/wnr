@@ -1,7 +1,7 @@
 {
   "name": "wnr",
-  "version": "1.2.0",
-  "update-use-version": "12077",
+  "version": "1.2.2",
+  "update-use-version": "12277",
   "description": "It's a timer app with strong expansibility for computers. The name is a abbr of \"Work & Rest\".",
   "main": "main.js",
   "scripts": {
@@ -28,7 +28,7 @@
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "electron": "^4.0.5",
+    "electron": "^4.0.8",
     "electron-builder": "^20.38.5"
   },
   "build": {

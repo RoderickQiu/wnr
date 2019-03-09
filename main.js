@@ -6,7 +6,7 @@ var i18n = require("i18n");
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win, settingsWin = null, aboutWin = null
+let win, settingsWin = null, aboutWin = null, tourWin = null
 let tray = null, contextMenu = null
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
 
@@ -14,7 +14,7 @@ function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
         width: 324,
-        height: 270,
+        height: 298,
         frame: false,
         resizable: false,
         show: false,
@@ -75,12 +75,13 @@ app.on('ready', () => {
     }
     i18n.setLocale(store.get("i18n"));//国际化组件默认设置
 
-    if (store.get("top") == true || store.get("top") == undefined) win.setAlwaysOnTop(true);
+    if (store.get("top") == true) win.setAlwaysOnTop(true);
 
     globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
         win.isVisible() ? win.hide() : win.show();
         if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
         if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+        if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
     })
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
@@ -120,6 +121,7 @@ app.on('ready', () => {
                 win.isVisible() ? win.hide() : win.show();
                 if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
                 if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+                if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
             }
         }, {
             label: i18n.__('exit'), click: () => { app.quit() }
@@ -131,7 +133,8 @@ app.on('ready', () => {
         tray.on('click', () => {
             win.isVisible() ? win.hide() : win.show();
             if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-            if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show()
+            if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+            if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show()
         });//托盘菜单
     }
 
@@ -256,6 +259,20 @@ ipcMain.on('noupdateavailable', function () {
     })
 })
 
+ipcMain.on('webproblem', function () {
+    dialog.showMessageBox(win, {
+        title: i18n.__('webproblem'),
+        type: "info",
+        message: i18n.__('webproblemmsg')
+    })
+})
+
+ipcMain.on('deleteall', function () {
+    store.clear();
+    app.relaunch();
+    app.exit(0)
+})
+
 ipcMain.on('relauncher', function () {
     app.relaunch();
     app.exit(0)
@@ -272,7 +289,7 @@ ipcMain.on('minimizer', function () {
 ipcMain.on('about', function () {
     aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     aboutWin.loadFile("about.html");
-    if (store.get("top") == true || store.get("top") == undefined) aboutWin.setAlwaysOnTop(true);
+    if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
     aboutWin.once('ready-to-show', () => {
         aboutWin.show();
     })
@@ -284,7 +301,7 @@ ipcMain.on('about', function () {
 ipcMain.on('settings', function () {
     settingsWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 520, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     settingsWin.loadFile("settings.html");
-    if (store.get("top") == true || store.get("top") == undefined) settingsWin.setAlwaysOnTop(true);
+    if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
     settingsWin.once('ready-to-show', () => {
         settingsWin.show();
     })
@@ -293,6 +310,21 @@ ipcMain.on('settings', function () {
             win.reload();
         }
         settingsWin = null
+    })
+})
+
+ipcMain.on('tourguide', function () {
+    tourWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 520, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    tourWin.loadFile("tourguide.html");
+    if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
+    tourWin.once('ready-to-show', () => {
+        tourWin.show();
+    })
+    tourWin.on('closed', () => {
+        if (win != null) {
+            win.reload();
+        }
+        tourWin = null
     })
 })
 

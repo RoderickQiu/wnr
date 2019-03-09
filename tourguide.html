@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <!-- solve the electron-jquery conflict -->
+    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <script src="res/lib/all.js"></script>
+    <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script src="renderer.js"></script>
+    <script>
+        function tourguide() {
+            ipc.send("settings");
+            require('electron').shell.openExternal('https://wnr.scris.top/help.html');
+            window.close();
+        }
+    </script>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="controller">
+            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
+            <script>
+                $('#exitsave').attr('title', i18n.__('exitsave'));
+            </script>
+        </div>
+        <div id="about" class="justify-content-center text-center small">
+            <p class="h3 rest font-weight-bolder">
+                <script>document.write(i18n.__('welcomer1'))</script>
+            </p>
+            <center class="text-black-50">
+                <script>document.write(i18n.__('welcomer2'))</script>
+            </center><br />
+            <a href="javascript:tourguide()" class="btn btn-primary">
+                <script>document.write(i18n.__('welcomer3'))</script></a><br /><br />
+            <a href="https://github.com/RoderickQiu/wnr/">GitHub</a> | <a href="javascript:window.close()">
+                <script>document.write(i18n.__('welcomer4'))</script></a>
+        </div>
+    </div>
+</body>
+
+</html>

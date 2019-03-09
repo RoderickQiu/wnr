@@ -136,3 +136,13 @@ li{
     -webkit-app-region: no-drag;/* let it clickable */
     -webkit-user-select: none;
 }
+#note{
+    line-height: 200%;
+    vertical-align: middle;
+}
+#about{
+    position: absolute;
+    width: 75%;
+    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-user-select: text;
+}

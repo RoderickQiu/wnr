@@ -12,13 +12,15 @@ function updatechecker(method) {
         if (body) {
             var title = decodeURI(cheerio.load(body)('title').html());
             title = title.replace(/[^0-9]/g, "");
-            if (method == 2) document.getElementById("manually").innerHTML = mtext;
             if (title > version) {
                 ipc.send("updateavailable");
             } else if (method == 2) {// manually
                 ipc.send("noupdateavailable");
             }
+        } else {
+            if (method == 2) ipc.send("webproblem");
         }
+        if (method == 2) document.getElementById("manually").innerHTML = mtext;
     });
     store.set("last-check-time", nowtime);
 }

@@ -21,6 +21,12 @@
     <script src="renderer.js"></script>
     <script src="updater.js"></script>
     <script>
+        if (!store.get('tour') || store.get('tour') == undefined) {
+            store.set('tour', 'true');
+            ipc.send("tourguide");
+        }
+    </script>
+    <script>
         function about() {
             ipc.send("about");
         }
@@ -36,7 +42,7 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
-                window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val();
+                window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
             }
         }
         document.onkeydown = keydown;
@@ -64,7 +70,7 @@
         </div>
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
-                <input name="title" id="title" type="text" class="small" maxlength="14" /><br /><br />
+                <input name="title" id="title" type="text" class="small" maxlength="11" /><br /><br />
                 <input name="work-time" id="work-time" type="number"
                     onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
                     class="work lead" autofocus required /><br /><br />
@@ -73,13 +79,15 @@
                     class="rest lead" required /><br /><br />
                 <input name="loop" id="loop" type="number"
                     onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
-                    class="small" required /><br /><!-- control that only numbers are OK -->
+                    class="small" required /><br /><br /><!-- control that only numbers are OK -->
+                <input name="note" id="note" type="text" class="small" maxlength="22" />
             </form>
             <script>
                 $('#work-time').attr('placeholder', i18n.__('worktime'));
                 $('#title').attr('placeholder', i18n.__('title'));
                 $('#rest-time').attr('placeholder', i18n.__('resttime'));
                 $('#loop').attr('placeholder', i18n.__('loop'));
+                $('#note').attr('placeholder', i18n.__('note'));
                 $("input").mouseenter(function () {
                     $("#tip").css('opacity', '1');
                 });

@@ -20,15 +20,12 @@
     <script src="renderer.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="index.html" class="small work"><i class="fa fa-chevron-left fa-fw"
-                    id="backindex"></i></a>&nbsp;&nbsp;
             <a href="javascript:winhider()" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw"
                     id="minimizer"></i></a>&nbsp;&nbsp;
             <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" id="exit"></i></a>
             <script>
-                $('#backindex').attr('title', i18n.__('backindex'));
                 $('#winhider').attr('title', i18n.__('winhider'));
                 $('#minimizer').attr('title', i18n.__('minimizer'));
                 $('#exit').attr('title', i18n.__('exit'));
@@ -36,14 +33,25 @@
         </div>
         <div id="timer" class="justify-content-center">
             <div id="title" class="text-center h4"></div>
+            <div id="note" class="text-center small text-black-50"></div>
             <div id="work-rest" class="text-center work lead"><i class="fa fa-building"></i></div>
             <div id="now-timing" class="text-center h1 work"></div>
             <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-black-50"><i
                         class="fa fa-pause"></i></a></div>
+            <div class="text-center text-black-50" id="moreoptions"><a href="index.html" class="small text-black-50"><i
+                        class="fa fa-angle-left" id="backindex"></i></a>&nbsp;&nbsp;<a href="javascript:skipper()"
+                    class="small text-black-50"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
+            <div class="text-center lead" id="backer"><a href="index.html" class="text-black-50"><i
+                        class="fa fa-angle-left" id="backindex2"></i></a></div>
+            <script>
+                $('#backindex').attr('title', i18n.__('backindex'));
+                $('#backindex2').attr('title', i18n.__('backindex'));
+                $('#backer').css('display', 'none');
+                $('#skipper').attr('title', i18n.__('skipper'));
+            </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <script>
-        const path = require("path");
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
@@ -64,9 +72,13 @@
             }
         })();
         var title = decodeURI($_GET['title']);
+        var note = decodeURI($_GET['note']);
         var worktime = decodeURI($_GET['work-time']) * 60000;
         var resttime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
+        var h = i18n.__('h');
+        var min = i18n.__('min');
+        var s = i18n.__('s');
         if (!worktime || worktime == "undefined" || !resttime || resttime == "undefined" || !loop || loop == "undefined") {
             $("#timer").html("<p class='text-center lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             isTimerWindow(false);
@@ -76,6 +88,7 @@
         } else {
             isTimerWindow(true);
             if (title && title != "undefined") $("#title").html(title);
+            if (note && note != "undefined") $("#note").html(note);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
             if (loop != 0) int = self.setInterval("clock()", 100);
@@ -116,7 +129,10 @@
                     $(".work").removeClass("work");
                     $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
                     method = 2;
-                    $("#controller").css("display", "none");
+                    if (store.get("fullscreen") == true) {
+                        $("#controller").css("display", "none");
+                        $("#moreoptions").css("display", "none");
+                    }
                 } else {
                     warninggiver(2);
                     $(".rest").addClass("work");
@@ -124,6 +140,9 @@
                     $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
                     method = 1;
                     $("#controller").css("display", "block");
+                    if (store.get("fullscreen") == true) {
+                        $("#moreoptions").css("display", "block");
+                    }
                 }
             }
             function ender() {
@@ -132,9 +151,20 @@
                 $("#now-timing").text(i18n.__('ended'));
                 isclockworking = 0;
                 $("#stopper").text("");
-                ipc.send("progress-bar-set", -1);
+                ipc.send("progress-bar-set", 2);//设置的是(1-message)，因而使用2才能得到-1
                 $("#controller").css("display", "block");
+                $("#backer").css("display", "block");
+                $("#moreoptions").css("display", "none");
                 warninggiver(0);
+            }
+            function skipper() {
+                times++;
+                if (times < loop * 2) {
+                    starttime = new Date().getTime();
+                    themechanger();
+                } else if (times == loop * 2) {
+                    ender();
+                }
             }
             function clock() {
                 t = new Date().getTime();
@@ -146,15 +176,9 @@
                     hours = parseInt(seconds / 3600);
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
-                    $("#now-timing").text(hours + "h " + minutes + "min " + seconds + "s");
+                    $("#now-timing").text(hours + h + minutes + min + seconds + s);
                 } else {
-                    times++;
-                    if (times < loop * 2) {
-                        starttime = new Date().getTime();
-                        themechanger();
-                    } else if (times == loop * 2) {
-                        ender();
-                    }
+                    skipper();
                 }
             }
             ipc.on('startorstop', function () {

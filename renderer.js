@@ -2,6 +2,7 @@ var i18n = require("i18n");
 const Store = require('electron-store');
 const store = new Store();
 const ipc = require('electron').ipcRenderer;
+const path = require("path");
 i18n.configure({
     locales: ['en', 'zh'],
     directory: __dirname + '/locales'

@@ -30,13 +30,21 @@ As a timer app, wnr is simple but useful.
 
 - auto-start with system
 
+- progress bar
+
+- hi-dpi support
+
+- multi-platform support
+
+- multi-language support
+
 - with strong expansibility
 
 - modern design
 
 ## To-do List
 
-Please go and see [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
+Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
 ## Contact
 

@@ -76,7 +76,7 @@
                 <br /><span class="text-muted small">
                     <script>document.write(i18n.__('langtip'));</script>
                     <br /><b>
-                        <script>document.write(i18n.__('restarttip'));</script><span id="restarttip1"></span>
+                        <script>document.write(i18n.__('autorestarttip'));</script>
                     </b>
                 </span>
             </div>
@@ -91,11 +91,11 @@
             <div class="align-content-center form-text">
                 <label>
                     <script>document.write(i18n.__('alwaysontop'));</script></label>
-                <input id="top-set" type="checkbox" onchange="topset()" checked />
+                <input id="top-set" type="checkbox" onchange="topset()" />
                 <br /><span class="text-muted small">
                     <script>document.write(i18n.__('alwaystip'));</script>
                     <br /><b>
-                        <script>document.write(i18n.__('restarttip'));</script><span id="restarttip"></span>
+                        <script>document.write(i18n.__('autorestarttip'));</script>
                     </b>
                 </span>
             </div>
@@ -130,8 +130,11 @@
             <hr />
             <div class="text-muted small">
                 <li>
-                    <a href="javascript:updatechecker(2)" class="rest"><span id="manually">
-                            <script>document.write(i18n.__('manuallycheck'));</script></span></a>&nbsp;
+                    <a href="javascript:updatechecker(2)" class="rest">
+                        <span id="manually">
+                            <script>document.write(i18n.__('manuallycheck'));</script>
+                        </span>
+                    </a>&nbsp;
                     <b>
                         <script>document.write(i18n.__('checker1') + i18n.__('v') + require("./package.json").version + i18n.__('checker2'))</script>
                     </b>
@@ -152,12 +155,23 @@
                         <script>document.write(i18n.__('hotkey2usage'));</script>
                     </b>
                 </li>
+                <li>
+                    <a href="javascript:deleteall()" class="rest">
+                        <script>document.write(i18n.__('deleteall'));</script>
+                    </a>
+                    <b>
+                        <script>document.write(i18n.__('autorestarttip'));</script>
+                    </b>
+                </li>
             </div>
         </div>
     </div>
     <script>
         if (process.platform == 'darwin') {
             $("#hotkey-tip").css("display", "none");
+        }
+        function relauncher() {
+            ipc.send("relauncher");
         }
     </script>
     <script src="updater.js"></script>
@@ -196,7 +210,7 @@
         function langset() {
             if (document.getElementById("lang-set").checked == true) store.set("i18n", 'en');
             else store.set("i18n", 'zh');
-            $("#restarttip1").html("(<a class='rest' href='javascript:relauncher()'>" + i18n.__('restartnow') + "</a>)");
+            var t = setTimeout("relauncher()", 500);
         }
         if (store.get("sound") != undefined) {
             if (store.get("sound")) document.getElementById("sound-set").checked = true;
@@ -213,7 +227,7 @@
         function topset() {
             if (document.getElementById("top-set").checked == true) store.set("top", true);
             else store.set("top", false);
-            $("#restarttip").html("(<a class='rest' href='javascript:relauncher()'>" + i18n.__('restartnow') + "</a>)");
+            var t = setTimeout("relauncher()", 500);
         }
         if (store.get("autostart") == true) document.getElementById("autostart-set").checked = true;
         else document.getElementById("autostart-set").checked = false;
@@ -253,8 +267,8 @@
             if (document.getElementById("autocheck-set").checked == true) store.set("autocheck", true);
             else store.set("autocheck", false);
         }
-        function relauncher() {
-            ipc.send("relauncher");
+        function deleteall() {
+            ipc.send("deleteall");
         }
     </script>
 </body>
