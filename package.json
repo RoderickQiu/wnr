@@ -2,7 +2,7 @@
   "name": "wnr",
   "version": "1.2.3",
   "update-use-version": "12377",
-  "description": "It's a timer app with strong expansibility for computers. The name is a abbr of \"Work & Rest\".",
+  "description": "It's a timer app with strong expansibility for computers. The name is a abbr of \"Work and Rest\".",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
@@ -10,9 +10,6 @@
     "mac": "electron-builder --mac --x64",
     "linux": "electron-builder --linux --x64"
   },
-  "asarUnpack": [
-    "./app/node_modules/node-notifier/vendor/**"
-  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/RoderickQiu/wnr.git"
