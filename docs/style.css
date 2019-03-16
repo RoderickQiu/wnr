@@ -17,6 +17,19 @@ img{
     height: 308px;
 }
 
+::-webkit-scrollbar-track{
+	background-color: #fefefe;
+}
+::-webkit-scrollbar{
+	width: 12px;
+	background-color: #f5f5f5;
+}
+::-webkit-scrollbar-thumb{
+	background-color: #5555558f;
+}
+::-webkit-scrollbar-thumb:active{
+    background-color: #4a9af68f;
+}
 
 #footer{
     position: absolute;

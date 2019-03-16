@@ -2,13 +2,17 @@ const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell }
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
-var i18n = require("i18n");
+var i18n = require("i18n")
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win, settingsWin = null, aboutWin = null, tourWin = null
+let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required');// 允许自动播放音频
+
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
+
+const gotTheLock = app.requestSingleInstanceLock();
+if (!gotTheLock) app.quit()// 只允许同时运行一个wnr
 
 function createWindow() {
     // 创建浏览器窗口。
@@ -77,7 +81,10 @@ app.on('ready', () => {
 
     if (store.get("top") == true) win.setAlwaysOnTop(true);
 
-    globalShortcut.register('CommandOrControl+Shift+Alt+W', () => {
+    if (store.get('hotkey1') == undefined || !store.get('hotkey1')) store.set('hotkey1', 'W');
+    if (store.get('hotkey2') == undefined || !store.get('hotkey2')) store.set('hotkey2', 'S');
+
+    globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey1'), () => {
         win.isVisible() ? win.hide() : win.show();
         if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
         if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
@@ -341,14 +348,14 @@ ipcMain.on("timer-win", function (event, message) {
         if (tray != null) {
             contextMenu.items[2].enabled = true;
         }
-        globalShortcut.register('CommandOrControl+Shift+Alt+S', () => {
+        globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
             win.webContents.send('startorstop');
         })
     } else {
         if (tray != null) {
             contextMenu.items[2].enabled = false;
         }
-        globalShortcut.unregister('CommandOrControl+Shift+Alt+S');
+        globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
     }
 })
 

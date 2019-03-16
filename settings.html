@@ -141,17 +141,15 @@
                 </li>
                 <li id="hotkey-tip">
                     <script>document.write(i18n.__('hotkeytip'));</script>
-                    <b>
-                        <kbd>
-                            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>W</kbd></kbd>.
+                    <b>Ctrl+Shift+Alt+<input id="hotkey1-set" class="hotkeyset" type="text" maxlength="1"
+                            onchange="hotkey1set()" />.
                         <script>document.write(i18n.__('hotkeyusage'));</script>
                     </b>
                 </li>
                 <li id="hotkey2-tip">
                     <script>document.write(i18n.__('hotkey2tip'));</script>
-                    <b>
-                        <kbd>
-                            <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Alt</kbd>+<kbd>S</kbd></kbd>.
+                    <b>Ctrl+Shift+Alt+<input id="hotkey2-set" class="hotkeyset" type="text" maxlength="1"
+                            onchange="hotkey2set()" />.
                         <script>document.write(i18n.__('hotkey2usage'));</script>
                     </b>
                 </li>
@@ -266,6 +264,22 @@
         function autocheckset() {
             if (document.getElementById("autocheck-set").checked == true) store.set("autocheck", true);
             else store.set("autocheck", false);
+        }
+        $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
+        function hotkey1set() {
+            if ($("#hotkey1-set").val() != null && $("#hotkey1-set").val()) {
+                $("#hotkey1-set").val($("#hotkey1-set").val().toUpperCase());
+                store.set("hotkey1", $("#hotkey1-set").val());
+            }
+            var t = setTimeout("relauncher()", 500);
+        }
+        $("#hotkey2-set").val(store.get("hotkey2").toUpperCase());
+        function hotkey2set() {
+            if ($("#hotkey2-set").val() != null && $("#hotkey2-set").val()) {
+                $("#hotkey2-set").val($("#hotkey2-set").val().toUpperCase());
+                store.set("hotkey2", $("#hotkey2-set").val());
+            }
+            var t = setTimeout("relauncher()", 500);
         }
         function deleteall() {
             ipc.send("deleteall");

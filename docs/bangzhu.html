@@ -7,22 +7,39 @@
     <title>wnr</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://cdn.bootcss.com/twitter-bootstrap/4.2.1/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" media="screen" href="style.css" />
     <link rel="shortcut icon" href="favicon.ico" />
 </head>
 
 <body class="mx-auto flex-column">
     <script>
+        var $_GET = (function () {
+            var url = window.document.location.href.toString();
+            var u = url.split("?");
+            if (typeof (u[1]) == "string") {
+                u = u[1].split("&");
+                var get = {};
+                for (var i in u) {
+                    var j = u[i].split("=");
+                    get[j[0]] = j[1];
+                }
+                return get;
+            } else {
+                return {};
+            }
+        })();
         var JsSrc = (navigator.language || navigator.browserLanguage).toLowerCase();
         if (JsSrc.indexOf('en') >= 0) {
-            window.location.href = "help.html";
-        }    
+            if (decodeURI($_GET['m']) == 1) window.location.href = "help.html?m=1";
+            else window.location.href = "help.html";
+        }
     </script>
     <main role="main" class="flex-shrink-0 align-content-center">
         <div class="container-fluid text-center">
-            <br /><br /><br />
-            <h1 class="font-weight-lighter">使用指南</h1>
-            <hr />
+            <div class="m"><br /><br /><br /></div>
+            <h1 class="font-weight-lighter m">使用指南</h1>
+            <hr class="m" />
             <div id="howtodoit">
                 <h2 class="h4">1、如何使用</h2>
                 <img src="https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-6.png"
@@ -52,20 +69,27 @@
                 如果你还有问题，或者你发现了wnr有bug，请创建一个<a href="https://github.com/RoderickQiu/wnr/issues/">issue</a>或者<a
                     href="mailto">给我发邮件</a>。谢谢！<br />
             </div><br />
-            <p class="text-black-50">
+            <p class="text-black-50 m">
                 <a href="index.html" title="Back">返回</a>&nbsp;|
                 <a href="https://github.com/RoderickQiu/wnr/releases" title="Download wnr now"
                     class="font-weight-bold">现在下载wnr</i></a>
             </p>
         </div>
     </main>
-    <footer class="footer mx-auto py-4 text-center">
+    <footer class="footer mx-auto py-4 text-center m">
         <div class="container">
             <span class="text-muted">
                 &copy; 2019 <a href="https://roderickqiu.scris.top/">Roderick Qiu.</a>
             </span>
         </div>
     </footer>
+    <script>
+        if (decodeURI($_GET['m']) == 1) {
+            $(".m").each(function () {
+                $(this).css("display", "none");
+            });
+        }
+    </script>
 </body>
 
 </html>

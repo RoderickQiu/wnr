@@ -77,15 +77,16 @@
     "checker1": "(Now ",
     "checker2": ")",
     "hotkeytip": "Open/Hide hotkey: ",
-    "hotkeyusage": "(Hide to the system tray)",
+    "hotkeyusage": "(Hide wnr to the system tray. [Can be set. Restart for wnr is required.])",
     "hotkey2tip": "Start/Stop hotkey: ",
-    "hotkey2usage": "(Fast start/stop the timer. Only available when there is a timer working.)",
+    "hotkey2usage": "(Fast start/stop the timer. Only available when there is a timer working. [Can be set. Restart for wnr is required.])",
     "deleteall": "Delete all settings.",
     "h": "h ",
     "min": "min ",
     "s": "s",
     "welcomer1": "Welcome",
     "welcomer2": "When you're in the zone, taking a break is the last thing on your mind. However, you may end up with some serious health issues down the line, and you may not be as productive as you would if you followed a strict work/break schedule. wnr is a simple, Electron-based application that was designed to help you remember when breaks are needed. It allows you to configure work/rest intervals that are then enforced, which will have many positive health effects in the long run. (From Softpedia)",
-    "welcomer3": "Take a tour & Open settings",
-    "welcomer4": "Skip the tour"
+    "welcomer3": "Take a tour",
+    "welcomer4": "Skip the tour",
+    "welcomer5": "Open settings first"
 }

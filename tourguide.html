@@ -18,13 +18,6 @@
 
 <body>
     <script src="renderer.js"></script>
-    <script>
-        function tourguide() {
-            ipc.send("settings");
-            require('electron').shell.openExternal('https://wnr.scris.top/help.html');
-            window.close();
-        }
-    </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
@@ -33,18 +26,41 @@
             </script>
         </div>
         <div id="about" class="justify-content-center text-center small">
-            <p class="h3 rest font-weight-bolder">
-                <script>document.write(i18n.__('welcomer1'))</script>
-            </p>
-            <center class="text-black-50">
-                <script>document.write(i18n.__('welcomer2'))</script>
-            </center><br />
-            <a href="javascript:tourguide()" class="btn btn-primary">
-                <script>document.write(i18n.__('welcomer3'))</script></a><br /><br />
-            <a href="https://github.com/RoderickQiu/wnr/">GitHub</a> | <a href="javascript:window.close()">
-                <script>document.write(i18n.__('welcomer4'))</script></a>
+            <div id="tourguide-part1">
+                <p class="h3 rest font-weight-bolder">
+                    <script>document.write(i18n.__('welcomer1'))</script>
+                </p>
+                <center class="text-black-50">
+                    <script>document.write(i18n.__('welcomer2'))</script>
+                </center><br />
+                <a href="javascript:tourguide()" class="btn btn-primary">
+                    <script>document.write(i18n.__('welcomer3'))</script></a><br /><br />
+                <a href="https://github.com/RoderickQiu/wnr/">GitHub</a> | <a href="javascript:window.close()">
+                    <script>document.write(i18n.__('welcomer4'))</script></a><br /><br />
+            </div>
+            <div id="tourguide-part2">
+                <iframe id="tourguide" src="docs/help.html?m=1">
+                    <center>Loading...</center>
+                </iframe>
+                <br /><br />
+                <a href="javascript:settings()" class="btn btn-primary">
+                    <script>document.write(i18n.__('welcomer5'))</script></a>&nbsp;
+                <a href="javascript:window.close()" class="btn btn-secondary">
+                    <script>document.write(i18n.__('welcomer4'))</script></a>
+            </div>
         </div>
     </div>
+    <script>
+        $("#tourguide-part2").css("display", "none");
+        function tourguide() {
+            $("#tourguide-part1").css("display", "none");
+            $("#tourguide-part2").css("display", "block");
+        }
+        function settings() {
+            ipc.send("settings");
+            window.close();
+        }
+    </script>
 </body>
 
 </html>

@@ -91,8 +91,7 @@
             if (note && note != "undefined") $("#note").html(note);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
-            if (loop != 0) int = self.setInterval("clock()", 100);
-            else ender();
+            int = self.setInterval("clock()", 100);
             function stopper() {
                 if (isclockworking) {
                     window.clearInterval(int);
@@ -120,11 +119,14 @@
                 else {
                     if (isend == 1) ipc.send('warninggiver-workend');
                     else ipc.send('warninggiver-restend');
+                    var t = setTimeout("stopper()", 500);
+                    ipc.once('warning-closed', function () {
+                        stopper();
+                    });
                 }
             }
             function themechanger() {
                 if (method == 1) {
-                    warninggiver(1);
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
                     $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
@@ -133,8 +135,8 @@
                         $("#controller").css("display", "none");
                         $("#moreoptions").css("display", "none");
                     }
+                    warninggiver(1);
                 } else {
-                    warninggiver(2);
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
@@ -143,6 +145,7 @@
                     if (store.get("fullscreen") == true) {
                         $("#moreoptions").css("display", "block");
                     }
+                    warninggiver(2);
                 }
             }
             function ender() {
