@@ -358,8 +358,3 @@ ipcMain.on("timer-win", function (event, message) {
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
     }
 })
-
-/* 参考：
-- https://blog.avocode.com/4-must-know-tips-for-building-cross-platform-electron-apps-f3ae9c2bffff [need proxy]
-- https://electronjs.org/docs
-*/
