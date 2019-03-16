@@ -8,7 +8,7 @@
 
 **The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.**
 
-![Preview](https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-1.png)
+![Preview](https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-1-smaller.png)
 
 As a timer app, wnr is simple but useful.
 

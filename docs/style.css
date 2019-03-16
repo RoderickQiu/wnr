@@ -12,6 +12,11 @@ a{
     color: #5490ea;
 }
 
+img{
+    width: 324px;
+    height: 308px;
+}
+
 
 #footer{
     position: absolute;
