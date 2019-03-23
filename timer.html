@@ -20,9 +20,9 @@
     <script src="renderer.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:winhider()" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
+            <a href="javascript:call('winhider')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:minimizer()" class="small work"><i class="fa fa-minus fa-fw"
+            <a href="javascript:call('minimizer')" class="small work"><i class="fa fa-minus fa-fw"
                     id="minimizer"></i></a>&nbsp;&nbsp;
             <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" id="exit"></i></a>
             <script>
@@ -56,6 +56,12 @@
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
+        function keydownOnError(e) {
+            var currKey = 0, e = e || event;
+            if (e.keyCode == 13) {
+                window.location.href = "index.html";
+            }
+        }
         var $_GET = (function () {
             var url = window.document.location.href.toString();
             var u = url.split("?");
@@ -79,19 +85,23 @@
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
-        if (!worktime || worktime == "undefined" || !resttime || resttime == "undefined" || !loop || loop == "undefined") {
+        if (!worktime || !resttime || !loop) {
             $("#timer").html("<p class='text-center lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+            $("#timer").css("width", "75%");
             isTimerWindow(false);
+            document.onkeydown = keydownOnError;
         } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
             $("#timer").html("<p class='text-center lead'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+            $("#timer").css("width", "75%");
             isTimerWindow(false);
+            document.onkeydown = keydownOnError;
         } else {
             isTimerWindow(true);
-            if (title && title != "undefined") $("#title").html(title);
-            if (note && note != "undefined") $("#note").html(note);
+            if (title) $("#title").html(title);
+            if (note) $("#note").html(note);
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
             starttime = new Date().getTime();
-            int = self.setInterval("clock()", 100);
+            int = self.setInterval(clock, 100);
             function stopper() {
                 if (isclockworking) {
                     window.clearInterval(int);
@@ -100,7 +110,7 @@
                 } else {
                     if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    int = self.setInterval("clock()", 100);
+                    int = self.setInterval(clock, 100);
                     $("#stopper").html("<i class='fa fa-pause' aria-hidden='true'></i>");
                     isclockworking = 1;//to restart
                 }
@@ -119,7 +129,7 @@
                 else {
                     if (isend == 1) ipc.send('warninggiver-workend');
                     else ipc.send('warninggiver-restend');
-                    var t = setTimeout("stopper()", 500);
+                    var t = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         stopper();
                     });
@@ -187,12 +197,6 @@
             ipc.on('startorstop', function () {
                 stopper();
             })
-        }
-        function winhider() {
-            ipc.send("winhider");
-        }
-        function minimizer() {
-            ipc.send("minimizer");
         }
     </script>
 </body>

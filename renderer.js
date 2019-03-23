@@ -13,3 +13,6 @@ function isTimerWindow(isTimer) {
         ipc.send('timer-win', true);
     } else ipc.send('timer-win', false);
 }
+function call(content) {
+    ipc.send(content);
+}

@@ -21,14 +21,15 @@
   "copyright": "© Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
+    "ajv": "^6.10.0",
     "auto-launch": "^5.0.5",
     "cheerio": "^1.0.0-rc.2",
-    "electron-store": "^2.0.0",
+    "electron-store": "^3.0.0",
     "i18n": "^0.8.3",
     "request": "^2.88.0"
   },
   "devDependencies": {
-    "electron": "^4.1.0",
+    "electron": "^4.1.1",
     "electron-builder": "^20.39.0"
   },
   "build": {

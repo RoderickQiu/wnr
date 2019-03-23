@@ -84,9 +84,17 @@
     "h": "h ",
     "min": "min ",
     "s": "s",
+    "times": "loops",
     "welcomer1": "Welcome",
     "welcomer2": "When you're in the zone, taking a break is the last thing on your mind. However, you may end up with some serious health issues down the line, and you may not be as productive as you would if you followed a strict work/break schedule. wnr is a simple, Electron-based application that was designed to help you remember when breaks are needed. It allows you to configure work/rest intervals that are then enforced, which will have many positive health effects in the long run. (From Softpedia)",
     "welcomer3": "Take a tour",
     "welcomer4": "Skip the tour",
-    "welcomer5": "Open settings first"
+    "welcomer5": "Open settings first",
+    "helper": "Guide",
+    "loadingtip1": "Loading...",
+    "loadingtip2": "If you cannot see the guide, please click",
+    "loadingtip3": "this link",
+    "loadingtip4": "to see the offline guide. (might be out of date)",
+    "settingstip": "Some tips about wnr settings",
+    "settingstipmsg": "Welcome to settings! When you change one field, the setting will automatially be set. Some settings needs a restart."
 }

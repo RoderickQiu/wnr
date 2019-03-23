@@ -154,7 +154,7 @@
                     </b>
                 </li>
                 <li>
-                    <a href="javascript:deleteall()" class="rest">
+                    <a href="javascript:call('deleteall')" class="rest">
                         <script>document.write(i18n.__('deleteall'));</script>
                     </a>
                     <b>
@@ -168,36 +168,35 @@
         if (process.platform == 'darwin') {
             $("#hotkey-tip").css("display", "none");
         }
-        function relauncher() {
-            ipc.send("relauncher");
-        }
     </script>
     <script src="updater.js"></script>
     <script>
+        var minute = i18n.__('min');
+        var times = i18n.__('times');
         if (store.get("worktime") != undefined) {
             $("#work-time-set").val(store.get("worktime"));
-            $("#work-time-show").text(store.get("worktime"));
+            $("#work-time-show").text(store.get("worktime") + minute);
         }
         function worktimeset() {
-            $("#work-time-show").html($("#work-time-set").val());
+            $("#work-time-show").html($("#work-time-set").val() + minute);
             if ($("#work-time-set").val() != 0) store.set("worktime", $("#work-time-set").val());
             else store.delete("worktime");
         }
         if (store.get("resttime") != undefined) {
             $("#rest-time-set").val(store.get("resttime"));
-            $("#rest-time-show").text(store.get("resttime"));
+            $("#rest-time-show").text(store.get("resttime") + minute);
         }
         function resttimeset() {
-            $("#rest-time-show").html($("#rest-time-set").val());
+            $("#rest-time-show").html($("#rest-time-set").val() + minute);
             if ($("#rest-time-set").val() != 0) store.set("resttime", $("#rest-time-set").val());
             else store.delete("resttime");
         }
         if (store.get("looptime") != undefined) {
             $("#loop-time-set").val(store.get("looptime"));
-            $("#loop-time-show").text(store.get("looptime"));
+            $("#loop-time-show").text(store.get("looptime") + times);
         }
         function looptimeset() {
-            $("#loop-time-show").html($("#loop-time-set").val());
+            $("#loop-time-show").html($("#loop-time-set").val() + times);
             if ($("#loop-time-set").val() != 0) store.set("looptime", $("#loop-time-set").val());
             else store.delete("looptime");
         }
@@ -208,7 +207,7 @@
         function langset() {
             if (document.getElementById("lang-set").checked == true) store.set("i18n", 'en');
             else store.set("i18n", 'zh');
-            var t = setTimeout("relauncher()", 500);
+            var t = setTimeout("call('relauncher')", 500);
         }
         if (store.get("sound") != undefined) {
             if (store.get("sound")) document.getElementById("sound-set").checked = true;
@@ -225,7 +224,7 @@
         function topset() {
             if (document.getElementById("top-set").checked == true) store.set("top", true);
             else store.set("top", false);
-            var t = setTimeout("relauncher()", 500);
+            var t = setTimeout("call('relauncher')", 500);
         }
         if (store.get("autostart") == true) document.getElementById("autostart-set").checked = true;
         else document.getElementById("autostart-set").checked = false;
@@ -271,7 +270,7 @@
                 $("#hotkey1-set").val($("#hotkey1-set").val().toUpperCase());
                 store.set("hotkey1", $("#hotkey1-set").val());
             }
-            var t = setTimeout("relauncher()", 500);
+            var t = setTimeout("call('relauncher')", 500);
         }
         $("#hotkey2-set").val(store.get("hotkey2").toUpperCase());
         function hotkey2set() {
@@ -279,10 +278,7 @@
                 $("#hotkey2-set").val($("#hotkey2-set").val().toUpperCase());
                 store.set("hotkey2", $("#hotkey2-set").val());
             }
-            var t = setTimeout("relauncher()", 500);
-        }
-        function deleteall() {
-            ipc.send("deleteall");
+            var t = setTimeout("call('relauncher')", 500);
         }
     </script>
 </body>

@@ -21,43 +21,39 @@
     <script src="renderer.js"></script>
     <script src="updater.js"></script>
     <script>
-        if (!store.get('tour') || store.get('tour') == undefined) {
+        if (!store.get('tour')) {
             store.set('tour', 'true');
             ipc.send("tourguide");
         }
     </script>
     <script>
-        function about() {
-            ipc.send("about");
-        }
-        function settings() {
-            ipc.send("settings");
-        }
-        function winhider() {
-            ipc.send("winhider");
-        }
-        function minimizer() {
-            ipc.send("minimizer");
-        }
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
                 window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
+            }
+            if (e.keyCode == 38 || e.keyCode == 40) {
+                return false;
             }
         }
         document.onkeydown = keydown;
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:settings()" class="small rest"><i class="fa fa-cog fa-fw"
+            &nbsp;&nbsp;
+            <a href="javascript:call('settings')" class="small rest"><i class="fa fa-cog fa-fw"
                     id="settings"></i></a>&nbsp;&nbsp;
-            <a href="javascript:about()" class="small rest"><i class="fa fa-info fa-fw" id="info"></i></a>&nbsp;&nbsp;
-            <a href="javascript:winhider()" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
+            <a href="javascript:call('tourguide')" class="small rest"><i class="fa fa-question"
+                    id="helper"></i></a>&nbsp;&nbsp;
+            <a href="javascript:call('about')" class="small rest"><i class="fa fa-info fa-fw"
+                    id="info"></i></a>&nbsp;&nbsp;
+            <a href="javascript:call('winhider')" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:minimizer()" class="small rest"><i class="fa fa-minus fa-fw"
+            <a href="javascript:call('minimizer')" class="small rest"><i class="fa fa-minus fa-fw"
                     id="minimizer"></i></a>&nbsp;&nbsp;
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exit"></i></a>
             <script>
+                $('#helper').attr('title', i18n.__('helper'));
                 $('#settings').attr('title', i18n.__('settings'));
                 $('#info').attr('title', i18n.__('info'));
                 $('#winhider').attr('title', i18n.__('winhider'));
@@ -88,6 +84,11 @@
                 $('#rest-time').attr('placeholder', i18n.__('resttime'));
                 $('#loop').attr('placeholder', i18n.__('loop'));
                 $('#note').attr('placeholder', i18n.__('note'));
+                $('#work-time').attr('title', i18n.__('worktime'));
+                $('#title').attr('title', i18n.__('title'));
+                $('#rest-time').attr('title', i18n.__('resttime'));
+                $('#loop').attr('title', i18n.__('loop'));
+                $('#note').attr('title', i18n.__('note'));
                 $("input").mouseenter(function () {
                     $("#tip").css('opacity', '1');
                 });

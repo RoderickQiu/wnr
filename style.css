@@ -155,3 +155,8 @@ li{
     border: none;
     outline: none;
 }
+#loadingtip{
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+}

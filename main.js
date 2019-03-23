@@ -81,8 +81,8 @@ app.on('ready', () => {
 
     if (store.get("top") == true) win.setAlwaysOnTop(true);
 
-    if (store.get('hotkey1') == undefined || !store.get('hotkey1')) store.set('hotkey1', 'W');
-    if (store.get('hotkey2') == undefined || !store.get('hotkey2')) store.set('hotkey2', 'S');
+    if (!store.get('hotkey1')) store.set('hotkey1', 'W');
+    if (!store.get('hotkey2')) store.set('hotkey2', 'S');
 
     globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey1'), () => {
         win.isVisible() ? win.hide() : win.show();
@@ -318,19 +318,25 @@ ipcMain.on('settings', function () {
         }
         settingsWin = null
     })
+    if (!store.get("settings-experience")) {
+        store.set("settings-experience", true);
+        dialog.showMessageBox(win, {
+            title: i18n.__('settingstip'),
+            type: "info",
+            message: i18n.__('settingstipmsg'),
+            silent: true
+        })
+    }
 })
 
 ipcMain.on('tourguide', function () {
-    tourWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 520, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    tourWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 600, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     tourWin.loadFile("tourguide.html");
     if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
     tourWin.once('ready-to-show', () => {
         tourWin.show();
     })
     tourWin.on('closed', () => {
-        if (win != null) {
-            win.reload();
-        }
         tourWin = null
     })
 })
