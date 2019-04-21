@@ -96,5 +96,7 @@
     "loadingtip3": "this link",
     "loadingtip4": "to see the offline guide. (might be out of date)",
     "settingstip": "Some tips about wnr settings",
-    "settingstipmsg": "Welcome to settings! When you change one field, the setting will automatially be set. Some settings needs a restart."
+    "settingstipmsg": "Welcome to settings! When you change one field, the setting will automatially be set. Some settings needs a restart.",
+    "alarmtip": "Long time no see... ",
+    "alarmtipmsg": "Open wnr and have a healthier schedule! "
 }

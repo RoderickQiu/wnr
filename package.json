@@ -1,7 +1,7 @@
 {
   "name": "wnr",
-  "version": "1.2.5",
-  "update-use-version": "12577",
+  "version": "1.2.6",
+  "update-use-version": "12677",
   "description": "It's a timer app with strong expansibility for computers. The name is a abbr of \"Work and Rest\".",
   "main": "main.js",
   "scripts": {
@@ -18,7 +18,7 @@
   "license": "MIT",
   "homepage": "https://wnr.scris.top",
   "appId": "com.scrisstudio.wnr",
-  "copyright": "© Roderick Qiu",
+  "copyright": "(c) Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
     "ajv": "^6.10.0",
@@ -26,6 +26,7 @@
     "cheerio": "^1.0.0-rc.2",
     "electron-store": "^3.0.0",
     "i18n": "^0.8.3",
+    "js-yaml": "^3.13.1",
     "request": "^2.88.0"
   },
   "devDependencies": {

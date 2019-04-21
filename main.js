@@ -8,6 +8,7 @@ var i18n = require("i18n")
 // be closed automatically when the JavaScript object is garbage collected.
 let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null
+let resetAlarm = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
 
@@ -192,9 +193,11 @@ ipcMain.on('warninggiver-workend', function () {
         win.show();
         win.focus();
         win.center();
-        win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        if (store.get("fullscreen") == true) win.setFullScreen(true);
+        if (store.get("fullscreen") == true) {
+            if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
+            win.setFullScreen(true);
+        }
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('worktimeend'),
@@ -210,9 +213,11 @@ ipcMain.on('warninggiver-workend', function () {
 
 ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
-        win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        if (win.isFullScreen()) win.setFullScreen(false);
+        if (store.get("fullscreen") == true) {
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            win.setFullScreen(false);
+        }
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('resttimeend'),
@@ -228,9 +233,11 @@ ipcMain.on('warninggiver-restend', function () {
 
 ipcMain.on('warninggiver-allend', function () {
     if (win != null) {
-        win.once('focus', () => win.flashFrame(false));
         win.flashFrame(true);
-        if (win.isFullScreen()) win.setFullScreen(false);
+        if (store.get("fullscreen") == true) {
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            win.setFullScreen(false);
+        }
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('allend'),
@@ -240,6 +247,14 @@ ipcMain.on('warninggiver-allend', function () {
                 if (!win.isVisible()) win.show()
             });
         }, 100)
+        resetAlarm = setTimeout(function () {
+            dialog.showMessageBox(win, {
+                title: i18n.__('alarmtip'),
+                type: "info",
+                message: i18n.__('alarmtipmsg'),
+                silent: true
+            });
+        }, 1200000)
     }
 })
 
@@ -357,10 +372,23 @@ ipcMain.on("timer-win", function (event, message) {
         globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
             win.webContents.send('startorstop');
         })
+        if (resetAlarm) {
+            clearTimeout(resetAlarm);
+        }
     } else {
         if (tray != null) {
             contextMenu.items[2].enabled = false;
         }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
+        if (!resetAlarm) {
+            resetAlarm = setTimeout(function () {
+                dialog.showMessageBox(win, {
+                    title: i18n.__('alarmtip'),
+                    type: "info",
+                    message: i18n.__('alarmtipmsg'),
+                    silent: true
+                });
+            }, 1200000)
+        }
     }
 })
