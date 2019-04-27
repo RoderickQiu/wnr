@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell }
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
+const notifier = require('node-notifier');
 var i18n = require("i18n")
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -19,7 +20,7 @@ function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
         width: 324,
-        height: 298,
+        height: 320,
         frame: false,
         resizable: false,
         show: false,
@@ -49,6 +50,23 @@ function createWindow() {
             app.quit()
         }
     })
+}
+
+function alarmSet() {
+    if (!resetAlarm) {
+        resetAlarm = setInterval(function () {
+            if (win != null) win.flashFrame(true);
+            notifier.notify(
+                {
+                    title: i18n.__('alarmtip'),
+                    message: i18n.__('alarmtipmsg'),
+                    sound: true, // Only Notification Center or Windows Toasters
+                    wait: true // Wait with callback, until user action is taken against notification
+                }
+            );
+            if (!win.isVisible()) win.show();
+        }, 1200000)//不断提示使用wnr
+    }
 }
 
 // 当程序就要结束
@@ -178,6 +196,8 @@ app.on('ready', () => {
         var osxMenu = Menu.buildFromTemplate(template);
         Menu.setApplicationMenu(osxMenu)
     }// 应付macOS的顶栏空缺
+
+
 })
 
 app.on('activate', () => {
@@ -201,18 +221,18 @@ ipcMain.on('warninggiver-workend', function () {
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('worktimeend'),
-                type: "info",
-                message: i18n.__('worktimemsg'),
-                silent: true
+                type: "warning",
+                message: i18n.__('worktimeend'),
             }, function (response) {
                 win.webContents.send('warning-closed');
-            });
+            })
         }, 100)
     }
 })
 
 ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
+        if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
@@ -221,18 +241,18 @@ ipcMain.on('warninggiver-restend', function () {
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('resttimeend'),
-                type: "info",
-                message: i18n.__('resttimemsg')
+                type: "warning",
+                message: i18n.__('resttimemsg'),
             }, function (response) {
-                if (!win.isVisible()) win.show();
                 win.webContents.send('warning-closed');
-            });
+            })
         }, 180)
     }
 })
 
 ipcMain.on('warninggiver-allend', function () {
     if (win != null) {
+        if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
@@ -241,20 +261,13 @@ ipcMain.on('warninggiver-allend', function () {
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: i18n.__('allend'),
-                type: "info",
-                message: i18n.__('allmsg')
-            }, function () {
-                if (!win.isVisible()) win.show()
-            });
+                type: "warning",
+                message: i18n.__('allmsg'),
+            }, function (response) {
+                win.loadFile('index.html');//回到首页，方便开始新计划
+            })
         }, 100)
-        resetAlarm = setTimeout(function () {
-            dialog.showMessageBox(win, {
-                title: i18n.__('alarmtip'),
-                type: "info",
-                message: i18n.__('alarmtipmsg'),
-                silent: true
-            });
-        }, 1200000)
+        alarmSet();
     }
 })
 
@@ -269,7 +282,6 @@ ipcMain.on('updateavailable', function () {
         if (checkboxChecked) {
             shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
         }
-
     })
 })
 
@@ -335,12 +347,14 @@ ipcMain.on('settings', function () {
     })
     if (!store.get("settings-experience")) {
         store.set("settings-experience", true);
-        dialog.showMessageBox(win, {
-            title: i18n.__('settingstip'),
-            type: "info",
-            message: i18n.__('settingstipmsg'),
-            silent: true
-        })
+        notifier.notify(
+            {
+                title: i18n.__('settingstip'),
+                message: i18n.__('settingstipmsg'),
+                sound: true, // Only Notification Center or Windows Toasters
+                wait: true // Wait with callback, until user action is taken against notification
+            }
+        );
     }
 })
 
@@ -354,6 +368,14 @@ ipcMain.on('tourguide', function () {
     tourWin.on('closed', () => {
         tourWin = null
     })
+    notifier.notify(
+        {
+            title: i18n.__('welcomer1'),
+            message: i18n.__('alarmtipmsg'),
+            sound: true, // Only Notification Center or Windows Toasters
+            wait: true // Wait with callback, until user action is taken against notification
+        }
+    );
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
@@ -380,15 +402,6 @@ ipcMain.on("timer-win", function (event, message) {
             contextMenu.items[2].enabled = false;
         }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
-        if (!resetAlarm) {
-            resetAlarm = setTimeout(function () {
-                dialog.showMessageBox(win, {
-                    title: i18n.__('alarmtip'),
-                    type: "info",
-                    message: i18n.__('alarmtipmsg'),
-                    silent: true
-                });
-            }, 1200000)
-        }
+        alarmSet();
     }
 })

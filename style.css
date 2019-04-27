@@ -34,6 +34,7 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
 input[type="range"] {
     -webkit-appearance: none;/* remove default style */
     height:4px;
+    width: 400px;
     padding: 0;
     border: none;
     background: #33333333;
@@ -140,6 +141,9 @@ li{
     -webkit-user-select: none;
 }
 #note{
+    display: inline-block;
+    width: 200px;
+    word-wrap: break-word;
     line-height: 200%;
     vertical-align: middle;
 }

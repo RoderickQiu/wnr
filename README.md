@@ -42,6 +42,8 @@ As a timer app, wnr is simple but useful.
 
 - modern design
 
+- ...
+
 ## To-do List
 
 Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
