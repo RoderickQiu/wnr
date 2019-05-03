@@ -22,7 +22,7 @@ function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
         width: 324,
-        height: 320,
+        height: 336,
         frame: false,
         resizable: false,
         show: false,
@@ -333,7 +333,7 @@ ipcMain.on('minimizer', function () {
 })
 
 ipcMain.on('about', function () {
-    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 305, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     aboutWin.loadFile("about.html");
     if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
     aboutWin.once('ready-to-show', () => {

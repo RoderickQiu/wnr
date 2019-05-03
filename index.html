@@ -67,15 +67,13 @@
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
                 <input name="title" id="title" type="text" class="small" maxlength="11" /><br /><br />
-                <input name="work-time" id="work-time" type="number"
-                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
+                <input name="work-time" id="work-time" type="number" onkeyup="allset()" style="ime-mode:Disabled"
                     class="work lead" autofocus required /><br /><br />
-                <input name="rest-time" id="rest-time" type="number"
-                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
+                <input name="rest-time" id="rest-time" type="number" onkeyup="allset()" style="ime-mode:Disabled"
                     class="rest lead" required /><br /><br />
-                <input name="loop" id="loop" type="number"
-                    onkeypress="return (/[0-9]/.test(String.fromCharCode(event.keyCode)))" style="ime-mode:Disabled"
-                    class="small" required /><br /><br /><!-- control that only numbers are OK -->
+                <input name="loop" id="loop" type="number" onkeyup="allset()" style="ime-mode:Disabled" class="small"
+                    required /><br /><br />
+                <!-- control that only numbers are OK -->
                 <input name="note" id="note" type="text" class="small" maxlength="39" />
             </form>
             <script>
@@ -89,13 +87,11 @@
                 $('#rest-time').attr('title', i18n.__('resttime'));
                 $('#loop').attr('title', i18n.__('loop'));
                 $('#note').attr('title', i18n.__('note'));
-                $("input").mouseenter(function () {
-                    $("#tip").css('opacity', '1');
-                });
-                $("input").mouseleave(function () {
-                    $("#tip").css('opacity', '0');
-                });
             </script>
+        </div>
+        <div id="allsum" class="small font-weight-bold text-black-50">
+            <script>document.write(i18n.__('allsum1'));</script> <span id="allsum-num">---</span>
+            <script>document.write(i18n.__('allsum2'));</script>
         </div>
     </div>
     <script>
@@ -103,9 +99,17 @@
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
+        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()))
+            $("#allsum-num").html((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()));
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
+        }
+        function allset() {
+            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()))
+                $("#allsum-num").html((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()));
+            else $("#allsum-num").html("---");
+            return (/[0-9]/.test(String.fromCharCode(event.keyCode)));
         }
     </script>
 </body>

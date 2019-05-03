@@ -1,4 +1,4 @@
-html, body{
+html, body {
     font-family: "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
     background-color: #fefefe;
     width: 100%;
@@ -6,20 +6,19 @@ html, body{
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
-    align-items: center;/* center in v/h */
-    -webkit-app-region: drag;/* let the app draggable */
-}
-@keyframes showTip{
-    from {opacity: 0;}
-    to {opacity: 1;}
+    align-items: center;
+    /* center in v/h */
+    -webkit-app-region: drag;
+    /* let the app draggable */
 }
 
-label{
+label {
     display: inline-block;
     vertical-align: middle;
     margin-bottom: .5rem;
 }
-input{
+
+input {
     display: inline-block;
     vertical-align: middle;
     line-height: inherit;
@@ -28,19 +27,24 @@ input{
     outline: none;
     border: none;
 }
-input::-webkit-outer-spin-button, input::-webkit-inner-spin-button{
+
+input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
+
 input[type="range"] {
-    -webkit-appearance: none;/* remove default style */
-    height:4px;
+    -webkit-appearance: none;
+    /* remove default style */
+    height: 4px;
     width: 400px;
     padding: 0;
     border: none;
     background: #33333333;
 }
+
 input[type="range"]::-webkit-slider-thumb {
-    -webkit-appearance: none;/* remove default style */
+    -webkit-appearance: none;
+    /* remove default style */
     cursor: default;
     top: 0;
     height: 20px;
@@ -48,62 +52,77 @@ input[type="range"]::-webkit-slider-thumb {
     background: #5490ea;
     border-radius: 15px;
 }
+
 input[type="checkbox"] {
-    -webkit-appearance: none;/* remove default style */
+    -webkit-appearance: none;
+    /* remove default style */
     border: solid #5490ea 2px;
     border-radius: 15px;
     width: 24px;
     height: 24px;
     position: absolute;
 }
+
 input[type="checkbox"]:checked {
     background-image: url(./res/icons/check.png);
     background-size: contain;
 }
-input::-webkit-input-placeholder { 
-    color: #999999; 
-    transition: color.5s; 
+
+input::-webkit-input-placeholder {
+    color: #999999;
+    transition: color.5s;
 }
-input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder { 
-    color: #999999c2; 
-    transition: color.5s; 
+
+input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
+    color: #999999c2;
+    transition: color.5s;
 }
-li{
+
+li {
     line-height: 200%;
 }
-::-webkit-scrollbar-track{
-	background-color: #fefefe;
+
+::-webkit-scrollbar-track {
+    background-color: #fefefe;
 }
-::-webkit-scrollbar{
-	width: 12px;
-	background-color: #f5f5f5;
+
+::-webkit-scrollbar {
+    width: 12px;
+    background-color: #f5f5f5;
 }
-::-webkit-scrollbar-thumb{
-	background-color: #5555558f;
+
+::-webkit-scrollbar-thumb {
+    background-color: #5555558f;
 }
-::-webkit-scrollbar-thumb:active{
+
+::-webkit-scrollbar-thumb:active {
     background-color: #4a9af68f;
 }
 
-.work, .work::-webkit-input-placeholder{
+.work, .work::-webkit-input-placeholder {
     color: #ea5454;
 }
-.work:focus::-webkit-input-placeholder, .work:hover::-webkit-input-placeholder{
+
+.work:focus::-webkit-input-placeholder, .work:hover::-webkit-input-placeholder {
     color: #ea5454c2;
 }
-.rest, .rest::-webkit-input-placeholder{
+
+.rest, .rest::-webkit-input-placeholder {
     color: #5490ea;
 }
-.rest:focus::-webkit-input-placeholder, .rest:hover::-webkit-input-placeholder{
+
+.rest:focus::-webkit-input-placeholder, .rest:hover::-webkit-input-placeholder {
     color: #5490eac2;
 }
-.extreme-small{
+
+.extreme-small {
     font-size: xx-small;
     line-break: loose;
     line-height: 100%;
     margin: 5px;
 }
-.hotkeyset{
+
+.hotkeyset {
     background-color: #999999;
     color: #fefefe;
     border-radius: 15px;
@@ -111,55 +130,74 @@ li{
     text-align: center;
 }
 
-#main{
-    -webkit-app-region: no-drag;/* let it clickable */
+#main {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
     -webkit-user-select: text;
 }
-#settingscontainer{
-    -webkit-app-region: no-drag;/* let it clickable */
+
+#settingscontainer {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
     top: 35px;
     left: 35.5px;
-    overflow-y:scroll;
+    overflow-y: scroll;
     height: 444px;
     width: 90%;
 }
-#controller{
+
+#controller {
     position: absolute;
     top: 5px;
     right: 8px;
     font-size: 18px;
-    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-app-region: no-drag;
+    /* let it clickable */
     -webkit-user-select: none;
 }
-#tip{
+
+#tip {
     position: absolute;
     bottom: 5px;
-    opacity: 0;
-    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-app-region: no-drag;
+    /* let it clickable */
     -webkit-user-select: none;
 }
-#note{
+
+#allsum {
+    position: absolute;
+    bottom: 25px;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
+}
+
+#note {
     display: inline-block;
     width: 200px;
     word-wrap: break-word;
     line-height: 200%;
     vertical-align: middle;
 }
-#about{
+
+#about {
     position: absolute;
     width: 75%;
-    -webkit-app-region: no-drag;/* let it clickable */
+    -webkit-app-region: no-drag;
+    /* let it clickable */
     -webkit-user-select: text;
 }
-#tourguide{
+
+#tourguide {
     width: 100%;
     height: 333px;
     border: none;
     outline: none;
 }
-#loadingtip{
+
+#loadingtip {
     position: absolute;
     top: 50%;
     bottom: 50%;

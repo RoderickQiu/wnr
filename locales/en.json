@@ -101,5 +101,7 @@
     "settingstip": "Some tips about wnr settings",
     "settingstipmsg": "Welcome to settings! When you change one field, the setting will automatially be set. Some settings needs a restart.",
     "alarmtip": "Long time no see... ",
-    "alarmtipmsg": "Open wnr and have a healthier schedule! "
+    "alarmtipmsg": "Open wnr and have a healthier schedule! ",
+    "allsum1": "all together",
+    "allsum2": "minutes"
 }

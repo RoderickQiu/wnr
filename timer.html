@@ -90,7 +90,7 @@
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
-        } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440) {
+        } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440 || (worktime + resttime) * loop > 86400000) {
             $("#timer").html("<p class='text-center lead'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
