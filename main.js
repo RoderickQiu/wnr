@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
@@ -15,6 +15,8 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// �
 
 const gotTheLock = app.requestSingleInstanceLock();
 if (!gotTheLock) app.quit()// 只允许同时运行一个wnr
+
+powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计时
 
 function createWindow() {
     // 创建浏览器窗口。
@@ -302,9 +304,19 @@ ipcMain.on('webproblem', function () {
 })
 
 ipcMain.on('deleteall', function () {
-    store.clear();
-    app.relaunch();
-    app.exit(0)
+    dialog.showMessageBox(win, {
+        title: i18n.__('deletealltitle'),
+        type: "warning",
+        message: i18n.__('deleteallcontent'),
+        checkboxLabel: i18n.__('deleteallchk'),
+        checkboxChecked: false
+    }, function (response, checkboxChecked) {
+        if (checkboxChecked) {
+            store.clear();
+            app.relaunch();
+            app.exit(0)
+        }
+    })
 })
 
 ipcMain.on('relauncher', function () {
@@ -321,7 +333,7 @@ ipcMain.on('minimizer', function () {
 })
 
 ipcMain.on('about', function () {
-    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 305, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     aboutWin.loadFile("about.html");
     if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
     aboutWin.once('ready-to-show', () => {
