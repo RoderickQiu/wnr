@@ -142,7 +142,7 @@ li {
     /* let it clickable */
     -webkit-user-select: none;
     position: absolute;
-    top: 35.5px;
+    top: 27px;
     left: 35.5px;
     width: 90%;
 }
@@ -152,10 +152,10 @@ li {
     /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 92px;
+    top: 75px;
     left: 35.5px;
     overflow-y: scroll;
-    height: 400px;
+    height: 382px;
     width: 90%;
 }
 

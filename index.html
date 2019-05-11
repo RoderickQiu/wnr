@@ -36,7 +36,7 @@
             if (e.keyCode == 13) {
                 window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
             }
-            if (e.keyCode == 38 || e.keyCode == 40) {
+            if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 110 || e.keyCode == 69) {
                 return false;
             }
         }
@@ -65,7 +65,7 @@
                 $('#exit').attr('title', i18n.__('exit'));
             </script>
         </div>
-        <div id="tip" class="small font-weight-bold text-black-50">
+        <div id="tip" class="extreme-small font-weight-bold text-black-50">
             <script>document.write(i18n.__('tip'));</script>
         </div>
         <div id="set" class="justify-content-center">

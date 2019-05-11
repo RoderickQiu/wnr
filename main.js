@@ -21,7 +21,7 @@ powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计
 function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
-        width: 324,
+        width: 342,
         height: 336,
         frame: false,
         resizable: false,
@@ -345,7 +345,7 @@ ipcMain.on('about', function () {
 })
 
 ipcMain.on('settings', function () {
-    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 520, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
+    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 486, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
     settingsWin.loadFile("settings.html");
     if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
     settingsWin.once('ready-to-show', () => {
