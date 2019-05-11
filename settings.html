@@ -6,8 +6,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
-    <!-- solve the electron-jquery conflict -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined;
+        }
+    </script>
+    <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -24,12 +28,12 @@
             $('#exitsave').attr('title', i18n.__('exitsave'));
         </script>
     </div>
+    <div class="d-flex h3 rest" id="settingstitle">
+        <i class="fa fa-cog fa-fw" id="settings" aria-hidden="true"></i>
+        <script>document.write(i18n.__('settings'));</script>
+    </div>
     <div class="d-flex text-dark" id="settingscontainer">
         <div id="settings" class="text-left">
-            <p class="h3 rest"><i class="fa fa-cog fa-fw" id="settings" aria-hidden="true"></i>
-                <script>document.write(i18n.__('settings'));</script>
-            </p>
-            <br />
             <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('timeset'));</script>
             </p>

@@ -58,7 +58,7 @@
     "resettip": "Set it to \"0\" to delete the former setting.",
     "globalset": "Global Settings",
     "langset": "Language: ",
-    "langtip": "If the checkbox is checked, wnr will display in English, and vice versa.",
+    "langtip": "If the checkbox is checked, wnr will display in English, or else in Chinese.",
     "soundnotify": "Play sound to notify: ",
     "soundtip": "If it is enabled, then every time your time is ended, a notice sound is played.",
     "alwaysontop": "Always on top: ",
@@ -103,5 +103,7 @@
     "alarmtip": "Long time no see... ",
     "alarmtipmsg": "Open wnr and have a healthier schedule! ",
     "allsum1": "all together",
-    "allsum2": "minutes"
+    "allsum2": "minutes, to ",
+    "1min": "Only 1 minute left",
+    "1minmsg": "Only a few amount of time left! "
 }

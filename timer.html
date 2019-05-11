@@ -6,7 +6,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined;
+        }
+    </script>
+    <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
     <!-- solve the electron-jquery conflict -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
@@ -51,6 +56,7 @@
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
+    <div id="bottombar">&nbsp;</div>
     <script>
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
@@ -85,7 +91,7 @@
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
-        if (!worktime || !resttime || !loop) {
+        if (!worktime || !resttime || !loop || worktime == 60000 || resttime == 60000) {//use ms
             $("#timer").html("<p class='text-center lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -99,7 +105,7 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#note").html(note);
-            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1;//method: 1-work / 2-rest, times: time-reset times
+            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1, morethan1 = 1;//method: 1-work / 2-rest, times: time-reset times, morethan1: more than 1 min left
             starttime = new Date().getTime();
             int = self.setInterval(clock, 100);
             function stopper() {
@@ -140,6 +146,7 @@
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
                     $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
+                    $("#bottombar").css("background-color", "#5490eac2");
                     method = 2;
                     if (store.get("fullscreen") == true) {
                         $("#controller").css("display", "none");
@@ -150,6 +157,7 @@
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
+                    $("#bottombar").css("background-color", "#ea5454c2");
                     method = 1;
                     $("#controller").css("display", "block");
                     if (store.get("fullscreen") == true) {
@@ -184,12 +192,22 @@
                 if (method == 1) seconds = parseInt((worktime - t + starttime) / 1000);
                 else seconds = parseInt((resttime - t + starttime) / 1000);
                 if (seconds > 0) {
-                    if (method == 1) ipc.send("progress-bar-set", (seconds / worktime) * 1000);
-                    else ipc.send("progress-bar-set", (seconds / resttime) * 1000);
+                    if (method == 1) {
+                        ipc.send("progress-bar-set", (seconds / worktime) * 1000);
+                        $("#bottombar").css("width", (seconds / worktime) * 100000 + "%");
+                    } else {
+                        ipc.send("progress-bar-set", (seconds / resttime) * 1000);
+                        $("#bottombar").css("width", (seconds / resttime) * 100000 + "%");
+                    }
                     hours = parseInt(seconds / 3600);
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $("#now-timing").text(hours + h + minutes + min + seconds + s);
+                    if (minutes == 0 && morethan1) {
+                        ipc.send("1min");
+                        morethan1 = 0;
+
+                    }
                 } else {
                     skipper();
                 }

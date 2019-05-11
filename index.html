@@ -6,8 +6,12 @@
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <script>if (typeof module === 'object') { window.module = module; module = undefined; }</script>
-    <!-- solve the electron-jquery conflict -->
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined;
+        }
+    </script>
+    <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
@@ -67,11 +71,14 @@
         <div id="set" class="justify-content-center">
             <form action="timer.html" method="GET">
                 <input name="title" id="title" type="text" class="small" maxlength="11" /><br /><br />
-                <input name="work-time" id="work-time" type="number" onkeyup="allset()" style="ime-mode:Disabled"
+                <input name="work-time" id="work-time" type="number" onkeyup="allset()"
+                    oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                     class="work lead" autofocus required /><br /><br />
-                <input name="rest-time" id="rest-time" type="number" onkeyup="allset()" style="ime-mode:Disabled"
+                <input name="rest-time" id="rest-time" type="number" onkeyup="allset()"
+                    oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                     class="rest lead" required /><br /><br />
-                <input name="loop" id="loop" type="number" onkeyup="allset()" style="ime-mode:Disabled" class="small"
+                <input name="loop" id="loop" type="number" onkeyup="allset()"
+                    oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled" class="small"
                     required /><br /><br />
                 <!-- control that only numbers are OK -->
                 <input name="note" id="note" type="text" class="small" maxlength="39" />
@@ -91,25 +98,40 @@
         </div>
         <div id="allsum" class="small font-weight-bold text-black-50">
             <script>document.write(i18n.__('allsum1'));</script> <span id="allsum-num">---</span>
-            <script>document.write(i18n.__('allsum2'));</script>
+            <script>document.write(i18n.__('allsum2'));</script> <span id="to-num-h">--</span>:<span
+                id="to-num-min">--</span>
         </div>
     </div>
     <script>
+        var timecnt, myDate, h, min;
+        function sumget() {
+            timecnt = (parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val());
+            $("#allsum-num").html(timecnt);
+            myDate = new Date();
+            h = myDate.getHours() + parseInt(timecnt / 60);
+            min = myDate.getMinutes() + timecnt % 60;
+            if (min >= 60) min -= 60, h++;
+            while (h >= 24) h -= 24;
+            $("#to-num-h").html(h);
+            if (min >= 10) $("#to-num-min").html(min);
+            else $("#to-num-min").html("0" + min);
+        }
         isTimerWindow(false);
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
-        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()))
-            $("#allsum-num").html((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()));
+        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumget();
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
         function allset() {
-            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()))
-                $("#allsum-num").html((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val()));
-            else $("#allsum-num").html("---");
-            return (/[0-9]/.test(String.fromCharCode(event.keyCode)));
+            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumget();
+            else {
+                $("#allsum-num").html("---");
+                $("#to-num-h").html("--");
+                $("#to-num-min").html("--");
+            }
         }
     </script>
 </body>

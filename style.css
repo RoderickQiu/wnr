@@ -6,6 +6,7 @@ html, body {
     display: -webkit-flex;
     display: -ms-flexbox;
     display: flex;
+    overflow: hidden;
     align-items: center;
     /* center in v/h */
     -webkit-app-region: drag;
@@ -87,7 +88,7 @@ li {
 }
 
 ::-webkit-scrollbar {
-    width: 12px;
+    width: 4px;
     background-color: #f5f5f5;
 }
 
@@ -136,15 +137,25 @@ li {
     -webkit-user-select: text;
 }
 
+#settingstitle {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
+    position: absolute;
+    top: 35.5px;
+    left: 35.5px;
+    width: 90%;
+}
+
 #settingscontainer {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 35px;
+    top: 92px;
     left: 35.5px;
     overflow-y: scroll;
-    height: 444px;
+    height: 400px;
     width: 90%;
 }
 
@@ -201,4 +212,13 @@ li {
     position: absolute;
     top: 50%;
     bottom: 50%;
+}
+
+#bottombar {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 0%;
+    height: 3px;
+    background-color: #ea5454c2;
 }

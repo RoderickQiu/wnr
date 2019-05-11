@@ -36,7 +36,7 @@ As a timer app, wnr is simple but useful.
 
 - multi-platform support
 
-- multi-language support
+- multi-language support ***(you can help to contribute!)***
 
 - with strong expansibility
 
@@ -55,6 +55,8 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/)
 
 - Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/)
+
+- Any issues or pull requests are appreciated.
 
 ---
 

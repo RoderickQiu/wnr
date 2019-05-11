@@ -390,6 +390,17 @@ ipcMain.on('tourguide', function () {
     );
 })
 
+ipcMain.on('1min', function () {
+    notifier.notify(
+        {
+            title: i18n.__('1min'),
+            message: i18n.__('1minmsg'),
+            sound: true, // Only Notification Center or Windows Toasters
+            wait: true // Wait with callback, until user action is taken against notification
+        }
+    );
+})
+
 ipcMain.on("progress-bar-set", function (event, message) {
     if (win != null) win.setProgressBar(1 - message)
 })

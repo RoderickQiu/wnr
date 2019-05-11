@@ -21,5 +21,12 @@
 			"i18n.__('$1')"
 		],
 		"description": "Get the i18n value defined."
+	},
+	"log": {
+		"prefix": "log",
+		"body": [
+			"ipc.send(\"logger\",\"$1\");"
+		],
+		"description": "Log to console."
 	}
 }
