@@ -274,7 +274,7 @@ ipcMain.on('warninggiver-allend', function () {
 })
 
 ipcMain.on('updateavailable', function () {
-    dialog.showMessageBox(win, {
+    dialog.showMessageBox(settingsWin, {
         title: i18n.__('update'),
         type: "warning",
         message: i18n.__('updatemsg'),
@@ -288,7 +288,7 @@ ipcMain.on('updateavailable', function () {
 })
 
 ipcMain.on('noupdateavailable', function () {
-    dialog.showMessageBox(win, {
+    dialog.showMessageBox(settingsWin, {
         title: i18n.__('noupdate'),
         type: "info",
         message: i18n.__('noupdatemsg')
@@ -296,7 +296,7 @@ ipcMain.on('noupdateavailable', function () {
 })
 
 ipcMain.on('webproblem', function () {
-    dialog.showMessageBox(win, {
+    dialog.showMessageBox(settingsWin, {
         title: i18n.__('webproblem'),
         type: "info",
         message: i18n.__('webproblemmsg')
@@ -304,7 +304,7 @@ ipcMain.on('webproblem', function () {
 })
 
 ipcMain.on('deleteall', function () {
-    dialog.showMessageBox(win, {
+    dialog.showMessageBox(settingsWin, {
         title: i18n.__('deletealltitle'),
         type: "warning",
         message: i18n.__('deleteallcontent'),
