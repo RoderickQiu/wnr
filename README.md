@@ -1,6 +1,6 @@
 # wnr
 
-**Download: [GitHub release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml)**
+**Download: [GitHub Release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml) | [百度网盘（提取码：swh3）](https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ)**
 
 ## Introduction
 
@@ -20,6 +20,10 @@ As a timer app, wnr is simple but useful.
 
 - automatic loops
 
+- clear tip for time
+
+- optional taskname and task content
+
 - tray menu
 
 - alerts for time end
@@ -33,6 +37,10 @@ As a timer app, wnr is simple but useful.
 - progress bar
 
 - hi-dpi support
+
+- user-friendly tourguide
+
+- user-friendly updater
 
 - multi-platform support
 
