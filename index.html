@@ -63,6 +63,7 @@
                 $('#winhider').attr('title', i18n.__('winhider'));
                 $('#minimizer').attr('title', i18n.__('minimizer'));
                 $('#exit').attr('title', i18n.__('exit'));
+                if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
         <div id="tip" class="extreme-small font-weight-bold text-black-50">

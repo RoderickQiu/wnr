@@ -28,6 +28,7 @@ function createWindow() {
         show: false,
         hasShadow: true,
         webPreferences: { nodeIntegration: true },
+        titleBarStyle: "hiddenInset",
         title: "wnr",
         icon: "./res/icons/wnrIcon.png",
         backgroundColor: "#fefefe"
@@ -177,8 +178,25 @@ app.on('ready', () => {
                 }
             }]
         }, {
-            label: i18n.__('help'),
+            label: i18n.__('dothings'),
             submenu: [{
+                label: i18n.__('settings'),
+                click: function () {
+                    settings();
+                }
+            }, {
+                label: i18n.__('tourguide'),
+                click: function () {
+                    tourguide();
+                }
+            }, {
+                label: i18n.__('about'),
+                click: function () {
+                    about();
+                }
+            }, {
+                type: 'separator'
+            }, {
                 label: i18n.__('website'),
                 click: function () {
                     shell.openExternal('https://wnr.scris.top/');
@@ -189,14 +207,15 @@ app.on('ready', () => {
                     shell.openExternal('https://wnr.scris.top/help.html');
                 }
             }, {
-                label: i18n.__('ongithub'),
+                label: i18n.__('github'),
                 click: function () {
                     shell.openExternal('https://github.com/RoderickQiu/wnr/');
                 }
             }]
         }];
         var osxMenu = Menu.buildFromTemplate(template);
-        Menu.setApplicationMenu(osxMenu)
+        Menu.setApplicationMenu(osxMenu);
+        app.dock.setMenu(osxMenu)
     }// 应付macOS的顶栏空缺
 
 
@@ -332,63 +351,72 @@ ipcMain.on('minimizer', function () {
     win.minimize()
 })
 
-ipcMain.on('about', function () {
-    aboutWin = new BrowserWindow({ parent: win, modal: true, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
-    aboutWin.loadFile("about.html");
-    if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
-    aboutWin.once('ready-to-show', () => {
-        aboutWin.show();
-    })
-    aboutWin.on('closed', () => {
-        aboutWin = null
-    })
-})
+function about() {
+    if (app.isReady()) {
+        aboutWin = new BrowserWindow({ parent: win, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, titleBarStyle: "hidden", webPreferences: { nodeIntegration: true } });
+        aboutWin.loadFile("about.html");
+        if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
+        aboutWin.once('ready-to-show', () => {
+            aboutWin.show();
+        })
+        aboutWin.on('closed', () => {
+            aboutWin = null
+        })
+    }
+}
+ipcMain.on('about', about);
 
-ipcMain.on('settings', function () {
-    settingsWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 486, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
-    settingsWin.loadFile("settings.html");
-    if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
-    settingsWin.once('ready-to-show', () => {
-        settingsWin.show();
-    })
-    settingsWin.on('closed', () => {
-        if (win != null) {
-            win.reload();
+function settings() {
+    if (app.isReady()) {
+        settingsWin = new BrowserWindow({ parent: win, width: 729, height: 486, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true }, titleBarStyle: "hidden" });
+        settingsWin.loadFile("settings.html");
+        if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
+        settingsWin.once('ready-to-show', () => {
+            settingsWin.show();
+        })
+        settingsWin.on('closed', () => {
+            if (win != null) {
+                win.reload();
+            }
+            settingsWin = null
+        })
+        if (!store.get("settings-experience")) {
+            store.set("settings-experience", true);
+            notifier.notify(
+                {
+                    title: i18n.__('settingstip'),
+                    message: i18n.__('settingstipmsg'),
+                    sound: true, // Only Notification Center or Windows Toasters
+                    wait: true // Wait with callback, until user action is taken against notification
+                }
+            );
         }
-        settingsWin = null
-    })
-    if (!store.get("settings-experience")) {
-        store.set("settings-experience", true);
+    }
+}
+ipcMain.on('settings', settings);
+
+function tourguide() {
+    if (app.isReady()) {
+        tourWin = new BrowserWindow({ parent: win, width: 729, height: 600, resizable: false, frame: false, show: false, center: true, titleBarStyle: "hidden", webPreferences: { nodeIntegration: true } });
+        tourWin.loadFile("tourguide.html");
+        if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
+        tourWin.once('ready-to-show', () => {
+            tourWin.show();
+        })
+        tourWin.on('closed', () => {
+            tourWin = null
+        })
         notifier.notify(
             {
-                title: i18n.__('settingstip'),
-                message: i18n.__('settingstipmsg'),
+                title: i18n.__('welcomer1'),
+                message: i18n.__('alarmtipmsg'),
                 sound: true, // Only Notification Center or Windows Toasters
                 wait: true // Wait with callback, until user action is taken against notification
             }
         );
     }
-})
-
-ipcMain.on('tourguide', function () {
-    tourWin = new BrowserWindow({ parent: win, modal: true, width: 729, height: 600, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true } });
-    tourWin.loadFile("tourguide.html");
-    if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
-    tourWin.once('ready-to-show', () => {
-        tourWin.show();
-    })
-    tourWin.on('closed', () => {
-        tourWin = null
-    })
-    notifier.notify(
-        {
-            title: i18n.__('welcomer1'),
-            message: i18n.__('alarmtipmsg'),
-            sound: true, // Only Notification Center or Windows Toasters
-            wait: true // Wait with callback, until user action is taken against notification
-        }
-    );
-})
+}
+ipcMain.on('tourguide', tourguide);
 
 ipcMain.on('1min', function () {
     notifier.notify(

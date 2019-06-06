@@ -31,6 +31,7 @@
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
             <script>
                 $('#exitsave').attr('title', i18n.__('exitsave'));
+                if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
         <div id="about" class="justify-content-center text-center small">

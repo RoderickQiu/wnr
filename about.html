@@ -27,6 +27,7 @@
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="close"></i></a>
             <script>
                 $('#close').attr('title', i18n.__('close'));
+                if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
         <div id="about" class="justify-content-center text-center">
@@ -49,6 +50,10 @@
                     $('#ongithub').attr('title', i18n.__('ongithub'));
                     $('#issues').attr('title', i18n.__('issues'));
                 </script>
+            </p>
+            <p class="extreme-small">
+                <a class="rest"
+                    href="javascript:require('electron').shell.openExternal('https://wnr.scris.top/acknoledgements.html/')">Acknoledgements</a>
             </p>
             <hr />
             <p class="extreme-small">

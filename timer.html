@@ -53,6 +53,7 @@
                 $('#backindex2').attr('title', i18n.__('backindex'));
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
+                if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
@@ -159,7 +160,7 @@
                     $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
                     $("#bottombar").css("background-color", "#ea5454c2");
                     method = 1;
-                    $("#controller").css("display", "block");
+                    if (process.platform != "darwin") $("#controller").css("display", "block");
                     if (store.get("fullscreen") == true) {
                         $("#moreoptions").css("display", "block");
                     }

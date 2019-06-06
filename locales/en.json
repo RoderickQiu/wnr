@@ -105,5 +105,8 @@
     "allsum1": "all together",
     "allsum2": "minutes, to ",
     "1min": "Only 1 minute left",
-    "1minmsg": "Only a few amount of time left! "
+    "1minmsg": "Only a few amount of time left! ",
+    "dothings": "Options",
+    "tourguide": "Tourguide",
+    "about": "About wnr"
 }
