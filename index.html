@@ -74,10 +74,16 @@
                 <input name="title" id="title" type="text" class="small" maxlength="11" /><br /><br />
                 <input name="work-time" id="work-time" type="number" onkeyup="allset()"
                     oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                    class="work lead" autofocus required /><br /><br />
+                    class="work lead" autofocus required /><input id="focus-work-set" class="focuscheck" type="checkbox"
+                    onchange="focusworkset()" /><span class="focuser extreme-small work">
+                    <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script></span>
+                </a><br /><br />
                 <input name="rest-time" id="rest-time" type="number" onkeyup="allset()"
                     oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                    class="rest lead" required /><br /><br />
+                    class="rest lead" required /><input id="focus-rest-set" class="focuscheck" type="checkbox"
+                    onchange="fullscreenset()" /><span class="focuser extreme-small rest">
+                    <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script>
+                </span><br /><br />
                 <input name="loop" id="loop" type="number" onkeyup="allset()"
                     oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled" class="small"
                     required /><br /><br />
@@ -95,6 +101,7 @@
                 $('#rest-time').attr('title', i18n.__('resttime'));
                 $('#loop').attr('title', i18n.__('loop'));
                 $('#note').attr('title', i18n.__('note'));
+                $(".focuscheck").attr('title', i18n.__('fullscreentip'));
             </script>
         </div>
         <div id="allsum" class="small font-weight-bold text-black-50">
@@ -133,6 +140,18 @@
                 $("#to-num-h").html("--");
                 $("#to-num-min").html("--");
             }
+        }
+        if (store.get("fullscreen") == true) document.getElementById("focus-rest-set").checked = true;
+        else document.getElementById("focus-rest-set").checked = false;
+        function fullscreenset() {
+            if (document.getElementById("focus-rest-set").checked == true) store.set("fullscreen", true);
+            else store.set("fullscreen", false);
+        }
+        if (store.get("fullscreen-work") == true) document.getElementById("focus-work-set").checked = true;
+        else document.getElementById("focus-work-set").checked = false;
+        function focusworkset() {
+            if (document.getElementById("focus-work-set").checked == true) store.set("fullscreen-work", true);
+            else store.set("fullscreen-work", false);
         }
     </script>
 </body>

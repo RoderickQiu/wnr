@@ -1,12 +1,12 @@
 # wnr
 
-**Download: [GitHub Release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml) | [百度网盘（提取码：swh3）](https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ)**
+**Download: [GitHub Release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia (Windows)](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml) | [百度网盘（提取码：swh3）](https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ)**
 
 ## Introduction
 
 **[中文版](https://scris.top/wnr/)**
 
-**The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.**
+**The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers _(Windows and macOS until now)_.**
 
 ![Preview](https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-1-smaller.png)
 
@@ -44,7 +44,7 @@ As a timer app, wnr is simple but useful.
 
 - multi-platform support
 
-- multi-language support ***(you can help to contribute!)***
+- multi-language support *(you can help to contribute!)*
 
 - with strong expansibility
 
@@ -68,4 +68,4 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 
 ---
 
-_Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)**_
+_Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)**, [Acknoledgements](https://wnr.scris.top/acknoledgements.html)._

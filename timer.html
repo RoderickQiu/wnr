@@ -92,7 +92,7 @@
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
-        if (!worktime || !resttime || !loop || worktime == 60000 || resttime == 60000) {//use ms
+        if (!worktime || !resttime || !loop || worktime == 6011000 || resttime == 6011000) {//use ms
             $("#timer").html("<p class='text-center lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -106,6 +106,11 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#note").html(note);
+            if (store.get('fullscreen-work')) {
+                ipc.send('focus-first');
+                $("#controller").css("display", "none");
+                $("#moreoptions").css("display", "none");
+            }
             var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1, morethan1 = 1;//method: 1-work / 2-rest, times: time-reset times, morethan1: more than 1 min left
             starttime = new Date().getTime();
             int = self.setInterval(clock, 100);
@@ -152,6 +157,9 @@
                     if (store.get("fullscreen") == true) {
                         $("#controller").css("display", "none");
                         $("#moreoptions").css("display", "none");
+                    } else if (store.get("fullscreen-work") == true) {
+                        if (process.platform != "darwin") $("#controller").css("display", "block");
+                        $("#moreoptions").css("display", "block");
                     }
                     warninggiver(1);
                 } else {
@@ -161,7 +169,10 @@
                     $("#bottombar").css("background-color", "#ea5454c2");
                     method = 1;
                     if (process.platform != "darwin") $("#controller").css("display", "block");
-                    if (store.get("fullscreen") == true) {
+                    if (store.get("fullscreen-work") == true) {
+                        $("#controller").css("display", "none");
+                        $("#moreoptions").css("display", "none");
+                    } else if (store.get("fullscreen") == true) {
                         $("#moreoptions").css("display", "block");
                     }
                     warninggiver(2);
@@ -174,7 +185,7 @@
                 isclockworking = 0;
                 $("#stopper").text("");
                 ipc.send("progress-bar-set", 2);//设置的是(1-message)，因而使用2才能得到-1
-                $("#controller").css("display", "block");
+                if (process.platform != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#moreoptions").css("display", "none");
                 warninggiver(0);
@@ -207,7 +218,6 @@
                     if (minutes == 0 && morethan1) {
                         ipc.send("1min");
                         morethan1 = 0;
-
                     }
                 } else {
                     skipper();

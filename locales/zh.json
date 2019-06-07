@@ -28,7 +28,7 @@
     "minimizer": "最小化至任务栏",
     "title": "任务名称是什么？",
     "worktime": "先工作多少分钟？",
-    "resttime": "然后再休息多少分钟？",
+    "resttime": "再休息多少分钟？",
     "loop": "循环几次？",
     "note": "还有什么想记的吗？",
     "tip": "输入各个项目，然后按Enter键开始计时器",
@@ -69,7 +69,7 @@
     "autostart": "开机自启设置：",
     "autotip": "是否要让wnr开机时自动启动？",
     "fullscreenrest": "专心休息设置：",
-    "fullscreentip": "如果你在休息时，还总是要看电脑，不妨开启专心休息模式（全屏休息模式）试一下？",
+    "fullscreentip": "如果你在休息或做别的事情的时候，还总是要看电脑，不妨开启专心模式（全屏模式）试一下？",
     "autocheck": "自动更新设置：",
     "checktip": "是否要wnr每天自动检测更新（如果联网）？如果有更新，将会提示您。",
     "otherthings": "其他设置",
@@ -108,5 +108,9 @@
     "1minmsg": "这一段时间只剩下1分钟了，好好规划一下暂时的收尾工作吧！",
     "dothings": "操作",
     "tourguide": "导览",
-    "about": "关于"
+    "about": "关于",
+    "focusmode1": "全屏",
+    "focusmode2": "专心",
+    "wrongfolder": "当前应用并不在应用程序文件夹中",
+    "wrongfoldertip": "把应用移到系统的应用程序文件夹中可以更方便地使用wnr。"
 }

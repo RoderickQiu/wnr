@@ -27,8 +27,8 @@
     "winhider": "Hide the window to system tray",
     "minimizer": "Minimize to taskbar",
     "title": "please enter a title",
-    "worktime": "work for (minutes)",
-    "resttime": "then rest for (minutes)",
+    "worktime": "1. work for (minutes)",
+    "resttime": "2. rest for (minutes)",
     "loop": "loop for (times)",
     "note": "notes",
     "tip": "Press Enter to submit.",
@@ -69,7 +69,7 @@
     "autostart": "Start up with system: ",
     "autotip": "If it is enabled, then every time your system starts, wnr starts.",
     "fullscreenrest": "Fullscreen rest time: ",
-    "fullscreentip": "If it is enabled, when it's rest time, wnr will enter full-screen mode to prevent you from using computer.",
+    "fullscreentip": "If it is enabled, wnr will enter full-screen mode to prevent you from using computer.",
     "autocheck": "Auto check for update: ",
     "checktip": "If it is enabled, wnr will automatically check for update (every day).",
     "otherthings": "Other Things",
@@ -108,5 +108,9 @@
     "1minmsg": "Only a few amount of time left! ",
     "dothings": "Options",
     "tourguide": "Tourguide",
-    "about": "About wnr"
+    "about": "About wnr",
+    "focusmode1": "Full",
+    "focusmode2": "screen",
+    "wrongfolder": "Not in Applications folder",
+    "wrongfoldertip": "To use wnr in a convenient way, please move wnr to the system's Applications folder."
 }

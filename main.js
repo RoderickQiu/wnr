@@ -25,6 +25,7 @@ function createWindow() {
         height: 336,
         frame: false,
         resizable: false,
+        maximizable: false,
         show: false,
         hasShadow: true,
         webPreferences: { nodeIntegration: true },
@@ -113,6 +114,19 @@ app.on('ready', () => {
         if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
     })
 
+    if (process.platform == "darwin") {
+        if (!app.isInApplicationsFolder()) {
+            notifier.notify(
+                {
+                    title: i18n.__('wrongfolder'),
+                    message: i18n.__('wrongfoldertip'),
+                    sound: true, // Only Notification Center or Windows Toasters
+                    wait: true // Wait with callback, until user action is taken against notification
+                }
+            );
+        }
+    }
+
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
     else if (process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
     contextMenu = Menu.buildFromTemplate([
@@ -163,63 +177,100 @@ app.on('ready', () => {
             win.isVisible() ? win.hide() : win.show();
             if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
             if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
-            if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show()
+            if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
         });//托盘菜单
     }
 
-    if (process.platform === 'darwin') {
-        var template = [{
-            label: 'wnr',
-            submenu: [{
-                label: i18n.__('quit'),
-                accelerator: 'CmdOrCtrl+Q',
-                click: function () {
-                    app.quit();
-                }
-            }]
-        }, {
-            label: i18n.__('dothings'),
-            submenu: [{
-                label: i18n.__('settings'),
-                click: function () {
-                    settings();
-                }
-            }, {
-                label: i18n.__('tourguide'),
-                click: function () {
-                    tourguide();
-                }
-            }, {
-                label: i18n.__('about'),
-                click: function () {
-                    about();
-                }
-            }, {
-                type: 'separator'
-            }, {
-                label: i18n.__('website'),
-                click: function () {
-                    shell.openExternal('https://wnr.scris.top/');
-                }
-            }, {
-                label: i18n.__('helppage'),
-                click: function () {
-                    shell.openExternal('https://wnr.scris.top/help.html');
-                }
-            }, {
-                label: i18n.__('github'),
-                click: function () {
-                    shell.openExternal('https://github.com/RoderickQiu/wnr/');
-                }
-            }]
-        }];
-        var osxMenu = Menu.buildFromTemplate(template);
-        Menu.setApplicationMenu(osxMenu);
-        app.dock.setMenu(osxMenu)
-    }// 应付macOS的顶栏空缺
-
+    macOSSolution(false)
 
 })
+
+function macOSSolution(isFullScreen) {
+    if (app.isReady()) {
+        if (process.platform === 'darwin') {
+            if (!isFullScreen)
+                var template = [{
+                    label: 'wnr',
+                    submenu: [{
+                        label: i18n.__('quit'),
+                        accelerator: 'CmdOrCtrl+Q',
+                        click: function () {
+                            app.quit();
+                        }
+                    }]
+                }, {
+                    label: i18n.__('dothings'),
+                    submenu: [{
+                        label: i18n.__('settings'),
+                        click: function () {
+                            settings();
+                        }
+                    }, {
+                        label: i18n.__('tourguide'),
+                        click: function () {
+                            tourguide();
+                        }
+                    }, {
+                        label: i18n.__('about'),
+                        click: function () {
+                            about();
+                        }
+                    }, {
+                        type: 'separator'
+                    }, {
+                        label: i18n.__('website'),
+                        click: function () {
+                            shell.openExternal('https://wnr.scris.top/');
+                        }
+                    }, {
+                        label: i18n.__('helppage'),
+                        click: function () {
+                            shell.openExternal('https://wnr.scris.top/help.html');
+                        }
+                    }, {
+                        label: i18n.__('github'),
+                        click: function () {
+                            shell.openExternal('https://github.com/RoderickQiu/wnr/');
+                        }
+                    }]
+                }];
+            else
+                var template = [{
+                    label: 'wnr',
+                    submenu: [{
+                        label: i18n.__('quit'),
+                        enabled: false
+                    }]
+                }, {
+                    label: i18n.__('dothings'),
+                    submenu: [{
+                        label: i18n.__('settings'),
+                        enabled: false
+                    }, {
+                        label: i18n.__('tourguide'),
+                        enabled: false
+                    }, {
+                        label: i18n.__('about'),
+                        enabled: false
+                    }, {
+                        type: 'separator'
+                    }, {
+                        label: i18n.__('website'),
+                        enabled: false
+                    }, {
+                        label: i18n.__('helppage'),
+                        enabled: false
+                    }, {
+                        label: i18n.__('github'),
+                        enabled: false
+                    }]
+                }];
+            var osxMenu = Menu.buildFromTemplate(template);
+            Menu.setApplicationMenu(osxMenu);
+            app.dock.setMenu(osxMenu)
+        }// 应付macOS的顶栏空缺
+    }
+}
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标并且没有其他窗口打开时，
@@ -227,6 +278,12 @@ app.on('activate', () => {
     if (win === null) {
         createWindow()
     }
+})
+
+ipcMain.on('focus-first', function () {
+    if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
+    win.setFullScreen(true);
+    macOSSolution(true)
 })
 
 ipcMain.on('warninggiver-workend', function () {
@@ -238,6 +295,11 @@ ipcMain.on('warninggiver-workend', function () {
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
             win.setFullScreen(true);
+            macOSSolution(true);
+        } else {
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            win.setFullScreen(false);
+            macOSSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -255,9 +317,14 @@ ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
-        if (store.get("fullscreen") == true) {
+        if (store.get("fullscreen-work") == true) {
+            if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
+            win.setFullScreen(true);
+            macOSSolution(true);
+        } else {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
             win.setFullScreen(false);
+            macOSSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -278,6 +345,7 @@ ipcMain.on('warninggiver-allend', function () {
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
             win.setFullScreen(false);
+            macOSSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -442,6 +510,7 @@ ipcMain.on("timer-win", function (event, message) {
         if (tray != null) {
             contextMenu.items[2].enabled = true;
         }
+
         globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
             win.webContents.send('startorstop');
         })

@@ -19,7 +19,7 @@ label {
     margin-bottom: .5rem;
 }
 
-input {
+input, .focuser {
     display: inline-block;
     vertical-align: middle;
     line-height: inherit;
@@ -61,7 +61,6 @@ input[type="checkbox"] {
     border-radius: 15px;
     width: 24px;
     height: 24px;
-    position: absolute;
 }
 
 input[type="checkbox"]:checked {
@@ -129,6 +128,28 @@ li {
     border-radius: 15px;
     width: 24px;
     text-align: center;
+}
+
+.focuscheck {
+    -webkit-appearance: none;
+    /* remove default style */
+    border: solid #5490ea 1.2px;
+    border-radius: 15px;
+    width: 18px;
+    height: 18px;
+}
+
+.focuscheck:checked {
+    background-image: url(./res/icons/check.png);
+    background-size: contain;
+}
+
+#focus-work-set{
+    border-color: #ea5454;
+}
+
+#focus-work-set:checked{
+    background-image: url(./res/icons/check-work.png);
 }
 
 #main {
@@ -219,6 +240,6 @@ li {
     bottom: 0px;
     right: 0px;
     width: 0%;
-    height: 3px;
+    height: 6px;
     background-color: #ea5454c2;
 }
