@@ -249,12 +249,6 @@
                     })
             }
         }
-        if (store.get("fullscreen") == true) document.getElementById("fullscreen-set").checked = true;
-        else document.getElementById("fullscreen-set").checked = false;
-        function fullscreenset() {
-            if (document.getElementById("fullscreen-set").checked == true) store.set("fullscreen", true);
-            else store.set("fullscreen", false);
-        }
         if (store.get("autocheck") != false) document.getElementById("autocheck-set").checked = true;
         else document.getElementById("autocheck-set").checked = false;
         function autocheckset() {
