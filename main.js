@@ -13,9 +13,6 @@ let resetAlarm = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
 
-const gotTheLock = app.requestSingleInstanceLock();
-if (!gotTheLock) app.quit()// 只允许同时运行一个wnr
-
 powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计时
 
 function createWindow() {
@@ -83,6 +80,21 @@ app.on('will-quit', () => {
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on('ready', () => {
+    const gotTheLock = app.requestSingleInstanceLock();
+    if (!gotTheLock) {
+        dialog.showMessageBox(win, {
+            title: __('multiwnr'),
+            type: "warning",
+            message: __('multiwnrmsg'),
+            checkboxLabel: __('multiwnrchk'),
+            checkboxChecked: true
+        }, function (response, checkboxChecked) {
+            if (checkboxChecked) {
+                app.quit();
+            }
+        })
+    }//不希望有多个wnr同时运行
+
     createWindow();
 
     i18n.configure({

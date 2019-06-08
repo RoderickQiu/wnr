@@ -112,5 +112,8 @@
     "focusmode1": "全屏",
     "focusmode2": "专心",
     "wrongfolder": "当前应用并不在应用程序文件夹中",
-    "wrongfoldertip": "把应用移到系统的应用程序文件夹中可以更方便地使用wnr。"
+    "wrongfoldertip": "把应用移到系统的应用程序文件夹中可以更方便地使用wnr。",
+    "multiwnr": "有不止一个wnr正在运行",
+    "multiwnrmsg": "我们强烈建议只同时运行一个wnr程序。",
+    "multiwnrchk": "退出当前"
 }

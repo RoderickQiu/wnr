@@ -112,5 +112,8 @@
     "focusmode1": "Full",
     "focusmode2": "screen",
     "wrongfolder": "Not in Applications folder",
-    "wrongfoldertip": "To use wnr in a convenient way, please move wnr to the system's Applications folder."
+    "wrongfoldertip": "To use wnr in a convenient way, please move wnr to the system's Applications folder.",
+    "multiwnr": "More than one wnr",
+    "multiwnrmsg": "There are more than 1 wnr application that is running now, which is not recommended.",
+    "multiwnrchk": "Exit now"
 }

@@ -66,6 +66,22 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 
 - Any issues or pull requests are appreciated.
 
+## How to Build
+
+I don't currently have styler tools, checker tools or things like that. And linux version hasn't been tested.
+
+```shell
+yarn
+
+yarn start
+
+yarn run win
+
+yarn run mac
+
+yarn run linux
+```
+
 ---
 
 _Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)**, [Acknoledgements](https://wnr.scris.top/acknoledgements.html)._

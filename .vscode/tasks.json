@@ -4,8 +4,9 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "type": "npm",
-            "script": "start",
+            "label": "run wnr",
+            "type": "shell",
+            "command": "yarn start",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -13,6 +14,12 @@
             "problemMatcher": [
                 "$jshint"
             ]
+        },
+        {
+            "label": "install",
+            "type": "shell",
+            "command": "yarn",
+            "group": "none"
         }
     ]
 }
