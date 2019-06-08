@@ -4,8 +4,7 @@
 <h2 align="center">wnr</h2>
 
 <p align="center">
-    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers <i>(Windows and
-            macOS until now)</i></b>
+    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.</b>
 </p>
 
 <p align="center">
@@ -13,7 +12,7 @@
 </p>
 
 <p align="center">
-    Download: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
+    Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
         (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a>
 </p>
