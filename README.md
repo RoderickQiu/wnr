@@ -1,16 +1,24 @@
-# wnr
+<p align="center"><img src="https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/icons/wnrIcon.png"
+        width="64px" /></p>
 
-**Download: [GitHub Release](https://github.com/RoderickQiu/wnr/releases) | [Softpedia (Windows)](https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml) | [百度网盘（提取码：swh3）](https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ)**
+<h2 align="center">wnr</h2>
 
-## Introduction
+<p align="center">
+    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers <i>(Windows and
+            macOS until now)</i></b>
+</p>
 
-**[中文版](https://scris.top/wnr/)**
+<p align="center">
+    As a timer app, wnr is simple but useful. | <a href="https://scris.top/wnr/">中文简介</a>
+</p>
 
-**The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers _(Windows and macOS until now)_.**
+<p align="center">
+    Download: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
+        href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a>
+</p>
 
-![Preview](https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/preview/preview-1-smaller.png)
-
-As a timer app, wnr is simple but useful.
+---
 
 ## Features
 
@@ -22,19 +30,19 @@ As a timer app, wnr is simple but useful.
 
 - clear tip for time
 
-- optional taskname and task content
+- optional taskname and task notes
 
-- tray menu
+- tray menu / dock menu
 
 - alerts for time end
 
-- full-screen mode for rest time
+- full-screen focus mode
 
 - always-on-top mode
 
 - auto-start with system
 
-- progress bar
+- progress bar support
 
 - hi-dpi support
 
@@ -42,7 +50,7 @@ As a timer app, wnr is simple but useful.
 
 - user-friendly updater
 
-- multi-platform support
+- multi-platform support *(currently Windows & macOS; web, Android, iOS versions are in plan)*
 
 - multi-language support *(you can help to contribute!)*
 
@@ -52,23 +60,27 @@ As a timer app, wnr is simple but useful.
 
 - ...
 
+This application is being frequently updated, so does this list.
+
+## Contact
+
+- Homepage: [wnr.scris.top](https://wnr.scris.top/).
+
+- Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
+
+- Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/).
+
+- Any issues or pull requests are appreciated.
+
 ## To-do List
 
 Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
-## Contact
-
-- Homepage: [wnr.scris.top](https://wnr.scris.top/)
-
-- Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/)
-
-- Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/)
-
-- Any issues or pull requests are appreciated.
-
 ## How to Build
 
-I don't currently have styler tools, checker tools or things like that. And linux version hasn't been tested.
+I currently don't have any styler tool, checker tool or things like that.
+
+And linux version hasn't been tested.
 
 ```shell
 yarn
@@ -82,6 +94,12 @@ yarn run mac
 yarn run linux
 ```
 
----
+I'm now using yarn.
 
-_Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)**, [Acknoledgements](https://wnr.scris.top/acknoledgements.html)._
+## Copyright & Credit
+
+Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)** and other contributors. All rights reserved.
+
+Licensed under the [MIT License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
+
+For all the packages using, go to the [acknoledgements](https://wnr.scris.top/acknoledgements.html).
