@@ -45,6 +45,8 @@
 
 - hi-dpi support
 
+- dark mode support
+
 - user-friendly tourguide
 
 - user-friendly updater
