@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <script src="renderer.js"></script>
+    <script src="supporter.js"></script>
     <div id="controller">
         <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
         <script>
@@ -33,7 +33,7 @@
         <i class="fa fa-cog fa-fw" id="settings" aria-hidden="true"></i>
         <script>document.write(i18n.__('settings'));</script>
     </div>
-    <div class="d-flex text-dark" id="settingscontainer">
+    <div class="d-flex" id="settingscontainer">
         <div id="settings" class="text-left">
             <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('timeset'));</script>
@@ -43,7 +43,7 @@
                 <label>
                     <script>document.write(i18n.__('defwork'));</script></label>
                 <input id="work-time-set" type="range" min="0" max="120" value="0" onchange="worktimeset()" />
-                <span id="work-time-show" class="text-black-50">0</span>
+                <span id="work-time-show" class="text-muted">0</span>
                 <br /><span class="text-muted small">
                     <script>document.write(i18n.__('defworktip'));</script><b>
                         <script>document.write(i18n.__('resettip'));</script></b>
@@ -53,7 +53,7 @@
                 <label>
                     <script>document.write(i18n.__('defrest'));</script></label>
                 <input id="rest-time-set" type="range" min="0" max="60" value="0" onchange="resttimeset()" />
-                <span id="rest-time-show" class="text-black-50">0</span>
+                <span id="rest-time-show" class="text-muted">0</span>
                 <br /><span class="text-muted small">
                     <script>document.write(i18n.__('defworktip'));</script><b>
                         <script>document.write(i18n.__('resettip'));</script></b>
@@ -63,7 +63,7 @@
                 <label>
                     <script>document.write(i18n.__('defloop'));</script></label>
                 <input id="loop-time-set" type="range" min="0" max="12" value="0" onchange="looptimeset()" />
-                <span id="loop-time-show" class="text-black-50">0</span>
+                <span id="loop-time-show" class="text-muted">0</span>
                 <br /><span class="text-muted small">
                     <script>document.write(i18n.__('deflooptip'));</script><b>
                         <script>document.write(i18n.__('resettip'));</script></b>
@@ -157,6 +157,9 @@
                     <b>
                         <script>document.write(i18n.__('autorestarttip'));</script>
                     </b>
+                </li>
+                <li>
+                    <script>document.write(i18n.__('snoretip'));</script>
                 </li>
             </div>
         </div>
@@ -272,6 +275,7 @@
             var t = setTimeout("call('relauncher')", 500);
         }
     </script>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

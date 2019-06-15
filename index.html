@@ -13,7 +13,7 @@
     </script>
     <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
     <script src="res/lib/jquery-3.3.1.min.js"></script>
-    <script src="res/lib/bootstrap.min.js"></script>
+    <script src="res/lib/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
     <script src="res/lib/all.js"></script>
     <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
@@ -22,7 +22,7 @@
 
 <body onpaste="return false">
     <!-- prevent people from pasting abnormal content -->
-    <script src="renderer.js"></script>
+    <script src="supporter.js"></script>
     <script src="updater.js"></script>
     <script>
         if (!store.get('tour')) {
@@ -66,18 +66,40 @@
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div id="tip" class="extreme-small font-weight-bold text-black-50">
+        <div id="tip" class="extreme-small font-weight-bold text-muted">
             <script>document.write(i18n.__('tip'));</script>
         </div>
         <div id="set" class="container-fluid">
             <form action="timer.html" method="GET" class="justify-content-center align-content-center">
-                <input name="title" id="title" type="text" class="small" maxlength="11" /><br /><br />
+                <input name="title" id="title" type="text" class="small" maxlength="11" />
+                <div class="dropdown dropleft focuser">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">&nbsp;
+                        <span class="focuser extreme-small text-muted">
+                            <script>document.write(i18n.__('default1') + "<br />" + i18n.__('default2'))</script>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="#">学习</a>
+                        <a class="dropdown-item" href="#">项目</a>
+                        <div class="dropdown-divider"></div>
+                        <div class="px-4">
+                            <input type="button" class="dropdown-controller rest" id="more-defaults" value="+" />&nbsp;
+                            <input type="button" class="dropdown-controller rest" id="less-defaults" value="-" />&nbsp;
+                            <input type="button" class="dropdown-controller rest" id="edit-defaults" />
+                            <script>
+                                $("#edit-defaults").val(i18n.__('edit'));
+                            </script>
+                        </div>
+                    </div>
+                </div><br /><br />
                 <div class="align-content-center">
                     <input name="work-time" id="work-time" type="number" onkeyup="allset()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                         class="work lead" autofocus required /><input id="focus-work-set" type="checkbox"
                         onchange="focusworkset()" /><span class="focuser extreme-small work">
-                        <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script></span>
+                        <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script>
+                    </span>
                 </div>
                 <br />
                 <div class="align-content-center">
@@ -90,11 +112,11 @@
                 </div>
                 <br />
                 <input name="loop" id="loop" type="number" onkeyup="allset()"
-                    oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled" class="small"
-                    required />
+                    oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled"
+                    class="small text-muted" required />
                 <br /><br />
                 <!-- control that only numbers are OK -->
-                <input name="note" id="note" type="text" class="small" maxlength="39" />
+                <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
                 <br /><br />
             </form>
             <script>
@@ -111,7 +133,7 @@
                 $(".focuscheck").attr('title', i18n.__('fullscreentip'));
             </script>
         </div>
-        <div id="allsum" class="small font-weight-bold text-black-50">
+        <div id="allsum" class="small font-weight-bold text-muted">
             <script>document.write(i18n.__('allsum1'));</script> <span id="allsum-num">---</span>
             <script>document.write(i18n.__('allsum2'));</script> <span id="to-num-h">--</span>:<span
                 id="to-num-min">--</span>
@@ -161,6 +183,7 @@
             else store.set("fullscreen-work", false);
         }
     </script>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

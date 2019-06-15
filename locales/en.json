@@ -115,5 +115,9 @@
     "wrongfoldertip": "To use wnr in a convenient way, please move wnr to the system's Applications folder.",
     "multiwnr": "More than one wnr",
     "multiwnrmsg": "There are more than 1 wnr application that is running now, which is not recommended.",
-    "multiwnrchk": "Exit now"
+    "multiwnrchk": "Exit now",
+    "snoretip": "Sometimes wnr sends notifications, which is able to be disabled in the system's settings. On Windows, we use SnoreToast to send tips. ",
+    "default1": "Predefined",
+    "default2": "tasks",
+    "edit": "Edit"
 }

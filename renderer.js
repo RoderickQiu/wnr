@@ -1,18 +1,11 @@
-var i18n = require("i18n");
-const Store = require('electron-store');
-const store = new Store();
-const ipc = require('electron').ipcRenderer;
-const path = require("path");
-i18n.configure({
-    locales: ['en', 'zh'],
-    directory: __dirname + '/locales'
-});
-i18n.setLocale(store.get("i18n"));//国际化组件默认设置
-function isTimerWindow(isTimer) {
-    if (isTimer) {
-        ipc.send('timer-win', true);
-    } else ipc.send('timer-win', false);
-}
-function call(content) {
-    ipc.send(content);
+const isDarkMode = store.get('isDarkMode');
+if (isDarkMode) {
+    document.write('<style>::-webkit-scrollbar-track {background-color: #393939;}</style>');
+    document.write('<style>::-webkit-scrollbar-thumb {background-color: #999999;}</style>');
+    document.write('<style>.dropdown-menu {border-color: #aaaaaa; background-color: #555555;}</style>');
+    document.write('<style>.dropdown-item:hover {background-color: #aaaaaa;}</style>');
+    document.write('<style>input[type="range"] {background-color: #aaaaaa33;}</style>');
+    $('body').css('background-color', '#393939');
+    $('body').css('color', '#aaaaaa');
+    $('#title').css('color', '#aaaaaa');
 }

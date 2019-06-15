@@ -25,7 +25,8 @@
     "electron-store": "3.2.0",
     "i18n": "0.8.3",
     "node-notifier": "5.4.0",
-    "request": "2.88.0"
+    "request": "2.88.0",
+    "winreg": "1.2.4"
   },
   "devDependencies": {
     "electron": "5.0.3",

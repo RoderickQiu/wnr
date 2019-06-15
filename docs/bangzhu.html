@@ -73,7 +73,7 @@
                 如果你还有问题，或者你发现了wnr有bug，请创建一个<a href="https://github.com/RoderickQiu/wnr/issues/">issue</a>或者<a
                     href="mailto">给我发邮件</a>。谢谢！<br />
             </div><br />
-            <p class="text-black-50 m">
+            <p class="text-muted m">
                 <a href="index.html" title="Back">返回</a>&nbsp;|
                 <a href="https://github.com/RoderickQiu/wnr/releases" title="Download wnr now"
                     class="font-weight-bold">现在下载wnr</i></a>
@@ -92,6 +92,13 @@
             $(".m").each(function () {
                 $(this).css("display", "none");
             });
+        }
+        if (decodeURI($_GET['dark']) == 1) {
+            $("body").css("background-color", "#393939");
+            $('body').css('color', '#aaaaaa');
+            $('img').css('opacity', '0.5');
+            document.write('<style>::-webkit-scrollbar-track {background-color: #393939;}</style>');
+            document.write('<style>::-webkit-scrollbar-thumb {background-color: #999999;}</style>');
         }
     </script>
 </body>

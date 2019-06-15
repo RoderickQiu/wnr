@@ -21,7 +21,7 @@
 </head>
 
 <body>
-    <script src="renderer.js"></script>
+    <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="close"></i></a>
@@ -56,10 +56,10 @@
                     href="javascript:require('electron').shell.openExternal('https://wnr.scris.top/acknoledgements.html')">Acknoledgements</a>
             </p>
             <hr />
-            <p class="extreme-small">
+            <p class="extreme-small text-muted">
                 <script>document.write(i18n.__('tip1'));</script>
             </p>
-            <p class="extreme-small">
+            <p class="extreme-small text-muted">
                 <script>document.write(i18n.__('tip2'));</script>
                 <a href="mailto:scrisqiu@hotmail.com" id="emailto">
                     <script>$("#emailto").attr("title", i18n.__('emailto'));</script>
@@ -69,6 +69,7 @@
             </p>
         </div>
     </div>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

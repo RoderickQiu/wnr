@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <script src="renderer.js"></script>
+    <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
             <a href="javascript:call('winhider')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
@@ -38,15 +38,15 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="note" class="text-center small text-black-50"></div>
+            <div id="note" class="text-center small text-muted"></div>
             <div id="work-rest" class="text-center work lead"><i class="fa fa-building"></i></div>
             <div id="now-timing" class="text-center h1 work"></div>
-            <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-black-50"><i
+            <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
                         class="fa fa-pause"></i></a></div>
-            <div class="text-center text-black-50" id="moreoptions"><a href="index.html" class="small text-black-50"><i
+            <div class="text-center text-muted" id="moreoptions"><a href="index.html" class="text-muted"><i
                         class="fa fa-angle-left" id="backindex"></i></a>&nbsp;&nbsp;<a href="javascript:skipper()"
-                    class="small text-black-50"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
-            <div class="text-center lead" id="backer"><a href="index.html" class="text-black-50"><i
+                    class="text-muted"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
+            <div class="text-center lead" id="backer"><a href="index.html" class="text-muted"><i
                         class="fa fa-angle-left" id="backindex2"></i></a></div>
             <script>
                 $('#backindex').attr('title', i18n.__('backindex'));
@@ -228,6 +228,7 @@
             })
         }
     </script>
+    <script src="renderer.js"></script>
 </body>
 
 </html>

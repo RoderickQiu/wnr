@@ -22,7 +22,7 @@
 </head>
 
 <body>
-    <script src="renderer.js"></script>
+    <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="loadingtip">
             <script>document.write(i18n.__('loadingtip1'))</script>
@@ -39,7 +39,7 @@
                 <p class="h3 rest font-weight-bolder">
                     <script>document.write(i18n.__('welcomer1'))</script>
                 </p>
-                <center class="text-black-50">
+                <center class="text-muted">
                     <script>document.write(i18n.__('welcomer2'))</script>
                 </center><br />
                 <a href="javascript:tourguide()" class="btn btn-primary">
@@ -53,7 +53,7 @@
                 </p>
                 <hr />
                 <iframe id="tourguide" src="https://wnr.scris.top/bangzhu.html?m=1"></iframe>
-                <p class="small text-black-50" id="loadingtip2">
+                <p class="small text-muted" id="loadingtip2">
                     <script>document.write(i18n.__('loadingtip2'))</script>
                     <a href="javascript:offline()">
                         <script>document.write(i18n.__('loadingtip3'))</script></a>
@@ -85,8 +85,13 @@
             ipc.send("settings");
             window.close();
         }
+    </script>
+    <script src="renderer.js"></script>
+    <script>
+        if (isDarkMode) $('#tourguide').src('https://wnr.scris.top/bangzhu.html?m=1&dark=1');
         function offline() {
-            frame.src = "docs/bangzhu.html?m=1";
+            if (isDarkMode) frame.src = "docs/bangzhu.html?m=1&dark=1";
+            else frame.src = "docs/bangzhu.html?m=1";
             $("#loadingtip2").css("display", "none");
         }
     </script>

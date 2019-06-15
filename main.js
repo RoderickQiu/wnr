@@ -1,9 +1,10 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, systemPreferences } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
 const notifier = require('node-notifier');
-var i18n = require("i18n")
+var i18n = require("i18n");
+var Registry = require('winreg')
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -18,8 +19,8 @@ powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计
 function createWindow() {
     // 创建浏览器窗口。
     win = new BrowserWindow({
-        width: 342,
-        height: 336,
+        width: 364,
+        height: 360,
         frame: false,
         resizable: false,
         maximizable: false,
@@ -80,23 +81,7 @@ app.on('will-quit', () => {
 // 创建浏览器窗口时，调用这个函数。
 // 部分 API 在 ready 事件触发后才能使用。
 app.on('ready', () => {
-    const gotTheLock = app.requestSingleInstanceLock();
-    if (!gotTheLock) {
-        dialog.showMessageBox(win, {
-            title: __('multiwnr'),
-            type: "warning",
-            message: __('multiwnrmsg'),
-            checkboxLabel: __('multiwnrchk'),
-            checkboxChecked: true
-        }, function (response, checkboxChecked) {
-            if (checkboxChecked) {
-                app.quit();
-            }
-        })
-    }//不希望有多个wnr同时运行
-
     createWindow();
-
     i18n.configure({
         locales: ['en', 'zh'],
         directory: __dirname + '/locales',
@@ -113,6 +98,21 @@ app.on('ready', () => {
         store.set('i18n', lang);
     }
     i18n.setLocale(store.get("i18n"));//国际化组件默认设置
+
+    const gotTheLock = app.requestSingleInstanceLock();
+    if (!gotTheLock) {
+        dialog.showMessageBox(win, {
+            title: i18n.__('multiwnr'),
+            type: "warning",
+            message: i18n.__('multiwnrmsg'),
+            checkboxLabel: i18n.__('multiwnrchk'),
+            checkboxChecked: true
+        }, function (response, checkboxChecked) {
+            if (checkboxChecked) {
+                app.quit();
+            }
+        })
+    }//不希望有多个wnr同时运行
 
     if (store.get("top") == true) win.setAlwaysOnTop(true);
 
@@ -193,8 +193,8 @@ app.on('ready', () => {
         });//托盘菜单
     }
 
-    macOSSolution(false)
-
+    macOSSolution(false);
+    isDarkMode()
 })
 
 function macOSSolution(isFullScreen) {
@@ -281,6 +281,31 @@ function macOSSolution(isFullScreen) {
             Menu.setApplicationMenu(osxMenu);
             app.dock.setMenu(osxMenu)
         }// 应付macOS的顶栏空缺
+    }
+}
+
+function isDarkMode() {
+    if (app.isReady()) {
+        store.set('isDarkMode', false);
+        if (process.platform == 'darwin') {
+            if (systemPreferences.isDarkMode()) store.set('isDarkMode', true);
+        } else if (process.platform == 'win32') {
+            var regKey = new Registry({                                       // new operator is optional
+                hive: Registry.HKCU,                                        // open registry hive HKEY_CURRENT_USER
+                key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize' // key containing autostart programs
+            })
+            regKey.values(function (err, items) {
+                if (err)
+                    return 'unset';
+                else {
+                    for (var i = 0; i < items.length; i++) {
+                        if (items[i].name == 'AppsUseLightTheme') {
+                            if (items[i].value == "0x0") store.set('isDarkMode', true);
+                        }
+                    }
+                }
+            });
+        }
     }
 }
 

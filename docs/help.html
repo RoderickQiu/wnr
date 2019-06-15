@@ -72,7 +72,7 @@
                 create an <a href="https://github.com/RoderickQiu/wnr/issues/">issue</a> or drop me an email to <a
                     href="mailto">scrisqiu@hotmail.com</a>.<br />
             </div><br />
-            <p class="text-black-50 m">
+            <p class="text-muted m">
                 <a href="index.html" title="Back">Back</a>&nbsp;|
                 <a href="https://github.com/RoderickQiu/wnr/releases" title="Download wnr now"
                     class="font-weight-bold">Download
@@ -93,6 +93,13 @@
             $(".m").each(function () {
                 $(this).css("display", "none");
             });
+        }
+        if (decodeURI($_GET['dark']) == 1) {
+            $("body").css("background-color", "#393939");
+            $('body').css('color', '#aaaaaa');
+            $('img').css('opacity', '0.5');
+            document.write('<style>::-webkit-scrollbar-track {background-color: #393939;}</style>');
+            document.write('<style>::-webkit-scrollbar-thumb {background-color: #999999;}</style>');
         }
     </script>
 </body>

@@ -31,6 +31,7 @@ input, .focuser {
 
 input {
     width: 192px;
+    background-color: transparent;
 }
 
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
@@ -134,10 +135,39 @@ li {
     text-align: center;
 }
 
+.dropdown-item {
+    font-size: x-small;
+}
+
+.dropdown-controller {
+    display: inline-block;
+    width: 15px;
+    position: relative;
+    -webkit-appearance: none;
+    background-color: transparent;
+    padding: 0px;
+    vertical-align: middle;
+    line-height: inherit;
+}
+
+.dropdown-menu {
+    border-width: 1.5px;
+}
+
+#dropdownMenuButton {
+    color: #999999;
+}
+
+#edit-defaults {
+    width: 56px;
+    font-size: xx-small;
+}
+
 #focus-work-set, #focus-rest-set {
     border-width: 1px;
     width: 18px;
     height: 18px;
+    padding: 8.4px;
 }
 
 #focus-work-set {

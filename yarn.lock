@@ -29,6 +29,11 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-10.14.8.tgz#fe444203ecef1162348cd6deb76c62477b2cc6e9"
   integrity sha1-/kRCA+zvEWI0jNbet2xiR3ssxuk=
 
+"@types/winreg@^1.2.30":
+  version "1.2.30"
+  resolved "https://registry.npm.taobao.org/@types/winreg/download/@types/winreg-1.2.30.tgz#91d6710e536d345b9c9b017c574cf6a8da64c518"
+  integrity sha1-kdZxDlNtNFucmwF8V0z2qNpkxRg=
+
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/abbrev/download/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"

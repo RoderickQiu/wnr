@@ -72,7 +72,7 @@
     "fullscreentip": "如果你在休息或做别的事情的时候，还总是要看电脑，不妨开启专心模式（全屏模式）试一下？",
     "autocheck": "自动更新设置：",
     "checktip": "是否要wnr每天自动检测更新（如果联网）？如果有更新，将会提示您。",
-    "otherthings": "其他设置",
+    "otherthings": "其他设置和信息",
     "manuallycheck": "现在就检测更新！",
     "checker1": "（现在你正在使用",
     "checker2": "）",
@@ -114,6 +114,10 @@
     "wrongfolder": "当前应用并不在应用程序文件夹中",
     "wrongfoldertip": "把应用移到系统的应用程序文件夹中可以更方便地使用wnr。",
     "multiwnr": "有不止一个wnr正在运行",
-    "multiwnrmsg": "我们强烈建议只同时运行一个wnr程序。",
-    "multiwnrchk": "退出当前"
+    "multiwnrmsg": "我们强烈建议只同时运行一个wnr程序。如果不退出，请取消勾选“退出当前”并点确认，然后等待程序加载。",
+    "multiwnrchk": "退出当前",
+    "snoretip": "wnr有时会发送通知（可以在系统设置中关闭或打开）。在Windows平台下使用了SnoreToast服务来发送通知。",
+    "default1": "预设",
+    "default2": "任务",
+    "edit": "编辑预设列表"
 }
