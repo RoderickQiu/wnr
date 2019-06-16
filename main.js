@@ -293,6 +293,12 @@ function isDarkMode() {
                 store.set('isDarkMode', true);
                 win.backgroundColor = '#393939';
             }
+            systemPreferences.subscribeNotification(
+                'AppleInterfaceThemeChangedNotification',
+                function theThemeHasChanged() {
+                    isDarkMode();
+                }
+            )
         } else if (process.platform == 'win32') {
             var regKey = new Registry({                                       // new operator is optional
                 hive: Registry.HKCU,                                        // open registry hive HKEY_CURRENT_USER
@@ -315,13 +321,6 @@ function isDarkMode() {
         }
     }
 }
-
-systemPreferences.subscribeNotification(
-    'AppleInterfaceThemeChangedNotification',
-    function theThemeHasChanged() {
-        isDarkMode();
-    }
-)
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标并且没有其他窗口打开时，

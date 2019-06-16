@@ -101,6 +101,6 @@ I'm now using yarn.
 
 Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)** and other contributors. All rights reserved.
 
-Licensed under the [MIT License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
+Now licensed under the [MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
 
 For all the packages using, go to the [acknoledgements](https://wnr.scris.top/acknoledgements.html).
