@@ -82,6 +82,7 @@ app.on('will-quit', () => {
 // 部分 API 在 ready 事件触发后才能使用。
 app.on('ready', () => {
     createWindow();
+
     i18n.configure({
         locales: ['en', 'zh'],
         directory: __dirname + '/locales',
@@ -288,7 +289,10 @@ function isDarkMode() {
     if (app.isReady()) {
         store.set('isDarkMode', false);
         if (process.platform == 'darwin') {
-            if (systemPreferences.isDarkMode()) store.set('isDarkMode', true);
+            if (systemPreferences.isDarkMode()) {
+                store.set('isDarkMode', true);
+                win.backgroundColor = '#393939';
+            }
         } else if (process.platform == 'win32') {
             var regKey = new Registry({                                       // new operator is optional
                 hive: Registry.HKCU,                                        // open registry hive HKEY_CURRENT_USER
@@ -300,7 +304,10 @@ function isDarkMode() {
                 else {
                     for (var i = 0; i < items.length; i++) {
                         if (items[i].name == 'AppsUseLightTheme') {
-                            if (items[i].value == "0x0") store.set('isDarkMode', true);
+                            if (items[i].value == "0x0") {
+                                store.set('isDarkMode', true);
+                                win.backgroundColor = '#393939';
+                            }
                         }
                     }
                 }
@@ -308,6 +315,13 @@ function isDarkMode() {
         }
     }
 }
+
+systemPreferences.subscribeNotification(
+    'AppleInterfaceThemeChangedNotification',
+    function theThemeHasChanged() {
+        isDarkMode();
+    }
+)
 
 app.on('activate', () => {
     // 在macOS上，当单击dock图标并且没有其他窗口打开时，

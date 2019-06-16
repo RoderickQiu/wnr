@@ -7,5 +7,6 @@ if (isDarkMode) {
     document.write('<style>input[type="range"] {background-color: #aaaaaa33;}</style>');
     $('body').css('background-color', '#393939');
     $('body').css('color', '#aaaaaa');
+    $('hr').css('border-color', '#666666');
     $('#title').css('color', '#aaaaaa');
 }

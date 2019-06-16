@@ -9,7 +9,8 @@ const config = {
         "target": [
             "dir"
         ],
-        "icon": "res/icons/iconMac.icns"
+        "icon": "res/icons/iconMac.icns",
+        "darkModeSupport": true
     }
 }
 
