@@ -20,6 +20,7 @@
   "copyright": "(c) Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
+    "@types/winreg": "1.2.30",
     "auto-launch": "5.0.5",
     "compare-version": "0.1.2",
     "electron-store": "3.3.0",

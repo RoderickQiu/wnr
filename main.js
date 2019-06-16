@@ -11,6 +11,7 @@ var Registry = require('winreg')
 let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null
 let resetAlarm = null
+let isTimerWin = null, isWorkMode = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
 
@@ -29,8 +30,7 @@ function createWindow() {
         webPreferences: { nodeIntegration: true },
         titleBarStyle: "hiddenInset",
         title: "wnr",
-        icon: "./res/icons/wnrIcon.png",
-        backgroundColor: "#fefefe"
+        icon: "./res/icons/wnrIcon.png"
     });// 为跨平台优化
 
     // 然后加载应用的 index.html。
@@ -121,10 +121,12 @@ app.on('ready', () => {
     if (!store.get('hotkey2')) store.set('hotkey2', 'S');
 
     globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey1'), () => {
-        win.isVisible() ? win.hide() : win.show();
-        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
-        if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
+        if (!isTimerWin || (isWorkMode && (!store.get('fullscreen-work')) || (!isWorkMode && (!store.get('fullscreen'))))) {
+            win.isVisible() ? win.hide() : win.show();
+            if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+            if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+            if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
+        }//防止这样用快捷键退出专心模式
     })
 
     if (process.platform == "darwin") {
@@ -194,11 +196,11 @@ app.on('ready', () => {
         });//托盘菜单
     }
 
-    macOSSolution(false);
+    macOSFullscreenSolution(false);
     isDarkMode()
 })
 
-function macOSSolution(isFullScreen) {
+function macOSFullscreenSolution(isFullScreen) {
     if (app.isReady()) {
         if (process.platform === 'darwin') {
             if (!isFullScreen)
@@ -333,11 +335,13 @@ app.on('activate', () => {
 ipcMain.on('focus-first', function () {
     if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
     win.setFullScreen(true);
-    macOSSolution(true)
+    macOSFullscreenSolution(true);
+    isWorkMode = true;
 })
 
 ipcMain.on('warninggiver-workend', function () {
     if (win != null) {
+        isWorkMode = false;
         win.show();
         win.focus();
         win.center();
@@ -345,11 +349,11 @@ ipcMain.on('warninggiver-workend', function () {
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
             win.setFullScreen(true);
-            macOSSolution(true);
+            macOSFullscreenSolution(true);
         } else {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
             win.setFullScreen(false);
-            macOSSolution(false);
+            macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -365,16 +369,17 @@ ipcMain.on('warninggiver-workend', function () {
 
 ipcMain.on('warninggiver-restend', function () {
     if (win != null) {
+        isWorkMode = true;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen-work") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
             win.setFullScreen(true);
-            macOSSolution(true);
+            macOSFullscreenSolution(true);
         } else {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
             win.setFullScreen(false);
-            macOSSolution(false);
+            macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -390,12 +395,13 @@ ipcMain.on('warninggiver-restend', function () {
 
 ipcMain.on('warninggiver-allend', function () {
     if (win != null) {
+        isTimerWin = false;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
             win.setFullScreen(false);
-            macOSSolution(false);
+            macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -557,21 +563,25 @@ ipcMain.on("logger", function (event, message) {
 
 ipcMain.on("timer-win", function (event, message) {
     if (message) {
+        if (aboutWin != null) aboutWin.close();
+        if (tourWin != null) tourWin.close();
+        if (settingsWin != null) settingsWin.close();
         if (tray != null) {
             contextMenu.items[2].enabled = true;
         }
-
         globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
             win.webContents.send('startorstop');
         })
         if (resetAlarm) {
             clearTimeout(resetAlarm);
         }
+        isTimerWin = true;
     } else {
         if (tray != null) {
             contextMenu.items[2].enabled = false;
         }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
         alarmSet();
+        isTimerWin = false;
     }
 })
