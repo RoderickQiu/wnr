@@ -29,11 +29,6 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-10.14.8.tgz#fe444203ecef1162348cd6deb76c62477b2cc6e9"
   integrity sha1-/kRCA+zvEWI0jNbet2xiR3ssxuk=
 
-"@types/winreg@^1.2.30":
-  version "1.2.30"
-  resolved "https://registry.npm.taobao.org/@types/winreg/download/@types/winreg-1.2.30.tgz#91d6710e536d345b9c9b017c574cf6a8da64c518"
-  integrity sha1-kdZxDlNtNFucmwF8V0z2qNpkxRg=
-
 abbrev@1:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/abbrev/download/abbrev-1.1.1.tgz#f8f2c887ad10bf67f634f005b6987fed3179aac8"
@@ -419,7 +414,7 @@ concat-stream@1.6.2:
     readable-stream "^2.2.2"
     typedarray "^0.0.6"
 
-conf@^4.0.1:
+conf@^4.1.0:
   version "4.1.0"
   resolved "https://registry.npm.taobao.org/conf/download/conf-4.1.0.tgz#c7029f629d7158eaf03ae118484d100f878c28b2"
   integrity sha1-xwKfYp1xWOrwOuEYSE0QD4eMKLI=
@@ -676,18 +671,18 @@ electron-publish@20.43.0:
     lazy-val "^1.0.4"
     mime "^2.4.3"
 
-electron-store@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.npm.taobao.org/electron-store/download/electron-store-3.2.0.tgz#50d2d6677beb46293c15814f2d230b65c6ca555e"
-  integrity sha1-UNLWZ3vrRik8FYFPLSMLZcbKVV4=
+electron-store@3.3.0:
+  version "3.3.0"
+  resolved "https://registry.npm.taobao.org/electron-store/download/electron-store-3.3.0.tgz#8727bad42ae0b6a95bdd702087878105ef5e8934"
+  integrity sha1-hye61Crgtqlb3XAgh4eBBe9eiTQ=
   dependencies:
-    conf "^4.0.1"
+    conf "^4.1.0"
     type-fest "^0.3.1"
 
-electron@5.0.3:
-  version "5.0.3"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-5.0.3.tgz#919818962caffbd909af15bc8a3034be972fa76e"
-  integrity sha1-kZgYliyv+9kJrxW8ijA0vpcvp24=
+electron@5.0.4:
+  version "5.0.4"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-5.0.4.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-5.0.4.tgz#2e0d09055363e983f4a73317cde4821c39617b02"
+  integrity sha1-Lg0JBVNj6YP0pzMXzeSCHDlhewI=
   dependencies:
     "@types/node" "^10.12.18"
     electron-download "^4.1.0"

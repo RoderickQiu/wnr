@@ -16,14 +16,13 @@ html, body {
 label {
     display: inline-block;
     vertical-align: middle;
-    margin-bottom: .5rem;
+    margin: 0px 0px 1px 0px;
 }
 
 input, .focuser {
     display: inline-block;
     vertical-align: middle;
     line-height: inherit;
-    margin: 0rem;
     padding: 1px 0px;
     outline: none;
     border: none;
@@ -148,6 +147,7 @@ li {
     padding: 0px;
     vertical-align: middle;
     line-height: inherit;
+    font-weight: bolder;
 }
 
 .dropdown-menu {
