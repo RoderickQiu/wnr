@@ -299,6 +299,7 @@ function isDarkMode() {
                 'AppleInterfaceThemeChangedNotification',
                 function theThemeHasChanged() {
                     isDarkMode();
+                    win.webContents.send('darkModeChanges');
                 }
             )
         } else if (process.platform == 'win32') {
