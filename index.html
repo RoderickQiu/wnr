@@ -80,9 +80,9 @@
                         </span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="#">学习</a>
-                        <a class="dropdown-item" href="#">项目</a>
-                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="javascript:defaultSet(25,5,4)">pomodoro</a>
+                        <a class="dropdown-item" href="javascript:defaultSet(30,10,1)">wnr recommendation</a>
+                        <!--<div class="dropdown-divider"></div>
                         <div class="px-4">
                             <input type="button" class="dropdown-controller rest" id="more-defaults" value="+" />&nbsp;
                             <input type="button" class="dropdown-controller rest" id="less-defaults" value="-" />&nbsp;
@@ -90,11 +90,11 @@
                             <script>
                                 $("#edit-defaults").val(i18n.__('edit'));
                             </script>
-                        </div>
+                        </div>-->
                     </div>
                 </div><br /><br />
                 <div class="align-content-center">
-                    <input name="work-time" id="work-time" type="number" onkeyup="allset()"
+                    <input name="work-time" id="work-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                         class="work lead" autofocus required /><input id="focus-work-set" type="checkbox"
                         onchange="focusworkset()" /><span class="focuser extreme-small work">
@@ -103,7 +103,7 @@
                 </div>
                 <br />
                 <div class="align-content-center">
-                    <input name="rest-time" id="rest-time" type="number" onkeyup="allset()"
+                    <input name="rest-time" id="rest-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                         class="rest lead" required /><input id="focus-rest-set" type="checkbox"
                         onchange="fullscreenset()" /><span class="focuser extreme-small rest">
@@ -111,7 +111,7 @@
                     </span>
                 </div>
                 <br />
-                <input name="loop" id="loop" type="number" onkeyup="allset()"
+                <input name="loop" id="loop" type="number" onkeyup="allSet()"
                     oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled"
                     class="small text-muted" required />
                 <br /><br />
@@ -141,7 +141,7 @@
     </div>
     <script>
         var timecnt, myDate, h, min;
-        function sumget() {
+        function sumGet() {
             timecnt = (parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val());
             $("#allsum-num").html(timecnt);
             myDate = new Date();
@@ -153,17 +153,23 @@
             if (min >= 10) $("#to-num-min").html(min);
             else $("#to-num-min").html("0" + min);
         }
+        function defaultSet(workTime, restTime, loopFor) {
+            $("#work-time").val(workTime);
+            $("#rest-time").val(restTime);
+            $("#loop").val(loopFor);
+            allSet();
+        }
         isTimerWindow(false);
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
-        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumget();
+        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumGet();
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
-        function allset() {
-            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumget();
+        function allSet() {
+            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumGet();
             else {
                 $("#allsum-num").html("---");
                 $("#to-num-h").html("--");
