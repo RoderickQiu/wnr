@@ -36,9 +36,9 @@
             if (e.keyCode == 13) {
                 window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
             }
-            if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 110 || e.keyCode == 69) {
+            /*if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 110 || e.keyCode == 69) {
                 return false;
-            }
+            }*/
         }
         document.onkeydown = keydown;
     </script>
@@ -142,16 +142,16 @@
     <script>
         var timecnt, myDate, h, min;
         function sumGet() {
-            timecnt = (parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val());
+            timecnt = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
             $("#allsum-num").html(timecnt);
             myDate = new Date();
-            h = myDate.getHours() + parseInt(timecnt / 60);
+            h = myDate.getHours() + Number(timecnt / 60);
             min = myDate.getMinutes() + timecnt % 60;
             if (min >= 60) min -= 60, h++;
             while (h >= 24) h -= 24;
-            $("#to-num-h").html(h);
-            if (min >= 10) $("#to-num-min").html(min);
-            else $("#to-num-min").html("0" + min);
+            $("#to-num-h").html(parseInt(h));
+            if (min >= 10) $("#to-num-min").html(parseInt(min));
+            else $("#to-num-min").html("0" + parseInt(min));
         }
         function defaultSet(workTime, restTime, loopFor) {
             $("#work-time").val(workTime);
@@ -163,13 +163,13 @@
         $("#work-time").val(store.get("worktime"));
         $("#rest-time").val(store.get("resttime"));
         $("#loop").val(store.get("looptime"));
-        if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumGet();
+        if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
         function allSet() {
-            if ((parseInt($("#work-time").val()) + parseInt($("#rest-time").val())) * parseInt($("#loop").val())) sumGet();
+            if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
             else {
                 $("#allsum-num").html("---");
                 $("#to-num-h").html("--");

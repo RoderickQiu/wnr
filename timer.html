@@ -92,7 +92,7 @@
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
-        if (!worktime || !resttime || !loop || worktime == 6000000 || resttime == 6000000) {//use ms for 1s, former edited by mistakes
+        if (!loop || worktime <= 60000 || resttime <= 60000) {//use ms for 1s
             $("#timer").html("<p class='text-center text-muted lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
