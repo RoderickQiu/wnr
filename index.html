@@ -142,6 +142,7 @@
     <script>
         var timecnt, myDate, h, min;
         function sumGet() {
+            console.log('a')
             timecnt = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
             $("#allsum-num").html(timecnt);
             myDate = new Date();
@@ -169,8 +170,9 @@
             $("#no-use-space").css("display", "none");
         }
         function allSet() {
-            if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
-            else {
+            if (Number($("#work-time").val()) != 0 && Number($("#rest-time").val()) != 0 && Number($("#loop").val()) != 0 && String(Number($("#work-time").val())).indexOf('e') == -1 && String(Number($("#rest-time").val())).indexOf('e') == -1 && String(Number($("#loop").val())).indexOf('e') == -1) {
+                if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
+            } else {
                 $("#allsum-num").html("---");
                 $("#to-num-h").html("--");
                 $("#to-num-min").html("--");
