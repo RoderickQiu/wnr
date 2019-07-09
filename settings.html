@@ -120,6 +120,14 @@
                     <script>document.write(i18n.__('checktip'));</script>
                 </span>
             </div>
+            <div class="align-content-center form-text">
+                <label>
+                    <script>document.write(i18n.__('isalarmtipon'));</script></label>
+                <input id="alarmtip-set" type="checkbox" onchange="alarmtipset()" />
+                <br /><span class="text-muted small">
+                    <script>document.write(i18n.__('isalarmtipontip'));</script>
+                </span>
+            </div>
             <br />
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('otherthings'));</script>
@@ -257,6 +265,12 @@
         function autocheckset() {
             if (document.getElementById("autocheck-set").checked == true) store.set("autocheck", true);
             else store.set("autocheck", false);
+        }
+        if (store.get("alarmtip") != false) document.getElementById("alarmtip-set").checked = true;
+        else document.getElementById("alarmtip-set").checked = false;
+        function alarmtipset() {
+            if (document.getElementById("alarmtip-set").checked == true) store.set("alarmtip", true);
+            else store.set("alarmtip", false);
         }
         $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
         function hotkey1set() {

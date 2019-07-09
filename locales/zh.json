@@ -119,5 +119,7 @@
     "snoretip": "wnr有时会发送通知（可以在系统设置中关闭或打开）。在Windows平台下使用了SnoreToast服务来发送通知。",
     "default1": "预设",
     "default2": "任务",
-    "edit": "编辑预设"
+    "edit": "编辑预设",
+    "isalarmtipon": "是否要让wnr发出使用提醒：",
+    "isalarmtipontip": "如果此项被选中，则wnr会在您一直不使用的时候提示您使用wnr，提高效率。"
 }

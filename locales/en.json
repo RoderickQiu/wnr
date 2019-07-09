@@ -119,5 +119,7 @@
     "snoretip": "Sometimes wnr sends notifications, which is able to be disabled in the system's settings. On Windows, we use SnoreToast to send tips. ",
     "default1": "Predefined",
     "default2": "tasks",
-    "edit": "Edit"
+    "edit": "Edit",
+    "isalarmtipon": "Tip for not using wnr: ",
+    "isalarmtipontip": "If it is enabled, wnr will send tips for you if you aren't really using wnr. "
 }
