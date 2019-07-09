@@ -1,0 +1,19 @@
+{
+  "main": "cdv-electron-main.js",
+  "name": "com.scrisstudio.wnr",
+  "displayName": "wnr",
+  "version": "2.0.0-beta",
+  "description": "It's a timer app with strong expansibility for multiple devices. The name is an abbr of \\\"Work and Rest\\\".",
+  "dependencies": {
+    "cordova-android": "^8.0.0",
+    "cordova-browser": "^6.0.0",
+    "cordova-electron": "^1.1.0",
+    "cordova-ios": "^5.0.1"
+  },
+  "homepage": "http://roderickqiu.scris.top/",
+  "license": "Apache-2.0",
+  "author": {
+    "name": "Roderick Qiu",
+    "email": "scrisqiu@hotmail.com"
+  }
+}

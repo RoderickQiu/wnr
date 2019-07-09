@@ -4,13 +4,40 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "run wnr",
+            "label": "run browser",
             "type": "shell",
-            "command": "yarn start",
+            "command": "cd wnr2; cordova run browser",
             "group": {
                 "kind": "build",
                 "isDefault": true
             },
+            "problemMatcher": [
+                "$jshint"
+            ]
+        },
+        {
+            "label": "run ios",
+            "type": "shell",
+            "command": "cd wnr2; cordova run ios",
+            "group": "build",
+            "problemMatcher": [
+                "$jshint"
+            ]
+        },
+        {
+            "label": "run electron",
+            "type": "shell",
+            "command": "cd wnr2; cordova run electron",
+            "group": "build",
+            "problemMatcher": [
+                "$jshint"
+            ]
+        },
+        {
+            "label": "run android",
+            "type": "shell",
+            "command": "cd wnr2; cordova run android",
+            "group": "build",
             "problemMatcher": [
                 "$jshint"
             ]

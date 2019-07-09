@@ -1,0 +1,12 @@
+{
+  "background_color": "#FFF",
+  "display": "standalone",
+  "orientation": "any",
+  "start_url": "index.html",
+  "name": "wnr",
+  "short_name": "wnr",
+  "version": "com.scrisstudio.wnr",
+  "description": "It's a timer app with strong expansibility for multiple devices. The name is an abbr of \\\"Work and Rest\\\".",
+  "author": "Roderick Qiu",
+  "icons": []
+}
