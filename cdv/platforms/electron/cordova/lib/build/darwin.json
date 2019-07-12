@@ -1,0 +1,17 @@
+{
+  "mac": [],
+  "config": {
+    "mac": {
+      "type": "${BUILD_TYPE}",
+      "icon": "${APP_INSTALLER_ICON}",
+      "target": [
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}

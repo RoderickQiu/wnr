@@ -6,7 +6,7 @@
         {
             "label": "run browser",
             "type": "shell",
-            "command": "cd wnr2; cordova run browser",
+            "command": "yarn run w",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -16,18 +16,9 @@
             ]
         },
         {
-            "label": "run ios",
-            "type": "shell",
-            "command": "cd wnr2; cordova run ios",
-            "group": "build",
-            "problemMatcher": [
-                "$jshint"
-            ]
-        },
-        {
             "label": "run electron",
             "type": "shell",
-            "command": "cd wnr2; cordova run electron",
+            "command": "yarn run e",
             "group": "build",
             "problemMatcher": [
                 "$jshint"
@@ -36,7 +27,7 @@
         {
             "label": "run android",
             "type": "shell",
-            "command": "cd wnr2; cordova run android",
+            "command": "yarn run c",
             "group": "build",
             "problemMatcher": [
                 "$jshint"

@@ -1,9 +1,14 @@
 # GitIgnore
 
+### only for this
+**/www/
+/cdv/platforms/android/app/
+/cdv/platforms/electron/build/
+/cdv/platforms/electron/build-res/
+
 # Personal files
-dist*/*
+**/dist*/*
 .markdownlint.json
-**/build/*
 
 # Created by https://www.gitignore.io/api/node,macos,windows,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=node,macos,windows,visualstudiocode

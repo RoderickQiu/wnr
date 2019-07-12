@@ -1,0 +1,16 @@
+{
+  "linux": [],
+  "config": {
+    "linux": {
+      "icon": "${APP_INSTALLER_ICON}",
+      "target": [
+        {
+          "target": "tar.gz",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}

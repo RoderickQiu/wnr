@@ -12,5 +12,29 @@
 </p>
 
 <p align="center">
-    It's now having 2.0 version!
+    Version 2 of wnr is coming out...
 </p>
+
+---
+
+## Contact
+
+- Homepage: [wnr.scris.top](https://wnr.scris.top/).
+
+- Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
+
+- Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/).
+
+- Any issues or pull requests are appreciated.
+
+## To-do List
+
+Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
+
+## Copyright & Credit
+
+Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)** and other contributors. All rights reserved.
+
+Now licensed under the [MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
+
+For all the packages using, go to the [acknoledgements](https://wnr.scris.top/acknoledgements.html).

@@ -1,5 +1,36 @@
 {
+  "name": "wnr",
+  "version": "2.0.0-beta",
+  "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
+  "scripts": {
+    "dev": "vue-cli-service serve",
+    "electron": "vue-cli-service build --mode electron && cd cdv && cordova build electron --release && cd ../",
+    "cordova": "vue-cli-service build --mode cordova && cd cdv && cordova emulate android && cd ../",
+    "web": "vue-cli-service build --mode web && cd cdv && cordova run browser && cd ../",
+    "d": "yarn run dev",
+    "e": "yarn run electron",
+    "c": "yarn run cordova",
+    "w": "yarn run web"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoderickQiu/wnr.git"
+  },
+  "author": "RoderickQiu",
+  "license": "MPL-2.0",
+  "homepage": "https://wnr.scris.top",
+  "appId": "com.scrisstudio.wnr",
+  "copyright": "(c) Roderick Qiu",
+  "productName": "wnr",
   "dependencies": {
-    "cordova": "^9.0.0"
+    "core-js": "^2.6.5",
+    "vue": "^2.6.10",
+    "vue-router": "^3.0.3",
+    "vuex": "^3.0.1"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.9.0",
+    "@vue/cli-service": "^3.9.0",
+    "vue-template-compiler": "^2.6.10"
   }
 }

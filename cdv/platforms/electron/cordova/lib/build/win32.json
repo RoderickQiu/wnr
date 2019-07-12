@@ -1,0 +1,16 @@
+{
+  "win": [],
+  "config": {
+    "win": {
+      "icon": "${APP_INSTALLER_ICON}",
+      "target": [
+        {
+          "target": "dir",
+          "arch": [
+            "x64"
+          ]
+        }
+      ]
+    }
+  }
+}

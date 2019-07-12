@@ -1,0 +1,36 @@
+{
+  "name": "wnr",
+  "version": "2.0.0-beta",
+  "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RoderickQiu/wnr.git"
+  },
+  "author": "RoderickQiu",
+  "license": "MPL-2.0",
+  "homepage": "https://wnr.scris.top",
+  "appId": "com.scrisstudio.wnr",
+  "copyright": "(c) Roderick Qiu",
+  "productName": "wnr",
+  "devDependencies": {
+    "cordova-plugin-whitelist": "1"
+  },
+  "cordova": {
+    "plugins": {
+      "cordova-plugin-whitelist": {}
+    },
+    "platforms": [
+      "android",
+      "browser",
+      "electron"
+    ]
+  },
+  "dependencies": {
+    "cordova-electron": "^1.1.0",
+    "cordova-serve": "^3.0.0"
+  }
+}
