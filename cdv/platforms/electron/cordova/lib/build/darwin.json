@@ -3,7 +3,7 @@
   "config": {
     "mac": {
       "type": "${BUILD_TYPE}",
-      "icon": "${APP_INSTALLER_ICON}",
+      "icon": "../src/assets/iconMac.icns",
       "target": [
         {
           "target": "zip",

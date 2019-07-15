@@ -15,5 +15,7 @@
     <allow-intent href="sms:*" />
     <allow-intent href="mailto:*" />
     <allow-intent href="geo:*" />
+    <preference name="SplashScreenDelay" value="0" />
+    <preference name="ShowSplashScreen" value="false" />
     <preference name="ElectronSettingsFilePath" value="electron-settings.json" />
 </widget>

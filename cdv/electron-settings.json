@@ -1,10 +1,14 @@
 {
     "browserWindow": {
-        "width": 720,
-        "height": 1280,
+        "width": 360,
+        "height": 640,
         "resizable": false,
+        "frame": false,
+        "show": false,
+        "hasShadow": true,
+        "titleBarStyle": "hiddenInset",
         "webPreferences": {
-            "nodeIntegration": false
+            "nodeIntegration": true
         }
     }
 }

@@ -21,7 +21,11 @@
   },
   "cordova": {
     "plugins": {
-      "cordova-plugin-whitelist": {}
+      "cordova-plugin-whitelist": {},
+      "cordova-plugin-statusbar": {},
+      "cordova-plugin-device": {},
+      "cordova-plugin-splashscreen": {},
+      "cordova-plugin-screen-orientation": {}
     },
     "platforms": [
       "android",
@@ -30,7 +34,13 @@
     ]
   },
   "dependencies": {
+    "cordova-android": "^8.0.0",
     "cordova-electron": "^1.1.0",
-    "cordova-serve": "^3.0.0"
+    "cordova-plugin-device": "^2.0.3",
+    "cordova-plugin-screen-orientation": "^3.0.2",
+    "cordova-plugin-splashscreen": "^5.0.3",
+    "cordova-plugin-statusbar": "^2.4.3",
+    "cordova-serve": "^3.0.0",
+    "es6-promise-plugin": "^4.2.2"
   }
 }

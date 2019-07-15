@@ -6,7 +6,7 @@
         {
             "label": "run browser",
             "type": "shell",
-            "command": "yarn run w",
+            "command": "yarn run d",
             "group": {
                 "kind": "build",
                 "isDefault": true
@@ -38,6 +38,11 @@
             "type": "shell",
             "command": "yarn",
             "group": "none"
+        },
+        {
+            "type": "npm",
+            "script": "electron-debug",
+            "problemMatcher": []
         }
     ]
 }

@@ -1,0 +1,55 @@
+html, body {
+    font-family: "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    background-color: #f9f9f9;
+    width: 100%;
+    height: 100%;
+    display: -webkit-flex;
+    overflow: hidden;
+    align-items: center;
+    /* center in v/h */
+    -webkit-app-region: drag;
+}
+
+.electronNoDrag {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+}
+
+.electronUserSelectNone {
+    -webkit-user-select: none;
+}
+
+.electronUserSelectText {
+    -webkit-user-select: text;
+}
+
+.s-input-check:checked {
+    background-image: url(./assets/check.png);
+    background-size: contain;
+}
+
+.work {
+    color: #ea5454;
+}
+
+.rest {
+    color: #5490ea;
+}
+
+#controllerRight {
+    position: absolute;
+    top: 7px;
+    right: 10px;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
+}
+
+#controllerLeft {
+    position: absolute;
+    top: 7px;
+    left: 10px;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
+}

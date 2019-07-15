@@ -2,7 +2,7 @@
   "win": [],
   "config": {
     "win": {
-      "icon": "${APP_INSTALLER_ICON}",
+      "icon": "../src/assets/iconWin.ico",
       "target": [
         {
           "target": "dir",

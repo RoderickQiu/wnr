@@ -1,0 +1,51 @@
+{
+  "_from": "es6-promise-plugin@^4.1.0",
+  "_id": "es6-promise-plugin@4.2.2",
+  "_inBundle": false,
+  "_integrity": "sha1-z6DME4PZH5maYqK79L2XvsMF4Kw=",
+  "_location": "/es6-promise-plugin",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "range",
+    "registry": true,
+    "raw": "es6-promise-plugin@^4.1.0",
+    "name": "es6-promise-plugin",
+    "escapedName": "es6-promise-plugin",
+    "rawSpec": "^4.1.0",
+    "saveSpec": null,
+    "fetchSpec": "^4.1.0"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "https://registry.npm.taobao.org/es6-promise-plugin/download/es6-promise-plugin-4.2.2.tgz",
+  "_shasum": "cfa0cc1383d91f999a62a2bbf4bd97bec305e0ac",
+  "_spec": "es6-promise-plugin@^4.1.0",
+  "_where": "C:\\Users\\RoderickQiu\\Documents\\wnr\\cdv",
+  "author": "",
+  "bugs": {
+    "url": "https://github.com/vstirbu/PromisesPlugin/issues"
+  },
+  "bundleDependencies": false,
+  "dependencies": {},
+  "deprecated": false,
+  "description": "ES6-Promises polyfill for Cordova/PhoneGap",
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "es6-promise": "^4.2.2"
+  },
+  "ecosystem": "cordova",
+  "homepage": "https://github.com/vstirbu/PromisesPlugin#readme",
+  "license": "MIT",
+  "main": "www/promise.js",
+  "name": "es6-promise-plugin",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vstirbu/PromisesPlugin.git"
+  },
+  "scripts": {
+    "build": "./build"
+  },
+  "version": "4.2.2"
+}

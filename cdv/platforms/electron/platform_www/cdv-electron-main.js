@@ -27,7 +27,7 @@ const cdvElectronSettings = require('./cdv-electron-settings.json');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
-function createWindow () {
+function createWindow() {
     // Create the browser window.
     let appIcon;
     if (fs.existsSync(`${__dirname}/img/app.png`)) {
@@ -48,6 +48,10 @@ function createWindow () {
         mainWindow.webContents.send('window-id', mainWindow.id);
     });
 
+    mainWindow.once('ready-to-show', () => {
+        mainWindow.show()
+    });
+
     // Open the DevTools.
     if (cdvElectronSettings.browserWindow.webPreferences.devTools) {
         mainWindow.webContents.openDevTools();
@@ -55,9 +59,9 @@ function createWindow () {
 
     // Emitted when the window is closed.
     mainWindow.on('closed', () => {
-    // Dereference the window object, usually you would store windows
-    // in an array if your app supports multi windows, this is the time
-    // when you should delete the corresponding element.
+        // Dereference the window object, usually you would store windows
+        // in an array if your app supports multi windows, this is the time
+        // when you should delete the corresponding element.
         mainWindow = null;
     });
 }

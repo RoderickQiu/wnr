@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "vue-cli-service serve",
     "electron": "vue-cli-service build --mode electron && cd cdv && cordova build electron --release && cd ../",
-    "cordova": "vue-cli-service build --mode cordova && cd cdv && cordova emulate android && cd ../",
+    "electron-debug": "vue-cli-service build --mode electron && cd cdv && cordova run electron --debug && cd ../",
+    "cordova": "vue-cli-service build --mode cordova && cd cdv && cordova build android && cd ../",
     "web": "vue-cli-service build --mode web && cd cdv && cordova run browser && cd ../",
     "d": "yarn run dev",
     "e": "yarn run electron",
@@ -23,14 +24,18 @@
   "copyright": "(c) Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
+    "bootstrap": "^4.3.1",
+    "bootstrap-vue": "^2.0.0-rc.26",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
+    "vue-cordova": "^0.1.2",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
+    "electron": "5.0.5",
     "vue-template-compiler": "^2.6.10"
   }
 }
