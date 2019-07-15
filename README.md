@@ -23,6 +23,8 @@
 
 **_The version 2 of wnr is already on the road! See [version2-beta](https://github.com/RoderickQiu/wnr/tree/version2-beta)._**
 
+The new version of wnr will be greatly optimized, and **we're going to support online version and android version** _(maybe iOS, too)_.
+
 ## Features
 
 - work time settings
