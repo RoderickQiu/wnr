@@ -4,7 +4,7 @@
 <h2 align="center">wnr</h2>
 
 <p align="center">
-    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.</b>
+    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for devices.</b>
 </p>
 
 <p align="center">
@@ -12,7 +12,7 @@
 </p>
 
 <p align="center">
-    Version 2 of wnr is coming out...
+    <b>Version 2 of wnr is coming out...</b>
 </p>
 
 ---
