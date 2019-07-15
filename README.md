@@ -19,6 +19,10 @@
 
 ---
 
+## Version 2
+
+**_The version 2 of wnr is already on the road! See [version2-beta](https://github.com/RoderickQiu/wnr/tree/version2-beta)._**
+
 ## Features
 
 - work time settings
