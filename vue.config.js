@@ -1,7 +1,7 @@
 const path = require('path')
 module.exports = {
     publicPath: './',
-    outputDir: 'cdv/www',
+    outputDir: 'www',
     productionSourceMap: false,
     configureWebpack: (config) => {
         node: {

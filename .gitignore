@@ -2,9 +2,8 @@
 
 ### only for this
 **/www/
-/cdv/platforms/android/app/
-/cdv/platforms/electron/build/
-/cdv/platforms/electron/build-res/
+/android/app/src/main/assets/public/
+/electron/app/
 
 # Personal files
 **/dist*/*

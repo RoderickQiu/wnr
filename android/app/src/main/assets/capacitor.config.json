@@ -1,0 +1,14 @@
+{
+  "appId": "com.scrisstudio.wnr",
+  "appName": "wnr",
+  "bundledWebRuntime": false,
+  "npmClient": "yarn",
+  "webDir": "www",
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1500,
+      "launchAutoHide": true,
+      "showSpinner": false
+    }
+  }
+}

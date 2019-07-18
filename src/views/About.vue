@@ -1,10 +1,10 @@
 <template>
-  <div class="about">
+  <div class="about text-center">
     <img src="../assets/wnrIcon.png" width="60px" />
     <br />
     <br />
     <p class="title-2 rest font-weight-bolder">wnr</p>
-    <p class="text-muted">v{{ version }}</p>
+    <p class="text-muted">{{ $t("about.versionShort") }}{{ version }}</p>
     <p class="info">
       <a class="rest" :href="Homepage()" target="_blank">
         <i class="fa fa-home" id="homepage"></i>
@@ -17,7 +17,11 @@
       </a>
     </p>
     <p class="small">
-      <a class="rest" :href="Acknoledgements()" target="_blank">Acknoledgements</a>
+      Made with ❤ by
+      <a class="rest" :href="PersonalPage()" target="_blank">Roderick Qiu</a>.
+    </p>
+    <p class="extreme-small">
+      <a class="rest" :href="Acknoledgements()" target="_blank">{{ $t("about.acknoledgements") }}</a>
     </p>
   </div>
 </template>
@@ -49,6 +53,11 @@ export default {
       return process.env.VUE_APP_LINXF == "electron"
         ? 'javascript:require("electron").shell.openExternal("https://wnr.scris.top/acknoledgements.html")'
         : "https://wnr.scris.top/acknoledgements.html";
+    },
+    PersonalPage: function() {
+      return process.env.VUE_APP_LINXF == "electron"
+        ? 'javascript:require("electron").shell.openExternal("https://roderickqiu.scris.top/")'
+        : "https://roderickqiu.scris.top/";
     }
   }
 };

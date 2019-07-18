@@ -1,0 +1,26 @@
+{
+  "name": "wnr",
+  "version": "2.0.0-beta",
+  "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
+  "main": "index.js",
+  "scripts": {
+    "electron:start": "electron ./",
+    "win": "node ./builder/win.js",
+    "mac": "node ./builder/mac.js",
+    "linux": "node ./builder/linux.js"
+  },
+  "dependencies": {
+    "@capacitor/electron": "^1.1.0",
+    "electron-is-dev": "^1.1.0"
+  },
+  "devDependencies": {
+    "electron": "^5.0.7",
+    "electron-builder": "^21.0.15"
+  },
+  "author": "RoderickQiu",
+  "license": "MPL-2.0",
+  "homepage": "https://wnr.scris.top",
+  "appId": "com.scrisstudio.wnr",
+  "copyright": "(c) Roderick Qiu",
+  "productName": "wnr"
+}

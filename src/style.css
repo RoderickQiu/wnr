@@ -1,13 +1,17 @@
 html, body {
-    font-family: "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-family: "Source Han Sans CN", "Noto Sans SC", "Noto Sans CJK", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
     background-color: #f9f9f9;
+    display: -webkit-flex;
+    align-items: center;
     width: 100%;
     height: 100%;
-    display: -webkit-flex;
-    overflow: hidden;
-    align-items: center;
+    /*overflow: hidden;*/
     /* center in v/h */
     -webkit-app-region: drag;
+}
+
+body, input {
+    letter-spacing: 0.5px;
 }
 
 .electronNoDrag {
@@ -23,17 +27,72 @@ html, body {
     -webkit-user-select: text;
 }
 
+.focuser {
+    display: inline-block;
+    vertical-align: middle;
+    line-height: inherit;
+    padding: 1px 0px;
+}
+
+.s-input {
+    background: #f9f9f9;
+    transition: all 0.2s ease-in-out;
+}
+
+.dropdown-menu {
+    display: block;
+    opacity: 0;
+    transition: opacity 0.12s ease-in-out;
+    pointer-events: none;
+}
+
+.dropdown-menu.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.w200 {
+    width: 200px;
+}
+
+.w165 {
+    width: 165px;
+}
+
+.s-input-border-bottom:hover, .s-input-border-bottom:focus {
+    border-bottom-width: 3px;
+    font-weight: bolder;
+    transition: all 0.2s ease-in-out;
+}
+
 .s-input-check:checked {
     background-image: url(./assets/check.png);
     background-size: contain;
+    transition: all 0.2s ease-in-out;
 }
 
-.work {
+input::-webkit-input-placeholder {
+    color: #999999;
+}
+
+input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
+    color: #99999999;
+}
+
+.work, .work::placeholder {
     color: #ea5454;
 }
 
-.rest {
+.work:focus::placeholder, .work:hover::placeholder {
+    color: #ea5454c2;
+}
+
+.rest, .rest::placeholder {
     color: #5490ea;
+}
+
+.rest:focus::placeholder, .rest:hover::placeholder {
+    color: #5490eac2;
 }
 
 #controllerRight {
@@ -52,4 +111,45 @@ html, body {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
+}
+
+#focus-work-set {
+    border-color: #ea5454;
+}
+
+#focus-work-set:checked {
+    background-image: url(./assets/check-work.png);
+}
+
+#all-sum {
+    position: absolute;
+    bottom: 25px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    text-align: center;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
+}
+
+#emptyContainer {
+    display: none;
+}
+
+@media (max-height:500px) {
+    #all-sum {
+        /*position: relative;
+        bottom: auto;
+        display: inline;*/
+        position: fixed;
+        top: 0px;
+        width: 100%;
+        height: 50px;
+        background-color: #f9f9f9;
+        bottom: auto;
+    }
+    #emptyContainer {
+        display: block;
+    }
 }

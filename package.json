@@ -4,13 +4,15 @@
   "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
   "scripts": {
     "dev": "vue-cli-service serve",
-    "electron": "vue-cli-service build --mode electron && cd cdv && cordova build electron --release && cd ../",
-    "electron-debug": "vue-cli-service build --mode electron && cd cdv && cordova run electron --debug && cd ../",
-    "cordova": "vue-cli-service build --mode cordova && cd cdv && cordova build android && cd ../",
-    "web": "vue-cli-service build --mode web && cd cdv && cordova run browser && cd ../",
+    "electron": "vue-cli-service build --mode electron && npx cap copy electron && npx cap open electron",
+    "win": "vue-cli-service build --mode electron && npx cap copy electron && cd electron && yarn run win && cd ../",
+    "mac": "vue-cli-service build --mode electron && npx cap copy electron && cd electron && mac && cd ../",
+    "linux": "vue-cli-service build --mode electron && npx cap copy electron && cd electron && linux && cd ../",
+    "android": "vue-cli-service build --mode android && npx cap copy android && npx cap open android",
+    "web": "vue-cli-service build --mode web && npx cap serve",
     "d": "yarn run dev",
     "e": "yarn run electron",
-    "c": "yarn run cordova",
+    "a": "yarn run android",
     "w": "yarn run web"
   },
   "repository": {
@@ -24,18 +26,20 @@
   "copyright": "(c) Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
+    "@capacitor/android": "^1.1.0",
+    "@capacitor/cli": "^1.1.0",
+    "@capacitor/core": "^1.1.0",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.26",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
-    "vue-cordova": "^0.1.2",
+    "vue-i18n": "^8.12.0",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",
     "@vue/cli-service": "^3.9.0",
-    "electron": "5.0.5",
     "vue-template-compiler": "^2.6.10"
   }
 }
