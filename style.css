@@ -154,6 +154,10 @@ li {
     border-width: 1.5px;
 }
 
+.dropdown-item:focus {
+    color: #f5f5f5;
+}
+
 #dropdownMenuButton {
     color: #999999;
 }

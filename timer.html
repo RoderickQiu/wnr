@@ -215,8 +215,8 @@
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $("#now-timing").text(hours + h + minutes + min + seconds + s);
-                    if (minutes == 0 && morethan1) {
-                        ipc.send("1min");
+                    if (minutes == 0 && morethan1 && hours == 0) {
+                        if (store.get("onemintip") != false) ipc.send("1min");
                         morethan1 = 0;
                     }
                 } else {

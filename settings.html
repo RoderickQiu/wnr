@@ -128,6 +128,14 @@
                     <script>document.write(i18n.__('isalarmtipontip'));</script>
                 </span>
             </div>
+            <div class="align-content-center form-text">
+                <label>
+                    <script>document.write(i18n.__('isonemintipon'));</script></label>
+                <input id="onemintip-set" type="checkbox" onchange="onemintipset()" />
+                <br /><span class="text-muted small">
+                    <script>document.write(i18n.__('isonemintipontip'));</script>
+                </span>
+            </div>
             <br />
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('otherthings'));</script>
@@ -271,6 +279,12 @@
         function alarmtipset() {
             if (document.getElementById("alarmtip-set").checked == true) store.set("alarmtip", true);
             else store.set("alarmtip", false);
+        }
+        if (store.get("onemintip") != false) document.getElementById("onemintip-set").checked = true;
+        else document.getElementById("onemintip-set").checked = false;
+        function onemintipset() {
+            if (document.getElementById("onemintip-set").checked == true) store.set("onemintip", true);
+            else store.set("onemintip", false);
         }
         $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
         function hotkey1set() {

@@ -89,7 +89,7 @@
     "s": "s",
     "times": "loops",
     "welcomer1": "Welcome",
-    "welcomer2": "When you're in the zone, taking a break is the last thing on your mind. However, you may end up with some serious health issues down the line, and you may not be as productive as you would if you followed a strict work/break schedule. wnr is a simple, Electron-based application that was designed to help you remember when breaks are needed. It allows you to configure work/rest intervals that are then enforced, which will have many positive health effects in the long run. (From Softpedia)",
+    "welcomer2": "wnr is a simple app that can help you remember when breaks are needed.",
     "welcomer3": "Take a tour",
     "welcomer4": "Skip the tour",
     "welcomer5": "Open settings first",
@@ -99,7 +99,7 @@
     "loadingtip3": "this link",
     "loadingtip4": "to see the offline guide. (might be out of date)",
     "settingstip": "Some tips about wnr settings",
-    "settingstipmsg": "Welcome to settings! When you change one field, the setting will automatially be set. Some settings needs a restart.",
+    "settingstipmsg": "The setting will automatically be saved. Some settings needs a restart.",
     "alarmtip": "Long time no see... ",
     "alarmtipmsg": "Open wnr and have a healthier schedule! ",
     "allsum1": "all together",
@@ -121,5 +121,7 @@
     "default2": "tasks",
     "edit": "Edit",
     "isalarmtipon": "Tip for not using wnr: ",
-    "isalarmtipontip": "If it is enabled, wnr will send tips for you if you aren't really using wnr. "
+    "isalarmtipontip": "If it is enabled, wnr will send tips for you if you aren't really using wnr. ",
+    "isonemintipon": "Tip for only 1 min left: ",
+    "isonemintipontip": "If it is enabled, wnr will send you a tip that your time is running out in 1 min. "
 }
