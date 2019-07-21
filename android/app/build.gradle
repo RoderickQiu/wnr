@@ -22,7 +22,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.scrisstudio.wnr"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode currentVersionCode
         versionName "2.0.0beta"

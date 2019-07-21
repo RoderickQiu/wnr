@@ -27,8 +27,8 @@
   "productName": "wnr",
   "dependencies": {
     "@capacitor/android": "^1.1.0",
-    "@capacitor/cli": "^1.1.0",
-    "@capacitor/core": "^1.1.0",
+    "@capacitor/cli": "^1.1.1",
+    "@capacitor/core": "^1.1.1",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.26",
     "core-js": "^2.6.5",

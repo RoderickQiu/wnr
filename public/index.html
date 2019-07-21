@@ -11,7 +11,6 @@
       window.module = module; module = undefined;
     }
   </script>
-  <script src="<%= BASE_URL %>jquery-3.3.1.min.js"></script>
   <link rel="stylesheet" type="text/css" href="<%= BASE_URL %>font-awesome/css/font-awesome.min.css" />
   <title>wnr</title>
   <style>
@@ -43,78 +42,34 @@
   <noscript>
     <strong>We're sorry but wnr doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
   </noscript>
-  <div class="lock-wrap" id="lock">
+  <div class="lock-wrap" id="the-lock">
     <div class="lock">
       <i class="display-1 fa fa-mobile" aria-hidden="true"></i>
       <br />
-      <span id="orientationTip"></span>
+      <span id="orientation-tip"></span>
     </div>
   </div>
   <div id="app"></div>
   <!-- built files will be auto injected -->
   <script>
     /* Orientation Tip */
-    $(document).ready(function () {
-      var lang = navigator.language || navigator.userLanguage;
-      lang = lang.substr(0, 2);
-      if (lang == 'zh') {
-        $("#orientationTip").text("移动设备请竖屏使用");
-      } else {
-        $("#orientationTip").text("Please rotate your device to use.");
-      }
-    })
+    var lang = navigator.language || navigator.userLanguage;
+    lang = lang.substr(0, 2);
+    if (lang == 'zh') {
+      document.getElementById("orientation-tip").innerText = "移动设备请竖屏使用";
+    } else {
+      document.getElementById("orientation-tip").innerText = "Please rotate your device to use.";
+    }
     window.addEventListener("orientationchange", function () {
       orientationWatcher();
     }, false);
     orientationWatcher();
     function orientationWatcher() {
       if ((window.orientation == 90 || window.orientation == -90) && (screen.availHeight < 500 || screen.availWidth < 500)) {
-        $("#lock").css("display", "block");
+        document.getElementById("the-lock").style.display = "block";
       } else {
-        $("#lock").css("display", "none");
+        document.getElementById("the-lock").style.display = "none";
       }
-    }
-
-    /* Time Sum Tip */
-    var timecnt, myDate, h, min, workTime, restTime, loop;
-    function sumGet() {
-      timecnt =
-        (Number($("#work-time").val()) + Number($("#rest-time").val())) *
-        Number($("#loop").val());
-      $("#allsum-num").html(timecnt);
-      myDate = new Date();
-      h = myDate.getHours() + Number(timecnt / 60);
-      min = myDate.getMinutes() + (timecnt % 60);
-      if (min >= 60) (min -= 60), h++;
-      while (h >= 24) h -= 24;
-      $("#to-num-h").html(parseInt(h));
-      if (min >= 10) $("#to-num-min").html(parseInt(min));
-      else $("#to-num-min").html("0" + parseInt(min));
-    }
-    function allSet() {
-      workTime = Number($("#work-time").val());
-      restTime = Number($("#rest-time").val());
-      loops = Number($("#loop").val());
-      if (
-        workTime > 0 &&
-        restTime > 0 &&
-        loops > 0 &&
-        workTime < 1e4 &&
-        restTime < 1e4 &&
-        loops < 1e4 &&
-        String(workTime).indexOf("e") == -1 &&
-        String(restTime).indexOf("e") == -1 &&
-        String(loops).indexOf("e") == -1
-      ) {
-        if ((workTime + restTime) * loops > 0 && (workTime + restTime) * loops < 144000)
-          sumGet();
-        else clearer();
-      } else clearer();
-    }
-    function clearer() {
-      $("#allsum-num").html("---");
-      $("#to-num-h").html("--");
-      $("#to-num-min").html("--");
     }
   </script>
 </body>

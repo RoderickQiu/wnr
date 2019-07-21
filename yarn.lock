@@ -675,10 +675,10 @@
   resolved "https://registry.npm.taobao.org/@capacitor/android/download/@capacitor/android-1.1.0.tgz#83d0322171a69754d99da28477fdd8abed7d9075"
   integrity sha1-g9AyIXGml1TZnaKEd/3Yq+19kHU=
 
-"@capacitor/cli@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/@capacitor/cli/download/@capacitor/cli-1.1.0.tgz#de4aebab7ec67cbf5a6cae120cff20da32bd938e"
-  integrity sha1-3krrq37GfL9abK4SDP8g2jK9k44=
+"@capacitor/cli@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@capacitor/cli/download/@capacitor/cli-1.1.1.tgz#f0eaee03f735ce4903347fd4473596ed3ba9b03c"
+  integrity sha1-8OruA/c1zkkDNH/URzWW7TupsDw=
   dependencies:
     chalk "^2.3.0"
     commander "^2.12.2"
@@ -695,10 +695,10 @@
     which "^1.3.0"
     xml2js "^0.4.19"
 
-"@capacitor/core@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/@capacitor/core/download/@capacitor/core-1.1.0.tgz#e2c08b793f9aa8a85af55668c069e134e176786d"
-  integrity sha1-4sCLeT+aqKha9VZowGnhNOF2eG0=
+"@capacitor/core@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@capacitor/core/download/@capacitor/core-1.1.1.tgz#8e32270d2aa7a843c40b14e4d10c76c62e451d49"
+  integrity sha1-jjInDSqnqEPECxTk0Qx2xi5FHUk=
   dependencies:
     tslib "^1.9.0"
 

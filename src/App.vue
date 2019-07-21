@@ -1,9 +1,9 @@
 <template>
   <div
     id="app"
-    class="d-flex mx-auto justify-content-center align-items-center text-dark electronUserSelectText"
+    class="d-flex mx-auto justify-content-center align-items-center text-dark electron-user-select-text"
   >
-    <div id="controllerLeft" class="electronUserSelectNone electronNoDrag lead rest">
+    <div id="controller-left" class="electron-user-select-none electron-no-drag lead rest">
       <transition name="fade" mode="out-in">
         <router-link to="/" title="Home" v-if="this.$route.path!='/'">
           <b-button class="rest" variant="link" size="lg" toggle-class="text-decoration-none">
@@ -12,7 +12,7 @@
         </router-link>
       </transition>
     </div>
-    <div id="controllerRight" class="electronUserSelectNone electronNoDrag lead rest">
+    <div id="controller-right" class="electron-user-select-none electron-no-drag lead rest">
       <transition name="fade" mode="out-in">
         <b-dropdown
           size="lg"
@@ -27,7 +27,7 @@
           </template>
           <b-dropdown-item>
             <router-link
-              class="dropdown-item electronUserSelectText electronNoDrag"
+              class="dropdown-item electron-user-select-text electron-no-drag"
               to="/about"
             >{{ $t("app.about") }}</router-link>
           </b-dropdown-item>
@@ -40,7 +40,7 @@
         </b-button>
       </a>
     </div>
-    <div class="justify-content-center align-content-center electronNoDrag">
+    <div class="justify-content-center align-content-center electron-no-drag">
       <transition name="fade" mode="out-in">
         <router-view />
       </transition>
