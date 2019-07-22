@@ -153,6 +153,10 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     margin: auto;
 }
 
+#backer a {
+    text-decoration: underline;
+}
+
 #empty-container {
     display: none;
 }

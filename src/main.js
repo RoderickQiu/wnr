@@ -68,7 +68,8 @@ const messages = {
       s: "s ",
       ended: "End",
       working: "WORKING",
-      resting: "RESTING"
+      resting: "RESTING",
+      backer: "Back Home"
     }
   },
   'zh-CN': {
@@ -113,7 +114,8 @@ const messages = {
       s: "秒 ",
       ended: "!!完成了!!",
       working: "工作",
-      resting: "休息"
+      resting: "休息",
+      backer: "返回首页，开启下一段时间"
     }
   }
 };

@@ -11,9 +11,13 @@
       {{ s }}
       {{ $t("timer.s") }}
     </div>
-    <div class="text-center h4">
+    <div id="backer" v-if="backer">
+      <router-link to="/" title="Home" class="rest">{{ $t("timer.backer") }}</router-link>
+    </div>
+    <div class="text-center h3">
       <b-button
         variant="link"
+        size="lg"
         toggle-class="text-decoration-none"
         v-on:click="stopper()"
         id="stopper"
@@ -26,7 +30,7 @@
       <b-button
         class="text-muted"
         variant="link"
-        size="sm"
+        size="lg"
         toggle-class="text-decoration-none"
         v-on:click="skipper()"
       >
@@ -54,7 +58,8 @@ export default {
       h: null,
       min: null,
       s: null,
-      times: 0 //times: how many loops have been here
+      times: 0, //times: how many loops have been here,
+      backer: false //back link
     };
   },
   mounted: function() {
@@ -160,6 +165,7 @@ export default {
     },
     ender: function() {
       this.isClockWorking = 0;
+      this.backer = true;
       window.clearInterval(this.int);
       document.getElementById("work-n-rest").innerText = "";
       document.getElementById("now-timing").innerText = this.$t("timer.ended");

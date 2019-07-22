@@ -129,6 +129,7 @@
                 id="dropdown-form-restTime"
                 size="sm"
                 class="w-200"
+                type="number"
                 v-bind:placeholder="$t('home.placeholder.restTime')"
                 v-model="onlyRestTime"
                 v-on:keyup="inputSafetyCheckOnlyRest(0)"
@@ -142,10 +143,10 @@
               block
             >{{ $t("home.starterTip") }}</b-button>
             <b-dropdown-text class="w-200">
-              <span class="work extreme-small" v-if="illegalOnlyRest">
+              <strong class="work extreme-small" v-if="illegalOnlyRest">
                 {{ $t("home.illegalInput") }}
                 {{ illegalReason }}
-              </span>
+              </strong>
             </b-dropdown-text>
           </b-dropdown-form>
         </b-dropdown>
