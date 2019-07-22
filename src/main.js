@@ -39,18 +39,23 @@ const messages = {
       notes: 'This page is not found.'
     },
     home: {
-      awayFromDevice1: 'Away from',
-      awayFromDevice2: 'Device',
+      onlyRest: "Only rest",
+      awayFromDevice: {
+        1: 'Away from',
+        2: 'Device'
+      },
       starterTip: 'Start!',
       placeholder: {
         title: 'Title (optional)',
-        workTime: 'Work Time',
-        restTime: 'Rest Time',
+        workTime: 'Work Time (minute)',
+        restTime: 'Rest Time (minute)',
         loop: 'Loops',
         notes: 'Notes (optional)'
       },
-      allSum1: "all together",
-      allSum2: "minutes, to",
+      allSum: {
+        1: "all together",
+        2: "minutes, to"
+      },
       illegalInput: "Illegal Input. ",
       illegalReason: {
         badContent: "Please insert positive numbers in the form. ",
@@ -79,18 +84,23 @@ const messages = {
       notes: 'wnr找不到这个页面了……返回首页吧。'
     },
     home: {
-      awayFromDevice1: '专心模式',
-      awayFromDevice2: '不用设备',
+      onlyRest: "仅休息",
+      awayFromDevice: {
+        1: '专心模式',
+        2: '不用设备'
+      },
       starterTip: '开始',
       placeholder: {
         title: '请输入任务名称（选填）',
-        workTime: '请输入工作时间',
-        restTime: '请输入休息时间',
+        workTime: '请输入工作时间（分钟）',
+        restTime: '请输入休息时间（分钟）',
         loop: '请输入时间循环次数',
         notes: '还有什么想要记的吗（选填）'
       },
-      allSum1: "共计",
-      allSum2: "分钟，到",
+      allSum: {
+        1: "共计",
+        2: "分钟，到"
+      },
       illegalInput: "wnr觉得有些项的内容不是很合理呢…",
       illegalReason: {
         badContent: "请在全部的必填项中输入一个正整数。",
@@ -101,7 +111,7 @@ const messages = {
       h: "时 ",
       min: "分 ",
       s: "秒 ",
-      ended: "完成了！！！",
+      ended: "!!完成了!!",
       working: "工作",
       resting: "休息"
     }

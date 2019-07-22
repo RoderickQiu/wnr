@@ -19,12 +19,14 @@ body, input {
     /* let it clickable */
 }
 
-.electron-user-select-none {
+.user-select-none {
     -webkit-user-select: none;
+    user-select: none;
 }
 
-.electron-user-select-text {
+.user-select-text {
     -webkit-user-select: text;
+    user-select: text;
 }
 
 .focuser {
@@ -49,6 +51,14 @@ body, input {
 .dropdown-menu.show {
     opacity: 1;
     pointer-events: all;
+}
+
+.w-250 {
+    width: 250px;
+}
+
+.w-225 {
+    width: 225px;
 }
 
 .w-200 {
@@ -155,7 +165,6 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
         position: fixed;
         top: 0px;
         width: 100%;
-        height: 64px;
         background-color: #f9f9f9;
         bottom: auto;
     }

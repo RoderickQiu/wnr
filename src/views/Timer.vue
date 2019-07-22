@@ -12,14 +12,26 @@
       {{ $t("timer.s") }}
     </div>
     <div class="text-center h4">
-      <a id="stopper" v-on:click="stopper()" class="text-muted">
+      <b-button
+        variant="link"
+        toggle-class="text-decoration-none"
+        v-on:click="stopper()"
+        id="stopper"
+        class="text-muted"
+      >
         <i class="fa fa-pause"></i>
-      </a>
+      </b-button>
     </div>
-    <div class="text-center text-muted" id="more-options">
-      <a v-on:click="skipper()" class="text-muted">
+    <div class="text-center" id="more-options">
+      <b-button
+        class="text-muted"
+        variant="link"
+        size="sm"
+        toggle-class="text-decoration-none"
+        v-on:click="skipper()"
+      >
         <i class="fa fa-angle-double-right" id="skipper"></i>
-      </a>
+      </b-button>
     </div>
   </div>
 </template>
@@ -39,17 +51,24 @@ export default {
       startTime: null,
       int: null, //int: interval variable
       nowTime: null,
-      h: 1,
-      min: 1,
-      s: 1,
+      h: null,
+      min: null,
+      s: null,
       times: 0 //times: how many loops have been here
     };
   },
   mounted: function() {
     this.startTime = new Date().getTime();
+    this.s = parseInt(this.workTime / 1000);
+    this.h = parseInt(this.s / 3600);
+    this.min = parseInt((this.s - this.h * 3600) / 60);
+    this.s -= this.h * 3600 + this.min * 60;
+    this.method = 1;
     this.isClockWorking = 1;
     this.int = self.setInterval(this.clock, 250);
-    this.clock();
+  },
+  beforeDestroy: function() {
+    window.clearInterval(this.int); //prevent still counting down in homepage
   },
   methods: {
     classModifier: function(queryClass, toClass) {
@@ -154,6 +173,7 @@ export default {
       this.warningGiver(0);
     },
     skipper: function() {
+      if (!this.isClockWorking) this.stopper();
       this.times++;
       this.startTime = new Date().getTime();
       if (this.times < this.loop * 2) {

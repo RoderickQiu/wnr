@@ -12,10 +12,11 @@
         id="title"
         type="text"
         v-model="title"
-        class="small s-input text-muted s-input-border-bottom w-200 s-input-border-bottom"
+        class="small s-input text-muted s-input-border-bottom w-250 s-input-border-bottom"
         maxlength="13"
         v-bind:placeholder="$t('home.placeholder.title')"
       />
+      <!-- title set -->
       <br />
       <br />
       <input
@@ -27,11 +28,12 @@
         oninput="if (value.length > 4) value = value.slice(0, 4)"
         style="ime-mode:Disabled"
         class="work s-input s-input-number lead s-input-border-bottom"
-        v-bind:class="{ 'w-165': notWeb, 'w-200': (!notWeb) }"
+        v-bind:class="{ 'w-225': notWeb, 'w-250': (!notWeb) }"
         autofocus
         required
         v-bind:placeholder="$t('home.placeholder.workTime')"
       />
+      <!-- work time set -->
       &nbsp;
       <input
         id="focus-work-set"
@@ -42,10 +44,11 @@
         v-if="notWeb"
       />
       <span class="focuser extreme-small work" v-if="notWeb">
-        {{ $t("home.awayFromDevice1") }}
+        {{ $t("home.awayFromDevice.1") }}
         <br />
-        {{ $t("home.awayFromDevice2") }}
+        {{ $t("home.awayFromDevice.2") }}
       </span>
+      <!-- focus mode for work time -->
       <br />
       <br />
       <input
@@ -57,10 +60,11 @@
         oninput="if (value.length > 4) value = value.slice(0, 4)"
         style="ime-mode:Disabled"
         class="rest lead s-input s-input-number s-input-border-bottom"
-        v-bind:class="{ 'w-165': notWeb, 'w-200': (!notWeb) }"
+        v-bind:class="{ 'w-225': notWeb, 'w-250': (!notWeb) }"
         required
         v-bind:placeholder="$t('home.placeholder.restTime')"
       />
+      <!-- rest time set -->
       &nbsp;
       <input
         id="focus-rest-set"
@@ -71,10 +75,11 @@
         v-if="notWeb"
       />
       <span class="focuser extreme-small rest" v-if="notWeb">
-        {{ $t("home.awayFromDevice1") }}
+        {{ $t("home.awayFromDevice.1") }}
         <br />
-        {{ $t("home.awayFromDevice2") }}
+        {{ $t("home.awayFromDevice.2") }}
       </span>
+      <!-- focus mode for rest time -->
       <br />
       <br />
       <input
@@ -85,10 +90,11 @@
         v-model="loop"
         oninput="if (value.length > 4) value = value.slice(0, 4)"
         style="ime-mode:Disabled"
-        class="small s-input s-input-number w-200 s-input-border-bottom"
+        class="small s-input s-input-number w-250 s-input-border-bottom"
         required
         v-bind:placeholder="$t('home.placeholder.loop')"
       />
+      <!-- loops set -->
       <br />
       <br />
       <!-- control that only numbers are OK -->
@@ -97,10 +103,11 @@
         id="note"
         type="text"
         v-model="notes"
-        class="small text-muted s-input w-200 s-input-border-bottom"
+        class="small text-muted s-input w-250 s-input-border-bottom"
         maxlength="39"
         v-bind:placeholder="$t('home.placeholder.notes')"
       />
+      <!-- notes set -->
       <br />
       <br />
       <div class="text-center">
@@ -108,8 +115,41 @@
           variant="outline-primary"
           pill
           class="s-input-button-primary w-165"
-          v-on:click="submit"
+          v-on:click="submit()"
         >{{ $t("home.starterTip") }}</b-button>
+        <!-- submit button -->
+        <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret right>
+          <template slot="button-content" class="rest">
+            <i class="fa fa-sort-desc"></i>
+          </template>
+          <b-dropdown-text>{{ $t("home.onlyRest") }}</b-dropdown-text>
+          <b-dropdown-form>
+            <b-form-group @submit.stop.prevent>
+              <b-form-input
+                id="dropdown-form-restTime"
+                size="sm"
+                class="w-200"
+                v-bind:placeholder="$t('home.placeholder.restTime')"
+                v-model="onlyRestTime"
+                v-on:keyup="inputSafetyCheckOnlyRest(0)"
+              ></b-form-input>
+            </b-form-group>
+            <b-button
+              variant="outline-primary"
+              size="sm"
+              v-on:click="onlyRest"
+              pill
+              block
+            >{{ $t("home.starterTip") }}</b-button>
+            <b-dropdown-text class="w-200">
+              <span class="work extreme-small" v-if="illegalOnlyRest">
+                {{ $t("home.illegalInput") }}
+                {{ illegalReason }}
+              </span>
+            </b-dropdown-text>
+          </b-dropdown-form>
+        </b-dropdown>
+        <!-- more sections -->
       </div>
       <br />
     </div>
@@ -117,9 +157,9 @@
       <div id="all-sum" class="small font-weight-bold text-muted">
         <br />
         <br />
-        {{ $t("home.allSum1") }}
+        {{ $t("home.allSum.1") }}
         {{ allSumNum }}
-        {{ $t("home.allSum2") }}
+        {{ $t("home.allSum.2") }}
         {{ toNumH }} : {{ toNumMin }}
         <br />
         <span class="work" v-if="illegal">
@@ -131,6 +171,7 @@
       <br />
       <br />
     </div>
+    <!-- time sum show -->
   </div>
 </template>
 
@@ -149,8 +190,10 @@ export default {
       isFocusWork: false,
       isFocusRest: false,
       illegal: false,
+      illegalOnlyRest: false,
       illegalReason: "",
-      notWeb: false
+      notWeb: false,
+      onlyRestTime: ""
     };
   },
   created: function() {
@@ -165,7 +208,7 @@ export default {
     },
     sumGet: function() {
       var timeCnt =
-        Number(this.workTime) + Number(this.restTime) * Number(this.loop);
+        (Number(this.workTime) + Number(this.restTime)) * Number(this.loop);
       this.allSumNum = parseInt(timeCnt);
       var myDate = new Date();
       var h = myDate.getHours() + Number(timeCnt / 60);
@@ -177,14 +220,14 @@ export default {
       else this.toNumMin = "0" + parseInt(min);
     },
     inputSafetyCheck: function(mode) {
-      if (isNaN(this.workTime) || isNaN(this.restTime) || isNaN(this.loop)) {
-        if (mode == 1) {
-          this.illegal = true;
-          this.illegalReason = this.$t("home.illegalReason.badContent");
-        }
-        return false;
-      }
-      if (this.workTime == "" || this.restTime == "" || this.loop == "") {
+      if (
+        isNaN(this.workTime) ||
+        isNaN(this.restTime) ||
+        isNaN(this.loop) ||
+        this.workTime == "" ||
+        this.restTime == "" ||
+        this.loop == ""
+      ) {
         if (mode == 1) {
           this.illegal = true;
           this.illegalReason = this.$t("home.illegalReason.badContent");
@@ -208,14 +251,7 @@ export default {
         }
         return false;
       }
-      if (
-        this.workTime >= 1440 ||
-        this.restTime >= 1440 ||
-        this.loop >= 1440 ||
-        String(Number(this.workTime)).indexOf(".") != -1 ||
-        String(Number(this.restTime)).indexOf(".") != -1 ||
-        String(Number(this.loop)).indexOf(".") != -1
-      ) {
+      if (this.workTime >= 1440 || this.restTime >= 1440 || this.loop >= 1440) {
         if (mode == 1) {
           this.illegal = true;
           this.illegalReason = this.$t("home.illegalReason.tooBig");
@@ -250,6 +286,47 @@ export default {
           loop: this.loop,
           title: this.title,
           notes: this.notes
+        });
+        this.$router.push("/wnr");
+      }
+    },
+    inputSafetyCheckOnlyRest: function(mode) {
+      if (isNaN(this.onlyRestTime || this.onlyRestTime == "")) {
+        if (mode == 1) {
+          this.illegalOnlyRest = true;
+          this.illegalReason = this.$t("home.illegalReason.badContent");
+        }
+        return false;
+      }
+      if (this.onlyRestTime) this.onlyRestTime = Number(this.onlyRestTime);
+      if (
+        this.onlyRestTime <= 0 ||
+        String(Number(this.onlyRestTime)).indexOf(".") != -1
+      ) {
+        if (mode == 1) {
+          this.illegalOnlyRest = true;
+          this.illegalReason = this.$t("home.illegalReason.badContent");
+        }
+        return false;
+      }
+      if (this.onlyRestTime >= 1440) {
+        if (mode == 1) {
+          this.illegalOnlyRest = true;
+          this.illegalReason = this.$t("home.illegalReason.tooBig");
+        }
+        return false;
+      }
+      this.illegalOnlyRest = false;
+      return true;
+    },
+    onlyRest: function() {
+      if (this.inputSafetyCheckOnlyRest(1)) {
+        this.$store.commit("setTimer", {
+          workTime: 0,
+          restTime: this.onlyRestTime * 60000,
+          loop: 1,
+          title: "",
+          notes: ""
         });
         this.$router.push("/wnr");
       }
