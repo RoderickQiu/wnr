@@ -10,5 +10,6 @@
       "launchAutoHide": true,
       "showSpinner": false
     }
-  }
+  },
+  "backgroundColor": "#f9f9f9ff"
 }

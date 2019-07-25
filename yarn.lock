@@ -670,10 +670,10 @@
     lodash "^4.17.11"
     to-fast-properties "^2.0.0"
 
-"@capacitor/android@^1.1.0":
-  version "1.1.0"
-  resolved "https://registry.npm.taobao.org/@capacitor/android/download/@capacitor/android-1.1.0.tgz#83d0322171a69754d99da28477fdd8abed7d9075"
-  integrity sha1-g9AyIXGml1TZnaKEd/3Yq+19kHU=
+"@capacitor/android@^1.1.1":
+  version "1.1.1"
+  resolved "https://registry.npm.taobao.org/@capacitor/android/download/@capacitor/android-1.1.1.tgz#397ba3fe53eb79158b6adc6a201e906f4fb0c4fa"
+  integrity sha1-OXuj/lPreRWLatxqIB6Qb0+wxPo=
 
 "@capacitor/cli@^1.1.1":
   version "1.1.1"
@@ -1611,10 +1611,10 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.npm.taobao.org/boolbase/download/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
-bootstrap-vue@^2.0.0-rc.26:
-  version "2.0.0-rc.26"
-  resolved "https://registry.npm.taobao.org/bootstrap-vue/download/bootstrap-vue-2.0.0-rc.26.tgz#2b8b9116a452584ae20ba8310d143635bc9e1375"
-  integrity sha1-K4uRFqRSWEriC6gxDRQ2NbyeE3U=
+bootstrap-vue@^2.0.0-rc.27:
+  version "2.0.0-rc.27"
+  resolved "https://registry.npm.taobao.org/bootstrap-vue/download/bootstrap-vue-2.0.0-rc.27.tgz#884a46a71948d13c9729134cb564467f79a7b2b9"
+  integrity sha1-iEpGpxlI0TyXKRNMtWRGf3mnsrk=
   dependencies:
     "@nuxt/opencollective" "^0.2.2"
     bootstrap "^4.3.1"

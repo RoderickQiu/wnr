@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Menu } = require('electron');
+const { app, BrowserWindow, ipcMain } = require('electron');
 const isDevMode = require('electron-is-dev');
 const { CapacitorSplashScreen } = require('@capacitor/electron');
 const path = require('path');
@@ -13,8 +13,8 @@ let useSplashScreen = false;
 async function createWindow() {
   // Define our main window size
   mainWindow = new BrowserWindow({
-    "width": 300,
-    "height": 532,
+    "width": 352,
+    "height": 588,
     frame: false,
     resizable: false,
     maximizable: false,
@@ -41,12 +41,18 @@ async function createWindow() {
       mainWindow.show();
     });
   }
+
+  if (process.platform === 'win32') {
+    app.setAppUserModelId("com.scrisstudio.wnr");
+  }
 }
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some Electron APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+app.on('ready', function () {
+  createWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', function () {
@@ -66,3 +72,12 @@ app.on('activate', function () {
 });
 
 // Define any IPC or other custom functionality below here
+ipcMain.on('fullScreen', function () {
+  if (mainWindow)
+    mainWindow.setFullScreen(true);
+});
+
+ipcMain.on('normalScreen', function () {
+  if (mainWindow)
+    mainWindow.setFullScreen(false);
+});

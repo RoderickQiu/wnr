@@ -27,12 +27,17 @@ export default new Router({
       component: () => import('./views/Timer.vue')
     },
     {
-      name: '404',
+      path: '/androidTips',
+      name: 'AndroidTips',
+      component: () => import('./views/AndroidTips.vue')
+    },
+    {
       path: '/404',
+      name: '404',
       component: () => import('./views/Error.vue')
     },
     {
-      path: '*',    // 此处需特别注意至于最底部
+      path: '*',    // 404 for error
       redirect: '/404'
     }
   ]

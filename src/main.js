@@ -38,6 +38,16 @@ const messages = {
       title: 'Error',
       notes: 'This page is not found.'
     },
+    androidTips: {
+      backgroundRunning: {
+        title: 'Please allow wnr to run in background.',
+        notes: 'It\'s for better timer accurancy. We won\'t abuse your permission. ',
+        osSpecifiedTips: {
+          huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->App launch; uncheck "Manage all automatically", and find wnr in the list below; then uncheck the checkbox alongside with wnr, check "Run in background" in the window pops up.'
+        }
+      },
+      finished: 'If you\'ve finished, click this to use wnr.'
+    },
     home: {
       onlyRest: "Only rest",
       awayFromDevice: {
@@ -69,7 +79,19 @@ const messages = {
       ended: "End",
       working: "WORKING",
       resting: "RESTING",
-      backer: "Back Home"
+      backer: "Back Home",
+      workTimeEnd: {
+        title: "Work Time End",
+        body: "You can now rest. "
+      },
+      restTimeEnd: {
+        title: "Rest Time End",
+        body: "You should now back to work. "
+      },
+      allTimeEnd: {
+        title: "Schedule End",
+        body: "You can have another schedule. "
+      }
     }
   },
   'zh-CN': {
@@ -83,6 +105,16 @@ const messages = {
     error: {
       title: '出错了',
       notes: 'wnr找不到这个页面了……返回首页吧。'
+    },
+    androidTips: {
+      backgroundRunning: {
+        title: '请允许wnr在后台运行',
+        notes: '这是为了wnr能够准确地运行计时器。我们保证不会滥用后台运行权限。',
+        osSpecifiedTips: {
+          huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用启动管理，关闭“全部自动管理”，并找到“wnr”，取消选中“自动管理”，并勾选“允许后台活动”。'
+        }
+      },
+      finished: '我确认我已经完成'
     },
     home: {
       onlyRest: "仅休息",
@@ -115,7 +147,19 @@ const messages = {
       ended: "!!完成了!!",
       working: "工作",
       resting: "休息",
-      backer: "返回首页，开启下一段时间"
+      backer: "返回首页，开启下一段时间",
+      workTimeEnd: {
+        title: "工作时间结束！",
+        body: "你可以休息了。"
+      },
+      restTimeEnd: {
+        title: "休息时间结束！",
+        body: "你应当工作了。"
+      },
+      allTimeEnd: {
+        title: "计划结束了！",
+        body: "你可以用wnr开启下一段时间了！"
+      }
     }
   }
 };

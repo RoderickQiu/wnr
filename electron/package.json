@@ -14,8 +14,8 @@
     "electron-is-dev": "^1.1.0"
   },
   "devDependencies": {
-    "electron": "^5.0.7",
-    "electron-builder": "^21.0.15"
+    "electron": "^5.0.8",
+    "electron-builder": "^21.1.15"
   },
   "author": "RoderickQiu",
   "license": "MPL-2.0",

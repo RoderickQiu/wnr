@@ -37,7 +37,7 @@ body, input {
 }
 
 .s-input {
-    background: #f9f9f9;
+    background: transparent;
     transition: all 0.2s ease-in-out;
 }
 

@@ -26,11 +26,11 @@
   "copyright": "(c) Roderick Qiu",
   "productName": "wnr",
   "dependencies": {
-    "@capacitor/android": "^1.1.0",
+    "@capacitor/android": "^1.1.1",
     "@capacitor/cli": "^1.1.1",
     "@capacitor/core": "^1.1.1",
     "bootstrap": "^4.3.1",
-    "bootstrap-vue": "^2.0.0-rc.26",
+    "bootstrap-vue": "^2.0.0-rc.27",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-i18n": "^8.12.0",

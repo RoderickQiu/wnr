@@ -41,6 +41,12 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { LocalNotifications, Haptics } = Plugins;
+var ipc = null;
+if (process.env.VUE_APP_LINXF == "electron") {
+  ipc = window.require("electron").ipcRenderer; //use window.require instead of require
+}
 export default {
   data: function() {
     return {
@@ -50,7 +56,10 @@ export default {
       restTime: this.$store.state.timer.restTime,
       loop: this.$store.state.timer.loop,
       title: this.$store.state.timer.title,
-      notes: this.$store.state.timer.notes, // all the timer things
+      notes: this.$store.state.timer.notes,
+      isFocusWork: this.$store.state.timer.isFocusWork,
+      isFocusRest: this.$store.state.timer.isFocusRest,
+      isOnlyRest: this.$store.state.timer.isOnlyRest, // all the timer things,
       isClockWorking: null,
       startTime: null,
       int: null, //int: interval variable
@@ -63,6 +72,11 @@ export default {
     };
   },
   mounted: function() {
+    if (process.env.VUE_APP_LINXF == "electron") {
+      if (this.isFocusWork) {
+        ipc.send("fullScreen");
+      }
+    }
     this.startTime = new Date().getTime();
     this.s = parseInt(this.workTime / 1000);
     this.h = parseInt(this.s / 3600);
@@ -74,8 +88,26 @@ export default {
   },
   beforeDestroy: function() {
     window.clearInterval(this.int); //prevent still counting down in homepage
+    if (process.env.VUE_APP_LINXF == "electron") {
+      ipc.send("normalScreen"); //prevent still fullscreen
+    }
   },
   methods: {
+    localNotificationMessenger: function(title, body) {
+      LocalNotifications.schedule({
+        notifications: [
+          {
+            title: title,
+            body: body,
+            id: 1,
+            sound: null,
+            attachments: null,
+            actionTypeId: "",
+            extra: null
+          }
+        ]
+      });
+    },
     classModifier: function(queryClass, toClass) {
       var ops = document.querySelectorAll("." + queryClass);
       for (let p of ops) {
@@ -110,7 +142,23 @@ export default {
         this.isClockWorking = 1; //to restart
       }
     },
-    warningGiver: function(isEnd) {
+    warningGiver: function(flag) {
+      if (process.env.VUE_APP_LINXF == "android") Haptics.vibrate();
+      if (flag == 1 && !this.isOnlyRest)
+        this.localNotificationMessenger(
+          this.$t("timer.workTimeEnd.title"),
+          this.$t("timer.workTimeEnd.body")
+        );
+      else if (flag == 2)
+        this.localNotificationMessenger(
+          this.$t("timer.restTimeEnd.title"),
+          this.$t("timer.restTimeEnd.body")
+        );
+      else if (flag == 0)
+        this.localNotificationMessenger(
+          this.$t("timer.allTimeEnd.title"),
+          this.$t("timer.allTimeEnd.body")
+        );
       /*if (store.get("sound") == true || store.get("sound") == undefined) {
         var player = document.createElement("audio");
         if (isend != 0) {
@@ -133,7 +181,7 @@ export default {
     themeChanger: function() {
       if (this.method == 1) {
         this.classModifier("work", "rest");
-        document.getElementById("work-n-rest").innerText = this.$t(
+        document.getElementById("work-n-rest").innerHTML = this.$t(
           "timer.resting"
         );
         this.method = 2;
@@ -146,9 +194,16 @@ export default {
           $("#more-options").css("display", "block");
         }*/
         this.warningGiver(1);
+        if (process.env.VUE_APP_LINXF == "electron") {
+          if (this.isFocusRest && !this.isFocusWork) {
+            ipc.send("fullScreen");
+          } else if (!this.isFocusRest && this.isFocusWork) {
+            ipc.send("normalScreen");
+          }
+        }
       } else {
         this.classModifier("rest", "work");
-        document.getElementById("work-n-rest").innerText = this.$t(
+        document.getElementById("work-n-rest").innerHTML = this.$t(
           "timer.working"
         );
         this.method = 1;
@@ -161,22 +216,34 @@ export default {
           $("#more-options").css("display", "block");
         }*/
         this.warningGiver(2);
+        if (process.env.VUE_APP_LINXF == "electron") {
+          if (this.isFocusWork && !this.isFocusRest) {
+            ipc.send("fullScreen");
+          } else if (!this.isFocusWork && this.isFocusRest) {
+            ipc.send("normalScreen");
+          }
+        }
       }
     },
     ender: function() {
       this.isClockWorking = 0;
       this.backer = true;
       window.clearInterval(this.int);
-      document.getElementById("work-n-rest").innerText = "";
-      document.getElementById("now-timing").innerText = this.$t("timer.ended");
+      document.getElementById("work-n-rest").style.display = "none";
+      document.getElementById("now-timing").innerHTML = this.$t("timer.ended");
       this.isClockWorking = 0;
-      document.getElementById("stopper").innerText = "";
+      document.getElementById("stopper").style.display = "none";
       //ipc.send("progress-bar-set", 2); //设置的是(1-message)，因而使用2才能得到-1
       /*if (process.platform != "darwin")
         $("#controller").css("display", "block");*/
       //$("#backer").css("display", "block");
       document.getElementById("more-options").style.display = "none";
       this.warningGiver(0);
+      if (process.env.VUE_APP_LINXF == "electron") {
+        if (this.isFocusRest) {
+          ipc.send("normalScreen");
+        }
+      }
     },
     skipper: function() {
       if (!this.isClockWorking) this.stopper();

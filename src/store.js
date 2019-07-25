@@ -8,6 +8,7 @@ export default new Vuex.Store({
     timer: {
       isFocusWork: false,
       isFocusRest: false,
+      isOnlyRest: false,
       workTime: 0,
       restTime: 0,
       loop: 0,
@@ -28,6 +29,9 @@ export default new Vuex.Store({
     },
     setIsFocusRest(state, b) {
       state.timer.isFocusRest = b;
+    },
+    setIsOnlyRest(state, b) {
+      state.timer.isOnlyRest = b;
     }
   },
   actions: {

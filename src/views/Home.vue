@@ -39,7 +39,6 @@
         id="focus-work-set"
         type="checkbox"
         class="s-input s-input-check"
-        v-on:click="focusWorkSet"
         v-model="isFocusWork"
         v-if="notWeb"
       />
@@ -70,7 +69,6 @@
         id="focus-rest-set"
         type="checkbox"
         class="s-input s-input-check"
-        v-on:click="focusRestSet"
         v-model="isFocusRest"
         v-if="notWeb"
       />
@@ -125,15 +123,16 @@
           <b-dropdown-text>{{ $t("home.onlyRest") }}</b-dropdown-text>
           <b-dropdown-form>
             <b-form-group @submit.stop.prevent>
-              <b-form-input
+              <input
                 id="dropdown-form-restTime"
-                size="sm"
-                class="w-200"
                 type="number"
                 v-bind:placeholder="$t('home.placeholder.restTime')"
                 v-model="onlyRestTime"
                 v-on:keyup="inputSafetyCheckOnlyRest(0)"
-              ></b-form-input>
+                class="small s-input w-250 s-input-border-bottom"
+                oninput="if (value.length > 4) value = value.slice(0, 4)"
+                style="ime-mode:Disabled"
+              />
             </b-form-group>
             <b-button
               variant="outline-primary"
@@ -142,7 +141,7 @@
               pill
               block
             >{{ $t("home.starterTip") }}</b-button>
-            <b-dropdown-text class="w-200">
+            <b-dropdown-text class="text-center">
               <strong class="work extreme-small" v-if="illegalOnlyRest">
                 {{ $t("home.illegalInput") }}
                 {{ illegalReason }}
@@ -177,6 +176,8 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { Storage } = Plugins;
 export default {
   data: function() {
     return {
@@ -197,9 +198,19 @@ export default {
       onlyRestTime: ""
     };
   },
-  created: function() {
+  mounted: function() {
     if (process.env.VUE_APP_LINXF == "web") this.notWeb = false;
     else this.notWeb = true;
+    if (process.env.VUE_APP_LINXF == "android") {
+      const androidTipsStatus = Storage.get({ key: "isAndroidTipsShown" });
+      androidTipsStatus.then(androidTipsStatusData => {
+        console.log(androidTipsStatusData);
+        if (androidTipsStatusData.value == null) {
+          Storage.set({ key: "isAndroidTipsShown", value: "true" }); //value only string ok
+          this.$router.push("/androidTips");
+        }
+      }); //android first time tip
+    }
   },
   methods: {
     clearer: function() {
@@ -273,12 +284,6 @@ export default {
       if (this.inputSafetyCheck(0)) this.sumGet();
       else this.clearer();
     },
-    focusWorkSet: function() {
-      this.$store.commit("setIsFocusWork", this.isFocusWork);
-    },
-    focusRestSet: function() {
-      this.$store.commit("setIsFocusRest", this.isFocusRest);
-    },
     submit: function() {
       if (this.inputSafetyCheck(1)) {
         this.$store.commit("setTimer", {
@@ -288,6 +293,9 @@ export default {
           title: this.title,
           notes: this.notes
         });
+        this.$store.commit("setIsOnlyRest", false);
+        this.$store.commit("setIsFocusWork", this.isFocusWork);
+        this.$store.commit("setIsFocusRest", this.isFocusRest);
         this.$router.push("/wnr");
       }
     },
@@ -329,6 +337,7 @@ export default {
           title: "",
           notes: ""
         });
+        this.$store.commit("setIsOnlyRest", true);
         this.$router.push("/wnr");
       }
     }
