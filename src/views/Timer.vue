@@ -168,6 +168,7 @@ export default {
         );
         this.$store.commit("setIsWorking", false);
       }
+      if (this.isFirstPeriod) this.isFirstPeriod = false;
       /*if (store.get("sound") == true || store.get("sound") == undefined) {
         var player = document.createElement("audio");
         if (isend != 0) {
@@ -263,7 +264,6 @@ export default {
     skipper: function() {
       if (!this.isClockWorking) this.stopper();
       this.times++;
-      this.isFirstPeriod = false;
       this.allTime += this.nowTime - this.startTime;
       this.startTime = new Date().getTime();
       if (this.times < this.loop * 2) {
@@ -285,7 +285,7 @@ export default {
       this.h = parseInt(this.s / 3600);
       this.min = parseInt((this.s - this.h * 3600) / 60);
       this.s -= this.h * 3600 + this.min * 60;
-      if (this.s == 0) this.skipper();
+      if (this.s == 0 && this.min == 0 && this.h == 0) this.skipper();
       /*if (min == 0 && morethan1 && h == 0) {
           if (store.get("onemintip") != false) ipc.send("1min");
           morethan1 = 0;
