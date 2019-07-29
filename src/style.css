@@ -105,26 +105,72 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     color: #5490eac2;
 }
 
+.work-rest-input {
+    letter-spacing: 0.64px;
+    font-size: 17.3px;
+}
+
 .timer {
     line-height: 250%;
+}
+
+.settings-note {
+    overflow-wrap: break-word;
+    width: 200px;
 }
 
 #controller-right {
     position: absolute;
     top: 7px;
     right: 10px;
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: none;
+}
+
+#controller-center {
+    position: absolute;
+    top: 7px;
+    padding: 0.5rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-left: auto;
+    margin-right: auto;
+    font-weight: bolder;
 }
 
 #controller-left {
     position: absolute;
     top: 7px;
     left: 10px;
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: none;
+}
+
+#settings-container {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    margin: auto;
+    transform: translateX(2%);
+    max-width: 88%;
+    max-height: 900px;
+    scrollbar-color: #5555558f #f9f9f9;
+}
+
+#settings-container::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+#settings-container::-webkit-scrollbar {
+    width: 4px;
+    background-color: #f9f9f9;
+}
+
+#settings-container::-webkit-scrollbar-thumb {
+    background-color: #5555558f;
+}
+
+#settings-container::-webkit-scrollbar-thumb:active {
+    background-color: #4a9af68f;
 }
 
 #focus-work-set {
@@ -135,7 +181,7 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     background-image: url(./assets/check-work.png);
 }
 
-#all-sum {
+#all-sum, #backer {
     position: absolute;
     bottom: 25px;
     left: 0;
@@ -162,7 +208,7 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
 }
 
 @media (max-height:500px) {
-    #all-sum {
+    #all-sum, #backer {
         /*position: relative;
         bottom: auto;
         display: inline;*/
@@ -174,5 +220,14 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     }
     #empty-container {
         display: block;
+    }
+    #settings-container {
+        max-height: 292px;
+    }
+}
+
+@media (max-height:1000px) {
+    #settings-container {
+        max-height: 600px;
     }
 }

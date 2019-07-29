@@ -28,7 +28,8 @@ Vue.use(VueI18n);
 const messages = {
   'en': {
     app: {
-      about: 'About'
+      about: 'About',
+      settings: "Settings"
     },
     about: {
       acknoledgements: 'Acknoledgements of Packages',
@@ -43,10 +44,11 @@ const messages = {
         title: 'Please allow wnr to run in background.',
         notes: 'It\'s for better timer accurancy. We won\'t abuse your permission. ',
         osSpecifiedTips: {
-          huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->App launch; uncheck "Manage all automatically", and find wnr in the list below; then uncheck the checkbox alongside with wnr, check "Run in background" in the window pops up.'
+          huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->App launch, and find wnr in the list; then uncheck the checkbox alongside with wnr, check "Run in background" in the window pops up.'
         }
       },
-      finished: 'If you\'ve finished, click this to use wnr.'
+      finished: 'If you\'ve finished, click this to use wnr.',
+      nowDo: "Now Go"
     },
     home: {
       onlyRest: "Only rest",
@@ -79,7 +81,10 @@ const messages = {
       ended: "End",
       working: "WORKING",
       resting: "RESTING",
-      backer: "Back Home",
+      backer: "Let's Back Home",
+      allTime: {
+        title: "Time Used: "
+      },
       workTimeEnd: {
         title: "Work Time End",
         body: "You can now rest. "
@@ -96,7 +101,8 @@ const messages = {
   },
   'zh-CN': {
     app: {
-      about: '关于'
+      about: '关于',
+      settings: "设置"
     },
     about: {
       acknoledgements: '致谢：使用的类库名单',
@@ -114,7 +120,8 @@ const messages = {
           huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用启动管理，关闭“全部自动管理”，并找到“wnr”，取消选中“自动管理”，并勾选“允许后台活动”。'
         }
       },
-      finished: '我确认我已经完成'
+      finished: '我确认我已经完成',
+      nowDo: '现在就去完成'
     },
     home: {
       onlyRest: "仅休息",
@@ -137,7 +144,7 @@ const messages = {
       illegalInput: "wnr觉得有些项的内容不是很合理呢…",
       illegalReason: {
         badContent: "请在全部的必填项中输入一个正整数。",
-        tooBig: "总时间太长了。"
+        tooBig: "总时间太长了，长于一天。"
       }
     },
     timer: {
@@ -147,7 +154,10 @@ const messages = {
       ended: "!!完成了!!",
       working: "工作",
       resting: "休息",
-      backer: "返回首页，开启下一段时间",
+      backer: "点左上角返回首页，开启下一段时间",
+      allTime: {
+        title: "总时间："
+      },
       workTimeEnd: {
         title: "工作时间结束！",
         body: "你可以休息了。"
@@ -160,6 +170,15 @@ const messages = {
         title: "计划结束了！",
         body: "你可以用wnr开启下一段时间了！"
       }
+    },
+    settings: {
+      submit: "保存并返回",
+      defaultWorkTime: "默认工作时间：",
+      defaultWorkTimeMessage: "设置默认工作时间。<i>（只能输入正整数，且时长应小于一天。）</i>",
+      defaultRestTime: "默认休息时间：",
+      defaultRestTimeMessage: "设置默认休息时间。<i>（只能输入正整数，且时长应小于一天。）</i>",
+      defaultLoop: "默认循环次数：",
+      defaultLoopMessage: "设置默认循环次数。<i>（只能输入正整数，且时长应小于一天。）</i>"
     }
   }
 };

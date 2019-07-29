@@ -11,9 +11,7 @@
       {{ s }}
       {{ $t("timer.s") }}
     </div>
-    <div id="backer" v-if="backer">
-      <router-link to="/" title="Home" class="rest">{{ $t("timer.backer") }}</router-link>
-    </div>
+    <div id="backer" class="small text-muted" v-if="backer">{{ $t("timer.backer") }}</div>
     <div class="text-center h3">
       <b-button
         variant="link"
@@ -59,16 +57,19 @@ export default {
       notes: this.$store.state.timer.notes,
       isFocusWork: this.$store.state.timer.isFocusWork,
       isFocusRest: this.$store.state.timer.isFocusRest,
-      isOnlyRest: this.$store.state.timer.isOnlyRest, // all the timer things,
+      isOnlyRest: this.$store.state.timer.isOnlyRest, // all the timer things
+      isFirstPeriod: true,
       isClockWorking: null,
       startTime: null,
       int: null, //int: interval variable
       nowTime: null,
+      allTime: 0,
       h: null,
       min: null,
       s: null,
-      times: 0, //times: how many loops have been here,
-      backer: false //back link
+      times: 0, //times: how many loops have been here
+      backer: false, //back link
+      intTime: 250
     };
   },
   mounted: function() {
@@ -83,8 +84,9 @@ export default {
     this.min = parseInt((this.s - this.h * 3600) / 60);
     this.s -= this.h * 3600 + this.min * 60;
     this.method = 1;
+    if (!this.isOnlyRest) this.$store.commit("setIsWorking", true);
     this.isClockWorking = 1;
-    this.int = self.setInterval(this.clock, 250);
+    this.int = self.setInterval(this.clock, this.intTime);
   },
   beforeDestroy: function() {
     window.clearInterval(this.int); //prevent still counting down in homepage
@@ -136,29 +138,36 @@ export default {
               this.h * 3600000 -
               this.min * 60000 -
               this.s * 1000);
-        this.int = self.setInterval(this.clock, 250);
+        this.int = self.setInterval(this.clock, this.intTime);
         document.getElementById("stopper").innerHTML =
           "<i class='fa fa-pause'></i>";
         this.isClockWorking = 1; //to restart
       }
     },
     warningGiver: function(flag) {
-      if (process.env.VUE_APP_LINXF == "android") Haptics.vibrate();
-      if (flag == 1 && !this.isOnlyRest)
+      if (process.env.VUE_APP_LINXF == "android") {
+        if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod))
+          Haptics.vibrate();
+      }
+      if (flag == 1 && !this.isOnlyRest) {
         this.localNotificationMessenger(
           this.$t("timer.workTimeEnd.title"),
           this.$t("timer.workTimeEnd.body")
         );
-      else if (flag == 2)
+        this.$store.commit("setIsWorking", false);
+      } else if (flag == 2) {
         this.localNotificationMessenger(
           this.$t("timer.restTimeEnd.title"),
           this.$t("timer.restTimeEnd.body")
         );
-      else if (flag == 0)
+        this.$store.commit("setIsWorking", true);
+      } else if (flag == 0) {
         this.localNotificationMessenger(
           this.$t("timer.allTimeEnd.title"),
           this.$t("timer.allTimeEnd.body")
         );
+        this.$store.commit("setIsWorking", false);
+      }
       /*if (store.get("sound") == true || store.get("sound") == undefined) {
         var player = document.createElement("audio");
         if (isend != 0) {
@@ -229,14 +238,20 @@ export default {
       this.isClockWorking = 0;
       this.backer = true;
       window.clearInterval(this.int);
-      document.getElementById("work-n-rest").style.display = "none";
+      document.getElementById("work-n-rest").innerHTML =
+        this.$t("timer.allTime.title") +
+        "<strong>" +
+        (parseInt(this.allTime / 60000) + 1) +
+        this.$t("timer.min") +
+        "</strong>";
+      document.getElementById("work-n-rest").classList.add("text-muted");
       document.getElementById("now-timing").innerHTML = this.$t("timer.ended");
       this.isClockWorking = 0;
-      document.getElementById("stopper").style.display = "none";
       //ipc.send("progress-bar-set", 2); //设置的是(1-message)，因而使用2才能得到-1
       /*if (process.platform != "darwin")
         $("#controller").css("display", "block");*/
       //$("#backer").css("display", "block");
+      document.getElementById("stopper").style.display = "none";
       document.getElementById("more-options").style.display = "none";
       this.warningGiver(0);
       if (process.env.VUE_APP_LINXF == "electron") {
@@ -248,6 +263,8 @@ export default {
     skipper: function() {
       if (!this.isClockWorking) this.stopper();
       this.times++;
+      this.isFirstPeriod = false;
+      this.allTime += this.nowTime - this.startTime;
       this.startTime = new Date().getTime();
       if (this.times < this.loop * 2) {
         this.themeChanger();

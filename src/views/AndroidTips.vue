@@ -9,11 +9,21 @@
     >{{ $t("androidTips.backgroundRunning.osSpecifiedTips.huawei") }}</div>
     <br />
     <transition name="fade" mode="out-in">
+      <b-button
+        variant="outline-primary"
+        pill
+        class="s-input-button-primary w-165"
+        v-on:click="nowDo()"
+      >{{ $t("androidTips.nowDo") }}</b-button>
+    </transition>
+    <br />
+    <br />
+    <transition name="fade" mode="out-in">
       <router-link
         to="/"
         title="Home"
         id="finishedLink"
-        class="w-165 mx-auto"
+        class="w-165 mx-auto rest small"
       >{{ $t("androidTips.finished") }}</router-link>
     </transition>
   </div>
@@ -21,20 +31,10 @@
 
 <script>
 export default {
-  data: function() {
-    return {
-      finishedTimeOutCounter: 0,
-      int: null
-    };
-  },
-  mounted: function() {
-    document.getElementById("finishedLink").style.display = "none";
-    this.int = setTimeout(function() {
-      document.getElementById("finishedLink").style.display = "block";
-    }, 3000);
-  },
-  beforeDestroy: function() {
-    window.clearTimeout(this.int);
+  methods: {
+    nowDo: function() {
+      window.cordova.plugins.settings.open("settings");
+    }
   }
 };
 </script>

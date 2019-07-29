@@ -1,7 +1,7 @@
 {
   "name": "wnr",
   "version": "2.0.0-beta",
-  "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
+  "description": "It's a work/rest timer app with strong expansibility for devices.",
   "scripts": {
     "dev": "vue-cli-service serve",
     "electron": "vue-cli-service build --mode electron && npx cap copy electron && npx cap open electron",
@@ -31,6 +31,7 @@
     "@capacitor/core": "^1.1.1",
     "bootstrap": "^4.3.1",
     "bootstrap-vue": "^2.0.0-rc.27",
+    "cordova-open-native-settings": "^1.5.2",
     "core-js": "^2.6.5",
     "vue": "^2.6.10",
     "vue-i18n": "^8.12.0",

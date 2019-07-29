@@ -17,6 +17,7 @@
 
 ---
 
+
 ## Contact
 
 - Homepage: [wnr.scris.top](https://wnr.scris.top/).
@@ -30,6 +31,60 @@
 ## To-do List
 
 Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
+
+## Build
+
+```shell
+
+yarn # install
+
+yarn run d # vue-debug
+
+yarn run w # capacitor-web
+
+yarn run e # capacitor-electron
+
+yarn run a # capacitor-android
+
+yarn run win # electron-build-windows
+
+yarn run mac # electron-build-macos
+
+yarn run linux # electron-build-linux
+
+npx cap update # use-this-after-install-a-plugin
+
+```
+
+**We are using [Capacitor](https://capacitor.ionicframework.com/docs/), [Electron](https://electronjs.org/docs) and [Vue](https://vuejs.org/v2/guide/).**
+
+## Folder Structure
+
+- android
+
+    This is the Android project.
+
+- electron
+
+    This is the Electron project.
+
+- public
+
+    This is the folder containing global resources for Vue.
+
+- src
+
+    This is the main folder for Vue developing.
+
+- www
+
+    This is the folder which Vue exports to.
+
+- node_modules
+
+    This is the folder containing node resources.
+
+    *Please note that we added `node_modules\@capacitor\android\capacitor\src\main\res\drawable\ic_stat_name.png` and modified `node_modules\@capacitor\android\capacitor\src\main\java\com\getcapacitor\plugin\notification\LocalNotificationManager.java` for notification issues.*
 
 ## Copyright & Credit
 

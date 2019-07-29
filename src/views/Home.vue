@@ -27,8 +27,8 @@
         v-model="workTime"
         oninput="if (value.length > 4) value = value.slice(0, 4)"
         style="ime-mode:Disabled"
-        class="work s-input s-input-number lead s-input-border-bottom"
-        v-bind:class="{ 'w-225': notWeb, 'w-250': (!notWeb) }"
+        class="work work-rest-input s-input s-input-number s-input-border-bottom"
+        v-bind:class="{ 'w-200': notWeb, 'w-250': (!notWeb) }"
         autofocus
         required
         v-bind:placeholder="$t('home.placeholder.workTime')"
@@ -58,8 +58,8 @@
         v-model="restTime"
         oninput="if (value.length > 4) value = value.slice(0, 4)"
         style="ime-mode:Disabled"
-        class="rest lead s-input s-input-number s-input-border-bottom"
-        v-bind:class="{ 'w-225': notWeb, 'w-250': (!notWeb) }"
+        class="rest work-rest-input s-input s-input-number s-input-border-bottom"
+        v-bind:class="{ 'w-200': notWeb, 'w-250': (!notWeb) }"
         required
         v-bind:placeholder="$t('home.placeholder.restTime')"
       />
@@ -124,7 +124,7 @@
           <b-dropdown-form>
             <b-form-group @submit.stop.prevent>
               <input
-                id="dropdown-form-restTime"
+                id="only-rest"
                 type="number"
                 v-bind:placeholder="$t('home.placeholder.restTime')"
                 v-model="onlyRestTime"
@@ -202,15 +202,29 @@ export default {
     if (process.env.VUE_APP_LINXF == "web") this.notWeb = false;
     else this.notWeb = true;
     if (process.env.VUE_APP_LINXF == "android") {
-      const androidTipsStatus = Storage.get({ key: "isAndroidTipsShown" });
-      androidTipsStatus.then(androidTipsStatusData => {
-        console.log(androidTipsStatusData);
-        if (androidTipsStatusData.value == null) {
+      Storage.get({ key: "isAndroidTipsShown" }).then(data => {
+        if (data.value == null) {
           Storage.set({ key: "isAndroidTipsShown", value: "true" }); //value only string ok
           this.$router.push("/androidTips");
         }
       }); //android first time tip
     }
+    Storage.get({ key: "defaultWorkTime" }).then(data => {
+      if (data.value != null && data.value != "") {
+        this.workTime = data.value;
+      }
+    });
+    Storage.get({ key: "defaultRestTime" }).then(data => {
+      if (data.value != null && data.value != "") {
+        this.restTime = data.value;
+        this.onlyRestTime = data.value;
+      }
+    });
+    Storage.get({ key: "defaultLoop" }).then(data => {
+      if (data.value != null && data.value != "") {
+        this.loop = data.value;
+      }
+    });
   },
   methods: {
     clearer: function() {
@@ -264,13 +278,6 @@ export default {
         return false;
       }
       if (this.workTime >= 1440 || this.restTime >= 1440 || this.loop >= 1440) {
-        if (mode == 1) {
-          this.illegal = true;
-          this.illegalReason = this.$t("home.illegalReason.tooBig");
-        }
-        return false;
-      }
-      if ((this.workTime + this.restTime) * this.loop >= 1440) {
         if (mode == 1) {
           this.illegal = true;
           this.illegalReason = this.$t("home.illegalReason.tooBig");

@@ -6,12 +6,21 @@
     <div id="controller-left" class="user-select-none electron-no-drag lead rest">
       <transition name="fade" mode="out-in">
         <router-link to="/" title="Home" v-if="this.$route.path!='/'">
-          <b-button class="rest" variant="link" size="lg" toggle-class="text-decoration-none">
+          <b-button
+            v-bind:class="{ 'work': $store.state.timer.isWorking, 'rest': (!$store.state.timer.isWorking)}"
+            variant="link"
+            size="lg"
+            toggle-class="text-decoration-none"
+          >
             <i class="fa fa-chevron-left" id="Home"></i>
           </b-button>
         </router-link>
       </transition>
     </div>
+    <div
+      id="controller-center"
+      class="user-select-none electron-no-drag rest"
+    >{{ $store.state.app.controllerCenterText }}</div>
     <div id="controller-right" class="user-select-none electron-no-drag lead rest">
       <transition name="fade" mode="out-in">
         <b-dropdown
@@ -30,6 +39,12 @@
               class="dropdown-item user-select-text electron-no-drag"
               to="/about"
             >{{ $t("app.about") }}</router-link>
+          </b-dropdown-item>
+          <b-dropdown-item>
+            <router-link
+              class="dropdown-item user-select-text electron-no-drag"
+              to="/settings"
+            >{{ $t("app.settings") }}</router-link>
           </b-dropdown-item>
         </b-dropdown>
       </transition>
@@ -56,6 +71,21 @@ export default {
     return {
       platform: process.env.VUE_APP_LINXF
     };
+  },
+  watch: {
+    $route: function() {
+      switch (this.$route.path) {
+        case "/settings":
+          this.$store.commit("setNowPage", this.$t("app.settings"));
+          break;
+        case "/about":
+          this.$store.commit("setNowPage", this.$t("app.about"));
+          break;
+        default:
+          this.$store.commit("setNowPage", "");
+          break;
+      }
+    }
   }
 };
 </script>

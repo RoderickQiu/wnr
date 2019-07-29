@@ -13,7 +13,11 @@ export default new Vuex.Store({
       restTime: 0,
       loop: 0,
       title: "",
-      notes: ""
+      notes: "",
+      isWorking: false
+    },
+    app: {
+      controllerCenterText: ''
     }
   },
   mutations: {
@@ -32,6 +36,12 @@ export default new Vuex.Store({
     },
     setIsOnlyRest(state, b) {
       state.timer.isOnlyRest = b;
+    },
+    setIsWorking(state, b) {
+      state.timer.isWorking = b;
+    },
+    setNowPage(state, s) {
+      state.app.controllerCenterText = s;
     }
   },
   actions: {
