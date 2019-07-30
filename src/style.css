@@ -142,15 +142,18 @@ input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     left: 10px;
 }
 
-#settings-container {
-    overflow-y: scroll;
-    scroll-behavior: smooth;
+#settings-container, #home-input {
     left: 0;
     right: 0;
     top: 0;
     bottom: 0;
     margin: auto;
     transform: translateX(2%);
+}
+
+#settings-container {
+    overflow-y: scroll;
+    scroll-behavior: smooth;
     max-width: 88%;
     max-height: 900px;
     scrollbar-color: #5555558f #f9f9f9;

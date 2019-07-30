@@ -1,12 +1,16 @@
 <template>
   <div class="about text-center">
+    <p class="title-2 rest font-weight-bolder w-200 mx-auto">{{ $t("androidTips.need") }}2/2</p>
     <p
-      class="title-2 rest font-weight-bolder w-200 mx-auto"
-    >{{ $t("androidTips.backgroundRunning.title") }}</p>
-    <p class="info w-250">{{ $t("androidTips.backgroundRunning.notes") }}</p>
+      class="title-3 rest font-weight-bolder w-200 mx-auto"
+    >{{ $t("androidTips.lockNotification.title") }}</p>
+    <p class="w-250">{{ $t("androidTips.lockNotification.notes") }}</p>
+    <p class="small text-muted w-250">
+      <strong>{{ $t("androidTips.lockNotification.tip") }}</strong>
+    </p>
     <div
       class="small text-muted w-250"
-    >{{ $t("androidTips.backgroundRunning.osSpecifiedTips.huawei") }}</div>
+    >{{ $t("androidTips.lockNotification.osSpecifiedTips.huawei") }}</div>
     <br />
     <transition name="fade" mode="out-in">
       <b-button
@@ -30,10 +34,12 @@
 </template>
 
 <script>
+import { Plugins } from "@capacitor/core";
+const { Opener } = Plugins;
 export default {
   methods: {
     nowDo: function() {
-      window.cordova.plugins.settings.open("settings");
+      Opener.enterNotificationSetting();
     }
   }
 };

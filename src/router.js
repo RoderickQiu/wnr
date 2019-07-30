@@ -36,9 +36,14 @@ export default new Router({
       component: () => import('./views/Timer.vue')
     },
     {
-      path: '/androidTips',
-      name: 'AndroidTips',
-      component: () => import('./views/AndroidTips.vue')
+      path: '/androidTips1',
+      name: 'AndroidTips1',
+      component: () => import('./views/AndroidTips/AndroidTips1.vue')
+    },
+    {
+      path: '/androidTips2',
+      name: 'AndroidTips2',
+      component: () => import('./views/AndroidTips/AndroidTips2.vue')
     },
     {
       path: '/404',

@@ -242,7 +242,7 @@ export default {
       document.getElementById("work-n-rest").innerHTML =
         this.$t("timer.allTime.title") +
         "<strong>" +
-        (parseInt(this.allTime / 60000) + 1) +
+        Math.round(this.allTime / 60000) +
         this.$t("timer.min") +
         "</strong>";
       document.getElementById("work-n-rest").classList.add("text-muted");
@@ -285,7 +285,7 @@ export default {
       this.h = parseInt(this.s / 3600);
       this.min = parseInt((this.s - this.h * 3600) / 60);
       this.s -= this.h * 3600 + this.min * 60;
-      if (this.s == 0 && this.min == 0 && this.h == 0) this.skipper();
+      if (this.s <= 0 && this.min <= 0 && this.h <= 0) this.skipper();
       /*if (min == 0 && morethan1 && h == 0) {
           if (store.get("onemintip") != false) ipc.send("1min");
           morethan1 = 0;

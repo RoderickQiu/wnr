@@ -9,7 +9,6 @@ import './../public/scrisui-0.3.0.min.css'
 import './style.css'
 import { Plugins } from '@capacitor/core';
 import VueI18n from 'vue-i18n'
-
 const { StatusBar, Device } = Plugins;
 
 if (process.env.VUE_APP_LINXF == 'android') {
@@ -40,11 +39,21 @@ const messages = {
       notes: 'This page is not found.'
     },
     androidTips: {
+      need: "Need Permissions",
       backgroundRunning: {
         title: 'Please allow wnr to run in background.',
         notes: 'It\'s for better timer accurancy. We won\'t abuse your permission. ',
+        tip: 'Click "Now Go" and wnr will redirect you to the settings. If not, read the notes below.',
         osSpecifiedTips: {
           huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->App launch, and find wnr in the list; then uncheck the checkbox alongside with wnr, check "Run in background" in the window pops up.'
+        }
+      },
+      lockNotification: {
+        title: 'Please allow wnr to send notification when locked.',
+        notes: 'It\'s for better experience. We won\'t abuse your permission. ',
+        tip: 'Click "Now Go" and wnr will redirect you to the settings. If not, read the notes below.',
+        osSpecifiedTips: {
+          huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->Apps, and find wnr in the list; then go to "Notifications" and click "Lock screen notifications" and check "show" in the window pops up.'
         }
       },
       finished: 'If you\'ve finished, click this to use wnr.',
@@ -71,7 +80,7 @@ const messages = {
       illegalInput: "Illegal Input. ",
       illegalReason: {
         badContent: "Please insert positive numbers in the form. ",
-        tooBig: "The total time is too long. "
+        tooBig: "The total time is too long, or there're too many loops. "
       }
     },
     timer: {
@@ -97,6 +106,15 @@ const messages = {
         title: "Schedule End",
         body: "You can have another schedule. "
       }
+    },
+    settings: {
+      submit: "Save all & Back",
+      defaultWorkTime: "Default work time: ",
+      defaultWorkTimeMessage: "Set the default work time. <i>(Only positive integer, time less than a day.)</i>",
+      defaultRestTime: "Default rest time: ",
+      defaultRestTimeMessage: "Set the default rest time. <i>(Only positive integer, time less than a day.)</i>",
+      defaultLoop: "Default loops: ",
+      defaultLoopMessage: "Set how many rounds do you want. <i>(Only positive integer, less than 20.)</i>"
     }
   },
   'zh-CN': {
@@ -113,11 +131,21 @@ const messages = {
       notes: 'wnr找不到这个页面了……返回首页吧。'
     },
     androidTips: {
+      need: "需要权限",
       backgroundRunning: {
         title: '请允许wnr在后台运行',
         notes: '这是为了wnr能够准确地运行计时器。我们保证不会滥用后台运行权限。',
+        tip: '点击“现在就去完成”，wnr会将您带到设置界面。如果没有，请看以下提示。',
         osSpecifiedTips: {
           huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用启动管理，关闭“全部自动管理”，并找到“wnr”，取消选中“自动管理”，并勾选“允许后台活动”。'
+        }
+      },
+      lockNotification: {
+        title: '请允许wnr发送锁屏通知',
+        notes: '这是为了wnr能够在您锁屏时仍然发出“时间到”的通知。我们保证不会滥用锁屏通知权限。',
+        tip: '点击“现在就去完成”，wnr会将您带到设置界面。如果没有，请看以下提示。',
+        osSpecifiedTips: {
+          huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用管理，在列表中找到wnr并点击，并进入“通知管理”选项卡，在“锁屏通知”选项卡中选择“显示”。'
         }
       },
       finished: '我确认我已经完成',
@@ -144,7 +172,7 @@ const messages = {
       illegalInput: "wnr觉得有些项的内容不是很合理呢…",
       illegalReason: {
         badContent: "请在全部的必填项中输入一个正整数。",
-        tooBig: "总时间太长了，长于一天。"
+        tooBig: "总时间太长了，长于一天，或是循环次数太多。"
       }
     },
     timer: {
@@ -178,7 +206,7 @@ const messages = {
       defaultRestTime: "默认休息时间：",
       defaultRestTimeMessage: "设置默认休息时间。<i>（只能输入正整数，且时长应小于一天。）</i>",
       defaultLoop: "默认循环次数：",
-      defaultLoopMessage: "设置默认循环次数。<i>（只能输入正整数，且时长应小于一天。）</i>"
+      defaultLoopMessage: "设置默认循环次数。<i>（只能输入正整数，且小于20。）</i>"
     }
   }
 };

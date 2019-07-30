@@ -47,7 +47,7 @@ export default {
       itemsList: [
         { name: "defaultWorkTime", val: "", checkMode: 1 },
         { name: "defaultRestTime", val: "", checkMode: 1 },
-        { name: "defaultLoop", val: "", checkMode: 1 }
+        { name: "defaultLoop", val: "", checkMode: 2 }
       ],
       illegal: false
     };
@@ -66,9 +66,19 @@ export default {
         let theVal = Number(val);
         if (
           isNaN(theVal) ||
-          theVal <= 0 ||
+          theVal < 0 ||
           String(theVal).indexOf(".") != -1 ||
           theVal >= 1440
+        ) {
+          return false;
+        }
+      } else if (mode == 2) {
+        let theVal = Number(val);
+        if (
+          isNaN(theVal) ||
+          theVal < 0 ||
+          String(theVal).indexOf(".") != -1 ||
+          theVal >= 20
         ) {
           return false;
         }
@@ -79,6 +89,13 @@ export default {
       let flag = true;
       for (var i = 0; i < this.itemsList.length; i++) {
         if (
+          document.getElementById(this.itemsList[i].name).value == "0" ||
+          document.getElementById(this.itemsList[i].name).value == ""
+        )
+          Storage.remove({
+            key: this.itemsList[i].name
+          });
+        else if (
           this.inputSafetyCheck(
             this.itemsList[i].checkMode,
             document.getElementById(this.itemsList[i].name).value

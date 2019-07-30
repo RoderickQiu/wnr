@@ -205,7 +205,7 @@ export default {
       Storage.get({ key: "isAndroidTipsShown" }).then(data => {
         if (data.value == null) {
           Storage.set({ key: "isAndroidTipsShown", value: "true" }); //value only string ok
-          this.$router.push("/androidTips");
+          this.$router.push("/androidTips1");
         }
       }); //android first time tip
     }
@@ -277,7 +277,7 @@ export default {
         }
         return false;
       }
-      if (this.workTime >= 1440 || this.restTime >= 1440 || this.loop >= 1440) {
+      if (this.workTime >= 1440 || this.restTime >= 1440 || this.loop >= 20) {
         if (mode == 1) {
           this.illegal = true;
           this.illegalReason = this.$t("home.illegalReason.tooBig");
