@@ -73,6 +73,14 @@
         document.getElementById("the-lock").style.display = "none";
       }
     }
+    /* Request H5 Notification Permission */
+    window.addEventListener('load', function () {
+      Notification.requestPermission(function (status) {
+        if (Notification.permission !== status) {
+          Notification.permission = status;
+        }
+      });
+    });
   </script>
 </body>
 

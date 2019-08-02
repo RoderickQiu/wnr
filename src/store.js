@@ -14,7 +14,8 @@ export default new Vuex.Store({
       loop: 0,
       title: "",
       notes: "",
-      isWorking: false
+      isWorking: false,
+      isFocused: false
     },
     app: {
       controllerCenterText: ''
@@ -42,9 +43,9 @@ export default new Vuex.Store({
     },
     setNowPage(state, s) {
       state.app.controllerCenterText = s;
+    },
+    setIsFocused(state, b) {
+      state.timer.isFocused = b;
     }
-  },
-  actions: {
-
   }
 })

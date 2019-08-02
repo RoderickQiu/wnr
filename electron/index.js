@@ -81,3 +81,8 @@ ipcMain.on('normalScreen', function () {
   if (mainWindow)
     mainWindow.setFullScreen(false);
 });
+
+ipcMain.on('minimize', function () {
+  if (mainWindow)
+    mainWindow.minimize();
+});

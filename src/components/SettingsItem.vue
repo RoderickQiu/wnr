@@ -4,11 +4,11 @@
       <label class="col-10 text-left" v-html="title"></label>
       <s-input
         class="col-2 text-center"
-        v-bind:placeholderMessage="this.placeholderMessage"
-        v-bind:defaultValue="this.defaultValue"
-        v-bind:classBind="this.classBind"
-        v-bind:inputType="this.inputType"
-        v-bind:itemBind="this.itemBind"
+        v-bind:placeholderMessage="this.config.placeholderMessage"
+        v-bind:defaultValue="this.config.val"
+        v-bind:classBind="this.config.classBind"
+        v-bind:inputType="this.config.type"
+        v-bind:itemBind="this.config.name"
       ></s-input>
       <div class="w-100"></div>
       <div class="settings-note small text-muted text-left col-12" v-html="notes"></div>
@@ -22,25 +22,16 @@ import SInput from "./SInput";
 export default {
   name: "SettingsItem",
   props: {
-    placeholderMessage: {
-      type: String,
-      default: ""
-    },
-    defaultValue: {
-      type: String,
-      default: ""
-    },
-    inputType: {
-      type: String,
-      default: ""
-    },
-    classBind: {
-      type: String,
-      default: ""
-    },
-    itemBind: {
-      type: String,
-      default: ""
+    config: {
+      type: Object,
+      default: {
+        name: "",
+        val: "",
+        checkMode: "",
+        type: "",
+        placeholderMessage: "",
+        classBind: ""
+      }
     }
   },
   components: {
@@ -48,8 +39,8 @@ export default {
   },
   data: function() {
     return {
-      title: this.$t("settings." + this.itemBind),
-      notes: this.$t("settings." + this.itemBind + "Message")
+      title: this.$t("settings." + this.config.name),
+      notes: this.$t("settings." + this.config.name + "Message")
     };
   }
 };

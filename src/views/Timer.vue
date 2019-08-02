@@ -35,12 +35,15 @@
         <i class="fa fa-angle-double-right" id="skipper"></i>
       </b-button>
     </div>
+    <audio id="h5Notification" muted>
+      <source src="h5Notification.mp3" type="audio/mp3" />
+    </audio>
   </div>
 </template>
 
 <script>
 import { Plugins } from "@capacitor/core";
-const { LocalNotifications, Haptics } = Plugins;
+const { LocalNotifications, Haptics, Storage } = Plugins;
 var ipc = null;
 if (process.env.VUE_APP_LINXF == "electron") {
   ipc = window.require("electron").ipcRenderer; //use window.require instead of require
@@ -59,6 +62,8 @@ export default {
       isFocusRest: this.$store.state.timer.isFocusRest,
       isOnlyRest: this.$store.state.timer.isOnlyRest, // all the timer things
       isFirstPeriod: true,
+      is1MinTip: true,
+      isMoreThan1: true,
       isClockWorking: null,
       startTime: null,
       int: null, //int: interval variable
@@ -76,14 +81,29 @@ export default {
     if (process.env.VUE_APP_LINXF == "electron") {
       if (this.isFocusWork) {
         ipc.send("fullScreen");
+      } else if (this.isOnlyRest && this.isFocusRest) {
+        ipc.send("fullScreen");
       }
     }
+    if (this.isFocusWork) {
+      document.getElementById("more-options").style.display = "none";
+      this.$store.commit("setIsFocused", true);
+    } else if (this.isOnlyRest && this.isFocusRest) {
+      document.getElementById("more-options").style.display = "none";
+      this.$store.commit("setIsFocused", true);
+    } else {
+      this.$store.commit("setIsFocused", false);
+    }
+    Storage.get({ key: "is1MinTip" }).then(data => {
+      if (data.value == "false") {
+        this.is1MinTip = false;
+      }
+    }); // 1 min left tip
     this.startTime = new Date().getTime();
     this.s = parseInt(this.workTime / 1000);
     this.h = parseInt(this.s / 3600);
     this.min = parseInt((this.s - this.h * 3600) / 60);
     this.s -= this.h * 3600 + this.min * 60;
-    this.method = 1;
     if (!this.isOnlyRest) this.$store.commit("setIsWorking", true);
     this.isClockWorking = 1;
     this.int = self.setInterval(this.clock, this.intTime);
@@ -93,6 +113,7 @@ export default {
     if (process.env.VUE_APP_LINXF == "electron") {
       ipc.send("normalScreen"); //prevent still fullscreen
     }
+    this.$store.commit("setIsFocused", false);
   },
   methods: {
     localNotificationMessenger: function(title, body) {
@@ -148,6 +169,13 @@ export default {
       if (process.env.VUE_APP_LINXF == "android") {
         if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod))
           Haptics.vibrate();
+      }
+      if (process.env.VUE_APP_LINXF == "web") {
+        if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod)) {
+          var audio = document.getElementById("h5Notification");
+          audio.muted = false;
+          audio.play();
+        }
       }
       if (flag == 1 && !this.isOnlyRest) {
         this.localNotificationMessenger(
@@ -205,11 +233,18 @@ export default {
         }*/
         this.warningGiver(1);
         if (process.env.VUE_APP_LINXF == "electron") {
-          if (this.isFocusRest && !this.isFocusWork) {
+          if (this.isFocusRest) {
             ipc.send("fullScreen");
           } else if (!this.isFocusRest && this.isFocusWork) {
             ipc.send("normalScreen");
           }
+        }
+        if (this.isFocusRest) {
+          document.getElementById("more-options").style.display = "none";
+          this.$store.commit("setIsFocused", true);
+        } else if (!this.isFocusRest && this.isFocusWork) {
+          document.getElementById("more-options").style.display = "block";
+          this.$store.commit("setIsFocused", false);
         }
       } else {
         this.classModifier("rest", "work");
@@ -227,15 +262,23 @@ export default {
         }*/
         this.warningGiver(2);
         if (process.env.VUE_APP_LINXF == "electron") {
-          if (this.isFocusWork && !this.isFocusRest) {
+          if (this.isFocusWork) {
             ipc.send("fullScreen");
           } else if (!this.isFocusWork && this.isFocusRest) {
             ipc.send("normalScreen");
           }
         }
+        if (this.isFocusWork) {
+          document.getElementById("more-options").style.display = "none";
+          this.$store.commit("setIsFocused", true);
+        } else if (!this.isFocusWork && this.isFocusRest) {
+          document.getElementById("more-options").style.display = "block";
+          this.$store.commit("setIsFocused", false);
+        }
       }
     },
     ender: function() {
+      this.$store.commit("setIsFocused", false);
       this.isClockWorking = 0;
       this.backer = true;
       window.clearInterval(this.int);
@@ -286,10 +329,19 @@ export default {
       this.min = parseInt((this.s - this.h * 3600) / 60);
       this.s -= this.h * 3600 + this.min * 60;
       if (this.s <= 0 && this.min <= 0 && this.h <= 0) this.skipper();
-      /*if (min == 0 && morethan1 && h == 0) {
-          if (store.get("onemintip") != false) ipc.send("1min");
-          morethan1 = 0;
-        }*/
+      if (this.min == 0 && this.isMoreThan1 && this.h == 0) {
+        if (
+          this.is1MinTip &&
+          ((this.method == 1 && this.workTime > 60000) ||
+            (this.method == 2 && this.restTime > 60000))
+        ) {
+          this.localNotificationMessenger(
+            this.$t("timer.oneMinTip.title"),
+            this.$t("timer.oneMinTip.body")
+          );
+        }
+        this.isMoreThan1 = false;
+      }
     } //the countdown for wnr
   }
 };

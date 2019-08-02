@@ -10,12 +10,12 @@
     "linux": "node ./builder/linux.js"
   },
   "dependencies": {
-    "@capacitor/electron": "^1.1.0",
+    "@capacitor/electron": "^1.1.1",
     "electron-is-dev": "^1.1.0"
   },
   "devDependencies": {
     "electron": "^5.0.8",
-    "electron-builder": "^21.1.15"
+    "electron-builder": "^21.2.0"
   },
   "author": "RoderickQiu",
   "license": "MPL-2.0",

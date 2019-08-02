@@ -1,37 +1,22 @@
 <template>
   <div class="settings text-center">
     <div id="settings-container" class="electron-no-drag user-select-text s-scroll">
-      <settings-item
-        inputType="text"
-        classBind="s-input-border-bottom"
-        placeholderMessage="--"
-        v-bind:defaultValue="itemsList[0].val"
-        itemBind="defaultWorkTime"
-      ></settings-item>
-      <settings-item
-        inputType="text"
-        classBind="s-input-border-bottom"
-        placeholderMessage="--"
-        v-bind:defaultValue="itemsList[1].val"
-        itemBind="defaultRestTime"
-      ></settings-item>
-      <settings-item
-        inputType="text"
-        classBind="s-input-border-bottom"
-        placeholderMessage="--"
-        v-bind:defaultValue="itemsList[2].val"
-        itemBind="defaultLoop"
-      ></settings-item>
+      <settings-item v-bind:config="itemsList[0]"></settings-item>
+      <settings-item v-bind:config="itemsList[1]"></settings-item>
+      <settings-item v-bind:config="itemsList[2]"></settings-item>
+      <settings-item v-bind:config="itemsList[3]"></settings-item>
     </div>
-    <b-button
-      variant="outline-primary"
-      class="w-165"
-      pill
-      v-on:click="submit()"
-    >{{ $t("settings.submit") }}</b-button>
-    <br />
-    <br />
-    <span class="work" v-if="illegal">{{ $t("home.illegalInput") }}</span>
+    <div class="all-sum">
+      <b-button
+        variant="outline-primary"
+        class="w-165"
+        pill
+        v-on:click="submit()"
+      >{{ $t("settings.submit") }}</b-button>
+      <br />
+      <br />
+      <span class="work" v-if="illegal">{{ $t("home.illegalInput") }}</span>
+    </div>
   </div>
 </template>
 <script>
@@ -45,9 +30,38 @@ export default {
   data: function() {
     return {
       itemsList: [
-        { name: "defaultWorkTime", val: "", checkMode: 1 },
-        { name: "defaultRestTime", val: "", checkMode: 1 },
-        { name: "defaultLoop", val: "", checkMode: 2 }
+        {
+          name: "defaultWorkTime",
+          val: "",
+          checkMode: 1,
+          type: "text",
+          placeholderMessage: "--",
+          classBind: "s-input-border-bottom"
+        },
+        {
+          name: "defaultRestTime",
+          val: "",
+          checkMode: 1,
+          type: "text",
+          placeholderMessage: "--",
+          classBind: "s-input-border-bottom"
+        },
+        {
+          name: "defaultLoop",
+          val: "",
+          checkMode: 2,
+          type: "text",
+          placeholderMessage: "--",
+          classBind: "s-input-border-bottom"
+        },
+        {
+          name: "oneMinTip",
+          val: "true",
+          checkMode: 3,
+          type: "text",
+          placeholderMessage: "--",
+          classBind: "s-input-border-bottom"
+        }
       ],
       illegal: false
     };
@@ -55,8 +69,11 @@ export default {
   mounted: function() {
     for (var i = 0; i < this.itemsList.length; i++) {
       let theItemName = this.itemsList[i].name;
+      let theItemType = this.itemsList[i].type;
       Storage.get({ key: theItemName }).then(data => {
-        document.getElementById(theItemName).value = data.value;
+        if (data.value != null) {
+          document.getElementById(theItemName).value = String(data.value);
+        }
       });
     }
   },
@@ -82,6 +99,9 @@ export default {
         ) {
           return false;
         }
+      } else if (mode == 3) {
+        let theVal = String(val);
+        if (theVal != "true" && theVal != "false" && theVal != "") return false;
       }
       return true;
     },
@@ -103,7 +123,7 @@ export default {
         )
           Storage.set({
             key: this.itemsList[i].name,
-            value: document.getElementById(this.itemsList[i].name).value
+            value: String(document.getElementById(this.itemsList[i].name).value)
           });
         else flag = false;
       }

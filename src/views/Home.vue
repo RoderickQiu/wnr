@@ -129,18 +129,37 @@
                 v-bind:placeholder="$t('home.placeholder.restTime')"
                 v-model="onlyRestTime"
                 v-on:keyup="inputSafetyCheckOnlyRest(0)"
-                class="small s-input w-250 s-input-border-bottom"
+                class="small s-input w-250 s-input-border-bottom s-input-number"
                 oninput="if (value.length > 4) value = value.slice(0, 4)"
                 style="ime-mode:Disabled"
               />
             </b-form-group>
-            <b-button
-              variant="outline-primary"
-              size="sm"
-              v-on:click="onlyRest"
-              pill
-              block
-            >{{ $t("home.starterTip") }}</b-button>
+            <div class="row align-items-center">
+              <div class="col-7">
+                <b-button
+                  variant="outline-primary"
+                  v-on:click="onlyRest"
+                  size="sm"
+                  pill
+                  block
+                  class="s-input-button-primary"
+                >{{ $t("home.starterTip") }}</b-button>
+              </div>
+              <div class="col-5">
+                <input
+                  id="focus-rest-set"
+                  type="checkbox"
+                  class="s-input s-input-check"
+                  v-model="isFocusRest"
+                  v-if="notWeb"
+                />
+                <span class="focuser extreme-small rest" v-if="notWeb">
+                  {{ $t("home.awayFromDevice.1") }}
+                  <br />
+                  {{ $t("home.awayFromDevice.2") }}
+                </span>
+              </div>
+            </div>
             <b-dropdown-text class="text-center">
               <strong class="work extreme-small" v-if="illegalOnlyRest">
                 {{ $t("home.illegalInput") }}
@@ -199,6 +218,7 @@ export default {
     };
   },
   mounted: function() {
+    this.$store.commit("setIsFocused", false);
     if (process.env.VUE_APP_LINXF == "web") this.notWeb = false;
     else this.notWeb = true;
     if (process.env.VUE_APP_LINXF == "android") {
@@ -209,20 +229,25 @@ export default {
         }
       }); //android first time tip
     }
+    Storage.get({ key: "is1MinTip" }).then(data => {
+      if (data.value == null) {
+        this.is1MinTip = "true";
+      }
+    }); // 1 min left tip
     Storage.get({ key: "defaultWorkTime" }).then(data => {
       if (data.value != null && data.value != "") {
-        this.workTime = data.value;
+        this.workTime = Number(data.value);
       }
     });
     Storage.get({ key: "defaultRestTime" }).then(data => {
       if (data.value != null && data.value != "") {
-        this.restTime = data.value;
-        this.onlyRestTime = data.value;
+        this.restTime = Number(data.value);
+        this.onlyRestTime = Number(data.value);
       }
     });
     Storage.get({ key: "defaultLoop" }).then(data => {
       if (data.value != null && data.value != "") {
-        this.loop = data.value;
+        this.loop = Number(data.value);
       }
     });
   },
@@ -345,6 +370,7 @@ export default {
           notes: ""
         });
         this.$store.commit("setIsOnlyRest", true);
+        this.$store.commit("setIsFocusRest", this.isFocusRest);
         this.$router.push("/wnr");
       }
     }

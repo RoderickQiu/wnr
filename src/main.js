@@ -5,7 +5,7 @@ import store from './store'
 import DropdownPlugin from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-import './../public/scrisui-0.3.0.min.css'
+import './../public/scrisui-0.3.2.min.css'
 import './style.css'
 import { Plugins } from '@capacitor/core';
 import VueI18n from 'vue-i18n'
@@ -105,6 +105,10 @@ const messages = {
       allTimeEnd: {
         title: "Schedule End",
         body: "You can have another schedule. "
+      },
+      oneMinTip: {
+        title: "Only One Minute Left",
+        body: "You can prepare to stop the thing you are doing now."
       }
     },
     settings: {
@@ -114,7 +118,9 @@ const messages = {
       defaultRestTime: "Default rest time: ",
       defaultRestTimeMessage: "Set the default rest time. <i>(Only positive integer, time less than a day.)</i>",
       defaultLoop: "Default loops: ",
-      defaultLoopMessage: "Set how many rounds do you want. <i>(Only positive integer, less than 20.)</i>"
+      defaultLoopMessage: "Set how many rounds do you want. <i>(Only positive integer, less than 20.)</i>",
+      oneMinTip: "1 Min Left Tip: ",
+      oneMinTipMessage: "Set if you want to have a tip when a period of time is only 1 minute left. <i>(Only true/false are OK.)</i> "
     }
   },
   'zh-CN': {
@@ -197,6 +203,10 @@ const messages = {
       allTimeEnd: {
         title: "计划结束了！",
         body: "你可以用wnr开启下一段时间了！"
+      },
+      oneMinTip: {
+        title: "这一段时间还剩下一分钟。",
+        body: "如果手上的事情还未完成，可以准备暂时休整了。"
       }
     },
     settings: {
@@ -206,7 +216,9 @@ const messages = {
       defaultRestTime: "默认休息时间：",
       defaultRestTimeMessage: "设置默认休息时间。<i>（只能输入正整数，且时长应小于一天。）</i>",
       defaultLoop: "默认循环次数：",
-      defaultLoopMessage: "设置默认循环次数。<i>（只能输入正整数，且小于20。）</i>"
+      defaultLoopMessage: "设置默认循环次数。<i>（只能输入正整数，且小于20。）</i>",
+      oneMinTip: "是否在剩余1分钟时提示：",
+      oneMinTipMessage: "设置是否在剩余1分钟时提示准备休整。<i>（只能输入true/false，或者留空。）</i>"
     }
   }
 };
@@ -222,6 +234,6 @@ Device.getLanguageCode().then(lang => {
     router,
     store,
     i18n,
-    render: h => h(App)
+    render: h => h(App),
   }).$mount('#app')
 });
