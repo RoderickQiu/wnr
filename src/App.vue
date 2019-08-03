@@ -7,11 +7,11 @@
       <transition name="fade" mode="out-in">
         <router-link
           to="/"
-          title="Home"
+          id="back-home"
           v-if="(this.$route.path != '/' && this.$store.state.timer.isFocused == false)"
         >
           <b-button
-            v-bind:class="{ 'work': $store.state.timer.isWorking, 'rest': (!$store.state.timer.isWorking)}"
+            v-bind:class="{'work': ($store.state.timer.isWorking && $route.path == '/wnr'), 'rest': (!$store.state.timer.isWorking || $route.path != '/wnr')}"
             variant="link"
             size="lg"
             toggle-class="text-decoration-none"
@@ -21,17 +21,37 @@
         </router-link>
       </transition>
     </div>
-    <div
-      id="controller-center"
-      class="user-select-none electron-no-drag rest"
-    >{{ $store.state.app.controllerCenterText }}</div>
+    <transition name="fade" mode="out-in">
+      <div
+        id="controller-center"
+        class="user-select-none electron-no-drag rest"
+      >{{ $store.state.app.controllerCenterText }}</div>
+    </transition>
     <div id="controller-right" class="user-select-none electron-no-drag lead rest">
       <a
         v-on:click="minimize()"
-        v-if="(platform == 'electron' && this.$store.state.timer.isFocused == false)"
+        v-if="(platform == 'electron' && this.$store.state.timer.isFocused == false && platform != 'darwin' && (this.$route.path == '/' || this.$route.path == '/wnr'))"
       >
-        <b-button class="rest" variant="link" size="lg" toggle-class="text-decoration-none">
-          <i class="fa fa-minus" id="Minimize"></i>
+        <b-button
+          v-bind:class="{'work': ($store.state.timer.isWorking && $route.path == '/wnr'), 'rest': (!$store.state.timer.isWorking || $route.path != '/wnr')}"
+          variant="link"
+          size="lg"
+          toggle-class="text-decoration-none"
+        >
+          <i class="fa fa-minus"></i>
+        </b-button>
+      </a>
+      <a
+        v-on:click="hide()"
+        v-if="(platform == 'electron' && this.$store.state.timer.isFocused == false && platform != 'darwin' && (this.$route.path == '/' || this.$route.path == '/wnr'))"
+      >
+        <b-button
+          v-bind:class="{'work': ($store.state.timer.isWorking && $route.path == '/wnr'), 'rest': (!$store.state.timer.isWorking || $route.path != '/wnr')}"
+          variant="link"
+          size="lg"
+          toggle-class="text-decoration-none"
+        >
+          <i class="fa fa-caret-down"></i>
         </b-button>
       </a>
       <transition name="fade" mode="out-in">
@@ -42,6 +62,7 @@
           no-caret
           dropleft
           v-if="this.$route.path=='/'"
+          id="select"
         >
           <template slot="button-content">
             <i class="rest fa fa-bars"></i>
@@ -58,14 +79,26 @@
               to="/settings"
             >{{ $t("app.settings") }}</router-link>
           </b-dropdown-item>
+          <b-dropdown-divider></b-dropdown-divider>
+          <b-dropdown-item>
+            <a
+              class="dropdown-item user-select-text electron-no-drag"
+              v-on:click="onlyRestOptionsOpen()"
+            >{{ $t("home.onlyRest") }}</a>
+          </b-dropdown-item>
         </b-dropdown>
       </transition>
       <a
         href="javascript:window.close()"
-        v-if="(platform == 'electron' && this.$store.state.timer.isFocused == false)"
+        v-if="(platform == 'electron' && this.$store.state.timer.isFocused == false && platform != 'darwin')"
       >
-        <b-button class="rest" variant="link" size="lg" toggle-class="text-decoration-none">
-          <i class="fa fa-times" id="Exit"></i>
+        <b-button
+          v-bind:class="{'work': ($store.state.timer.isWorking && $route.path == '/wnr'), 'rest': (!$store.state.timer.isWorking || $route.path != '/wnr')}"
+          variant="link"
+          size="lg"
+          toggle-class="text-decoration-none"
+        >
+          <i class="fa fa-times"></i>
         </b-button>
       </a>
     </div>
@@ -106,9 +139,19 @@ export default {
     }
   },
   methods: {
+    onlyRestOptionsOpen: function() {
+      document.getElementById("only-rest-modal").style.visibility = "visible";
+      document.getElementById("only-rest-modal").style.opacity = 1;
+      document.getElementById("select").style.visibility = "hidden";
+    },
     minimize: function() {
       if (process.env.VUE_APP_LINXF == "electron") {
         ipc.send("minimize");
+      }
+    },
+    hide: function() {
+      if (process.env.VUE_APP_LINXF == "electron") {
+        ipc.send("hide");
       }
     }
   }

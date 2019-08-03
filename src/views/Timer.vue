@@ -80,9 +80,9 @@ export default {
   mounted: function() {
     if (process.env.VUE_APP_LINXF == "electron") {
       if (this.isFocusWork) {
-        ipc.send("fullScreen");
+        ipc.send("full-screen");
       } else if (this.isOnlyRest && this.isFocusRest) {
-        ipc.send("fullScreen");
+        ipc.send("full-screen");
       }
     }
     if (this.isFocusWork) {
@@ -111,7 +111,8 @@ export default {
   beforeDestroy: function() {
     window.clearInterval(this.int); //prevent still counting down in homepage
     if (process.env.VUE_APP_LINXF == "electron") {
-      ipc.send("normalScreen"); //prevent still fullscreen
+      ipc.send("normal-screen"); //prevent still fullscreen
+      ipc.send("progress-bar-set", 2); //Used(1-message), so set 2 to get -1 to remove
     }
     this.$store.commit("setIsFocused", false);
   },
@@ -197,24 +198,6 @@ export default {
         this.$store.commit("setIsWorking", false);
       }
       if (this.isFirstPeriod) this.isFirstPeriod = false;
-      /*if (store.get("sound") == true || store.get("sound") == undefined) {
-        var player = document.createElement("audio");
-        if (isend != 0) {
-          player.src = path.join(__dirname, "\\res\\sound\\timeend.wav");
-        } else {
-          player.src = path.join(__dirname, "\\res\\sound\\allend.wav");
-        }
-        player.play();
-      } //different sound for different circumstances
-      if (isend == 0) ipc.send("warninggiver-allend");
-      else {
-        if (isend == 1) ipc.send("warninggiver-workend");
-        else ipc.send("warninggiver-restend");
-        var t = setTimeout(stopper, 500);
-        ipc.once("warning-closed", function() {
-          stopper();
-        });
-      }*/
     },
     themeChanger: function() {
       if (this.method == 1) {
@@ -223,20 +206,12 @@ export default {
           "timer.resting"
         );
         this.method = 2;
-        /*if (store.get("fullscreen") == true) {
-          $("#controller").css("display", "none");
-          $("#more-options").css("display", "none");
-        } else if (store.get("fullscreen-work") == true) {
-          if (process.platform != "darwin")
-            $("#controller").css("display", "block");
-          $("#more-options").css("display", "block");
-        }*/
         this.warningGiver(1);
         if (process.env.VUE_APP_LINXF == "electron") {
           if (this.isFocusRest) {
-            ipc.send("fullScreen");
+            ipc.send("full-screen");
           } else if (!this.isFocusRest && this.isFocusWork) {
-            ipc.send("normalScreen");
+            ipc.send("normal-screen");
           }
         }
         if (this.isFocusRest) {
@@ -252,20 +227,12 @@ export default {
           "timer.working"
         );
         this.method = 1;
-        /*if (process.platform != "darwin")
-          $("#controller").css("display", "block");
-        if (store.get("fullscreen-work") == true) {
-          $("#controller").css("display", "none");
-          $("#more-options").css("display", "none");
-        } else if (store.get("fullscreen") == true) {
-          $("#more-options").css("display", "block");
-        }*/
         this.warningGiver(2);
         if (process.env.VUE_APP_LINXF == "electron") {
           if (this.isFocusWork) {
-            ipc.send("fullScreen");
+            ipc.send("full-screen");
           } else if (!this.isFocusWork && this.isFocusRest) {
-            ipc.send("normalScreen");
+            ipc.send("normal-screen");
           }
         }
         if (this.isFocusWork) {
@@ -291,16 +258,14 @@ export default {
       document.getElementById("work-n-rest").classList.add("text-muted");
       document.getElementById("now-timing").innerHTML = this.$t("timer.ended");
       this.isClockWorking = 0;
-      //ipc.send("progress-bar-set", 2); //设置的是(1-message)，因而使用2才能得到-1
-      /*if (process.platform != "darwin")
-        $("#controller").css("display", "block");*/
-      //$("#backer").css("display", "block");
+      if (process.env.VUE_APP_LINXF == "electron")
+        ipc.send("progress-bar-set", 2); //Used(1-message), so set 2 to get -1 to remove
       document.getElementById("stopper").style.display = "none";
       document.getElementById("more-options").style.display = "none";
       this.warningGiver(0);
       if (process.env.VUE_APP_LINXF == "electron") {
         if (this.isFocusRest) {
-          ipc.send("normalScreen");
+          ipc.send("normal-screen");
         }
       }
     },
@@ -328,6 +293,13 @@ export default {
       this.h = parseInt(this.s / 3600);
       this.min = parseInt((this.s - this.h * 3600) / 60);
       this.s -= this.h * 3600 + this.min * 60;
+      if (process.env.VUE_APP_LINXF == "electron") {
+        if (this.method == 1) {
+          ipc.send("progress-bar-set", (this.s / this.workTime) * 1000);
+        } else {
+          ipc.send("progress-bar-set", (this.s / this.restTime) * 1000);
+        }
+      }
       if (this.s <= 0 && this.min <= 0 && this.h <= 0) this.skipper();
       if (this.min == 0 && this.isMoreThan1 && this.h == 0) {
         if (

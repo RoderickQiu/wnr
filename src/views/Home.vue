@@ -108,7 +108,7 @@
       <!-- notes set -->
       <br />
       <br />
-      <div class="text-center">
+      <div class="text-center justify-content-center">
         <b-button
           variant="outline-primary"
           pill
@@ -116,59 +116,7 @@
           v-on:click="submit()"
         >{{ $t("home.starterTip") }}</b-button>
         <!-- submit button -->
-        <b-dropdown variant="link" toggle-class="text-decoration-none" no-caret right>
-          <template slot="button-content" class="rest">
-            <i class="fa fa-sort-desc"></i>
-          </template>
-          <b-dropdown-text>{{ $t("home.onlyRest") }}</b-dropdown-text>
-          <b-dropdown-form>
-            <b-form-group @submit.stop.prevent>
-              <input
-                id="only-rest"
-                type="number"
-                v-bind:placeholder="$t('home.placeholder.restTime')"
-                v-model="onlyRestTime"
-                v-on:keyup="inputSafetyCheckOnlyRest(0)"
-                class="small s-input w-250 s-input-border-bottom s-input-number"
-                oninput="if (value.length > 4) value = value.slice(0, 4)"
-                style="ime-mode:Disabled"
-              />
-            </b-form-group>
-            <div class="row align-items-center">
-              <div class="col-7">
-                <b-button
-                  variant="outline-primary"
-                  v-on:click="onlyRest"
-                  size="sm"
-                  pill
-                  block
-                  class="s-input-button-primary"
-                >{{ $t("home.starterTip") }}</b-button>
-              </div>
-              <div class="col-5">
-                <input
-                  id="focus-rest-set"
-                  type="checkbox"
-                  class="s-input s-input-check"
-                  v-model="isFocusRest"
-                  v-if="notWeb"
-                />
-                <span class="focuser extreme-small rest" v-if="notWeb">
-                  {{ $t("home.awayFromDevice.1") }}
-                  <br />
-                  {{ $t("home.awayFromDevice.2") }}
-                </span>
-              </div>
-            </div>
-            <b-dropdown-text class="text-center">
-              <strong class="work extreme-small" v-if="illegalOnlyRest">
-                {{ $t("home.illegalInput") }}
-                {{ illegalReason }}
-              </strong>
-            </b-dropdown-text>
-          </b-dropdown-form>
-        </b-dropdown>
-        <!-- more sections -->
+        &nbsp;
       </div>
       <br />
     </div>
@@ -190,7 +138,63 @@
       <br />
       <br />
     </div>
-    <!-- time sum show -->
+    <!-- time sum show + illegal input tip -->
+    <div id="only-rest-modal">
+      <div
+        id="controller-center"
+        class="user-select-none electron-no-drag rest"
+      >{{ $t("home.onlyRest") }}</div>
+      <div id="controller-right" class="user-select-none electron-no-drag lead rest">
+        <a v-on:click="onlyRestOptionsClose()">
+          <b-button class="rest" variant="link" size="lg" toggle-class="text-decoration-none">
+            <i class="fa fa-times"></i>
+          </b-button>
+        </a>
+      </div>
+      <div id="only-rest-container" class="justify-content-center align-items-center">
+        <input
+          id="only-rest"
+          type="number"
+          v-bind:placeholder="$t('home.placeholder.restTime')"
+          v-model="onlyRestTime"
+          v-on:keyup="inputSafetyCheckOnlyRest(0)"
+          class="small s-input w-250 s-input-border-bottom s-input-number"
+          oninput="if (value.length > 4) value = value.slice(0, 4)"
+          style="ime-mode:Disabled"
+        />
+        <br />
+        <br />
+        <div class="align-items-center">
+          <p>
+            <b-button
+              variant="outline-primary"
+              v-on:click="onlyRest"
+              size="sm"
+              pill
+              class="s-input-button-primary w-144"
+            >{{ $t("home.starterTip") }}</b-button>&nbsp;&nbsp;
+            <input
+              id="focus-rest-set"
+              type="checkbox"
+              class="s-input s-input-check"
+              v-model="isFocusRest"
+              v-if="notWeb"
+            />
+            <span class="focuser extreme-small rest" v-if="notWeb">
+              {{ $t("home.awayFromDevice.1") }}
+              <br />
+              {{ $t("home.awayFromDevice.2") }}
+            </span>
+          </p>
+        </div>
+        <div class="w-250 text-center m-auto font-weight-bold work small" v-if="illegalOnlyRest">
+          {{ $t("home.illegalInput") }}
+          <br />
+          {{ illegalReason }}
+        </div>
+      </div>
+    </div>
+    <!-- more sections -->
   </div>
 </template>
 
@@ -252,6 +256,11 @@ export default {
     });
   },
   methods: {
+    onlyRestOptionsClose: function() {
+      document.getElementById("only-rest-modal").style.visibility = "hidden";
+      document.getElementById("only-rest-modal").style.opacity = 0;
+      document.getElementById("select").style.visibility = "visible";
+    },
     clearer: function() {
       this.allSumNum = "---";
       this.toNumH = "--";

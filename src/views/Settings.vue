@@ -6,7 +6,7 @@
       <settings-item v-bind:config="itemsList[2]"></settings-item>
       <settings-item v-bind:config="itemsList[3]"></settings-item>
     </div>
-    <div class="all-sum">
+    <div id="all-sum">
       <b-button
         variant="outline-primary"
         class="w-165"
