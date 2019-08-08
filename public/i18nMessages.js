@@ -16,7 +16,7 @@ export var messages = {
             need: "Need Permissions",
             backgroundRunning: {
                 title: 'Please allow wnr to run in background.',
-                notes: 'It\'s for better timer accurancy. We won\'t abuse your permission. ',
+                notes: 'It\'s for better timer accurancy. We won\'t abuse your permission. (Some old versions of Android may not require this step.)',
                 tip: 'Click "Now Go" and wnr will redirect you to the settings. If not, read the notes below.',
                 osSpecifiedTips: {
                     huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->App launch, and find wnr in the list; then uncheck the checkbox alongside with wnr, check "Run in background" in the window pops up.'
@@ -24,7 +24,7 @@ export var messages = {
             },
             lockNotification: {
                 title: 'Please allow wnr to send notification when locked.',
-                notes: 'It\'s for better experience. We won\'t abuse your permission. ',
+                notes: 'It\'s for better experience. We won\'t abuse your permission. (Some old versions of Android may not require this step.) ',
                 tip: 'Click "Now Go" and wnr will redirect you to the settings. If not, read the notes below.',
                 osSpecifiedTips: {
                     huawei: 'Take Huawei EMUI9.1 / Honor MagicUI2.1 for example, you can go to the Settings, and then go to Apps->Apps, and find wnr in the list; then go to "Notifications" and click "Lock screen notifications" and check "show" in the window pops up.'
@@ -34,6 +34,10 @@ export var messages = {
             nowDo: "Now Go"
         },
         home: {
+            wnrWelcome: {
+                title: "Welcome",
+                notes: "Welcome to wnr! "
+            },
             onlyRest: "Only rest",
             awayFromDevice: {
                 1: 'Away from',
@@ -64,6 +68,8 @@ export var messages = {
             ended: "End",
             working: "WORKING",
             resting: "RESTING",
+            workingCountDown: "Working...",
+            restingCountDown: "Resting...",
             backer: "Let's Back Home",
             allTime: {
                 title: "Time Used: "
@@ -114,7 +120,7 @@ export var messages = {
             need: "需要权限",
             backgroundRunning: {
                 title: '请允许wnr在后台运行',
-                notes: '这是为了wnr能够准确地运行计时器。我们保证不会滥用后台运行权限。',
+                notes: '这是为了wnr能够准确地运行计时器。我们保证不会滥用后台运行权限。(并非所有手机都需要这个步骤，尤其是一些搭载了老系统的手机！)',
                 tip: '点击“现在就去完成”，wnr会将您带到设置界面。如果没有，请看以下提示。',
                 osSpecifiedTips: {
                     huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用启动管理，关闭“全部自动管理”，并找到“wnr”，取消选中“自动管理”，并勾选“允许后台活动”。'
@@ -122,7 +128,7 @@ export var messages = {
             },
             lockNotification: {
                 title: '请允许wnr发送锁屏通知',
-                notes: '这是为了wnr能够在您锁屏时仍然发出“时间到”的通知。我们保证不会滥用锁屏通知权限。',
+                notes: '这是为了wnr能够在您锁屏时仍然发出“时间到”的通知或者时间进度条。我们保证不会滥用锁屏通知权限。(并非所有手机都需要这个步骤，尤其是一些搭载了老系统的手机！)',
                 tip: '点击“现在就去完成”，wnr会将您带到设置界面。如果没有，请看以下提示。',
                 osSpecifiedTips: {
                     huawei: '以华为EMUI9.1/荣耀MagicUI2.1为例：请打开设置，并进入应用->应用管理，在列表中找到wnr并点击，并进入“通知管理”选项卡，在“锁屏通知”选项卡中选择“显示”。'
@@ -132,6 +138,10 @@ export var messages = {
             nowDo: '现在就去完成'
         },
         home: {
+            wnrWelcome: {
+                title: "欢迎来到wnr",
+                notes: "希望wnr能给你带来更好的时间管理体验！"
+            },
             onlyRest: "仅休息",
             awayFromDevice: {
                 1: '专心模式',
@@ -162,6 +172,8 @@ export var messages = {
             ended: "!!完成了!!",
             working: "工作",
             resting: "休息",
+            workingCountDown: "工作计时中……",
+            restingCountDown: "休息计时中……",
             backer: "点左上角返回首页，开启下一段时间",
             allTime: {
                 title: "总时间："

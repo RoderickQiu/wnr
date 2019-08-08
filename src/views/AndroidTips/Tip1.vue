@@ -37,6 +37,9 @@
 import { Plugins } from "@capacitor/core";
 const { Opener } = Plugins;
 export default {
+  mounted: function() {
+    this.$store.commit("setAndroidTips", true);
+  },
   methods: {
     nowDo: function() {
       Opener.enterWhiteListSetting();

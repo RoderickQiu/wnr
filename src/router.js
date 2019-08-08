@@ -38,12 +38,12 @@ export default new Router({
     {
       path: '/androidTips1',
       name: 'AndroidTips1',
-      component: () => import('./views/AndroidTips/AndroidTips1.vue')
+      component: () => import('./views/AndroidTips/Tip1.vue')
     },
     {
       path: '/androidTips2',
       name: 'AndroidTips2',
-      component: () => import('./views/AndroidTips/AndroidTips2.vue')
+      component: () => import('./views/AndroidTips/Tip2.vue')
     },
     {
       path: '/404',

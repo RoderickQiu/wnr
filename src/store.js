@@ -18,7 +18,8 @@ export default new Vuex.Store({
       isFocused: false
     },
     app: {
-      controllerCenterText: ''
+      controllerCenterText: '',
+      isAndroidTips: false
     }
   },
   mutations: {
@@ -46,6 +47,9 @@ export default new Vuex.Store({
     },
     setIsFocused(state, b) {
       state.timer.isFocused = b;
+    },
+    setAndroidTips(state, b) {
+      state.app.isAndroidTips = b;
     }
   }
 })

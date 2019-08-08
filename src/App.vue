@@ -8,7 +8,7 @@
         <router-link
           to="/"
           id="back-home"
-          v-if="(this.$route.path != '/' && this.$store.state.timer.isFocused == false)"
+          v-if="(this.$route.path != '/' && this.$store.state.timer.isFocused == false && this.$store.state.app.isAndroidTips == false)"
         >
           <b-button
             v-bind:class="{'work': ($store.state.timer.isWorking && $route.path == '/wnr'), 'rest': (!$store.state.timer.isWorking || $route.path != '/wnr')}"

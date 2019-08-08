@@ -200,7 +200,7 @@
 
 <script>
 import { Plugins } from "@capacitor/core";
-const { Storage } = Plugins;
+const { Storage, LocalNotifications } = Plugins;
 export default {
   data: function() {
     return {
@@ -223,16 +223,20 @@ export default {
   },
   mounted: function() {
     this.$store.commit("setIsFocused", false);
+    this.$store.commit("setAndroidTips", false);
     if (process.env.VUE_APP_LINXF == "web") this.notWeb = false;
     else this.notWeb = true;
-    if (process.env.VUE_APP_LINXF == "android") {
-      Storage.get({ key: "isAndroidTipsShown" }).then(data => {
-        if (data.value == null) {
-          Storage.set({ key: "isAndroidTipsShown", value: "true" }); //value only string ok
+    Storage.get({ key: "isFirstTimeUsing" }).then(data => {
+      if (data.value == null) {
+        Storage.set({ key: "isFirstTimeUsing", value: "true" }); //value only string ok
+        this.localNotificationMessenger(
+          this.$t("home.wnrWelcome.title"),
+          this.$t("home.wnrWelcome.notes")
+        );
+        if (process.env.VUE_APP_LINXF == "android")
           this.$router.push("/androidTips1");
-        }
-      }); //android first time tip
-    }
+      }
+    }); //first time tip
     Storage.get({ key: "is1MinTip" }).then(data => {
       if (data.value == null) {
         this.is1MinTip = "true";
@@ -256,6 +260,21 @@ export default {
     });
   },
   methods: {
+    localNotificationMessenger: function(title, body) {
+      LocalNotifications.schedule({
+        notifications: [
+          {
+            title: title,
+            body: body,
+            id: 1,
+            sound: null,
+            attachments: null,
+            actionTypeId: "",
+            extra: null
+          }
+        ]
+      });
+    },
     onlyRestOptionsClose: function() {
       document.getElementById("only-rest-modal").style.visibility = "hidden";
       document.getElementById("only-rest-modal").style.opacity = 0;

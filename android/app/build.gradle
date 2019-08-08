@@ -1,16 +1,15 @@
 apply plugin: 'com.android.application'
 
-def getVersionCode() {// 获取版本号
-    def versionFile = file('version.properties')// 读取第一步新建的文件
-    if (versionFile.canRead()) {// 判断文件读取异常
+def getVersionCode() {// get version-code and self++
+    def versionFile = file('version.properties')
+    if (versionFile.canRead()) {
         Properties versionProps = new Properties()
         versionProps.load(new FileInputStream(versionFile))
-        def versionCode = versionProps['VERSION_CODE'].toInteger()// 读取文件里面的版本号
+        def versionCode = versionProps['VERSION_CODE'].toInteger()
         def runTasks = gradle.startParameter.taskNames
-        // 版本号自增之后再写入文件（此处是关键，版本号自增+1）
         versionProps['VERSION_CODE'] = (++versionCode).toString()
         versionProps.store(versionFile.newWriter(), null)
-        return versionCode // 返回自增之后的版本号
+        return versionCode
     } else {
         throw new GradleException("Could not find version.properties!")
     }
@@ -22,7 +21,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.scrisstudio.wnr"
-        minSdkVersion 24
+        minSdkVersion 26 // Only 8 and newer
         targetSdkVersion 28
         versionCode currentVersionCode
         versionName "2.0.0beta"

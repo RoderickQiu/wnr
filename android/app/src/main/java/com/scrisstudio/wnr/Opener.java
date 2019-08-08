@@ -8,7 +8,6 @@ import com.getcapacitor.PluginMethod;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.provider.Settings;
-import android.os.Build;
 import android.net.Uri;
 import android.content.pm.ApplicationInfo;
 

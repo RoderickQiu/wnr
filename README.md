@@ -32,7 +32,9 @@
 
 Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
-## Build
+## For developing
+
+### Build
 
 ```shell
 
@@ -58,7 +60,7 @@ npx cap update # use-this-after-install-a-plugin
 
 **We are using [Capacitor](https://capacitor.ionicframework.com/docs/), [Electron](https://electronjs.org/docs) and [Vue](https://vuejs.org/v2/guide/).**
 
-## Folder Structure
+### Folder Structure
 
 - android
 
@@ -74,17 +76,21 @@ npx cap update # use-this-after-install-a-plugin
 
 - src
 
-    This is the main folder for Vue developing.
+    This is the main folder for Vue developing. It's the main thing in this project.
 
 - www
 
-    This is the folder which Vue exports to.
+    This is the folder which Vue exports to. It's not included because it's generated.
 
 - node_modules
 
-    This is the folder containing node resources.
+    This is the folder containing node resources. It's not included because it's generated.
 
-    *Please note that we added `node_modules\@capacitor\android\capacitor\src\main\res\drawable\ic_stat_name.png` and modified `node_modules\@capacitor\android\capacitor\src\main\java\com\getcapacitor\plugin\notification\LocalNotificationManager.java` for notification issues.*
+    _**NOTES:**_
+    
+    _Please note that we added `node_modules\@capacitor\android\capacitor\src\main\res\drawable\ic_stat_name.png` and modified `node_modules\@capacitor\android\capacitor\src\main\java\com\getcapacitor\plugin\notification\LocalNotificationManager.java` for notification issues._
+
+    _**So you may need to copy `src/assets/notificationIcon.png` to `node_modules\@capacitor\android\capacitor\src\main\res\drawable` and rename it into `ic_stat_name.png`; change the line of code `mBuilder.setSmallIcon(localNotification.getSmallIcon(context));` to `mBuilder.setSmallIcon(R.drawable.ic_stat_name);` and add `channel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);` in `createNotificationChannel()` in `LocalNotificationManager.java` the time you set up wnr and every time you update capacitor.**_
 
 ## Copyright & Credit
 

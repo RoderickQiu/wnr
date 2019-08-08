@@ -43,7 +43,13 @@
 
 <script>
 import { Plugins } from "@capacitor/core";
-const { LocalNotifications, Haptics, Storage } = Plugins;
+const {
+  LocalNotifications,
+  Haptics,
+  Storage,
+  NotificationManagerSpecified,
+  RingtonePlayer
+} = Plugins;
 var ipc = null;
 if (process.env.VUE_APP_LINXF == "electron") {
   ipc = window.require("electron").ipcRenderer; //use window.require instead of require
@@ -74,10 +80,14 @@ export default {
       s: null,
       times: 0, //times: how many loops have been here
       backer: false, //back link
-      intTime: 250
+      intTime: 250,
+      lastTimeSecond: null
     };
   },
   mounted: function() {
+    if (process.env.VUE_APP_LINXF == "android") {
+      NotificationManagerSpecified.buildProgressNotification();
+    }
     if (process.env.VUE_APP_LINXF == "electron") {
       if (this.isFocusWork) {
         ipc.send("full-screen");
@@ -86,12 +96,18 @@ export default {
       }
     }
     if (this.isFocusWork) {
+      if (process.env.VUE_APP_LINXF == "android")
+        NotificationManagerSpecified.setIsFocusMode({ isFocusMode: true });
       document.getElementById("more-options").style.display = "none";
       this.$store.commit("setIsFocused", true);
     } else if (this.isOnlyRest && this.isFocusRest) {
+      if (process.env.VUE_APP_LINXF == "android")
+        NotificationManagerSpecified.setIsFocusMode({ isFocusMode: true });
       document.getElementById("more-options").style.display = "none";
       this.$store.commit("setIsFocused", true);
     } else {
+      if (process.env.VUE_APP_LINXF == "android")
+        NotificationManagerSpecified.setIsFocusMode({ isFocusMode: false });
       this.$store.commit("setIsFocused", false);
     }
     Storage.get({ key: "is1MinTip" }).then(data => {
@@ -104,12 +120,23 @@ export default {
     this.h = parseInt(this.s / 3600);
     this.min = parseInt((this.s - this.h * 3600) / 60);
     this.s -= this.h * 3600 + this.min * 60;
+    this.lastTimeSecond = this.second;
+    if (process.env.VUE_APP_LINXF == "android") {
+      NotificationManagerSpecified.setProgressNotificationContent({
+        title: "wnr",
+        content: this.$t("timer.workingCountDown")
+      });
+    } //initialize countdown for android
     if (!this.isOnlyRest) this.$store.commit("setIsWorking", true);
     this.isClockWorking = 1;
     this.int = self.setInterval(this.clock, this.intTime);
   },
   beforeDestroy: function() {
     window.clearInterval(this.int); //prevent still counting down in homepage
+    if (process.env.VUE_APP_LINXF == "android") {
+      NotificationManagerSpecified.cancelProgressNotification();
+      NotificationManagerSpecified.setIsFocusMode({ isFocusMode: false });
+    }
     if (process.env.VUE_APP_LINXF == "electron") {
       ipc.send("normal-screen"); //prevent still fullscreen
       ipc.send("progress-bar-set", 2); //Used(1-message), so set 2 to get -1 to remove
@@ -168,13 +195,16 @@ export default {
     },
     warningGiver: function(flag) {
       if (process.env.VUE_APP_LINXF == "android") {
-        if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod))
+        if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod)) {
           Haptics.vibrate();
+          RingtonePlayer.play();
+        }
       }
       if (process.env.VUE_APP_LINXF == "web") {
         if (!this.isOnlyRest || (this.isOnlyRest && !this.isFirstPeriod)) {
           var audio = document.getElementById("h5Notification");
           audio.muted = false;
+          audio.volume = 1;
           audio.play();
         }
       }
@@ -184,18 +214,33 @@ export default {
           this.$t("timer.workTimeEnd.body")
         );
         this.$store.commit("setIsWorking", false);
+        if (process.env.VUE_APP_LINXF == "android") {
+          NotificationManagerSpecified.setProgressNotificationContent({
+            title: "wnr",
+            content: this.$t("timer.restingCountDown")
+          });
+        }
       } else if (flag == 2) {
         this.localNotificationMessenger(
           this.$t("timer.restTimeEnd.title"),
           this.$t("timer.restTimeEnd.body")
         );
         this.$store.commit("setIsWorking", true);
+        if (process.env.VUE_APP_LINXF == "android") {
+          NotificationManagerSpecified.setProgressNotificationContent({
+            title: "wnr",
+            content: this.$t("timer.workingCountDown")
+          });
+        }
       } else if (flag == 0) {
         this.localNotificationMessenger(
           this.$t("timer.allTimeEnd.title"),
           this.$t("timer.allTimeEnd.body")
         );
         this.$store.commit("setIsWorking", false);
+        if (process.env.VUE_APP_LINXF == "android") {
+          NotificationManagerSpecified.cancelProgressNotification();
+        }
       }
       if (this.isFirstPeriod) this.isFirstPeriod = false;
     },
@@ -217,9 +262,13 @@ export default {
         if (this.isFocusRest) {
           document.getElementById("more-options").style.display = "none";
           this.$store.commit("setIsFocused", true);
+          if (process.env.VUE_APP_LINXF == "android")
+            NotificationManagerSpecified.setIsFocusMode({ isFocusMode: true });
         } else if (!this.isFocusRest && this.isFocusWork) {
           document.getElementById("more-options").style.display = "block";
           this.$store.commit("setIsFocused", false);
+          if (process.env.VUE_APP_LINXF == "android")
+            NotificationManagerSpecified.setIsFocusMode({ isFocusMode: false });
         }
       } else {
         this.classModifier("rest", "work");
@@ -238,9 +287,13 @@ export default {
         if (this.isFocusWork) {
           document.getElementById("more-options").style.display = "none";
           this.$store.commit("setIsFocused", true);
+          if (process.env.VUE_APP_LINXF == "android")
+            NotificationManagerSpecified.setIsFocusMode({ isFocusMode: true });
         } else if (!this.isFocusWork && this.isFocusRest) {
           document.getElementById("more-options").style.display = "block";
           this.$store.commit("setIsFocused", false);
+          if (process.env.VUE_APP_LINXF == "android")
+            NotificationManagerSpecified.setIsFocusMode({ isFocusMode: false });
         }
       }
     },
@@ -258,15 +311,16 @@ export default {
       document.getElementById("work-n-rest").classList.add("text-muted");
       document.getElementById("now-timing").innerHTML = this.$t("timer.ended");
       this.isClockWorking = 0;
-      if (process.env.VUE_APP_LINXF == "electron")
-        ipc.send("progress-bar-set", 2); //Used(1-message), so set 2 to get -1 to remove
       document.getElementById("stopper").style.display = "none";
       document.getElementById("more-options").style.display = "none";
       this.warningGiver(0);
+      if (process.env.VUE_APP_LINXF == "android")
+        NotificationManagerSpecified.setIsFocusMode({ isFocusMode: false });
       if (process.env.VUE_APP_LINXF == "electron") {
         if (this.isFocusRest) {
           ipc.send("normal-screen");
         }
+        ipc.send("progress-bar-set", 2); //Used(1-message), so set 2 to get -1 to remove
       }
     },
     skipper: function() {
@@ -293,11 +347,28 @@ export default {
       this.h = parseInt(this.s / 3600);
       this.min = parseInt((this.s - this.h * 3600) / 60);
       this.s -= this.h * 3600 + this.min * 60;
-      if (process.env.VUE_APP_LINXF == "electron") {
-        if (this.method == 1) {
-          ipc.send("progress-bar-set", (this.s / this.workTime) * 1000);
-        } else {
-          ipc.send("progress-bar-set", (this.s / this.restTime) * 1000);
+      if (this.s != this.lastTimeSecond) {
+        this.lastTimeSecond = this.s;
+        if (this.lastTimeSecond % 3 == 0) {
+          //3s and 1 progress bar change, not so fast
+          if (process.env.VUE_APP_LINXF == "electron") {
+            if (this.method == 1) {
+              ipc.send("progress-bar-set", (this.s / this.workTime) * 1000);
+            } else {
+              ipc.send("progress-bar-set", (this.s / this.restTime) * 1000);
+            }
+          }
+          if (process.env.VUE_APP_LINXF == "android") {
+            if (this.method == 1) {
+              NotificationManagerSpecified.setProgressNotification({
+                progress: (this.s / this.workTime) * 100000
+              });
+            } else {
+              NotificationManagerSpecified.setProgressNotification({
+                progress: (this.s / this.restTime) * 100000
+              });
+            }
+          }
         }
       }
       if (this.s <= 0 && this.min <= 0 && this.h <= 0) this.skipper();
