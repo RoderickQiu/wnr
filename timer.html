@@ -24,6 +24,9 @@
 <body>
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="time-bar" class="text-muted">
+            00:00
+        </div>
         <div id="controller">
             <a href="javascript:call('winhider')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
@@ -38,14 +41,17 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="note" class="text-center small text-muted"></div>
-            <div id="work-rest" class="text-center work lead"><i class="fa fa-building"></i></div>
-            <div id="now-timing" class="text-center h1 work"></div>
+            <div id="note" class="text-center small text-muted"></div><br />
+            <div id="work-rest" class="text-center work">
+                <script>document.write(i18n.__('working'));</script>
+            </div><br />
+            <div id="now-timing" class="text-center h1 work"></div><br />
             <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
-                        class="fa fa-pause"></i></a></div>
+                        class="fa fa-pause"></i></a></div><br />
             <div class="text-center text-muted" id="moreoptions"><a href="index.html" class="text-muted"><i
-                        class="fa fa-angle-left" id="backindex"></i></a>&nbsp;&nbsp;<a href="javascript:skipper()"
-                    class="text-muted"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
+                        class="fa fa-angle-left" id="backindex"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+                    href="javascript:skipper()" class="text-muted"><i class="fa fa-angle-double-right"
+                        id="skipper"></i></a></div><br />
             <div class="text-center lead" id="backer"><a href="index.html" class="text-muted"><i
                         class="fa fa-angle-left" id="backindex2"></i></a></div>
             <script>
@@ -92,13 +98,14 @@
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
+        var player = document.createElement("audio");//alert player
         if (!loop || worktime <= 60000 || resttime <= 60000) {//use ms for 1s
-            $("#timer").html("<p class='text-center text-muted lead'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
         } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440 || (worktime + resttime) * loop > 86400000) {
-            $("#timer").html("<p class='text-center text-muted lead'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
@@ -111,7 +118,7 @@
                 $("#controller").css("display", "none");
                 $("#moreoptions").css("display", "none");
             }
-            var starttime, int, t, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1, morethan1 = 1;//method: 1-work / 2-rest, times: time-reset times, morethan1: more than 1 min left
+            var starttime, int, t, dt, timeget, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1, morethan1 = 1;//method: 1-work / 2-rest, times: time-reset times, morethan1: more than 1 min left
             starttime = new Date().getTime();
             int = self.setInterval(clock, 100);
             function stopper() {
@@ -129,12 +136,12 @@
             }
             function warninggiver(isend) {
                 if (store.get("sound") == true || store.get("sound") == undefined) {
-                    var player = document.createElement("audio");
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\timeend.wav");
                     } else {
                         player.src = path.join(__dirname, "\\res\\sound\\allend.wav");
                     }
+                    player.loop = true;
                     player.play();
                 }//different sound for different circumstances
                 if (isend == 0) ipc.send('warninggiver-allend');
@@ -143,6 +150,8 @@
                     else ipc.send('warninggiver-restend');
                     var t = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
+                        player.loop = false;
+                        player.pause();
                         stopper();
                     });
                 }
@@ -151,7 +160,7 @@
                 if (method == 1) {
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
-                    $("#work-rest").html("<i class='fa fa-gamepad' aria-hidden='true'></i>");
+                    $("#work-rest").html(i18n.__('resting'));
                     $("#bottombar").css("background-color", "#5490eac2");
                     method = 2;
                     if (store.get("fullscreen") == true) {
@@ -165,7 +174,7 @@
                 } else {
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
-                    $("#work-rest").html("<i class='fa fa-building' aria-hidden='true'></i>");
+                    $("#work-rest").html(i18n.__('working'));
                     $("#bottombar").css("background-color", "#ea5454c2");
                     method = 1;
                     if (process.platform != "darwin") $("#controller").css("display", "block");
@@ -199,22 +208,31 @@
                     ender();
                 }
             }
+            //为时间补位，当某个字段不是两位数时补0
+            function fnW(str) {
+                var num;
+                str >= 10 ? num = str : num = "0" + str;
+                return num;
+            }
             function clock() {
-                t = new Date().getTime();
+                dt = new Date();
+                t = dt.getTime();
                 if (method == 1) seconds = parseInt((worktime - t + starttime) / 1000);
                 else seconds = parseInt((resttime - t + starttime) / 1000);
                 if (seconds > 0) {
                     if (method == 1) {
-                        ipc.send("progress-bar-set", (seconds / worktime) * 1000);
+                        ipc.send("progress-bar-set", ((seconds / worktime) * 1000).toFixed(2));
                         $("#bottombar").css("width", (seconds / worktime) * 100000 + "%");
                     } else {
-                        ipc.send("progress-bar-set", (seconds / resttime) * 1000);
+                        ipc.send("progress-bar-set", ((seconds / resttime) * 1000).toFixed(2));
                         $("#bottombar").css("width", (seconds / resttime) * 100000 + "%");
                     }
                     hours = parseInt(seconds / 3600);
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $("#now-timing").text(hours + h + minutes + min + seconds + s);
+                    timeget = fnW(dt.getHours()) + ":" + fnW(dt.getMinutes());
+                    $("#time-bar").html(timeget);//显示时间
                     if (minutes == 0 && morethan1 && hours == 0) {
                         if (store.get("onemintip") != false) ipc.send("1min");
                         morethan1 = 0;

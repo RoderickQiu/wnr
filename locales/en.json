@@ -123,5 +123,8 @@
     "isalarmtipon": "Tip for not using wnr: ",
     "isalarmtipontip": "If it is enabled, wnr will send tips for you if you aren't really using wnr. ",
     "isonemintipon": "Tip for only 1 min left: ",
-    "isonemintipontip": "If it is enabled, wnr will send you a tip that your time is running out in 1 min. "
+    "isonemintipontip": "If it is enabled, wnr will send you a tip that your time is running out in 1 min. ",
+    "working": "WORK",
+    "resting": "REST",
+    "timeleft": "% Left"
 }

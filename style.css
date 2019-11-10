@@ -23,7 +23,7 @@ input, .focuser {
     line-height: inherit;
     padding: 1px 0px;
     outline: none;
-    border: none;
+    border-width: 0;
 }
 
 input {
@@ -31,8 +31,17 @@ input {
     background-color: transparent;
 }
 
+input:focus {
+    font-weight: bolder;
+}
+
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
+}
+
+input[type="text"]:focus, input[type="number"]:focus {
+    border-bottom-width: 3px;
+    border-bottom-color: #33333333;
 }
 
 input[type="range"] {
@@ -132,10 +141,6 @@ li {
     text-align: center;
 }
 
-.dropdown-item {
-    font-size: x-small;
-}
-
 .dropdown-controller {
     display: inline-block;
     width: 25px;
@@ -154,7 +159,13 @@ li {
     border-width: 1.5px;
 }
 
-.dropdown-item:focus {
+.dropdown-item {
+    font-size: x-small;
+    color: #111111;
+    line-height: 200%;
+}
+
+.dropdown-item:focus, .dropdown-item:active, .dropdown-item:hover {
     color: #f5f5f5;
 }
 
@@ -180,6 +191,14 @@ li {
 
 #focus-work-set:checked {
     background-image: url(./res/icons/check-work.png);
+}
+
+#timer {
+    line-height: 90%;
+}
+
+#timer-error {
+    line-height: 150%;
 }
 
 #main {
@@ -210,7 +229,7 @@ li {
     width: 90%;
 }
 
-#controller {
+#controller, #time-bar {
     position: absolute;
     top: 5px;
     right: 8px;
@@ -218,6 +237,15 @@ li {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
+}
+
+#controller {
+    right: 8px;
+}
+
+#time-bar {
+    left: 8px;
+    padding: 2px;
 }
 
 #tip {

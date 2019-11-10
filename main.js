@@ -12,13 +12,14 @@ let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null
 let resetAlarm = null
 let isTimerWin = null, isWorkMode = null
+let timeLeftTip = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
 
 powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计时
 
 function createWindow() {
-    // 创建浏览器窗口。
+    // 创建浏览器窗口
     win = new BrowserWindow({
         width: 364,
         height: 360,
@@ -33,7 +34,7 @@ function createWindow() {
         icon: "./res/icons/wnrIcon.png"
     });// 为跨平台优化
 
-    // 然后加载应用的 index.html。
+    // 然后加载应用的 index.html
     win.loadFile('index.html');
 
     //在加载页面时，渲染进程第一次完成绘制时，会发出 ready-to-show 事件。在此事件后显示窗口将没有视觉闪烁
@@ -42,11 +43,11 @@ function createWindow() {
         //win.webContents.openDevTools()
     });
 
-    // 当 window 被关闭，这个事件会被触发。
+    // 当 window 被关闭，这个事件会被触发
     win.on('closed', () => {
         // 取消引用 window 对象，如果你的应用支持多窗口的话，
         // 通常会把多个 window 对象存放在一个数组里面，
-        // 与此同时，你应该删除相应的元素。
+        // 与此同时，你应该删除相应的元素
         win = null;
         if (process.platform !== 'darwin') {
             app.quit()
@@ -63,6 +64,7 @@ function alarmSet() {
                     {
                         title: i18n.__('alarmtip'),
                         message: i18n.__('alarmtipmsg'),
+                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
                         sound: true, // Only Notification Center or Windows Toasters
                         wait: true // Wait with callback, until user action is taken against notification
                     }
@@ -102,6 +104,8 @@ app.on('ready', () => {
     }
     i18n.setLocale(store.get("i18n"));//国际化组件默认设置
 
+    timeLeftTip = i18n.__("timeleft");//剩余时间的提示符预载
+
     const gotTheLock = app.requestSingleInstanceLock();
     if (!gotTheLock && win != null) {
         dialog.showMessageBox(win, {
@@ -116,6 +120,8 @@ app.on('ready', () => {
             }
         })
     }//不希望有多个wnr同时运行
+
+    app.setAppUserModelId("wnr1");//设置UserModelId，使得通知功能可用
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
@@ -137,6 +143,7 @@ app.on('ready', () => {
                 {
                     title: i18n.__('wrongfolder'),
                     message: i18n.__('wrongfoldertip'),
+                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
                     sound: true, // Only Notification Center or Windows Toasters
                     wait: true // Wait with callback, until user action is taken against notification
                 }
@@ -366,7 +373,7 @@ ipcMain.on('warninggiver-workend', function () {
             }, function (response) {
                 win.webContents.send('warning-closed');
             })
-        }, 100)
+        }, 1000)
     }
 })
 
@@ -392,7 +399,7 @@ ipcMain.on('warninggiver-restend', function () {
             }, function (response) {
                 win.webContents.send('warning-closed');
             })
-        }, 180)
+        }, 1000)
     }
 })
 
@@ -414,7 +421,7 @@ ipcMain.on('warninggiver-allend', function () {
             }, function (response) {
                 win.loadFile('index.html');//回到首页，方便开始新计划
             })
-        }, 100)
+        }, 1000)
         alarmSet();
     }
 })
@@ -514,6 +521,7 @@ function settings() {
                     {
                         title: i18n.__('settingstip'),
                         message: i18n.__('settingstipmsg'),
+                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
                         sound: true, // Only Notification Center or Windows Toasters
                         wait: true // Wait with callback, until user action is taken against notification
                     }
@@ -540,6 +548,7 @@ function tourguide() {
                 {
                     title: i18n.__('welcomer1'),
                     message: i18n.__('alarmtipmsg'),
+                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
                     sound: true, // Only Notification Center or Windows Toasters
                     wait: true // Wait with callback, until user action is taken against notification
                 }
@@ -554,6 +563,7 @@ ipcMain.on('1min', function () {
         {
             title: i18n.__('1min'),
             message: i18n.__('1minmsg'),
+            icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
             sound: true, // Only Notification Center or Windows Toasters
             wait: true // Wait with callback, until user action is taken against notification
         }
@@ -561,7 +571,8 @@ ipcMain.on('1min', function () {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    if (win != null) win.setProgressBar(1 - message)
+    if (win != null) win.setProgressBar(1 - message);
+    if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
 })
 
 ipcMain.on("logger", function (event, message) {
@@ -586,6 +597,7 @@ ipcMain.on("timer-win", function (event, message) {
     } else {
         if (tray != null) {
             contextMenu.items[2].enabled = false;
+            tray.setToolTip('wnr');
         }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
         alarmSet();
