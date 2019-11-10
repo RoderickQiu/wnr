@@ -289,18 +289,28 @@
         $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
         function hotkey1set() {
             if ($("#hotkey1-set").val() != null && $("#hotkey1-set").val()) {
-                $("#hotkey1-set").val($("#hotkey1-set").val().toUpperCase());
-                store.set("hotkey1", $("#hotkey1-set").val());
+                if ($("#hotkey1-set").val().toUpperCase() != store.get('hotkey2')) {
+                    $("#hotkey1-set").val($("#hotkey1-set").val().toUpperCase());
+                    store.set("hotkey1", $("#hotkey1-set").val());
+                    var t = setTimeout("call('relauncher')", 500);
+                } else $("#hotkey1-set").val(store.get("hotkey1"));
+            } else {
+                store.set("hotkey1", 'W');
+                var t = setTimeout("call('relauncher')", 500);
             }
-            var t = setTimeout("call('relauncher')", 500);
         }
         $("#hotkey2-set").val(store.get("hotkey2").toUpperCase());
         function hotkey2set() {
             if ($("#hotkey2-set").val() != null && $("#hotkey2-set").val()) {
-                $("#hotkey2-set").val($("#hotkey2-set").val().toUpperCase());
-                store.set("hotkey2", $("#hotkey2-set").val());
+                if ($("#hotkey2-set").val().toUpperCase() != store.get('hotkey1')) {
+                    $("#hotkey2-set").val($("#hotkey2-set").val().toUpperCase());
+                    store.set("hotkey2", $("#hotkey2-set").val());
+                    var t = setTimeout("call('relauncher')", 500);
+                } else $("#hotkey2-set").val(store.get("hotkey2"));
+            } else {
+                store.set("hotkey2", 'S');
+                var t = setTimeout("call('relauncher')", 500);
             }
-            var t = setTimeout("call('relauncher')", 500);
         }
     </script>
     <script src="renderer.js"></script>
