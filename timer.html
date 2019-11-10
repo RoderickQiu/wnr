@@ -24,9 +24,8 @@
 <body>
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
-        <div id="time-bar" class="text-muted">
-            00:00
-        </div>
+        <div id="time-bar" class="text-muted"></div>
+        <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
             <a href="javascript:call('winhider')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
@@ -232,7 +231,8 @@
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $("#now-timing").text(hours + h + minutes + min + seconds + s);
                     timeget = fnW(dt.getHours()) + ":" + fnW(dt.getMinutes());
-                    $("#time-bar").html(timeget);//显示时间
+                    if (process.platform != "darwin") $("#time-bar").html(timeget);
+                    else $("#time-bar-macos").html(timeget);//显示时间
                     if (minutes == 0 && morethan1 && hours == 0) {
                         if (store.get("onemintip") != false) ipc.send("1min");
                         morethan1 = 0;

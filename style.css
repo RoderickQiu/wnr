@@ -229,17 +229,16 @@ li {
     width: 90%;
 }
 
-#controller, #time-bar {
+#controller, #time-bar, #time-bar-macos {
     position: absolute;
     top: 5px;
-    right: 8px;
     font-size: 18px;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
 }
 
-#controller {
+#controller, #time-bar-macos {
     right: 8px;
 }
 
