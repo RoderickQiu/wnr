@@ -10,7 +10,15 @@ const config = {
             "dir"
         ],
         "icon": "res/icons/iconMac.icns",
-        "darkModeSupport": true
+        "darkModeSupport": true,
+        "files": [
+            "**/*",
+            //! to exclude
+            "!res/preview/",
+            "!res/icons/*Win*",
+            "!res/icons/*.psd",
+            "!node_modules/node-notifier/vendor/snoreToast/*"
+        ]
     }
 }
 

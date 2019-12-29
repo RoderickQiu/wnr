@@ -20,6 +20,12 @@
             "type": "shell",
             "command": "yarn",
             "group": "none"
+        },
+        {
+            "label": "autoclean",
+            "type": "shell",
+            "command": "yarn autoclean --force",
+            "group": "none"
         }
     ]
 }

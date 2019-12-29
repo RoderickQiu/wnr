@@ -9,7 +9,16 @@ const config = {
         "target": [
             "dir"
         ],
-        "icon": "res/icons/wnrIcon.png"
+        "icon": "res/icons/wnrIcon.png",
+        "files": [
+            "**/*",
+            //! to exclude
+            "!res/preview/",
+            "!res/icons/*Mac*",
+            "!res/icons/*Win*",
+            "!res/icons/*.psd",
+            "!node_modules/node-notifier/vendor/snoreToast/*"
+        ]
     }
 }
 

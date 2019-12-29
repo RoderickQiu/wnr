@@ -9,7 +9,14 @@ const config = {
         "target": [
             "dir"
         ],
-        "icon": "res/icons/iconWin.ico"
+        "icon": "res/icons/iconWin.ico",
+        "files": [
+            "**/*",
+            //! to exclude
+            "!res/preview/",
+            "!res/icons/*Mac*",
+            "!res/icons/*.psd"
+        ]
     }
 }
 

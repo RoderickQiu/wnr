@@ -24,11 +24,12 @@ function createWindow() {
         width: 364,
         height: 360,
         frame: false,
+        backgroundColor: "#FEFEFE",
         resizable: false,
         maximizable: false,
         show: false,
         hasShadow: true,
-        webPreferences: { nodeIntegration: true },
+        webPreferences: { nodeIntegration: true, webgl: false },
         titleBarStyle: "hiddenInset",
         title: "wnr",
         icon: "./res/icons/wnrIcon.png"
@@ -69,9 +70,11 @@ function alarmSet() {
                         wait: true // Wait with callback, until user action is taken against notification
                     }
                 );
-                if (win != null) if (!win.isVisible()) win.show();
+                notifier.on('click', function (notifierObject, options, event) {
+                    if (win != null) if (!win.isVisible()) win.show();
+                });
             }
-        }, 1200000)//不断提示使用wnr
+        }, 600000)//不断提示使用wnr
     }
 }
 
@@ -488,7 +491,18 @@ ipcMain.on('minimizer', function () {
 function about() {
     if (app.isReady()) {
         if (win != null) {
-            aboutWin = new BrowserWindow({ parent: win, width: 256, height: 233, resizable: false, frame: false, show: false, center: true, titleBarStyle: "hidden", webPreferences: { nodeIntegration: true } });
+            aboutWin = new BrowserWindow({
+                parent: win,
+                width: 279,
+                height: 256,
+                backgroundColor: "#FEFEFE",
+                resizable: false,
+                frame: false,
+                show: false,
+                center: true,
+                titleBarStyle: "hidden",
+                webPreferences: { nodeIntegration: true }
+            });
             aboutWin.loadFile("about.html");
             if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
             aboutWin.once('ready-to-show', () => {
@@ -505,7 +519,18 @@ ipcMain.on('about', about);
 function settings() {
     if (app.isReady()) {
         if (win != null) {
-            settingsWin = new BrowserWindow({ parent: win, width: 729, height: 486, resizable: false, frame: false, show: false, center: true, webPreferences: { nodeIntegration: true }, titleBarStyle: "hidden" });
+            settingsWin = new BrowserWindow({
+                parent: win,
+                width: 729,
+                height: 486,
+                backgroundColor: "#FEFEFE",
+                resizable: false,
+                frame: false,
+                show: false,
+                center: true,
+                webPreferences: { nodeIntegration: true },
+                titleBarStyle: "hidden"
+            });
             settingsWin.loadFile("settings.html");
             if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
             settingsWin.once('ready-to-show', () => {
@@ -535,7 +560,18 @@ ipcMain.on('settings', settings);
 function tourguide() {
     if (app.isReady()) {
         if (win != null) {
-            tourWin = new BrowserWindow({ parent: win, width: 729, height: 600, resizable: false, frame: false, show: false, center: true, titleBarStyle: "hidden", webPreferences: { nodeIntegration: true } });
+            tourWin = new BrowserWindow({
+                parent: win,
+                width: 729,
+                height: 600,
+                backgroundColor: "#FEFEFE",
+                resizable: false,
+                frame: false,
+                show: false,
+                center: true,
+                titleBarStyle: "hidden",
+                webPreferences: { nodeIntegration: true }
+            });
             tourWin.loadFile("tourguide.html");
             if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
             tourWin.once('ready-to-show', () => {
