@@ -23,6 +23,8 @@
 
 **_The version 2 of wnr is already on the road! See [version2-beta](https://github.com/RoderickQiu/wnr/tree/version2-beta)._**
 
+*It's has been stuck of some problems especially on some brands' android phone, though.*
+
 The new version of wnr will be greatly optimized, and **we're going to support online version and android version** _(maybe iOS, too)_.
 
 ## Features
@@ -105,7 +107,7 @@ I'm now using yarn.
 
 ## Copyright & Credit
 
-Copyright (c) 2019 **[Roderick Qiu](https://roderickqiu.scris.top)** and other contributors. All rights reserved.
+Copyright (c) 2019-2020 **[Roderick Qiu](https://roderickqiu.scris.top)** and other contributors. All rights reserved.
 
 Now licensed under the [MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
 
