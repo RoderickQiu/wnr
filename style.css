@@ -251,7 +251,8 @@ li {
     -webkit-user-select: text;
     position: absolute;
     bottom: 15px;
-    left: 35.5px;
+    left: 25.5px;
+    width: 90%;
 }
 
 #itemlist {
