@@ -126,5 +126,9 @@
     "isonemintipontip": "If it is enabled, wnr will send you a tip that your time is running out in 1 min. ",
     "working": "WORK",
     "resting": "REST",
-    "timeleft": "% Left"
+    "looping": "LOOP FOR",
+    "timeleft": "% Left",
+    "defaultsbackhome": "Back home",
+    "add": "Add",
+    "delete": "Delete"
 }

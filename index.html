@@ -75,30 +75,26 @@
                 <div class="dropdown dropleft focuser">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuButton" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" data-offset="0, 21">&nbsp;
-                        <span class="focuser extreme-small text-muted">
+                        <span class="focuser extreme-small font-weight-bold">
                             <script>document.write(i18n.__('default1') + "<br />" + i18n.__('default2'))</script>
                         </span>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="javascript:defaultSet(25,5,4)">pomodoro</a>
-                        <a class="dropdown-item" href="javascript:defaultSet(30,10,1)">wnr recommendation</a>
-                        <a class="dropdown-item" href="javascript:defaultSet(40,10,1)">class time</a>
-                        <!--<div class="dropdown-divider"></div>
-                        <div class="px-4">
-                            <input type="button" class="dropdown-controller rest" id="more-defaults" value="+" />&nbsp;
-                            <input type="button" class="dropdown-controller rest" id="less-defaults" value="-" />&nbsp;
-                            <input type="button" class="dropdown-controller rest" id="edit-defaults" />
-                            <script>
-                                $("#edit-defaults").val(i18n.__('edit'));
-                            </script>
-                        </div>-->
+                        <div id="dropdown-itemlist">
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item font-weight-bold" href="defaults.html">
+                            <script>document.write(i18n.__('edit'));</script>
+                        </a>
                     </div>
-                </div><br /><br />
+                </div>
+                <br /><br />
                 <div class="align-content-center">
                     <input name="work-time" id="work-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                        class="work lead" autofocus required /><input id="focus-work-set" type="checkbox"
-                        onchange="focusworkset()" /><span class="focuser extreme-small work">
+                        class="work lead" autofocus required />
+                    &nbsp;<input id="focus-work-set" type="checkbox" onchange="focusworkset()" /><span
+                        class="focuser extreme-small work">
                         <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script>
                     </span>
                 </div>
@@ -106,8 +102,9 @@
                 <div class="align-content-center">
                     <input name="rest-time" id="rest-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                        class="rest lead" required /><input id="focus-rest-set" type="checkbox"
-                        onchange="fullscreenset()" /><span class="focuser extreme-small rest">
+                        class="rest lead" required />
+                    &nbsp;<input id="focus-rest-set" type="checkbox" onchange="fullscreenset()" /><span
+                        class="focuser extreme-small rest">
                         <script>document.write(i18n.__('focusmode1') + "<br />" + i18n.__('focusmode2'))</script>
                     </span>
                 </div>
@@ -141,7 +138,7 @@
         </div>
     </div>
     <script>
-        var timecnt, myDate, h, min;
+        var timecnt, myDate, h, min, defaultArray;
         function sumGet() {
             console.log('a')
             timecnt = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
@@ -170,6 +167,10 @@
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
+        defaultArray = store.get("defaults");
+        defaultArray.forEach(function (item, index, array) {
+            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(" + item.workTime + ", " + item.restTime + ", " + item.loops + ")'>" + item.name + "</a>");
+        });
         function allSet() {
             if (Number($("#work-time").val()) != 0 && Number($("#rest-time").val()) != 0 && Number($("#loop").val()) != 0 && String(Number($("#work-time").val())).indexOf('e') == -1 && String(Number($("#rest-time").val())).indexOf('e') == -1 && String(Number($("#loop").val())).indexOf('e') == -1) {
                 if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();

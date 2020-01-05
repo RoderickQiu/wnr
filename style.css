@@ -110,6 +110,10 @@ li {
     background-color: #4a9af68f;
 }
 
+.underlined {
+    text-decoration: underline;
+}
+
 .work, .work::-webkit-input-placeholder {
     color: #ea5454;
 }
@@ -227,6 +231,31 @@ li {
     overflow-y: scroll;
     height: 382px;
     width: 90%;
+}
+
+#defaultssettingscontainer {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    top: 75px;
+    left: 35.5px;
+    overflow-y: scroll;
+    height: 280px;
+    width: 80%;
+}
+
+#defaultssettingsadd {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    bottom: 15px;
+    left: 35.5px;
+}
+
+#itemlist {
+    width: 280px;
 }
 
 #controller, #time-bar, #time-bar-macos {

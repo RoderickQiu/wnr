@@ -126,5 +126,9 @@
     "isonemintipontip": "如果此项被选中，则wnr会在时间仅剩下一分钟时发出提醒，提示您进行暂时收尾工作。",
     "working": "工作",
     "resting": "休息",
-    "timeleft": "% 时间剩余"
+    "looping": "循环",
+    "timeleft": "% 时间剩余",
+    "defaultsbackhome": "返回首页",
+    "add": "添加",
+    "delete": "删除"
 }

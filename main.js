@@ -22,7 +22,7 @@ function createWindow() {
     // 创建浏览器窗口
     win = new BrowserWindow({
         width: 364,
-        height: 360,
+        height: 396,
         frame: false,
         backgroundColor: "#FEFEFE",
         resizable: false,
@@ -116,12 +116,10 @@ app.on('ready', () => {
             type: "warning",
             message: i18n.__('multiwnrmsg'),
             checkboxLabel: i18n.__('multiwnrchk'),
-            checkboxChecked: true
-        }, function (response, checkboxChecked) {
-            if (checkboxChecked) {
-                app.quit();
-            }
-        })
+            checkboxChecked: true,
+        }).then(function (msg) {
+            if (msg.checkboxChecked) app.quit();
+        });
     }//不希望有多个wnr同时运行
 
     app.setAppUserModelId("wnr1");//设置UserModelId，使得通知功能可用
@@ -209,7 +207,28 @@ app.on('ready', () => {
     }
 
     macOSFullscreenSolution(false);
-    isDarkMode()
+    isDarkMode();
+
+    if (!store.has("defaults-created")) {
+        store.set("defaults-created", true);
+        let defaults = new Array({
+            name: "wnr recommended",
+            workTime: 30,
+            restTime: 10,
+            loops: 4
+        }, {
+            name: "pomodoro",
+            workTime: 25,
+            restTime: 5,
+            loops: 4
+        }, {
+            name: "class time",
+            workTime: 40,
+            restTime: 10,
+            loops: 1
+        });
+        store.set("defaults", defaults);
+    }
 })
 
 function macOSFullscreenSolution(isFullScreen) {
@@ -373,7 +392,7 @@ ipcMain.on('warninggiver-workend', function () {
                 title: i18n.__('worktimeend'),
                 type: "warning",
                 message: i18n.__('worktimeend'),
-            }, function (response) {
+            }).then(function (response) {
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -399,7 +418,7 @@ ipcMain.on('warninggiver-restend', function () {
                 title: i18n.__('resttimeend'),
                 type: "warning",
                 message: i18n.__('resttimemsg'),
-            }, function (response) {
+            }).then(function (response) {
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -421,7 +440,7 @@ ipcMain.on('warninggiver-allend', function () {
                 title: i18n.__('allend'),
                 type: "warning",
                 message: i18n.__('allmsg'),
-            }, function (response) {
+            }).then(function (response) {
                 win.loadFile('index.html');//回到首页，方便开始新计划
             })
         }, 1000)
@@ -436,8 +455,8 @@ ipcMain.on('updateavailable', function () {
         message: i18n.__('updatemsg'),
         checkboxLabel: i18n.__('updatechk'),
         checkboxChecked: true
-    }, function (response, checkboxChecked) {
-        if (checkboxChecked) {
+    }).then(function (msg) {
+        if (msg.checkboxChecked) {
             shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
         }
     })
@@ -466,8 +485,8 @@ ipcMain.on('deleteall', function () {
         message: i18n.__('deleteallcontent'),
         checkboxLabel: i18n.__('deleteallchk'),
         checkboxChecked: false
-    }, function (response, checkboxChecked) {
-        if (checkboxChecked) {
+    }).then(function (msg) {
+        if (msg.checkboxChecked) {
             store.clear();
             app.relaunch();
             app.exit(0)
