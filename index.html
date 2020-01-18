@@ -36,9 +36,6 @@
             if (e.keyCode == 13) {
                 window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
             }
-            /*if (e.keyCode == 38 || e.keyCode == 40 || e.keyCode == 110 || e.keyCode == 69) {
-                return false;
-            }*/
         }
         document.onkeydown = keydown;
     </script>
@@ -83,7 +80,7 @@
                         <div id="dropdown-itemlist">
                         </div>
                         <div class="dropdown-divider"></div>
-                        <a class="dropdown-item font-weight-bold" href="defaults.html">
+                        <a class="dropdown-item font-weight-bold" href="javascript:call('settings')">
                             <script>document.write(i18n.__('edit'));</script>
                         </a>
                     </div>
@@ -140,7 +137,6 @@
     <script>
         var timecnt, myDate, h, min, defaultArray;
         function sumGet() {
-            console.log('a')
             timecnt = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
             $("#allsum-num").html(timecnt);
             myDate = new Date();
@@ -152,24 +148,30 @@
             if (min >= 10) $("#to-num-min").html(parseInt(min));
             else $("#to-num-min").html("0" + parseInt(min));
         }
-        function defaultSet(workTime, restTime, loopFor) {
+        function defaultSet(workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
             $("#work-time").val(workTime);
             $("#rest-time").val(restTime);
-            $("#loop").val(loopFor);
+            $("#loop").val(loops);
+            document.getElementById("focus-work-set").checked = focusWhenWorking;
+            document.getElementById("focus-rest-set").checked = focusWhenResting;
             allSet();
         }
         isTimerWindow(false);
-        $("#work-time").val(store.get("worktime"));
-        $("#rest-time").val(store.get("resttime"));
-        $("#loop").val(store.get("looptime"));
-        if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
-        defaultArray = store.get("defaults");
+        defaultArray = store.get("predefined-tasks");
         defaultArray.forEach(function (item, index, array) {
-            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(" + item.workTime + ", " + item.restTime + ", " + item.loops + ")'>" + item.name + "</a>");
+            if (store.get("default-task") == index) {
+                defaultSet(item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
+                if (store.get("autostarttask") && store.get("just-launched") && (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
+                    window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
+                } else if (store.get("just-relaunched")) {
+                    store.set("just-relaunched", false);
+                }
+            }
+            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(" + item.workTime + ", " + item.restTime + ", " + item.loops + "," + item.focusWhenWorking + "," + item.focusWhenResting + ")'>" + item.name + "</a>");
         });
         function allSet() {
             if (Number($("#work-time").val()) != 0 && Number($("#rest-time").val()) != 0 && Number($("#loop").val()) != 0 && String(Number($("#work-time").val())).indexOf('e') == -1 && String(Number($("#rest-time").val())).indexOf('e') == -1 && String(Number($("#loop").val())).indexOf('e') == -1) {
@@ -179,18 +181,6 @@
                 $("#to-num-h").html("--");
                 $("#to-num-min").html("--");
             }
-        }
-        if (store.get("fullscreen") == true) document.getElementById("focus-rest-set").checked = true;
-        else document.getElementById("focus-rest-set").checked = false;
-        function fullscreenset() {
-            if (document.getElementById("focus-rest-set").checked == true) store.set("fullscreen", true);
-            else store.set("fullscreen", false);
-        }
-        if (store.get("fullscreen-work") == true) document.getElementById("focus-work-set").checked = true;
-        else document.getElementById("focus-work-set").checked = false;
-        function focusworkset() {
-            if (document.getElementById("focus-work-set").checked == true) store.set("fullscreen-work", true);
-            else store.set("fullscreen-work", false);
         }
     </script>
     <script src="renderer.js"></script>

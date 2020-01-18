@@ -233,32 +233,6 @@ li {
     width: 90%;
 }
 
-#defaultssettingscontainer {
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: text;
-    position: absolute;
-    top: 75px;
-    left: 35.5px;
-    overflow-y: scroll;
-    height: 280px;
-    width: 80%;
-}
-
-#defaultssettingsadd {
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: text;
-    position: absolute;
-    bottom: 15px;
-    left: 25.5px;
-    width: 90%;
-}
-
-#itemlist {
-    width: 280px;
-}
-
 #controller, #time-bar, #time-bar-macos {
     position: absolute;
     top: 5px;

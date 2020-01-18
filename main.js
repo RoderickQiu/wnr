@@ -9,14 +9,13 @@ var Registry = require('winreg')
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win, settingsWin = null, aboutWin = null, tourWin = null;
-let tray = null, contextMenu = null
-let resetAlarm = null
-let isTimerWin = null, isWorkMode = null
-let timeLeftTip = null
+let tray = null, contextMenu = null;
+let resetAlarm = null, powerSaveBlockerId;
+let isTimerWin = null, isWorkMode = null;
+let timeLeftTip = null;
+let predefinedTasks = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
-
-powerSaveBlocker.start('prevent-app-suspension')//防止app被挂起，停止计时
 
 function createWindow() {
     // 创建浏览器窗口
@@ -40,7 +39,7 @@ function createWindow() {
 
     //在加载页面时，渲染进程第一次完成绘制时，会发出 ready-to-show 事件。在此事件后显示窗口将没有视觉闪烁
     win.once('ready-to-show', () => {
-        win.show()
+        win.show();
         //win.webContents.openDevTools()
     });
 
@@ -68,11 +67,10 @@ function alarmSet() {
                         icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
                         sound: true, // Only Notification Center or Windows Toasters
                         wait: true // Wait with callback, until user action is taken against notification
+                    }, function () {
+                        if (win != null) if (!win.isVisible()) win.show();
                     }
                 );
-                notifier.on('click', function (notifierObject, options, event) {
-                    if (win != null) if (!win.isVisible()) win.show();
-                });
             }
         }, 600000)//不断提示使用wnr
     }
@@ -137,6 +135,8 @@ app.on('ready', () => {
             if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
         }//防止这样用快捷键退出专心模式
     })
+
+    store.set("just-launched", true);
 
     if (process.platform == "darwin") {
         if (!app.isInApplicationsFolder()) {
@@ -209,26 +209,48 @@ app.on('ready', () => {
     macOSFullscreenSolution(false);
     isDarkMode();
 
-    if (!store.has("defaults-created")) {
-        store.set("defaults-created", true);
-        let defaults = new Array({
+    if (!store.has("predefined-tasks-created")) {
+        store.set("predefined-tasks-created", true);
+        predefinedTasks = new Array({
             name: "wnr recommended",
             workTime: 30,
             restTime: 10,
-            loops: 4
+            loops: 4,
+            focusWhenWorking: false,
+            focusWhenResting: true
         }, {
             name: "pomodoro",
             workTime: 25,
             restTime: 5,
-            loops: 4
+            loops: 4,
+            focusWhenWorking: false,
+            focusWhenResting: true
         }, {
             name: "class time",
             workTime: 40,
             restTime: 10,
-            loops: 1
+            loops: 1,
+            focusWhenWorking: true,
+            focusWhenResting: false
         });
-        store.set("defaults", defaults);
-    }
+        store.set("predefined-tasks", predefinedTasks);
+        store.set("default-task", 0);//0 -> wnr recommended
+    } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//初始化预设
+    if (store.get("worktime")) {
+        predefinedTasks.push({
+            name: "user default",
+            workTime: store.get("worktime"),
+            restTime: store.get("resttime"),
+            loops: store.get('looptime'),
+            focusWhenWorking: store.get("fullscreen-work"),
+            focusWhenResting: store.get("fullscreen")
+        })
+        store.delete("worktime");
+        store.delete("resttime");
+        store.delete("looptime");
+        store.set("predefined-tasks", predefinedTasks);
+        store.set("default-task", predefinedTasks.length - 1)//the last is the newest-added
+    }//取代原有的默认事件设置
 })
 
 function macOSFullscreenSolution(isFullScreen) {
@@ -334,9 +356,9 @@ function isDarkMode() {
                 }
             )
         } else if (process.platform == 'win32') {
-            var regKey = new Registry({                                       // new operator is optional
-                hive: Registry.HKCU,                                        // open registry hive HKEY_CURRENT_USER
-                key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize' // key containing autostart programs
+            var regKey = new Registry({
+                hive: Registry.HKCU,
+                key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
             })
             regKey.values(function (err, items) {
                 if (err)
@@ -351,7 +373,7 @@ function isDarkMode() {
                         }
                     }
                 }
-            });
+            })
         }
     }
 }
@@ -368,7 +390,7 @@ ipcMain.on('focus-first', function () {
     if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//全屏时恒定最上层
     if (win != null) win.setFullScreen(true);
     macOSFullscreenSolution(true);
-    isWorkMode = true;
+    isWorkMode = true
 })
 
 ipcMain.on('warninggiver-workend', function () {
@@ -444,7 +466,7 @@ ipcMain.on('warninggiver-allend', function () {
                 win.loadFile('index.html');//回到首页，方便开始新计划
             })
         }, 1000)
-        alarmSet();
+        alarmSet()
     }
 })
 
@@ -495,6 +517,7 @@ ipcMain.on('deleteall', function () {
 })
 
 ipcMain.on('relauncher', function () {
+    store.set('just-relaunched', true);
     app.relaunch();
     app.exit(0)
 })
@@ -528,7 +551,7 @@ function about() {
                 aboutWin.show();
             })
             aboutWin.on('closed', () => {
-                aboutWin = null
+                aboutWin = null;
             })
         }
     }
@@ -557,7 +580,7 @@ function settings() {
             })
             settingsWin.on('closed', () => {
                 win.reload();
-                settingsWin = null
+                settingsWin = null;
             })
             if (!store.get("settings-experience")) {
                 store.set("settings-experience", true);
@@ -597,7 +620,7 @@ function tourguide() {
                 tourWin.show();
             })
             tourWin.on('closed', () => {
-                tourWin = null
+                tourWin = null;
             })
             notifier.notify(
                 {
@@ -648,6 +671,7 @@ ipcMain.on("timer-win", function (event, message) {
         if (resetAlarm) {
             clearTimeout(resetAlarm);
         }
+        powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//防止app被挂起，停止计时
         isTimerWin = true;
     } else {
         if (tray != null) {
@@ -656,6 +680,9 @@ ipcMain.on("timer-win", function (event, message) {
         }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
         alarmSet();
-        isTimerWin = false;
+        if (powerSaveBlockerId)
+            if (powerSaveBlocker.isStarted(powerSaveBlockerId))
+                powerSaveBlocker.stop(powerSaveBlockerId);
+        isTimerWin = false
     }
 })

@@ -68,6 +68,7 @@
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
+        store.set('just-launched', false);
         function keydownOnError(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {

@@ -120,9 +120,9 @@
     "default1": "预设",
     "default2": "任务",
     "edit": "编辑预设",
-    "isalarmtipon": "是否要让wnr发出使用提醒：",
+    "isalarmtipon": "是否要发出使用提醒：",
     "isalarmtipontip": "如果此项被选中，则wnr会在您一直不使用的时候提示您使用wnr，提高效率。",
-    "isonemintipon": "是否要让wnr在时间仅剩下一分钟时发出提醒：",
+    "isonemintipon": "是否要在时间仅剩下一分钟时发出提醒：",
     "isonemintipontip": "如果此项被选中，则wnr会在时间仅剩下一分钟时发出提醒，提示您进行暂时收尾工作。",
     "working": "工作",
     "resting": "休息",
@@ -130,5 +130,13 @@
     "timeleft": "% 时间剩余",
     "defaultsbackhome": "返回首页",
     "add": "添加",
-    "delete": "删除"
+    "delete": "删除",
+    "timesetdeleted": "时间设置已经被移除。请使用新的预设设置，原有的时间设置内容将被保存成为“user default”预设。",
+    "defaultsset": "预设设置",
+    "focuswhenworking": "工作时启用专心模式",
+    "focuswhenresting": "休息时启用专心模式",
+    "setasdefault": "设为默认预设",
+    "defaulttip": "红色标题的是默认预设，会自动使用；蓝色的是普通预设。",
+    "isautostarttaskon": "是否在启动时自动开始默认预设：",
+    "isautostarttaskontip": "如果此项被选中，则wnr会在启动时自动启用默认预设（假如有），这使你不会把wnr放在一边不管。"
 }

@@ -40,34 +40,30 @@
             </p>
             <hr />
             <div class="align-content-center form-text">
-                <label>
-                    <script>document.write(i18n.__('defwork'));</script></label>
-                <input id="work-time-set" type="range" min="0" max="120" value="0" onchange="worktimeset()" />
-                <span id="work-time-show" class="text-muted">0</span>
-                <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('defworktip'));</script><b>
-                        <script>document.write(i18n.__('resettip'));</script></b>
+                <span class="text-muted small">
+                    <script>document.write(i18n.__('timesetdeleted'));</script>
                 </span>
             </div>
+            <br />
+            <p class="lead"><i class="fa fa-superpowers" aria-hidden="true"></i>
+                <script>document.write(i18n.__('defaultsset'));</script>
+            </p>
+            <hr />
             <div class="align-content-center form-text">
-                <label>
-                    <script>document.write(i18n.__('defrest'));</script></label>
-                <input id="rest-time-set" type="range" min="0" max="60" value="0" onchange="resttimeset()" />
-                <span id="rest-time-show" class="text-muted">0</span>
-                <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('defworktip'));</script><b>
-                        <script>document.write(i18n.__('resettip'));</script></b>
-                </span>
-            </div>
-            <div class="align-content-center form-text">
-                <label>
-                    <script>document.write(i18n.__('defloop'));</script></label>
-                <input id="loop-time-set" type="range" min="0" max="12" value="0" onchange="looptimeset()" />
-                <span id="loop-time-show" class="text-muted">0</span>
-                <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('deflooptip'));</script><b>
-                        <script>document.write(i18n.__('resettip'));</script></b>
-                </span>
+                <div class="align-self-start text-left small text-muted">
+                    <script>document.write(i18n.__('defaulttip'));</script>
+                </div>
+                <div class="d-flex text-left">
+                    <div id="itemlist">
+                        <ul id="itemlist-ul"></ul>
+                    </div>
+                    <br /><br />
+                </div>
+                <div class="align-self-start text-left">
+                    <a href="javascript:add()" class="text-info">
+                        <script>document.write(i18n.__('add'));</script>
+                    </a>
+                </div>
             </div>
             <br />
             <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>
@@ -136,6 +132,14 @@
                     <script>document.write(i18n.__('isonemintipontip'));</script>
                 </span>
             </div>
+            <div class="align-content-center form-text">
+                <label>
+                    <script>document.write(i18n.__('isautostarttaskon'));</script></label>
+                <input id="autostarttask-set" type="checkbox" onchange="autostarttaskset()" />
+                <br /><span class="text-muted small">
+                    <script>document.write(i18n.__('isautostarttaskontip'));</script>
+                </span>
+            </div>
             <br />
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('otherthings'));</script>
@@ -187,35 +191,81 @@
     </script>
     <script src="updater.js"></script>
     <script>
-        var minute = i18n.__('min');
-        var times = i18n.__('times');
-        if (store.get("worktime") != undefined) {
-            $("#work-time-set").val(store.get("worktime"));
-            $("#work-time-show").text(store.get("worktime") + minute);
+        //defaults settings
+        let defaultArray = store.get("predefined-tasks");
+        let newItem = {
+            name: "new item",
+            workTime: 30,
+            restTime: 10,
+            loops: 4,
+            focusWhenWorking: false,
+            focusWhenResting: false
+        };
+        defaultArray.forEach(function (item, index, array) {
+            append(item, index);
+        });
+        setAsDefault(store.get("default-task"));
+        function edit(index) {
+            defaultArray[index].name = $("#title" + index).val();
+            if (Number($("#work-time" + index).val()) != NaN && Number($("#work-time" + index).val()) >= 2) defaultArray[index].workTime = $("#work-time" + index).val();
+            else $("#work-time" + index).val(defaultArray[index].workTime);
+            if (Number($("#rest-time" + index).val()) != NaN && Number($("#rest-time" + index).val()) >= 2) defaultArray[index].restTime = $("#rest-time" + index).val();
+            else $("#rest-time" + index).val(defaultArray[index].restTime);
+            if (Number($("#loops" + index).val()) != NaN && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
+            else $("#loops" + index).val(defaultArray[index].loops);
+            if (document.getElementById("focuswhenworking" + index).checked) defaultArray[index].focusWhenWorking = true;
+            else defaultArray[index].focusWhenWorking = false;
+            if (document.getElementById("focuswhenresting" + index).checked) defaultArray[index].focusWhenResting = true;
+            else defaultArray[index].focusWhenResting = false;
+            store.set("predefined-tasks", defaultArray);
         }
-        function worktimeset() {
-            $("#work-time-show").html($("#work-time-set").val() + minute);
-            if ($("#work-time-set").val() != 0) store.set("worktime", $("#work-time-set").val());
-            else store.delete("worktime");
+        function append(item, index) {
+            $("#itemlist-ul").append(
+                "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='lead rest' maxlength='11' value='" +
+                item.name + "'onchange='edit(" + index + ")' />: <br />" +
+                i18n.__('working') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
+                item.workTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+                i18n.__('min') + " | " +
+                i18n.__('resting') + " <input id='rest-time" + index + "' class='hotkeyset' type='number' value='" +
+                item.restTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+                i18n.__('min') + " | " +
+                i18n.__('looping') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
+                item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+                i18n.__('times') +
+                "<br />" + i18n.__('focuswhenworking') + " <input id='focuswhenworking" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' /> | " +
+                i18n.__('focuswhenresting') + " <input id='focuswhenresting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />" +
+                "<span id='setasdefault-container" + index + "'> | <a href='javascript:setAsDefault(" + index + ")'>" + i18n.__('setasdefault') + "</a></span>" +
+                "<br /><span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work small underlined'>" + i18n.__('delete') + "</a></span> " +
+                "<hr /></li>"
+            );
+            if (item.focusWhenWorking) document.getElementById("focuswhenworking" + index).checked = true;
+            else document.getElementById("focuswhenworking" + index).checked = false;
+            if (item.focusWhenResting) document.getElementById("focuswhenresting" + index).checked = true;
+            else document.getElementById("focuswhenresting" + index).checked = false;
         }
-        if (store.get("resttime") != undefined) {
-            $("#rest-time-set").val(store.get("resttime"));
-            $("#rest-time-show").text(store.get("resttime") + minute);
+        function erase(index) {
+            defaultArray.splice(index, 1);
+            store.set("predefined-tasks", defaultArray);
+            $("#item" + index).remove();
         }
-        function resttimeset() {
-            $("#rest-time-show").html($("#rest-time-set").val() + minute);
-            if ($("#rest-time-set").val() != 0) store.set("resttime", $("#rest-time-set").val());
-            else store.delete("resttime");
+        function add() {
+            defaultArray.push(newItem);
+            store.set("predefined-tasks", defaultArray);
+            append(newItem, defaultArray.length - 1);
         }
-        if (store.get("looptime") != undefined) {
-            $("#loop-time-set").val(store.get("looptime"));
-            $("#loop-time-show").text(store.get("looptime") + times);
+        function setAsDefault(index) {
+            $("#deleter" + store.get("default-task")).css("display", "inline");
+            $("#setasdefault-container" + store.get("default-task")).css("display", "inline");
+            $('#title' + store.get("default-task")).removeClass("work");
+            $('#title' + store.get("default-task")).addClass("rest");
+            store.set("default-task", index);
+            $("#deleter" + index).css("display", "none");
+            $("#setasdefault-container" + index).css("display", "none");
+            $('#title' + index).removeClass("rest");
+            $('#title' + index).addClass("work");
         }
-        function looptimeset() {
-            $("#loop-time-show").html($("#loop-time-set").val() + times);
-            if ($("#loop-time-set").val() != 0) store.set("looptime", $("#loop-time-set").val());
-            else store.delete("looptime");
-        }
+
+        //global settings
         if (store.get("i18n") != undefined) {
             if (store.get("i18n") == 'en') document.getElementById("lang-set").checked = true;
             else document.getElementById("lang-set").checked = false;
@@ -286,6 +336,14 @@
             if (document.getElementById("onemintip-set").checked == true) store.set("onemintip", true);
             else store.set("onemintip", false);
         }
+        if (store.get("autostarttask") == true) document.getElementById("autostarttask-set").checked = true;
+        else document.getElementById("autostarttask-set").checked = false;
+        function autostarttaskset() {
+            if (document.getElementById("autostarttask-set").checked == true) store.set("autostarttask", true);
+            else store.set("autostarttask", false);
+        }
+
+        //other things
         $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
         function hotkey1set() {
             if ($("#hotkey1-set").val() != null && $("#hotkey1-set").val()) {
