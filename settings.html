@@ -23,35 +23,38 @@
 <body>
     <script src="supporter.js"></script>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exitsave"></i></a>
+        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exit-and-save"></i></a>
         <script>
-            $('#exitsave').attr('title', i18n.__('exitsave'));
+            $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
             if (process.platform == "darwin") $("#controller").css("display", "none");
         </script>
     </div>
-    <div class="d-flex h3 rest" id="settingstitle">
+    <div class="d-flex h3 rest" id="settings-title">
         <i class="fa fa-cog fa-fw" id="settings" aria-hidden="true"></i>
         <script>document.write(i18n.__('settings'));</script>
     </div>
-    <div class="d-flex" id="settingscontainer">
+    <div class="d-flex" id="settings-container">
         <div id="settings" class="text-left">
+            <!-- 1. time settings -->
             <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
-                <script>document.write(i18n.__('timeset'));</script>
+                <script>document.write(i18n.__('time-settings'));</script>
             </p>
             <hr />
             <div class="align-content-center form-text">
                 <span class="text-muted small">
-                    <script>document.write(i18n.__('timesetdeleted'));</script>
+                    <script>document.write(i18n.__('times-settings-deleted-tip'));</script>
                 </span>
             </div>
+
+            <!-- 2. predefined tasks settings -->
             <br />
             <p class="lead"><i class="fa fa-superpowers" aria-hidden="true"></i>
-                <script>document.write(i18n.__('defaultsset'));</script>
+                <script>document.write(i18n.__('predefined-tasks-settings'));</script>
             </p>
             <hr />
             <div class="align-content-center form-text">
                 <div class="align-self-start text-left small text-muted">
-                    <script>document.write(i18n.__('defaulttip'));</script>
+                    <script>document.write(i18n.__('predefined-tasks-settings-tip'));</script>
                 </div>
                 <div class="d-flex text-left">
                     <div id="itemlist">
@@ -66,120 +69,138 @@
                 </div>
             </div>
             <br />
+
+            <!-- 3. global settings -->
             <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>
-                <script>document.write(i18n.__('globalset'));</script>
+                <script>document.write(i18n.__('global-settings'));</script>
             </p>
             <hr />
+            <!-- language setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('langset'));</script></label>
-                <input id="lang-set" type="checkbox" onchange="langset()" />
+                    <script>document.write(i18n.__('language-setting'));</script></label>
+                <input id="language-setting" type="checkbox" onchange="languageSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('langtip'));</script>
+                    <script>document.write(i18n.__('language-setting-tip'));</script>
                     <br /><b>
-                        <script>document.write(i18n.__('autorestarttip'));</script>
+                        <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                     </b>
                 </span>
             </div>
+            <!-- notifying sound setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('soundnotify'));</script></label>
-                <input id="sound-set" type="checkbox" onchange="soundset()" checked />
+                    <script>document.write(i18n.__('sound-to-notify-setting'));</script></label>
+                <input id="notifying-sound-setting" type="checkbox" onchange="notifyingSoundSetting()" checked />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('soundtip'));</script>
+                    <script>document.write(i18n.__('sound-to-notify-setting-tip'));</script>
                 </span>
             </div>
+            <!-- always-on-top setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('alwaysontop'));</script></label>
-                <input id="top-set" type="checkbox" onchange="topset()" />
+                    <script>document.write(i18n.__('always-on-top-setting'));</script></label>
+                <input id="always-on-top-setting" type="checkbox" onchange="alwaysOnTopSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('alwaystip'));</script>
+                    <script>document.write(i18n.__('always-on-top-setting-tip'));</script>
                     <br /><b>
-                        <script>document.write(i18n.__('autorestarttip'));</script>
+                        <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                     </b>
                 </span>
             </div>
+            <!-- wnr auto-start setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('autostart'));</script></label>
-                <input id="autostart-set" type="checkbox" onchange="autostartset()" />
+                    <script>document.write(i18n.__('auto-start-setting'));</script></label>
+                <input id="auto-start-setting" type="checkbox" onchange="autoStartSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('autotip'));</script>
+                    <script>document.write(i18n.__('auto-start-setting-tip'));</script>
                 </span>
             </div>
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('autocheck'));</script></label>
-                <input id="autocheck-set" type="checkbox" onchange="autocheckset()" />
+                    <script>document.write(i18n.__('auto-check-update-setting'));</script></label>
+                <input id="auto-check-update-setting" type="checkbox" onchange="autocheckset()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('checktip'));</script>
+                    <script>document.write(i18n.__('auto-check-update-setting-tip'));</script>
                 </span>
             </div>
+            <!-- alarm for not using setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('isalarmtipon'));</script></label>
-                <input id="alarmtip-set" type="checkbox" onchange="alarmtipset()" />
+                    <script>document.write(i18n.__('is-alarm-for-not-using-wnr-on'));</script></label>
+                <input id="alarm-for-not-using-wnr-dialog-box-title-setting" type="checkbox"
+                    onchange="alarmForNotUsingSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('isalarmtipontip'));</script>
+                    <script>document.write(i18n.__('is-alarm-for-not-using-wnr-on-tip'));</script>
                 </span>
             </div>
+            <!-- one minute left setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('isonemintipon'));</script></label>
-                <input id="onemintip-set" type="checkbox" onchange="onemintipset()" />
+                    <script>document.write(i18n.__('is-one-min-left-notification-on'));</script></label>
+                <input id="one-min-left-notification-setting" type="checkbox"
+                    onchange="oneMinLeftNotificationSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('isonemintipontip'));</script>
+                    <script>document.write(i18n.__('is-one-min-left-notification-on-tip'));</script>
                 </span>
             </div>
+            <!-- auto start the default task setting -->
             <div class="align-content-center form-text">
                 <label>
-                    <script>document.write(i18n.__('isautostarttaskon'));</script></label>
-                <input id="autostarttask-set" type="checkbox" onchange="autostarttaskset()" />
+                    <script>document.write(i18n.__('is-auto-start-task-setting-on'));</script></label>
+                <input id="auto-start-task-setting" type="checkbox" onchange="autoStartDefaultTaskSetting()" />
                 <br /><span class="text-muted small">
-                    <script>document.write(i18n.__('isautostarttaskontip'));</script>
+                    <script>document.write(i18n.__('is-auto-start-task-setting-on-tip'));</script>
                 </span>
             </div>
             <br />
+
+            <!-- 4. other things -->
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
-                <script>document.write(i18n.__('otherthings'));</script>
+                <script>document.write(i18n.__('other-things'));</script>
             </p>
             <hr />
             <div class="text-muted small">
+                <!-- manually check for update -->
                 <li>
-                    <a href="javascript:updatechecker(2)" class="rest">
+                    <a href="javascript:updateChecker(2)" class="rest">
                         <span id="manually">
-                            <script>document.write(i18n.__('manuallycheck'));</script>
+                            <script>document.write(i18n.__('manually-check-for-update'));</script>
                         </span>
                     </a>&nbsp;
                     <b>
-                        <script>document.write(i18n.__('checker1') + i18n.__('v') + require("./package.json").version + i18n.__('checker2'))</script>
+                        <script>document.write(i18n.__('manually-check-for-update-tip-1') + i18n.__('v') + require("./package.json").version + i18n.__('manually-check-for-update-tip-2'))</script>
                     </b>
                 </li>
+                <!-- hotkey for show or hide -->
                 <li id="hotkey-tip">
-                    <script>document.write(i18n.__('hotkeytip'));</script>
-                    <b>Ctrl+Shift+Alt+<input id="hotkey1-set" class="hotkeyset" type="text" maxlength="1"
-                            onchange="hotkey1set()" />.<br />
-                        <script>document.write(i18n.__('hotkeyusage'));</script>
+                    <script>document.write(i18n.__('hotkey-for-show-or-hide-setting'));</script>
+                    <b>Ctrl+Shift+Alt+<input id="hotkey-for-show-or-hide-setting" class="hotkeyset" type="text"
+                            maxlength="1" onchange="hotkeyForShowOrHideSetting()" />.<br />
+                        <script>document.write(i18n.__('hotkey-for-show-or-hide-setting-tip'));</script>
                     </b>
                 </li>
+                <!-- hotkey for start or stop the task -->
                 <li id="hotkey2-tip">
-                    <script>document.write(i18n.__('hotkey2tip'));</script>
-                    <b>Ctrl+Shift+Alt+<input id="hotkey2-set" class="hotkeyset" type="text" maxlength="1"
-                            onchange="hotkey2set()" />.<br />
-                        <script>document.write(i18n.__('hotkey2usage'));</script>
+                    <script>document.write(i18n.__('hotkey-for-start-or-stop-setting'));</script>
+                    <b>Ctrl+Shift+Alt+<input id="hotkey-for-start-or-stop-setting" class="hotkeyset" type="text"
+                            maxlength="1" onchange="hotkeyForStartOrStopSetting()" />.<br />
+                        <script>document.write(i18n.__('hotkey-for-start-or-stop-setting-tip'));</script>
                     </b>
                 </li>
+                <!-- delete all the data -->
                 <li>
-                    <a href="javascript:call('deleteall')" class="rest">
-                        <script>document.write(i18n.__('deleteall'));</script>
+                    <a href="javascript:call('delete-all-data')" class="rest">
+                        <script>document.write(i18n.__('delete-all-data'));</script>
                     </a>
                     <b>
-                        <script>document.write(i18n.__('autorestarttip'));</script>
+                        <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                     </b>
                 </li>
+                <!-- tip for notification-sending -->
                 <li>
-                    <script>document.write(i18n.__('snoretip'));</script>
+                    <script>document.write(i18n.__('notification-sending-tip'));</script>
                 </li>
             </div>
         </div>
@@ -213,9 +234,9 @@
             else $("#rest-time" + index).val(defaultArray[index].restTime);
             if (Number($("#loops" + index).val()) != NaN && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
             else $("#loops" + index).val(defaultArray[index].loops);
-            if (document.getElementById("focuswhenworking" + index).checked) defaultArray[index].focusWhenWorking = true;
+            if (document.getElementById("focus-when-working" + index).checked) defaultArray[index].focusWhenWorking = true;
             else defaultArray[index].focusWhenWorking = false;
-            if (document.getElementById("focuswhenresting" + index).checked) defaultArray[index].focusWhenResting = true;
+            if (document.getElementById("focus-when-resting" + index).checked) defaultArray[index].focusWhenResting = true;
             else defaultArray[index].focusWhenResting = false;
             store.set("predefined-tasks", defaultArray);
         }
@@ -232,16 +253,16 @@
                 i18n.__('looping') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
                 item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
                 i18n.__('times') +
-                "<br />" + i18n.__('focuswhenworking') + " <input id='focuswhenworking" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' /> | " +
-                i18n.__('focuswhenresting') + " <input id='focuswhenresting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />" +
-                "<span id='setasdefault-container" + index + "'> | <a href='javascript:setAsDefault(" + index + ")'>" + i18n.__('setasdefault') + "</a></span>" +
+                "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' /> | " +
+                i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />" +
+                "<span id='set-as-default-task-container" + index + "'> | <a href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a></span>" +
                 "<br /><span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work small underlined'>" + i18n.__('delete') + "</a></span> " +
                 "<hr /></li>"
             );
-            if (item.focusWhenWorking) document.getElementById("focuswhenworking" + index).checked = true;
-            else document.getElementById("focuswhenworking" + index).checked = false;
-            if (item.focusWhenResting) document.getElementById("focuswhenresting" + index).checked = true;
-            else document.getElementById("focuswhenresting" + index).checked = false;
+            if (item.focusWhenWorking) document.getElementById("focus-when-working" + index).checked = true;
+            else document.getElementById("focus-when-working" + index).checked = false;
+            if (item.focusWhenResting) document.getElementById("focus-when-resting" + index).checked = true;
+            else document.getElementById("focus-when-resting" + index).checked = false;
         }
         function erase(index) {
             defaultArray.splice(index, 1);
@@ -255,49 +276,49 @@
         }
         function setAsDefault(index) {
             $("#deleter" + store.get("default-task")).css("display", "inline");
-            $("#setasdefault-container" + store.get("default-task")).css("display", "inline");
+            $("#set-as-default-task-container" + store.get("default-task")).css("display", "inline");
             $('#title' + store.get("default-task")).removeClass("work");
             $('#title' + store.get("default-task")).addClass("rest");
             store.set("default-task", index);
             $("#deleter" + index).css("display", "none");
-            $("#setasdefault-container" + index).css("display", "none");
+            $("#set-as-default-task-container" + index).css("display", "none");
             $('#title' + index).removeClass("rest");
             $('#title' + index).addClass("work");
         }
 
         //global settings
         if (store.get("i18n") != undefined) {
-            if (store.get("i18n") == 'en') document.getElementById("lang-set").checked = true;
-            else document.getElementById("lang-set").checked = false;
+            if (store.get("i18n") == 'en') document.getElementById("language-setting").checked = true;
+            else document.getElementById("language-setting").checked = false;
         }
-        function langset() {
-            if (document.getElementById("lang-set").checked == true) store.set("i18n", 'en');
+        function languageSetting() {
+            if (document.getElementById("language-setting").checked == true) store.set("i18n", 'en');
             else store.set("i18n", 'zh');
             var t = setTimeout("call('relauncher')", 500);
         }
         if (store.get("sound") != undefined) {
-            if (store.get("sound")) document.getElementById("sound-set").checked = true;
-            else document.getElementById("sound-set").checked = false;
+            if (store.get("sound")) document.getElementById("notifying-sound-setting").checked = true;
+            else document.getElementById("notifying-sound-setting").checked = false;
         }
-        function soundset() {
-            if (document.getElementById("sound-set").checked == true) store.set("sound", true);
+        function notifyingSoundSetting() {
+            if (document.getElementById("notifying-sound-setting").checked == true) store.set("sound", true);
             else store.set("sound", false);
         }
         if (store.get("top") != undefined) {
-            if (store.get("top") == true) document.getElementById("top-set").checked = true;
-            else document.getElementById("top-set").checked = false;
+            if (store.get("top") == true) document.getElementById("always-on-top-setting").checked = true;
+            else document.getElementById("always-on-top-setting").checked = false;
         }
-        function topset() {
-            if (document.getElementById("top-set").checked == true) store.set("top", true);
+        function alwaysOnTopSetting() {
+            if (document.getElementById("always-on-top-setting").checked == true) store.set("top", true);
             else store.set("top", false);
             var t = setTimeout("call('relauncher')", 500);
         }
-        if (store.get("autostart") == true) document.getElementById("autostart-set").checked = true;
-        else document.getElementById("autostart-set").checked = false;
-        function autostartset() {
+        if (store.get("autostart") == true) document.getElementById("auto-start-setting").checked = true;
+        else document.getElementById("auto-start-setting").checked = false;
+        function autoStartSetting() {
             var AutoLaunch = require('auto-launch');
             var wnrLauncher = new AutoLaunch({ name: 'wnr' });
-            if (document.getElementById("autostart-set").checked == true) {
+            if (document.getElementById("auto-start-setting").checked == true) {
                 store.set("autostart", true);
                 wnrLauncher.isEnabled()
                     .then(function (isEnabled) {
@@ -318,53 +339,53 @@
                     })
             }
         }
-        if (store.get("autocheck") != false) document.getElementById("autocheck-set").checked = true;
-        else document.getElementById("autocheck-set").checked = false;
+        if (store.get("autocheck") != false) document.getElementById("auto-check-update-setting").checked = true;
+        else document.getElementById("auto-check-update-setting").checked = false;
         function autocheckset() {
-            if (document.getElementById("autocheck-set").checked == true) store.set("autocheck", true);
+            if (document.getElementById("auto-check-update-setting").checked == true) store.set("autocheck", true);
             else store.set("autocheck", false);
         }
-        if (store.get("alarmtip") != false) document.getElementById("alarmtip-set").checked = true;
-        else document.getElementById("alarmtip-set").checked = false;
-        function alarmtipset() {
-            if (document.getElementById("alarmtip-set").checked == true) store.set("alarmtip", true);
+        if (store.get("alarmtip") != false) document.getElementById("alarm-for-not-using-wnr-dialog-box-title-setting").checked = true;
+        else document.getElementById("alarm-for-not-using-wnr-dialog-box-title-setting").checked = false;
+        function alarmForNotUsingSetting() {
+            if (document.getElementById("alarm-for-not-using-wnr-dialog-box-title-setting").checked == true) store.set("alarmtip", true);
             else store.set("alarmtip", false);
         }
-        if (store.get("onemintip") != false) document.getElementById("onemintip-set").checked = true;
-        else document.getElementById("onemintip-set").checked = false;
-        function onemintipset() {
-            if (document.getElementById("onemintip-set").checked == true) store.set("onemintip", true);
+        if (store.get("onemintip") != false) document.getElementById("one-min-left-notification-setting").checked = true;
+        else document.getElementById("one-min-left-notification-setting").checked = false;
+        function oneMinLeftNotificationSetting() {
+            if (document.getElementById("one-min-left-notification-setting").checked == true) store.set("onemintip", true);
             else store.set("onemintip", false);
         }
-        if (store.get("autostarttask") == true) document.getElementById("autostarttask-set").checked = true;
-        else document.getElementById("autostarttask-set").checked = false;
-        function autostarttaskset() {
-            if (document.getElementById("autostarttask-set").checked == true) store.set("autostarttask", true);
+        if (store.get("autostarttask") == true) document.getElementById("auto-start-task-setting").checked = true;
+        else document.getElementById("auto-start-task-setting").checked = false;
+        function autoStartDefaultTaskSetting() {
+            if (document.getElementById("auto-start-task-setting").checked == true) store.set("autostarttask", true);
             else store.set("autostarttask", false);
         }
 
         //other things
-        $("#hotkey1-set").val(store.get("hotkey1").toUpperCase());
-        function hotkey1set() {
-            if ($("#hotkey1-set").val() != null && $("#hotkey1-set").val()) {
-                if ($("#hotkey1-set").val().toUpperCase() != store.get('hotkey2')) {
-                    $("#hotkey1-set").val($("#hotkey1-set").val().toUpperCase());
-                    store.set("hotkey1", $("#hotkey1-set").val());
+        $("#hotkey-for-show-or-hide-setting").val(store.get("hotkey1").toUpperCase());
+        function hotkeyForShowOrHideSetting() {
+            if ($("#hotkey-for-show-or-hide-setting").val() != null && $("#hotkey-for-show-or-hide-setting").val()) {
+                if ($("#hotkey-for-show-or-hide-setting").val().toUpperCase() != store.get('hotkey2')) {
+                    $("#hotkey-for-show-or-hide-setting").val($("#hotkey-for-show-or-hide-setting").val().toUpperCase());
+                    store.set("hotkey1", $("#hotkey-for-show-or-hide-setting").val());
                     var t = setTimeout("call('relauncher')", 500);
-                } else $("#hotkey1-set").val(store.get("hotkey1"));
+                } else $("#hotkey-for-show-or-hide-setting").val(store.get("hotkey1"));
             } else {
                 store.set("hotkey1", 'W');
                 var t = setTimeout("call('relauncher')", 500);
             }
         }
-        $("#hotkey2-set").val(store.get("hotkey2").toUpperCase());
-        function hotkey2set() {
-            if ($("#hotkey2-set").val() != null && $("#hotkey2-set").val()) {
-                if ($("#hotkey2-set").val().toUpperCase() != store.get('hotkey1')) {
-                    $("#hotkey2-set").val($("#hotkey2-set").val().toUpperCase());
-                    store.set("hotkey2", $("#hotkey2-set").val());
+        $("#hotkey-for-start-or-stop-setting").val(store.get("hotkey2").toUpperCase());
+        function hotkeyForStartOrStopSetting() {
+            if ($("#hotkey-for-start-or-stop-setting").val() != null && $("#hotkey-for-start-or-stop-setting").val()) {
+                if ($("#hotkey-for-start-or-stop-setting").val().toUpperCase() != store.get('hotkey1')) {
+                    $("#hotkey-for-start-or-stop-setting").val($("#hotkey-for-start-or-stop-setting").val().toUpperCase());
+                    store.set("hotkey2", $("#hotkey-for-start-or-stop-setting").val());
                     var t = setTimeout("call('relauncher')", 500);
-                } else $("#hotkey2-set").val(store.get("hotkey2"));
+                } else $("#hotkey-for-start-or-stop-setting").val(store.get("hotkey2"));
             } else {
                 store.set("hotkey2", 'S');
                 var t = setTimeout("call('relauncher')", 500);

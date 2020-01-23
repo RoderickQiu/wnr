@@ -6,8 +6,7 @@ const notifier = require('node-notifier');
 var i18n = require("i18n");
 var Registry = require('winreg')
 
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
+//keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null;
 let resetAlarm = null, powerSaveBlockerId;
@@ -15,10 +14,10 @@ let isTimerWin = null, isWorkMode = null;
 let timeLeftTip = null;
 let predefinedTasks = null
 
-app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')// 允许自动播放音频
+app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
 function createWindow() {
-    // 创建浏览器窗口
+    //create the main window
     win = new BrowserWindow({
         width: 364,
         height: 396,
@@ -32,22 +31,19 @@ function createWindow() {
         titleBarStyle: "hiddenInset",
         title: "wnr",
         icon: "./res/icons/wnrIcon.png"
-    });// 为跨平台优化
+    });//optimize for cross platfrom
 
-    // 然后加载应用的 index.html
+    //load index.html
     win.loadFile('index.html');
 
-    //在加载页面时，渲染进程第一次完成绘制时，会发出 ready-to-show 事件。在此事件后显示窗口将没有视觉闪烁
+    //to load without sparking
     win.once('ready-to-show', () => {
         win.show();
         //win.webContents.openDevTools()
     });
 
-    // 当 window 被关闭，这个事件会被触发
+    //triggers when the main windows is closesd
     win.on('closed', () => {
-        // 取消引用 window 对象，如果你的应用支持多窗口的话，
-        // 通常会把多个 window 对象存放在一个数组里面，
-        // 与此同时，你应该删除相应的元素
         win = null;
         if (process.platform !== 'darwin') {
             app.quit()
@@ -62,29 +58,27 @@ function alarmSet() {
                 if (win != null) win.flashFrame(true);
                 notifier.notify(
                     {
-                        title: i18n.__('alarmtip'),
-                        message: i18n.__('alarmtipmsg'),
+                        title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                        message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
                         icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                        sound: true, // Only Notification Center or Windows Toasters
-                        wait: true // Wait with callback, until user action is taken against notification
+                        sound: true,
+                        wait: true //to wait with callback, until user action is taken against notification
                     }, function () {
                         if (win != null) if (!win.isVisible()) win.show();
                     }
                 );
             }
-        }, 600000)//不断提示使用wnr
+        }, 600000)//alarm you for using wnr
     }
 }
 
-// 当程序就要结束
+//before quit
 app.on('will-quit', () => {
-    // 清空所有快捷键
     globalShortcut.unregisterAll()
 })
 
-// Electron 会在初始化后并准备
-// 创建浏览器窗口时，调用这个函数。
-// 部分 API 在 ready 事件触发后才能使用。
+//when created the app, triggers
+//some apis can be only used inside ready
 app.on('ready', () => {
     createWindow();
 
@@ -100,27 +94,27 @@ app.on('ready', () => {
         }
         if (lang[0] == 'z' && lang[1] == 'h') {
             lang = 'zh';
-        }//自动去掉不必要的语言尾巴
+        }//the tail isn't required
         store.set('i18n', lang);
     }
-    i18n.setLocale(store.get("i18n"));//国际化组件默认设置
+    i18n.setLocale(store.get("i18n"));//set the locale
 
-    timeLeftTip = i18n.__("timeleft");//剩余时间的提示符预载
+    timeLeftTip = i18n.__("time-left");//this will be used in this file frequently
 
     const gotTheLock = app.requestSingleInstanceLock();
     if (!gotTheLock && win != null) {
         dialog.showMessageBox(win, {
-            title: i18n.__('multiwnr'),
+            title: i18n.__('more-than-one-wnr-running-dialog-box-title'),
             type: "warning",
-            message: i18n.__('multiwnrmsg'),
-            checkboxLabel: i18n.__('multiwnrchk'),
+            message: i18n.__('more-than-one-wnr-running-dialog-box-content'),
+            checkboxLabel: i18n.__('more-than-one-wnr-running-dialog-box-chk'),
             checkboxChecked: true,
         }).then(function (msg) {
             if (msg.checkboxChecked) app.quit();
         });
-    }//不希望有多个wnr同时运行
+    }//prevent wnr from running more than one instance
 
-    app.setAppUserModelId("wnr1");//设置UserModelId，使得通知功能可用
+    app.setAppUserModelId("wnr1");//set the appUserModelId to use notification in Windows
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
@@ -133,7 +127,7 @@ app.on('ready', () => {
             if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
             if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
             if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
-        }//防止这样用快捷键退出专心模式
+        }//prevent using hotkeys to quit
     })
 
     store.set("just-launched", true);
@@ -142,11 +136,11 @@ app.on('ready', () => {
         if (!app.isInApplicationsFolder()) {
             notifier.notify(
                 {
-                    title: i18n.__('wrongfolder'),
-                    message: i18n.__('wrongfoldertip'),
+                    title: i18n.__('wrong-folder-notification-title'),
+                    message: i18n.__('wrong-folder-notification-content'),
                     icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                    sound: true, // Only Notification Center or Windows Toasters
-                    wait: true // Wait with callback, until user action is taken against notification
+                    sound: true,
+                    wait: true //to wait with callback, until user action is taken against notification
                 }
             );
         }
@@ -160,10 +154,10 @@ app.on('ready', () => {
         }, {
             type: 'separator'
         }, {
-            label: i18n.__('startorstop'),
+            label: i18n.__('start-or-stop'),
             enabled: false,
             click: function () {
-                if (win != null) win.webContents.send('startorstop')
+                if (win != null) win.webContents.send('start-or-stop')
             }
         }, {
             type: 'separator'
@@ -173,7 +167,7 @@ app.on('ready', () => {
                 shell.openExternal('https://wnr.scris.top/');
             }
         }, {
-            label: i18n.__('helppage'),
+            label: i18n.__('help-page'),
             click: function () {
                 shell.openExternal('https://wnr.scris.top/help.html');
             }
@@ -185,14 +179,14 @@ app.on('ready', () => {
         }, {
             type: 'separator'
         }, {
-            label: i18n.__('showorhide'), click: () => {
+            label: i18n.__('show-or-hide'), click: () => {
                 if (win != null) win.isVisible() ? win.hide() : win.show();
                 if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
                 if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
                 if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
             }
         }, {
-            label: i18n.__('exit'), click: () => { app.quit() }
+            label: i18n.__('exit'), click: () => { windowCloseChk() }
         }
     ]);
     if (tray != null) {
@@ -203,7 +197,7 @@ app.on('ready', () => {
             if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
             if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
             if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
-        });//托盘菜单
+        });//tray
     }
 
     macOSFullscreenSolution(false);
@@ -235,7 +229,7 @@ app.on('ready', () => {
         });
         store.set("predefined-tasks", predefinedTasks);
         store.set("default-task", 0);//0 -> wnr recommended
-    } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//初始化预设
+    } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//init predefined tasks
     if (store.get("worktime")) {
         predefinedTasks.push({
             name: "user default",
@@ -250,7 +244,7 @@ app.on('ready', () => {
         store.delete("looptime");
         store.set("predefined-tasks", predefinedTasks);
         store.set("default-task", predefinedTasks.length - 1)//the last is the newest-added
-    }//取代原有的默认事件设置
+    }//alternated the former default time settings
 })
 
 function macOSFullscreenSolution(isFullScreen) {
@@ -263,11 +257,11 @@ function macOSFullscreenSolution(isFullScreen) {
                         label: i18n.__('quit'),
                         accelerator: 'CmdOrCtrl+Q',
                         click: function () {
-                            app.quit();
+                            windowCloseChk();
                         }
                     }]
                 }, {
-                    label: i18n.__('dothings'),
+                    label: i18n.__('operations'),
                     submenu: [{
                         label: i18n.__('settings'),
                         click: function () {
@@ -291,7 +285,7 @@ function macOSFullscreenSolution(isFullScreen) {
                             shell.openExternal('https://wnr.scris.top/');
                         }
                     }, {
-                        label: i18n.__('helppage'),
+                        label: i18n.__('help-page'),
                         click: function () {
                             shell.openExternal('https://wnr.scris.top/help.html');
                         }
@@ -310,7 +304,7 @@ function macOSFullscreenSolution(isFullScreen) {
                         enabled: false
                     }]
                 }, {
-                    label: i18n.__('dothings'),
+                    label: i18n.__('operations'),
                     submenu: [{
                         label: i18n.__('settings'),
                         enabled: false
@@ -326,7 +320,7 @@ function macOSFullscreenSolution(isFullScreen) {
                         label: i18n.__('website'),
                         enabled: false
                     }, {
-                        label: i18n.__('helppage'),
+                        label: i18n.__('help-page'),
                         enabled: false
                     }, {
                         label: i18n.__('github'),
@@ -336,7 +330,7 @@ function macOSFullscreenSolution(isFullScreen) {
             var osxMenu = Menu.buildFromTemplate(template);
             Menu.setApplicationMenu(osxMenu);
             app.dock.setMenu(osxMenu)
-        }// 应付macOS的顶栏空缺
+        }//dock menu for mac os
     }
 }
 
@@ -379,21 +373,19 @@ function isDarkMode() {
 }
 
 app.on('activate', () => {
-    // 在macOS上，当单击dock图标并且没有其他窗口打开时，
-    // 通常在应用程序中重新创建一个窗口。
     if (win === null) {
         createWindow()
     }
 })
 
 ipcMain.on('focus-first', function () {
-    if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//全屏时恒定最上层
+    if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//always on top when full screen
     if (win != null) win.setFullScreen(true);
     macOSFullscreenSolution(true);
     isWorkMode = true
 })
 
-ipcMain.on('warninggiver-workend', function () {
+ipcMain.on('warning-giver-workend', function () {
     if (win != null) {
         isWorkMode = false;
         win.show();
@@ -401,19 +393,19 @@ ipcMain.on('warninggiver-workend', function () {
         win.center();
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
+            if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
             win.setFullScreen(true);
             macOSFullscreenSolution(true);
         } else {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             win.setFullScreen(false);
             macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('worktimeend'),
+                title: i18n.__('work-time-end'),
                 type: "warning",
-                message: i18n.__('worktimeend'),
+                message: i18n.__('work-time-end-msg'),
             }).then(function (response) {
                 win.webContents.send('warning-closed');
             })
@@ -421,25 +413,25 @@ ipcMain.on('warninggiver-workend', function () {
     }
 })
 
-ipcMain.on('warninggiver-restend', function () {
+ipcMain.on('warning-giver-restend', function () {
     if (win != null) {
         isWorkMode = true;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen-work") == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(true);//全屏时恒定最上层
+            if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
             win.setFullScreen(true);
             macOSFullscreenSolution(true);
         } else {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             win.setFullScreen(false);
             macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('resttimeend'),
+                title: i18n.__('rest-time-end'),
                 type: "warning",
-                message: i18n.__('resttimemsg'),
+                message: i18n.__('rest-time-end-msg'),
             }).then(function (response) {
                 win.webContents.send('warning-closed');
             })
@@ -447,23 +439,23 @@ ipcMain.on('warninggiver-restend', function () {
     }
 })
 
-ipcMain.on('warninggiver-allend', function () {
+ipcMain.on('warning-giver-all-task-end', function () {
     if (win != null) {
         isTimerWin = false;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//取消不需要的恒定最上层
+            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             win.setFullScreen(false);
             macOSFullscreenSolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('allend'),
+                title: i18n.__('all-task-end'),
                 type: "warning",
-                message: i18n.__('allmsg'),
+                message: i18n.__('all-task-end-msg'),
             }).then(function (response) {
-                win.loadFile('index.html');//回到首页，方便开始新计划
+                win.loadFile('index.html');//automatically back
             })
         }, 1000)
         alarmSet()
@@ -474,8 +466,8 @@ ipcMain.on('updateavailable', function () {
     dialog.showMessageBox(settingsWin, {
         title: i18n.__('update'),
         type: "warning",
-        message: i18n.__('updatemsg'),
-        checkboxLabel: i18n.__('updatechk'),
+        message: i18n.__('update-msg'),
+        checkboxLabel: i18n.__('update-chk'),
         checkboxChecked: true
     }).then(function (msg) {
         if (msg.checkboxChecked) {
@@ -486,35 +478,50 @@ ipcMain.on('updateavailable', function () {
 
 ipcMain.on('noupdateavailable', function () {
     dialog.showMessageBox(settingsWin, {
-        title: i18n.__('noupdate'),
+        title: i18n.__('no-update'),
         type: "info",
-        message: i18n.__('noupdatemsg')
+        message: i18n.__('no-update-msg')
     })
 })
 
-ipcMain.on('webproblem', function () {
+ipcMain.on('web-problem', function () {
     dialog.showMessageBox(settingsWin, {
-        title: i18n.__('webproblem'),
+        title: i18n.__('web-problem'),
         type: "info",
-        message: i18n.__('webproblemmsg')
+        message: i18n.__('web-problem-msg')
     })
 })
 
-ipcMain.on('deleteall', function () {
-    dialog.showMessageBox(settingsWin, {
-        title: i18n.__('deletealltitle'),
+ipcMain.on('delete-all-data', function () {
+    /*dialog.showMessageBox(settingsWin, {
+        title: i18n.__('delete-all-data-dialog-box-title'),
         type: "warning",
-        message: i18n.__('deleteallcontent'),
-        checkboxLabel: i18n.__('deleteallchk'),
+        message: i18n.__('delete-all-data-dialog-box-content'),
+        checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
         checkboxChecked: false
     }).then(function (msg) {
-        if (msg.checkboxChecked) {
-            store.clear();
-            app.relaunch();
-            app.exit(0)
-        }
-    })
-})
+        if (msg.checkboxChecked) {*/
+    store.clear();
+    app.relaunch();
+    app.quit()
+    //}
+    //})
+})// unchecked checkboxes still not working in Electron
+
+function windowCloseChk() {
+    /*dialog.showMessageBox(win, {
+        title: i18n.__('window-close-dialog-box-title'),
+        type: "warning",
+        message: i18n.__('window-close-dialog-box-content'),
+        checkboxLabel: i18n.__('window-close-dialog-box-chk'),
+        checkboxChecked: false
+    }).then(function (msger) {
+        if (msger.checkboxChecked) {*/
+    app.quit()
+    //}
+    //})
+}// unchecked checkboxes still not working in Electron
+ipcMain.on('window-close-chk', windowCloseChk);
 
 ipcMain.on('relauncher', function () {
     store.set('just-relaunched', true);
@@ -522,11 +529,11 @@ ipcMain.on('relauncher', function () {
     app.exit(0)
 })
 
-ipcMain.on('winhider', function () {
+ipcMain.on('window-hide', function () {
     if (win != null) win.hide()
 })
 
-ipcMain.on('minimizer', function () {
+ipcMain.on('window-minimize', function () {
     if (win != null) win.minimize()
 })
 
@@ -586,11 +593,11 @@ function settings() {
                 store.set("settings-experience", true);
                 notifier.notify(
                     {
-                        title: i18n.__('settingstip'),
-                        message: i18n.__('settingstipmsg'),
+                        title: i18n.__('newbie-for-settings'),
+                        message: i18n.__('newble-for-settings-tip'),
                         icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                        sound: true, // Only Notification Center or Windows Toasters
-                        wait: true // Wait with callback, until user action is taken against notification
+                        sound: true,
+                        wait: true //to wait with callback, until user action is taken against notification
                     }
                 );
             }
@@ -624,11 +631,11 @@ function tourguide() {
             })
             notifier.notify(
                 {
-                    title: i18n.__('welcomer1'),
-                    message: i18n.__('alarmtipmsg'),
+                    title: i18n.__('welcome-part-1'),
+                    message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
                     icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                    sound: true, // Only Notification Center or Windows Toasters
-                    wait: true // Wait with callback, until user action is taken against notification
+                    sound: true,
+                    wait: true //to wait with callback, until user action is taken against notification
                 }
             );
         }
@@ -636,14 +643,14 @@ function tourguide() {
 }
 ipcMain.on('tourguide', tourguide);
 
-ipcMain.on('1min', function () {
+ipcMain.on('only-one-min-left', function () {
     notifier.notify(
         {
-            title: i18n.__('1min'),
-            message: i18n.__('1minmsg'),
+            title: i18n.__('only-one-min-left'),
+            message: i18n.__('only-one-min-left-msg'),
             icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-            sound: true, // Only Notification Center or Windows Toasters
-            wait: true // Wait with callback, until user action is taken against notification
+            sound: true,
+            wait: true //to wait with callback, until user action is taken against notification
         }
     );
 })
@@ -666,12 +673,12 @@ ipcMain.on("timer-win", function (event, message) {
             contextMenu.items[2].enabled = true;
         }
         globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
-            if (win != null) win.webContents.send('startorstop');
+            if (win != null) win.webContents.send('start-or-stop');
         })
         if (resetAlarm) {
             clearTimeout(resetAlarm);
         }
-        powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//防止app被挂起，停止计时
+        powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//prevent wnr to be suspended when timing
         isTimerWin = true;
     } else {
         if (tray != null) {

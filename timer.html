@@ -27,14 +27,15 @@
         <div id="time-bar" class="text-muted"></div>
         <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
-            <a href="javascript:call('winhider')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
-                    id="winhider"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:call('minimizer')" class="small work"><i class="fa fa-minus fa-fw"
-                    id="minimizer"></i></a>&nbsp;&nbsp;
-            <a href="javascript:window.close()" class="small work"><i class="fa fa-times fa-fw" id="exit"></i></a>
+            <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
+                    id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-minimize')" class="small work"><i class="fa fa-minus fa-fw"
+                    id="window-minimize"></i></a>&nbsp;&nbsp;
+            <a href="javascript:call('window-close-chk')" class="small work"><i class="fa fa-times fa-fw"
+                    id="exit"></i></a>
             <script>
-                $('#winhider').attr('title', i18n.__('winhider'));
-                $('#minimizer').attr('title', i18n.__('minimizer'));
+                $('#window-hide').attr('title', i18n.__('window-hide'));
+                $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
             </script>
         </div>
@@ -47,28 +48,29 @@
             <div id="now-timing" class="text-center h1 work"></div><br />
             <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
                         class="fa fa-pause"></i></a></div><br />
-            <div class="text-center text-muted" id="moreoptions"><a href="index.html" class="text-muted"><i
-                        class="fa fa-angle-left" id="backindex"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
+            <div class="text-center text-muted" id="more-options"><a href="index.html" class="text-muted"><i
+                        class="fa fa-angle-left" id="back-index"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
                     href="javascript:skipper()" class="text-muted"><i class="fa fa-angle-double-right"
                         id="skipper"></i></a></div><br />
             <div class="text-center lead" id="backer"><a href="index.html" class="text-muted"><i
                         class="fa fa-angle-left" id="backindex2"></i></a></div>
             <script>
-                $('#backindex').attr('title', i18n.__('backindex'));
-                $('#backindex2').attr('title', i18n.__('backindex'));
+                $('#back-index').attr('title', i18n.__('back-index'));
+                $('#backindex2').attr('title', i18n.__('back-index'));
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
-    <div id="bottombar">&nbsp;</div>
+    <div id="bottom-bar">&nbsp;</div>
     <script>
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
         store.set('just-launched', false);
+
         function keydownOnError(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
@@ -90,22 +92,23 @@
                 return {};
             }
         })();
+
         var title = decodeURI($_GET['title']);
         var note = decodeURI($_GET['note']);
-        var worktime = decodeURI($_GET['work-time']) * 60000;
-        var resttime = decodeURI($_GET['rest-time']) * 60000;//use ms
+        var workTime = decodeURI($_GET['work-time']) * 60000;
+        var restTime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
         var player = document.createElement("audio");//alert player
-        if (!loop || worktime <= 60000 || resttime <= 60000) {//use ms for 1s
-            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('notenough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+        if (!loop || workTime <= 60000 || restTime <= 60000) {//use ms for 1s
+            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
-        } else if (worktime / 60000 > 1440 || resttime / 60000 > 1440 || (worktime + resttime) * loop > 86400000) {
-            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('toolong') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
+        } else if (workTime / 60000 > 1440 || restTime / 60000 > 1440 || (workTime + restTime) * loop > 86400000) {
+            $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('too-long') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
@@ -116,25 +119,34 @@
             if (store.get('fullscreen-work')) {
                 ipc.send('focus-first');
                 $("#controller").css("display", "none");
-                $("#moreoptions").css("display", "none");
+                $("#more-options").css("display", "none");
+                $("#now-timing").addClass("display-1");
+                $("#now-timing").removeClass("h1");
             }
-            var starttime, int, t, dt, timeget, seconds, minutes, hours, method = 1, times = 0, isclockworking = 1, morethan1 = 1;//method: 1-work / 2-rest, times: time-reset times, morethan1: more than 1 min left
-            starttime = new Date().getTime();
+
+            var startTime, int, tempVariable, nowTime, timeGot, seconds, minutes, hours, method = 1, times = 0, isClockWorking = 1, moreThanOneMin = 1;//method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left
+            startTime = new Date().getTime();
             int = self.setInterval(clock, 100);
+
+            ipc.on('start-or-stop', function () {
+                stopper();
+            })
+
             function stopper() {
-                if (isclockworking) {
+                if (isClockWorking) {
                     window.clearInterval(int);
                     $("#stopper").html("<i class='fa fa-play' aria-hidden='true'></i>");
-                    isclockworking = 0;//to stop
+                    isClockWorking = 0;//to stop
                 } else {
-                    if (method == 1) starttime = new Date().getTime() - (worktime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    else starttime = new Date().getTime() - (resttime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                    if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                    else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     int = self.setInterval(clock, 100);
                     $("#stopper").html("<i class='fa fa-pause' aria-hidden='true'></i>");
-                    isclockworking = 1;//to restart
+                    isClockWorking = 1;//to restart
                 }
             }
-            function warninggiver(isend) {
+
+            function warningGiver(isend) {
                 if (store.get("sound") == true || store.get("sound") == undefined) {
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\timeend.wav");
@@ -144,11 +156,11 @@
                     player.loop = true;
                     player.play();
                 }//different sound for different circumstances
-                if (isend == 0) ipc.send('warninggiver-allend');
+                if (isend == 0) ipc.send('warning-giver-all-task-end');
                 else {
-                    if (isend == 1) ipc.send('warninggiver-workend');
-                    else ipc.send('warninggiver-restend');
-                    var t = setTimeout(stopper, 500);
+                    if (isend == 1) ipc.send('warning-giver-workend');
+                    else ipc.send('warning-giver-restend');
+                    var tempVariable = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         player.loop = false;
                         player.pause();
@@ -156,95 +168,108 @@
                     });
                 }
             }
-            function themechanger() {
+
+            function themeChanger() {
                 if (method == 1) {
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
                     $("#work-rest").html(i18n.__('resting'));
-                    $("#bottombar").css("background-color", "#5490eac2");
+                    $("#bottom-bar").css("background-color", "#5490eac2");
                     method = 2;
                     if (store.get("fullscreen") == true) {
                         $("#controller").css("display", "none");
-                        $("#moreoptions").css("display", "none");
+                        $("#more-options").css("display", "none");
+                        $("#now-timing").addClass("display-1");
+                        $("#now-timing").removeClass("h1");
                     } else if (store.get("fullscreen-work") == true) {
                         if (process.platform != "darwin") $("#controller").css("display", "block");
-                        $("#moreoptions").css("display", "block");
+                        $("#more-options").css("display", "block");
+                        $("#now-timing").removeClass("display-1");
+                        $("#now-timing").addClass("h1");
                     }
-                    warninggiver(1);
+                    warningGiver(1);
                 } else {
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html(i18n.__('working'));
-                    $("#bottombar").css("background-color", "#ea5454c2");
+                    $("#bottom-bar").css("background-color", "#ea5454c2");
                     method = 1;
                     if (process.platform != "darwin") $("#controller").css("display", "block");
                     if (store.get("fullscreen-work") == true) {
                         $("#controller").css("display", "none");
-                        $("#moreoptions").css("display", "none");
+                        $("#more-options").css("display", "none");
+                        $("#now-timing").addClass("display-1");
+                        $("#now-timing").removeClass("h1");
                     } else if (store.get("fullscreen") == true) {
-                        $("#moreoptions").css("display", "block");
+                        $("#more-options").css("display", "block");
+                        $("#now-timing").removeClass("display-1");
+                        $("#now-timing").addClass("h1");
                     }
-                    warninggiver(2);
+                    warningGiver(2);
                 }
             }
+
             function ender() {
                 window.clearInterval(int);
                 $("#work-rest").text("");
                 $("#now-timing").text(i18n.__('ended'));
-                isclockworking = 0;
+                isClockWorking = 0;
                 $("#stopper").text("");
-                ipc.send("progress-bar-set", 2);//设置的是(1-message)，因而使用2才能得到-1
+                ipc.send("progress-bar-set", 2);//the progress-bar-set is using (1-message), so when message is 2, the answer is -1
                 if (process.platform != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
-                $("#moreoptions").css("display", "none");
-                warninggiver(0);
+                $("#more-options").css("display", "none");
+                if (store.get("fullscreen") == true) {
+                    $("#now-timing").removeClass("display-1");
+                    $("#now-timing").addClass("h1");
+                }
+                warningGiver(0);
             }
+
             function skipper() {
                 times++;
                 if (times < loop * 2) {
-                    starttime = new Date().getTime();
-                    themechanger();
+                    startTime = new Date().getTime();
+                    themeChanger();
                 } else if (times == loop * 2) {
                     ender();
                 }
             }
-            //为时间补位，当某个字段不是两位数时补0
-            function fnW(str) {
+
+            function positionCover(str) {//cover the positions of '0'
                 var num;
                 str >= 10 ? num = str : num = "0" + str;
                 return num;
             }
+
             function clock() {
-                dt = new Date();
-                t = dt.getTime();
-                if (method == 1) seconds = parseInt((worktime - t + starttime) / 1000);
-                else seconds = parseInt((resttime - t + starttime) / 1000);
+                nowTime = new Date();
+                tempVariable = nowTime.getTime();
+                if (method == 1) seconds = parseInt((workTime - tempVariable + startTime) / 1000);
+                else seconds = parseInt((restTime - tempVariable + startTime) / 1000);
                 if (seconds > 0) {
                     if (method == 1) {
-                        ipc.send("progress-bar-set", ((seconds / worktime) * 1000).toFixed(2));
-                        $("#bottombar").css("width", (seconds / worktime) * 100000 + "%");
+                        ipc.send("progress-bar-set", ((seconds / workTime) * 1000).toFixed(2));
+                        $("#bottom-bar").css("width", (seconds / workTime) * 100000 + "%");
                     } else {
-                        ipc.send("progress-bar-set", ((seconds / resttime) * 1000).toFixed(2));
-                        $("#bottombar").css("width", (seconds / resttime) * 100000 + "%");
+                        ipc.send("progress-bar-set", ((seconds / restTime) * 1000).toFixed(2));
+                        $("#bottom-bar").css("width", (seconds / restTime) * 100000 + "%");
                     }
                     hours = parseInt(seconds / 3600);
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $("#now-timing").text(hours + h + minutes + min + seconds + s);
-                    timeget = fnW(dt.getHours()) + ":" + fnW(dt.getMinutes());
-                    if (process.platform != "darwin") $("#time-bar").html(timeget);
-                    else $("#time-bar-macos").html(timeget);//显示时间
-                    if (minutes == 0 && morethan1 && hours == 0) {
-                        if (store.get("onemintip") != false) ipc.send("1min");
-                        morethan1 = 0;
+                    timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
+                    if (process.platform != "darwin") $("#time-bar").html(timeGot);
+                    else $("#time-bar-macos").html(timeGot);//display the current time
+                    if (minutes == 0 && moreThanOneMin && hours == 0) {
+                        if (store.get("onemintip") != false) ipc.send("only-one-min-left");
+                        moreThanOneMin = 0;
                     }
                 } else {
                     skipper();
                 }
             }
-            ipc.on('startorstop', function () {
-                stopper();
-            })
         }
     </script>
     <script src="renderer.js"></script>

@@ -17,7 +17,7 @@ label {
     margin: 0px 0px 1px 0px;
 }
 
-input, .focuser {
+input, .focuser, .dropdown-default {
     display: inline-block;
     vertical-align: middle;
     line-height: inherit;
@@ -173,7 +173,7 @@ li {
     color: #f5f5f5;
 }
 
-#dropdownMenuButton {
+#dropdown-menu-button {
     color: #999999;
 }
 
@@ -211,7 +211,7 @@ li {
     -webkit-user-select: text;
 }
 
-#settingstitle {
+#settings-title {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
@@ -221,7 +221,7 @@ li {
     width: 90%;
 }
 
-#settingscontainer {
+#settings-container {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: text;
@@ -259,7 +259,7 @@ li {
     -webkit-user-select: none;
 }
 
-#allsum {
+#all-sum {
     position: absolute;
     bottom: 25px;
     -webkit-app-region: no-drag;
@@ -290,13 +290,13 @@ li {
     outline: none;
 }
 
-#loadingtip {
+#welcome-loading-tip {
     position: absolute;
     top: 50%;
     bottom: 50%;
 }
 
-#bottombar {
+#bottom-bar {
     position: absolute;
     bottom: 0px;
     right: 0px;

@@ -41,18 +41,19 @@
                         class="fa fa-home" id="homepage"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
-                        class="fa fa-github" id="ongithub"></i></a>&nbsp;&nbsp;
+                        class="fa fa-github" id="on-github"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
                         class="fa fa-exclamation-circle" id="issues"></i></a>
                 <script>
                     $('#homepage').attr('title', i18n.__('homepage'));
-                    $('#ongithub').attr('title', i18n.__('ongithub'));
+                    $('#on-github').attr('title', i18n.__('on-github'));
                     $('#issues').attr('title', i18n.__('issues'));
                 </script>
             </p>
             <p class="extreme-small text-muted">
-                &copy; 2019-2020 <a href="https://r-q.name/">Roderick Qiu</a>.
+                &copy; 2019-2020 <a
+                    href="javascript:require('electron').shell.openExternal('https://r-q.name/')">Roderick Qiu</a>.
             </p>
             <p class="extreme-small">&nbsp;</p>
             <p class="extreme-small">
@@ -61,15 +62,15 @@
             </p>
             <hr />
             <p class="extreme-small text-muted">
-                <script>document.write(i18n.__('tip1'));</script>
+                <script>document.write(i18n.__('feedback-tip-part-1'));</script>
             </p>
             <p class="extreme-small text-muted">
-                <script>document.write(i18n.__('tip2'));</script>
-                <a href="mailto:scrisqiu@hotmail.com" id="emailto">
-                    <script>$("#emailto").attr("title", i18n.__('emailto'));</script>
-                    <script>document.write(i18n.__('tip3'));</script>
+                <script>document.write(i18n.__('feedback-tip-part-2'));</script>
+                <a href="mailto:scrisqiu@hotmail.com" id="email-to">
+                    <script>$("#email-to").attr("title", i18n.__('email-to'));</script>
+                    <script>document.write(i18n.__('feedback-tip-part-3'));</script>
                 </a>
-                <script>document.write(i18n.__('tip4'));</script>
+                <script>document.write(i18n.__('feedback-tip-part-4'));</script>
             </p>
         </div>
     </div>
