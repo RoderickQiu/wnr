@@ -46,8 +46,13 @@ function createWindow() {
     win.on('closed', () => {
         win = null;
         if (process.platform !== 'darwin') {
-            app.quit()
+            app.quit();
         }
+    })
+
+    //triggers for focusing
+    win.on('blur', () => {
+        if (store.get("fullscreen-protection")) win.focus()
     })
 }
 
@@ -131,6 +136,7 @@ app.on('ready', () => {
     })
 
     store.set("just-launched", true);
+    store.set("fullscreen-protection", false);
 
     if (process.platform == "darwin") {
         if (!app.isInApplicationsFolder()) {
@@ -382,10 +388,12 @@ ipcMain.on('focus-first', function () {
     if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//always on top when full screen
     if (win != null) win.setFullScreen(true);
     macOSFullscreenSolution(true);
-    isWorkMode = true
+    isWorkMode = true;
+    store.set("fullscreen-protection", true);
 })
 
 ipcMain.on('warning-giver-workend', function () {
+    store.set("fullscreen-protection", false);
     if (win != null) {
         isWorkMode = false;
         win.show();
@@ -407,6 +415,7 @@ ipcMain.on('warning-giver-workend', function () {
                 type: "warning",
                 message: i18n.__('work-time-end-msg'),
             }).then(function (response) {
+                if (store.get("fullscreen")) store.set("fullscreen-protection", true);
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -414,6 +423,7 @@ ipcMain.on('warning-giver-workend', function () {
 })
 
 ipcMain.on('warning-giver-restend', function () {
+    store.set("fullscreen-protection", false);
     if (win != null) {
         isWorkMode = true;
         if (!win.isVisible()) win.show();
@@ -433,6 +443,7 @@ ipcMain.on('warning-giver-restend', function () {
                 type: "warning",
                 message: i18n.__('rest-time-end-msg'),
             }).then(function (response) {
+                if (store.get("fullscreen-work")) store.set("fullscreen-protection", true);
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -440,6 +451,7 @@ ipcMain.on('warning-giver-restend', function () {
 })
 
 ipcMain.on('warning-giver-all-task-end', function () {
+    store.set("fullscreen-protection", false);
     if (win != null) {
         isTimerWin = false;
         if (!win.isVisible()) win.show();
@@ -681,6 +693,7 @@ ipcMain.on("timer-win", function (event, message) {
         powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//prevent wnr to be suspended when timing
         isTimerWin = true;
     } else {
+        if (win != null) win.setProgressBar(-1);
         if (tray != null) {
             contextMenu.items[2].enabled = false;
             tray.setToolTip('wnr');

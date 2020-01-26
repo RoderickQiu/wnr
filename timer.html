@@ -27,13 +27,16 @@
         <div id="time-bar" class="text-muted"></div>
         <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
+            <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="fa fa-question"
+                    id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small work"><i class="fa fa-minus fa-fw"
                     id="window-minimize"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-close-chk')" class="small work"><i class="fa fa-times fa-fw"
-                    id="exit"></i></a>
+                    id="exit"></i></a>&nbsp;&nbsp;
             <script>
+                $('#helper').attr('title', i18n.__('helper'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));

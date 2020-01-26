@@ -52,7 +52,7 @@
     </div>
     <script>
         function tourguide() {
-            require('electron').shell.openExternal(store.get("i18n") == 'zh' ? 'https://wnr.scris.top/zh/guide/1-basic-usage.html' : 'https://wnr.scris.top/guide/1-basic-usage.html');
+            getHelp("guide/1-basic-usage");
             setTimeout("window.close()", 500);
         }
     </script>

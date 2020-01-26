@@ -38,6 +38,8 @@
             <!-- 1. time settings -->
             <p class="lead"><i class="fa fa-clock-o fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('time-settings'));</script>
+                &nbsp;<a href="javascript:getHelp('settings/1-time-settings')" class="small rest"><i
+                        class="fa fa-question get-help"></i></a>
             </p>
             <hr />
             <div class="align-content-center form-text">
@@ -50,6 +52,8 @@
             <br />
             <p class="lead"><i class="fa fa-superpowers" aria-hidden="true"></i>
                 <script>document.write(i18n.__('predefined-tasks-settings'));</script>
+                &nbsp;<a href="javascript:getHelp('settings/2-predefined-tasks-settings')" class="small rest"><i
+                        class="fa fa-question get-help"></i></a>
             </p>
             <hr />
             <div class="align-content-center form-text">
@@ -73,6 +77,8 @@
             <!-- 3. global settings -->
             <p class="lead"><i class="fa fa-globe fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('global-settings'));</script>
+                &nbsp;<a href="javascript:getHelp('settings/3-global-settings')" class="small rest"><i
+                        class="fa fa-question get-help"></i></a>
             </p>
             <hr />
             <!-- language setting -->
@@ -159,6 +165,8 @@
             <!-- 4. other things -->
             <p class="lead"><i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
                 <script>document.write(i18n.__('other-things'));</script>
+                &nbsp;<a href="javascript:getHelp('settings/4-other-things')" class="small rest"><i
+                        class="fa fa-question get-help"></i></a>
             </p>
             <hr />
             <div class="text-muted small">
@@ -209,6 +217,7 @@
         if (process.platform == 'darwin') {
             $("#hotkey-tip").css("display", "none");
         }
+        $(".get-help").attr('title', i18n.__('helper'));
     </script>
     <script src="updater.js"></script>
     <script>

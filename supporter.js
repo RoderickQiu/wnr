@@ -19,3 +19,9 @@ function isTimerWindow(isTimer) {
 function call(content) {
     ipc.send(content);
 }
+
+function getHelp(idCode) {
+    require('electron').shell.openExternal(store.get("i18n") == 'zh' ?
+        'https://wnr.scris.top/zh/' + idCode + '.html' :
+        'https://wnr.scris.top/' + idCode + '.html');
+}

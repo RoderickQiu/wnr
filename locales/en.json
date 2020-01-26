@@ -127,7 +127,7 @@
     "focus-when-resting": "Focus when resting",
     "set-as-default-task": "Set this as default",
     "predefined-tasks-settings-tip": "(The task with red title is the default task.)",
-    "is-auto-start-task-setting-on": "Auto start default task when wnr is launched: ",
+    "is-auto-start-task-setting-on": "Auto start default task: ",
     "is-auto-start-task-setting-on-tip": "If it is enabled, wnr will automatically start the default predefined task if there is one.",
     "window-close-dialog-box-title": "Are you sure you want to quit",
     "window-close-dialog-box-content": "If you really have something to do which makes a must to quit wnr, check that checkbox.",
