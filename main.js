@@ -77,6 +77,13 @@ function alarmSet() {
     }
 }
 
+function setFullScreenMode(flag) {
+    if (win != null) {
+        if (process.platform == "darwin") win.setSimpleFullScreen(flag);
+        else win.setFullScreen(flag)
+    }
+}
+
 //before quit
 app.on('will-quit', () => {
     globalShortcut.unregisterAll()
@@ -153,59 +160,9 @@ app.on('ready', () => {
     }
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-    else if (process.platform != "darwin") tray = new Tray(path.join(__dirname, '\\res\\icons\\wnrIcon.png'));
-    contextMenu = Menu.buildFromTemplate([
-        {
-            label: 'wnr' + i18n.__('v') + require("./package.json").version
-        }, {
-            type: 'separator'
-        }, {
-            label: i18n.__('start-or-stop'),
-            enabled: false,
-            click: function () {
-                if (win != null) win.webContents.send('start-or-stop')
-            }
-        }, {
-            type: 'separator'
-        }, {
-            label: i18n.__('website'),
-            click: function () {
-                shell.openExternal('https://wnr.scris.top/');
-            }
-        }, {
-            label: i18n.__('help-page'),
-            click: function () {
-                shell.openExternal('https://wnr.scris.top/help.html');
-            }
-        }, {
-            label: i18n.__('github'),
-            click: function () {
-                shell.openExternal('https://github.com/RoderickQiu/wnr/');
-            }
-        }, {
-            type: 'separator'
-        }, {
-            label: i18n.__('show-or-hide'), click: () => {
-                if (win != null) win.isVisible() ? win.hide() : win.show();
-                if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-                if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
-                if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
-            }
-        }, {
-            label: i18n.__('exit'), click: () => { windowCloseChk() }
-        }
-    ]);
-    if (tray != null) {
-        tray.setToolTip('wnr');
-        tray.setContextMenu(contextMenu);
-        tray.on('click', () => {
-            if (win != null) win.isVisible() ? win.hide() : win.show();
-            if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-            if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
-            if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
-        });//tray
-    }
-
+    else if (process.platform == "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
+    if (tray != null) tray.setToolTip('wnr');
+    traySolution(false);
     macOSFullscreenSolution(false);
     isDarkMode();
 
@@ -252,6 +209,82 @@ app.on('ready', () => {
         store.set("default-task", predefinedTasks.length - 1)//the last is the newest-added
     }//alternated the former default time settings
 })
+
+function traySolution(isFullScreen) {
+    if (app.isReady()) {
+        if (!isFullScreen) {
+            if (process.platform == "darwin") app.dock.show();
+            contextMenu = Menu.buildFromTemplate([
+                {
+                    label: 'wnr' + i18n.__('v') + require("./package.json").version
+                }, {
+                    type: 'separator'
+                }, {
+                    label: i18n.__('start-or-stop'),
+                    enabled: false,
+                    click: function () {
+                        if (win != null) win.webContents.send('start-or-stop')
+                    }
+                }, {
+                    type: 'separator'
+                },
+                {
+                    label: i18n.__('website'),
+                    click: function () {
+                        shell.openExternal('https://wnr.scris.top/');
+                    }
+                }, {
+                    label: i18n.__('help-page'),
+                    click: function () {
+                        shell.openExternal('https://wnr.scris.top/help.html');
+                    }
+                }, {
+                    label: i18n.__('github'),
+                    click: function () {
+                        shell.openExternal('https://github.com/RoderickQiu/wnr/');
+                    }
+                }, {
+                    type: 'separator'
+                }, {
+                    label: i18n.__('show-or-hide'), click: () => {
+                        if (win != null) win.isVisible() ? win.hide() : win.show();
+                        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+                        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+                        if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
+                    }
+                }, {
+                    label: i18n.__('exit'), click: () => { windowCloseChk() }
+                }
+            ]);
+            if (tray != null) {
+                tray.on('click', () => {
+                    if (win != null) win.isVisible() ? win.hide() : win.show();
+                    if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+                    if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+                    if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
+                });//tray
+                tray.setContextMenu(contextMenu);
+            }
+        } else {
+            if (process.platform == "darwin") app.dock.hide();
+            contextMenu = Menu.buildFromTemplate([
+                {
+                    label: 'wnr' + i18n.__('v') + require("./package.json").version
+                }, {
+                    type: 'separator'
+                }, {
+                    label: i18n.__('start-or-stop'),
+                    click: function () {
+                        if (win != null) win.webContents.send('start-or-stop')
+                    }
+                }]);
+            if (tray != null) {
+                tray.setContextMenu(contextMenu);
+                tray.on('click', () => { ; })
+            }
+        }
+    }
+}
 
 function macOSFullscreenSolution(isFullScreen) {
     if (app.isReady()) {
@@ -334,8 +367,7 @@ function macOSFullscreenSolution(isFullScreen) {
                     }]
                 }];
             var osxMenu = Menu.buildFromTemplate(template);
-            Menu.setApplicationMenu(osxMenu);
-            app.dock.setMenu(osxMenu)
+            Menu.setApplicationMenu(osxMenu)
         }//dock menu for mac os
     }
 }
@@ -386,8 +418,9 @@ app.on('activate', () => {
 
 ipcMain.on('focus-first', function () {
     if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//always on top when full screen
-    if (win != null) win.setFullScreen(true);
+    if (win != null) setFullScreenMode(true);
     macOSFullscreenSolution(true);
+    traySolution(true);
     isWorkMode = true;
     store.set("fullscreen-protection", true);
 })
@@ -402,12 +435,14 @@ ipcMain.on('warning-giver-workend', function () {
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
-            win.setFullScreen(true);
+            setFullScreenMode(true);
             macOSFullscreenSolution(true);
+            traySolution(true);
         } else {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-            win.setFullScreen(false);
+            setFullScreenMode(false);
             macOSFullscreenSolution(false);
+            traySolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -430,12 +465,14 @@ ipcMain.on('warning-giver-restend', function () {
         win.flashFrame(true);
         if (store.get("fullscreen-work") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
-            win.setFullScreen(true);
+            setFullScreenMode(true);
             macOSFullscreenSolution(true);
+            traySolution(true);
         } else {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-            win.setFullScreen(false);
+            setFullScreenMode(false);
             macOSFullscreenSolution(false);
+            traySolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -458,8 +495,9 @@ ipcMain.on('warning-giver-all-task-end', function () {
         win.flashFrame(true);
         if (store.get("fullscreen") == true) {
             if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-            win.setFullScreen(false);
+            setFullScreenMode(false);
             macOSFullscreenSolution(false);
+            traySolution(false);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
