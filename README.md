@@ -1,4 +1,4 @@
-<p align="center"><img src="https://raw.githubusercontent.com/RoderickQiu/wnr/master/res/icons/wnrIcon.png"
+<p align="center"><img src="https://i.loli.net/2020/01/27/bOvLlYmT7dQFRjr.png"
         width="64px" /></p>
 
 <h2 align="center">wnr</h2>
@@ -77,7 +77,7 @@ This application is being frequently updated, so does this list.
 
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
 
-- Need Help: [Go to Help Page](https://wnr.scris.top/help.html) or [Contact Me](https://roderickqiu.scris.top/).
+- Need Help: [Go to Help Page](https://wnr.scris.top/guide/1-basic-usage.html) or [Contact Me](https://roderickqiu.scris.top/).
 
 - Any issues or pull requests are appreciated.
 
@@ -109,6 +109,28 @@ I'm now using yarn.
 
 Copyright (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
-Now licensed under the [MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE).
+Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
-For all the packages using, go to the [acknoledgements](https://wnr.scris.top/acknoledgements.html).
+### Packages Using
+
+#### Main Program
+
+- node-auto-launch, Teamwork, MIT License.
+- compare-version, kevva, MIT License.
+- electron-store, sindresorhus, MIT License.
+- i18n-node, mashpie, MIT License.
+- node-notifier, mikaelbr, MIT License.
+- request, request, Apache-2.0 License.
+- winreg, fresc81, BSD 2-Clause License.
+- **electron, electron, MIT License**.
+- electron-builder, electron-userland, MIT License.
+- node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE).
+- jQuery, JS Foundation and other contributors, [License](https://jquery.org/license).
+- bootstrap, twbs, MIT License.
+- font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
+
+#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide))*
+
+- **vuepress, vuejs, MIT License**.
+- vuepress-plugin-sitemap, ekoeryanto, MIT License.
+- vuepress-theme-api, sqrthree, MIT License.

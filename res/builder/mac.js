@@ -14,7 +14,6 @@ const config = {
         "files": [
             "**/*",
             //! to exclude
-            "!res/preview/",
             "!res/icons/*Win*",
             "!res/icons/*.psd",
             "!node_modules/node-notifier/vendor/snoreToast/*"

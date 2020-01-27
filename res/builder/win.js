@@ -13,7 +13,6 @@ const config = {
         "files": [
             "**/*",
             //! to exclude
-            "!res/preview/",
             "!res/icons/*Mac*",
             "!res/icons/*.psd"
         ]
