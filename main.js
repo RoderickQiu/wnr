@@ -779,9 +779,6 @@ ipcMain.on("timer-win", function (event, message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();
-        if (tray != null) {
-            contextMenu.items[2].enabled = true;
-        }
         globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
             if (win != null) win.webContents.send('start-or-stop');
         })
@@ -790,17 +787,24 @@ ipcMain.on("timer-win", function (event, message) {
         }
         powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//prevent wnr to be suspended when timing
         isTimerWin = true;
+        traySolution();
+        macOSFullscreenSolution();
+        if (tray != null) {
+            contextMenu.items[2].enabled = true;
+        }
     } else {
         if (win != null) win.setProgressBar(-1);
-        if (tray != null) {
-            contextMenu.items[2].enabled = false;
-            tray.setToolTip('wnr');
-        }
         globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
         alarmSet();
         if (powerSaveBlockerId)
             if (powerSaveBlocker.isStarted(powerSaveBlockerId))
                 powerSaveBlocker.stop(powerSaveBlockerId);
-        isTimerWin = false
+        isTimerWin = false;
+        traySolution();
+        macOSFullscreenSolution();
+        if (tray != null) {
+            tray.setToolTip('wnr');
+            contextMenu.items[2].enabled = false
+        }
     }
 })
