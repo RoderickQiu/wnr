@@ -12,7 +12,9 @@
         }
     </script>
     <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
-    <script src="res/lib/jquery-3.3.1.min.js"></script>
+    <link rel="preload" as="style" href="loader.css" onload="this.rel='stylesheet'">
+    <!-- loader style preload -->
+    <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
     <script src="res/lib/all.js"></script>
@@ -20,13 +22,30 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
+
+
 <body onpaste="return false">
     <!-- prevent people from pasting abnormal content -->
+
+    <!-- loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <script>
+        window.onload = function () {
+            $("body").addClass("loaded");
+            setTimeout(function () { $('#loader-wrapper').remove() }, 1000);
+        } 
+    </script>
+
     <script src="supporter.js"></script>
     <script src="updater.js"></script>
     <script>
         if (!store.get('tour')) {
             store.set('tour', 'true');
+            store.set('islocked', false);
             ipc.send("tourguide");
         }
     </script>
@@ -41,7 +60,8 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            &nbsp;&nbsp;
+            <a href="javascript:call('locker')" class="small rest"><i class="fa fa-lock" id="locker"></i></a><span
+                class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('settings')" class="small rest"><i class="fa fa-cog fa-fw"
                     id="settings"></i></a>&nbsp;&nbsp;
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest"><i class="fa fa-question"
@@ -51,10 +71,11 @@
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="fa fa-minus fa-fw"
-                    id="window-minimize"></i></a>&nbsp;&nbsp;
+                    id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-close-chk')" class="small rest"><i class="fa fa-times fa-fw"
                     id="exit"></i></a>
             <script>
+                $('#locker').attr('title', i18n.__('locker'));
                 $('#helper').attr('title', i18n.__('helper'));
                 $('#settings').attr('title', i18n.__('settings'));
                 $('#info').attr('title', i18n.__('info'));
@@ -69,10 +90,10 @@
         </div>
         <div id="set" class="container-fluid">
             <form action="timer.html" method="GET" class="justify-content-center align-content-center">
-                <input name="title" id="title" type="text" class="small" maxlength="11" />
+                <input name="title" id="title" type="text" class="small" maxlength="11" />&nbsp;&nbsp;
                 <div class="dropdown dropleft dropdown-default">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-menu-button" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">&nbsp;
+                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                         <span class="dropdown-default extreme-small font-weight-bold">
                             <script>document.write(i18n.__('default-part-1') + "<br />" + i18n.__('default-part-2'))</script>
                         </span>
@@ -80,8 +101,9 @@
                     <div class="dropdown-menu" aria-labelledby="dropdown-menu-button">
                         <div id="dropdown-itemlist">
                         </div>
-                        <div class="dropdown-divider"></div>
-                        <a class="dropdown-item font-weight-bold" href="javascript:call('settings')">
+                        <div class="dropdown-divider" id="predefined-tasks-divider"></div>
+                        <a class="dropdown-item font-weight-bold text-info" id="predefined-tasks-edit"
+                            href="javascript:call('predefined-tasks')">
                             <script>document.write(i18n.__('edit'));</script>
                         </a>
                     </div>
@@ -91,7 +113,7 @@
                     <input name="work-time" id="work-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                         class="work lead" autofocus required />
-                    &nbsp;<input id="focus-work-set" type="checkbox" onchange="focusWorkSet()" /><span
+                    <input id="focus-work-set" type="checkbox" onchange="focusWorkSet()" /><span
                         class="focuser extreme-small work">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
@@ -101,7 +123,7 @@
                     <input name="rest-time" id="rest-time" type="number" onkeyup="allSet()"
                         oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
                         class="rest lead" required />
-                    &nbsp;<input id="focus-rest-set" type="checkbox" onchange="focusRestSet()" /><span
+                    <input id="focus-rest-set" type="checkbox" onchange="focusRestSet()" /><span
                         class="focuser extreme-small rest">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>

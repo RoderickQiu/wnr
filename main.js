@@ -9,10 +9,10 @@ var Registry = require('winreg')
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null;
-let resetAlarm = null, powerSaveBlockerId;
+let resetAlarm = null, powerSaveBlockerId = null;
 let isTimerWin = null, isWorkMode = null;
 let timeLeftTip = null;
-let predefinedTasks = null
+let predefinedTasks = null;
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
@@ -42,17 +42,22 @@ function createWindow() {
         //win.webContents.openDevTools()
     });
 
-    //triggers when the main windows is closesd
+    //triggers when the main windows is closed
     win.on('closed', () => {
         win = null;
-        if (process.platform !== 'darwin') {
-            app.quit();
-        }
-    })
+    });
 
     //triggers for focusing
     win.on('blur', () => {
-        if (store.get("fullscreen-protection")) win.focus()
+        if (store.get("fullscreen-protection")) {
+            win.focus();
+            win.moveTop();
+        }
+    });
+
+    //prevent app-killers for lock mode / focus mode
+    win.webContents.on('crashed', () => {
+        if (store.get('islocked') || (store.get('fullscreen-protection') && isTimerWin)) app.relaunch()
     })
 }
 
@@ -79,6 +84,7 @@ function alarmSet() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
+        win.setKiosk(flag);
         if (process.platform == "darwin") win.setSimpleFullScreen(flag);
         else win.setFullScreen(flag)
     }
@@ -86,7 +92,8 @@ function setFullScreenMode(flag) {
 
 //before quit
 app.on('will-quit', () => {
-    globalShortcut.unregisterAll()
+    globalShortcut.unregisterAll();
+    tray.destroy();
 })
 
 //when created the app, triggers
@@ -142,6 +149,10 @@ app.on('ready', () => {
         }//prevent using hotkeys to quit
     })
 
+    if (store.get('islocked')) {
+        win.setSkipTaskbar(true);
+    }//locked mode
+
     store.set("just-launched", true);
     store.set("fullscreen-protection", false);
 
@@ -151,9 +162,8 @@ app.on('ready', () => {
                 {
                     title: i18n.__('wrong-folder-notification-title'),
                     message: i18n.__('wrong-folder-notification-content'),
-                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                    sound: true,
-                    wait: true //to wait with callback, until user action is taken against notification
+                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
+                    sound: true
                 }
             );
         }
@@ -214,70 +224,69 @@ function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
             if (process.platform == "darwin") app.dock.show();
-            contextMenu = Menu.buildFromTemplate([
-                {
-                    label: 'wnr' + i18n.__('v') + require("./package.json").version
-                }, {
-                    type: 'separator'
-                }, {
-                    label: i18n.__('start-or-stop'),
-                    enabled: false,
-                    click: function () {
-                        if (win != null) win.webContents.send('start-or-stop')
-                    }
-                }, {
-                    type: 'separator'
-                },
-                {
-                    label: i18n.__('website'),
-                    click: function () {
-                        shell.openExternal('https://wnr.scris.top/');
-                    }
-                }, {
-                    label: i18n.__('help-page'),
-                    click: function () {
-                        shell.openExternal('https://wnr.scris.top/help.html');
-                    }
-                }, {
-                    label: i18n.__('github'),
-                    click: function () {
-                        shell.openExternal('https://github.com/RoderickQiu/wnr/');
-                    }
-                }, {
-                    type: 'separator'
-                }, {
-                    label: i18n.__('show-or-hide'), click: () => {
-                        if (win != null) win.isVisible() ? win.hide() : win.show();
-                        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
-                        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
-                        if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
-                    }
-                }, {
-                    label: i18n.__('exit'), click: () => { windowCloseChk() }
+            if (process.platform == "win32" && store.get('islocked') == false) win.setSkipTaskbar(false);
+            contextMenu = Menu.buildFromTemplate([{
+                label: 'wnr' + i18n.__('v') + require("./package.json").version
+            }, {
+                type: 'separator'
+            }, {
+                label: i18n.__('start-or-stop'),
+                enabled: false,
+                click: function () {
+                    if (win != null) win.webContents.send('start-or-stop')
                 }
-            ]);
-            if (tray != null) {
-                tray.on('click', () => {
+            }, {
+                type: 'separator'
+            },
+            {
+                label: i18n.__('website'),
+                click: function () {
+                    shell.openExternal('https://wnr.scris.top/');
+                }
+            }, {
+                label: i18n.__('github'),
+                click: function () {
+                    shell.openExternal('https://github.com/RoderickQiu/wnr/');
+                }
+            }, {
+                type: 'separator'
+            }, {
+                label: i18n.__('show-or-hide'), click: () => {
                     if (win != null) win.isVisible() ? win.hide() : win.show();
                     if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
                     if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
                     if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
+                }
+            }, {
+                label: i18n.__('exit'),
+                enabled: !store.get('islocked'),
+                click: () => { windowCloseChk() }
+            }
+            ]);
+            if (tray != null) {
+                tray.on('click', () => {
+                    if (store.get("fullscreen-protection") == false) {
+                        if (win != null) /*win.isVisible() ? win.hide() :*/ win.show();
+                        if (settingsWin != null) /*settingsWin.isVisible() ? settingsWin.hide() :*/ settingsWin.show();
+                        if (aboutWin != null) /*aboutWin.isVisible() ? aboutWin.hide() :*/ aboutWin.show();
+                        if (tourWin != null) /*tourWin.isVisible() ? tourWin.hide() :*/ tourWin.show();
+                    }//with problem
                 });//tray
                 tray.setContextMenu(contextMenu);
             }
         } else {
             if (process.platform == "darwin") app.dock.hide();
-            contextMenu = Menu.buildFromTemplate([
-                {
-                    label: 'wnr' + i18n.__('v') + require("./package.json").version
-                }, {
-                    type: 'separator'
-                }, {
-                    label: i18n.__('start-or-stop'),
-                    click: function () {
-                        if (win != null) win.webContents.send('start-or-stop')
-                    }
-                }]);
+            if (process.platform == "win32") win.setSkipTaskbar(true);
+            contextMenu = Menu.buildFromTemplate([{
+                label: 'wnr' + i18n.__('v') + require("./package.json").version
+            }, {
+                type: 'separator'
+            }, {
+                label: i18n.__('start-or-stop'),
+                click: function () {
+                    if (win != null) win.webContents.send('start-or-stop')
+                }
+            }]);
             if (tray != null) {
                 tray.setContextMenu(contextMenu);
                 tray.on('click', () => { ; })
@@ -295,6 +304,7 @@ function macOSFullscreenSolution(isFullScreen) {
                     submenu: [{
                         label: i18n.__('quit'),
                         accelerator: 'CmdOrCtrl+Q',
+                        enabled: !store.get('islocked'),
                         click: function () {
                             windowCloseChk();
                         }
@@ -302,17 +312,26 @@ function macOSFullscreenSolution(isFullScreen) {
                 }, {
                     label: i18n.__('operations'),
                     submenu: [{
+                        enabled: (!store.get('islocked')) && (!isTimerWin),
                         label: i18n.__('settings'),
                         click: function () {
-                            settings();
+                            settings('normal');
+                        }
+                    }, {
+                        enabled: !isTimerWin,
+                        label: i18n.__('locker'),
+                        click: function () {
+                            locker();
                         }
                     }, {
                         label: i18n.__('tourguide'),
+                        enabled: !isTimerWin,
                         click: function () {
                             tourguide();
                         }
                     }, {
                         label: i18n.__('about'),
+                        enabled: !isTimerWin,
                         click: function () {
                             about();
                         }
@@ -322,11 +341,6 @@ function macOSFullscreenSolution(isFullScreen) {
                         label: i18n.__('website'),
                         click: function () {
                             shell.openExternal('https://wnr.scris.top/');
-                        }
-                    }, {
-                        label: i18n.__('help-page'),
-                        click: function () {
-                            shell.openExternal('https://wnr.scris.top/help.html');
                         }
                     }, {
                         label: i18n.__('github'),
@@ -348,6 +362,9 @@ function macOSFullscreenSolution(isFullScreen) {
                         label: i18n.__('settings'),
                         enabled: false
                     }, {
+                        label: i18n.__('locker'),
+                        enabled: false
+                    }, {
                         label: i18n.__('tourguide'),
                         enabled: false
                     }, {
@@ -357,9 +374,6 @@ function macOSFullscreenSolution(isFullScreen) {
                         type: 'separator'
                     }, {
                         label: i18n.__('website'),
-                        enabled: false
-                    }, {
-                        label: i18n.__('help-page'),
                         enabled: false
                     }, {
                         label: i18n.__('github'),
@@ -374,10 +388,10 @@ function macOSFullscreenSolution(isFullScreen) {
 
 function isDarkMode() {
     if (app.isReady()) {
-        store.set('isDarkMode', false);
+        store.set('isdark', false);
         if (process.platform == 'darwin') {
             if (systemPreferences.isDarkMode()) {
-                store.set('isDarkMode', true);
+                store.set('isdark', true);
                 if (win != null) win.backgroundColor = '#393939';
             }
             systemPreferences.subscribeNotification(
@@ -399,7 +413,7 @@ function isDarkMode() {
                     for (var i = 0; i < items.length; i++) {
                         if (items[i].name == 'AppsUseLightTheme') {
                             if (items[i].value == "0x0") {
-                                store.set('isDarkMode', true);
+                                store.set('isdark', true);
                                 if (win != null) win.backgroundColor = '#393939';
                             }
                         }
@@ -512,34 +526,31 @@ ipcMain.on('warning-giver-all-task-end', function () {
     }
 })
 
-ipcMain.on('updateavailable', function () {
-    dialog.showMessageBox(settingsWin, {
-        title: i18n.__('update'),
-        type: "warning",
-        message: i18n.__('update-msg'),
-        checkboxLabel: i18n.__('update-chk'),
-        checkboxChecked: true
-    }).then(function (msg) {
-        if (msg.checkboxChecked) {
-            shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
-        }
-    })
-})
-
-ipcMain.on('noupdateavailable', function () {
-    dialog.showMessageBox(settingsWin, {
-        title: i18n.__('no-update'),
-        type: "info",
-        message: i18n.__('no-update-msg')
-    })
-})
-
-ipcMain.on('web-problem', function () {
-    dialog.showMessageBox(settingsWin, {
-        title: i18n.__('web-problem'),
-        type: "info",
-        message: i18n.__('web-problem-msg')
-    })
+ipcMain.on('update-feedback', function (event, message) {
+    if (message == "update-available")
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('update'),
+            type: "warning",
+            message: i18n.__('update-msg'),
+            checkboxLabel: i18n.__('update-chk'),
+            checkboxChecked: true
+        }).then(function (msg) {
+            if (msg.checkboxChecked) {
+                shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+            }
+        })
+    else if (message == "no-update")
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('no-update'),
+            type: "info",
+            message: i18n.__('no-update-msg')
+        })
+    else
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('update-web-problem'),
+            type: "info",
+            message: i18n.__('update-web-problem-msg')
+        })
 })
 
 ipcMain.on('delete-all-data', function () {
@@ -615,7 +626,7 @@ function about() {
 }
 ipcMain.on('about', about);
 
-function settings() {
+function settings(mode) {
     if (app.isReady()) {
         if (win != null) {
             settingsWin = new BrowserWindow({
@@ -630,7 +641,9 @@ function settings() {
                 webPreferences: { nodeIntegration: true },
                 titleBarStyle: "hidden"
             });
-            settingsWin.loadFile("settings.html");
+            if (mode == 'locker') settingsWin.loadFile("settings.html", { hash: '#locker-anchor' });
+            else if (mode == 'predefined-tasks') settingsWin.loadFile("settings.html", { hash: '#predefined-tasks-anchor' });
+            else settingsWin.loadFile("settings.html");
             if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
@@ -645,7 +658,7 @@ function settings() {
                     {
                         title: i18n.__('newbie-for-settings'),
                         message: i18n.__('newble-for-settings-tip'),
-                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
+                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
                         sound: true,
                         wait: true //to wait with callback, until user action is taken against notification
                     }
@@ -683,9 +696,8 @@ function tourguide() {
                 {
                     title: i18n.__('welcome-part-1'),
                     message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-                    sound: true,
-                    wait: true //to wait with callback, until user action is taken against notification
+                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
+                    sound: true
                 }
             );
         }
@@ -693,16 +705,40 @@ function tourguide() {
 }
 ipcMain.on('tourguide', tourguide);
 
+
+function predefiner() {
+    settings('predefined-tasks');
+}
+ipcMain.on('predefined-tasks', predefiner);
+
+function locker() {
+    settings('locker');
+}
+ipcMain.on('locker', locker);
+ipcMain.on('locker-passcode', function (event, message) {
+    let lockerMessage = null;
+    if (message == "wrong-passcode") lockerMessage = i18n.__('locker-settings-input-tip-wrong-password');
+    if (message == "lock-mode-on") lockerMessage = i18n.__('locker-settings-status') + i18n.__('on') + i18n.__('period-symbol');
+    if (message == "lock-mode-off") lockerMessage = i18n.__('locker-settings-status') + i18n.__('off') + i18n.__('period-symbol');
+    if (message == "not-same-password") lockerMessage = i18n.__('locker-settings-not-same-password');
+    if (message == "empty") lockerMessage = i18n.__('locker-settings-empty-password');
+    if (settingsWin != null)
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('locker-settings'),
+            type: "warning",
+            message: lockerMessage
+        })
+})
+
 ipcMain.on('only-one-min-left', function () {
+    //if (!store.get('fullscreen-protection'))
     notifier.notify(
         {
             title: i18n.__('only-one-min-left'),
             message: i18n.__('only-one-min-left-msg'),
-            icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
-            sound: true,
-            wait: true //to wait with callback, until user action is taken against notification
-        }
-    );
+            icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
+            sound: true
+        })
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {

@@ -14,7 +14,7 @@
 <p align="center">
     Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a> | <a href="https://gitee.com/roderickqiu/wnr-backup/releases/">中国用户镜像下载（码云）</a>
 </p>
 
 ---
@@ -42,6 +42,8 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(trail version, 
 - alerts for time end
 
 - full-screen focus mode
+
+- lock mode / parent control
 
 - always-on-top mode
 
@@ -124,8 +126,7 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - winreg, fresc81, BSD 2-Clause License.
 - **electron, electron, MIT License**.
 - electron-builder, electron-userland, MIT License.
-- node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE).
-- jQuery, JS Foundation and other contributors, [License](https://jquery.org/license).
+- jquery, jquery, MIT License.
 - bootstrap, twbs, MIT License.
 - font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
 
@@ -134,3 +135,9 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
 - vuepress-theme-api, sqrthree, MIT License.
+
+### Environment Using
+
+- node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE).
+- Inno Setup 6, jrsoftware, [License](https://github.com/jrsoftware/issrc/blob/master/license.txt).
+- VS Code, microsoft, MIT License.

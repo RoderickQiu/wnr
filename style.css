@@ -39,7 +39,12 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
-input[type="text"]:focus, input[type="number"]:focus {
+input[type="text"], input[type="number"], input[type="password"] {
+    border-bottom-width: 3px;
+    border-bottom-color: #33333303;
+}
+
+input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
     border-bottom-width: 3px;
     border-bottom-color: #33333333;
 }
@@ -143,6 +148,10 @@ li {
     border-radius: 15px;
     width: 24px;
     text-align: center;
+}
+
+.dropdown a {
+    text-decoration: none;
 }
 
 .dropdown-controller {

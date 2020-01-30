@@ -1,5 +1,5 @@
 function isInDark() {
-    const isDarkMode = store.get('isDarkMode');
+    const isDarkMode = store.get('isdark');
     if (isDarkMode) {
         $('body').append('<style>::-webkit-scrollbar-track {background-color: #393939;}</style>');
         $('body').append('<style>::-webkit-scrollbar-thumb {background-color: #999999;}</style>');
@@ -25,4 +25,16 @@ function isInDark() {
 isInDark();
 ipc.on('darkModeChanges', function () {
     isInDark();
-})
+})//dark mode settings
+
+function isLockMode() {
+    const isLocked = store.get('islocked');
+    if (isLocked) {
+        $('.should-lock').css('display', 'none');
+        $('#exit').css('display', 'none');
+        $('#settings').css('display', 'none');
+        $('#predefined-tasks-edit').css('display', 'none');
+        $('#predefined-tasks-divider').css('display', 'none');
+    }
+}//lock mode settings
+isLockMode()
