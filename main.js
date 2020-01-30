@@ -89,8 +89,7 @@ function alarmSet() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
-        win.setKiosk(flag);
-        if (process.platform == "darwin") win.setSimpleFullScreen(flag);
+        if (process.platform == "darwin") win.setKiosk(flag);
         else win.setFullScreen(flag)
     }
 }
@@ -229,7 +228,10 @@ app.on('ready', () => {
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
-            if (process.platform == "darwin") app.dock.show();
+            if (process.platform == "darwin") {
+                if (!store.get("islocked")) app.dock.show();
+                else app.dock.hide();
+            }
             if (process.platform == "win32" && store.get('islocked') == false) win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
@@ -243,8 +245,15 @@ function traySolution(isFullScreen) {
                 }
             }, {
                 type: 'separator'
-            },
-            {
+            }, {
+                enabled: !isTimerWin,
+                label: i18n.__('locker'),
+                click: function () {
+                    locker();
+                }
+            }, {
+                type: 'separator'
+            }, {
                 label: i18n.__('website'),
                 click: function () {
                     shell.openExternal('https://wnr.scris.top/');
