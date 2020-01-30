@@ -142,7 +142,7 @@
     "locker-settings-input-tip-lock-mode-on": "目前锁定模式已经打开，输入密码以关闭。按下Enter键确认。",
     "locker-settings-input-tip-wrong-password": "密码输入错误。",
     "locker-settings-input-tip-lock-mode-off": "输入密码后，按Enter键进入锁定模式。请慎重设置。",
-    "locker-settings-status": "锁定模式目前状态为：",
+    "locker-settings-status": "设置成功。目前锁定",
     "locker-settings-not-same-password": "密码不一致，请重新输入。",
     "locker-settings-empty-password": "密码为空，无效。",
     "is-local-time-setting-on": "时间显示设置：",

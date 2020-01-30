@@ -12,7 +12,7 @@ let tray = null, contextMenu = null;
 let resetAlarm = null, powerSaveBlockerId = null;
 let isTimerWin = null, isWorkMode = null;
 let timeLeftTip = null;
-let predefinedTasks = null;
+let predefinedTasks = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
@@ -45,6 +45,11 @@ function createWindow() {
     //triggers when the main windows is closed
     win.on('closed', () => {
         win = null;
+    });
+
+    //triggers for macos lock
+    win.on('close', (event) => {
+        if (store.get("islocked")) event.preventDefault();
     });
 
     //triggers for focusing
@@ -149,9 +154,10 @@ app.on('ready', () => {
         }//prevent using hotkeys to quit
     })
 
-    if (store.get('islocked')) {
-        win.setSkipTaskbar(true);
-    }//locked mode
+    if (store.get('islocked')) {//locked mode
+        if (process.platform == "win32") win.setSkipTaskbar(true);
+        win.setClosable(false);
+    }
 
     store.set("just-launched", true);
     store.set("fullscreen-protection", false);
@@ -727,6 +733,15 @@ ipcMain.on('locker-passcode', function (event, message) {
             title: i18n.__('locker-settings'),
             type: "warning",
             message: lockerMessage
+        }).then(function (response) {
+            if (message == "lock-mode-on" || message == "lock-mode-off") {
+                settingsWin.close();
+                settingsWin = null;
+                if (process.platform == "darwin") {
+                    app.relaunch();
+                    app.exit()
+                }
+            }
         })
 })
 
