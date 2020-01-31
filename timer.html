@@ -163,6 +163,7 @@
             }
 
             function warningGiver(isend) {
+                moreThanOneMin = 1;
                 if (store.get("sound") == true || store.get("sound") == undefined) {
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\time-end.wav");
