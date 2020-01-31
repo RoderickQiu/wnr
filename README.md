@@ -129,6 +129,7 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - jquery, jquery, MIT License.
 - bootstrap, twbs, MIT License.
 - font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
+- node-md5, pvorb, BSD 3-Clause License.
 
 #### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide))*
 

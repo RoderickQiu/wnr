@@ -98,6 +98,7 @@ function setFullScreenMode(flag) {
 app.on('will-quit', () => {
     globalShortcut.unregisterAll();
     tray.destroy();
+    tray = null
 })
 
 //when created the app, triggers
@@ -155,7 +156,7 @@ app.on('ready', () => {
 
     if (store.get('islocked')) {//locked mode
         if (process.platform == "win32") win.setSkipTaskbar(true);
-        win.setClosable(false);
+        win.closable = false;
     }
 
     store.set("just-launched", true);
@@ -186,7 +187,7 @@ app.on('ready', () => {
         predefinedTasks = new Array({
             name: "wnr recommended",
             workTime: 30,
-            restTime: 10,
+            restTime: 6,
             loops: 4,
             focusWhenWorking: false,
             focusWhenResting: true
@@ -569,19 +570,19 @@ ipcMain.on('update-feedback', function (event, message) {
 })
 
 ipcMain.on('delete-all-data', function () {
-    /*dialog.showMessageBox(settingsWin, {
+    dialog.showMessageBox(settingsWin, {
         title: i18n.__('delete-all-data-dialog-box-title'),
         type: "warning",
         message: i18n.__('delete-all-data-dialog-box-content'),
         checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
         checkboxChecked: false
     }).then(function (msg) {
-        if (msg.checkboxChecked) {*/
-    store.clear();
-    app.relaunch();
-    app.quit()
-    //}
-    //})
+        if (msg.checkboxChecked) {
+            store.clear();
+            app.relaunch();
+            app.quit()
+        }
+    })
 })// unchecked checkboxes still not working in Electron
 
 function windowCloseChk() {
@@ -744,12 +745,10 @@ ipcMain.on('locker-passcode', function (event, message) {
             message: lockerMessage
         }).then(function (response) {
             if (message == "lock-mode-on" || message == "lock-mode-off") {
-                settingsWin.close();
+                if (settingsWin != null) settingsWin.close();
                 settingsWin = null;
-                if (process.platform == "darwin") {
-                    app.relaunch();
-                    app.exit()
-                }
+                app.relaunch();
+                app.exit()
             }
         })
 })
