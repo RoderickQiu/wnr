@@ -14,7 +14,7 @@
 <p align="center">
     Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a> | <a href="https://gitee.com/roderickqiu/wnr-backup/releases/">中国用户镜像下载（码云）</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a> | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载（密码：7nzh）</a>
 </p>
 
 ---
