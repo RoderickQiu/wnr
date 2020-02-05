@@ -40,8 +40,9 @@
         } 
     </script>
 
-    <script src="supporter.js"></script>
-    <script src="updater.js"></script>
+    <script src="supporter.js"></script><!-- support wnr running -->
+    <script src="updater.js"></script><!-- check for updates -->
+    <script src="querier.js"></script><!-- query push messages -->
     <script>
         if (!store.get('tour')) {
             store.set('tour', 'true');

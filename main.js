@@ -75,7 +75,7 @@ function alarmSet() {
                     {
                         title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
                         message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '\\res\\icons\\iconMac.png'),
+                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
                         sound: true,
                         wait: true //to wait with callback, until user action is taken against notification
                     }, function () {
@@ -751,6 +751,23 @@ ipcMain.on('locker-passcode', function (event, message) {
                 app.exit()
             }
         })
+})
+
+ipcMain.on('push-notification', function (event, message) {
+    if (!store.get(message.id)) {
+        notifier.notify(
+            {
+                title: message.title,
+                message: message.content,
+                icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
+                sound: true,
+                wait: true //to wait with callback, until user action is taken against notification
+            }, function () {
+                if (message.link != "" && message.link != null) shell.openExternal(message.link);
+            }
+        );
+        store.set(message.id, true);
+    }
 })
 
 ipcMain.on('only-one-min-left', function () {

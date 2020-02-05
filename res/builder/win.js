@@ -7,7 +7,7 @@ const config = {
     ],
     "win": {
         "target": [
-            "dir"
+            "nsis"
         ],
         "icon": "res/icons/iconWin.ico",
         "files": [
@@ -15,7 +15,16 @@ const config = {
             //! to exclude
             "!res/icons/*Mac*",
             "!res/icons/*.psd"
-        ]
+        ],
+    },
+    "nsis": {
+        "installerLanguages": [
+            "en-US",
+            "zh-CN"
+        ],
+        "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
+        "license": "LICENSE",
+        "oneClick": false
     }
 }
 

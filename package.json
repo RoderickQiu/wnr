@@ -1,6 +1,6 @@
 {
   "name": "wnr",
-  "version": "1.10.1",
+  "version": "1.10.2",
   "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
   "main": "main.js",
   "scripts": {
@@ -25,10 +25,11 @@
     "compare-version": "0.1.2",
     "electron-store": "5.1.0",
     "i18n": "0.8.5",
+    "leancloud-storage": "4.2.0",
+    "md5": "2.2.1",
     "node-notifier": "6.0.0",
     "request": "2.88.0",
-    "winreg": "1.2.4",
-    "md5": "2.2.1"
+    "winreg": "1.2.4"
   },
   "devDependencies": {
     "electron": "7.1.11",
