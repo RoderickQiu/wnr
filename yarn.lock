@@ -1325,10 +1325,10 @@ leancloud-realtime@^5.0.0-beta.0:
     uuid "^3.0.0"
     ws "^5.2.1"
 
-leancloud-storage@^4.2.0:
+leancloud-storage@4.2.0:
   version "4.2.0"
-  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.2.0.tgz#c973cf488cb3d9309eeaac7c081c27adef7cb73a"
-  integrity sha1-yXPPSIyz2TCe6qx8CBwnre98tzo=
+  resolved "https://registry.yarnpkg.com/leancloud-storage/-/leancloud-storage-4.2.0.tgz#c973cf488cb3d9309eeaac7c081c27adef7cb73a"
+  integrity sha512-Mfw1hZScZGM6lpUyAninyrpMaFyibF4g26jMXfTTC9z64wOXyOWaM5SCddTRvAbs3ppcnL9N8TL1/nMgzJRtCQ==
   dependencies:
     debug "^3.1.0"
     es6-promise "4.2.3"
