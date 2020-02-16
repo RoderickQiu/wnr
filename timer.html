@@ -68,13 +68,13 @@
                 $('#backindex2').attr('title', i18n.__('back-index'));
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
-                if (systemName == "darwin") $("#controller").css("display", "none");
+                if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="bottom-bar">&nbsp;</div>
     <script>
-        if (systemName == "darwin") {
+        if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }

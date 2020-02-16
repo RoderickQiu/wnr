@@ -10,6 +10,8 @@ function isInDark() {
         $('body').css('color', '#aaaaaa');
         $('hr').css('border-color', '#666666');
         $('#title').css('color', '#aaaaaa');
+        $('.settings-sidebar-block').css('color', '#fefefe');
+        $('.settings-sidebar-block').css('background-color', '#393939');
     } else {
         $('body').append('<style>::-webkit-scrollbar-track {background-color: #fefefe;}</style>');
         $('body').append('<style>::-webkit-scrollbar-thumb {background-color: #5555558f;}</style>');

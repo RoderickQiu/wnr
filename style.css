@@ -126,8 +126,8 @@ li {
 }
 
 .settings-sidebar-block-highlighted {
-    color: #fefefe;
-    background-color: #5490eac2;
+    color: #fefefe !important;
+    background-color: #5490eac2 !important;
 }
 
 .underlined {

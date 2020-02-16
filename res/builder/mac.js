@@ -4,7 +4,7 @@ const Platform = builder.Platform
 const config = {
     "mac": {
         "target": [
-            "dir"
+            "dmg"
         ],
         "icon": "res/icons/iconMac.icns",
         "darkModeSupport": true,
@@ -14,6 +14,10 @@ const config = {
             "!res/icons/*Win*",
             "!res/icons/*.psd",
         ]
+    },
+    "dmg": {
+        icon: "res/icons/iconMac.icns",
+        backgroundColor: "#fefefe"
     }
 }
 

@@ -1,6 +1,6 @@
 {
   "name": "wnr",
-  "version": "1.11.0",
+  "version": "1.11.1",
   "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
   "main": "main.js",
   "scripts": {
