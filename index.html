@@ -54,21 +54,39 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
-                window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
+                window.location.href = "timer.html?title=" + $("#title").val()
+                    + "&work-time=" + $("#work-time").val()
+                    + "&rest-time=" + $("#rest-time").val()
+                    + "&loop=" + $("#loop").val()
+                    + "&note=" + $("#note").val()
+                    + "&method=1";
             }
         }
         document.onkeydown = keydown;
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:call('locker')" class="small rest"><i class="fa fa-lock" id="locker"></i></a><span
-                class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('settings')" class="small rest"><i class="fa fa-cog fa-fw"
-                    id="settings"></i></a>&nbsp;&nbsp;
-            <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest"><i class="fa fa-question"
-                    id="helper"></i></a>&nbsp;&nbsp;
-            <a href="javascript:call('about')" class="small rest"><i class="fa fa-info fa-fw"
-                    id="info"></i></a>&nbsp;&nbsp;
+            <div class="dropdown dropleft dropdown-default">
+                <a class="dropdown-toggle" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                    <span class="dropdown-default rest">
+                        <i class="fa fa-ellipsis-h" id="dropdown-more"></i>
+                    </span>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="controller-dropdown">
+                    <a href="#" class="dropdown-header extreme-small">
+                        <script>document.write(i18n.__('menu'));</script></a>
+                    <div class="dropdown-divider"></div>
+                    <a href="javascript:call('locker')" class="small dropdown-item">
+                        <script>document.write(i18n.__('locker-settings'));</script></a>
+                    <a href="javascript:call('settings')" class="small dropdown-item should-lock">
+                        <script>document.write(i18n.__('settings'));</script></a>
+                    <a href="javascript:getHelp('guide/1-basic-usage')" class="small dropdown-item">
+                        <script>document.write(i18n.__('helper'));</script></a>
+                    <a href="javascript:call('about')" class="small dropdown-item">
+                        <script>document.write(i18n.__('info'));</script></a>
+                </div>
+            </div>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="fa fa-minus fa-fw"
@@ -76,10 +94,7 @@
             <a href="javascript:call('window-close-chk')" class="small rest"><i class="fa fa-times fa-fw"
                     id="exit"></i></a>
             <script>
-                $('#locker').attr('title', i18n.__('locker'));
-                $('#helper').attr('title', i18n.__('helper'));
-                $('#settings').attr('title', i18n.__('settings'));
-                $('#info').attr('title', i18n.__('info'));
+                $('#dropdown-more').attr('title', i18n.__('menu'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
@@ -92,7 +107,7 @@
         <div id="set" class="container-fluid">
             <form action="timer.html" method="GET" class="justify-content-center align-content-center">
                 <input name="title" id="title" type="text" class="small" maxlength="11" />&nbsp;
-                <div class="dropdown dropleft dropdown-default">
+                <div class="dropdown dropleft dropdown-default" id="dropdown-tasks">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-menu-button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                         <span class="dropdown-default extreme-small font-weight-bold">
@@ -103,9 +118,11 @@
                         <div id="dropdown-itemlist">
                         </div>
                         <div class="dropdown-divider" id="predefined-tasks-divider"></div>
-                        <a class="dropdown-item font-weight-bold text-info" id="predefined-tasks-edit"
+                        <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
                             href="javascript:call('predefined-tasks')">
-                            <script>document.write(i18n.__('edit'));</script>
+                            <span class="text-info underlined">
+                                <script>document.write(i18n.__('edit'));</script>
+                            </span>
                         </a>
                     </div>
                 </div>
@@ -165,13 +182,13 @@
             $("#no-use-space").css("display", "none");
         }
 
-        var timecnt, myDate, h, min, defaultArray;
+        var timeCount, myDate, h, min, defaultArray;
         function sumGet() {
-            timecnt = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
-            $("#all-sum-num").html(timecnt);
+            timeCount = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
+            $("#all-sum-num").html(timeCount);
             myDate = new Date();
-            h = myDate.getHours() + Number(timecnt / 60);
-            min = myDate.getMinutes() + timecnt % 60;
+            h = myDate.getHours() + Number(timeCount / 60);
+            min = myDate.getMinutes() + timeCount % 60;
             if (min >= 60) min -= 60, h++;
             while (h >= 24) h -= 24;
             $("#to-num-h").html(parseInt(h));
@@ -209,14 +226,50 @@
         defaultArray.forEach(function (item, index, array) {
             if (store.get("default-task") == index) {
                 defaultSet(item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
-                if (store.get("autostarttask") && store.get("just-launched") && (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
-                    window.location.href = "timer.html?title=" + $("#title").val() + "&work-time=" + $("#work-time").val() + "&rest-time=" + $("#rest-time").val() + "&loop=" + $("#loop").val() + "&note=" + $("#note").val();
+                if (store.get("autostarttask") && store.get("just-launched") &&
+                    (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
+                    window.location.href =
+                        "timer.html?title=" + $("#title").val()
+                        + "&work-time=" + $("#work-time").val()
+                        + "&rest-time=" + $("#rest-time").val()
+                        + "&loop=" + $("#loop").val()
+                        + "&note=" + $("#note").val()
+                        + "&method=" + 1;
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
             }
-            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(" + item.workTime + ", " + item.restTime + ", " + item.loops + "," + item.focusWhenWorking + "," + item.focusWhenResting + ")'>" + item.name + "</a>");
+            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(" +
+                item.workTime + ", " + item.restTime + ", " + item.loops + "," +
+                item.focusWhenWorking + "," + item.focusWhenResting + ")'>" + item.name + "</a>");
         });
+
+        setTimeout(function () {
+            if ((store.get("last-recorded-hours-left") && store.get("last-recorded-hours-left") != -1) ||
+                (store.get("last-recorded-minutes-left") && store.get("last-recorded-minutes-left") != -1)) {
+                store.set("fullscreen-work", store.get("last-recorded-state").isWorkTimeFocused);
+                store.set("fullscreen", store.get("last-recorded-state").isRestTimeFocused);
+                if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
+                    store.set("last-recorded-minutes-left", 2);
+                if (store.get("last-recorded-method") == 1) {
+                    window.location.href =
+                        "timer.html?title=" + store.get("last-recorded-state").title
+                        + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                        + "&rest-time=" + store.get("last-recorded-state").restTime
+                        + "&loop=" + 1
+                        + "&note=" + store.get("last-recorded-state").note
+                        + "&method=1";
+                } else {
+                    window.location.href =
+                        "timer.html?title=" + store.get("last-recorded-state").title
+                        + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                        + "&rest-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                        + "&loop=" + 1
+                        + "&note=" + store.get("last-recorded-state").note
+                        + "&method=2";
+                }
+            }
+        }, 500);
     </script>
     <script src="renderer.js"></script>
 </body>

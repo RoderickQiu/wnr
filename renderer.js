@@ -14,7 +14,7 @@ function isInDark() {
         $('body').append('<style>::-webkit-scrollbar-track {background-color: #fefefe;}</style>');
         $('body').append('<style>::-webkit-scrollbar-thumb {background-color: #5555558f;}</style>');
         $('body').append('<style>.dropdown-menu {border-color: #999999; background-color: #fefefe;}</style>');
-        $('body').append('<style>.dropdown-item:hover {background-color: #007bff;}</style>');
+        $('body').append('<style>.dropdown-item:hover {background-color: #5490ea;}</style>');
         $('body').append('<style>input[type="range"] {background-color: #33333333;}</style>');
         $('body').css('background-color', '#fefefe');
         $('body').css('color', '#000000');

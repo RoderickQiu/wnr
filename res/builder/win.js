@@ -2,9 +2,6 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
-    "asarUnpack": [
-        "./node_modules/node-notifier/vendor/**"
-    ],
     "win": {
         "target": [
             "nsis"
@@ -24,7 +21,9 @@ const config = {
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",
-        "oneClick": false
+        "oneClick": false,
+        "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
+        "uninstallerIcon": "res/builder/nsisResources/uninstallerIcon.ico"
     }
 }
 

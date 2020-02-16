@@ -21,7 +21,7 @@
 
 ## Online Version
 
-The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(trail version, may not be fully useful on phones due to a lot of reasons.)*
+The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo version, may not be fully useful on phones or other devices due to a lot of reasons.)*
 
 ## Features
 
@@ -79,7 +79,7 @@ This application is being frequently updated, so does this list.
 
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
 
-- Need Help: [Go to Help Page](https://wnr.scris.top/guide/1-basic-usage.html) or [Contact Me](https://roderickqiu.scris.top/).
+- Need Help: [Go to Help Page](https://wnr.scris.top/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com).
 
 - Any issues or pull requests are appreciated.
 
@@ -121,7 +121,8 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - compare-version, kevva, MIT License.
 - electron-store, sindresorhus, MIT License.
 - i18n-node, mashpie, MIT License.
-- node-notifier, mikaelbr, MIT License.
+- crypto-js, brix, MIT License.
+- copy-to-clipboard, sudodoki, MIT License.
 - request, request, Apache-2.0 License.
 - winreg, fresc81, BSD 2-Clause License.
 - **electron, electron, MIT License**.
@@ -131,7 +132,7 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
 - node-md5, pvorb, BSD 3-Clause License.
 
-#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide))*
+#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [CC BY] license)*
 
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
@@ -139,6 +140,6 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 
 ### Environment Using
 
-- node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE).
-- Inno Setup 6, jrsoftware, [License](https://github.com/jrsoftware/issrc/blob/master/license.txt).
+- **node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE)**.
+- NSIS, Nullsoft, zlib/libpng License.
 - VS Code, microsoft, MIT License.

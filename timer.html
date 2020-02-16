@@ -51,11 +51,12 @@
             <div id="now-timing" class="text-center h1 work"></div><br />
             <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
                         class="fa fa-pause"></i></a></div><br />
-            <div class="text-center text-muted" id="more-options"><a href="index.html" class="text-muted"><i
-                        class="fa fa-angle-left" id="back-index"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a
-                    href="javascript:skipper()" class="text-muted"><i class="fa fa-angle-double-right"
-                        id="skipper"></i></a></div><br />
-            <div class="text-center lead" id="backer"><a href="index.html" class="text-muted"><i
+            <div class="text-center text-muted" id="more-options"><a href="javascript:backer()" class="text-muted"><i
+                        class="fa fa-angle-left" id="back-index"></i></a><span
+                    id="skipper-space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><a href=" javascript:skipper()"
+                    class="text-muted" id="skipper"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
+            <br />
+            <div class="text-center lead" id="backer"><a href="javascript:backer()" class="text-muted"><i
                         class="fa fa-angle-left" id="backindex2"></i></a></div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
@@ -67,13 +68,13 @@
                 $('#backindex2').attr('title', i18n.__('back-index'));
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
-                if (process.platform == "darwin") $("#controller").css("display", "none");
+                if (systemName == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="bottom-bar">&nbsp;</div>
     <script>
-        if (process.platform == "darwin") {
+        if (systemName == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
@@ -83,6 +84,12 @@
         }
         $("#only-one").css("display", "none");
         store.set('just-launched', false);
+
+        function backer() {
+            store.set("last-recorded-minutes-left", -1);
+            store.set("last-recorded-hours-left", -1);
+            window.location.href = "index.html";
+        }
 
         function keydownOnError(e) {
             var currKey = 0, e = e || event;
@@ -111,6 +118,7 @@
         var workTime = decodeURI($_GET['work-time']) * 60000;
         var restTime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
+        var methodFromStart = Number(decodeURI($_GET['method']));
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
@@ -123,7 +131,7 @@
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
-        } else if (workTime / 60000 > 1440 || restTime / 60000 > 1440 || (workTime + restTime) * loop > 86400000) {
+        } else if (workTime > 86400000 || restTime > 86400000 || (workTime + restTime) * loop > 86400000) {
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('too-long') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -140,9 +148,38 @@
                 $nowTiming.removeClass("h1");
             }
 
-            var startTime, int, tempVariable, nowTime, timeGot, seconds, minutes, hours, method = 1, times = 0, isClockWorking = 1, moreThanOneMin = 1;//method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left
+            //method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left
+            var startTime,
+                int,
+                tempVariable,
+                nowTime,
+                timeGot,
+                seconds,
+                minutes,
+                hours,
+                method = 1,
+                times = 0,
+                isClockWorking = 1,
+                moreThanOneMin = 1,
+                lastRecordedMinutesLeft = -1,
+                lastRecordedHoursLeft = -1,
+                systemName = process.platform;
+
+            store.set("last-recorded-state", {
+                workTime: workTime / 60000,
+                restTime: restTime / 60000,
+                loop: loop,
+                title: title,
+                note: note,
+                isWorkTimeFocused: store.get("fullscreen-work"),
+                isRestTimeFocused: store.get("fullscreen")
+            });
+            store.set("last-recorded-method", methodFromStart);
+
             startTime = new Date().getTime();
-            int = self.setInterval(clock, 100);
+            int = setInterval(clock, 200);
+
+            if (methodFromStart == 2) skipper();
 
             ipc.on('start-or-stop', function () {
                 stopper();
@@ -164,6 +201,9 @@
 
             function warningGiver(isend) {
                 moreThanOneMin = 1;
+                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1;
+                store.set("last-recorded-minutes-left", -1);
+                store.set("last-recorded-hours-left", -1);
                 if (store.get("sound") == true || store.get("sound") == undefined) {
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\time-end.wav");
@@ -182,6 +222,8 @@
                         player.loop = false;
                         player.pause();
                         stopper();
+                        $("#skipper").css("display", "inline");
+                        $("#skipper-space").css("display", "inline");
                     });
                 }
             }
@@ -194,13 +236,14 @@
                     $("#work-rest").html(i18n.__('resting'));
                     $bottomBar.css("background-color", "#5490eac2");
                     method = 2;
+                    store.set("last-recorded-method", 2);
                     if (store.get("fullscreen") == true) {
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
                         $nowTiming.addClass("display-1");
                         $nowTiming.removeClass("h1");
                     } else if (store.get("fullscreen-work") == true) {
-                        if (process.platform != "darwin") $("#controller").css("display", "block");
+                        if (systemName != "darwin") $("#controller").css("display", "block");
                         $("#more-options").css("display", "block");
                         $nowTiming.removeClass("display-1");
                         $nowTiming.addClass("h1");
@@ -213,7 +256,8 @@
                     $("#work-rest").html(i18n.__('working'));
                     $bottomBar.css("background-color", "#ea5454c2");
                     method = 1;
-                    if (process.platform != "darwin") $("#controller").css("display", "block");
+                    store.set("last-recorded-method", 1);
+                    if (systemName != "darwin") $("#controller").css("display", "block");
                     if (store.get("fullscreen-work") == true) {
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
@@ -236,7 +280,7 @@
                 isClockWorking = 0;
                 $("#stopper").text("");
                 ipc.send("progress-bar-set", 2);//the progress-bar-set is using (1-message), so when message is 2, the answer is -1
-                if (process.platform != "darwin") $("#controller").css("display", "block");
+                if (systemName != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
                 if (store.get("fullscreen") == true) {
@@ -247,6 +291,8 @@
             }
 
             function skipper() {
+                $("#skipper").css("display", "none");
+                $("#skipper-space").css("display", "none");
                 times++;
                 if (times < loop * 2) {
                     startTime = new Date().getTime();
@@ -279,9 +325,20 @@
                     minutes = parseInt((seconds - hours * 3600) / 60);
                     seconds = seconds - hours * 3600 - minutes * 60;
                     $nowTiming.text(hours + h + minutes + min + seconds + s);
+
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
-                    if (process.platform != "darwin") $timeBar.html(timeGot);
+                    if (systemName != "darwin") $timeBar.html(timeGot);
                     else $timeBarMacOS.html(timeGot);//display the current time
+
+                    if (lastRecordedHoursLeft != hours) {
+                        lastRecordedHoursLeft = hours;
+                        store.set("last-recorded-hours-left", lastRecordedHoursLeft);
+                    }
+                    if (lastRecordedMinutesLeft != minutes) {
+                        lastRecordedMinutesLeft = minutes;
+                        store.set("last-recorded-minutes-left", lastRecordedMinutesLeft + 1);
+                    }
+
                     if (minutes == 0 && moreThanOneMin && hours == 0) {
                         if (store.get("onemintip") != false) {
                             if (!store.get('fullscreen-protection'))

@@ -85,12 +85,12 @@ input[type="checkbox"]:checked {
 }
 
 input::-webkit-input-placeholder {
-    color: #999999;
+    color: #6c757d;
     transition: color.5s;
 }
 
 input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
-    color: #999999c2;
+    color: #6c757dc2;
     transition: color.5s;
 }
 
@@ -104,15 +104,30 @@ li {
 
 ::-webkit-scrollbar {
     width: 4px;
-    background-color: #f5f5f5;
+    background-color: #33333333;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #5555558f;
+    background-color: #6c757d8f;
 }
 
 ::-webkit-scrollbar-thumb:active {
     background-color: #4a9af68f;
+}
+
+.settings-sidebar-block {
+    position: relative;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    max-height: 100px;
+    width: 100%;
+    color: #6c757d;
+    background-color: #fefefe;
+}
+
+.settings-sidebar-block-highlighted {
+    color: #fefefe;
+    background-color: #5490eac2;
 }
 
 .underlined {
@@ -143,10 +158,10 @@ li {
 }
 
 .hotkeyset {
-    background-color: #999999;
-    color: #fefefe;
-    border-radius: 15px;
+    color: #6c757d;
+    border-bottom: #6c757d8f 2px solid !important;
     width: 24px;
+    height: 20px;
     text-align: center;
 }
 
@@ -160,7 +175,7 @@ li {
     height: 25px;
     position: relative;
     -webkit-appearance: none;
-    background-color: #cccccc;
+    background-color: #6c757d8f;
     border-radius: 0.25rem;
     padding: 0px;
     vertical-align: middle;
@@ -174,16 +189,19 @@ li {
 
 .dropdown-item {
     font-size: x-small;
-    color: #111111;
     line-height: 200%;
 }
 
-.dropdown-item:focus, .dropdown-item:active, .dropdown-item:hover {
-    color: #f5f5f5;
+.dropdown-item:focus, .dropdown-item:active, .dropdown-item:hover, .dropdown-item:focus .text-info, .dropdown-item:active .text-info, .dropdown-item:hover .text-info {
+    color: #f5f5f5 !important;
+}
+
+#controller .dropdown-toggle::before {
+    display: none !important;
 }
 
 #dropdown-menu-button {
-    color: #999999;
+    color: #6c757d8f;
 }
 
 #edit-defaults {
@@ -225,9 +243,20 @@ li {
     /* let it clickable */
     -webkit-user-select: none;
     position: absolute;
-    top: 27px;
+    top: 24px;
     left: 35.5px;
     width: 90%;
+}
+
+#settings-sidebar {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    top: 75px;
+    height: 382px;
+    width: 30%;
+    border-right: 1px solid rgba(0, 0, 0, .1);
 }
 
 #settings-container {
@@ -236,10 +265,19 @@ li {
     -webkit-user-select: text;
     position: absolute;
     top: 75px;
-    left: 35.5px;
+    left: 32%;
     overflow-y: scroll;
     height: 382px;
-    width: 90%;
+    width: 64%;
+}
+
+#settings-helper {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    bottom: 25px;
+    right: 14px;
 }
 
 #controller, #time-bar, #time-bar-macos {
@@ -312,4 +350,20 @@ li {
     width: 0%;
     height: 6px;
     background-color: #ea5454c2;
+}
+
+#window-hide {
+    margin-bottom: 3px;
+}
+
+#dropdown-more {
+    margin-bottom: 1.5px;
+}
+
+#dropdown-tasks {
+    margin-left: 2.5px;
+}
+
+#exit {
+    margin-bottom: 0.5px;
 }

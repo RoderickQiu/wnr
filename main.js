@@ -1,8 +1,7 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, systemPreferences } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, systemPreferences, Notification } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
-const notifier = require('node-notifier');
 var i18n = require("i18n");
 var Registry = require('winreg')
 
@@ -12,7 +11,8 @@ let tray = null, contextMenu = null;
 let resetAlarm = null, powerSaveBlockerId = null;
 let isTimerWin = null, isWorkMode = null;
 let timeLeftTip = null;
-let predefinedTasks = null
+let predefinedTasks = null;
+let pushNotificationLink = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
@@ -22,7 +22,7 @@ function createWindow() {
         width: 364,
         height: 396,
         frame: false,
-        backgroundColor: "#FEFEFE",
+        backgroundColor: "#fefefe",
         resizable: false,
         maximizable: false,
         show: false,
@@ -45,11 +45,18 @@ function createWindow() {
     //triggers when the main windows is closed
     win.on('closed', () => {
         win = null;
+        settingsWin = null;
+        tourWin = null;
+        aboutWin = null;
     });
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if (store.get("islocked")) event.preventDefault();
+        if (store.get("islocked")) {
+            event.preventDefault();
+            if (win != null)
+                notificationSolution("wnr", i18n.__('prevent-stop'), "normal");
+        }
     });
 
     //triggers for focusing
@@ -69,19 +76,11 @@ function createWindow() {
 function alarmSet() {
     if (!resetAlarm) {
         resetAlarm = setInterval(function () {
-            if (store.get('alarmtip')) {
+            if (store.get('alarmtip') != false) {
                 if (win != null) win.flashFrame(true);
-                notifier.notify(
-                    {
-                        title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
-                        message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-                        sound: true,
-                        wait: true //to wait with callback, until user action is taken against notification
-                    }, function () {
-                        if (win != null) if (!win.isVisible()) win.show();
-                    }
-                );
+                notificationSolution(i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                    i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
+                    "hide-or-show");
             }
         }, 600000)//alarm you for using wnr
     }
@@ -138,7 +137,7 @@ app.on('ready', () => {
         });
     }//prevent wnr from running more than one instance
 
-    app.setAppUserModelId("wnr1");//set the appUserModelId to use notification in Windows
+    app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
@@ -155,7 +154,7 @@ app.on('ready', () => {
     })
 
     if (store.get('islocked')) {//locked mode
-        if (process.platform == "win32") win.setSkipTaskbar(true);
+        //if (process.platform == "win32") win.setSkipTaskbar(true);
         win.closable = false;
     }
 
@@ -164,14 +163,7 @@ app.on('ready', () => {
 
     if (process.platform == "darwin") {
         if (!app.isInApplicationsFolder()) {
-            notifier.notify(
-                {
-                    title: i18n.__('wrong-folder-notification-title'),
-                    message: i18n.__('wrong-folder-notification-content'),
-                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-                    sound: true
-                }
-            );
+            notificationSolution(i18n.__('wrong-folder-notification-title'), i18n.__('wrong-folder-notification-content'), "normal");
         }
     }
 
@@ -188,7 +180,7 @@ app.on('ready', () => {
             name: "wnr recommended",
             workTime: 30,
             restTime: 6,
-            loops: 4,
+            loops: 5,
             focusWhenWorking: false,
             focusWhenResting: true
         }, {
@@ -226,16 +218,58 @@ app.on('ready', () => {
     }//alternated the former default time settings
 })
 
+function notificationSolution(title, body, func) {
+    if (Notification.isSupported()) {
+        let notifier = new Notification({
+            title: title,
+            body: body,
+            silent: false,
+            icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png')
+        })
+        notifier.show();
+        notifier.removeAllListeners("click");
+        if (func == "hide-or-show")
+            notifier.once("click", function () {
+                if (win != null) {
+                    win.show();
+                    win.focus();
+                }
+            });
+        else if (func == "push-notification")
+            notifier.once("click", function () {
+                shell.openExternal(pushNotificationLink);
+            });
+    } else {
+        if (win != null) {
+            dialog.showMessageBox(win, {
+                title: title,
+                type: "warning",
+                message: body,
+            }).then(function (response) {
+                if (func == "hide-or-show") {
+                    win.show();
+                    win.focus();
+                } else if (func == "push-notification") {
+                    shell.openExternal(pushNotificationLink);
+                }
+            })
+        }
+    }
+}
+
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
-            if (process.platform == "darwin") {
+            /*if (process.platform == "darwin") {
                 if (!store.get("islocked")) app.dock.show();
                 else app.dock.hide();
-            }
-            if (process.platform == "win32" && store.get('islocked') == false) win.setSkipTaskbar(false);
+            }*/
+            //if (process.platform == "win32" && store.get('islocked') == false) win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
-                label: 'wnr' + i18n.__('v') + require("./package.json").version
+                label: 'wnr' + i18n.__('v') + require("./package.json").version,
+                click: function () {
+                    shell.openExternal('https://github.com/RoderickQiu/wnr/releases/');
+                }
             }, {
                 type: 'separator'
             }, {
@@ -280,19 +314,20 @@ function traySolution(isFullScreen) {
             }
             ]);
             if (tray != null) {
+                tray.removeAllListeners('click');
                 tray.on('click', () => {
                     if (store.get("fullscreen-protection") == false) {
-                        if (win != null) /*win.isVisible() ? win.hide() :*/ win.show();
-                        if (settingsWin != null) /*settingsWin.isVisible() ? settingsWin.hide() :*/ settingsWin.show();
-                        if (aboutWin != null) /*aboutWin.isVisible() ? aboutWin.hide() :*/ aboutWin.show();
-                        if (tourWin != null) /*tourWin.isVisible() ? tourWin.hide() :*/ tourWin.show();
+                        if (win != null) win.isVisible() ? win.hide() : win.show();
+                        if (settingsWin != null) settingsWin.isVisible() ? settingsWin.hide() : settingsWin.show();
+                        if (aboutWin != null) aboutWin.isVisible() ? aboutWin.hide() : aboutWin.show();
+                        if (tourWin != null) tourWin.isVisible() ? tourWin.hide() : tourWin.show();
                     }//with problem
                 });//tray
                 tray.setContextMenu(contextMenu);
             }
         } else {
-            if (process.platform == "darwin") app.dock.hide();
-            if (process.platform == "win32") win.setSkipTaskbar(true);
+            //if (process.platform == "darwin") app.dock.hide();
+            //if (process.platform == "win32") win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
             }, {
@@ -304,6 +339,7 @@ function traySolution(isFullScreen) {
                 }
             }]);
             if (tray != null) {
+                tray.removeAllListeners('click');
                 tray.setContextMenu(contextMenu);
                 tray.on('click', () => { ; })
             }
@@ -577,7 +613,7 @@ ipcMain.on('delete-all-data', function () {
         checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
         checkboxChecked: false
     }).then(function (msg) {
-        if (msg.checkboxChecked) {
+        if (msg.checkboxChecked || msg.response != 0) {
             store.clear();
             app.relaunch();
             app.quit()
@@ -620,8 +656,8 @@ function about() {
             aboutWin = new BrowserWindow({
                 parent: win,
                 width: 279,
-                height: 256,
-                backgroundColor: "#FEFEFE",
+                height: 270,
+                backgroundColor: "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -647,9 +683,9 @@ function settings(mode) {
         if (win != null) {
             settingsWin = new BrowserWindow({
                 parent: win,
-                width: 729,
+                width: 780,
                 height: 486,
-                backgroundColor: "#FEFEFE",
+                backgroundColor: "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -657,12 +693,14 @@ function settings(mode) {
                 webPreferences: { nodeIntegration: true },
                 titleBarStyle: "hidden"
             });
-            if (mode == 'locker') settingsWin.loadFile("settings.html", { hash: '#locker-anchor' });
-            else if (mode == 'predefined-tasks') settingsWin.loadFile("settings.html", { hash: '#predefined-tasks-anchor' });
-            else settingsWin.loadFile("settings.html");
+            if (mode == 'locker') store.set("settings-goto", "locker");
+            else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
+            else store.set("settings-goto", "normal");
+            settingsWin.loadFile("settings.html");
             if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
+                //settingsWin.webContents.openDevTools()
             })
             settingsWin.on('closed', () => {
                 win.reload();
@@ -670,15 +708,7 @@ function settings(mode) {
             })
             if (!store.get("settings-experience")) {
                 store.set("settings-experience", true);
-                notifier.notify(
-                    {
-                        title: i18n.__('newbie-for-settings'),
-                        message: i18n.__('newble-for-settings-tip'),
-                        icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-                        sound: true,
-                        wait: true //to wait with callback, until user action is taken against notification
-                    }
-                );
+                notificationSolution(i18n.__('newbie-for-settings'), i18n.__('newbie-for-settings-tip'), "normal");
             }
         }
     }
@@ -692,7 +722,7 @@ function tourguide() {
                 parent: win,
                 width: 729,
                 height: 600,
-                backgroundColor: "#FEFEFE",
+                backgroundColor: "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -708,14 +738,7 @@ function tourguide() {
             tourWin.on('closed', () => {
                 tourWin = null;
             })
-            notifier.notify(
-                {
-                    title: i18n.__('welcome-part-1'),
-                    message: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                    icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-                    sound: true
-                }
-            );
+            notificationSolution(i18n.__('welcome-part-1'), i18n.__('welcome-part-2'), "normal");
         }
     }
 }
@@ -755,30 +778,16 @@ ipcMain.on('locker-passcode', function (event, message) {
 
 ipcMain.on('push-notification', function (event, message) {
     if (!store.get(message.id)) {
-        notifier.notify(
-            {
-                title: message.title,
-                message: message.content,
-                icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-                sound: true,
-                wait: true //to wait with callback, until user action is taken against notification
-            }, function () {
-                if (message.link != "" && message.link != null) shell.openExternal(message.link);
-            }
-        );
+        pushNotificationLink = message.link;
+        if (pushNotificationLink != "" && pushNotificationLink != null) notificationSolution(message.title, message.content, "push-notification");
+        else notificationSolution(message.title, message.content, "normal");
         store.set(message.id, true);
     }
 })
 
 ipcMain.on('only-one-min-left', function () {
-    //if (!store.get('fullscreen-protection'))
-    notifier.notify(
-        {
-            title: i18n.__('only-one-min-left'),
-            message: i18n.__('only-one-min-left-msg'),
-            icon: path.join(__dirname, process.platform == "win32" ? '\\res\\icons\\wnrIcon.png' : '/res/icons/iconMac.png'),
-            sound: true
-        })
+    if (!store.get('fullscreen-protection'))
+        notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "normal");
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {

@@ -2,9 +2,6 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
-    "asarUnpack": [
-        "./node_modules/node-notifier/vendor/**"
-    ],
     "mac": {
         "target": [
             "dir"
@@ -16,7 +13,6 @@ const config = {
             //! to exclude
             "!res/icons/*Win*",
             "!res/icons/*.psd",
-            "!node_modules/node-notifier/vendor/snoreToast/*"
         ]
     }
 }
@@ -26,7 +22,7 @@ builder.build({
     config,
 })
     .then(m => {
-        console.log(m)
+        console.log("Done!")
     })
     .catch(e => {
         console.error(e)
