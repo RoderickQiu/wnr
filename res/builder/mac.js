@@ -16,8 +16,9 @@ const config = {
         ]
     },
     "dmg": {
-        icon: "res/icons/iconMac.icns",
-        backgroundColor: "#fefefe"
+        "icon": "res/icons/iconMac.icns",
+        "backgroundColor": "#fefefe",
+        "artifactName": "${productName} ${version} MacOS.${ext}"
     }
 }
 
