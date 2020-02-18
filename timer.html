@@ -217,7 +217,7 @@
                 else {
                     if (isend == 1) ipc.send('warning-giver-workend');
                     else ipc.send('warning-giver-restend');
-                    var tempVariable = setTimeout(stopper, 500);
+                    let stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         player.loop = false;
                         player.pause();
@@ -294,11 +294,23 @@
                 $("#skipper").css("display", "none");
                 $("#skipper-space").css("display", "none");
                 times++;
-                if (times < loop * 2) {
-                    startTime = new Date().getTime();
-                    themeChanger();
-                } else if (times == loop * 2) {
-                    ender();
+                if (isClockWorking) {
+                    if (times < loop * 2) {
+                        startTime = new Date().getTime();
+                        themeChanger();
+                    } else if (times == loop * 2) {
+                        ender();
+                    }
+                } else {
+                    stopper();
+                    setTimeout(function () {
+                        if (times < loop * 2) {
+                            startTime = new Date().getTime();
+                            themeChanger();
+                        } else if (times == loop * 2) {
+                            ender();
+                        }
+                    }, 250);
                 }
             }
 

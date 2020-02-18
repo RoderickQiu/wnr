@@ -39,7 +39,6 @@ function createWindow() {
     //to load without sparking
     win.once('ready-to-show', () => {
         win.show();
-        //win.webContents.openDevTools()
     });
 
     //triggers when the main windows is closed
@@ -153,6 +152,11 @@ app.on('ready', () => {
         }//prevent using hotkeys to quit
     })
 
+    globalShortcut.register('CommandOrControl+Shift+L', () => {
+        let focusWin = BrowserWindow.getFocusedWindow()
+        focusWin && focusWin.toggleDevTools()
+    })//toggle devtools
+
     if (store.get('islocked')) {//locked mode
         //if (process.platform == "win32") win.setSkipTaskbar(true);
         win.closable = false;
@@ -199,7 +203,7 @@ app.on('ready', () => {
             focusWhenResting: false
         });
         store.set("predefined-tasks", predefinedTasks);
-        store.set("default-task", 0);//0 -> wnr recommended
+        store.set("default-task", -1);//-1: not set yet
     } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//init predefined tasks
     if (store.get("worktime")) {
         predefinedTasks.push({
@@ -700,7 +704,6 @@ function settings(mode) {
             if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
-                //settingsWin.webContents.openDevTools()
             })
             settingsWin.on('closed', () => {
                 win.reload();

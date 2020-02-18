@@ -754,10 +754,10 @@ electron-store@5.1.0:
     conf "^6.2.0"
     type-fest "^0.7.1"
 
-electron@7.1.11:
-  version "7.1.11"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-7.1.11.tgz#3a95e35804af083d58b590513afea5e2290c4b66"
-  integrity sha1-OpXjWASvCD1YtZBROv6l4ikMS2Y=
+electron@7.1.12:
+  version "7.1.12"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-7.1.12.tgz?cache=0&sync_timestamp=1581822947442&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-7.1.12.tgz#7a9a416975f466b941c8ef1a48c5a50aefad494f"
+  integrity sha1-eppBaXX0ZrlByO8aSMWlCu+tSU8=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
