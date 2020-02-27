@@ -23,7 +23,6 @@ const config = {
         "license": "LICENSE",
         "oneClick": false,
         "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
-        "uninstallerIcon": "res/builder/nsisResources/uninstallerIcon.ico",
         "artifactName": "${productName} ${version} Setup.${ext}"
     }
 }
