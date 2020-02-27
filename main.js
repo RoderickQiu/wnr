@@ -471,14 +471,14 @@ function isDarkMode() {
 }
 function darkModeSettingsFinder() {
     if (process.platform == "darwin") {
-        if (nativeTheme.shouldUseDarkColors)
-            store.set('isdark', false);
-        else {
+        if (nativeTheme.shouldUseDarkColors) {
             store.set('isdark', true);
             if (win != null) {
                 win.setBackgroundColor('#393939');
                 win.webContents.send('darkModeChanges');
             }
+        } else {
+            store.set('isdark', false);
         }
     } else if (process.platform == 'win32') {
         var regKey = new Registry({
