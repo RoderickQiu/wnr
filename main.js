@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, systemPreferences, Notification } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, Notification, nativeTheme } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
@@ -15,6 +15,8 @@ let predefinedTasks = null;
 let pushNotificationLink = null
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this meaningless alert
 
 function createWindow() {
     //create the main window
@@ -95,8 +97,10 @@ function setFullScreenMode(flag) {
 //before quit
 app.on('will-quit', () => {
     globalShortcut.unregisterAll();
-    tray.destroy();
-    tray = null
+    if (tray != null) {
+        tray.destroy(tray);
+        tray = null
+    }
 })
 
 //when created the app, triggers
@@ -105,18 +109,21 @@ app.on('ready', () => {
     createWindow();
 
     i18n.configure({
-        locales: ['en', 'zh'],
+        locales: ['en', 'zh-CN', 'zh-TW'],
         directory: __dirname + '/locales',
         register: global
     });
     if (store.get("i18n") == undefined) {
         var lang = app.getLocale();
-        if (lang[0] == 'e' && lang[1] == 'n') {
-            lang = 'en';
-        }
-        if (lang[0] == 'z' && lang[1] == 'h') {
-            lang = 'zh';
-        }//the tail isn't required
+        if (lang.charAt(0) == 'z' && lang.charAt(1) == 'h') {
+            if ((lang.charAt(3) == 'T' && lang.charAt(4) == 'W') && (lang.charAt(3) == 'H' && lang.charAt(4) == 'K')) lang = 'zh-TW';
+            else lang = 'zh-CN';
+        } else lang = 'en';
+        store.set('i18n', lang);
+    } else if (store.get("i18n") == 'zh') {
+        var lang = app.getLocale();
+        if ((lang.charAt(3) == 'T' && lang.charAt(4) == 'W') && (lang.charAt(3) == 'H' && lang.charAt(4) == 'K')) lang = 'zh-TW';
+        else lang = 'zh-CN';
         store.set('i18n', lang);
     }
     i18n.setLocale(store.get("i18n"));//set the locale
@@ -124,7 +131,7 @@ app.on('ready', () => {
     timeLeftTip = i18n.__("time-left");//this will be used in this file frequently
 
     const gotTheLock = app.requestSingleInstanceLock();
-    if (!gotTheLock && win != null) {
+    if (!gotTheLock && win != null && app.isPackaged) {
         dialog.showMessageBox(win, {
             title: i18n.__('more-than-one-wnr-running-dialog-box-title'),
             type: "warning",
@@ -169,6 +176,15 @@ app.on('ready', () => {
         if (!app.isInApplicationsFolder()) {
             notificationSolution(i18n.__('wrong-folder-notification-title'), i18n.__('wrong-folder-notification-content'), "normal");
         }
+        nativeTheme.on('updated', function theThemeHasChanged() {
+            if (nativeTheme.shouldUseDarkColors) {
+                store.set('isdark', true);
+                if (win != null) {
+                    win.setBackgroundColor('#393939');
+                    win.webContents.send('darkModeChanges');
+                }
+            }
+        })
     }
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
@@ -444,39 +460,46 @@ function macOSFullscreenSolution(isFullScreen) {
 
 function isDarkMode() {
     if (app.isReady()) {
-        store.set('isdark', false);
-        if (process.platform == 'darwin') {
-            if (systemPreferences.isDarkMode()) {
-                store.set('isdark', true);
-                if (win != null) win.backgroundColor = '#393939';
+        try {
+            store.set('isdark', false);
+            darkModeSettingsFinder();
+            return store.get('isdark');
+        } catch (e) {
+            console.log(e)
+        }
+    }
+}
+function darkModeSettingsFinder() {
+    if (process.platform == "darwin") {
+        if (nativeTheme.shouldUseDarkColors)
+            store.set('isdark', false);
+        else {
+            store.set('isdark', true);
+            if (win != null) {
+                win.setBackgroundColor('#393939');
+                win.webContents.send('darkModeChanges');
             }
-            systemPreferences.subscribeNotification(
-                'AppleInterfaceThemeChangedNotification',
-                function theThemeHasChanged() {
-                    isDarkMode();
-                    if (win != null) win.webContents.send('darkModeChanges');
-                }
-            )
-        } else if (process.platform == 'win32') {
-            var regKey = new Registry({
-                hive: Registry.HKCU,
-                key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
-            })
-            regKey.values(function (err, items) {
-                if (err)
-                    return 'unset';
-                else {
-                    for (var i = 0; i < items.length; i++) {
-                        if (items[i].name == 'AppsUseLightTheme') {
-                            if (items[i].value == "0x0") {
-                                store.set('isdark', true);
-                                if (win != null) win.backgroundColor = '#393939';
-                            }
+        }
+    } else if (process.platform == 'win32') {
+        var regKey = new Registry({
+            hive: Registry.HKCU,
+            key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
+        })
+        regKey.values(function (err, items) {
+            if (err)
+                return 'unset';
+            else {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].name == 'AppsUseLightTheme') {
+                        if (items[i].value == "0x0") {
+                            store.set('isdark', true);
+                            if (win != null) win.setBackgroundColor('#393939');
+                            win.webContents.send('darkModeChanges');
                         }
                     }
                 }
-            })
-        }
+            }
+        })
     }
 }
 
@@ -661,7 +684,7 @@ function about() {
                 parent: win,
                 width: 279,
                 height: 270,
-                backgroundColor: "#fefefe",
+                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -689,7 +712,7 @@ function settings(mode) {
                 parent: win,
                 width: 780,
                 height: 486,
-                backgroundColor: "#fefefe",
+                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -725,7 +748,7 @@ function tourguide() {
                 parent: win,
                 width: 729,
                 height: 600,
-                backgroundColor: "#fefefe",
+                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
                 frame: false,
                 show: false,
@@ -803,6 +826,7 @@ ipcMain.on("logger", function (event, message) {
 })
 
 ipcMain.on("timer-win", function (event, message) {
+    isDarkMode();
     if (message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();

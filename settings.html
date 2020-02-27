@@ -309,10 +309,12 @@
             <!-- 4. lock mode settings -->
             <div id="locker">
                 <div class="align-content-center form-text">
-                    <script>
-                        document.write(i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '<span class="font-weight-bold work">'
-                            + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
-                    </script>
+                    <label>
+                        <script>
+                            document.write(i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '<span class="font-weight-bold rest">'
+                                + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
+                        </script>
+                    </label>
                     <br />
                     <input name="passcode-locker" id="passcode-locker" type="password" maxlength="11"
                         onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
@@ -352,7 +354,7 @@
                     <li id="hotkey-tip">
                         <script>document.write(i18n.__('hotkey-for-show-or-hide-setting'));</script>
                         <p class="small text-muted">
-                            <script>document.write(process.platform == "darwin" ? "Command" : "Ctrl")</script>
+                            <script>document.write(cmdOrCtrl._("short", "pascal"))</script>
                             + Shift + Alt + <input id="hotkey-for-show-or-hide-setting" class="hotkeyset" type="text"
                                 maxlength="1" onchange="hotkeyForShowOrHideSetting()" />.<br />
                             <b>
@@ -364,7 +366,7 @@
                     <li id="hotkey2-tip">
                         <script>document.write(i18n.__('hotkey-for-start-or-stop-setting'));</script>
                         <p class="small text-muted">
-                            <script>document.write(process.platform == "darwin" ? "Command" : "Ctrl")</script>
+                            <script>document.write(cmdOrCtrl._("short", "pascal"))</script>
                             + Shift + Alt + <input id="hotkey-for-start-or-stop-setting" class="hotkeyset" type="text"
                                 maxlength="1" onchange="hotkeyForStartOrStopSetting()" />.<br />
                             <b>
@@ -529,10 +531,10 @@
                 item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
                 i18n.__('times') +
                 "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' /> | " +
-                i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />" +
-                "<br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>" +
-                "<span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span> " +
-                "</div><hr /></li>"
+                i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />\
+                <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
+                <span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
+                </div><hr /></li>"
             );
             if (item.focusWhenWorking) document.getElementById("focus-when-working" + index).checked = true;
             else document.getElementById("focus-when-working" + index).checked = false;
@@ -568,7 +570,12 @@
         }
         function languageSetting() {
             if (document.getElementById("language-setting").checked == true) store.set("i18n", 'en');
-            else store.set("i18n", 'zh');
+            else {
+                var lang = navigator.language;
+                if ((lang.charAt(3) == 'T' && lang.charAt(4) == 'W') && (lang.charAt(3) == 'H' && lang.charAt(4) == 'K')) lang = 'zh-TW';
+                else lang = 'zh-CN';
+                store.set('i18n', lang);
+            }
             timeOut = setTimeout("call('relauncher')", 500);
         }
         if (store.get("sound") != undefined) {

@@ -24,8 +24,7 @@
 
 
 
-<body onpaste="return false">
-    <!-- prevent people from pasting abnormal content -->
+<body>
 
     <!-- loader -->
     <div id="loader-wrapper">
@@ -37,7 +36,7 @@
         window.onload = function () {
             $("body").addClass("loaded");
             setTimeout(function () { $('#loader-wrapper').remove() }, 1000);
-        } 
+        }
     </script>
 
     <script src="supporter.js"></script><!-- support wnr running -->
@@ -49,15 +48,16 @@
             store.set('islocked', false);
             ipc.send("tourguide");
         }
+        const shi = require("node-shi");
     </script>
     <script>
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
                 window.location.href = "timer.html?title=" + $("#title").val()
-                    + "&work-time=" + $("#work-time").val()
-                    + "&rest-time=" + $("#rest-time").val()
-                    + "&loop=" + $("#loop").val()
+                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&loop=" + $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
                     + "&note=" + $("#note").val()
                     + "&method=1";
             }
@@ -128,28 +128,24 @@
                 </div>
                 <br /><br />
                 <div class="align-content-center">
-                    <input name="work-time" id="work-time" type="number" onkeyup="allSet()"
-                        oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                        class="work lead" autofocus required />
-                    <input id="focus-work-set" type="checkbox" onchange="focusWorkSet()" /><span
-                        class="focuser extreme-small work">
+                    <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
+                        required />
+                    <input id="focus-work-set" type="checkbox" onchange="focusWorkSet()" />
+                    <span class="focuser extreme-small work">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
                 </div>
                 <br />
                 <div class="align-content-center">
-                    <input name="rest-time" id="rest-time" type="number" onkeyup="allSet()"
-                        oninput="if (value.length > 4) value = value.slice(0, 4)" style="ime-mode:Disabled"
-                        class="rest lead" required />
-                    <input id="focus-rest-set" type="checkbox" onchange="focusRestSet()" /><span
-                        class="focuser extreme-small rest">
+                    <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+                    <input id="focus-rest-set" type="checkbox" onchange="focusRestSet()" />
+                    <span class="focuser extreme-small rest">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
                 </div>
                 <br />
-                <input name="loop" id="loop" type="number" onkeyup="allSet()"
-                    oninput="if (value.length > 3) value = value.slice(0, 3)" style="ime-mode:Disabled"
-                    class="small text-muted" required />
+                <input name="loop" id="loop" type="text" onkeyup="allSet()"
+                    oninput="if (value.length > 5) value = value.slice(0, 5)" class="small text-muted" required />
                 <br /><br />
                 <!-- control that only numbers are OK -->
                 <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
@@ -183,22 +179,33 @@
         }
 
         var timeCount, myDate, h, min, defaultArray;
-        function sumGet() {
-            timeCount = (Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val());
-            $("#all-sum-num").html(timeCount);
-            myDate = new Date();
-            h = myDate.getHours() + Number(timeCount / 60);
-            min = myDate.getMinutes() + timeCount % 60;
-            if (min >= 60) min -= 60, h++;
-            while (h >= 24) h -= 24;
-            $("#to-num-h").html(parseInt(h));
-            if (min >= 10) $("#to-num-min").html(parseInt(min));
-            else $("#to-num-min").html("0" + parseInt(min));
+        function sumGet(workTimeGet, restTimeGet, loopGet) {
+            timeCount = (Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet);
+            if (timeCount != NaN) {
+                $("#all-sum-num").html(timeCount);
+                myDate = new Date();
+                h = myDate.getHours() + Number(timeCount / 60);
+                min = myDate.getMinutes() + timeCount % 60;
+                if (min >= 60) min -= 60, h++;
+                while (h >= 24) h -= 24;
+                $("#to-num-h").html(parseInt(h));
+                if (min >= 10) $("#to-num-min").html(parseInt(min));
+                else $("#to-num-min").html("0" + parseInt(min));
+            }
         }
         function allSet() {
-            if (Number($("#work-time").val()) != 0 && Number($("#rest-time").val()) != 0 && Number($("#loop").val()) != 0 && String(Number($("#work-time").val())).indexOf('e') == -1 && String(Number($("#rest-time").val())).indexOf('e') == -1 && String(Number($("#loop").val())).indexOf('e') == -1) {
-                if ((Number($("#work-time").val()) + Number($("#rest-time").val())) * Number($("#loop").val())) sumGet();
-            } else {
+            try {
+                var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
+                    restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
+                    loopGet = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
+                if (workTimeGet != 0 && restTimeGet != 0 && loopGet != 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet <= 1440) {
+                    if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
+                } else {
+                    $("#all-sum-num").html("---");
+                    $("#to-num-h").html("--");
+                    $("#to-num-min").html("--");
+                }
+            } catch {
                 $("#all-sum-num").html("---");
                 $("#to-num-h").html("--");
                 $("#to-num-min").html("--");
@@ -213,9 +220,9 @@
         }
 
         function defaultSet(workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
-            $("#work-time").val(workTime);
-            $("#rest-time").val(restTime);
-            $("#loop").val(loops);
+            $("#work-time").val(shi.ArabicNumberTimeParser(workTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
+            $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
+            $("#loop").val(loops + ' ' + i18n.__('times'));
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
             focusWorkSet();
@@ -230,11 +237,11 @@
                     (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
                     window.location.href =
                         "timer.html?title=" + $("#title").val()
-                        + "&work-time=" + $("#work-time").val()
-                        + "&rest-time=" + $("#rest-time").val()
-                        + "&loop=" + $("#loop").val()
+                        + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
+                        + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                        + "&loop=" + $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
                         + "&note=" + $("#note").val()
-                        + "&method=" + 1;
+                        + "&method=1";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -251,7 +258,7 @@
                 store.set("fullscreen", store.get("last-recorded-state").isRestTimeFocused);
                 if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
                     store.set("last-recorded-minutes-left", 2);
-                if (store.get("last-recorded-method") == 1) {
+                if (store.get("last-recorded-state").method == 1) {
                     window.location.href =
                         "timer.html?title=" + store.get("last-recorded-state").title
                         + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")

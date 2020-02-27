@@ -411,6 +411,13 @@ charenc@~0.0.1:
   resolved "https://registry.npm.taobao.org/charenc/download/charenc-0.0.2.tgz#c0a1d2f3a7092e03774bfa83f14c0fc5790a8667"
   integrity sha1-wKHS86cJLgN3S/qD8UwPxXkKhmc=
 
+chinese-numbers-converter@^2.3.1:
+  version "2.3.1"
+  resolved "https://registry.npm.taobao.org/chinese-numbers-converter/download/chinese-numbers-converter-2.3.1.tgz#b22f578ffce42dc817ab0826508093e7c62a7bcb"
+  integrity sha1-si9Xj/zkLcgXqwgmUICT58Yqe8s=
+  dependencies:
+    should "^13.2.3"
+
 chromium-pickle-js@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npm.taobao.org/chromium-pickle-js/download/chromium-pickle-js-0.2.0.tgz#04a106672c18b085ab774d983dfa3ea138f22205"
@@ -450,6 +457,11 @@ clone-response@^1.0.2:
   integrity sha1-0dyXOSAxTfZ/vrlCI7TuNQI56Ws=
   dependencies:
     mimic-response "^1.0.0"
+
+cmd-or-ctrl@0.3.1:
+  version "0.3.1"
+  resolved "https://registry.npmjs.org/cmd-or-ctrl/-/cmd-or-ctrl-0.3.1.tgz#8618bc38b92c07e30aa770c8f1a905b273b68a47"
+  integrity sha512-tVXgC1iBNeEGujqaV420Kr4o5BVP56/mKNAUIkAXIsXoAgrDgc7xXGcX/KX6i29raXasG5misyHs5dHyQJ+tfg==
 
 code-point-at@^1.0.0:
   version "1.1.0"
@@ -785,6 +797,11 @@ end-of-stream@^1.1.0:
   dependencies:
     once "^1.4.0"
 
+english2number@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.npm.taobao.org/english2number/download/english2number-1.0.8.tgz#7b83974bea539746b39ca831137c9feaf595c488"
+  integrity sha1-e4OXS+pTl0aznKgxE3yf6vWVxIg=
+
 env-paths@^2.2.0:
   version "2.2.0"
   resolved "https://registry.npm.taobao.org/env-paths/download/env-paths-2.2.0.tgz#cdca557dc009152917d6166e2febe1f039685e43"
@@ -1079,6 +1096,11 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
+humanize-duration@^3.21.0:
+  version "3.21.0"
+  resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.21.0.tgz#ae5dc7e67640770cbf6a8d03a5d1138d47c7ce38"
+  integrity sha1-rl3H5nZAdwy/ao0DpdETjUfHzjg=
+
 i18n@0.8.5:
   version "0.8.5"
   resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.8.5.tgz#3ae2db28fa1670e3f5ba30d3e505958b0b62e7ec"
@@ -1212,6 +1234,11 @@ javascript-state-machine@^2.3.5:
   version "2.4.0"
   resolved "https://registry.npm.taobao.org/javascript-state-machine/download/javascript-state-machine-2.4.0.tgz#d8be31ec38f24ac1a1832f0b672fc3cd5f79c96e"
   integrity sha1-2L4x7DjySsGhgy8LZy/DzV95yW4=
+
+js-pinyin@^0.1.9:
+  version "0.1.9"
+  resolved "https://registry.npm.taobao.org/js-pinyin/download/js-pinyin-0.1.9.tgz#cdf19335645ddb20d4630df1058aac25d256adfd"
+  integrity sha1-zfGTNWRd2yDUYw3xBYqsJdJWrf0=
 
 js-yaml@^3.13.1:
   version "3.13.1"
@@ -1519,6 +1546,16 @@ mustache@*:
   version "3.2.1"
   resolved "https://registry.npm.taobao.org/mustache/download/mustache-3.2.1.tgz#89e78a9d207d78f2799b1e95764a25bf71a28322"
   integrity sha1-ieeKnSB9ePJ5mx6Vdkolv3GigyI=
+
+node-shi@0.4.1:
+  version "0.4.1"
+  resolved "https://registry.npm.taobao.org/node-shi/download/node-shi-0.4.1.tgz#478e14034bb302e1c8cf033ae344632cbdc8cedb"
+  integrity sha1-R44UA0uzAuHIzwM640RjLL3Izts=
+  dependencies:
+    chinese-numbers-converter "^2.3.1"
+    english2number "^1.0.8"
+    humanize-duration "^3.21.0"
+    js-pinyin "^0.1.9"
 
 normalize-package-data@^2.5.0:
   version "2.5.0"
@@ -1911,6 +1948,50 @@ set-blocking@^2.0.0:
   version "2.0.0"
   resolved "https://registry.npm.taobao.org/set-blocking/download/set-blocking-2.0.0.tgz#045f9782d011ae9a6803ddd382b24392b3d890f7"
   integrity sha1-BF+XgtARrppoA93TgrJDkrPYkPc=
+
+should-equal@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.npm.taobao.org/should-equal/download/should-equal-2.0.0.tgz#6072cf83047360867e68e98b09d71143d04ee0c3"
+  integrity sha1-YHLPgwRzYIZ+aOmLCdcRQ9BO4MM=
+  dependencies:
+    should-type "^1.4.0"
+
+should-format@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.npm.taobao.org/should-format/download/should-format-3.0.3.tgz#9bfc8f74fa39205c53d38c34d717303e277124f1"
+  integrity sha1-m/yPdPo5IFxT04w01xcwPidxJPE=
+  dependencies:
+    should-type "^1.3.0"
+    should-type-adaptors "^1.0.1"
+
+should-type-adaptors@^1.0.1:
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/should-type-adaptors/download/should-type-adaptors-1.1.0.tgz#401e7f33b5533033944d5cd8bf2b65027792e27a"
+  integrity sha1-QB5/M7VTMDOUTVzYvytlAneS4no=
+  dependencies:
+    should-type "^1.3.0"
+    should-util "^1.0.0"
+
+should-type@^1.3.0, should-type@^1.4.0:
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/should-type/download/should-type-1.4.0.tgz#0756d8ce846dfd09843a6947719dfa0d4cff5cf3"
+  integrity sha1-B1bYzoRt/QmEOmlHcZ36DUz/XPM=
+
+should-util@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.npm.taobao.org/should-util/download/should-util-1.0.1.tgz?cache=0&sync_timestamp=1561373492586&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fshould-util%2Fdownload%2Fshould-util-1.0.1.tgz#fb0d71338f532a3a149213639e2d32cbea8bcb28"
+  integrity sha1-+w1xM49TKjoUkhNjni0yy+qLyyg=
+
+should@^13.2.3:
+  version "13.2.3"
+  resolved "https://registry.npm.taobao.org/should/download/should-13.2.3.tgz#96d8e5acf3e97b49d89b51feaa5ae8d07ef58f10"
+  integrity sha1-ltjlrPPpe0nYm1H+qlro0H71jxA=
+  dependencies:
+    should-equal "^2.0.0"
+    should-format "^3.0.3"
+    should-type "^1.4.0"
+    should-type-adaptors "^1.0.1"
+    should-util "^1.0.0"
 
 signal-exit@^3.0.2:
   version "3.0.2"

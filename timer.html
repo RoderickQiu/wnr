@@ -126,7 +126,7 @@
 
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
-        if (!loop || workTime <= 60000 || restTime <= 60000) {//use ms for 1s
+        if (!loop || workTime <= 60000 || restTime <= 60000 || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -144,6 +144,8 @@
                 ipc.send('focus-first');
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
+                $("#time-bar").addClass("time-bar-focus");
+                $("#time-bar-macos").addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
             }
@@ -163,7 +165,11 @@
                 moreThanOneMin = 1,
                 lastRecordedMinutesLeft = -1,
                 lastRecordedHoursLeft = -1,
-                systemName = process.platform;
+                systemName = process.platform,
+                progress = 0.00,
+                lastRecordedProgress = 0.00,
+                isWorkTimeFocused = store.get("fullscreen-work"),
+                isRestTimeFocused = store.get("fullscreen");
 
             store.set("last-recorded-state", {
                 workTime: workTime / 60000,
@@ -171,10 +177,10 @@
                 loop: loop,
                 title: title,
                 note: note,
-                isWorkTimeFocused: store.get("fullscreen-work"),
-                isRestTimeFocused: store.get("fullscreen")
+                isWorkTimeFocused: isWorkTimeFocused,
+                isRestTimeFocused: isRestTimeFocused,
+                method: methodFromStart
             });
-            store.set("last-recorded-method", methodFromStart);
 
             startTime = new Date().getTime();
             int = setInterval(clock, 200);
@@ -201,7 +207,7 @@
 
             function warningGiver(isend) {
                 moreThanOneMin = 1;
-                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1;
+                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
                 store.set("last-recorded-minutes-left", -1);
                 store.set("last-recorded-hours-left", -1);
                 if (store.get("sound") == true || store.get("sound") == undefined) {
@@ -236,15 +242,18 @@
                     $("#work-rest").html(i18n.__('resting'));
                     $bottomBar.css("background-color", "#5490eac2");
                     method = 2;
-                    store.set("last-recorded-method", 2);
+                    store.set("last-recorded-state.method", 2);
                     if (store.get("fullscreen") == true) {
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
+                        $("#time-bar-macos").addClass("time-bar-focus");
+                        $("#time-bar").addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
                         $nowTiming.removeClass("h1");
                     } else if (store.get("fullscreen-work") == true) {
                         if (systemName != "darwin") $("#controller").css("display", "block");
                         $("#more-options").css("display", "block");
+                        $(".time-bar-focus").removeClass("time-bar-focus");
                         $nowTiming.removeClass("display-1");
                         $nowTiming.addClass("h1");
                     }
@@ -256,15 +265,18 @@
                     $("#work-rest").html(i18n.__('working'));
                     $bottomBar.css("background-color", "#ea5454c2");
                     method = 1;
-                    store.set("last-recorded-method", 1);
+                    store.set("last-recorded-state.method", 1);
                     if (systemName != "darwin") $("#controller").css("display", "block");
                     if (store.get("fullscreen-work") == true) {
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
+                        $("#time-bar").addClass("time-bar-focus");
+                        $("#time-bar-macos").addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
                         $nowTiming.removeClass("h1");
                     } else if (store.get("fullscreen") == true) {
                         $("#more-options").css("display", "block");
+                        $(".time-bar-focus").removeClass("time-bar-focus");
                         $nowTiming.removeClass("display-1");
                         $nowTiming.addClass("h1");
                     }
@@ -284,6 +296,7 @@
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
                 if (store.get("fullscreen") == true) {
+                    $(".time-bar-focus").removeClass("time-bar-focus");
                     $nowTiming.removeClass("display-1");
                     $nowTiming.addClass("h1");
                 }
@@ -323,19 +336,27 @@
             function clock() {
                 nowTime = new Date();
                 tempVariable = nowTime.getTime();
-                if (method == 1) seconds = parseInt((workTime - tempVariable + startTime) / 1000);
-                else seconds = parseInt((restTime - tempVariable + startTime) / 1000);
+                if (method == 1) seconds = Math.floor((workTime - tempVariable + startTime) / 1000);
+                else seconds = Math.floor((restTime - tempVariable + startTime) / 1000);
                 if (seconds > 0) {
                     if (method == 1) {
-                        ipc.send("progress-bar-set", ((seconds / workTime) * 1000).toFixed(2));
-                        $bottomBar.css("width", (seconds / workTime) * 100000 + "%");
+                        progress = ((seconds / workTime) * 1000).toFixed(2);
+                        if (progress != lastRecordedProgress) {
+                            lastRecordedProgress = progress;
+                            ipc.send("progress-bar-set", lastRecordedProgress);
+                            $bottomBar.css("width", lastRecordedProgress * 100 + "%");
+                        }
                     } else {
-                        ipc.send("progress-bar-set", ((seconds / restTime) * 1000).toFixed(2));
-                        $bottomBar.css("width", (seconds / restTime) * 100000 + "%");
+                        progress = ((seconds / restTime) * 1000).toFixed(2);
+                        if (progress != lastRecordedProgress) {
+                            lastRecordedProgress = progress;
+                            ipc.send("progress-bar-set", lastRecordedProgress);
+                            $bottomBar.css("width", lastRecordedProgress * 100 + "%");
+                        }
                     }
-                    hours = parseInt(seconds / 3600);
-                    minutes = parseInt((seconds - hours * 3600) / 60);
-                    seconds = seconds - hours * 3600 - minutes * 60;
+                    hours = Math.floor(seconds / 3600);
+                    minutes = Math.floor((seconds - hours * 3600) / 60);
+                    seconds -= hours * 3600 + minutes * 60;
                     $nowTiming.text(hours + h + minutes + min + seconds + s);
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());

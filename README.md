@@ -25,6 +25,8 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 ## Features
 
+- semantic time input
+
 - work time settings
 
 - rest time settings
@@ -37,7 +39,7 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 - optional taskname and task notes
 
-- tray menu / dock menu
+- tray menu
 
 - alerts for time end
 
@@ -107,6 +109,8 @@ yarn run linux
 
 I'm now using yarn.
 
+**I'm currently disabling `node-modules/conf/index.js`' error from throwing by annotationifying line 441 (`throw error;`) because it's error-occurring.**
+
 ## Copyright & Credit
 
 Copyright (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
@@ -117,6 +121,8 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 
 #### Main Program
 
+- node-shi, [**my own project**](https://shi.r-q.name) following MIT License.
+- cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
 - node-auto-launch, Teamwork, MIT License.
 - compare-version, kevva, MIT License.
 - electron-store, sindresorhus, MIT License.
@@ -132,7 +138,7 @@ Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blo
 - font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
 - node-md5, pvorb, BSD 3-Clause License.
 
-#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [CC BY] license)*
+#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [CC-BY-4.0] license)*
 
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
