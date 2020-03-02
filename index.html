@@ -43,10 +43,14 @@
     <script src="updater.js"></script><!-- check for updates -->
     <script src="querier.js"></script><!-- query push messages -->
     <script>
-        if (!store.get('tour')) {
-            store.set('tour', 'true');
-            store.set('islocked', false);
-            ipc.send("tourguide");
+        try {
+            if (!store.get('tour')) {
+                store.set('tour', 'true');
+                store.set('islocked', false);
+                ipc.send("tourguide");
+            }
+        } catch (e) {
+            console.log(e);
         }
         const shi = require("node-shi");
     </script>
@@ -252,29 +256,33 @@
         });
 
         setTimeout(function () {
-            if ((store.get("last-recorded-hours-left") && store.get("last-recorded-hours-left") != -1) ||
-                (store.get("last-recorded-minutes-left") && store.get("last-recorded-minutes-left") != -1)) {
-                store.set("fullscreen-work", store.get("last-recorded-state").isWorkTimeFocused);
-                store.set("fullscreen", store.get("last-recorded-state").isRestTimeFocused);
-                if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
-                    store.set("last-recorded-minutes-left", 2);
-                if (store.get("last-recorded-state").method == 1) {
-                    window.location.href =
-                        "timer.html?title=" + store.get("last-recorded-state").title
-                        + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
-                        + "&rest-time=" + store.get("last-recorded-state").restTime
-                        + "&loop=" + 1
-                        + "&note=" + store.get("last-recorded-state").note
-                        + "&method=1";
-                } else {
-                    window.location.href =
-                        "timer.html?title=" + store.get("last-recorded-state").title
-                        + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
-                        + "&rest-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
-                        + "&loop=" + 1
-                        + "&note=" + store.get("last-recorded-state").note
-                        + "&method=2";
+            try {
+                if ((store.get("last-recorded-hours-left") && store.get("last-recorded-hours-left") != -1) ||
+                    (store.get("last-recorded-minutes-left") && store.get("last-recorded-minutes-left") != -1)) {
+                    store.set("fullscreen-work", store.get("last-recorded-state").isWorkTimeFocused);
+                    store.set("fullscreen", store.get("last-recorded-state").isRestTimeFocused);
+                    if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
+                        store.set("last-recorded-minutes-left", 2);
+                    if (store.get("last-recorded-state").method == 1) {
+                        window.location.href =
+                            "timer.html?title=" + store.get("last-recorded-state").title
+                            + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                            + "&rest-time=" + store.get("last-recorded-state").restTime
+                            + "&loop=" + 1
+                            + "&note=" + store.get("last-recorded-state").note
+                            + "&method=1";
+                    } else {
+                        window.location.href =
+                            "timer.html?title=" + store.get("last-recorded-state").title
+                            + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                            + "&rest-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                            + "&loop=" + 1
+                            + "&note=" + store.get("last-recorded-state").note
+                            + "&method=2";
+                    }
                 }
+            } catch (e) {
+                console.log(e);
             }
         }, 500);
     </script>

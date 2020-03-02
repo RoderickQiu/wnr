@@ -83,11 +83,19 @@
             $("#time-bar-macos").remove();
         }
         $("#only-one").css("display", "none");
-        store.set('just-launched', false);
+        try {
+            store.set('just-launched', false);
+        } catch (e) {
+            console.log(e);
+        }
 
         function backer() {
-            store.set("last-recorded-minutes-left", -1);
-            store.set("last-recorded-hours-left", -1);
+            try {
+                store.set("last-recorded-minutes-left", -1);
+                store.set("last-recorded-hours-left", -1);
+            } catch (e) {
+                console.log(e);
+            }
             window.location.href = "index.html";
         }
 
@@ -123,6 +131,21 @@
         var min = i18n.__('min');
         var s = i18n.__('s');
         var player = document.createElement("audio");//alert player
+
+        try {
+            store.set("last-recorded-state", {
+                workTime: workTime / 60000,
+                restTime: restTime / 60000,
+                loop: loop,
+                title: title,
+                note: note,
+                isWorkTimeFocused: store.get("fullscreen-work"),
+                isRestTimeFocused: store.get("fullscreen"),
+                method: methodFromStart
+            });
+        } catch (e) {
+            console.log(e);
+        }
 
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
@@ -171,17 +194,6 @@
                 isWorkTimeFocused = store.get("fullscreen-work"),
                 isRestTimeFocused = store.get("fullscreen");
 
-            store.set("last-recorded-state", {
-                workTime: workTime / 60000,
-                restTime: restTime / 60000,
-                loop: loop,
-                title: title,
-                note: note,
-                isWorkTimeFocused: isWorkTimeFocused,
-                isRestTimeFocused: isRestTimeFocused,
-                method: methodFromStart
-            });
-
             startTime = new Date().getTime();
             int = setInterval(clock, 200);
 
@@ -189,6 +201,14 @@
 
             ipc.on('start-or-stop', function () {
                 stopper();
+            });
+
+            ipc.on('alter-start-stop', function (event, message) {
+                if (message == "start") {
+                    if (!isClockWorking) stopper();
+                } else if (message == "stop") {
+                    if (isClockWorking) stopper();
+                }
             });
 
             function stopper() {
@@ -208,8 +228,12 @@
             function warningGiver(isend) {
                 moreThanOneMin = 1;
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
-                store.set("last-recorded-minutes-left", -1);
-                store.set("last-recorded-hours-left", -1);
+                try {
+                    store.set("last-recorded-minutes-left", -1);
+                    store.set("last-recorded-hours-left", -1);
+                } catch (e) {
+                    console.log(e);
+                }
                 if (store.get("sound") == true || store.get("sound") == undefined) {
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\time-end.wav");
@@ -235,52 +259,56 @@
             }
 
             function themeChanger() {
-                if (method == 1) {
-                    $("#only-one").css("display", "none");
-                    $(".work").addClass("rest");
-                    $(".work").removeClass("work");
-                    $("#work-rest").html(i18n.__('resting'));
-                    $bottomBar.css("background-color", "#5490eac2");
-                    method = 2;
-                    store.set("last-recorded-state.method", 2);
-                    if (store.get("fullscreen") == true) {
-                        $("#controller").css("display", "none");
-                        $("#more-options").css("display", "none");
-                        $("#time-bar-macos").addClass("time-bar-focus");
-                        $("#time-bar").addClass("time-bar-focus");
-                        $nowTiming.addClass("display-1");
-                        $nowTiming.removeClass("h1");
-                    } else if (store.get("fullscreen-work") == true) {
+                try {
+                    if (method == 1) {
+                        $("#only-one").css("display", "none");
+                        $(".work").addClass("rest");
+                        $(".work").removeClass("work");
+                        $("#work-rest").html(i18n.__('resting'));
+                        $bottomBar.css("background-color", "#5490eac2");
+                        method = 2;
+                        store.set("last-recorded-state.method", 2);
+                        if (store.get("fullscreen") == true) {
+                            $("#controller").css("display", "none");
+                            $("#more-options").css("display", "none");
+                            $("#time-bar-macos").addClass("time-bar-focus");
+                            $("#time-bar").addClass("time-bar-focus");
+                            $nowTiming.addClass("display-1");
+                            $nowTiming.removeClass("h1");
+                        } else if (store.get("fullscreen-work") == true) {
+                            if (systemName != "darwin") $("#controller").css("display", "block");
+                            $("#more-options").css("display", "block");
+                            $(".time-bar-focus").removeClass("time-bar-focus");
+                            $nowTiming.removeClass("display-1");
+                            $nowTiming.addClass("h1");
+                        }
+                        warningGiver(1);
+                    } else {
+                        $("#only-one").css("display", "none");
+                        $(".rest").addClass("work");
+                        $(".rest").removeClass("rest");
+                        $("#work-rest").html(i18n.__('working'));
+                        $bottomBar.css("background-color", "#ea5454c2");
+                        method = 1;
+                        store.set("last-recorded-state.method", 1);
                         if (systemName != "darwin") $("#controller").css("display", "block");
-                        $("#more-options").css("display", "block");
-                        $(".time-bar-focus").removeClass("time-bar-focus");
-                        $nowTiming.removeClass("display-1");
-                        $nowTiming.addClass("h1");
+                        if (store.get("fullscreen-work") == true) {
+                            $("#controller").css("display", "none");
+                            $("#more-options").css("display", "none");
+                            $("#time-bar").addClass("time-bar-focus");
+                            $("#time-bar-macos").addClass("time-bar-focus");
+                            $nowTiming.addClass("display-1");
+                            $nowTiming.removeClass("h1");
+                        } else if (store.get("fullscreen") == true) {
+                            $("#more-options").css("display", "block");
+                            $(".time-bar-focus").removeClass("time-bar-focus");
+                            $nowTiming.removeClass("display-1");
+                            $nowTiming.addClass("h1");
+                        }
+                        warningGiver(2);
                     }
-                    warningGiver(1);
-                } else {
-                    $("#only-one").css("display", "none");
-                    $(".rest").addClass("work");
-                    $(".rest").removeClass("rest");
-                    $("#work-rest").html(i18n.__('working'));
-                    $bottomBar.css("background-color", "#ea5454c2");
-                    method = 1;
-                    store.set("last-recorded-state.method", 1);
-                    if (systemName != "darwin") $("#controller").css("display", "block");
-                    if (store.get("fullscreen-work") == true) {
-                        $("#controller").css("display", "none");
-                        $("#more-options").css("display", "none");
-                        $("#time-bar").addClass("time-bar-focus");
-                        $("#time-bar-macos").addClass("time-bar-focus");
-                        $nowTiming.addClass("display-1");
-                        $nowTiming.removeClass("h1");
-                    } else if (store.get("fullscreen") == true) {
-                        $("#more-options").css("display", "block");
-                        $(".time-bar-focus").removeClass("time-bar-focus");
-                        $nowTiming.removeClass("display-1");
-                        $nowTiming.addClass("h1");
-                    }
-                    warningGiver(2);
+                } catch (e) {
+                    console.log(e);
                 }
             }
 

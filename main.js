@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, Notification, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, powerMonitor, Notification, nativeTheme } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
@@ -53,7 +53,7 @@ function createWindow() {
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if (store.get("islocked")) {
+        if (store.get("islocked") || (store.get('fullscreen-protection') && isTimerWin)) {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "normal");
@@ -62,7 +62,7 @@ function createWindow() {
 
     //triggers for focusing
     win.on('blur', () => {
-        if (store.get("fullscreen-protection")) {
+        if (isTimerWin && store.get("fullscreen-protection")) {
             win.focus();
             win.moveTop();
         }
@@ -147,8 +147,12 @@ app.on('ready', () => {
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
-    if (!store.get('hotkey1')) store.set('hotkey1', 'W');
-    if (!store.get('hotkey2')) store.set('hotkey2', 'S');
+    try {
+        if (!store.get('hotkey1')) store.set('hotkey1', 'W');
+        if (!store.get('hotkey2')) store.set('hotkey2', 'S');
+    } catch (e) {
+        console.log(e);
+    }
 
     globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey1'), () => {
         if (!isTimerWin || (isWorkMode && (!store.get('fullscreen-work')) || (!isWorkMode && (!store.get('fullscreen'))))) {
@@ -165,12 +169,15 @@ app.on('ready', () => {
     })//toggle devtools
 
     if (store.get('islocked')) {//locked mode
-        //if (process.platform == "win32") win.setSkipTaskbar(true);
         win.closable = false;
     }
 
-    store.set("just-launched", true);
-    store.set("fullscreen-protection", false);
+    try {
+        store.set("just-launched", true);
+        store.set("fullscreen-protection", false);
+    } catch (e) {
+        console.log(e);
+    }
 
     if (process.platform == "darwin") {
         if (!app.isInApplicationsFolder()) {
@@ -178,7 +185,11 @@ app.on('ready', () => {
         }
         nativeTheme.on('updated', function theThemeHasChanged() {
             if (nativeTheme.shouldUseDarkColors) {
-                store.set('isdark', true);
+                try {
+                    store.set('isdark', true);
+                } catch (e) {
+                    console.log(e);
+                }
                 if (win != null) {
                     win.setBackgroundColor('#393939');
                     win.webContents.send('darkModeChanges');
@@ -195,7 +206,11 @@ app.on('ready', () => {
     isDarkMode();
 
     if (!store.has("predefined-tasks-created")) {
-        store.set("predefined-tasks-created", true);
+        try {
+            store.set("predefined-tasks-created", true);
+        } catch (e) {
+            console.log(e);
+        }
         predefinedTasks = new Array({
             name: "wnr recommended",
             workTime: 30,
@@ -218,8 +233,12 @@ app.on('ready', () => {
             focusWhenWorking: true,
             focusWhenResting: false
         });
-        store.set("predefined-tasks", predefinedTasks);
-        store.set("default-task", -1);//-1: not set yet
+        try {
+            store.set("predefined-tasks", predefinedTasks);
+            store.set("default-task", -1);//-1: not set yet
+        } catch (e) {
+            console.log(e);
+        }
     } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//init predefined tasks
     if (store.get("worktime")) {
         predefinedTasks.push({
@@ -230,12 +249,28 @@ app.on('ready', () => {
             focusWhenWorking: store.get("fullscreen-work"),
             focusWhenResting: store.get("fullscreen")
         })
-        store.delete("worktime");
-        store.delete("resttime");
-        store.delete("looptime");
-        store.set("predefined-tasks", predefinedTasks);
-        store.set("default-task", predefinedTasks.length - 1)//the last is the newest-added
+        try {
+            store.delete("worktime");
+            store.delete("resttime");
+            store.delete("looptime");
+            store.set("predefined-tasks", predefinedTasks);
+            store.set("default-task", predefinedTasks.length - 1)//the last is the newest-added
+        } catch (e) {
+            console.log(e);
+        }
     }//alternated the former default time settings
+
+    powerMonitor.on('lock-screen', () => {
+        if (powerSaveBlockerId)
+            if (powerSaveBlocker.isStarted(powerSaveBlockerId))
+                powerSaveBlocker.stop(powerSaveBlockerId);
+        if (win != null) win.webContents.send('alter-start-stop', 'stop');
+    })
+
+    powerMonitor.on('unlock-screen', () => {
+        powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+        if (win != null) win.webContents.send('alter-start-stop', 'start')
+    })
 })
 
 function notificationSolution(title, body, func) {
@@ -280,11 +315,9 @@ function notificationSolution(title, body, func) {
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
-            /*if (process.platform == "darwin") {
-                if (!store.get("islocked")) app.dock.show();
-                else app.dock.hide();
-            }*/
-            //if (process.platform == "win32" && store.get('islocked') == false) win.setSkipTaskbar(false);
+            if (!store.get("islocked")) win.closable = true;
+            if (process.platform == "darwin") app.dock.show();
+            if (process.platform == "win32") win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version,
                 click: function () {
@@ -346,8 +379,9 @@ function traySolution(isFullScreen) {
                 tray.setContextMenu(contextMenu);
             }
         } else {
-            //if (process.platform == "darwin") app.dock.hide();
-            //if (process.platform == "win32") win.setSkipTaskbar(true);
+            win.closable = false;
+            if (process.platform == "darwin") app.dock.hide();
+            if (process.platform == "win32") win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
             }, {
@@ -515,11 +549,19 @@ ipcMain.on('focus-first', function () {
     macOSFullscreenSolution(true);
     traySolution(true);
     isWorkMode = true;
-    store.set("fullscreen-protection", true);
+    try {
+        store.set("fullscreen-protection", true);
+    } catch (e) {
+        console.log(e);
+    }
 })
 
 ipcMain.on('warning-giver-workend', function () {
-    store.set("fullscreen-protection", false);
+    try {
+        store.set("fullscreen-protection", false);
+    } catch (e) {
+        console.log(e);
+    }
     if (win != null) {
         isWorkMode = false;
         win.show();
@@ -543,7 +585,13 @@ ipcMain.on('warning-giver-workend', function () {
                 type: "warning",
                 message: i18n.__('work-time-end-msg'),
             }).then(function (response) {
-                if (store.get("fullscreen")) store.set("fullscreen-protection", true);
+                if (store.get("fullscreen")) {
+                    try {
+                        store.set("fullscreen-protection", true);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -551,7 +599,11 @@ ipcMain.on('warning-giver-workend', function () {
 })
 
 ipcMain.on('warning-giver-restend', function () {
-    store.set("fullscreen-protection", false);
+    try {
+        store.set("fullscreen-protection", false);
+    } catch (e) {
+        console.log(e);
+    }
     if (win != null) {
         isWorkMode = true;
         if (!win.isVisible()) win.show();
@@ -573,7 +625,13 @@ ipcMain.on('warning-giver-restend', function () {
                 type: "warning",
                 message: i18n.__('rest-time-end-msg'),
             }).then(function (response) {
-                if (store.get("fullscreen-work")) store.set("fullscreen-protection", true);
+                if (store.get("fullscreen-work")) {
+                    try {
+                        store.set("fullscreen-protection", true);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
                 win.webContents.send('warning-closed');
             })
         }, 1000)
@@ -581,7 +639,11 @@ ipcMain.on('warning-giver-restend', function () {
 })
 
 ipcMain.on('warning-giver-all-task-end', function () {
-    store.set("fullscreen-protection", false);
+    try {
+        store.set("fullscreen-protection", false);
+    } catch (e) {
+        console.log(e);
+    }
     if (win != null) {
         isTimerWin = false;
         if (!win.isVisible()) win.show();
@@ -646,26 +708,30 @@ ipcMain.on('delete-all-data', function () {
             app.quit()
         }
     })
-})// unchecked checkboxes still not working in Electron
+})
 
 function windowCloseChk() {
-    /*dialog.showMessageBox(win, {
+    dialog.showMessageBox(win, {
         title: i18n.__('window-close-dialog-box-title'),
         type: "warning",
         message: i18n.__('window-close-dialog-box-content'),
         checkboxLabel: i18n.__('window-close-dialog-box-chk'),
         checkboxChecked: false
     }).then(function (msger) {
-        if (msger.checkboxChecked) {*/
-    app.quit()
-    //}
-    //})
-}// unchecked checkboxes still not working in Electron
+        if (msger.checkboxChecked) {
+            app.quit()
+        }
+    })
+}
 ipcMain.on('window-close-chk', windowCloseChk);
 
 ipcMain.on('relauncher', function () {
-    store.set('just-relaunched', true);
-    app.relaunch();
+    try {
+        store.set('just-relaunched', true);
+        app.relaunch();
+    } catch (e) {
+        console.log(e);
+    }
     app.exit(0)
 })
 
@@ -720,9 +786,13 @@ function settings(mode) {
                 webPreferences: { nodeIntegration: true },
                 titleBarStyle: "hidden"
             });
-            if (mode == 'locker') store.set("settings-goto", "locker");
-            else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
-            else store.set("settings-goto", "normal");
+            try {
+                if (mode == 'locker') store.set("settings-goto", "locker");
+                else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
+                else store.set("settings-goto", "normal");
+            } catch (e) {
+                console.log(e);
+            }
             settingsWin.loadFile("settings.html");
             if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
             settingsWin.once('ready-to-show', () => {
@@ -733,7 +803,11 @@ function settings(mode) {
                 settingsWin = null;
             })
             if (!store.get("settings-experience")) {
-                store.set("settings-experience", true);
+                try {
+                    store.set("settings-experience", true);
+                } catch (e) {
+                    console.log(e);
+                }
                 notificationSolution(i18n.__('newbie-for-settings'), i18n.__('newbie-for-settings-tip'), "normal");
             }
         }
@@ -803,11 +877,15 @@ ipcMain.on('locker-passcode', function (event, message) {
 })
 
 ipcMain.on('push-notification', function (event, message) {
-    if (!store.get(message.id)) {
-        pushNotificationLink = message.link;
-        if (pushNotificationLink != "" && pushNotificationLink != null) notificationSolution(message.title, message.content, "push-notification");
-        else notificationSolution(message.title, message.content, "normal");
-        store.set(message.id, true);
+    try {
+        if (!store.get(message.id)) {
+            pushNotificationLink = message.link;
+            if (pushNotificationLink != "" && pushNotificationLink != null) notificationSolution(message.title, message.content, "push-notification");
+            else notificationSolution(message.title, message.content, "normal");
+            store.set(message.id, true);
+        }
+    } catch (e) {
+        console.log(e);
     }
 })
 

@@ -163,5 +163,5 @@
     "settings-import-tip": "粘貼口令進文本框然後按下Enter鍵，導入設置項。",
     "settings-import-error": "口令無效，請重試。",
     "menu": "菜單列表",
-    "prevent-stop": "目前處於鎖定模式，不能退出"
+    "prevent-stop": "目前處於鎖定糢式或者正在執行專心任務，不能退出"
 }

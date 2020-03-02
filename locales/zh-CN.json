@@ -163,5 +163,5 @@
     "settings-import-tip": "粘贴口令进文本框然后按下Enter键，导入设置项。",
     "settings-import-error": "口令无效，请重试。",
     "menu": "菜单列表",
-    "prevent-stop": "目前处于锁定模式，不能退出"
+    "prevent-stop": "目前处于锁定模式或者正在执行专心任务，不能退出"
 }
