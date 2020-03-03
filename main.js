@@ -63,8 +63,16 @@ function createWindow() {
     //triggers for focusing
     win.on('blur', () => {
         if (isTimerWin && store.get("fullscreen-protection")) {
-            win.focus();
-            win.moveTop();
+            if (process.platform != "darwin") {
+                win.focus();
+                win.moveTop();
+            } else {
+                win.hide();
+                win.setKiosk(false);
+                win.moveTop();
+                win.setKiosk(true);
+                win.show();
+            }
         }
     });
 
@@ -799,7 +807,7 @@ function settings(mode) {
                 settingsWin.show();
             })
             settingsWin.on('closed', () => {
-                win.reload();
+                if (win != null) win.reload();
                 settingsWin = null;
             })
             if (!store.get("settings-experience")) {
