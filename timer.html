@@ -167,8 +167,8 @@
                 ipc.send('focus-first');
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
-                $("#time-bar").addClass("time-bar-focus");
-                $("#time-bar-macos").addClass("time-bar-focus");
+                $timeBar.addClass("time-bar-focus");
+                $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
             }
@@ -271,8 +271,8 @@
                         if (store.get("fullscreen") == true) {
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
-                            $("#time-bar-macos").addClass("time-bar-focus");
-                            $("#time-bar").addClass("time-bar-focus");
+                            $timeBarMacOS.addClass("time-bar-focus");
+                            $timeBar.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
                         } else if (store.get("fullscreen-work") == true) {
@@ -295,8 +295,8 @@
                         if (store.get("fullscreen-work") == true) {
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
-                            $("#time-bar").addClass("time-bar-focus");
-                            $("#time-bar-macos").addClass("time-bar-focus");
+                            $timeBar.addClass("time-bar-focus");
+                            $timeBarMacOS.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
                         } else if (store.get("fullscreen") == true) {

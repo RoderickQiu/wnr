@@ -37,6 +37,8 @@ function createWindow() {
 
     //load index.html
     win.loadFile('index.html');
+    if (process.platform == "darwin")
+        win.setVisibleOnAllWorkspaces(true);
 
     //to load without sparking
     win.once('ready-to-show', () => {
@@ -62,7 +64,7 @@ function createWindow() {
 
     //triggers for focusing
     win.on('blur', () => {
-        if (isTimerWin && store.get("fullscreen-protection")) {
+        if (isTimerWin && store.get("fullscreen-protection") && win != null) {
             if (process.platform != "darwin") {
                 win.focus();
                 win.moveTop();
@@ -72,6 +74,7 @@ function createWindow() {
                 win.moveTop();
                 win.setKiosk(true);
                 win.show();
+                win.focus();
             }
         }
     });
@@ -324,7 +327,6 @@ function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
             if (!store.get("islocked")) win.closable = true;
-            if (process.platform == "darwin") app.dock.show();
             if (process.platform == "win32") win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version,
@@ -388,7 +390,6 @@ function traySolution(isFullScreen) {
             }
         } else {
             win.closable = false;
-            if (process.platform == "darwin") app.dock.hide();
             if (process.platform == "win32") win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
@@ -571,6 +572,7 @@ ipcMain.on('warning-giver-workend', function () {
         console.log(e);
     }
     if (win != null) {
+        win.maximizable = false;
         isWorkMode = false;
         win.show();
         win.focus();
@@ -601,6 +603,7 @@ ipcMain.on('warning-giver-workend', function () {
                     }
                 }
                 win.webContents.send('warning-closed');
+                win.maximizable = false;
             })
         }, 1000)
     }
@@ -613,6 +616,7 @@ ipcMain.on('warning-giver-restend', function () {
         console.log(e);
     }
     if (win != null) {
+        win.maximizable = false;
         isWorkMode = true;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
@@ -641,6 +645,7 @@ ipcMain.on('warning-giver-restend', function () {
                     }
                 }
                 win.webContents.send('warning-closed');
+                win.maximizable = false;
             })
         }, 1000)
     }
@@ -653,6 +658,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         console.log(e);
     }
     if (win != null) {
+        win.maximizable = false;
         isTimerWin = false;
         if (!win.isVisible()) win.show();
         win.flashFrame(true);
@@ -669,6 +675,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
                 message: i18n.__('all-task-end-msg'),
             }).then(function (response) {
                 win.loadFile('index.html');//automatically back
+                win.maximizable = false;
             })
         }, 1000)
         alarmSet()
@@ -760,6 +767,8 @@ function about() {
                 height: 270,
                 backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
+                maximizable: false,
+                minimizable: false,
                 frame: false,
                 show: false,
                 center: true,
@@ -788,6 +797,8 @@ function settings(mode) {
                 height: 486,
                 backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
+                maximizable: false,
+                minimizable: false,
                 frame: false,
                 show: false,
                 center: true,
@@ -832,6 +843,8 @@ function tourguide() {
                 height: 600,
                 backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
+                maximizable: false,
+                minimizable: false,
                 frame: false,
                 show: false,
                 center: true,
@@ -913,6 +926,7 @@ ipcMain.on("logger", function (event, message) {
 
 ipcMain.on("timer-win", function (event, message) {
     isDarkMode();
+    if (win != null) win.maximizable = false;
     if (message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
