@@ -77,11 +77,11 @@ This application is being frequently updated, so does this list.
 
 ## Contact
 
-- Homepage: [wnr.scris.top](https://wnr.scris.top/).
+- Homepage: [getwnr.com](https://getwnr.com/).
 
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
 
-- Need Help: [Go to Help Page](https://wnr.scris.top/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com).
+- Need Help: [Go to Help Page](https://getwnr.com/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com).
 
 - Any issues or pull requests are appreciated.
 

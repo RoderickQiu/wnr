@@ -17,7 +17,8 @@ const config = {
     "nsis": {
         "installerLanguages": [
             "en-US",
-            "zh-CN"
+            "zh-CN",
+            "zh-TW"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",

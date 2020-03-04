@@ -25,8 +25,8 @@ function call(content) {
 
 function getHelp(idCode) {
     require('electron').shell.openExternal(store.get("i18n") == 'zh' ?
-        'https://wnr.scris.top/zh/' + idCode + '.html' :
-        'https://wnr.scris.top/' + idCode + '.html');
+        'https://getwnr.com/zh/' + idCode + '.html' :
+        'https://getwnr.com/' + idCode + '.html');
 }
 
 function isInDark() {

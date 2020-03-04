@@ -1,4 +1,4 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, powerMonitor, Notification, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, powerMonitor, systemPreferences, Notification, nativeTheme } = require('electron')
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
@@ -9,7 +9,7 @@ var Registry = require('winreg')
 let win, settingsWin = null, aboutWin = null, tourWin = null;
 let tray = null, contextMenu = null;
 let resetAlarm = null, powerSaveBlockerId = null;
-let isTimerWin = null, isWorkMode = null;
+let isTimerWin = null, isWorkMode = null, isShadowless = null;
 let timeLeftTip = null;
 let predefinedTasks = null;
 let pushNotificationLink = null
@@ -175,8 +175,8 @@ app.on('ready', () => {
     })
 
     globalShortcut.register('CommandOrControl+Shift+L', () => {
-        let focusWin = BrowserWindow.getFocusedWindow()
-        focusWin && focusWin.toggleDevTools()
+        let focusWin = BrowserWindow.getFocusedWindow();
+        focusWin && focusWin.toggleDevTools();
     })//toggle devtools
 
     if (store.get('islocked')) {//locked mode
@@ -282,6 +282,40 @@ app.on('ready', () => {
         powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
         if (win != null) win.webContents.send('alter-start-stop', 'start')
     })
+
+    if (process.platform == "win32") {
+        var regKey = new Registry({
+            hive: Registry.HKCU,
+            key: '\\Control Panel\\Desktop\\'
+        })
+        regKey.values(function (err, items) {
+            if (err)
+                return 'unset';
+            else {
+                for (var i = 0; i < items.length; i++) {
+                    if (items[i].name == 'UserPreferencesMask') {
+                        if (parseInt(items[i].value, 16).toString(2).charAt(21) == 1 && systemPreferences.isAeroGlassEnabled()) {
+                            isShadowless = false;
+                            try {
+                                store.set("is-shadowless", false);
+                            }
+                            catch (e) {
+                                console.log(e);
+                            }
+                        } else {
+                            isShadowless = true;
+                            try {
+                                store.set("is-shadowless", true);
+                            }
+                            catch (e) {
+                                console.log(e);
+                            }
+                        }
+                    }
+                }
+            }
+        })
+    }//backport when shadow disabled
 })
 
 function notificationSolution(title, body, func) {
@@ -354,7 +388,7 @@ function traySolution(isFullScreen) {
             }, {
                 label: i18n.__('website'),
                 click: function () {
-                    shell.openExternal('https://wnr.scris.top/');
+                    shell.openExternal('https://getwnr.com/');
                 }
             }, {
                 label: i18n.__('github'),
@@ -455,7 +489,7 @@ function macOSFullscreenSolution(isFullScreen) {
                     }, {
                         label: i18n.__('website'),
                         click: function () {
-                            shell.openExternal('https://wnr.scris.top/');
+                            shell.openExternal('https://getwnr.com/');
                         }
                     }, {
                         label: i18n.__('github'),
@@ -726,17 +760,19 @@ ipcMain.on('delete-all-data', function () {
 })
 
 function windowCloseChk() {
-    dialog.showMessageBox(win, {
-        title: i18n.__('window-close-dialog-box-title'),
-        type: "warning",
-        message: i18n.__('window-close-dialog-box-content'),
-        checkboxLabel: i18n.__('window-close-dialog-box-chk'),
-        checkboxChecked: false
-    }).then(function (msger) {
-        if (msger.checkboxChecked) {
-            app.quit()
-        }
-    })
+    if (app.isPackaged)
+        dialog.showMessageBox(win, {
+            title: i18n.__('window-close-dialog-box-title'),
+            type: "warning",
+            message: i18n.__('window-close-dialog-box-content'),
+            checkboxLabel: i18n.__('window-close-dialog-box-chk'),
+            checkboxChecked: false
+        }).then(function (msger) {
+            if (msger.checkboxChecked) {
+                app.quit()
+            }
+        })
+    else app.quit()
 }
 ipcMain.on('window-close-chk', windowCloseChk);
 
