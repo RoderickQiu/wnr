@@ -171,5 +171,8 @@
     "is-infinity-mode-setting-on": "Infinity mode: ",
     "is-infinity-mode-setting-on-tip": "If it is enabled, wnr will automatically loop in an infinite way.",
     "stop-now": "Stop this meaningless attempt and return to focus now",
-    "stop-now-msg": "You will eventually find that your own softwares won't work under focus mode. Stop trying."
+    "stop-now-msg": "You will eventually find that your own softwares won't work under focus mode. Stop trying.",
+    "without-permission-part-1": "Permission denied. This setting failed to execute.",
+    "without-permission-part-2": "Please go to System Preferences -> Security & Privacy -> Privacy -> Automation and check the sections below the name of wnr.",
+    "permission-ask": "If a dialog box is shown, allow it. Or else you'll fail to set auto start settings. "
 }

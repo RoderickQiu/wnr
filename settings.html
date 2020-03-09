@@ -644,11 +644,19 @@
             else store.set("top", false);
             timeOut = setTimeout("call('relauncher')", 500);
         }
-        if (store.get("autostart") == true) document.getElementById("auto-start-setting").checked = true;
-        else document.getElementById("auto-start-setting").checked = false;
+        var AutoLaunch = require('auto-launch');
+        var wnrLauncher = new AutoLaunch({ name: 'wnr' });
+        wnrLauncher.isEnabled()
+            .then(function (isEnabled) {
+                if (isEnabled) {
+                    document.getElementById("auto-start-setting").checked = true;
+                } else {
+                    document.getElementById("auto-start-setting").checked = false;
+                }
+            }).catch(function (error) {
+                alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
+            })
         function autoStartSetting() {
-            var AutoLaunch = require('auto-launch');
-            var wnrLauncher = new AutoLaunch({ name: 'wnr' });
             if (document.getElementById("auto-start-setting").checked == true) {
                 store.set("autostart", true);
                 wnrLauncher.isEnabled()
@@ -657,6 +665,10 @@
                             return;
                         }
                         wnrLauncher.enable();
+                    }).catch(function (error) {
+                        store.set("autostart", false);
+                        document.getElementById("auto-start-setting").checked = false;
+                        alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
                     })
             }
             else {
@@ -667,6 +679,10 @@
                             wnrLauncher.disable();
                         }
                         return;
+                    }).catch(function (error) {
+                        store.set("autostart", true);
+                        document.getElementById("auto-start-setting").checked = true;
+                        alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
                     })
             }
         }
@@ -700,10 +716,10 @@
             if (document.getElementById("local-time-setting").checked != false) store.set("localtime", true);
             else store.set("localtime", false);
         }
-        if (store.get("infinity") != false) document.getElementById("infinity-mode-setting").checked = true;
+        if (store.get("infinity") == true) document.getElementById("infinity-mode-setting").checked = true;
         else document.getElementById("infinity-mode-setting").checked = false;
         function infinityModeSetting() {
-            if (document.getElementById("infinity-mode-setting").checked != false) store.set("infinity", true);
+            if (document.getElementById("infinity-mode-setting").checked == true) store.set("infinity", true);
             else store.set("infinity", false);
         }
 

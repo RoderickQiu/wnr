@@ -171,5 +171,8 @@
     "is-infinity-mode-setting-on": "無限模式設置：",
     "is-infinity-mode-setting-on-tip": "如果打開無限模式，則wnr會無限地自動重復設置的計劃，忽略循環設定。強制退出並恢複後，無限模式將不生效。",
     "stop-now": "停止必將失敗的嘗試，返回專心",
-    "stop-now-msg": "在專心糢式下，你最終會發現無法使用你的軟件，停止不必要的嘗試吧！"
+    "stop-now-msg": "在專心糢式下，你最終會發現無法使用你的軟件，停止不必要的嘗試吧！",
+    "without-permission-part-1": "沒有權限，可能無法設置開機自啓。",
+    "without-permission-part-2": "請前往系統偏好設置->安全性和隱私->自動化，找到wnr並勾選附屬的權限，否則無法設置。",
+    "permission-ask": "如果彈出一個權限申請框，請允許，否則無法設置開機自啓。"
 }

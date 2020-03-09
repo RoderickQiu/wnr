@@ -903,6 +903,8 @@ function settings(mode) {
                     console.log(e);
                 }
                 notificationSolution(i18n.__('newbie-for-settings'), i18n.__('newbie-for-settings-tip'), "normal");
+                if (process.platfrom == "darwin")
+                    notificationSolution(i18n.__('newbie-for-settings'), i18n.__('permission-ask'), "normal");
             }
         }
     }
