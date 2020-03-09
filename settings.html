@@ -15,7 +15,7 @@
     <link rel="preload" as="style" href="loader.css" onload="this.rel='stylesheet'">
     <!-- loader style preload -->
     <script src="res/lib/jquery.slim.min.js"></script>
-    <script src="res/lib/bootstrap.min.js"></script>
+    <script src="res/lib/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
     <script src="res/lib/all.js"></script>
@@ -63,6 +63,18 @@
                 </div>
             </div>
         </div>
+        <div class="settings-sidebar-block lead should-lock" id="languages-sidebar" onclick="settingsGoto('languages')">
+            <div class="container-fluid">
+                <div class="row align-items-start">
+                    <div class="col-3 text-center">
+                        <i class="fa fa-language" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-9">
+                        <script>document.write(i18n.__('languages'));</script>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="settings-sidebar-block lead should-lock" id="global-settings-sidebar"
             onclick="settingsGoto('global-settings')">
             <div class="container-fluid">
@@ -105,16 +117,12 @@
 
     <div class="d-flex" id="settings-container">
         <div class="text-left">
-            <!-- 1. time settings (formally, deleted) -->
-
-            <!-- 2. predefined tasks settings -->
+            <!-- 1. predefined tasks settings -->
             <div id="predefined-tasks" class="should-lock">
                 <div class="align-content-center form-text">
-                    <ul>
-                        <li class="align-self-start text-left small text-muted" type="none">
-                            <script>document.write(i18n.__('predefined-tasks-settings-tip'));</script>
-                        </li>
-                    </ul>
+                    <div class="align-self-start text-left" type="none">
+                        <script>document.write(i18n.__('predefined-tasks-settings-tip'));</script>
+                    </div>
                     <div class="d-flex text-left">
                         <div id="itemlist">
                             <ul id="itemlist-ul"></ul>
@@ -127,32 +135,35 @@
                         </a>
                     </div>
                 </div>
-                <br />
+            </div>
+
+            <!-- 2. languages -->
+            <div id="languages" class="should-lock">
+                <div class="align-content-center form-text">
+                    <div class="align-self-start text-left" type="none">
+                        <script>document.write(i18n.__('language-setting-tip'));</script>
+                    </div>
+                    <select name="language-section" id="language-select" onchange="languageSetting()">
+                    </select>
+                    <br />
+                    <span class="text-muted small">
+                        <script>
+                            document.write(i18n.__('language-contribute-tip-part-1')
+                                + "<a href=\"javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/locales/README.md')\">"
+                                + i18n.__('language-contribute-tip-part-2')
+                                + "</a>"
+                                + i18n.__('feedback-tip-part-4'));
+                        </script>
+                        <br />
+                        <b>
+                            <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                        </b>
+                    </span>
+                </div>
             </div>
 
             <!-- 3. global settings -->
             <div id="global-settings" class="should-lock">
-                <!-- language setting -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-1 text-center">
-                            <input id="language-setting" type="checkbox" onchange="languageSetting()" />
-                        </div>
-                        <div class="col-11 text-left">
-                            <label>
-                                <script>document.write(i18n.__('language-setting'));</script>
-                            </label>
-                            <br />
-                            <span class="text-muted small">
-                                <script>document.write(i18n.__('language-setting-tip'));</script>
-                                <b>
-                                    <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
-                                </b>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-                <br />
                 <!-- notifying sound setting -->
                 <div class="container">
                     <div class="row">
@@ -304,6 +315,24 @@
                     </div>
                 </div>
                 <br />
+                <!-- infinity mode setting -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-1 text-center">
+                            <input id="infinity-mode-setting" type="checkbox" onchange="infinityModeSetting()" />
+                        </div>
+                        <div class="col-11 text-left">
+                            <label>
+                                <script>document.write(i18n.__('is-infinity-mode-setting-on'));</script>
+                            </label>
+                            <br />
+                            <span class="text-muted small">
+                                <script>document.write(i18n.__('is-infinity-mode-setting-on-tip'));</script>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <br />
             </div>
 
             <!-- 4. lock mode settings -->
@@ -442,11 +471,13 @@
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "block");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
+                $("#languages").css("display", "none");
             } else if ((mask == "predefined-tasks" || mask == "normal" || mask == "" || mask == null) && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/2-predefined-tasks-settings')");
 
@@ -454,11 +485,27 @@
                 $("#predefined-tasks-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "block");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
+                $("#languages").css("display", "none");
+            } else if (mask == "languages" && (!store.get('islocked'))) {
+                $("#settings-helper a").attr("href", "javascript:getHelp('settings/6-languages')");
+
+                $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").addClass("settings-sidebar-block-highlighted");
+
+                $("#locker").css("display", "none");
+                $("#predefined-tasks").css("display", "none");
+                $("#global-settings").css("display", "none");
+                $("#other-things").css("display", "none");
+                $("#languages").css("display", "block");
             } else if (mask == "global-settings" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/3-global-settings')");
 
@@ -466,11 +513,13 @@
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").addClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "block");
                 $("#other-things").css("display", "none");
+                $("#languages").css("display", "none");
             } else if (mask == "other-things" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/5-other-things')");
 
@@ -478,11 +527,13 @@
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#other-things-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "block");
+                $("#languages").css("display", "none");
             }
         }
     </script>
@@ -563,21 +614,19 @@
             $('#title' + index).addClass("work");
         }
 
-        //global settings
-        if (store.get("i18n") != undefined) {
-            if (store.get("i18n") == 'en') document.getElementById("language-setting").checked = true;
-            else document.getElementById("language-setting").checked = false;
+        //language settings
+        for (i in languageList) {
+            $("#language-select").append("<option id='" + languageList[i] + "' value='" + languageList[i] + "'>" + languageNameList[i] + "</option>");
+            if (store.get("i18n") == languageList[i]) {
+                $("#" + languageList[i]).attr("selected", true);
+            }
         }
         function languageSetting() {
-            if (document.getElementById("language-setting").checked == true) store.set("i18n", 'en');
-            else {
-                var lang = navigator.language;
-                if ((lang.charAt(3) == 'T' && lang.charAt(4) == 'W') && (lang.charAt(3) == 'H' && lang.charAt(4) == 'K')) lang = 'zh-TW';
-                else lang = 'zh-CN';
-                store.set('i18n', lang);
-            }
+            store.set("i18n", $("#language-select").val());
             timeOut = setTimeout("call('relauncher')", 500);
         }
+
+        //global settings
         if (store.get("sound") != undefined) {
             if (store.get("sound")) document.getElementById("notifying-sound-setting").checked = true;
             else document.getElementById("notifying-sound-setting").checked = false;
@@ -650,6 +699,12 @@
         function localTimeSetting() {
             if (document.getElementById("local-time-setting").checked != false) store.set("localtime", true);
             else store.set("localtime", false);
+        }
+        if (store.get("infinity") != false) document.getElementById("infinity-mode-setting").checked = true;
+        else document.getElementById("infinity-mode-setting").checked = false;
+        function infinityModeSetting() {
+            if (document.getElementById("infinity-mode-setting").checked != false) store.set("infinity", true);
+            else store.set("infinity", false);
         }
 
         //lock mode settings

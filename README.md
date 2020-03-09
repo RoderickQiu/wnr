@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-    As a timer app, wnr is simple but useful. | <a href="https://scris.top/wnr/">中文简介</a>
+    As a timer app, wnr is simple but useful. | <a href="https://getwnr.com/">中文网站</a>
 </p>
 
 <p align="center">
@@ -65,7 +65,7 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 - multi-platform support *(currently Windows & macOS; web, Android, iOS versions are in plan)*
 
-- multi-language support *(you can help to contribute!)*
+- multi-language support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
 
 - with strong expansibility
 
@@ -107,15 +107,13 @@ yarn run mac
 yarn run linux
 ```
 
-I'm now using yarn.
-
-**I'm currently disabling `node-modules/conf/index.js`' error from throwing by annotationifying line 441 (`throw error;`) because it's error-occurring.**
+I'm using yarn.
 
 ## Copyright & Credit
 
 Copyright (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
-Now licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
+Licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
 ### Packages Using
 

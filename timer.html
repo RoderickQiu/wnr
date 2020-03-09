@@ -44,7 +44,7 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="note" class="text-center small text-muted"></div><br />
+            <div id="note" class="text-center small text-muted"></div><br /><br />
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
             </div><br />
@@ -126,11 +126,16 @@
         var workTime = decodeURI($_GET['work-time']) * 60000;
         var restTime = decodeURI($_GET['rest-time']) * 60000;//use ms
         var loop = decodeURI($_GET['loop']);
+        var workTimeFocused = (decodeURI($_GET['work-time-focused']) == "false") ? false : true;
+        var restTimeFocused = (decodeURI($_GET['rest-time-focused']) == "false") ? false : true;
+        var restored = (decodeURI($_GET['restored']) == "false") ? false : true;
         var methodFromStart = Number(decodeURI($_GET['method']));
         var h = i18n.__('h');
         var min = i18n.__('min');
         var s = i18n.__('s');
         var player = document.createElement("audio");//alert player
+
+        ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
         try {
             store.set("last-recorded-state", {
@@ -139,8 +144,8 @@
                 loop: loop,
                 title: title,
                 note: note,
-                isWorkTimeFocused: store.get("fullscreen-work"),
-                isRestTimeFocused: store.get("fullscreen"),
+                isWorkTimeFocused: workTimeFocused,
+                isRestTimeFocused: restTimeFocused,
                 method: methodFromStart
             });
         } catch (e) {
@@ -149,7 +154,7 @@
 
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
-        if (!loop || workTime <= 60000 || restTime <= 60000 || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+        if ((loop < 1 && loop != 0) || workTime <= 60000 || restTime <= 60000 || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -163,7 +168,7 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#note").html(note);
-            if (store.get('fullscreen-work')) {
+            if (workTimeFocused) {
                 ipc.send('focus-first');
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
@@ -191,8 +196,7 @@
                 systemName = process.platform,
                 progress = 0.00,
                 lastRecordedProgress = 0.00,
-                isWorkTimeFocused = store.get("fullscreen-work"),
-                isRestTimeFocused = store.get("fullscreen");
+                wasCounting = true;
 
             startTime = new Date().getTime();
             int = setInterval(clock, 200);
@@ -205,13 +209,20 @@
 
             ipc.on('alter-start-stop', function (event, message) {
                 if (message == "start") {
-                    if (!isClockWorking) stopper();
+                    if ((!isClockWorking) && (wasCounting)) {
+                        stopper();
+                        wasCounting = !wasCounting;
+                    }
                 } else if (message == "stop") {
-                    if (isClockWorking) stopper();
+                    if (isClockWorking && wasCounting) {
+                        stopper();
+                        wasCounting = !wasCounting;
+                    }
                 }
             });
 
             function stopper() {
+                wasCounting = !wasCounting;
                 if (isClockWorking) {
                     window.clearInterval(int);
                     $("#stopper").html("<i class='fa fa-play' aria-hidden='true'></i>");
@@ -268,14 +279,14 @@
                         $bottomBar.css("background-color", "#5490eac2");
                         method = 2;
                         store.set("last-recorded-state.method", 2);
-                        if (store.get("fullscreen") == true) {
+                        if (restTimeFocused == true) {
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
                             $timeBarMacOS.addClass("time-bar-focus");
                             $timeBar.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
-                        } else if (store.get("fullscreen-work") == true) {
+                        } else if (workTimeFocused == true) {
                             if (systemName != "darwin") $("#controller").css("display", "block");
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");
@@ -292,14 +303,14 @@
                         method = 1;
                         store.set("last-recorded-state.method", 1);
                         if (systemName != "darwin") $("#controller").css("display", "block");
-                        if (store.get("fullscreen-work") == true) {
+                        if (workTimeFocused == true) {
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
                             $timeBar.addClass("time-bar-focus");
                             $timeBarMacOS.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
-                        } else if (store.get("fullscreen") == true) {
+                        } else if (restTimeFocused == true) {
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");
@@ -323,7 +334,7 @@
                 if (systemName != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
-                if (store.get("fullscreen") == true) {
+                if (restTimeFocused == true) {
                     $(".time-bar-focus").removeClass("time-bar-focus");
                     $nowTiming.removeClass("display-1");
                     $nowTiming.addClass("h1");
@@ -336,19 +347,19 @@
                 $("#skipper-space").css("display", "none");
                 times++;
                 if (isClockWorking) {
-                    if (times < loop * 2) {
+                    if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {
                         startTime = new Date().getTime();
                         themeChanger();
-                    } else if (times == loop * 2) {
+                    } else if ((times == loop * 2) || ((method == 2 && restored == true) == true)) {
                         ender();
                     }
                 } else {
                     stopper();
                     setTimeout(function () {
-                        if (times < loop * 2) {
+                        if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {
                             startTime = new Date().getTime();
                             themeChanger();
-                        } else if (times == loop * 2) {
+                        } else if ((times == loop * 2) || ((method == 2 && restored == true) == true)) {
                             ender();
                         }
                     }, 250);

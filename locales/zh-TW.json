@@ -50,8 +50,11 @@
     "issues": "已知問題列表",
     "time-settings": "默認時間設置",
     "global-settings": "wnr全局設置",
+    "languages": "語言設置",
     "language-setting": "語言設置：",
-    "language-setting-tip": "選中選框則設置為英語，否則設置為中文（將會自動根據本機設置，調整為簡體中文或者正體中文）。",
+    "language-setting-tip": "可以在下拉菜單中選擇語言。",
+    "language-contribute-tip-part-1": "如果妳會另外壹種語言，妳可以",
+    "language-contribute-tip-part-2": "現在貢獻",
     "sound-to-notify-setting": "提示音設置：",
     "sound-to-notify-setting-tip": "在壹段時間結束後，是否要播放提示音？",
     "always-on-top-setting": "置頂設置：",
@@ -128,7 +131,7 @@
     "focus-when-working": "工作時啟用專心模式",
     "focus-when-resting": "休息時啟用專心模式",
     "set-as-default-task": "設為默認預設",
-    "predefined-tasks-settings-tip": "紅色標題的是默認預設，會自動使用；藍色的是普通預設。",
+    "predefined-tasks-settings-tip": "紅色標題的是默認預設，會自動使用；藍色的是普通預設。當無限模式開啟後，循環設置將會被自動忽略。",
     "is-auto-start-task-setting-on": "默認預設自動啟用設置：",
     "is-auto-start-task-setting-on-tip": "如果此項被選中，則wnr會在啟動時自動啟用默認預設（假如有），這使妳不會把wnr放在壹邊不管。",
     "window-close-dialog-box-title": "是否要退出wnr？",
@@ -163,5 +166,10 @@
     "settings-import-tip": "粘貼口令進文本框然後按下Enter鍵，導入設置項。",
     "settings-import-error": "口令無效，請重試。",
     "menu": "菜單列表",
-    "prevent-stop": "目前處於鎖定糢式或者正在執行專心任務，不能退出"
+    "prevent-stop": "目前處於鎖定糢式或者正在執行專心任務，不能退出",
+    "infinity": "無限模式",
+    "is-infinity-mode-setting-on": "無限模式設置：",
+    "is-infinity-mode-setting-on-tip": "如果打開無限模式，則wnr會無限地自動重復設置的計劃，忽略循環設定。強制退出並恢複後，無限模式將不生效。",
+    "stop-now": "停止必將失敗的嘗試，返回專心",
+    "stop-now-msg": "在專心糢式下，你最終會發現無法使用你的軟件，停止不必要的嘗試吧！"
 }

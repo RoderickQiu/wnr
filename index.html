@@ -61,9 +61,12 @@
                 window.location.href = "timer.html?title=" + $("#title").val()
                     + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
                     + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
-                    + "&loop=" + $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
+                    + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
                     + "&note=" + $("#note").val()
-                    + "&method=1";
+                    + "&method=1"
+                    + "&work-time-focused=" + document.getElementById("focus-work-set").checked
+                    + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
+                    + "&restored=false";
             }
         }
         document.onkeydown = keydown;
@@ -110,7 +113,7 @@
         </div>
         <div id="set" class="container-fluid">
             <form action="timer.html" method="GET" class="justify-content-center align-content-center">
-                <input name="title" id="title" type="text" class="small" maxlength="11" />&nbsp;
+                <input name="title" id="title" type="text" class="small" maxlength="14" />&nbsp;
                 <div class="dropdown dropleft dropdown-default" id="dropdown-tasks">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-menu-button" data-toggle="dropdown"
                         aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
@@ -202,25 +205,26 @@
                 var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
                     restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
                     loopGet = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
-                if (workTimeGet != 0 && restTimeGet != 0 && loopGet != 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet <= 1440) {
+                if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet > 1 && loopGet <= 1440) {
                     if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
+                    else allClear();
                 } else {
-                    $("#all-sum-num").html("---");
-                    $("#to-num-h").html("--");
-                    $("#to-num-min").html("--");
+                    allClear();
                 }
+                if (store.get("infinity")) infinityMode();
             } catch {
-                $("#all-sum-num").html("---");
-                $("#to-num-h").html("--");
-                $("#to-num-min").html("--");
+                allClear();
             }
         }
-
-        function focusWorkSet() {
-            store.set("fullscreen-work", document.getElementById("focus-work-set").checked);
+        function allClear() {
+            $("#all-sum-num").html("---");
+            $("#to-num-h").html("--");
+            $("#to-num-min").html("--");
         }
-        function focusRestSet() {
-            store.set("fullscreen", document.getElementById("focus-rest-set").checked);
+
+        function infinityMode() {
+            $("#loop").val(i18n.__('infinity'));
+            allClear();
         }
 
         function defaultSet(workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
@@ -229,23 +233,26 @@
             $("#loop").val(loops + ' ' + i18n.__('times'));
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
-            focusWorkSet();
-            focusRestSet();
             allSet();
         }
+
         defaultArray = store.get("predefined-tasks");
         defaultArray.forEach(function (item, index, array) {
             if (store.get("default-task") == index) {
                 defaultSet(item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
+                if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
                     (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
                     window.location.href =
                         "timer.html?title=" + $("#title").val()
                         + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
                         + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&loop=" + $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
+                        + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
                         + "&note=" + $("#note").val()
-                        + "&method=1";
+                        + "&method=1"
+                        + "&work-time-focused=" + item.focusWhenWorking
+                        + "&rest-time-focused=" + item.focusWhenResting
+                        + "&restored=false";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -259,8 +266,6 @@
             try {
                 if ((store.get("last-recorded-hours-left") && store.get("last-recorded-hours-left") != -1) ||
                     (store.get("last-recorded-minutes-left") && store.get("last-recorded-minutes-left") != -1)) {
-                    store.set("fullscreen-work", store.get("last-recorded-state").isWorkTimeFocused);
-                    store.set("fullscreen", store.get("last-recorded-state").isRestTimeFocused);
                     if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
                         store.set("last-recorded-minutes-left", 2);
                     if (store.get("last-recorded-state").method == 1) {
@@ -268,17 +273,23 @@
                             "timer.html?title=" + store.get("last-recorded-state").title
                             + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
                             + "&rest-time=" + store.get("last-recorded-state").restTime
-                            + "&loop=" + 1
+                            + "&loop=" + (store.get("infinity") ? 0 : 1)
                             + "&note=" + store.get("last-recorded-state").note
-                            + "&method=1";
+                            + "&method=1"
+                            + "&work-time-focused=" + store.get("last-recorded-state").isWorkTimeFocused
+                            + "&rest-time-focused=" + store.get("last-recorded-state").isRestTimeFocused
+                            + "&restored=true";
                     } else {
                         window.location.href =
                             "timer.html?title=" + store.get("last-recorded-state").title
                             + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
                             + "&rest-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
-                            + "&loop=" + 1
+                            + "&loop=" + (store.get("infinity") ? 0 : 1)
                             + "&note=" + store.get("last-recorded-state").note
-                            + "&method=2";
+                            + "&method=2"
+                            + "&work-time-focused=" + store.get("last-recorded-state").isWorkTimeFocused
+                            + "&rest-time-focused=" + store.get("last-recorded-state").isRestTimeFocused
+                            + "&restored=true";
                     }
                 }
             } catch (e) {

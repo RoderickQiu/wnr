@@ -27,14 +27,6 @@
         <div id="welcome-loading-tip">
             <script>document.write(i18n.__('welcome-loading-tip-1'))</script>
         </div>
-        <div id="controller">
-            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw"
-                    id="exit-and-save"></i></a>
-            <script>
-                $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
-                if (process.platform == "darwin") $("#controller").css("display", "none");
-            </script>
-        </div>
         <div id="about" class="justify-content-center text-center small">
             <div id="tourguide-part-1">
                 <p class="h3 rest font-weight-bolder">
@@ -55,6 +47,13 @@
             getHelp("guide/1-basic-usage");
             setTimeout("window.close()", 500);
         }
+
+        const request = require('request');
+        request('https://wnr-tj.now.sh/index.html', function (error, response, body) {//analysis for users
+            if (error || response.statusCode != 200) {
+                console.log("Analysis got an error.")
+            }
+        });
     </script>
     <script src="renderer.js"></script>
 </body>

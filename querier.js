@@ -12,9 +12,9 @@ pushNotifications.limit(3);
 pushNotifications.find().then(function (notifications) {
     notifications.forEach(function (notification) {
         if (notification.get('targetVersion') == null || notification.get("targetVersion") == "" || notification.get("targetVersion") == require("./package.json").version.toString()) {
-            var content = store.get("i18n") == 'zh' ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
-            var title = store.get("i18n") == 'zh' ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
-            var link = store.get("i18n") == 'zh' ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
+            var content = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
+            var title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
+            var link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
             var id = notification.get('objectId');
             ipc.send("push-notification", { content: content, title: title, link: link, id: id })
         }

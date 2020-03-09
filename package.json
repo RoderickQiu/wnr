@@ -22,6 +22,7 @@
   "dependencies": {
     "@types/winreg": "1.2.30",
     "auto-launch": "5.0.5",
+    "cmd-or-ctrl": "0.3.1",
     "compare-version": "0.1.2",
     "copy-to-clipboard": "3.3.1",
     "crypto-js": "4.0.0",
@@ -29,12 +30,11 @@
     "i18n": "0.8.5",
     "leancloud-storage": "4.2.0",
     "node-shi": "0.4.1",
-    "cmd-or-ctrl": "0.3.1",
     "request": "2.88.2",
     "winreg": "1.2.4"
   },
   "devDependencies": {
-    "electron": "7.1.11",
+    "electron": "7.1.14",
     "electron-builder": "22.3.2"
   }
 }

@@ -10,6 +10,12 @@ html, body {
     /* let the app draggable */
 }
 
+a {
+    display: inline-block;
+    border: 4px solid transparent;
+    background-clip: padding-box;
+}
+
 label {
     display: inline-block;
     vertical-align: middle;
@@ -25,12 +31,12 @@ input, .focuser, .dropdown-default {
     border-width: 0;
 }
 
-input {
+input, select {
     width: 192px;
     background-color: transparent;
 }
 
-input:focus {
+input:focus, input:active {
     font-weight: bolder;
 }
 
@@ -46,6 +52,11 @@ input[type="text"], input[type="number"], input[type="password"] {
 input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
     border-bottom-width: 3px;
     border-bottom-color: #33333333;
+}
+
+input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {
+    border-bottom-width: 3px;
+    border-bottom-color: #33333328;
 }
 
 input[type="range"] {
@@ -91,6 +102,16 @@ input::-webkit-input-placeholder {
 input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     color: #6c757dc2;
     transition: color.5s;
+}
+
+select {
+    height: 40px;
+    margin-top: 5px;
+}
+
+select>option:focus {
+    background-color: #5490ea;
+    color: #fefefe;
 }
 
 li {
@@ -349,7 +370,7 @@ li {
     bottom: 0px;
     right: 0px;
     width: 0%;
-    height: 6px;
+    height: 5px;
     background-color: #ea5454c2;
 }
 
