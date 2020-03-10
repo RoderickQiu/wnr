@@ -21,7 +21,7 @@
 
 ## Online Version
 
-The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). 
+The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
 
 *(just a demo version, may not be fully useful on phones or other devices due to a lot of reasons.)*
 
@@ -91,7 +91,15 @@ This application is being frequently updated, so does this list.
 
 - Need Help: [Go to Help Page](https://getwnr.com/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com).
 
-- Any issues or pull requests are appreciated.
+## Contributing
+
+I appreciate it if you can help contribute.
+
+- If you have any feature requests / bugs to report, feel free to [have a issue](https://github.com/RoderickQiu/wnr/issues/new).
+
+- If you have done something brilliant, then [go for a pull request](https://github.com/RoderickQiu/wnr/pulls).
+
+- If you want to add a new language to wnr, [see this guide first](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md).
 
 ## To-do List
 
@@ -117,7 +125,7 @@ Linux version hasn't been tested *(If you are using Linux, you can fix things up
 
 Copyright (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
-Licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
+Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
 ### Packages Using
 
@@ -140,7 +148,7 @@ Licensed under the **[MPL2.0 License](https://github.com/RoderickQiu/wnr/blob/ma
 - font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
 - node-md5, pvorb, BSD 3-Clause License.
 
-#### Website *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [CC-BY-4.0] license)*
+#### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
