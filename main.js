@@ -6,14 +6,13 @@ var i18n = require("i18n");
 var Registry = require('winreg')
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
-let win, settingsWin = null, aboutWin = null, tourWin = null;
-let tray = null, contextMenu = null;
-let resetAlarm = null, powerSaveBlockerId = null;
-let isTimerWin = null, isWorkMode = null, isChinese = null;
-let timeLeftTip = null;
-let predefinedTasks = null;
-let pushNotificationLink = null;
-let workTimeFocused = false, restTimeFocused = false;
+let win = null, settingsWin = null, aboutWin = null, tourWin = null,
+    tray = null, contextMenu = null,
+    resetAlarm = null, powerSaveBlockerId = null,
+    isTimerWin = null, isWorkMode = null, isChinese = null,
+    timeLeftTip = null, predefinedTasks = null,
+    pushNotificationLink = null,
+    workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -39,7 +38,7 @@ function createWindow() {
 
     //load index.html
     win.loadFile('index.html');
-    if (process.platform == "darwin")
+    if (process.platform == "darwin" && win != null)
         win.setVisibleOnAllWorkspaces(true);
 
     //to load without sparking
@@ -57,7 +56,7 @@ function createWindow() {
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if (store.get("islocked") || (store.get('fullscreen-protection') && isTimerWin && app.isPackaged)) {
+        if (store.get("islocked") || (fullScreenProtection && isTimerWin && app.isPackaged)) {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "normal");
@@ -66,18 +65,13 @@ function createWindow() {
 
     //triggers for focusing
     win.on('blur', () => {
-        if (isTimerWin && store.get("fullscreen-protection") && win != null && app.isPackaged) {
-            if (process.platform != "darwin") {
-                win.focus();
-                win.moveTop();
-            } else {
-                win.hide();
-                win.setKiosk(false);
-                win.moveTop();
-                win.setKiosk(true);
-                win.show();
-                win.focus();
-            }
+        if (isTimerWin && fullScreenProtection && win != null && app.isPackaged) {
+            win.hide();
+            win.setKiosk(false);
+            win.moveTop();
+            win.setKiosk(true);
+            win.show();
+            win.focus();
 
             notificationSolution(i18n.__('stop-now'), i18n.__('stop-now-msg'), "hide-or-show");//notify not to do meaningless things
         }
@@ -85,7 +79,7 @@ function createWindow() {
 
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
-        if (store.get('islocked') || (store.get('fullscreen-protection') && isTimerWin && app.isPackaged)) app.relaunch()
+        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged)) app.relaunch()
     })
 }
 
@@ -104,8 +98,9 @@ function alarmSet() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
-        if (process.platform == "darwin") win.setKiosk(flag);
-        else win.setFullScreen(flag)
+        /*if (process.platform == "darwin") win.setKiosk(flag);
+        else win.setFullScreen(flag)*/
+        win.setKiosk(flag);
     }
 }
 
@@ -158,19 +153,19 @@ app.on('ready', () => {
     timeLeftTip = i18n.__("time-left");//this will be used in this file frequently
 
     const gotTheLock = app.requestSingleInstanceLock();
-    if (!gotTheLock && win != null && app.isPackaged) {
-        dialog.showMessageBox(win, {
-            title: i18n.__('more-than-one-wnr-running-dialog-box-title'),
-            type: "warning",
-            message: i18n.__('more-than-one-wnr-running-dialog-box-content'),
-            checkboxLabel: i18n.__('more-than-one-wnr-running-dialog-box-chk'),
-            checkboxChecked: true,
-        }).then(function (msg) {
-            if (msg.checkboxChecked) app.quit();
+    if (!gotTheLock) {
+        app.quit();
+    } else {
+        app.on('second-instance', () => {
+            if (win != null) {
+                if (win.isMinimized()) win.restore();
+                if (!win.isVisible()) win.show();
+                win.focus();
+            }
         });
     }//prevent wnr from running more than one instance
 
-    app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
+    if (process.platform == "win32") app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
@@ -194,7 +189,7 @@ app.on('ready', () => {
         }
     })//toggle devtools
 
-    if (store.get('islocked')) {//locked mode
+    if (store.get('islocked') && win != null) {//locked mode
         win.closable = false;
     }
 
@@ -335,25 +330,37 @@ app.on('ready', () => {
 
 function showOrHide() {
     if (settingsWin != null)
-        if (settingsWin.isVisible()) {
+        if (settingsWin.isVisible() && !settingsWin.isMinimized()) {
             settingsWin.minimize();
             settingsWin.hide();
-        } else settingsWin.show();
+        } else {
+            settingsWin.restore();
+            settingsWin.show();
+        }
     if (aboutWin != null)
-        if (aboutWin.isVisible()) {
+        if (aboutWin.isVisible() && !aboutWin.isMinimized()) {
             aboutWin.minimize();
             aboutWin.hide();
-        } else aboutWin.show();
+        } else {
+            aboutWin.restore();
+            aboutWin.show();
+        }
     if (tourWin != null)
-        if (tourWin.isVisible()) {
+        if (tourWin.isVisible() && !tourWin.isMinimized()) {
             tourWin.minimize();
             tourWin.hide();
-        } else tourWin.show();
+        } else {
+            tourWin.restore();
+            tourWin.show();
+        }
     if (win != null)
-        if (win.isVisible()) {
+        if (win.isVisible() && !win.isMinimized()) {
             win.minimize();
             win.hide();
-        } else win.show()
+        } else {
+            win.restore();
+            win.show()
+        }
 }
 
 function notificationSolution(title, body, func) {
@@ -398,8 +405,8 @@ function notificationSolution(title, body, func) {
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (!isFullScreen) {
-            if (!store.get("islocked")) win.closable = true;
-            if (process.platform == "win32") win.setSkipTaskbar(false);
+            if ((!store.get("islocked")) && win != null) win.closable = true;
+            if (process.platform == "win32" && win != null) win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version,
                 click: function () {
@@ -446,15 +453,15 @@ function traySolution(isFullScreen) {
             if (tray != null) {
                 tray.removeAllListeners('click');
                 tray.on('click', () => {
-                    if (store.get("fullscreen-protection") == false) {
+                    if (fullScreenProtection == false) {
                         showOrHide();
                     }
                 });//tray
                 tray.setContextMenu(contextMenu);
             }
         } else {
-            win.closable = false;
-            if (process.platform == "win32") win.setSkipTaskbar(true);
+            if (win != null) win.closable = false;
+            if (process.platform == "win32" && win != null) win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
             }, {
@@ -600,8 +607,10 @@ function darkModeSettingsFinder() {
                     if (items[i].name == 'AppsUseLightTheme') {
                         if (items[i].value == "0x0") {
                             store.set('isdark', true);
-                            if (win != null) win.setBackgroundColor('#393939');
-                            win.webContents.send('darkModeChanges');
+                            if (win != null) {
+                                win.setBackgroundColor('#393939');
+                                win.webContents.send('darkModeChanges');
+                            }
                         }
                     }
                 }
@@ -623,7 +632,7 @@ ipcMain.on('focus-mode-settings', function (event, message) {
 })
 
 ipcMain.on('focus-first', function () {
-    if (store.get("top") != true && win != null) win.setAlwaysOnTop(true);//always on top when full screen
+    if (win != null) win.setAlwaysOnTop(true);//always on top when full screen
     if (win != null) setFullScreenMode(true);
     macOSFullscreenSolution(true);
     traySolution(true);
@@ -633,9 +642,11 @@ ipcMain.on('focus-first', function () {
     } catch (e) {
         console.log(e);
     }
+    fullScreenProtection = true;
 })
 
 ipcMain.on('warning-giver-workend', function () {
+    fullScreenProtection = false;
     try {
         store.set("fullscreen-protection", false);
     } catch (e) {
@@ -644,17 +655,18 @@ ipcMain.on('warning-giver-workend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
-        win.show();
-        win.focus();
+        win.restore();
+        if (restTimeFocused != true) win.show();
         win.center();
         win.flashFrame(true);
+        win.setAlwaysOnTop(true);
+        win.moveTop();
         if (restTimeFocused == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
+            win.focus();
         } else {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
@@ -666,20 +678,22 @@ ipcMain.on('warning-giver-workend', function () {
                 message: i18n.__('work-time-end-msg'),
             }).then(function (response) {
                 if (restTimeFocused) {
+                    fullScreenProtection = true;
                     try {
                         store.set("fullscreen-protection", true);
                     } catch (e) {
                         console.log(e);
                     }
-                }
+                } else if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
                 win.webContents.send('warning-closed');
                 win.maximizable = false;
             })
-        }, 1000)
+        }, 1500)
     }
 })
 
 ipcMain.on('warning-giver-restend', function () {
+    fullScreenProtection = false;
     try {
         store.set("fullscreen-protection", false);
     } catch (e) {
@@ -688,15 +702,18 @@ ipcMain.on('warning-giver-restend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = true;
-        if (!win.isVisible()) win.show();
+        win.restore();
+        if (workTimeFocused != true) win.show();
+        win.center();
         win.flashFrame(true);
+        win.setAlwaysOnTop(true);
+        win.moveTop();
         if (workTimeFocused == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(true);//always on top when full screen
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
+            win.focus();
         } else {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
@@ -708,12 +725,13 @@ ipcMain.on('warning-giver-restend', function () {
                 message: i18n.__('rest-time-end-msg'),
             }).then(function (response) {
                 if (workTimeFocused) {
+                    fullScreenProtection = true;
                     try {
                         store.set("fullscreen-protection", true);
                     } catch (e) {
                         console.log(e);
                     }
-                }
+                } else if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
                 win.webContents.send('warning-closed');
                 win.maximizable = false;
             })
@@ -722,6 +740,7 @@ ipcMain.on('warning-giver-restend', function () {
 })
 
 ipcMain.on('warning-giver-all-task-end', function () {
+    fullScreenProtection = false;
     try {
         store.set("fullscreen-protection", false);
     } catch (e) {
@@ -729,11 +748,15 @@ ipcMain.on('warning-giver-all-task-end', function () {
     }
     if (win != null) {
         win.maximizable = false;
-        isTimerWin = false;
-        if (!win.isVisible()) win.show();
+        isWorkMode = false;
+        win.restore();
+        win.show();
+        win.center();
         win.flashFrame(true);
+        win.setAlwaysOnTop(true);
+        win.moveTop();
+        win.setProgressBar(-1);
         if (restTimeFocused == true) {
-            if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
@@ -746,57 +769,62 @@ ipcMain.on('warning-giver-all-task-end', function () {
             }).then(function (response) {
                 win.loadFile('index.html');//automatically back
                 win.maximizable = false;
+                if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
             })
-        }, 1000)
+        }, 1000);
         alarmSet()
     }
 })
 
 ipcMain.on('update-feedback', function (event, message) {
-    if (message == "update-available")
-        dialog.showMessageBox(settingsWin, {
-            title: i18n.__('update'),
-            type: "warning",
-            message: i18n.__('update-msg'),
-            checkboxLabel: i18n.__('update-chk'),
-            checkboxChecked: true
-        }).then(function (msg) {
-            if (msg.checkboxChecked) {
-                shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
-            }
-        })
-    else if (message == "no-update")
-        dialog.showMessageBox(settingsWin, {
-            title: i18n.__('no-update'),
-            type: "info",
-            message: i18n.__('no-update-msg')
-        })
-    else
-        dialog.showMessageBox(settingsWin, {
-            title: i18n.__('update-web-problem'),
-            type: "info",
-            message: i18n.__('update-web-problem-msg')
-        })
+    if (settingsWin != null) {
+        if (message == "update-available")
+            dialog.showMessageBox(settingsWin, {
+                title: i18n.__('update'),
+                type: "warning",
+                message: i18n.__('update-msg'),
+                checkboxLabel: i18n.__('update-chk'),
+                checkboxChecked: true
+            }).then(function (msg) {
+                if (msg.checkboxChecked) {
+                    shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+                }
+            })
+        else if (message == "no-update")
+            dialog.showMessageBox(settingsWin, {
+                title: i18n.__('no-update'),
+                type: "info",
+                message: i18n.__('no-update-msg')
+            })
+        else
+            dialog.showMessageBox(settingsWin, {
+                title: i18n.__('update-web-problem'),
+                type: "info",
+                message: i18n.__('update-web-problem-msg')
+            })
+    }
 })
 
 ipcMain.on('delete-all-data', function () {
-    dialog.showMessageBox(settingsWin, {
-        title: i18n.__('delete-all-data-dialog-box-title'),
-        type: "warning",
-        message: i18n.__('delete-all-data-dialog-box-content'),
-        checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
-        checkboxChecked: false
-    }).then(function (msg) {
-        if (msg.checkboxChecked || msg.response != 0) {
-            store.clear();
-            app.relaunch();
-            app.quit()
-        }
-    })
+    if (settingsWin != null) {
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('delete-all-data-dialog-box-title'),
+            type: "warning",
+            message: i18n.__('delete-all-data-dialog-box-content'),
+            checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
+            checkboxChecked: false
+        }).then(function (msg) {
+            if (msg.checkboxChecked || msg.response != 0) {
+                store.clear();
+                app.relaunch();
+                app.quit()
+            }
+        })
+    }
 })
 
 function windowCloseChk() {
-    if (app.isPackaged)
+    if (app.isPackaged && win != null)
         dialog.showMessageBox(win, {
             title: i18n.__('window-close-dialog-box-title'),
             type: "warning",
@@ -869,7 +897,7 @@ function settings(mode) {
             settingsWin = new BrowserWindow({
                 parent: win,
                 width: isChinese ? 780 : 888,
-                height: 486,
+                height: 480,
                 backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -916,8 +944,8 @@ function tourguide() {
         if (win != null) {
             tourWin = new BrowserWindow({
                 parent: win,
-                width: 564,
-                height: 404,
+                width: 672,
+                height: 600,
                 backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -935,6 +963,7 @@ function tourguide() {
             })
             tourWin.on('closed', () => {
                 tourWin = null;
+                win.focus();
             })
             notificationSolution(i18n.__('welcome-part-1'), i18n.__('welcome-part-2'), "normal");
         }
@@ -1002,9 +1031,9 @@ ipcMain.on("logger", function (event, message) {
 })
 
 ipcMain.on("timer-win", function (event, message) {
-    isDarkMode();
+    if (message != "index.html") isDarkMode();
     if (win != null) win.maximizable = false;
-    if (message) {
+    if (message && (message != "index.html")) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();

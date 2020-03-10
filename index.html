@@ -58,15 +58,18 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
-                window.location.href = "timer.html?title=" + $("#title").val()
-                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
-                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
-                    + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
-                    + "&note=" + $("#note").val()
-                    + "&method=1"
-                    + "&work-time-focused=" + document.getElementById("focus-work-set").checked
-                    + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
-                    + "&restored=false";
+                if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked && store.get("infinity"))
+                    alert(i18n.__('all-focus-mode-warn'));
+                else
+                    window.location.href = "timer.html?title=" + $("#title").val()
+                        + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
+                        + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                        + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
+                        + "&note=" + $("#note").val()
+                        + "&method=1"
+                        + "&work-time-focused=" + document.getElementById("focus-work-set").checked
+                        + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
+                        + "&restored=false";
             }
         }
         document.onkeydown = keydown;
@@ -179,7 +182,7 @@
         </div>
     </div>
     <script>
-        isTimerWindow(false);
+        isTimerWindow("index.html");
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
@@ -243,16 +246,19 @@
                 if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
                     (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
-                    window.location.href =
-                        "timer.html?title=" + $("#title").val()
-                        + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
-                        + "&note=" + $("#note").val()
-                        + "&method=1"
-                        + "&work-time-focused=" + item.focusWhenWorking
-                        + "&rest-time-focused=" + item.focusWhenResting
-                        + "&restored=false";
+                    if (item.focusWhenWorking && item.focusWhenResting && store.get("infinity"))
+                        alert(i18n.__('all-focus-mode-warn'));
+                    else
+                        window.location.href =
+                            "timer.html?title=" + $("#title").val()
+                            + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
+                            + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                            + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
+                            + "&note=" + $("#note").val()
+                            + "&method=1"
+                            + "&work-time-focused=" + item.focusWhenWorking
+                            + "&rest-time-focused=" + item.focusWhenResting
+                            + "&restored=false";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -264,9 +270,8 @@
 
         setTimeout(function () {
             try {
-                if ((store.get("last-recorded-hours-left") && store.get("last-recorded-hours-left") != -1) ||
-                    (store.get("last-recorded-minutes-left") && store.get("last-recorded-minutes-left") != -1)) {
-                    if (store.get('last-recorded-hours-left') == 0 && store.get("last-recorded-minutes-left") < 2)
+                if ((store.get("last-recorded-hours-left") > 0 || store.get("last-recorded-hours-left") > 0)) {
+                    if (store.get('last-recorded-hours-left') <= 0 && store.get("last-recorded-minutes-left") < 2)
                         store.set("last-recorded-minutes-left", 2);
                     if (store.get("last-recorded-state").method == 1) {
                         window.location.href =

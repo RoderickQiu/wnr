@@ -31,7 +31,7 @@
     "rest-time": "再休息多少分鐘？",
     "loop": "循環幾次？",
     "note": "還有什麽想記的嗎？",
-    "tip": "輸入各個項目，然後按Enter鍵開始計時器",
+    "tip": "輸入各個項目，然後按Enter鍵開始計時",
     "back-index": "放棄當前時間計劃並返回首頁",
     "skipper": "提前跳過當前的時間",
     "not-enough": "請合法輸入工作時間、休息時間和循環次數。暫時不支持1分鐘及以下的時間。",
@@ -109,9 +109,6 @@
     "focus-mode-part-2": "專心",
     "wrong-folder-notification-title": "當前應用並不在應用程序文件夾中",
     "wrong-folder-notification-content": "把應用移到系統的應用程序文件夾中可以更方便地使用wnr。",
-    "more-than-one-wnr-running-dialog-box-title": "有不止壹個wnr正在運行",
-    "more-than-one-wnr-running-dialog-box-content": "我們強烈建議只同時運行壹個wnr程序，運行超過壹個wnr可能導致糟糕的情況發生。如果不退出，請取消勾選“退出當前”並點確認，然後等待程序加載。",
-    "more-than-one-wnr-running-dialog-box-chk": "退出當前",
     "notification-sending-tip-msg": "通知相關事項：",
     "notification-sending-tip": "wnr有時會發送通知（可以在系統設置中調整）。",
     "default-part-1": "預設",
@@ -174,5 +171,6 @@
     "stop-now-msg": "在專心糢式下，你最終會發現無法使用你的軟件，停止不必要的嘗試吧！",
     "without-permission-part-1": "沒有權限，可能無法設置開機自啓。",
     "without-permission-part-2": "請前往系統偏好設置->安全性和隱私->自動化，找到wnr並勾選附屬的權限，否則無法設置。",
-    "permission-ask": "如果彈出一個權限申請框，請允許，否則無法設置開機自啓。"
+    "permission-ask": "如果彈出一個權限申請框，請允許，否則無法設置開機自啓。",
+    "all-focus-mode-warn": "不允許在無限模式下，把工作和休息時都設置爲專心模式。"
 }

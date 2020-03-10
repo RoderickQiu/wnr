@@ -109,9 +109,6 @@
     "focus-mode-part-2": "screen",
     "wrong-folder-notification-title": "Not in Applications folder",
     "wrong-folder-notification-content": "To use wnr in a convenient way, please move wnr to the system's Applications folder.",
-    "more-than-one-wnr-running-dialog-box-title": "More than one wnr",
-    "more-than-one-wnr-running-dialog-box-content": "There are more than 1 wnr application that is running now, which is not recommended.",
-    "more-than-one-wnr-running-dialog-box-chk": "Exit now",
     "notification-sending-tip-msg": "Things about notifications: ",
     "notification-sending-tip": "Sometimes wnr sends notifications, which is able to be disabled in the system's settings. ",
     "default-part-1": "Predefined",
@@ -174,5 +171,6 @@
     "stop-now-msg": "You will eventually find that your own softwares won't work under focus mode. Stop trying.",
     "without-permission-part-1": "Permission denied. This setting failed to execute.",
     "without-permission-part-2": "Please go to System Preferences -> Security & Privacy -> Privacy -> Automation and check the sections below the name of wnr.",
-    "permission-ask": "If a dialog box is shown, allow it. Or else you'll fail to set auto start settings. "
+    "permission-ask": "If a dialog box is shown, allow it. Or else you'll fail to set auto start settings. ",
+    "all-focus-mode-warn": "When infinity mode is on, you cannot set both periods to focus."
 }
