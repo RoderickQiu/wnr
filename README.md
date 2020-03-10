@@ -14,14 +14,16 @@
 <p align="center">
     Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（提取码：swh3）</a> | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载（密码：7nzh）</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘（swh3）</a> | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载（7nzh）</a>
 </p>
 
 ---
 
 ## Online Version
 
-The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo version, may not be fully useful on phones or other devices due to a lot of reasons.)*
+The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). 
+
+*(just a demo version, may not be fully useful on phones or other devices due to a lot of reasons.)*
 
 ## Features
 
@@ -33,7 +35,7 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 - automatic loops
 
-- predefined tasks
+- predefined tasks / defaults
 
 - clear tips for time
 
@@ -47,6 +49,8 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 - lock mode / parent control
 
+- strict rules to prevent users from hacking
+
 - always-on-top mode
 
 - auto-start with system
@@ -57,19 +61,23 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top). *(just a demo ver
 
 - hi-dpi support
 
+- good touchscreen usability
+
 - dark mode support
 
 - user-friendly tourguide
 
 - user-friendly updater
 
-- multi-platform support *(currently Windows & macOS; web, Android, iOS versions are in plan)*
+- multi-platforms support *(currently Windows & macOS)*
 
-- multi-language support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
+- multi-languages support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
 
 - with strong expansibility
 
 - modern design
+
+- infinity mode
 
 - ...
 
@@ -91,23 +99,19 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 
 ## How to Build
 
-I currently don't have any styler tool, checker tool or things like that.
-
-And linux version hasn't been tested.
-
 ```shell
 yarn
 
 yarn start
 
-yarn run win
+yarn win
 
-yarn run mac
+yarn mac
 
-yarn run linux
+yarn linux
 ```
 
-I'm using yarn.
+Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
 
 ## Copyright & Credit
 
