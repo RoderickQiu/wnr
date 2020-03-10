@@ -75,7 +75,7 @@
     "hotkey-for-show-or-hide-setting-tip": "將會把wnr隱藏至托盤菜單，打開wnr後始終有效。",
     "hotkey-for-start-or-stop-setting": "開始/暫停的快捷鍵：",
     "hotkey-for-start-or-stop-setting-tip": "將會開始或暫停計時，且僅在計時器頁面打開時有效。",
-    "delete-all-data": "清除。",
+    "delete-all-data": "清除",
     "delete-all-data-msg": "清除所有數據：",
     "delete-all-data-dialog-box-title": "是否真的要清除數據？",
     "delete-all-data-dialog-box-content": "此操作無法恢復！如果要，請勾選“清除”",
@@ -156,7 +156,6 @@
     "predefined-tasks-settings-tip-part-3": "；總共循環",
     "copied": "已經復制。",
     "settings-backup-msg": "備份wnr設置項：",
-    "settings-backup": "復制。",
     "settings-backup-tip": "點擊“復制”，可以復制並備份wnr設置項的口令。將口令粘貼到wnr的“導入設置”中，就可以實現設置的快捷導入。",
     "settings-import-msg": "導入wnr設置項：",
     "settings-import": "粘貼在此",
@@ -172,5 +171,8 @@
     "without-permission-part-1": "沒有權限，可能無法設置開機自啓。",
     "without-permission-part-2": "請前往系統偏好設置->安全性和隱私->自動化，找到wnr並勾選附屬的權限，否則無法設置。",
     "permission-ask": "如果彈出一個權限申請框，請允許，否則無法設置開機自啓。",
-    "all-focus-mode-warn": "不允許在無限模式下，把工作和休息時都設置爲專心模式。"
+    "all-focus-mode-warn": "不允許在無限模式下，把工作和休息時都設置爲專心模式。",
+    "copy": "複制",
+    "paste": "粘貼",
+    "select-all": "全選"
 }

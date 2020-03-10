@@ -411,7 +411,7 @@
                                 <script>document.write(i18n.__('delete-all-data'));</script>
                             </a>
                             <b>
-                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                                <script>document.write(i18n.__('period-symbol') + i18n.__('need-to-restart-now-tip'));</script>
                             </b>
                         </p>
                     </li>
@@ -420,9 +420,9 @@
                         <script>document.write(i18n.__('settings-backup-msg'));</script>
                         <p class="small text-muted">
                             <a href="javascript:settingsBackup()" class="rest underlined">
-                                <script>document.write(i18n.__('settings-backup'));</script>
+                                <script>document.write(i18n.__('copy'));</script>
                             </a>
-                            <script>document.write(i18n.__('settings-backup-tip'));</script>
+                            <script>document.write(i18n.__('period-symbol') + i18n.__('settings-backup-tip'));</script>
                         </p>
                     </li>
                     <!-- settings import -->
@@ -457,6 +457,37 @@
             <i class="fa fa-question" id="helper"></i>
         </a>
     </div>
+
+    <!-- right click context menu methods -->
+    <script>
+        let helperWord = "";
+        const remote = require('electron').remote;
+        const Menu = remote.Menu;
+        const MenuItem = remote.MenuItem;
+        let menu = new Menu();
+        menu.append(new MenuItem({
+            label: i18n.__('copy'),
+            role: 'copy',
+        }));
+        menu.append(new MenuItem({
+            label: i18n.__('paste'),
+            role: 'paste',
+        }));
+        menu.append(new MenuItem({
+            label: i18n.__('select-all'),
+            role: 'selectAll',
+        }));
+        menu.append(new MenuItem({ type: 'separator' }));
+        menu.append(new MenuItem({
+            label: i18n.__('help-page'),
+            click() { getHelp(helperWord) }
+        }));
+        window.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            menu.popup(remote.getCurrentWindow());
+        }, false);
+    </script>
+
     <script>
         if (process.platform == 'darwin') $("#hotkey-tip").css("display", "none");
         $(".get-help").attr('title', i18n.__('helper'));
@@ -466,6 +497,7 @@
         function settingsGoto(mask) {
             if (mask == "locker") {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/4-lock-mode-settings')");
+                helperWord = 'settings/4-lock-mode-settings';
 
                 $("#locker-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -480,6 +512,7 @@
                 $("#languages").css("display", "none");
             } else if ((mask == "predefined-tasks" || mask == "normal" || mask == "" || mask == null) && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/2-predefined-tasks-settings')");
+                helperWord = 'settings/2-predefined-tasks-settings';
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#predefined-tasks-sidebar").addClass("settings-sidebar-block-highlighted");
@@ -494,6 +527,7 @@
                 $("#languages").css("display", "none");
             } else if (mask == "languages" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/6-languages')");
+                helperWord = 'settings/6-languages';
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -508,6 +542,7 @@
                 $("#languages").css("display", "block");
             } else if (mask == "global-settings" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/3-global-settings')");
+                helperWord = 'settings/3-global-settings';
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -522,6 +557,7 @@
                 $("#languages").css("display", "none");
             } else if (mask == "other-things" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/5-other-things')");
+                helperWord = 'settings/5-other-things';
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");

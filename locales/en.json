@@ -75,7 +75,7 @@
     "hotkey-for-show-or-hide-setting-tip": "(Hide wnr to the system tray.) ",
     "hotkey-for-start-or-stop-setting": "Start/Stop hotkey: ",
     "hotkey-for-start-or-stop-setting-tip": "(Fast start/stop the timer. Only available when there is a timer working.) ",
-    "delete-all-data": "Delete.",
+    "delete-all-data": "Delete",
     "delete-all-data-msg": "Delete all data: ",
     "delete-all-data-dialog-box-title": "Are you sure you want to delete all data? ",
     "delete-all-data-dialog-box-content": "All the data will be erased, and cannot be re-found. ",
@@ -156,7 +156,6 @@
     "predefined-tasks-settings-tip-part-3": "; loop for ",
     "copied": "Copied to clipboard! ",
     "settings-backup-msg": "Back wnr settings up: ",
-    "settings-backup": "Copy.",
     "settings-backup-tip": "Click \"Copy\" to copy the settings token to clipboard.",
     "settings-import-msg": "Import wnr settings: ",
     "settings-import": "Paste here",
@@ -172,5 +171,8 @@
     "without-permission-part-1": "Permission denied. This setting failed to execute.",
     "without-permission-part-2": "Please go to System Preferences -> Security & Privacy -> Privacy -> Automation and check the sections below the name of wnr.",
     "permission-ask": "If a dialog box is shown, allow it. Or else you'll fail to set auto start settings. ",
-    "all-focus-mode-warn": "When infinity mode is on, you cannot set both periods to focus."
+    "all-focus-mode-warn": "When infinity mode is on, you cannot set both periods to focus.",
+    "copy": "Copy",
+    "paste": "Paste",
+    "select-all": "Select All"
 }
