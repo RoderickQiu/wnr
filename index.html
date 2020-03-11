@@ -270,7 +270,7 @@
 
         setTimeout(function () {
             try {
-                if ((store.get("last-recorded-hours-left") > 0 || store.get("last-recorded-hours-left") > 0)) {
+                if ((store.get("last-recorded-hours-left") > 0 || store.get("last-recorded-minutes-left") > 0)) {
                     if (store.get('last-recorded-hours-left') <= 0 && store.get("last-recorded-minutes-left") < 2)
                         store.set("last-recorded-minutes-left", 2);
                     if (store.get("last-recorded-state").method == 1) {
