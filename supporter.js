@@ -48,7 +48,10 @@ function isInDark() {
             .settings-sidebar-block {color: #fefefe; background-color: #393939;}\
             #loader-wrapper .loader-section {background: #393939;}\
             .dropdown-item, .dropdown-item .text-info {color: #f5f5f5!important;}\
-            label, li {color: #f5f5f5;}'
+            label, li, select {color: #f5f5f5;}\
+            input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {border-bottom-color: #cccccc33;}\
+            input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {border-bottom-color: #cccccc28;}\
+            </style>'
         );
     } else {
         $('#darkmode-jetplane').remove();

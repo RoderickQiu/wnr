@@ -65,6 +65,7 @@ function createWindow() {
 
     //triggers for focusing
     win.on('blur', () => {
+        win.maximizable = false;
         if (isTimerWin && fullScreenProtection && win != null && app.isPackaged) {
             win.hide();
             win.setKiosk(false);
@@ -213,6 +214,16 @@ app.on('ready', () => {
                 }
                 if (win != null) {
                     win.setBackgroundColor('#393939');
+                    win.webContents.send('darkModeChanges');
+                }
+            } else {
+                try {
+                    store.set('isdark', false);
+                } catch (e) {
+                    console.log(e);
+                }
+                if (win != null) {
+                    win.setBackgroundColor('#fefefe');
                     win.webContents.send('darkModeChanges');
                 }
             }
@@ -494,6 +505,18 @@ function macOSFullscreenSolution(isFullScreen) {
                         click: function () {
                             windowCloseChk();
                         }
+                    }]
+                }, {
+                    label: i18n.__('edit'),
+                    submenu: [{
+                        label: i18n.__('copy'),
+                        role: "copy"
+                    }, {
+                        label: i18n.__('paste'),
+                        role: "paste"
+                    }, {
+                        label: i18n.__('select-all'),
+                        role: "selectAll"
                     }]
                 }, {
                     label: i18n.__('operations'),
@@ -1031,9 +1054,10 @@ ipcMain.on("logger", function (event, message) {
 })
 
 ipcMain.on("timer-win", function (event, message) {
-    if (message != "index.html") isDarkMode();
     if (win != null) win.maximizable = false;
-    if (message && (message != "index.html")) {
+
+    if (message) {
+        isDarkMode();
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();

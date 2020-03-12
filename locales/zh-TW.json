@@ -113,7 +113,7 @@
     "notification-sending-tip": "wnr有時會發送通知（可以在系統設置中調整）。",
     "default-part-1": "預設",
     "default-part-2": "任務",
-    "edit": "編輯預設",
+    "edit": "編輯",
     "is-alarm-for-not-using-wnr-on": "使用提醒設置：",
     "is-alarm-for-not-using-wnr-on-tip": "如果此項被選中，則wnr會在您壹直不使用的時候提示您使用wnr，提高效率。",
     "is-one-min-left-notification-on": "壹分鐘提醒設置：",

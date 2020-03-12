@@ -120,9 +120,9 @@
             <!-- 1. predefined tasks settings -->
             <div id="predefined-tasks" class="should-lock">
                 <div class="align-content-center form-text">
-                    <div class="align-self-start text-left" type="none">
+                    <label class="align-self-start text-left" type="none">
                         <script>document.write(i18n.__('predefined-tasks-settings-tip'));</script>
-                    </div>
+                    </label>
                     <div class="d-flex text-left">
                         <div id="itemlist">
                             <ul id="itemlist-ul"></ul>
@@ -140,9 +140,10 @@
             <!-- 2. languages -->
             <div id="languages" class="should-lock">
                 <div class="align-content-center form-text">
-                    <div class="align-self-start text-left" type="none">
+                    <label class="align-self-start text-left" type="none">
                         <script>document.write(i18n.__('language-setting-tip'));</script>
-                    </div>
+                    </label>
+                    <br />
                     <select name="language-section" id="language-select" onchange="languageSetting()">
                     </select>
                     <br />
