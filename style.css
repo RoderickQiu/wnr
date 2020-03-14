@@ -273,7 +273,7 @@ li {
 #settings-sidebar {
     -webkit-app-region: no-drag;
     /* let it clickable */
-    -webkit-user-select: text;
+    -webkit-user-select: none;
     position: absolute;
     top: 75px;
     height: 382px;
@@ -289,7 +289,7 @@ li {
     top: 75px;
     left: 32%;
     overflow-y: scroll;
-    height: 382px;
+    height: 390px;
     width: 64%;
 }
 

@@ -131,7 +131,7 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 
 #### Main Program
 
-- node-shi, [**my own project**](https://shi.r-q.name) following MIT License.
+- node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
 - cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
 - node-auto-launch, Teamwork, MIT License.
 - compare-version, kevva, MIT License.

@@ -174,5 +174,14 @@
     "all-focus-mode-warn": "When infinity mode is on, you cannot set both periods to focus.",
     "copy": "Copy",
     "paste": "Paste",
-    "select-all": "Select All"
+    "select-all": "Select All",
+    "should-sent": "Data sending setting: ",
+    "should-sent-msg-part-1": "We will collect some non-privacy information anonymously, such as which country you came from. Your settings and usage logs won't be uploaded. You have the right to secede, though we sincerely want to have some basic data to improve our service quality. Your data won't be identified and will be stored anonymously, and will never be shown for commercial use. ",
+    "should-sent-msg-part-2": "If it is needed, you can refer to our analysis service provider's",
+    "should-sent-msg-part-3": "Privacy Policy",
+    "notification-settings": "Notifications",
+    "timer-settings": "Timer",
+    "general-settings": "General",
+    "windows-7-notification": "You are using Windows 7",
+    "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". "
 }

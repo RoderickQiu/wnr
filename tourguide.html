@@ -37,7 +37,9 @@
                 </center><br />
                 <a href="javascript:tourguide()" class="btn btn-primary">
                     <script>document.write(i18n.__('welcome-part-3'))</script></a><br /><br />
-                <a href="https://github.com/RoderickQiu/wnr/">GitHub</a> | <a href="javascript:window.close()">
+                <a
+                    href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">GitHub</a>
+                | <a href="javascript:window.close()">
                     <script>document.write(i18n.__('welcome-part-4'))</script></a><br /><br />
             </div>
         </div>
@@ -47,13 +49,6 @@
             getHelp("guide/1-basic-usage");
             setTimeout("window.close()", 500);
         }
-
-        const request = require('request');
-        request('https://wnr-tj.now.sh/index.html', function (error, response, body) {//analysis for users
-            if (error || response.statusCode != 200) {
-                console.log("Analysis got an error.")
-            }
-        });
     </script>
     <script src="renderer.js"></script>
 </body>

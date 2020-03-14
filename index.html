@@ -91,12 +91,12 @@
                         <script>document.write(i18n.__('locker-settings'));</script></a>
                     <a href="javascript:call('settings')" class="small dropdown-item should-lock">
                         <script>document.write(i18n.__('settings'));</script></a>
-                    <a href="javascript:getHelp('guide/1-basic-usage')" class="small dropdown-item">
-                        <script>document.write(i18n.__('helper'));</script></a>
                     <a href="javascript:call('about')" class="small dropdown-item">
                         <script>document.write(i18n.__('info'));</script></a>
                 </div>
             </div>&nbsp;&nbsp;
+            <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
+                <i class="fa fa-question" id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
                     id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="fa fa-minus fa-fw"
@@ -105,6 +105,7 @@
                     id="exit"></i></a>
             <script>
                 $('#dropdown-more').attr('title', i18n.__('menu'));
+                $('#get-help').attr('title', i18n.__('helper'))
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
@@ -181,6 +182,30 @@
                 id="to-num-min">--</span>
         </div>
     </div>
+
+    <script>
+        if (store.get("should-sent") != false)
+            if (!store.has("never-sent")) {
+                request('https://wnr-tj.now.sh/index.html', function (error, response, body) {//analysis for users
+                    if (error || response.statusCode != 200) {
+                        console.log("Analysis got an error.")
+                    } else {
+                        try {
+                            store.set("never-sent", false);
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    }
+                });
+            } else {
+                request('https://wnr-tj.now.sh/analysis.html', function (error, response, body) {//analysis for users
+                    if (error || response.statusCode != 200) {
+                        console.log("Analysis got an error.")
+                    }
+                });
+            }
+    </script>
+
     <script>
         isTimerWindow(false);
         if (process.platform == "darwin") {

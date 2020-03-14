@@ -3,11 +3,12 @@ const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
 var i18n = require("i18n");
-var Registry = require('winreg')
+var Registry = require('winreg');
+const windowsRelease = require('windows-release')
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
-    tray = null, contextMenu = null,
+    tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, predefinedTasks = null,
@@ -166,7 +167,25 @@ app.on('ready', () => {
         });
     }//prevent wnr from running more than one instance
 
-    if (process.platform == "win32") app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
+    if (process.platform == "win32") {
+        app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
+        if (windowsRelease() == '7' && win != null) {
+            let isNotified = store.has("windows-7-notification");
+            if (isNotified == false) {
+                dialog.showMessageBox(win, {
+                    title: i18n.__('windows-7-notification'),
+                    type: "warning",
+                    message: i18n.__('windows-7-notification-msg'),
+                }).then(function () {
+                    try {
+                        store.set("windows-7-notification", 1);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                });
+            }
+        }
+    }
 
     if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
 
@@ -236,6 +255,7 @@ app.on('ready', () => {
     traySolution(false);
     macOSFullscreenSolution(false);
     isDarkMode();
+    settingsWinContextMenuSolution();
 
     if (!store.has("predefined-tasks-created")) {
         try {
@@ -595,6 +615,31 @@ function macOSFullscreenSolution(isFullScreen) {
     }
 }
 
+function settingsWinContextMenuSolution() {
+    if (app.isReady()) {
+        var template = [{
+            label: i18n.__('select-all'),
+            role: 'selectAll',
+        }, {
+            label: i18n.__('copy'),
+            role: 'copy',
+        }, {
+            label: i18n.__('paste'),
+            role: 'paste',
+        }];
+        settingsWinContextMenu = Menu.buildFromTemplate(template)
+    }
+}
+ipcMain.on("settings-win-context-menu", function (event, message) {
+    if (settingsWin != null) {
+        try {
+            settingsWinContextMenu.popup({ window: settingsWin, x: message.x, y: message.y });
+        } catch {
+            settingsWinContextMenu.popup({ window: settingsWin });
+        }
+    }
+})
+
 function isDarkMode() {
     if (app.isReady()) {
         try {
@@ -856,10 +901,12 @@ function windowCloseChk() {
             checkboxChecked: false
         }).then(function (msger) {
             if (msger.checkboxChecked) {
-                app.quit()
+                app.quit();
             }
         })
-    else app.quit()
+    else {
+        app.quit()
+    }
 }
 ipcMain.on('window-close-chk', windowCloseChk);
 
