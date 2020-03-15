@@ -359,12 +359,6 @@ li {
     outline: none;
 }
 
-#welcome-loading-tip {
-    position: absolute;
-    top: 50%;
-    bottom: 50%;
-}
-
 #bottom-bar {
     position: absolute;
     bottom: 0px;

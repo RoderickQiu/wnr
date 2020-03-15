@@ -24,7 +24,7 @@ const config = {
         "license": "LICENSE",
         "oneClick": false,
         "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
-        "artifactName": "${productName} ${version} Setup.${ext}"
+        "artifactName": "${productName}-${version}-Setup.${ext}"
     }
 }
 

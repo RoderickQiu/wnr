@@ -2983,7 +2983,7 @@ window-size@^0.1.4:
   resolved "https://registry.npm.taobao.org/window-size/download/window-size-0.1.4.tgz#f8e1aa1ee5a53ec5bf151ffa09742a6ad7697876"
   integrity sha1-+OGqHuWlPsW/FR/6CXQqatdpeHY=
 
-windows-release@^3.2.0:
+windows-release@3.2.0:
   version "3.2.0"
   resolved "https://registry.npm.taobao.org/windows-release/download/windows-release-3.2.0.tgz#8122dad5afc303d833422380680a79cdfa91785f"
   integrity sha1-gSLa1a/DA9gzQiOAaAp5zfqReF8=
