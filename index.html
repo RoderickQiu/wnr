@@ -58,7 +58,7 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
-                if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked && store.get("infinity"))
+                if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                     alert(i18n.__('all-focus-mode-warn'));
                 else
                     window.location.href = "timer.html?title=" + $("#title").val()
@@ -271,7 +271,7 @@
                 if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
                     (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
-                    if (item.focusWhenWorking && item.focusWhenResting && store.get("infinity"))
+                    if (item.focusWhenWorking && item.focusWhenResting)
                         alert(i18n.__('all-focus-mode-warn'));
                     else
                         window.location.href =

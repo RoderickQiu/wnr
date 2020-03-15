@@ -519,6 +519,14 @@ function macOSFullscreenSolution(isFullScreen) {
                 var template = [{
                     label: 'wnr',
                     submenu: [{
+                        label: i18n.__('about'),
+                        enabled: !isTimerWin,
+                        click: function () {
+                            about();
+                        }
+                    }, {
+                        type: 'separator'
+                    }, {
                         label: i18n.__('quit'),
                         accelerator: 'CmdOrCtrl+Q',
                         enabled: !store.get('islocked'),
@@ -537,6 +545,9 @@ function macOSFullscreenSolution(isFullScreen) {
                     }, {
                         label: i18n.__('select-all'),
                         role: "selectAll"
+                    }, {
+                        label: i18n.__('cut'),
+                        role: "cut"
                     }]
                 }, {
                     label: i18n.__('operations'),
@@ -559,12 +570,6 @@ function macOSFullscreenSolution(isFullScreen) {
                             tourguide();
                         }
                     }, {
-                        label: i18n.__('about'),
-                        enabled: !isTimerWin,
-                        click: function () {
-                            about();
-                        }
-                    }, {
                         type: 'separator'
                     }, {
                         label: i18n.__('website'),
@@ -582,6 +587,11 @@ function macOSFullscreenSolution(isFullScreen) {
                 var template = [{
                     label: 'wnr',
                     submenu: [{
+                        label: i18n.__('about'),
+                        enabled: false
+                    }, {
+                        type: 'separator'
+                    }, {
                         label: i18n.__('quit'),
                         enabled: false
                     }]
@@ -595,9 +605,6 @@ function macOSFullscreenSolution(isFullScreen) {
                         enabled: false
                     }, {
                         label: i18n.__('tourguide'),
-                        enabled: false
-                    }, {
-                        label: i18n.__('about'),
                         enabled: false
                     }, {
                         type: 'separator'
