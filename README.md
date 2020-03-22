@@ -145,7 +145,7 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 - electron-builder, electron-userland, MIT License.
 - jquery, jquery, MIT License.
 - bootstrap, twbs, MIT License.
-- font-awesome, fontawesome, [License](https://github.com/FortAwesome/Font-Awesome/blob/master/LICENSE.txt).
+- iconfont, ALIMAMA MUX, for license go to [the site](https://www.iconfont.cn/).
 - node-md5, pvorb, BSD 3-Clause License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
