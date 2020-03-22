@@ -17,12 +17,9 @@
     <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
-    <script src="res/lib/all.js"></script>
-    <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
-
-
 
 <body>
 
@@ -41,7 +38,6 @@
 
     <script src="supporter.js"></script><!-- support wnr running -->
     <script src="updater.js"></script><!-- check for updates -->
-    <script src="querier.js"></script><!-- query push messages -->
     <script>
         try {
             if (!store.get('tour')) {
@@ -59,7 +55,7 @@
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
                 if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
-                    alert(i18n.__('all-focus-mode-warn'));
+                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
                 else
                     window.location.href = "timer.html?title=" + $("#title").val()
                         + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
@@ -79,13 +75,14 @@
             <div class="dropdown dropleft dropdown-default">
                 <a class="dropdown-toggle" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                    <span class="dropdown-default rest">
-                        <i class="fa fa-ellipsis-h" id="dropdown-more"></i>
+                    <span class="dropdown-default rest" id="dropdown-more">
+                        <i class="iconfont icon-bars"></i>
                     </span>
                 </a>
                 <div class="dropdown-menu" aria-labelledby="controller-dropdown">
-                    <a href="#" class="dropdown-header extreme-small">
-                        <script>document.write(i18n.__('menu'));</script></a>
+                    <div class="dropdown-header extreme-small">
+                        <script>document.write(i18n.__('menu'));</script>
+                    </div>
                     <div class="dropdown-divider"></div>
                     <a href="javascript:call('locker')" class="small dropdown-item">
                         <script>document.write(i18n.__('locker-settings'));</script></a>
@@ -96,12 +93,13 @@
                 </div>
             </div>&nbsp;&nbsp;
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
-                <i class="fa fa-question" id="helper"></i></a>&nbsp;&nbsp;
-            <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i class="fa fa-sort-desc fa-fw"
-                    id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-minimize')" class="small rest"><i class="fa fa-minus fa-fw"
+                <i class="iconfont icon-info" id="helper"></i></a>&nbsp;&nbsp;
+            <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
+                    class="iconfont icon-caret-down" id="window-hide"></i></a><span
+                id="no-use-space">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
                     id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small rest"><i class="fa fa-times fa-fw"
+            <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
                 $('#dropdown-more').attr('title', i18n.__('menu'));
@@ -141,7 +139,7 @@
                 <div class="align-content-center">
                     <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
                         required />
-                    <input id="focus-work-set" type="checkbox" onchange="focusWorkSet()" />
+                    <input id="focus-work-set" type="checkbox" />
                     <span class="focuser extreme-small work">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
@@ -149,7 +147,7 @@
                 <br />
                 <div class="align-content-center">
                     <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
-                    <input id="focus-rest-set" type="checkbox" onchange="focusRestSet()" />
+                    <input id="focus-rest-set" type="checkbox" />
                     <span class="focuser extreme-small rest">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
@@ -272,7 +270,7 @@
                 if (store.get("autostarttask") && store.get("just-launched") &&
                     (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
                     if (item.focusWhenWorking && item.focusWhenResting)
-                        alert(i18n.__('all-focus-mode-warn'));
+                        ipc.send("alert", i18n.__('all-focus-mode-warn'));
                     else
                         window.location.href =
                             "timer.html?title=" + $("#title").val()

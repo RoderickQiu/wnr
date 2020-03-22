@@ -17,9 +17,8 @@
     <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.bundle.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
-    <script src="res/lib/all.js"></script>
-    <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
 </head>
 
 <body>
@@ -38,14 +37,14 @@
 
     <script src="supporter.js"></script>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="exit-and-save"></i></a>
+        <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close"
+                id="exit-and-save"></i></a>
         <script>
             $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
             if (process.platform == "darwin") $("#controller").css("display", "none");
         </script>
     </div>
     <div class="d-flex h3 rest" id="settings-title">
-        <i class="fa fa-cog fa-fw" aria-hidden="true"></i>
         <script>document.write(i18n.__('settings'));</script>
     </div>
 
@@ -55,7 +54,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="fa fa-superpowers" aria-hidden="true"></i>
+                        <i class="iconfont icon-bolt" aria-hidden="true"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('predefined-tasks-settings'));</script>
@@ -67,7 +66,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="fa fa-language" aria-hidden="true"></i>
+                        <i class="iconfont icon-translation" aria-hidden="true"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('languages'));</script>
@@ -80,19 +79,23 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="fa fa-globe fa-fw" aria-hidden="true"></i>
+                        <i class="iconfont" id="global-settings-sidebar-icon" aria-hidden="true"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('global-settings'));</script>
                     </div>
                 </div>
             </div>
+            <script>
+                if (isChinese) $("#global-settings-sidebar-icon").addClass("icon-globe-asia");
+                else $("#global-settings-sidebar-icon").addClass("icon-globe-europe");
+            </script>
         </div>
         <div class="settings-sidebar-block lead" id="locker-sidebar" onclick="settingsGoto('locker')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
+                        <i class="iconfont icon-lock" aria-hidden="true"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('locker-settings'));</script>
@@ -105,7 +108,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="fa fa-ellipsis-h fa-fw" aria-hidden="true"></i>
+                        <i class="iconfont icon-more" aria-hidden="true"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('other-things'));</script>
@@ -144,9 +147,14 @@
                         <script>document.write(i18n.__('language-setting-tip'));</script>
                     </label>
                     <br />
-                    <select name="language-section" id="language-select" onchange="languageSetting()">
-                    </select>
-                    <br />
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            id="language-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
+                            aria-expanded="false">
+                        </button>
+                        <div class="dropdown-menu" id="language-select" aria-labelledby="language-dropdown-button">
+                        </div>
+                    </div>
                     <span class="text-muted small">
                         <script>
                             document.write(i18n.__('language-contribute-tip-part-1')
@@ -368,6 +376,10 @@
                             $('#passcode-locker-again').attr('placeholder', i18n.__('locker-settings-input-again'));
                             document.write(store.get('islocked') ? i18n.__('locker-settings-input-tip-lock-mode-on') : i18n.__('locker-settings-input-tip-lock-mode-off'));
                         </script>
+                        <br />
+                        <b>
+                            <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                        </b>
                     </span>
                 </div>
                 <br />
@@ -394,28 +406,20 @@
                     <li id="hotkey-tip">
                         <script>document.write(i18n.__('hotkey-for-show-or-hide-setting'));</script>
                         <p class="small text-muted">
-                            <script>document.write(cmdOrCtrl._("short", "pascal"))</script>
-                            + Shift + Alt + <input id="hotkey-for-show-or-hide-setting" class="hotkeyset" type="text"
-                                maxlength="1" onchange="hotkeyForShowOrHideSetting()" />.<br />
-                            <script>document.write(i18n.__('hotkey-for-show-or-hide-setting-tip')); </script>
+                            <input name="hotkey-1" id="hotkey-1" type="text" readonly onclick="keyDownCapturer('1')"
+                                onblur="keyDownTriggerRemover()" ime-mode="disabled" />
                             <br />
-                            <b>
-                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
-                            </b>
+                            <script>document.write(i18n.__('hotkey-for-show-or-hide-setting-tip')); </script>
                         </p>
                     </li>
                     <!-- hotkey for start or stop the task -->
                     <li id="hotkey2-tip">
                         <script>document.write(i18n.__('hotkey-for-start-or-stop-setting'));</script>
                         <p class="small text-muted">
-                            <script>document.write(cmdOrCtrl._("short", "pascal"))</script>
-                            + Shift + Alt + <input id="hotkey-for-start-or-stop-setting" class="hotkeyset" type="text"
-                                maxlength="1" onchange="hotkeyForStartOrStopSetting()" />.<br />
-                            <script>document.write(i18n.__('hotkey-for-start-or-stop-setting-tip')); </script>
+                            <input name="hotkey-2" id="hotkey-2" type="text" readonly onclick="keyDownCapturer('2')"
+                                onblur="keyDownTriggerRemover()" ime-mode="disabled" />
                             <br />
-                            <b>
-                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
-                            </b>
+                            <script>document.write(i18n.__('hotkey-for-start-or-stop-setting-tip')); </script>
                         </p>
                     </li>
                     <!-- delete all the data -->
@@ -423,10 +427,10 @@
                         <script>document.write(i18n.__('delete-all-data-msg'));</script>
                         <p class="small text-muted">
                             <a href="javascript:call('delete-all-data')" class="rest underlined">
-                                <script>document.write(i18n.__('delete-all-data'));</script>
-                            </a>
+                                <script>document.write(i18n.__('delete-all-data') + i18n.__('period-symbol'));</script>
+                            </a>&nbsp;
                             <b>
-                                <script>document.write(i18n.__('period-symbol') + i18n.__('need-to-restart-now-tip'));</script>
+                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                             </b>
                         </p>
                     </li>
@@ -435,9 +439,9 @@
                         <script>document.write(i18n.__('settings-backup-msg'));</script>
                         <p class="small text-muted">
                             <a href="javascript:settingsBackup()" class="rest underlined">
-                                <script>document.write(i18n.__('copy'));</script>
-                            </a>
-                            <script>document.write(i18n.__('period-symbol') + i18n.__('settings-backup-tip'));</script>
+                                <script>document.write(i18n.__('copy') + i18n.__('period-symbol'));</script>
+                            </a>&nbsp;
+                            <script>document.write(i18n.__('settings-backup-tip'));</script>
                         </p>
                     </li>
                     <!-- settings import -->
@@ -469,7 +473,7 @@
     </div>
     <div class="get-help" id="settings-helper">
         <a class="small rest">
-            <i class="fa fa-question" id="helper"></i>
+            <i class="iconfont icon-info" id="helper"></i>
         </a>
     </div>
 
@@ -525,7 +529,7 @@
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
-            } else if ((mask == "predefined-tasks" || mask == "normal" || mask == "" || mask == null) && (!store.get('islocked'))) {
+            } else if ((mask == "predefined-tasks" || mask == "" || mask == null) && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/2-predefined-tasks-settings')");
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -553,7 +557,7 @@
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "block");
-            } else if (mask == "global-settings" && (!store.get('islocked'))) {
+            } else if ((mask == "global-settings" || mask == "normal") && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/3-global-settings')");
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -587,6 +591,7 @@
     <script src="updater.js"></script>
     <script>
         var timeOut = null;//temporary variable
+
         //defaults settings
         let defaultArray = store.get("predefined-tasks");
         let newItem = {
@@ -617,7 +622,7 @@
         }
         function append(item, index) {
             $("#itemlist-ul").append(
-                "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='lead rest' maxlength='11' value='" +
+                "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='lead rest' maxlength='15' value='" +
                 item.name + "'onchange='edit(" + index + ")' /> <br /><div class='text-muted small'>" +
                 i18n.__('predefined-tasks-settings-tip-part-1') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
                 item.workTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
@@ -628,8 +633,8 @@
                 i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
                 item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
                 i18n.__('times') +
-                "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' /> | " +
-                i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' class='focuser' type='checkbox' onchange='edit(" + index + ")' />\
+                "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='edit(" + index + ")' /> | " +
+                i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='edit(" + index + ")' />\
                 <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
                 <span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
                 </div><hr /></li>"
@@ -663,14 +668,22 @@
 
         //language settings
         for (i in languageList) {
-            $("#language-select").append("<option id='" + languageList[i] + "' value='" + languageList[i] + "'>" + languageNameList[i] + "</option>");
+            $("#language-select").append("\
+            <a class='dropdown-item' href='javascript:languageSetting(\"" + languageList[i] + "\")'>"
+                + languageNameList[i] + "</a>");
             if (store.get("i18n") == languageList[i]) {
-                $("#" + languageList[i]).attr("selected", true);
+                $("#language-dropdown-button").text(languageNameList[i]);
             }
         }
-        function languageSetting() {
-            store.set("i18n", $("#language-select").val());
-            timeOut = setTimeout("call('relauncher')", 500);
+        function languageSetting(val) {
+            if (store.get('i18n') != val) {
+                try {
+                    store.set("i18n", val);
+                } catch (e) {
+                    console.log(e);
+                }
+                timeOut = setTimeout("call('relauncher')", 500);
+            }
         }
 
         //global settings
@@ -701,7 +714,7 @@
                     document.getElementById("auto-start-setting").checked = false;
                 }
             }).catch(function (error) {
-                alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
+                ipc.send("alert", i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
             })
         function autoStartSetting() {
             if (document.getElementById("auto-start-setting").checked == true) {
@@ -715,7 +728,7 @@
                     }).catch(function (error) {
                         store.set("autostart", false);
                         document.getElementById("auto-start-setting").checked = false;
-                        alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
+                        ipc.send("alert", i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
                     })
             }
             else {
@@ -729,7 +742,7 @@
                     }).catch(function (error) {
                         store.set("autostart", true);
                         document.getElementById("auto-start-setting").checked = true;
-                        alert(i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
+                        ipc.send("alert", i18n.__('without-permission-part-1') + ((process.platform == "darwin") ? i18n.__('without-permission-part-2') : ""));
                     })
             }
         }
@@ -804,31 +817,43 @@
         }
 
         //other things
-        $("#hotkey-for-show-or-hide-setting").val(store.get("hotkey1").toUpperCase());
-        function hotkeyForShowOrHideSetting() {
-            if ($("#hotkey-for-show-or-hide-setting").val() != null && $("#hotkey-for-show-or-hide-setting").val()) {
-                if ($("#hotkey-for-show-or-hide-setting").val().toUpperCase() != store.get('hotkey2')) {
-                    $("#hotkey-for-show-or-hide-setting").val($("#hotkey-for-show-or-hide-setting").val().toUpperCase());
-                    store.set("hotkey1", $("#hotkey-for-show-or-hide-setting").val());
-                    timeOut = setTimeout("call('relauncher')", 500);
-                } else $("#hotkey-for-show-or-hide-setting").val(store.get("hotkey1"));
-            } else {
-                store.set("hotkey1", 'W');
-                timeOut = setTimeout("call('relauncher')", 500);
-            }
+        let hotkeyTo = "", keyDownGet = "";;
+        $("#hotkey-1").val(store.get("hotkey1"));
+        $("#hotkey-2").val(store.get("hotkey2"));
+        function keyDownCapturer(to) {
+            hotkeyTo = to;
+            document.addEventListener('keydown', KeyDownTrigger, false);
         }
-        $("#hotkey-for-start-or-stop-setting").val(store.get("hotkey2").toUpperCase());
-        function hotkeyForStartOrStopSetting() {
-            if ($("#hotkey-for-start-or-stop-setting").val() != null && $("#hotkey-for-start-or-stop-setting").val()) {
-                if ($("#hotkey-for-start-or-stop-setting").val().toUpperCase() != store.get('hotkey1')) {
-                    $("#hotkey-for-start-or-stop-setting").val($("#hotkey-for-start-or-stop-setting").val().toUpperCase());
-                    store.set("hotkey2", $("#hotkey-for-start-or-stop-setting").val());
-                    timeOut = setTimeout("call('relauncher')", 500);
-                } else $("#hotkey-for-start-or-stop-setting").val(store.get("hotkey2"));
-            } else {
-                store.set("hotkey2", 'S');
-                timeOut = setTimeout("call('relauncher')", 500);
-            }
+
+        function isTagNude(tag) {
+            if (tag.indexOf('Control') == -1 && tag.indexOf('Shift') == -1
+                && tag.indexOf('Alt') == -1 && tag.indexOf('Command') == -1 && tag.indexOf('Win') == -1)
+                return true;
+            else return false;
+        }
+
+        function KeyDownTrigger(event) {
+            event.preventDefault();
+            keyDownGet = "";
+
+            const keyName = event.key;
+
+            if (keyName === 'Control' || keyName === 'Alt' || keyName === 'Shift' || keyName === 'Meta') return;
+
+            if (event.metaKey) keyDownGet += (process.platform == "darwin") ? "Command + " : "";
+            if (event.ctrlKey) keyDownGet += "Control + ";
+            if (event.shiftKey) keyDownGet += "Shift + ";
+            if (event.altKey) keyDownGet += "Alt + ";
+            if (keyName) keyDownGet += keyName.toUpperCase();
+            if (keyName.indexOf("Unidentified") == -1 && keyName.indexOf("Dead") == -1 && keyName.indexOf("PROCESS") == -1) {
+                if (isTagNude(keyDownGet)) keyDownGet = cmdOrCtrl._('long', 'pascal') + " + Shift + Alt + " + keyDownGet;
+                $("#hotkey-" + hotkeyTo).val(keyDownGet);
+                ipc.send("global-shortcut-set", { type: hotkeyTo, before: store.get("hotkey" + hotkeyTo), to: keyDownGet });
+            } else keyDownGet = "";
+        }
+
+        function keyDownTriggerRemover() {
+            document.removeEventListener('keydown', KeyDownTrigger, false);
         }
 
         // settings backup & import
@@ -836,19 +861,19 @@
         var encoding = require("crypto-js/enc-utf8");
         var copyToClipboard = require("copy-to-clipboard");
         function settingsBackup() {
-            var ciphertext = aes.encrypt(JSON.stringify(store.store), 'We all love wnr, so please do not use this passcode to do bad things.');
-            copyToClipboard(ciphertext.toString());
-            alert(i18n.__('copied'));
+            var cipherText = aes.encrypt(JSON.stringify(store.store), String(process.env.SETTING_BACKUP_KEY));
+            copyToClipboard(cipherText.toString());
+            ipc.send("alert", i18n.__('copied'));
         }
         function settingsImport(token) {
-            var bytes = aes.decrypt(token, 'We all love wnr, so please do not use this passcode to do bad things.');
+            var bytes = aes.decrypt(token, String(process.env.SETTING_BACKUP_KEY));
             var isAllRight = true;
             try {
                 var decryptedData = JSON.parse(bytes.toString(encoding));
                 store.set(decryptedData);
             } catch (error) {
                 if (error instanceof SyntaxError) {
-                    alert(i18n.__('settings-import-error'))
+                    ipc.send("alert", i18n.__('settings-import-error'))
                     isAllRight = false;
                 }
             }

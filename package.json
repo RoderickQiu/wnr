@@ -1,10 +1,11 @@
 {
   "name": "wnr",
-  "version": "1.13.0",
+  "version": "1.13.1",
   "description": "It's a timer app with strong expansibility for computers. The name is an abbr of \"Work and Rest\".",
   "main": "main.js",
   "scripts": {
-    "start": "nodemon --ext html,js,css,json --watch * --ignore node_modules/ --ignore designs/ --exec electron .",
+    "upd-dependency": "yarn",
+    "start": "electron .",
     "win": "node ./res/builder/win.js",
     "mac": "node ./res/builder/mac.js",
     "linux": "node ./res/builder/linux.js"
@@ -26,9 +27,10 @@
     "compare-version": "0.1.2",
     "copy-to-clipboard": "3.3.1",
     "crypto-js": "4.0.0",
+    "dotenv": "8.2.0",
     "electron-store": "5.1.1",
-    "i18n": "0.8.5",
-    "leancloud-storage": "4.3.1",
+    "i18n": "0.8.6",
+    "leancloud-storage": "4.5.0",
     "node-shi": "0.4.1",
     "request": "2.88.2",
     "windows-release": "3.2.0",
@@ -37,6 +39,6 @@
   "devDependencies": {
     "electron": "7.1.14",
     "electron-builder": "22.3.2",
-    "nodemon": "2.0.2"
+    "elemon": "5.0.3"
   }
 }

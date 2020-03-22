@@ -15,8 +15,7 @@
     <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
-    <script src="res/lib/all.js"></script>
-    <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
@@ -24,7 +23,7 @@
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">
-            <a href="javascript:window.close()" class="small rest"><i class="fa fa-times fa-fw" id="close"></i></a>
+            <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close" id="close"></i></a>
             <script>
                 $('#close').attr('title', i18n.__('close'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
@@ -40,13 +39,13 @@
             <p>
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)"><i
-                        class="fa fa-home" id="homepage"></i></a>&nbsp;&nbsp;
+                        class="iconfont icon-home-" id="homepage"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')"><i
-                        class="fa fa-github" id="on-github"></i></a>&nbsp;&nbsp;
+                        class="iconfont icon-github" id="on-github"></i></a>&nbsp;&nbsp;
                 <a class="rest"
                     href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/issues/')"><i
-                        class="fa fa-exclamation-circle" id="issues"></i></a>
+                        class="iconfont icon-bug" id="issues"></i></a>
                 <script>
                     $('#homepage').attr('title', i18n.__('homepage'));
                     $('#on-github').attr('title', i18n.__('on-github'));

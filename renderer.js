@@ -13,3 +13,7 @@ isLockMode()
 if (store.get("is-shadowless")) {
     $('html').css('border', '#33333333 1px solid')
 }
+
+if (store.get("isdark")) {
+    $('html').css('border', '#ffffff33 1px solid')
+}

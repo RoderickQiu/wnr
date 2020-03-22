@@ -1,0 +1,100 @@
+@font-face {
+    font-family: "iconfont";
+    src: url("iconfont.woff2") format('woff2');
+}
+
+.iconfont {
+    font-family: "iconfont" !important;
+    font-size: 16px;
+    font-style: normal;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-globe-europe:before {
+    content: "\e71c";
+}
+
+.icon-check-circle:before {
+    content: "\e7b9";
+}
+
+.icon-angle-double-left:before {
+    content: "\e7a1";
+}
+
+.icon-globe-asia:before {
+    content: "\e7e4";
+}
+
+.icon-lock:before {
+    content: "\e7fd";
+}
+
+.icon-more:before {
+    content: "\e6a7";
+}
+
+.icon-bolt:before {
+    content: "\e7ab";
+}
+
+.icon-translation:before {
+    content: "\e705";
+}
+
+.icon-settings-:before {
+    content: "\e70c";
+}
+
+.icon-fast-forward:before {
+    content: "\e6c9";
+}
+
+.icon-play:before {
+    content: "\e6fd";
+}
+
+.icon-pause:before {
+    content: "\e6fe";
+}
+
+.icon-previous:before {
+    content: "\e702";
+}
+
+.icon-github:before {
+    content: "\e65b";
+}
+
+.icon-home-:before {
+    content: "\e6d3";
+}
+
+.icon-bug:before {
+    content: "\e7af";
+}
+
+.icon-minus:before {
+    content: "\e808";
+}
+
+.icon-close:before {
+    content: "\e600";
+}
+
+.icon-angle-down:before {
+    content: "\e7a0";
+}
+
+.icon-bars:before {
+    content: "\e7a6";
+}
+
+.icon-caret-down:before {
+    content: "\e7b4";
+}
+
+.icon-info:before {
+    content: "\e7fa";
+}

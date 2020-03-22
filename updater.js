@@ -6,7 +6,7 @@ var manuallyCheckText = '';
 function updateChecker(method) {
     if (method == 2) {
         manuallyCheckText = document.getElementById("manually").innerHTML;
-        document.getElementById("manually").innerHTML = "<i class='fa fa-refresh fa-spin fa-fw'></i>";
+        document.getElementById("manually").innerHTML = "...";
     }
     request('https://raw.githubusercontent.com/RoderickQiu/wnr/master/package.json', function (error, response, body) {
         if (error || response.statusCode != 200) {

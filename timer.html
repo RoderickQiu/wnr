@@ -16,8 +16,7 @@
     <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
-    <script src="res/lib/all.js"></script>
-    <script src="res/lib/v4-shims.js"></script><!-- font-awesome 5 use as 4 -->
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
@@ -27,13 +26,14 @@
         <div id="time-bar" class="text-muted"></div>
         <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
-            <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="fa fa-question"
+            <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="iconfont icon-info"
                     id="helper"></i></a>&nbsp;&nbsp;
-            <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i class="fa fa-sort-desc fa-fw"
-                    id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-minimize')" class="small work"><i class="fa fa-minus fa-fw"
+            <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
+                    class="iconfont icon-caret-down" id="window-hide"></i></a><span
+                id="no-use-space">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-minimize')" class="small work"><i class="iconfont icon-minus"
                     id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small work"><i class="fa fa-times fa-fw"
+            <a href="javascript:call('window-close-chk')" class="small work should-lock"><i class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
                 $('#helper').attr('title', i18n.__('helper'));
@@ -49,15 +49,19 @@
                 <script>document.write(i18n.__('working'));</script>
             </div><br />
             <div id="now-timing" class="text-center h1 work"></div><br />
-            <div class="text-center lead"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
-                        class="fa fa-pause"></i></a></div><br />
-            <div class="text-center text-muted" id="more-options"><a href="javascript:backer()" class="text-muted"><i
-                        class="fa fa-angle-left" id="back-index"></i></a><span
-                    id="skipper-space">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><a href=" javascript:skipper()"
-                    class="text-muted" id="skipper"><i class="fa fa-angle-double-right" id="skipper"></i></a></div>
+            <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
+                        class="iconfont icon-pause"></i></a></div><br />
+            <div class="text-center text-muted" id="more-options">
+                <a href="javascript:backer()" class="text-muted should-lock"><i class="iconfont icon-previous"
+                        id="back-index"></i></a>
+                <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <a href=" javascript:skipper()" class="text-muted" id="skipper">
+                    <i class="iconfont icon-fast-forward" id="skipper"></i>
+                </a>
+            </div>
             <br />
-            <div class="text-center lead" id="backer"><a href="javascript:backer()" class="text-muted"><i
-                        class="fa fa-angle-left" id="backindex2"></i></a></div>
+            <div class="text-center lead should-lock" id="backer"><a href="javascript:backer()" class="text-muted"><i
+                        class="iconfont icon-fast-forward" id="backindex2"></i></a></div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
                     <script>document.write(i18n.__('only-one-min-left'));</script>
@@ -225,13 +229,13 @@
                 wasCounting = !wasCounting;
                 if (isClockWorking) {
                     window.clearInterval(int);
-                    $("#stopper").html("<i class='fa fa-play' aria-hidden='true'></i>");
+                    $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                 } else {
                     if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     int = self.setInterval(clock, 100);
-                    $("#stopper").html("<i class='fa fa-pause' aria-hidden='true'></i>");
+                    $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                     isClockWorking = 1;//to restart
                 }
             }
@@ -245,7 +249,7 @@
                 } catch (e) {
                     console.log(e);
                 }
-                if (store.get("sound") == true || store.get("sound") == undefined) {
+                if (store.get("sound") != false) {
                     if (isend != 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\time-end.wav");
                     } else {
@@ -264,7 +268,7 @@
                         player.pause();
                         stopper();
                         $("#skipper").css("display", "inline");
-                        $("#skipper-space").css("display", "inline");
+                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                     });
                 }
             }
@@ -416,9 +420,11 @@
                             if (!store.get('fullscreen-protection'))
                                 ipc.send("only-one-min-left");
                             else {
-                                player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
-                                player.loop = false;
-                                player.play();
+                                if (store.get("sound") != false) {
+                                    player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
+                                    player.loop = false;
+                                    player.play();
+                                }
                                 $("#only-one").css("display", "block");
                             }
                         }

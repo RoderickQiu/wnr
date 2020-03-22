@@ -1,10 +1,16 @@
-const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut, dialog, shell, powerSaveBlocker, powerMonitor, systemPreferences, Notification, nativeTheme } = require('electron')
+const { app, BrowserWindow, ipcMain, Tray, Menu,
+    globalShortcut, dialog, shell, powerSaveBlocker,
+    powerMonitor, systemPreferences, Notification, nativeTheme }
+    = require('electron');
 const Store = require('electron-store');
 const store = new Store();
 const path = require("path");
 var i18n = require("i18n");
 var Registry = require('winreg');
-const windowsRelease = require('windows-release')
+const windowsRelease = require('windows-release');
+var cmdOrCtrl = require('cmd-or-ctrl');
+var AV = require('leancloud-storage');
+var { Query } = AV
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
@@ -13,7 +19,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, predefinedTasks = null,
     pushNotificationLink = null,
-    workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false;
+    workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false,
+    leanId = null, leanKey = null;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -33,7 +40,6 @@ function createWindow() {
         hasShadow: true,
         webPreferences: { nodeIntegration: true, webgl: false },
         titleBarStyle: "hiddenInset",
-        title: "wnr",
         icon: "./res/icons/wnrIcon.png"
     });//optimize for cross platfrom
 
@@ -57,7 +63,7 @@ function createWindow() {
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if (store.get("islocked") || (fullScreenProtection && isTimerWin && app.isPackaged)) {
+        if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && app.isPackaged) {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "normal");
@@ -100,8 +106,6 @@ function alarmSet() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
-        /*if (process.platform == "darwin") win.setKiosk(flag);
-        else win.setFullScreen(flag)*/
         win.setKiosk(flag);
     }
 }
@@ -119,6 +123,20 @@ app.on('will-quit', () => {
 //some apis can be only used inside ready
 app.on('ready', () => {
     createWindow();
+
+    require('dotenv').config();
+
+    if (!app.isPackaged) {
+        const elemon = require('elemon'); // require elemon if electron is in dev
+        elemon({
+            app: app,
+            mainFile: 'main.js',
+            bws: [
+                { bw: win, res: ['index.html', 'timer.html', 'renderer.js', 'supporter.js', 'updater.js', 'style.css'] },
+                { bw: settingsWin, res: ['settings.html', 'updater.js', 'style.css'] }
+            ]
+        });
+    }
 
     i18n.configure({
         locales: languageCodeList,
@@ -156,6 +174,7 @@ app.on('ready', () => {
 
     const gotTheLock = app.requestSingleInstanceLock();
     if (!gotTheLock) {
+        console.log('Didn\'t get the lock, quitting');
         app.quit();
     } else {
         app.on('second-instance', () => {
@@ -187,16 +206,32 @@ app.on('ready', () => {
         }
     }
 
-    if (store.get("top") == true && win != null) win.setAlwaysOnTop(true);
+    if (win != null) {
+        if (store.get("top") == true) win.setAlwaysOnTop(true);
+        else win.setAlwaysOnTop(false);
+    }
+
+    function isTagNude(tag) {
+        if (tag.indexOf('Control') == -1 && tag.indexOf('Shift') == -1
+            && tag.indexOf('Alt') == -1 && tag.indexOf('Command') == -1 && tag.indexOf('Win') == -1)
+            return true;
+        else return false;
+    }
 
     try {
-        if (!store.get('hotkey1')) store.set('hotkey1', 'W');
-        if (!store.get('hotkey2')) store.set('hotkey2', 'S');
+        if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
+        else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
+    } catch (e) {
+        console.log(e);
+    }
+    try {
+        if (!store.get('hotkey2')) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + S');
+        else if (isTagNude(store.get('hotkey2'))) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey2'));
     } catch (e) {
         console.log(e);
     }
 
-    globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey1'), () => {
+    globalShortcut.register(store.get('hotkey1'), () => {
         if (!isTimerWin || (isWorkMode && (workTimeFocused == false)) || ((!isWorkMode) && (restTimeFocused == false))) {
             showOrHide();
         }//prevent using hotkeys to quit
@@ -232,7 +267,7 @@ app.on('ready', () => {
                     console.log(e);
                 }
                 if (win != null) {
-                    win.setBackgroundColor('#393939');
+                    win.setBackgroundColor('#191919');
                     win.webContents.send('darkModeChanges');
                 }
             } else {
@@ -357,6 +392,9 @@ app.on('ready', () => {
             }
         })
     }//backport when shadow disabled
+
+    leanId = process.env.LEAN_ID, leanKey = process.env.LEAN_KEY;
+    leanCloudSolution();
 })
 
 function showOrHide() {
@@ -647,6 +685,39 @@ ipcMain.on("settings-win-context-menu", function (event, message) {
     }
 })
 
+function leanCloudSolution() {
+    try {
+        AV.init({
+            appId: leanId,
+            appKey: leanKey
+        });
+
+        var pushNotifications = new AV.Query('notifications');
+        pushNotifications.descending('createdAt');
+        pushNotifications.limit(3);
+
+        pushNotifications.find().then(function (notifications) {
+            notifications.forEach(function (notification) {
+                if (notification.get('targetVersion') == null || notification.get("targetVersion") == "" || notification.get("targetVersion") == require("./package.json").version.toString()) {
+                    let content = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
+                    let title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
+                    let link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
+                    let id = notification.get('objectId');
+                    if (!store.get(id)) {
+                        pushNotificationLink = link;
+                        if (pushNotificationLink != "" && pushNotificationLink != null)
+                            notificationSolution(title, content, "push-notification");
+                        else notificationSolution(title, content, "normal");
+                        store.set(id, true);
+                    }
+                }
+            })
+        })
+    } catch (e) {
+        console.log(e)
+    }
+}
+
 function isDarkMode() {
     if (app.isReady()) {
         try {
@@ -663,7 +734,7 @@ function darkModeSettingsFinder() {
         if (nativeTheme.shouldUseDarkColors) {
             store.set('isdark', true);
             if (win != null) {
-                win.setBackgroundColor('#393939');
+                win.setBackgroundColor('#191919');
                 win.webContents.send('darkModeChanges');
             }
         } else {
@@ -683,7 +754,7 @@ function darkModeSettingsFinder() {
                         if (items[i].value == "0x0") {
                             store.set('isdark', true);
                             if (win != null) {
-                                win.setBackgroundColor('#393939');
+                                win.setBackgroundColor('#191919');
                                 win.webContents.send('darkModeChanges');
                             }
                         }
@@ -880,6 +951,22 @@ ipcMain.on('update-feedback', function (event, message) {
     }
 })
 
+ipcMain.on('alert', function (event, message) {
+    if (settingsWin != null) {
+        dialog.showMessageBox(settingsWin, {
+            title: "wnr",
+            type: "info",
+            message: message
+        });
+    } else {
+        dialog.showMessageBox(win, {
+            title: "wnr",
+            type: "info",
+            message: message
+        })
+    }
+})
+
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
         dialog.showMessageBox(settingsWin, {
@@ -917,6 +1004,37 @@ function windowCloseChk() {
 }
 ipcMain.on('window-close-chk', windowCloseChk);
 
+ipcMain.on('global-shortcut-set', function (event, message) {
+    let hasFailed = false;
+    try {
+        if (globalShortcut.isRegistered(message.before))
+            globalShortcut.unregister(message.before);
+        if (message.type == '1') {
+            globalShortcut.register(message.to, () => {
+                if (!isTimerWin || (isWorkMode && (workTimeFocused == false)) || ((!isWorkMode) && (restTimeFocused == false))) {
+                    showOrHide();
+                }//prevent using hotkeys to quit
+            })
+        }
+    } catch (e) {
+        hasFailed = true;
+        dialog.showMessageBox(settingsWin, {
+            title: i18n.__('settings'),
+            type: "warning",
+            message: i18n.__('hotkey-failed')
+        });
+        console.log(e);
+    } finally {
+        if (!hasFailed) {
+            try {
+                store.set("hotkey" + message.type, message.to);
+            } catch (err) {
+                console.log(err);
+            }
+        }
+    }
+})
+
 ipcMain.on('relauncher', function () {
     try {
         store.set('just-relaunched', true);
@@ -945,7 +1063,7 @@ function about() {
                 parent: win,
                 width: 279,
                 height: 297,
-                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
+                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
                 minimizable: false,
@@ -975,7 +1093,7 @@ function settings(mode) {
                 parent: win,
                 width: isChinese ? 780 : 888,
                 height: 480,
-                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
+                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
                 minimizable: false,
@@ -1023,7 +1141,7 @@ function tourguide() {
                 parent: win,
                 width: 672,
                 height: 600,
-                backgroundColor: isDarkMode() ? "#393939" : "#fefefe",
+                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
                 minimizable: false,
@@ -1080,22 +1198,9 @@ ipcMain.on('locker-passcode', function (event, message) {
         })
 })
 
-ipcMain.on('push-notification', function (event, message) {
-    try {
-        if (!store.get(message.id)) {
-            pushNotificationLink = message.link;
-            if (pushNotificationLink != "" && pushNotificationLink != null) notificationSolution(message.title, message.content, "push-notification");
-            else notificationSolution(message.title, message.content, "normal");
-            store.set(message.id, true);
-        }
-    } catch (e) {
-        console.log(e);
-    }
-})
-
 ipcMain.on('only-one-min-left', function () {
     if (!store.get('fullscreen-protection'))
-        notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "normal");
+        notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "normal")
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
@@ -1115,7 +1220,7 @@ ipcMain.on("timer-win", function (event, message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();
-        globalShortcut.register('CommandOrControl+Shift+Alt+' + store.get('hotkey2'), () => {
+        globalShortcut.register(store.get('hotkey2'), () => {
             if (win != null) win.webContents.send('start-or-stop');
         })
         if (resetAlarm) {
@@ -1130,7 +1235,8 @@ ipcMain.on("timer-win", function (event, message) {
         }
     } else {
         if (win != null) win.setProgressBar(-1);
-        globalShortcut.unregister('CommandOrControl+Shift+Alt+' + store.get('hotkey2'));
+        if (globalShortcut.isRegistered(store.get('hotkey2')))
+            globalShortcut.unregister(store.get('hotkey2'));
         alarmSet();
         if (powerSaveBlockerId)
             if (powerSaveBlocker.isStarted(powerSaveBlockerId))

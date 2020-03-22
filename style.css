@@ -31,7 +31,11 @@ input, .focuser, .dropdown-default {
     border-width: 0;
 }
 
-input, select {
+input, .focuser, .dropdown, .settings-sidebar-block-highlighted, .dropdown-item:hover, .dropdown-item:focus {
+    transition: all .16s;
+}
+
+input {
     width: 192px;
     background-color: transparent;
 }
@@ -46,7 +50,8 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 
 input[type="text"], input[type="number"], input[type="password"] {
     border-bottom-width: 3px;
-    border-bottom-color: #33333303;
+    border-bottom-color: transparent;
+    margin: 1px;
 }
 
 input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
@@ -56,7 +61,7 @@ input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:foc
 
 input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {
     border-bottom-width: 3px;
-    border-bottom-color: #33333328;
+    border-bottom-color: #33333322;
 }
 
 input[type="range"] {
@@ -87,11 +92,23 @@ input[type="checkbox"] {
     border-radius: 15px;
     width: 24px;
     height: 24px;
+    position: relative;
 }
 
-input[type="checkbox"]:checked {
-    background-image: url(./res/icons/check.png);
-    background-size: contain;
+input[type="checkbox"]::after {
+    font-family: "iconfont" !important;
+    font-style: normal;
+    font-size: 16px;
+    content: '\e7b9';
+    color: #fefefe;
+    display: block;
+    position: absolute;
+    margin-top: -2.4px;
+    margin-left: 1.7px;
+}
+
+input[type="checkbox"]:checked::after {
+    color: #5490ea;
 }
 
 input::-webkit-input-placeholder {
@@ -118,6 +135,11 @@ li {
     line-height: 200%;
 }
 
+li input[type="checkbox"]::after {
+    margin-top: -5.8px;
+    margin-left: 2.1px;
+}
+
 ::-webkit-scrollbar-track {
     background-color: #fefefe;
 }
@@ -133,6 +155,10 @@ li {
 
 ::-webkit-scrollbar-thumb:active {
     background-color: #4a9af68f;
+}
+
+.iconfont {
+    font-size: inherit;
 }
 
 .settings-sidebar-block {
@@ -170,6 +196,10 @@ li {
     color: #5490eac2;
 }
 
+.text-grey {
+    color: #6c757d;
+}
+
 .extreme-small {
     font-size: xx-small;
     line-break: loose;
@@ -179,7 +209,6 @@ li {
 
 .hotkeyset {
     color: #6c757d;
-    border-bottom: #6c757d8f 2px solid !important;
     width: 24px;
     height: 20px;
     text-align: center;
@@ -238,12 +267,18 @@ li {
     padding: 8.4px;
 }
 
+#focus-work-set::after, #focus-rest-set::after {
+    font-size: 14px;
+    margin-top: -10.3px;
+    margin-left: -7px;
+}
+
 #focus-work-set {
     border-color: #ea5454;
 }
 
 #focus-work-set:checked {
-    background-image: url(./res/icons/check-work.png);
+    color: #ea5454;
 }
 
 #timer {
@@ -252,6 +287,10 @@ li {
 
 #timer-error {
     line-height: 150%;
+}
+
+#stopper i::before {
+    font-size: 2rem;
 }
 
 #main {
@@ -266,8 +305,14 @@ li {
     -webkit-user-select: none;
     position: absolute;
     top: 24px;
-    left: 35.5px;
-    width: 90%;
+    left: 20px;
+    width: 100%;
+    border-bottom: #33333322 solid 1px;
+    padding-bottom: 17.3px;
+}
+
+#predefined-tasks-sidebar {
+    border-top: #33333322 solid 1px;
 }
 
 #settings-sidebar {
@@ -276,9 +321,9 @@ li {
     -webkit-user-select: none;
     position: absolute;
     top: 75px;
-    height: 382px;
+    height: 408px;
     width: 30%;
-    border-right: 1px solid rgba(0, 0, 0, .1);
+    border-right: 1px solid #0000001a;
 }
 
 #settings-container {
@@ -286,11 +331,23 @@ li {
     /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 75px;
+    top: 88px;
     left: 32%;
     overflow-y: scroll;
-    height: 390px;
+    height: 375px;
     width: 64%;
+}
+
+#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"] {
+    border-bottom-color: #33333315;
+}
+
+#settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input[type="password"]:hover {
+    border-bottom-color: #33333335;
+}
+
+#settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input[type="password"]:focus {
+    border-bottom-color: #33333325;
 }
 
 #settings-helper {
@@ -300,6 +357,17 @@ li {
     position: absolute;
     bottom: 25px;
     right: 14px;
+}
+
+#language-dropdown-button, #language-select {
+    width: 192px;
+}
+
+#language-dropdown-button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: 3px;
+    margin-right: 3px;
 }
 
 #controller, #time-bar, #time-bar-macos {
@@ -318,6 +386,10 @@ li {
 #time-bar {
     left: 8px;
     padding: 2px;
+}
+
+#work-rest, #now-timing {
+    -webkit-user-select: none;
 }
 
 #tip {
@@ -373,7 +445,7 @@ li {
 }
 
 #dropdown-more {
-    margin-bottom: 1.5px;
+    margin-bottom: 1px;
 }
 
 #dropdown-tasks {
