@@ -20,6 +20,8 @@
 ---
 
 ## Online Version
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRoderickQiu%2Fwnr.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FRoderickQiu%2Fwnr?ref=badge_shield)
+
 
 The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
 
@@ -153,6 +155,9 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
 - vuepress-theme-api, sqrthree, MIT License.
+
+
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FRoderickQiu%2Fwnr.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FRoderickQiu%2Fwnr?ref=badge_large)
 
 ### Environment Using
 
