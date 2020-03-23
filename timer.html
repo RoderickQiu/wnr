@@ -173,13 +173,19 @@
             if (title) $("#title").html(title);
             if (note) $("#note").html(note);
             if (workTimeFocused) {
-                ipc.send('focus-first');
+                ipc.send('warning-giver-restend');
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
                 $timeBar.addClass("time-bar-focus");
                 $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
+                let stopperTimeout = setTimeout(stopper, 500);
+                ipc.once('warning-closed', function () {
+                    stopper();
+                    $("#skipper").css("display", "inline");
+                    if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                });
             }
 
             //method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left

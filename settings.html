@@ -244,6 +244,25 @@
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('timer-settings'));</script>
                 </p>
+                <!-- hide from dock setting -->
+                <div class="row" id="hide-from-dock-setting-container">
+                    <div class="col-1 text-center">
+                        <input id="hide-from-dock-setting" type="checkbox" onchange="hideFromDockSetting()" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('is-hide-from-dock-setting-on'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('is-hide-from-dock-setting-on-tip'));</script>
+                            <b>
+                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                            </b>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- auto start the default task setting -->
                 <div class="row">
                     <div class="col-1 text-center">
@@ -529,6 +548,8 @@
 
     <script>
         $(".get-help").attr('title', i18n.__('helper'));
+
+        if (process.platform != "darwin") $("#hide-from-dock-setting-container").css("display", "none");
 
         settingsGoto(store.get("settings-goto"));
 
@@ -831,6 +852,13 @@
         function dataSentSetting() {
             if (document.getElementById("data-sent-setting").checked != false) store.set("should-sent", true);
             else store.set("should-sent", false);
+        }
+        if (store.get("dock-hide") == true) document.getElementById("hide-from-dock-setting").checked = true;
+        else document.getElementById("hide-from-dock-setting").checked = false;
+        function hideFromDockSetting() {
+            if (document.getElementById("hide-from-dock-setting").checked == true) store.set("dock-hide", true);
+            else store.set("dock-hide", false);
+            timeOut = setTimeout("call('relauncher')", 500);
         }
 
         //lock mode settings

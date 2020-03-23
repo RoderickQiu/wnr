@@ -10,9 +10,9 @@
     "quit": "Quit",
     "help": "Help",
     "work-time-end": "Your work time is now ended!",
-    "work-time-end-msg": "Your work time is now ended. Enjoy your rest time!",
+    "work-time-end-msg": "Enjoy your rest time!",
     "rest-time-end": "Your rest time is now ended!",
-    "rest-time-end-msg": "Your rest time is now ended. Start working!",
+    "rest-time-end-msg": "Start working!",
     "all-task-end": "Your schedule is now finished!",
     "all-task-end-msg": "Your schedule is now finished. You can now set another one.",
     "update": "New version available!",
@@ -183,5 +183,7 @@
     "general-settings": "3. General",
     "windows-7-notification": "You are using Windows 7",
     "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". ",
-    "personalization": "Personalization"
+    "personalization": "Personalization",
+    "is-hide-from-dock-setting-on": "Hide from dock setting: ",
+    "is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and you'll only be able to find wnr via the tray menu (not recommend)."
 }

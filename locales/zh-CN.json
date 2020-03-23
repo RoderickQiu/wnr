@@ -183,5 +183,7 @@
 	"general-settings": "3. 通用设置",
 	"windows-7-notification": "你正在使用Windows7",
 	"windows-7-notification-msg": "如果你在使用时出现wnr黑屏的情况，请为wnr打开“Vista兼容模式”。",
-	"personalization": "个性化设置"
+	"personalization": "个性化设置",
+	"is-hide-from-dock-setting-on": "从Dock隐藏设置：",
+	"is-hide-from-dock-setting-on-tip": "如果此项被选中，则将会把wnr从Dock隐藏，你将会只能从状态栏菜单打开wnr（不推荐）。"
 }

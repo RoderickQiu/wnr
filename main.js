@@ -10,8 +10,7 @@ var Registry = require('winreg');
 const windowsRelease = require('windows-release');
 var cmdOrCtrl = require('cmd-or-ctrl');
 var AV = require('leancloud-storage');
-var { Query } = AV;
-const debug = require('electron-debug');
+var { Query } = AV
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
@@ -22,7 +21,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false,
     leanId = null, leanKey = null,
-    progress = -1;
+    progress = -1,
+    dockHide = false;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -83,7 +83,8 @@ function createWindow() {
             win.show();
             win.focus();
 
-            notificationSolution(i18n.__('stop-now'), i18n.__('stop-now-msg'), "hide-or-show");//notify not to do meaningless things
+            if (!dockHide)
+                notificationSolution(i18n.__('stop-now'), i18n.__('stop-now-msg'), "hide-or-show");//notify not to do meaningless things
         }
     });
 
@@ -136,7 +137,11 @@ app.on('ready', () => {
 
     require('dotenv').config();
 
-    debug({ showDevTools: false });//production build not affected
+    if (!app.isPackaged) {
+        const debug = require('electron-debug');
+        debug({ showDevTools: false });
+        require('devtron').install();
+    }
 
     i18n.configure({
         locales: languageCodeList,
@@ -205,6 +210,8 @@ app.on('ready', () => {
             }
         }
     }
+
+    if (store.get("dock-hide") && process.platform == "darwin") dockHide = true;
 
     if (win != null) {
         if (store.get("top") == true) win.setAlwaysOnTop(true);
@@ -391,38 +398,73 @@ app.on('ready', () => {
 })
 
 function showOrHide() {
-    if (settingsWin != null)
-        if (settingsWin.isVisible() && !settingsWin.isMinimized()) {
-            settingsWin.minimize();
-            settingsWin.hide();
-        } else {
-            settingsWin.restore();
-            settingsWin.show();
-        }
-    if (aboutWin != null)
-        if (aboutWin.isVisible() && !aboutWin.isMinimized()) {
-            aboutWin.minimize();
-            aboutWin.hide();
-        } else {
-            aboutWin.restore();
-            aboutWin.show();
-        }
-    if (tourWin != null)
-        if (tourWin.isVisible() && !tourWin.isMinimized()) {
-            tourWin.minimize();
-            tourWin.hide();
-        } else {
-            tourWin.restore();
-            tourWin.show();
-        }
-    if (win != null)
-        if (win.isVisible() && !win.isMinimized()) {
-            win.minimize();
-            win.hide();
-        } else {
-            win.restore();
-            win.show()
-        }
+    if (process.platform == "win32") {
+        if (settingsWin != null)
+            if (settingsWin.isVisible() && !settingsWin.isMinimized()) {
+                settingsWin.minimize();
+                settingsWin.hide();
+            } else {
+                settingsWin.restore();
+                settingsWin.show();
+            }
+        if (aboutWin != null)
+            if (aboutWin.isVisible() && !aboutWin.isMinimized()) {
+                aboutWin.minimize();
+                aboutWin.hide();
+            } else {
+                aboutWin.restore();
+                aboutWin.show();
+            }
+        if (tourWin != null)
+            if (tourWin.isVisible() && !tourWin.isMinimized()) {
+                tourWin.minimize();
+                tourWin.hide();
+            } else {
+                tourWin.restore();
+                tourWin.show();
+            }
+        if (win != null)
+            if (win.isVisible() && !win.isMinimized()) {
+                win.minimize();
+                win.hide();
+            } else {
+                win.restore();
+                win.show()
+            }
+    } else {
+        if (settingsWin != null)
+            if (settingsWin.isFocused()) {
+                settingsWin.minimize();
+                settingsWin.hide();
+            } else {
+                settingsWin.restore();
+                settingsWin.show();
+            }
+        if (aboutWin != null)
+            if (aboutWin.isFocused()) {
+                aboutWin.minimize();
+                aboutWin.hide();
+            } else {
+                aboutWin.restore();
+                aboutWin.show();
+            }
+        if (tourWin != null)
+            if (tourWin.isFocused()) {
+                tourWin.minimize();
+                tourWin.hide();
+            } else {
+                tourWin.restore();
+                tourWin.show();
+            }
+        if (win != null)
+            if (win.isFocused()) {
+                win.minimize();
+                win.hide();
+            } else {
+                win.restore();
+                win.show()
+            }
+    }
 }
 
 function notificationSolution(title, body, func) {
@@ -489,6 +531,12 @@ function traySolution(isFullScreen) {
                 label: i18n.__('locker'),
                 click: function () {
                     locker();
+                }
+            }, {
+                enabled: !isTimerWin,
+                label: i18n.__('settings'),
+                click: function () {
+                    settings();
                 }
             }, {
                 type: 'separator'
@@ -649,7 +697,7 @@ function macOSFullscreenSolution(isFullScreen) {
                 }];
             var osxMenu = Menu.buildFromTemplate(template);
             Menu.setApplicationMenu(osxMenu)
-        }//dock menu for mac os
+        }
     }
 }
 
@@ -770,20 +818,6 @@ ipcMain.on('focus-mode-settings', function (event, message) {
     isWorkMode = true;
 })
 
-ipcMain.on('focus-first', function () {
-    if (win != null) win.setAlwaysOnTop(true);//always on top when full screen
-    if (win != null) setFullScreenMode(true);
-    macOSFullscreenSolution(true);
-    traySolution(true);
-    isWorkMode = true;
-    try {
-        store.set("fullscreen-protection", true);
-    } catch (e) {
-        console.log(e);
-    }
-    fullScreenProtection = true;
-})
-
 ipcMain.on('warning-giver-workend', function () {
     fullScreenProtection = false;
     try {
@@ -801,6 +835,7 @@ ipcMain.on('warning-giver-workend', function () {
         win.setAlwaysOnTop(true);
         win.moveTop();
         if (restTimeFocused == true) {
+            if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
@@ -823,7 +858,13 @@ ipcMain.on('warning-giver-workend', function () {
                     } catch (e) {
                         console.log(e);
                     }
-                } else if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                } else {
+                    if (store.get("top") != true) {
+                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                        win.moveTop();
+                    }
+                    if (dockHide) app.dock.hide();
+                }
                 win.webContents.send('warning-closed');
                 win.maximizable = false;
             })
@@ -848,6 +889,7 @@ ipcMain.on('warning-giver-restend', function () {
         win.setAlwaysOnTop(true);
         win.moveTop();
         if (workTimeFocused == true) {
+            if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
@@ -870,7 +912,13 @@ ipcMain.on('warning-giver-restend', function () {
                     } catch (e) {
                         console.log(e);
                     }
-                } else if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                } else {
+                    if (store.get("top") != true) {
+                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                        win.moveTop();
+                    }
+                    if (dockHide) app.dock.hide();
+                }
                 win.webContents.send('warning-closed');
                 win.maximizable = false;
             })
@@ -896,6 +944,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         win.moveTop();
         win.setProgressBar(-1);
         if (restTimeFocused == true) {
+            if (dockHide) app.dock.hide();
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
@@ -908,7 +957,10 @@ ipcMain.on('warning-giver-all-task-end', function () {
             }).then(function (response) {
                 win.loadFile('index.html');//automatically back
                 win.maximizable = false;
-                if (store.get("top") != true) win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                if (store.get("top") != true) {
+                    win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                    win.moveTop();
+                }
             })
         }, 1000);
         alarmSet()
@@ -950,6 +1002,8 @@ ipcMain.on('alert', function (event, message) {
             title: "wnr",
             type: "info",
             message: message
+        }).then(function () {
+            settingsWin.moveTop();
         });
     } else {
         dialog.showMessageBox(win, {
@@ -1228,6 +1282,7 @@ ipcMain.on("timer-win", function (event, message) {
             contextMenu.items[2].enabled = true;
         }
     } else {
+        if (dockHide) app.dock.hide();
         if (win != null) win.setProgressBar(-1);
         if (globalShortcut.isRegistered(store.get('hotkey2')))
             globalShortcut.unregister(store.get('hotkey2'));
