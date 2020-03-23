@@ -149,8 +149,8 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 - node-md5, pvorb, BSD-3-Clause License.
 - dotenv, motdotla, BSD-2-Clause License.
 - windows-release, sindresorhus, MIT License.
-- elemon, manidlou, MIT License.
 - leancloud-storage, leancloud, MIT License.
+- electron-debug, sindresorhus, MIT License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 

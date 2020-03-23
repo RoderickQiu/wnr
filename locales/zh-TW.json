@@ -85,6 +85,7 @@
     "min": "分 ",
     "s": "秒",
     "times": "次",
+    "time(s)": "次",
     "welcome-part-1": "歡迎使用wnr",
     "welcome-part-2": "wnr是一款時間管理程序，能幫助您調節工作與休息。",
     "welcome-part-3": "查看幫助手冊，熟悉一下wnr",
@@ -181,5 +182,6 @@
     "timer-settings": "2. 計時器設置",
     "general-settings": "3. 通用設置",
     "windows-7-notification": "你正在使用Windows7",
-    "windows-7-notification-msg": "如果你在使用時出現wnr黑屏的情況，請爲wnr打開“Vista兼容模式”。"
+    "windows-7-notification-msg": "如果你在使用時出現wnr黑屏的情況，請爲wnr打開“Vista兼容模式”。",
+    "personalization": "個性化設置"
 }

@@ -153,8 +153,7 @@
                     </span>
                 </div>
                 <br />
-                <input name="loop" id="loop" type="text" onkeyup="allSet()"
-                    oninput="if (value.length > 5) value = value.slice(0, 5)" class="small text-muted" required />
+                <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                 <br /><br />
                 <!-- control that only numbers are OK -->
                 <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
@@ -228,10 +227,11 @@
         }
         function allSet() {
             try {
+                var timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
                 var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
                     restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
-                    loopGet = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "")
-                if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet > 1 && loopGet <= 1440) {
+                    loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
+                if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
                     if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
                     else allClear();
                 } else {
@@ -256,7 +256,8 @@
         function defaultSet(workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
             $("#work-time").val(shi.ArabicNumberTimeParser(workTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
             $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
-            $("#loop").val(loops + ' ' + i18n.__('times'));
+            if (loops > 1) $("#loop").val(loops + ' ' + i18n.__('times'));
+            else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
             allSet();

@@ -85,6 +85,7 @@
     "min": "min ",
     "s": "s",
     "times": "loops",
+    "time(s)": "loop(s)",
     "welcome-part-1": "Welcome",
     "welcome-part-2": "wnr is a simple app that can help you remember when breaks are needed.",
     "welcome-part-3": "Take a tour",
@@ -121,7 +122,7 @@
     "time-left": "% Left",
     "add": "Add",
     "delete": "Delete",
-    "predefined-tasks-settings": "Predefined Tasks Settings",
+    "predefined-tasks-settings": "Predefined Tasks",
     "focus-when-working": "Focus when working",
     "focus-when-resting": "Focus when resting",
     "set-as-default-task": "Set this as default",
@@ -181,5 +182,6 @@
     "timer-settings": "2. Timer",
     "general-settings": "3. General",
     "windows-7-notification": "You are using Windows 7",
-    "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". "
+    "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". ",
+    "personalization": "Personalization"
 }

@@ -100,7 +100,7 @@ input[type="checkbox"]::after {
     font-style: normal;
     font-size: 16px;
     content: '\e7b9';
-    color: #fefefe;
+    color: #fefefe00;
     display: block;
     position: absolute;
     margin-top: -2.4px;
@@ -277,7 +277,7 @@ li input[type="checkbox"]::after {
     border-color: #ea5454;
 }
 
-#focus-work-set:checked {
+#focus-work-set:checked, #focus-work-set:checked::after {
     color: #ea5454;
 }
 

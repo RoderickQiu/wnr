@@ -10,7 +10,8 @@ var Registry = require('winreg');
 const windowsRelease = require('windows-release');
 var cmdOrCtrl = require('cmd-or-ctrl');
 var AV = require('leancloud-storage');
-var { Query } = AV
+var { Query } = AV;
+const debug = require('electron-debug');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
@@ -20,7 +21,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     timeLeftTip = null, predefinedTasks = null,
     pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false,
-    leanId = null, leanKey = null;
+    leanId = null, leanKey = null,
+    progress = -1;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -85,6 +87,14 @@ function createWindow() {
         }
     });
 
+    win.on('show', () => {
+        if (isTimerWin) {
+            if (win != null) {
+                win.setProgressBar(progress);
+            }
+        }
+    });
+
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
         if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged)) app.relaunch()
@@ -126,17 +136,7 @@ app.on('ready', () => {
 
     require('dotenv').config();
 
-    if (!app.isPackaged) {
-        const elemon = require('elemon'); // require elemon if electron is in dev
-        elemon({
-            app: app,
-            mainFile: 'main.js',
-            bws: [
-                { bw: win, res: ['index.html', 'timer.html', 'renderer.js', 'supporter.js', 'updater.js', 'style.css'] },
-                { bw: settingsWin, res: ['settings.html', 'updater.js', 'style.css'] }
-            ]
-        });
-    }
+    debug({ showDevTools: false });//production build not affected
 
     i18n.configure({
         locales: languageCodeList,
@@ -236,13 +236,6 @@ app.on('ready', () => {
             showOrHide();
         }//prevent using hotkeys to quit
     })
-
-    globalShortcut.register('CommandOrControl+Shift+L', () => {
-        if (!isTimerWin || (isWorkMode && (workTimeFocused == false)) || ((!isWorkMode) && (restTimeFocused == false))) {
-            let focusWin = BrowserWindow.getFocusedWindow();
-            focusWin && focusWin.toggleDevTools();
-        }
-    })//toggle devtools
 
     if (store.get('islocked') && win != null) {//locked mode
         win.closable = false;
@@ -1204,7 +1197,8 @@ ipcMain.on('only-one-min-left', function () {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    if (win != null) win.setProgressBar(1 - message);
+    progress = 1 - message;
+    if (win != null) win.setProgressBar(progress);
     if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
 })
 

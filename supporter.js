@@ -37,7 +37,8 @@ function isInDark() {
     const isDarkMode = store.get('isdark');
     if (isDarkMode) {
         $('body').append(
-            '<style id="darkmode-jetplane">::-webkit-scrollbar-track {background-color: #191919;}\
+            '<style id="darkmode-jetplane">\
+            ::-webkit-scrollbar-track {background-color: #191919;}\
             ::-webkit-scrollbar-thumb {background-color: #999999;}\
             .dropdown-menu {border-color: #aaaaaa; background-color: #393939;}\
             .dropdown-item:hover {background-color: #555555; color: #fefefe;}\
@@ -50,8 +51,9 @@ function isInDark() {
             #loader-wrapper .loader-section {background: #191919;}\
             .dropdown-item, .dropdown-item .text-info {color: #f5f5f5!important;}\
             label, li, select {color: #f5f5f5;}\
-            input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {border-bottom-color: #cccccc33;}\
-            input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {border-bottom-color: #cccccc28;}\
+            input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {border-bottom-color: #cccccc33 !important;}\
+            input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {border-bottom-color: #cccccc28 !important;}\
+            .hotkey-setting {color: #aaaaaa;}\
             </style>'
         );
     } else {

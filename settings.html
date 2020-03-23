@@ -116,6 +116,20 @@
                 </div>
             </div>
         </div>
+        <!--<div class="settings-sidebar-block lead should-lock" id="personalization-sidebar"
+            onclick="settingsGoto('personalization')">
+            <div class="container-fluid">
+                <div class="row align-items-start">
+                    <div class="col-3 text-center">
+                        <i class="iconfont icon-palette" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-9">
+                        <script>document.write(i18n.__('personalization'));</script>
+                    </div>
+                </div>
+            </div>
+        </div>-->
+        <!-- not finished yet -->
     </div>
 
     <div class="d-flex" id="settings-container">
@@ -406,8 +420,8 @@
                     <li id="hotkey-tip">
                         <script>document.write(i18n.__('hotkey-for-show-or-hide-setting'));</script>
                         <p class="small text-muted">
-                            <input name="hotkey-1" id="hotkey-1" type="text" readonly onclick="keyDownCapturer('1')"
-                                onblur="keyDownTriggerRemover()" ime-mode="disabled" />
+                            <input name="hotkey-1" id="hotkey-1" class="hotkey-setting" type="text" readonly
+                                onclick="keyDownCapturer('1')" onblur="keyDownTriggerRemover()" ime-mode="disabled" />
                             <br />
                             <script>document.write(i18n.__('hotkey-for-show-or-hide-setting-tip')); </script>
                         </p>
@@ -416,8 +430,8 @@
                     <li id="hotkey2-tip">
                         <script>document.write(i18n.__('hotkey-for-start-or-stop-setting'));</script>
                         <p class="small text-muted">
-                            <input name="hotkey-2" id="hotkey-2" type="text" readonly onclick="keyDownCapturer('2')"
-                                onblur="keyDownTriggerRemover()" ime-mode="disabled" />
+                            <input name="hotkey-2" id="hotkey-2" class="hotkey-setting" type="text" readonly
+                                onclick="keyDownCapturer('2')" onblur="keyDownTriggerRemover()" ime-mode="disabled" />
                             <br />
                             <script>document.write(i18n.__('hotkey-for-start-or-stop-setting-tip')); </script>
                         </p>
@@ -469,6 +483,11 @@
                     </li>
                 </ul>
             </div>
+
+            <!-- 6. personalization -->
+            <!--<div id="personalization" class="should-lock">
+            </div>-->
+            <!-- not finished yet -->
         </div>
     </div>
     <div class="get-help" id="settings-helper">
@@ -522,12 +541,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
+                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "block");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
+                //$("#personalization").css("display", "none");
             } else if ((mask == "predefined-tasks" || mask == "" || mask == null) && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/2-predefined-tasks-settings')");
 
@@ -536,12 +557,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
+                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "block");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
+                //$("#personalization").css("display", "none");
             } else if (mask == "languages" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/6-languages')");
 
@@ -550,12 +573,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").addClass("settings-sidebar-block-highlighted");
+                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "block");
+                //$("#personalization").css("display", "none");
             } else if ((mask == "global-settings" || mask == "normal") && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/3-global-settings')");
 
@@ -564,12 +589,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
+                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "block");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
+                //$("#personalization").css("display", "none");
             } else if (mask == "other-things" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/5-other-things')");
 
@@ -578,13 +605,31 @@
                 $("#other-things-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
+                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "block");
                 $("#languages").css("display", "none");
-            }
+                //$("#personalization").css("display", "none");
+            }/* else if (mask == "personalization" && (!store.get('islocked'))) {
+                $("#settings-helper a").attr("href", "javascript:getHelp('settings/7-personalization')");
+
+                $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#predefined-tasks-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").addClass("settings-sidebar-block-highlighted");
+
+                $("#locker").css("display", "none");
+                $("#predefined-tasks").css("display", "none");
+                $("#global-settings").css("display", "none");
+                $("#other-things").css("display", "none");
+                $("#languages").css("display", "none");
+                $("#personalization").css("display", "block");
+            }*/// not finished yet
         }
     </script>
     <script src="updater.js"></script>
@@ -631,7 +676,7 @@
                 i18n.__('min') +
                 i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
                 item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
-                i18n.__('times') +
+                i18n.__('time(s)') +
                 "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='edit(" + index + ")' /> | " +
                 i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='edit(" + index + ")' />\
                 <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
