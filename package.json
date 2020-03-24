@@ -39,7 +39,7 @@
   },
   "devDependencies": {
     "devtron": "1.4.0",
-    "electron": "7.2.0",
+    "electron": "7.2.1",
     "electron-builder": "22.3.2"
   }
 }
