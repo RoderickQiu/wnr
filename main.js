@@ -398,73 +398,38 @@ app.on('ready', () => {
 })
 
 function showOrHide() {
-    if (process.platform == "win32") {
-        if (settingsWin != null)
-            if (settingsWin.isVisible() && !settingsWin.isMinimized()) {
-                settingsWin.minimize();
-                settingsWin.hide();
-            } else {
-                settingsWin.restore();
-                settingsWin.show();
-            }
-        if (aboutWin != null)
-            if (aboutWin.isVisible() && !aboutWin.isMinimized()) {
-                aboutWin.minimize();
-                aboutWin.hide();
-            } else {
-                aboutWin.restore();
-                aboutWin.show();
-            }
-        if (tourWin != null)
-            if (tourWin.isVisible() && !tourWin.isMinimized()) {
-                tourWin.minimize();
-                tourWin.hide();
-            } else {
-                tourWin.restore();
-                tourWin.show();
-            }
-        if (win != null)
-            if (win.isVisible() && !win.isMinimized()) {
-                win.minimize();
-                win.hide();
-            } else {
-                win.restore();
-                win.show()
-            }
-    } else {
-        if (settingsWin != null)
-            if (settingsWin.isFocused()) {
-                settingsWin.minimize();
-                settingsWin.hide();
-            } else {
-                settingsWin.restore();
-                settingsWin.show();
-            }
-        if (aboutWin != null)
-            if (aboutWin.isFocused()) {
-                aboutWin.minimize();
-                aboutWin.hide();
-            } else {
-                aboutWin.restore();
-                aboutWin.show();
-            }
-        if (tourWin != null)
-            if (tourWin.isFocused()) {
-                tourWin.minimize();
-                tourWin.hide();
-            } else {
-                tourWin.restore();
-                tourWin.show();
-            }
-        if (win != null)
-            if (win.isFocused()) {
-                win.minimize();
-                win.hide();
-            } else {
-                win.restore();
-                win.show()
-            }
-    }
+    if (settingsWin != null)
+        if (settingsWin.isFocused()) {
+            settingsWin.minimize();
+            settingsWin.hide();
+        } else {
+            settingsWin.restore();
+            settingsWin.show();
+        }
+    if (aboutWin != null)
+        if (aboutWin.isFocused()) {
+            aboutWin.minimize();
+            aboutWin.hide();
+        } else {
+            aboutWin.restore();
+            aboutWin.show();
+        }
+    if (tourWin != null)
+        if (tourWin.isFocused()) {
+            tourWin.minimize();
+            tourWin.hide();
+        } else {
+            tourWin.restore();
+            tourWin.show();
+        }
+    if (win != null)
+        if (win.isFocused()) {
+            win.minimize();
+            win.hide();
+        } else {
+            win.restore();
+            win.show()
+        }
 }
 
 function notificationSolution(title, body, func) {

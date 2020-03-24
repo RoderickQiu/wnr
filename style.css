@@ -338,15 +338,15 @@ li input[type="checkbox"]::after {
     width: 64%;
 }
 
-#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"] {
+#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #passcode-rechecker {
     border-bottom-color: #33333315;
 }
 
-#settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input[type="password"]:hover {
+#settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input[type="password"]:hover, #passcode-rechecker:hover {
     border-bottom-color: #33333335;
 }
 
-#settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input[type="password"]:focus {
+#settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input[type="password"]:focus, #passcode-rechecker:focus {
     border-bottom-color: #33333325;
 }
 
@@ -408,11 +408,11 @@ li input[type="checkbox"]::after {
     -webkit-user-select: none;
 }
 
-#note {
+#notes {
     display: inline-block;
-    width: 200px;
+    width: 300px;
     word-wrap: break-word;
-    line-height: 200%;
+    line-height: 180%;
     vertical-align: middle;
 }
 
@@ -454,4 +454,8 @@ li input[type="checkbox"]::after {
 
 #exit {
     margin-bottom: 0.5px;
+}
+
+#passcode-rechecker {
+    text-align: center;
 }

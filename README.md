@@ -131,6 +131,8 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 
 #### Main Program
 
+For the full text of licenses, go see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which is also included in every copy of wnr.
+
 - node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
 - cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
 - node-auto-launch, Teamwork, MIT License.
@@ -151,6 +153,7 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 - windows-release, sindresorhus, MIT License.
 - leancloud-storage, leancloud, MIT License.
 - electron-debug, sindresorhus, MIT License.
+- devtron, electron-userland, MIT License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 

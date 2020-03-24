@@ -185,5 +185,7 @@
     "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". ",
     "personalization": "Personalization",
     "is-hide-from-dock-setting-on": "Hide from dock setting: ",
-    "is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and you'll only be able to find wnr via the tray menu (not recommend)."
+    "is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and you'll only be able to find wnr via the tray menu (not recommend).",
+    "fullscreen-experience-tip": "It seems it's the first time that you enabled fullscreen focus mode. Go enjoy it! ",
+    "quit-from-timer-in-lock-mode-msg": "need passcode to quit"
 }

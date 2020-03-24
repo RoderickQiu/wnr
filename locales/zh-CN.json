@@ -169,7 +169,7 @@
 	"without-permission-part-1": "没有权限，可能无法设置开机自启。",
 	"without-permission-part-2": "请前往系统偏好设置->安全性和隐私->自动化，找到wnr并勾选附属的权限，否则无法设置。",
 	"permission-ask": "如果弹出一个权限申请框，请允许，否则无法设置开机自启。",
-	"all-focus-mode-warn": "不允许把工作和休息时都设置为专心模式。",
+	"all-focus-mode-warn": "不允许把工作、休息时间都设置为专心模式。",
 	"copy": "复制",
 	"paste": "粘贴",
 	"select-all": "全选",
@@ -185,5 +185,7 @@
 	"windows-7-notification-msg": "如果你在使用时出现wnr黑屏的情况，请为wnr打开“Vista兼容模式”。",
 	"personalization": "个性化设置",
 	"is-hide-from-dock-setting-on": "从Dock隐藏设置：",
-	"is-hide-from-dock-setting-on-tip": "如果此项被选中，则将会把wnr从Dock隐藏，你将会只能从状态栏菜单打开wnr（不推荐）。"
+	"is-hide-from-dock-setting-on-tip": "如果此项被选中，则将会把wnr从Dock隐藏，你将会只能从状态栏菜单打开wnr（不推荐）。",
+	"fullscreen-experience-tip": "你可能是第一次使用全屏专心模式。专为强制工作/休息准备，在选中的时段内，坚不可摧。",
+	"quit-from-timer-in-lock-mode-msg": "锁定模式下退出需输入密码"
 }

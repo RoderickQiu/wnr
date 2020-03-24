@@ -884,10 +884,10 @@ electron-store@5.1.1:
     conf "^6.2.1"
     type-fest "^0.7.1"
 
-electron@7.1.14:
-  version "7.1.14"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-7.1.14.tgz#1a58aa5968677a4fe564442f3b72771166c8904c"
-  integrity sha1-GliqWWhnek/lZEQvO3J3EWbIkEw=
+electron@7.2.0:
+  version "7.2.0"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-7.2.0.tgz#2b2828ceca4f728dce51639ea4745af519409b36"
+  integrity sha1-KygozspPco3OUWOepHRa9RlAmzY=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"

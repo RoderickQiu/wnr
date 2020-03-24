@@ -44,7 +44,7 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="note" class="text-center small text-muted"></div><br /><br />
+            <div id="notes" class="text-center small text-muted"></div><br /><br />
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
             </div><br />
@@ -52,22 +52,28 @@
             <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
                         class="iconfont icon-pause"></i></a></div><br />
             <div class="text-center text-muted" id="more-options">
-                <a href="javascript:backer()" class="text-muted should-lock"><i class="iconfont icon-previous"
+                <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
                         id="back-index"></i></a>
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href=" javascript:skipper()" class="text-muted" id="skipper">
+                <a href="javascript:skipper()" class="text-muted">
                     <i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
+                <br />
+                <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
+                    onkeydown="if(event.keyCode == 13) recheck($('#passcode-rechecker').val());" />
             </div>
             <br />
-            <div class="text-center lead should-lock" id="backer"><a href="javascript:backer()" class="text-muted"><i
-                        class="iconfont icon-fastforward" id="backindex2"></i></a></div>
+            <div class="text-center lead" id="backer">
+                <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-fastforward"
+                        id="backindex2"></i></a>
+            </div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
                     <script>document.write(i18n.__('only-one-min-left'));</script>
                 </h3>
             </div>
             <script>
+                $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
                 $('#back-index').attr('title', i18n.__('back-index'));
                 $('#backindex2').attr('title', i18n.__('back-index'));
                 $('#backer').css('display', 'none');
@@ -87,10 +93,24 @@
             $("#time-bar-macos").remove();
         }
         $("#only-one").css("display", "none");
+        $("#passcode-rechecker").css("display", "none");
         try {
             store.set('just-launched', false);
         } catch (e) {
             console.log(e);
+        }
+
+        //lock mode settings
+        function recheck(passcode) {
+            var md5 = require('crypto-js/md5');
+            if (passcode == "") ipc.send("alert", i18n.__('locker-settings-empty-password'));
+            else if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) backer();
+            else ipc.send("alert", i18n.__('locker-settings-input-tip-wrong-password'));
+        }
+
+        function backcheck() {
+            if (store.get("islocked")) $("#passcode-rechecker").css("display", "inline");
+            else backer();
         }
 
         function backer() {
@@ -171,7 +191,7 @@
         } else {
             isTimerWindow(true);
             if (title) $("#title").html(title);
-            if (note) $("#note").html(note);
+            if (note) $("#notes").html(note);
             if (workTimeFocused) {
                 ipc.send('warning-giver-restend');
                 $("#controller").css("display", "none");
@@ -355,6 +375,7 @@
             function skipper() {
                 $("#skipper").css("display", "none");
                 $("#skipper-space").css("display", "none");
+                $("#passcode-rechecker").css("display", "none");
                 times++;
                 if (isClockWorking) {
                     if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {

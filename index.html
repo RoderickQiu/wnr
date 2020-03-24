@@ -54,6 +54,15 @@
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) {
+                if ((document.getElementById("focus-work-set").checked || document.getElementById("focus-rest-set").checked)
+                    && (store.has("fullscreen-experience") == false && store.has("settings-experience") == false)) {
+                    ipc.send("alert", i18n.__('fullscreen-experience-tip'));
+                    try {
+                        store.set("fullscreen-experience", true);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
                 if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                     ipc.send("alert", i18n.__('all-focus-mode-warn'));
                 else
