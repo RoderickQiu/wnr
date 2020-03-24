@@ -6,7 +6,6 @@
   "scripts": {
     "upd-dependency": "yarn",
     "start": "electron .",
-    "debug": "electron --inspect=5858 .",
     "win": "node ./res/builder/win.js",
     "mac": "node ./res/builder/mac.js",
     "linux": "node ./res/builder/linux.js"

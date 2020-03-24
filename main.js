@@ -498,7 +498,7 @@ function traySolution(isFullScreen) {
                     locker();
                 }
             }, {
-                enabled: !isTimerWin,
+                enabled: (!store.get('islocked')) && (!isTimerWin),
                 label: i18n.__('settings'),
                 click: function () {
                     settings();
