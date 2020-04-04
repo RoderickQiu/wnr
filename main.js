@@ -1418,7 +1418,7 @@ ipcMain.on("progress-bar-set", function (event, message) {
     if (win != null) win.setProgressBar(progress);
     if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
     if (process.platform == "darwin")
-        if (timeLeftOnbar != null) timeLeftOnBar.label = message * 100 + timeLeftTip;
+        if (timeLeftOnBar != null) timeLeftOnBar.label = message * 100 + timeLeftTip;
 })
 
 ipcMain.on("should-nap", function () {
