@@ -48,36 +48,40 @@
         } catch (e) {
             console.log(e);
         }
+
         const shi = require("node-shi");
-    </script>
-    <script>
+
+        function keyDownSubmitter() {
+            if ((document.getElementById("focus-work-set").checked || document.getElementById("focus-rest-set").checked)
+                && (store.has("fullscreen-experience") == false && store.has("settings-experience") == false)) {
+                ipc.send("alert", i18n.__('fullscreen-experience-tip'));
+                try {
+                    store.set("fullscreen-experience", true);
+                } catch (e) {
+                    console.log(e);
+                }
+            }
+            if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
+                ipc.send("alert", i18n.__('all-focus-mode-warn'));
+            else
+                window.location.href = "timer.html?title=" + $("#title").val()
+                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
+                    + "&note=" + $("#note").val()
+                    + "&method=1"
+                    + "&work-time-focused=" + document.getElementById("focus-work-set").checked
+                    + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
+                    + "&restored=false";
+        }
         function keydown(e) {
             var currKey = 0, e = e || event;
-            if (e.keyCode == 13) {
-                if ((document.getElementById("focus-work-set").checked || document.getElementById("focus-rest-set").checked)
-                    && (store.has("fullscreen-experience") == false && store.has("settings-experience") == false)) {
-                    ipc.send("alert", i18n.__('fullscreen-experience-tip'));
-                    try {
-                        store.set("fullscreen-experience", true);
-                    } catch (e) {
-                        console.log(e);
-                    }
-                }
-                if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
-                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
-                else
-                    window.location.href = "timer.html?title=" + $("#title").val()
-                        + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
-                        + "&note=" + $("#note").val()
-                        + "&method=1"
-                        + "&work-time-focused=" + document.getElementById("focus-work-set").checked
-                        + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
-                        + "&restored=false";
-            }
+            if (e.keyCode == 13) keyDownSubmitter();
         }
         document.onkeydown = keydown;
+        ipc.on('submitter', function () {
+            keyDownSubmitter();
+        });
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="controller">

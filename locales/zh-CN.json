@@ -93,7 +93,7 @@
 	"welcome-part-5": "先调整下设置",
 	"helper": "帮助手册",
 	"newbie-for-settings": "你似乎是第一次打开设置",
-	"newbie-for-settings-tip": "所有设置都会自动生效，部分组件在被设置后会自动重启程序以应用设置，望知悉。",
+	"newbie-for-settings-tip": "设置会自动生效，部分组件在被设置后会自动重启程序，望知悉。",
 	"alarm-for-not-using-wnr-dialog-box-title": "你已经很久没有开始一个新计划了。",
 	"alarm-for-not-using-wnr-dialog-box-content": "打开wnr，开始一个新计划吧！",
 	"all-sum-part-1": "共计",
@@ -168,7 +168,7 @@
 	"stop-now-msg": "在专心模式下，你最终会发现无法使用你的软件，停止不必要的尝试吧！",
 	"without-permission-part-1": "没有权限，可能无法设置开机自启。",
 	"without-permission-part-2": "请前往系统偏好设置->安全性和隐私->自动化，找到wnr并勾选附属的权限，否则无法设置。",
-	"permission-ask": "如果弹出一个权限申请框，请允许，否则无法设置开机自启。",
+	"permission-ask": "如果弹出权限申请框，请允许，否则无法设置开机自启。",
 	"all-focus-mode-warn": "不允许把工作、休息时间都设置为专心模式。",
 	"copy": "复制",
 	"paste": "粘贴",
@@ -204,5 +204,6 @@
 	"should-nap-now": "现在小憩几秒钟吧",
 	"should-nap-now-msg": "现在小憩几秒钟，待会更有好精神。",
 	"is-loose-setting-on": "宽松的全屏专心模式：",
-	"is-loose-setting-on-tip": "如果将全屏专心模式设定为宽松的，则我们将不会强制使应用处于最上层，不会强制锁定所有显示器，不会强制在所有虚拟桌面上显示。谨慎选择，因为这可能使你无法专心于应当做的事。"
+	"is-loose-setting-on-tip": "如果将全屏专心模式设定为宽松的，则我们将不会强制使应用处于最上层，不会强制锁定所有显示器，不会强制在所有虚拟桌面上显示。谨慎选择，因为这可能使你无法专心于应当做的事。",
+	"submitter": "开始计时"
 }

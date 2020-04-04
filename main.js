@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, systemPreferences, Notification, nativeTheme, screen }
+    powerMonitor, systemPreferences, Notification,
+    nativeTheme, screen, TouchBar }
     = require('electron');
 const Store = require('electron-store');
 const path = require("path");
@@ -9,7 +10,8 @@ var Registry = require('winreg');
 const windowsRelease = require('windows-release');
 var cmdOrCtrl = require('cmd-or-ctrl');
 var AV = require('leancloud-storage');
-var { Query } = AV
+var { Query } = AV;
+const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
@@ -21,7 +23,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
     leanId = null, leanKey = null,
-    progress = -1,
+    progress = -1, timeLeftOnBar,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
     store = null,
@@ -50,8 +52,6 @@ function createWindow() {
 
     //load index.html
     win.loadFile('index.html');
-    if (process.platform == "darwin" && win != null)
-        win.setVisibleOnAllWorkspaces(true);
 
     //to load without sparking
     win.once('ready-to-show', () => {
@@ -183,6 +183,57 @@ function multiScreenSolution(mode) {
                             newWindows[i].destroy();
                     }
                 }
+            }
+        }
+    }
+}
+
+function touchBarSolution(mode) {
+    if (app.isReady()) {
+        if (process.platform == "darwin") {
+            try {
+                if (mode == "index") {
+                    let settingsSubmitter = new TouchBarButton({
+                        label: i18n.__('settings'),
+                        click: () => settings()
+                    });
+                    let helperSubmitter = new TouchBarButton({
+                        label: i18n.__('website'),
+                        click: () => shell.openExternal('https://getwnr.com/')
+                    });
+                    let submitter = new TouchBarButton({
+                        label: i18n.__('submitter'),
+                        backgroundColor: '#5490ea',
+                        click: () => win.webContents.send("submitter")
+                    });
+                    let touchBar = new TouchBar({
+                        items: [
+                            settingsSubmitter,
+                            new TouchBarSpacer({ size: "small" }),
+                            helperSubmitter,
+                            new TouchBarSpacer({ size: "small" }),
+                            submitter,
+                        ]
+                    });
+                    if (win != null) win.setTouchBar(touchBar);
+                } else if (mode == "timer") {
+                    let startOrStopSubmitter = new TouchBarButton({
+                        label: i18n.__('start-or-stop'),
+                        click: () => win.webContents.send("start-or-stop")
+                    });
+                    timeLeftOnBar = new TouchBarLabel({
+                        label: (1 - progress) * 100 + timeLeftTip
+                    })
+                    let touchBar = new TouchBar({
+                        items: [
+                            timeLeftOnBar
+                        ]
+                    });
+                    touchBar.escapeItem = startOrStopSubmitter;
+                    if (win != null) win.setTouchBar(touchBar);
+                }
+            } catch (e) {
+                console.log(e)
             }
         }
     }
@@ -552,7 +603,7 @@ function traySolution(isFullScreen) {
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version,
                 click: function () {
-                    shell.openExternal('https://github.com/RoderickQiu/wnr/releases/');
+                    about()
                 }
             }, {
                 type: 'separator'
@@ -1181,12 +1232,29 @@ function about() {
                 webPreferences: { nodeIntegration: true }
             });
             aboutWin.loadFile("about.html");
-            if (store.get("top") == true) aboutWin.setAlwaysOnTop(true);
+            win.setAlwaysOnTop(true);
+            aboutWin.setAlwaysOnTop(true);
+            aboutWin.focus();
             aboutWin.once('ready-to-show', () => {
                 aboutWin.show();
+                try {
+                    let aboutWinTouchBar = new TouchBar({
+                        items: [
+                            new TouchBarLabel({ label: "wnr " + i18n.__('v') + require("./package.json")["version"] })
+                        ]
+                    });
+                    aboutWinTouchBar.escapeItem = new TouchBarButton({
+                        label: i18n.__('close'),
+                        click: () => aboutWin.close()
+                    });
+                    aboutWin.setTouchBar(aboutWinTouchBar);
+                } catch (e) {
+                    console.log(e);
+                }
             })
             aboutWin.on('closed', () => {
                 aboutWin = null;
+                if (store.get("top") != true) win.setAlwaysOnTop(false)
             })
         }
     }
@@ -1218,12 +1286,31 @@ function settings(mode) {
                 console.log(e);
             }
             settingsWin.loadFile("settings.html");
-            if (store.get("top") == true) settingsWin.setAlwaysOnTop(true);
+            win.setAlwaysOnTop(true);
+            settingsWin.setAlwaysOnTop(true);
+            settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
+                try {
+                    let settingsWinTouchBar = new TouchBar({
+                        items: [
+                            new TouchBarLabel({ label: i18n.__('newbie-for-settings-tip') })
+                        ]
+                    });
+                    settingsWinTouchBar.escapeItem = new TouchBarButton({
+                        label: i18n.__('close'),
+                        click: () => settingsWin.close()
+                    });
+                    settingsWin.setTouchBar(settingsWinTouchBar);
+                } catch (e) {
+                    console.log(e);
+                }
             })
             settingsWin.on('closed', () => {
-                if (win != null) win.reload();
+                if (win != null) {
+                    win.reload();
+                    if (store.get("top") != true) win.setAlwaysOnTop(false);
+                }
                 settingsWin = null;
                 if (store.get("loose-mode")) isLoose = true;
                 else isLoose = false;
@@ -1236,7 +1323,7 @@ function settings(mode) {
                 }
                 notificationSolution(i18n.__('newbie-for-settings'), i18n.__('newbie-for-settings-tip'), "normal");
                 if (process.platfrom == "darwin")
-                    notificationSolution(i18n.__('newbie-for-settings'), i18n.__('permission-ask'), "normal");
+                    notificationSolution(i18n.__('newbie-for-settings'), i18n.__('permission-ask'), "normal")
             }
         }
     }
@@ -1261,12 +1348,26 @@ function tourguide() {
                 webPreferences: { nodeIntegration: true }
             });
             tourWin.loadFile("tourguide.html");
-            if (store.get("top") == true) tourWin.setAlwaysOnTop(true);
+            win.setAlwaysOnTop(true);
+            tourWin.setAlwaysOnTop(true);
+            tourWin.focus();
             tourWin.once('ready-to-show', () => {
                 tourWin.show();
+                let tourWinTouchBar = new TouchBar({
+                    items: [
+                        new TouchBarLabel({ label: i18n.__('welcome-part-1') })
+                    ]
+                });
+                tourWinTouchBar.escapeItem = new TouchBarButton({
+                    label: i18n.__('close'),
+                    click: () => tourWin.close()
+                });
+                tourWin.setTouchBar(tourWinTouchBar);
             })
             tourWin.on('closed', () => {
                 tourWin = null;
+                if (store.get("top") != true) win.setAlwaysOnTop(false);
+                win.moveTop();
                 win.focus();
             })
             notificationSolution(i18n.__('welcome-part-1'), i18n.__('welcome-part-2'), "normal");
@@ -1316,6 +1417,7 @@ ipcMain.on("progress-bar-set", function (event, message) {
     progress = 1 - message;
     if (win != null) win.setProgressBar(progress);
     if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
+    timeLeftOnBar.label = message * 100 + timeLeftTip;
 })
 
 ipcMain.on("should-nap", function () {
@@ -1344,6 +1446,7 @@ ipcMain.on("timer-win", function (event, message) {
         isTimerWin = true;
         traySolution();
         macOSFullscreenSolution();
+        touchBarSolution("timer");
         if (tray != null) {
             contextMenu.items[2].enabled = true;
         }
@@ -1362,6 +1465,7 @@ ipcMain.on("timer-win", function (event, message) {
         isTimerWin = false;
         traySolution();
         macOSFullscreenSolution();
+        touchBarSolution("index");
         if (tray != null) {
             tray.setToolTip('wnr');
             contextMenu.items[2].enabled = false;

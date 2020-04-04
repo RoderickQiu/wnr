@@ -204,5 +204,6 @@
     "should-nap-now": "Take a little rest for a few seconds",
     "should-nap-now-msg": "This is a good way to disenchant yourself.",
     "is-loose-setting-on": "Loose fullscreen mode: ",
-    "is-loose-setting-on-tip": "If this is enabled, fullscreen mode will be looser and we won't lock all the things up."
+    "is-loose-setting-on-tip": "If this is enabled, fullscreen mode will be looser and we won't lock all the things up.",
+    "submitter": "Start timing"
 }

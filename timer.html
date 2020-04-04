@@ -434,7 +434,7 @@
                         if (progress != lastRecordedProgress) {
                             lastRecordedProgress = progress;
                             ipc.send("progress-bar-set", lastRecordedProgress);
-                            $bottomBar.css("width", lastRecordedProgress * 100 + "%");
+                            $bottomBar.css("width", (lastRecordedProgress * 100 + "%"));
                         }
                     }
                     if (shouldNap && method == 1) {
