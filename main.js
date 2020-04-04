@@ -23,7 +23,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
     leanId = null, leanKey = null,
-    progress = -1, timeLeftOnBar,
+    progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
     store = null,
@@ -1417,7 +1417,8 @@ ipcMain.on("progress-bar-set", function (event, message) {
     progress = 1 - message;
     if (win != null) win.setProgressBar(progress);
     if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
-    timeLeftOnBar.label = message * 100 + timeLeftTip;
+    if (process.platform == "darwin")
+        if (timeLeftOnbar != null) timeLeftOnBar.label = message * 100 + timeLeftTip;
 })
 
 ipcMain.on("should-nap", function () {
