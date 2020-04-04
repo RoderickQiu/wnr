@@ -1,9 +1,17 @@
 var i18n = require("i18n");
 const Store = require('electron-store');
-const store = new Store();
 const ipc = require('electron').ipcRenderer;
 const path = require("path");
 const cmdOrCtrl = require("cmd-or-ctrl")
+
+if (process.env.PORTABLE_EXECUTABLE_DIR) {
+    try {
+        store = new Store({ cwd: process.env.PORTABLE_EXECUTABLE_DIR, name: 'wnr-config' });//accept portable
+    } catch (e) {
+        console.log(e);
+        store = new Store();
+    }
+} else store = new Store()
 
 isInDark();
 

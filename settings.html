@@ -103,6 +103,19 @@
                 </div>
             </div>
         </div>
+        <div class="settings-sidebar-block lead should-lock" id="personalization-sidebar"
+            onclick="settingsGoto('personalization')">
+            <div class="container-fluid">
+                <div class="row align-items-start">
+                    <div class="col-3 text-center">
+                        <i class="iconfont icon-palette" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-9">
+                        <script>document.write(i18n.__('personalization'));</script>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="settings-sidebar-block lead should-lock" id="other-things-sidebar"
             onclick="settingsGoto('other-things')">
             <div class="container-fluid">
@@ -116,20 +129,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="settings-sidebar-block lead should-lock" id="personalization-sidebar"
-            onclick="settingsGoto('personalization')">
-            <div class="container-fluid">
-                <div class="row align-items-start">
-                    <div class="col-3 text-center">
-                        <i class="iconfont icon-palette" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-9">
-                        <script>document.write(i18n.__('personalization'));</script>
-                    </div>
-                </div>
-            </div>
-        </div>-->
-        <!-- not finished yet -->
     </div>
 
     <div class="d-flex" id="settings-container">
@@ -240,10 +239,47 @@
                         </span>
                     </div>
                 </div>
+                <br />
+                <!-- nap notifying setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="nap-setting" type="checkbox" onchange="napSetting()" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('is-nap-on'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('is-nap-on-tip'));</script>
+                            <span id="nap-time-set">
+                                <script>document.write(i18n.__('is-nap-on-time-msg'));</script>
+                                <input name="nap-time-msg" id="nap-time-msg" type="number" maxlength="11"
+                                    onblur="napTimeChange()" class="hotkeyset" />
+                            </span>
+                        </span>
+                    </div>
+                </div>
                 <hr />
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('timer-settings'));</script>
                 </p>
+                <!-- loose mode setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="loose-setting" type="checkbox" onchange="looseSetting()" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('is-loose-setting-on'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('is-loose-setting-on-tip'));</script>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- hide from dock setting -->
                 <div class="row" id="hide-from-dock-setting-container">
                     <div class="col-1 text-center">
@@ -504,9 +540,86 @@
             </div>
 
             <!-- 6. personalization -->
-            <!--<div id="personalization" class="should-lock">
-            </div>-->
-            <!-- not finished yet -->
+            <div id="personalization" class="should-lock">
+                <ul>
+                    <!-- personalization for notification -->
+                    <li>
+                        <script>document.write(i18n.__('personalization-notification'));</script>
+                        <br /><label id="work-time-end" class="personalization-notification-label text-muted"></label>
+                        <input name="work-time-end" class="personalization-notification" type="text" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br /><label id="work-time-end-msg"
+                            class="personalization-notification-label text-muted"></label>
+                        <input name="work-time-end-msg" class="personalization-notification" type="text" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br /><label id="rest-time-end" class="personalization-notification-label text-muted"></label>
+                        <input name="rest-time-end" type="text" class="personalization-notification" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br /><label id="rest-time-end-msg"
+                            class="personalization-notification-label text-muted"></label>
+                        <input name="rest-time-end-msg" class="personalization-notification" type="text" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br /><label id="all-task-end" class="personalization-notification-label text-muted"></label>
+                        <input name="all-task-end" class="personalization-notification" type="text" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br /><label id="all-task-end-msg"
+                            class="personalization-notification-label text-muted"></label>
+                        <input name="all-task-end-msg" class="personalization-notification" type="text" maxlength="64"
+                            onchange="personalizedNotification()" />
+                        <br />
+                        <script>
+                            $(".personalization-notification").each(function () {
+                                $(this).attr("placeholder", i18n.__($(this).attr("name")));
+                                if (store.has("personalization-notification." + $(this).attr("name")))
+                                    $(this).val(store.get("personalization-notification." + $(this).attr("name")));
+                            });
+                            $(".personalization-notification-label").each(function () {
+                                $(this).text(i18n.__('personalization-notification-label-begin') +
+                                    i18n.__($(this).attr("id")) + i18n.__('personalization-notification-label-end'));
+                            });
+                        </script>
+                        <p class="small text-muted">
+                            <script>
+                                document.write(i18n.__('personalization-notification-tip'));
+                            </script>
+                        </p>
+                    </li>
+                    <li>
+                        <script>document.write(i18n.__('personalization-notify-sound'));</script>
+                        <br />
+                        <label>
+                            <script>document.write(i18n.__("personalization-notify-sound-msg-time-end"));</script>
+                        </label>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                id="work-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" id="work-time-end-sound-select"
+                                aria-labelledby="work-time-end-sound-dropdown-button">
+                            </div>
+                        </div>
+                        <label>
+                            <script>document.write(i18n.__("personalization-notify-sound-msg-all-end"));</script>
+                        </label>
+                        <div class="dropdown">
+                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                                id="all-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
+                                aria-expanded="false">
+                            </button>
+                            <div class="dropdown-menu" id="all-time-end-sound-select"
+                                aria-labelledby="all-time-end-sound-dropdown-button">
+                            </div>
+                        </div>
+                        <p class="small text-muted">
+                            <script>
+                                document.write(i18n.__('personalization-notify-sound-tip'));
+                            </script>
+                        </p>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
     <div class="get-help" id="settings-helper">
@@ -562,14 +675,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
-                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "block");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
-                //$("#personalization").css("display", "none");
+                $("#personalization").css("display", "none");
             } else if ((mask == "predefined-tasks" || mask == "" || mask == null) && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/2-predefined-tasks-settings')");
 
@@ -578,14 +691,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
-                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "block");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
-                //$("#personalization").css("display", "none");
+                $("#personalization").css("display", "none");
             } else if (mask == "languages" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/6-languages')");
 
@@ -594,14 +707,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").addClass("settings-sidebar-block-highlighted");
-                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "block");
-                //$("#personalization").css("display", "none");
+                $("#personalization").css("display", "none");
             } else if ((mask == "global-settings" || mask == "normal") && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/3-global-settings')");
 
@@ -610,14 +723,14 @@
                 $("#other-things-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
-                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "block");
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
-                //$("#personalization").css("display", "none");
+                $("#personalization").css("display", "none");
             } else if (mask == "other-things" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/5-other-things')");
 
@@ -626,15 +739,15 @@
                 $("#other-things-sidebar").addClass("settings-sidebar-block-highlighted");
                 $("#global-settings-sidebar").removeClass("settings-sidebar-block-highlighted");
                 $("#languages-sidebar").removeClass("settings-sidebar-block-highlighted");
-                //$("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
+                $("#personalization-sidebar").removeClass("settings-sidebar-block-highlighted");
 
                 $("#locker").css("display", "none");
                 $("#predefined-tasks").css("display", "none");
                 $("#global-settings").css("display", "none");
                 $("#other-things").css("display", "block");
                 $("#languages").css("display", "none");
-                //$("#personalization").css("display", "none");
-            }/* else if (mask == "personalization" && (!store.get('islocked'))) {
+                $("#personalization").css("display", "none");
+            } else if (mask == "personalization" && (!store.get('islocked'))) {
                 $("#settings-helper a").attr("href", "javascript:getHelp('settings/7-personalization')");
 
                 $("#locker-sidebar").removeClass("settings-sidebar-block-highlighted");
@@ -650,7 +763,7 @@
                 $("#other-things").css("display", "none");
                 $("#languages").css("display", "none");
                 $("#personalization").css("display", "block");
-            }*/// not finished yet
+            }
         }
     </script>
     <script src="updater.js"></script>
@@ -860,6 +973,34 @@
             else store.set("dock-hide", false);
             timeOut = setTimeout("call('relauncher')", 500);
         }
+        if (store.get("nap") == true) document.getElementById("nap-setting").checked = true;
+        else {
+            document.getElementById("nap-setting").checked = false;
+            $("#nap-time-set").css("display", "none");
+        }
+        if (store.has("nap-time")) $("#nap-time-msg").val(store.get("nap-time"));
+        else $("#nap-time-msg").val(10);
+        function napSetting() {
+            if (document.getElementById("nap-setting").checked == true) {
+                store.set("nap", true);
+                $("#nap-time-set").css("display", "inline-block");
+            } else {
+                store.set("nap", false);
+                $("#nap-time-set").css("display", "none");
+            }
+        }
+        function napTimeChange() {
+            let napTimeGet = Number($("#nap-time-msg").val());
+            if (isNaN(napTimeGet)) $("#nap-time-msg").val(10);
+            else if (napTimeGet < 1) $("#nap-time-msg").val(10);
+            store.set("nap-time", Number($("#nap-time-msg").val()));
+        }
+        if (store.get("loose-mode") == true) document.getElementById("loose-setting").checked = true;
+        else document.getElementById("loose-setting").checked = false;
+        function looseSetting() {
+            if (document.getElementById("loose-setting").checked == true) store.set("loose-mode", true);
+            else store.set("loose-mode", false);
+        }
 
         //lock mode settings
         function lock(passcode, again) {
@@ -928,7 +1069,6 @@
             document.removeEventListener('keydown', KeyDownTrigger, false);
         }
 
-        // settings backup & import
         var aes = require("crypto-js/aes");
         var encoding = require("crypto-js/enc-utf8");
         var copyToClipboard = require("copy-to-clipboard");
@@ -952,6 +1092,59 @@
             setTimeout(function () {
                 if (isAllRight) call('relauncher');
             }, 500);
+        }
+
+        //personalization
+
+        function personalizedNotification() {
+            $(".personalization-notification").each(function () {
+                try {
+                    if ($(this).val() && $(this).val() != "")
+                        store.set("personalization-notification." + $(this).attr("name"), $(this).val());
+                    else store.delete("personalization-notification." + $(this).attr("name"));
+                } catch (e) {
+                    console.log(e);
+                }
+            });
+        }
+
+        var player = document.createElement("audio");//alert player
+        let workTimeEndSoundList = ['alarming', 'beep', 'beep2', 'gun', 'trumpet', 'whistle'];
+        for (i in workTimeEndSoundList) {
+            $("#work-time-end-sound-select").append("\
+            <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + workTimeEndSoundList[i] + "\")'>"
+                + workTimeEndSoundList[i] + "</a>");
+        }
+        $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "whistle");
+        function workTimeEndSoundSetting(val) {
+            try {
+                store.set("time-end-sound", val);
+                $("#work-time-end-sound-dropdown-button").text(val);
+                player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+                player.loop = false;
+                player.play();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        let allTimeEndSoundList = ['horns', 'magic', 'piano'];
+        for (i in allTimeEndSoundList) {
+            $("#all-time-end-sound-select").append("\
+            <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + allTimeEndSoundList[i] + "\")'>"
+                + allTimeEndSoundList[i] + "</a>");
+        }
+        $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "magic");
+        function allTimeEndSoundSetting(val) {
+            try {
+                store.set("all-end-sound", val);
+                $("#all-time-end-sound-dropdown-button").text(val);
+                player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+                player.loop = false;
+                player.play();
+            } catch (e) {
+                console.log(e);
+            }
         }
     </script>
     <script src="renderer.js"></script>

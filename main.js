@@ -1,9 +1,8 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, systemPreferences, Notification, nativeTheme }
+    powerMonitor, systemPreferences, Notification, nativeTheme, screen }
     = require('electron');
 const Store = require('electron-store');
-const store = new Store();
 const path = require("path");
 var i18n = require("i18n");
 var Registry = require('winreg');
@@ -19,10 +18,14 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, predefinedTasks = null,
     pushNotificationLink = null,
-    workTimeFocused = false, restTimeFocused = false, fullScreenProtection = false,
+    workTimeFocused = false, restTimeFocused = false,
+    fullScreenProtection = false,
     leanId = null, leanKey = null,
     progress = -1,
-    dockHide = false;
+    dockHide = false,
+    newWindows = new Array, displays = null, hasMultiDisplays = null,
+    store = null,
+    isLoose = false;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -53,6 +56,7 @@ function createWindow() {
     //to load without sparking
     win.once('ready-to-show', () => {
         win.show();
+        win.moveTop();
     });
 
     //triggers when the main windows is closed
@@ -73,20 +77,18 @@ function createWindow() {
     });
 
     //triggers for focusing
-    win.on('blur', () => {
+    /*win.on('blur', () => {
         win.maximizable = false;
-        if (isTimerWin && fullScreenProtection && win != null && app.isPackaged) {
+        if (isTimerWin && fullScreenProtection && win != null) {
             win.hide();
             win.setKiosk(false);
             win.moveTop();
             win.setKiosk(true);
             win.show();
-            win.focus();
-
             if (!dockHide)
                 notificationSolution(i18n.__('stop-now'), i18n.__('stop-now-msg'), "hide-or-show");//notify not to do meaningless things
         }
-    });
+    });*/
 
     win.on('show', () => {
         if (isTimerWin) {
@@ -98,8 +100,29 @@ function createWindow() {
 
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
-        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged)) app.relaunch()
-    })
+        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged && (!isLoose))) app.relaunch();
+    });
+
+    screen.on('display-added', (event, newDisplay) => {
+        displays = screen.getAllDisplays();
+        hasMultiDisplays = true;
+        setTimeout(function () {
+            if (fullScreenProtection && isTimerWin && (!isLoose)) {
+                for (i in displays) {
+                    if (displays[i].id == newDisplay.id) {
+                        addScreenSolution(newWindows[i], newDisplay);
+                    }
+                }
+            }
+        }, 500);
+    });
+
+    screen.on('display-removed', () => {
+        if (fullScreenProtection && isTimerWin && (!isLoose)) {
+            multiScreenSolution("off");
+            setTimeout(function () { multiScreenSolution("on"); }, 1500);
+        }
+    });
 }
 
 function alarmSet() {
@@ -117,7 +140,51 @@ function alarmSet() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
-        win.setKiosk(flag);
+        if (!isLoose) win.setKiosk(flag);
+        else if (process.platform == "darwin") win.setSimpleFullScreen(flag);
+        else win.setFullScreen(flag);
+    }
+}
+
+function addScreenSolution(objWindow, display) {
+    objWindow = new BrowserWindow({
+        width: 364,
+        height: 396,
+        x: display.bounds.x,
+        y: display.bounds.y,
+        frame: false,
+        backgroundColor: "#fefefe",
+        show: true,
+        hasShadow: true,
+        webPreferences: { nodeIntegration: true, webgl: false },
+        titleBarStyle: "hiddenInset",
+        icon: "./res/icons/wnrIcon.png",
+        visibleOnAllWorkspaces: true
+    });//optimize for cross platfrom
+
+    objWindow.loadFile('placeholder.html');
+
+    if (app.isPackaged) objWindow.setFocusable(false);
+    objWindow.setFullScreen(true);
+    objWindow.moveTop();
+    objWindow.setAlwaysOnTop(true);
+}
+function multiScreenSolution(mode) {
+    if (app.isReady()) {
+        displays = screen.getAllDisplays();
+        hasMultiDisplays = (displays.length > 1) ? true : false;
+        for (i in displays) {
+            if (displays[i].id != screen.getPrimaryDisplay().id) {
+                if (mode == "on") {
+                    addScreenSolution(newWindows[i], displays[i]);
+                } else {
+                    if (newWindows[i] != null) {
+                        if (newWindows[i].isDestroyed() == false)
+                            newWindows[i].destroy();
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -135,12 +202,15 @@ app.on('will-quit', () => {
 app.on('ready', () => {
     createWindow();
 
+    if (process.env.PORTABLE_EXECUTABLE_DIR) {
+        store = new Store({ cwd: process.env.PORTABLE_EXECUTABLE_DIR, name: 'wnr-config' });//accept portable
+    } else store = new Store();
+
     require('dotenv').config();
 
     if (!app.isPackaged) {
         const debug = require('electron-debug');
         debug({ showDevTools: false });
-        require('devtron').install();
     }
 
     i18n.configure({
@@ -191,6 +261,9 @@ app.on('ready', () => {
         });
     }//prevent wnr from running more than one instance
 
+    if (screen.getAllDisplays().length > 1) hasMultiDisplays = true;
+    else hasMultiDisplays = false;
+
     if (process.platform == "win32") {
         app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
         if (windowsRelease() == '7' && win != null) {
@@ -212,6 +285,8 @@ app.on('ready', () => {
     }
 
     if (store.get("dock-hide") && process.platform == "darwin") dockHide = true;
+
+    if (store.get("loose-mode")) isLoose = true;
 
     if (win != null) {
         if (store.get("top") == true) win.setAlwaysOnTop(true);
@@ -239,7 +314,7 @@ app.on('ready', () => {
     }
 
     globalShortcut.register(store.get('hotkey1'), () => {
-        if (!isTimerWin || (isWorkMode && (workTimeFocused == false)) || ((!isWorkMode) && (restTimeFocused == false))) {
+        if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose)) || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
             showOrHide();
         }//prevent using hotkeys to quit
     })
@@ -399,7 +474,7 @@ app.on('ready', () => {
 
 function showOrHide() {
     if (settingsWin != null)
-        if (settingsWin.isFocused()) {
+        if (settingsWin.isVisible()) {
             settingsWin.minimize();
             settingsWin.hide();
         } else {
@@ -407,7 +482,7 @@ function showOrHide() {
             settingsWin.show();
         }
     if (aboutWin != null)
-        if (aboutWin.isFocused()) {
+        if (aboutWin.isVisible()) {
             aboutWin.minimize();
             aboutWin.hide();
         } else {
@@ -415,7 +490,7 @@ function showOrHide() {
             aboutWin.show();
         }
     if (tourWin != null)
-        if (tourWin.isFocused()) {
+        if (tourWin.isVisible()) {
             tourWin.minimize();
             tourWin.hide();
         } else {
@@ -423,7 +498,7 @@ function showOrHide() {
             tourWin.show();
         }
     if (win != null)
-        if (win.isFocused()) {
+        if (win.isVisible()) {
             win.minimize();
             win.hide();
         } else {
@@ -446,7 +521,6 @@ function notificationSolution(title, body, func) {
             notifier.once("click", function () {
                 if (win != null) {
                     win.show();
-                    win.focus();
                 }
             });
         else if (func == "push-notification")
@@ -462,7 +536,6 @@ function notificationSolution(title, body, func) {
             }).then(function (response) {
                 if (func == "hide-or-show") {
                     win.show();
-                    win.focus();
                 } else if (func == "push-notification") {
                     shell.openExternal(pushNotificationLink);
                 }
@@ -535,8 +608,8 @@ function traySolution(isFullScreen) {
                 tray.setContextMenu(contextMenu);
             }
         } else {
-            if (win != null) win.closable = false;
-            if (process.platform == "win32" && win != null) win.setSkipTaskbar(true);
+            if (win != null && (!isLoose)) win.closable = false;
+            if (process.platform == "win32" && win != null && (!isLoose)) win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version
             }, {
@@ -704,7 +777,8 @@ function leanCloudSolution() {
 
         pushNotifications.find().then(function (notifications) {
             notifications.forEach(function (notification) {
-                if (notification.get('targetVersion') == null || notification.get("targetVersion") == "" || notification.get("targetVersion") == require("./package.json").version.toString()) {
+                let targetVersion = notification.get('targetVersion').replace("v", "");
+                if (targetVersion == null || targetVersion == "" || targetVersion == require("./package.json").version.toString()) {
                     let content = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
                     let title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
                     let link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
@@ -714,7 +788,11 @@ function leanCloudSolution() {
                         if (pushNotificationLink != "" && pushNotificationLink != null)
                             notificationSolution(title, content, "push-notification");
                         else notificationSolution(title, content, "normal");
-                        store.set(id, true);
+                        try {
+                            store.set(id, true);
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             })
@@ -797,26 +875,32 @@ ipcMain.on('warning-giver-workend', function () {
         if (restTimeFocused != true) win.show();
         win.center();
         win.flashFrame(true);
-        win.setAlwaysOnTop(true);
+        if (!isLoose) win.setAlwaysOnTop(true);
         win.moveTop();
         if (restTimeFocused == true) {
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
+            if (!isLoose) multiScreenSolution("on");
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
-            win.focus();
+            if (app.isPackaged && (!isLoose)) win.setFocusable(false);
         } else {
+            multiScreenSolution("off");
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
+            win.setFocusable(true);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('work-time-end'),
+                title: (store.has("personalization-notification.work-time-end") ?
+                    store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                 type: "warning",
-                message: i18n.__('work-time-end-msg'),
+                message: (store.has("personalization-notification.work-time-end-msg") ?
+                    store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                    + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
             }).then(function (response) {
-                if (restTimeFocused) {
+                if (restTimeFocused && (!isLoose)) {
                     fullScreenProtection = true;
                     try {
                         store.set("fullscreen-protection", true);
@@ -854,21 +938,27 @@ ipcMain.on('warning-giver-restend', function () {
         win.setAlwaysOnTop(true);
         win.moveTop();
         if (workTimeFocused == true) {
+            multiScreenSolution("on");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
-            win.focus();
+            if (app.isPackaged) win.setFocusable(false);
         } else {
+            multiScreenSolution("off");
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
+            win.setFocusable(true);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('rest-time-end'),
+                title: (store.has("personalization-notification.rest-time-end") ?
+                    store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                 type: "warning",
-                message: i18n.__('rest-time-end-msg'),
+                message: (store.has("personalization-notification.rest-time-end-msg") ?
+                    store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                    + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
             }).then(function (response) {
                 if (workTimeFocused) {
                     fullScreenProtection = true;
@@ -909,16 +999,20 @@ ipcMain.on('warning-giver-all-task-end', function () {
         win.moveTop();
         win.setProgressBar(-1);
         if (restTimeFocused == true) {
+            multiScreenSolution("off");
             if (dockHide) app.dock.hide();
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
+            win.setFocusable(true);
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
-                title: i18n.__('all-task-end'),
+                title: (store.has("personalization-notification.all-task-end") ?
+                    store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
                 type: "warning",
-                message: i18n.__('all-task-end-msg'),
+                message: (store.has("personalization-notification.all-task-end-msg") ?
+                    store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
             }).then(function (response) {
                 win.loadFile('index.html');//automatically back
                 win.maximizable = false;
@@ -1007,6 +1101,7 @@ function windowCloseChk() {
             checkboxChecked: false
         }).then(function (msger) {
             if (msger.checkboxChecked) {
+                multiScreenSolution("off");
                 app.quit();
             }
         })
@@ -1023,7 +1118,7 @@ ipcMain.on('global-shortcut-set', function (event, message) {
             globalShortcut.unregister(message.before);
         if (message.type == '1') {
             globalShortcut.register(message.to, () => {
-                if (!isTimerWin || (isWorkMode && (workTimeFocused == false)) || ((!isWorkMode) && (restTimeFocused == false))) {
+                if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose)) || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
                     showOrHide();
                 }//prevent using hotkeys to quit
             })
@@ -1130,6 +1225,8 @@ function settings(mode) {
             settingsWin.on('closed', () => {
                 if (win != null) win.reload();
                 settingsWin = null;
+                if (store.get("loose-mode")) isLoose = true;
+                else isLoose = false;
             })
             if (!store.get("settings-experience")) {
                 try {
@@ -1221,6 +1318,10 @@ ipcMain.on("progress-bar-set", function (event, message) {
     if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
 })
 
+ipcMain.on("should-nap", function () {
+    notificationSolution(i18n.__('should-nap-now'), i18n.__('should-nap-now-msg'), "normal")
+})
+
 ipcMain.on("logger", function (event, message) {
     console.log(message)
 })
@@ -1247,8 +1348,11 @@ ipcMain.on("timer-win", function (event, message) {
             contextMenu.items[2].enabled = true;
         }
     } else {
+        if (win != null) {
+            win.focus();
+            win.setProgressBar(-1);
+        }
         if (dockHide) app.dock.hide();
-        if (win != null) win.setProgressBar(-1);
         if (globalShortcut.isRegistered(store.get('hotkey2')))
             globalShortcut.unregister(store.get('hotkey2'));
         alarmSet();
@@ -1260,7 +1364,8 @@ ipcMain.on("timer-win", function (event, message) {
         macOSFullscreenSolution();
         if (tray != null) {
             tray.setToolTip('wnr');
-            contextMenu.items[2].enabled = false
+            contextMenu.items[2].enabled = false;
         }
+        multiScreenSolution("off")
     }
 })

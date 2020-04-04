@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>
+        if (typeof module === 'object') {
+            window.module = module; module = undefined;
+        }
+    </script>
+    <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
+    <!-- solve the electron-jquery conflict -->
+    <script src="res/lib/jquery.slim.min.js"></script>
+    <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script src="supporter.js"></script>
+    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
+        <div id="now-timing" class="text-center h1 work">
+            <img src="res/icons/wnrIcon.png" width="8%" />
+            <br />
+            <h6 class="text-center text-muted">
+                <br />
+                <script>document.write(i18n.__('focus-mode'));</script>
+            </h6>
+        </div>
+        <div id="all-sum" class="small font-weight-bold text-muted align-self-center">
+            <script>document.write(i18n.__('has-multi-displays'));</script>
+        </div>
+    </div>
+    <script src="renderer.js"></script>
+</body>
+
+</html>

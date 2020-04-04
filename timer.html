@@ -145,19 +145,19 @@
             }
         })();
 
-        var title = decodeURI($_GET['title']);
-        var note = decodeURI($_GET['note']);
-        var workTime = decodeURI($_GET['work-time']) * 60000;
-        var restTime = decodeURI($_GET['rest-time']) * 60000;//use ms
-        var loop = decodeURI($_GET['loop']);
-        var workTimeFocused = (decodeURI($_GET['work-time-focused']) == "false") ? false : true;
-        var restTimeFocused = (decodeURI($_GET['rest-time-focused']) == "false") ? false : true;
-        var restored = (decodeURI($_GET['restored']) == "false") ? false : true;
-        var methodFromStart = Number(decodeURI($_GET['method']));
-        var h = i18n.__('h');
-        var min = i18n.__('min');
-        var s = i18n.__('s');
-        var player = document.createElement("audio");//alert player
+        var title = decodeURI($_GET['title']),
+            note = decodeURI($_GET['note']),
+            workTime = decodeURI($_GET['work-time']) * 60000,
+            restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
+            loop = decodeURI($_GET['loop']),
+            workTimeFocused = (decodeURI($_GET['work-time-focused']) == "false") ? false : true,
+            restTimeFocused = (decodeURI($_GET['rest-time-focused']) == "false") ? false : true,
+            restored = (decodeURI($_GET['restored']) == "false") ? false : true,
+            methodFromStart = Number(decodeURI($_GET['method'])),
+            h = i18n.__('h'),
+            min = i18n.__('min'),
+            s = i18n.__('s'),
+            player = document.createElement("audio");//alert player
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -226,7 +226,17 @@
                 systemName = process.platform,
                 progress = 0.00,
                 lastRecordedProgress = 0.00,
-                wasCounting = true;
+                wasCounting = true,
+                shouldNap,
+                napInterval = 0,
+                lastNapSecond = 0;
+
+            if (store.get("nap")) {
+                shouldNap = true;
+                napInterval = (store.has("nap-time") ? store.get("nap-time") : 10) * 60;
+                if (isNaN(napInterval)) napInterval = 600;
+                lastNapSecond = workTime / 1000;
+            } else shouldNap = false;
 
             startTime = new Date().getTime();
             int = setInterval(clock, 200);
@@ -277,9 +287,9 @@
                 }
                 if (store.get("sound") != false) {
                     if (isend != 0) {
-                        player.src = path.join(__dirname, "\\res\\sound\\time-end.wav");
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "whistle") + ".mp3");
                     } else {
-                        player.src = path.join(__dirname, "\\res\\sound\\all-end.wav");
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "magic") + ".mp3");
                     }
                     player.loop = true;
                     player.play();
@@ -345,6 +355,9 @@
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");
                             $nowTiming.addClass("h1");
+                        }
+                        if (shouldNap) {
+                            lastNapSecond = workTime / 1000;
                         }
                         warningGiver(2);
                     }
@@ -422,6 +435,12 @@
                             lastRecordedProgress = progress;
                             ipc.send("progress-bar-set", lastRecordedProgress);
                             $bottomBar.css("width", lastRecordedProgress * 100 + "%");
+                        }
+                    }
+                    if (shouldNap && method == 1) {
+                        if (lastNapSecond - seconds > napInterval) {
+                            lastNapSecond = seconds;
+                            ipc.send("should-nap");
                         }
                     }
                     hours = Math.floor(seconds / 3600);

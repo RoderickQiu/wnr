@@ -27,6 +27,18 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
 
 ## Features
 
+- modern design
+
+- multi-platforms support *(currently Windows & macOS)*
+
+- multi-languages support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
+
+- multi-monitor support
+
+- multi-virtual-desktops support
+
+- portable software available *(currently Windows)*
+
 - semantic time input
 
 - work time settings
@@ -68,14 +80,6 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
 - user-friendly tourguide
 
 - user-friendly updater
-
-- multi-platforms support *(currently Windows & macOS)*
-
-- multi-languages support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
-
-- with strong expansibility
-
-- modern design
 
 - infinity mode
 
@@ -153,7 +157,6 @@ For the full text of licenses, go see [this file](https://github.com/RoderickQiu
 - windows-release, sindresorhus, MIT License.
 - leancloud-storage, leancloud, MIT License.
 - electron-debug, sindresorhus, MIT License.
-- devtron, electron-userland, MIT License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 

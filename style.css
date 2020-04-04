@@ -32,7 +32,7 @@ input, .focuser, .dropdown-default {
 }
 
 input, .focuser, .dropdown, .settings-sidebar-block-highlighted, .dropdown-item:hover, .dropdown-item:focus {
-    transition: all .16s;
+    transition: all .08s;
 }
 
 input {
@@ -247,8 +247,8 @@ li input[type="checkbox"]::after {
     text-align: center;
 }
 
-#controller .dropdown-toggle::before {
-    display: none !important;
+#controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
+    color: #5490ea;
 }
 
 #dropdown-menu-button {
@@ -359,15 +359,16 @@ li input[type="checkbox"]::after {
     right: 14px;
 }
 
-#language-dropdown-button, #language-select {
+#settings-container .dropdwon-menu, #settings-container .dropdown-toggle {
     width: 192px;
 }
 
-#language-dropdown-button {
+#settings-container .dropdown-toggle {
     margin-top: 5px;
     margin-bottom: 5px;
     margin-left: 3px;
     margin-right: 3px;
+    display: inline-block;
 }
 
 #controller, #time-bar, #time-bar-macos {
@@ -458,4 +459,12 @@ li input[type="checkbox"]::after {
 
 #passcode-rechecker {
     text-align: center;
+}
+
+#personalization input[type="text"] {
+    width: 216px;
+}
+
+#personalization label {
+    font-size: smaller;
 }
