@@ -470,7 +470,7 @@ li input[type="checkbox"]::after {
 #bottom-btn {
     opacity: 0;
     transition: all 0.16s;
-    width: 192px;
+    width: 233px;
     position: absolute;
     bottom: 8px;
     z-index: 999;
