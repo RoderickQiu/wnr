@@ -29,7 +29,7 @@
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="iconfont icon-info"
                     id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
-                    class="iconfont icon-caret-down" id="window-hide"></i></a><span
+                    class="iconfont icon-angle-down" id="window-hide"></i></a><span
                 id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small work"><i class="iconfont icon-minus"
                     id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
@@ -72,6 +72,11 @@
                     <script>document.write(i18n.__('only-one-min-left'));</script>
                 </h3>
             </div>
+            <div id="fullscreen-experience-tip" class="small font-weight-bold text-muted text-center">
+                <script>document.write(i18n.__('fullscreen-experience-tip') +
+                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+            </div>
             <script>
                 $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
                 $('#back-index').attr('title', i18n.__('back-index'));
@@ -99,6 +104,19 @@
         } catch (e) {
             console.log(e);
         }
+
+        //for first time users
+        function mistakeResolver() {
+            try {
+                store.set("last-recorded-minutes-left", -1);
+                store.set("last-recorded-hours-left", -1);
+                store.set("fullscreen-experience", true);
+            } catch (e) {
+                console.log(e);
+            }
+            call('relauncher');
+        }
+        $("#fullscreen-experience-tip").css("display", "none");
 
         //lock mode settings
         function recheck(passcode) {
@@ -179,11 +197,23 @@
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
         if ((loop < 1 && loop != 0) || workTime <= 60000 || restTime <= 60000 || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+            try {
+                store.set("last-recorded-minutes-left", 0);
+                store.set("last-recorded-hours-left", 0);
+            } catch (e) {
+                console.log(e);
+            }
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
             document.onkeydown = keydownOnError;
         } else if (workTime > 86400000 || restTime > 86400000 || (workTime + restTime) * loop > 86400000) {
+            try {
+                store.set("last-recorded-minutes-left", 0);
+                store.set("last-recorded-hours-left", 0);
+            } catch (e) {
+                console.log(e);
+            }
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('too-long') + "<br/><a href='index.html' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -206,6 +236,14 @@
                     $("#skipper").css("display", "inline");
                     if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                 });
+                if (store.get("fullscreen-experience") != true && store.get("settings-experience") != true) {
+                    $("#fullscreen-experience-tip").css("display", "inline-block");
+                    try {
+                        store.set("fullscreen-experience", true);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                }
             }
 
             //method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left
@@ -287,12 +325,15 @@
                 }
                 if (store.get("sound") != false) {
                     if (isend != 0) {
-                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "whistle") + ".mp3");
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
                     } else {
-                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "magic") + ".mp3");
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
                     }
                     player.loop = true;
                     player.play();
+                    setTimeout(function () {
+                        player.loop = false;
+                    }, 20000);
                 }//different sound for different circumstances
                 if (isend == 0) ipc.send('warning-giver-all-task-end');
                 else {
@@ -326,6 +367,14 @@
                             $timeBar.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
+                            if (store.get("fullscreen-experience") != true && store.get("settings-experience") != true) {
+                                $("#fullscreen-experience-tip").css("display", "inline-block");
+                                try {
+                                    store.set("fullscreen-experience", true);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
                         } else if (workTimeFocused == true) {
                             if (systemName != "darwin") $("#controller").css("display", "block");
                             $("#more-options").css("display", "block");
@@ -424,23 +473,19 @@
                 if (seconds > 0) {
                     if (method == 1) {
                         progress = ((seconds / workTime) * 1000).toFixed(2);
-                        if (progress != lastRecordedProgress) {
-                            lastRecordedProgress = progress;
-                            ipc.send("progress-bar-set", lastRecordedProgress);
-                            $bottomBar.css("width", lastRecordedProgress * 100 + "%");
-                        }
                     } else {
                         progress = ((seconds / restTime) * 1000).toFixed(2);
-                        if (progress != lastRecordedProgress) {
-                            lastRecordedProgress = progress;
-                            ipc.send("progress-bar-set", lastRecordedProgress);
-                            $bottomBar.css("width", (lastRecordedProgress * 100 + "%"));
-                        }
+                    }
+                    if (progress != lastRecordedProgress) {
+                        lastRecordedProgress = progress;
+                        naturalProgress = Math.round(lastRecordedProgress * 100);
+                        ipc.send("progress-bar-set", naturalProgress);
+                        $bottomBar.css("width", naturalProgress + "%");
                     }
                     if (shouldNap && method == 1) {
                         if (lastNapSecond - seconds > napInterval) {
                             lastNapSecond = seconds;
-                            ipc.send("should-nap");
+                            ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
                         }
                     }
                     hours = Math.floor(seconds / 3600);
@@ -463,7 +508,7 @@
 
                     if (minutes == 0 && moreThanOneMin && hours == 0) {
                         if (store.get("onemintip") != false) {
-                            if (!store.get('fullscreen-protection'))
+                            if ((method == 1 && workTimeFocused == false) || (method == 2 && restTimeFocused == false))
                                 ipc.send("only-one-min-left");
                             else {
                                 if (store.get("sound") != false) {

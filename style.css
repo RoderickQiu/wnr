@@ -49,8 +49,9 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
 }
 
 input[type="text"], input[type="number"], input[type="password"] {
+    border-color: transparent;
     border-bottom-width: 3px;
-    border-bottom-color: transparent;
+    border-radius: 0%;
     margin: 1px;
 }
 
@@ -201,7 +202,7 @@ li input[type="checkbox"]::after {
 }
 
 .extreme-small {
-    font-size: xx-small;
+    font-size: x-small;
     line-break: loose;
     line-height: 100%;
     margin: 5px;
@@ -234,6 +235,7 @@ li input[type="checkbox"]::after {
 
 .dropdown-menu {
     border-width: 1.5px;
+    margin-top: 6px;
 }
 
 .dropdown-item {
@@ -247,12 +249,40 @@ li input[type="checkbox"]::after {
     text-align: center;
 }
 
+.btn-primary:hover {
+    background-color: #5490ea;
+    border-color: #5490ea;
+}
+
 #controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
     color: #5490ea;
 }
 
-#dropdown-menu-button {
+#dropdown-extend-button {
     color: #6c757d8f;
+}
+
+#dropdown-menu-button, #dropdown-menu-menu {
+    width: 250px;
+    text-align: left;
+}
+
+#dropdown-menu-button #expand-right {
+    text-align: right;
+    display: inline-block;
+    position: absolute;
+    right: 7px;
+}
+
+#dropdown-menu-button #expand-left {
+    text-align: left;
+    display: inline-block;
+    position: absolute;
+    left: 2px;
+}
+
+#dropdown-menu-button::after {
+    display: none;
 }
 
 #edit-defaults {
@@ -336,30 +366,49 @@ li input[type="checkbox"]::after {
     overflow-y: scroll;
     height: 375px;
     width: 64%;
+    word-break: normal;
 }
 
-#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #passcode-rechecker {
+#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #passcode-rechecker, #extend-form input {
     border-bottom-color: #33333315;
 }
 
-#settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input[type="password"]:hover, #passcode-rechecker:hover {
+#settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input[type="password"]:hover, #passcode-rechecker:hover, #extend-form input:hover {
     border-bottom-color: #33333335;
 }
 
-#settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input[type="password"]:focus, #passcode-rechecker:focus {
+#settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input[type="password"]:focus, #passcode-rechecker:focus, #extend-form input:focus {
     border-bottom-color: #33333325;
 }
 
-#settings-helper {
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: text;
-    position: absolute;
-    bottom: 25px;
-    right: 14px;
+#settings-container .dropdown .btn, #dropdown-menu-button {
+    border-color: transparent;
+    border-radius: 0%;
+    border-bottom-width: 3px;
+    color: #6c757d;
+    transition: all .08s;
 }
 
-#settings-container .dropdwon-menu, #settings-container .dropdown-toggle {
+#settings-container .dropdown .btn {
+    border-bottom-color: #33333315;
+}
+
+#settings-container .dropdown .btn:hover, #dropdown-menu-button:hover {
+    background-color: transparent;
+    color: #6c757d8f;
+    font-weight: bolder;
+    border-bottom-color: #33333335;
+}
+
+#settings-container .dropdown .btn:focus, #settings-container .dropdown .btn[aria-expanded=true], #dropdown-menu-button:focus, #dropdown-menu-button[aria-expanded=true] {
+    background-color: transparent;
+    color: #6c757d8f;
+    font-weight: bolder;
+    border-bottom-color: #33333335;
+    outline: none;
+}
+
+#settings-container .dropdown-menu, #settings-container .dropdown-toggle {
     width: 192px;
 }
 
@@ -371,9 +420,18 @@ li input[type="checkbox"]::after {
     display: inline-block;
 }
 
+#settings-helper {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
+    position: absolute;
+    bottom: 25px;
+    right: 14px;
+}
+
 #controller, #time-bar, #time-bar-macos {
     position: absolute;
-    top: 5px;
+    top: 4px;
     font-size: 18px;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -395,7 +453,7 @@ li input[type="checkbox"]::after {
 
 #tip {
     position: absolute;
-    bottom: 5px;
+    bottom: 8px;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
@@ -403,10 +461,23 @@ li input[type="checkbox"]::after {
 
 #all-sum {
     position: absolute;
-    bottom: 25px;
+    bottom: 30px;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
+}
+
+#bottom-btn {
+    opacity: 0;
+    transition: all 0.16s;
+    width: 192px;
+    position: absolute;
+    bottom: 8px;
+    z-index: 999;
+}
+
+#bottom-btn:hover, #buttom-btn:focus {
+    opacity: 1;
 }
 
 #notes {
@@ -449,8 +520,9 @@ li input[type="checkbox"]::after {
     margin-bottom: 1px;
 }
 
-#dropdown-tasks {
-    margin-left: 2.5px;
+#dropdown-extend {
+    margin-left: 6px;
+    margin-bottom: 2px;
 }
 
 #exit {

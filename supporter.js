@@ -58,9 +58,13 @@ function isInDark() {
             .settings-sidebar-block {color: #fefefe; background-color: #191919;}\
             #loader-wrapper .loader-section {background: #191919;}\
             .dropdown-item, .dropdown-item .text-info {color: #f5f5f5!important;}\
-            label, li, select {color: #f5f5f5;}\
-            input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {border-bottom-color: #cccccc33 !important;}\
-            input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {border-bottom-color: #cccccc28 !important;}\
+            label, li, select, #personalization input[type="text"] {color: #f5f5f5;}\
+            input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus,\
+            #settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container input:focus,\
+            #settings-container .dropdown .btn:focus, #dropdown-menu-button:focus\ {border-bottom-color: #cccccc33 !important;}\
+            input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover,\
+            #settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input:hover,\
+            #settings-container .dropdown .btn:hover, #dropdown-menu-button:hover{border-bottom-color: #cccccc28 !important;}\
             .hotkey-setting {color: #aaaaaa;}\
             </style>'
         );

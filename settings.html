@@ -161,10 +161,9 @@
                     </label>
                     <br />
                     <div class="dropdown">
-                        <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                            id="language-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
-                            aria-expanded="false">
-                        </button>
+                        <a class="btn btn-outline-secondary dropdown-toggle" id="language-dropdown-button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        </a>
                         <div class="dropdown-menu" id="language-select" aria-labelledby="language-dropdown-button">
                         </div>
                     </div>
@@ -264,6 +263,22 @@
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('timer-settings'));</script>
                 </p>
+                <!-- should count after locked setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="still-count-setting" type="checkbox" onchange="stillCountSetting()" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('is-still-count-setting-on'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('is-still-count-setting-on-tip'));</script>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- loose mode setting -->
                 <div class="row">
                     <div class="col-1 text-center">
@@ -591,10 +606,10 @@
                             <script>document.write(i18n.__("personalization-notify-sound-msg-time-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
+                            <a class="btn btn-outline-secondary dropdown-toggle"
                                 id="work-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
                                 aria-expanded="false">
-                            </button>
+                            </a>
                             <div class="dropdown-menu" id="work-time-end-sound-select"
                                 aria-labelledby="work-time-end-sound-dropdown-button">
                             </div>
@@ -603,10 +618,9 @@
                             <script>document.write(i18n.__("personalization-notify-sound-msg-all-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <button class="btn btn-outline-secondary dropdown-toggle" type="button"
-                                id="all-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
-                            </button>
+                            <a class="btn btn-outline-secondary dropdown-toggle" id="all-time-end-sound-dropdown-button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
                             <div class="dropdown-menu" id="all-time-end-sound-select"
                                 aria-labelledby="all-time-end-sound-dropdown-button">
                             </div>
@@ -783,7 +797,7 @@
         defaultArray.forEach(function (item, index, array) {
             append(item, index);
         });
-        setAsDefault(store.get("default-task"));
+        if (store.has("default-task")) setAsDefault(store.get("default-task"));
         function edit(index) {
             defaultArray[index].name = $("#title" + index).val();
             if (Number($("#work-time" + index).val()) != NaN && Number($("#work-time" + index).val()) >= 2) defaultArray[index].workTime = $("#work-time" + index).val();
@@ -1001,6 +1015,12 @@
             if (document.getElementById("loose-setting").checked == true) store.set("loose-mode", true);
             else store.set("loose-mode", false);
         }
+        if (store.get("should-stop-locked") == true) document.getElementById("still-count-setting").checked = true;
+        else document.getElementById("still-count-setting").checked = false;
+        function stillCountSetting() {
+            if (document.getElementById("still-count-setting").checked == true) store.set("should-stop-locked", true);
+            else store.set("should-stop-locked", false);
+        }
 
         //lock mode settings
         function lock(passcode, again) {
@@ -1075,7 +1095,7 @@
         function settingsBackup() {
             var cipherText = aes.encrypt(JSON.stringify(store.store), String(process.env.SETTING_BACKUP_KEY));
             copyToClipboard(cipherText.toString());
-            ipc.send("alert", i18n.__('copied'));
+            ipc.send("notify", i18n.__('copied'));
         }
         function settingsImport(token) {
             var bytes = aes.decrypt(token, String(process.env.SETTING_BACKUP_KEY));
@@ -1109,13 +1129,13 @@
         }
 
         var player = document.createElement("audio");//alert player
-        let workTimeEndSoundList = ['alarming', 'beep', 'beep2', 'gun', 'trumpet', 'whistle'];
+        let workTimeEndSoundList = ['alarming', 'beep', 'beep2', 'clock', 'gun', 'tick', 'trumpet', 'whistle'];
         for (i in workTimeEndSoundList) {
             $("#work-time-end-sound-select").append("\
             <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + workTimeEndSoundList[i] + "\")'>"
                 + workTimeEndSoundList[i] + "</a>");
         }
-        $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "whistle");
+        $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
         function workTimeEndSoundSetting(val) {
             try {
                 store.set("time-end-sound", val);
@@ -1128,13 +1148,13 @@
             }
         }
 
-        let allTimeEndSoundList = ['horns', 'magic', 'piano'];
+        let allTimeEndSoundList = ['clock', 'horns', 'magic', 'piano', 'tick', 'whistle'];
         for (i in allTimeEndSoundList) {
             $("#all-time-end-sound-select").append("\
             <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + allTimeEndSoundList[i] + "\")'>"
                 + allTimeEndSoundList[i] + "</a>");
         }
-        $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "magic");
+        $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "piano");
         function allTimeEndSoundSetting(val) {
             try {
                 store.set("all-end-sound", val);

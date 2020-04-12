@@ -16,7 +16,7 @@ const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     tray = null, contextMenu = null, settingsWinContextMenu = null,
-    resetAlarm = null, powerSaveBlockerId = null,
+    resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, predefinedTasks = null,
     pushNotificationLink = null,
@@ -110,7 +110,7 @@ function createWindow() {
             if (fullScreenProtection && isTimerWin && (!isLoose)) {
                 for (i in displays) {
                     if (displays[i].id == newDisplay.id) {
-                        addScreenSolution(newWindows[i], newDisplay);
+                        addScreenSolution(i, newDisplay);
                     }
                 }
             }
@@ -146,8 +146,8 @@ function setFullScreenMode(flag) {
     }
 }
 
-function addScreenSolution(objWindow, display) {
-    objWindow = new BrowserWindow({
+function addScreenSolution(windowNumber, display) {
+    newWindows[windowNumber] = new BrowserWindow({
         width: 364,
         height: 396,
         x: display.bounds.x,
@@ -162,12 +162,12 @@ function addScreenSolution(objWindow, display) {
         visibleOnAllWorkspaces: true
     });//optimize for cross platfrom
 
-    objWindow.loadFile('placeholder.html');
+    newWindows[windowNumber].loadFile('placeholder.html');
 
-    if (app.isPackaged) objWindow.setFocusable(false);
-    objWindow.setFullScreen(true);
-    objWindow.moveTop();
-    objWindow.setAlwaysOnTop(true);
+    if (app.isPackaged) newWindows[windowNumber].setFocusable(false);
+    newWindows[windowNumber].setFullScreen(true);
+    newWindows[windowNumber].moveTop();
+    newWindows[windowNumber].setAlwaysOnTop(true);
 }
 function multiScreenSolution(mode) {
     if (app.isReady()) {
@@ -176,11 +176,14 @@ function multiScreenSolution(mode) {
         for (i in displays) {
             if (displays[i].id != screen.getPrimaryDisplay().id) {
                 if (mode == "on") {
-                    addScreenSolution(newWindows[i], displays[i]);
+                    addScreenSolution(i, displays[i]);
                 } else {
                     if (newWindows[i] != null) {
-                        if (newWindows[i].isDestroyed() == false)
+                        try {
                             newWindows[i].destroy();
+                        } catch (e) {
+                            console.log(e);
+                        }
                     }
                 }
             }
@@ -376,7 +379,6 @@ app.on('ready', () => {
 
     try {
         store.set("just-launched", true);
-        store.set("fullscreen-protection", false);
     } catch (e) {
         console.log(e);
     }
@@ -474,15 +476,21 @@ app.on('ready', () => {
     }//alternated the former default time settings
 
     powerMonitor.on('lock-screen', () => {
-        if (powerSaveBlockerId)
-            if (powerSaveBlocker.isStarted(powerSaveBlockerId))
-                powerSaveBlocker.stop(powerSaveBlockerId);
-        if (win != null) win.webContents.send('alter-start-stop', 'stop');
+        if (store.get("should-stop-locked") != true) {
+            if (powerSaveBlockerId)
+                if (powerSaveBlocker.isStarted(powerSaveBlockerId))
+                    powerSaveBlocker.stop(powerSaveBlockerId);
+            if (win != null) win.webContents.send('alter-start-stop', 'stop');
+        }
     })
 
     powerMonitor.on('unlock-screen', () => {
-        powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
-        if (win != null) win.webContents.send('alter-start-stop', 'start')
+        if (powerSaveBlockerId)
+            if (!powerSaveBlocker.isStarted(powerSaveBlockerId))
+                powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+        if (store.get("should-stop-locked") != true) {
+            if (win != null) win.webContents.send('alter-start-stop', 'start')
+        }
     })
 
     if (process.platform == "win32") {
@@ -914,11 +922,6 @@ ipcMain.on('focus-mode-settings', function (event, message) {
 
 ipcMain.on('warning-giver-workend', function () {
     fullScreenProtection = false;
-    try {
-        store.set("fullscreen-protection", false);
-    } catch (e) {
-        console.log(e);
-    }
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
@@ -935,12 +938,22 @@ ipcMain.on('warning-giver-workend', function () {
             macOSFullscreenSolution(true);
             traySolution(true);
             if (app.isPackaged && (!isLoose)) win.setFocusable(false);
+            if (sleepBlockerId) {
+                if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
+                    sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+                }
+            }
         } else {
             multiScreenSolution("off");
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
             win.setFocusable(true);
+            if (sleepBlockerId) {
+                if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                    powerSaveBlocker.stop(sleepBlockerId);
+                }
+            }
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -953,11 +966,6 @@ ipcMain.on('warning-giver-workend', function () {
             }).then(function (response) {
                 if (restTimeFocused && (!isLoose)) {
                     fullScreenProtection = true;
-                    try {
-                        store.set("fullscreen-protection", true);
-                    } catch (e) {
-                        console.log(e);
-                    }
                 } else {
                     if (store.get("top") != true) {
                         win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
@@ -974,11 +982,6 @@ ipcMain.on('warning-giver-workend', function () {
 
 ipcMain.on('warning-giver-restend', function () {
     fullScreenProtection = false;
-    try {
-        store.set("fullscreen-protection", false);
-    } catch (e) {
-        console.log(e);
-    }
     if (win != null) {
         win.maximizable = false;
         isWorkMode = true;
@@ -995,12 +998,22 @@ ipcMain.on('warning-giver-restend', function () {
             macOSFullscreenSolution(true);
             traySolution(true);
             if (app.isPackaged) win.setFocusable(false);
+            if (sleepBlockerId) {
+                if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
+                    sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+                }
+            }
         } else {
             multiScreenSolution("off");
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
             win.setFocusable(true);
+            if (sleepBlockerId) {
+                if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                    powerSaveBlocker.stop(sleepBlockerId);
+                }
+            }
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -1013,11 +1026,6 @@ ipcMain.on('warning-giver-restend', function () {
             }).then(function (response) {
                 if (workTimeFocused) {
                     fullScreenProtection = true;
-                    try {
-                        store.set("fullscreen-protection", true);
-                    } catch (e) {
-                        console.log(e);
-                    }
                 } else {
                     if (store.get("top") != true) {
                         win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
@@ -1034,11 +1042,6 @@ ipcMain.on('warning-giver-restend', function () {
 
 ipcMain.on('warning-giver-all-task-end', function () {
     fullScreenProtection = false;
-    try {
-        store.set("fullscreen-protection", false);
-    } catch (e) {
-        console.log(e);
-    }
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
@@ -1066,10 +1069,33 @@ ipcMain.on('warning-giver-all-task-end', function () {
                     store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
             }).then(function (response) {
                 win.loadFile('index.html');//automatically back
+                if (!store.has("suggest-star")) {
+                    dialog.showMessageBox(win, {
+                        title: i18n.__('suggest-star'),
+                        type: "warning",
+                        message: i18n.__('suggest-star-msg'),
+                        checkboxLabel: i18n.__('suggest-star-chk'),
+                        checkboxChecked: true
+                    }).then(function (msg) {
+                        if (msg.checkboxChecked) {
+                            shell.openExternal("https://github.com/RoderickQiu/wnr");
+                        }
+                        try {
+                            store.set("suggest-star", "suggested");
+                        } catch (e) {
+                            console.log(e);
+                        }
+                    });
+                }
                 win.maximizable = false;
                 if (store.get("top") != true) {
                     win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
                     win.moveTop();
+                }
+                if (sleepBlockerId) {
+                    if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                        powerSaveBlocker.stop(sleepBlockerId);
+                    }
                 }
             })
         }, 1000);
@@ -1092,17 +1118,9 @@ ipcMain.on('update-feedback', function (event, message) {
                 }
             })
         else if (message == "no-update")
-            dialog.showMessageBox(settingsWin, {
-                title: i18n.__('no-update'),
-                type: "info",
-                message: i18n.__('no-update-msg')
-            })
+            notificationSolution(i18n.__('no-update'), i18n.__('no-update-msg'), "normal");
         else
-            dialog.showMessageBox(settingsWin, {
-                title: i18n.__('update-web-problem'),
-                type: "info",
-                message: i18n.__('update-web-problem-msg')
-            })
+            notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
     }
 })
 
@@ -1176,11 +1194,7 @@ ipcMain.on('global-shortcut-set', function (event, message) {
         }
     } catch (e) {
         hasFailed = true;
-        dialog.showMessageBox(settingsWin, {
-            title: i18n.__('settings'),
-            type: "warning",
-            message: i18n.__('hotkey-failed')
-        });
+        notificationSolution(i18n.__('settings'), i18n.__('hotkey-failed'), "normal");
         console.log(e);
     } finally {
         if (!hasFailed) {
@@ -1220,7 +1234,7 @@ function about() {
             aboutWin = new BrowserWindow({
                 parent: win,
                 width: 279,
-                height: 297,
+                height: 279,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1409,20 +1423,24 @@ ipcMain.on('locker-passcode', function (event, message) {
 })
 
 ipcMain.on('only-one-min-left', function () {
-    if (!store.get('fullscreen-protection'))
+    if (!fullScreenProtection)
         notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "normal")
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    progress = 1 - message;
+    progress = 1 - message / 100;
     if (win != null) win.setProgressBar(progress);
-    if (tray != null) tray.setToolTip(message * 100 + timeLeftTip)
+    if (tray != null) tray.setToolTip(message + timeLeftTip)
     if (process.platform == "darwin")
-        if (timeLeftOnBar != null) timeLeftOnBar.label = message * 100 + timeLeftTip;
+        if (timeLeftOnBar != null) timeLeftOnBar.label = message + timeLeftTip;
 })
 
-ipcMain.on("should-nap", function () {
-    notificationSolution(i18n.__('should-nap-now'), i18n.__('should-nap-now-msg'), "normal")
+ipcMain.on("notify", function (event, message) {
+    if (message != null) {
+        if (message.title != null && message.msg != null)
+            notificationSolution(message.title, message.msg, "normal");
+        else notificationSolution("wnr", message, "normal")
+    }
 })
 
 ipcMain.on("logger", function (event, message) {
@@ -1463,6 +1481,9 @@ ipcMain.on("timer-win", function (event, message) {
         if (powerSaveBlockerId)
             if (powerSaveBlocker.isStarted(powerSaveBlockerId))
                 powerSaveBlocker.stop(powerSaveBlockerId);
+        if (sleepBlockerId)
+            if (powerSaveBlocker.isStarted(sleepBlockerId))
+                powerSaveBlocker.stop(sleepBlockerId);
         isTimerWin = false;
         traySolution();
         macOSFullscreenSolution();
