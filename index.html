@@ -99,8 +99,7 @@
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
                 <i class="iconfont icon-info" id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
-                    class="iconfont icon-angle-down" id="window-hide"></i></a><span
-                id="no-use-space">&nbsp;&nbsp;</span>
+                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
                     id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
@@ -163,7 +162,7 @@
                     <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
                         <a class="dropdown-toggle" href="#" role="button" id="dropdown-extend-button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                            <span class="dropdown-default extreme-small font-weight-bold">
+                            <span class="dropdown-default extreme-small">
                                 <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
                             </span>
                         </a>
@@ -324,7 +323,7 @@
                     if (store.get("last-recorded-state").method == 1) {
                         window.location.href =
                             "timer.html?title=" + store.get("last-recorded-state").title
-                            + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                            + "&work-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
                             + "&rest-time=" + store.get("last-recorded-state").restTime
                             + "&loop=" + (store.get("infinity") ? 0 : 1)
                             + "&note=" + store.get("last-recorded-state").note
@@ -335,8 +334,8 @@
                     } else {
                         window.location.href =
                             "timer.html?title=" + store.get("last-recorded-state").title
-                            + "&work-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
-                            + "&rest-time=" + store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left")
+                            + "&work-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
+                            + "&rest-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
                             + "&loop=" + (store.get("infinity") ? 0 : 1)
                             + "&note=" + store.get("last-recorded-state").note
                             + "&method=2"

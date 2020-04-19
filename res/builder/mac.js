@@ -3,6 +3,9 @@ const Platform = builder.Platform
 
 const config = {
     "mac": {
+        "asarUnpack": [
+            "./node_modules/node-notifier/vendor/**"
+        ],
         "target": [
             "dmg"
         ],

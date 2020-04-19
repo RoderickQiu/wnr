@@ -3,6 +3,9 @@ const Platform = builder.Platform
 
 const config = {
     "win": {
+        "asarUnpack": [
+            "./node_modules/node-notifier/vendor/**",
+        ],
         "target": [
             "portable"
         ],

@@ -29,8 +29,7 @@
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="iconfont icon-info"
                     id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
-                    class="iconfont icon-angle-down" id="window-hide"></i></a><span
-                id="no-use-space">&nbsp;&nbsp;</span>
+                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small work"><i class="iconfont icon-minus"
                     id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-close-chk')" class="small work should-lock"><i class="iconfont icon-close"
@@ -267,7 +266,8 @@
                 wasCounting = true,
                 shouldNap,
                 napInterval = 0,
-                lastNapSecond = 0;
+                lastNapSecond = 0,
+                canStop = true;
 
             if (store.get("nap")) {
                 shouldNap = true;
@@ -282,7 +282,7 @@
             if (methodFromStart == 2) skipper();
 
             ipc.on('start-or-stop', function () {
-                stopper();
+                if (canStop) stopper();
             });
 
             ipc.on('alter-start-stop', function (event, message) {
@@ -317,6 +317,7 @@
             function warningGiver(isend) {
                 moreThanOneMin = 1;
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
+                canStop = false;
                 try {
                     store.set("last-recorded-minutes-left", -1);
                     store.set("last-recorded-hours-left", -1);
@@ -346,6 +347,7 @@
                         stopper();
                         $("#skipper").css("display", "inline");
                         if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        canStop = true;
                     });
                 }
             }
@@ -416,6 +418,7 @@
             }
 
             function ender() {
+                canStop = false;
                 window.clearInterval(int);
                 $("#only-one").css("display", "none");
                 $("#work-rest").text("");

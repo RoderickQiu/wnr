@@ -1,6 +1,6 @@
 const { app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, systemPreferences, Notification,
+    powerMonitor, systemPreferences,
     nativeTheme, screen, TouchBar }
     = require('electron');
 const Store = require('electron-store');
@@ -11,7 +11,8 @@ const windowsRelease = require('windows-release');
 var cmdOrCtrl = require('cmd-or-ctrl');
 var AV = require('leancloud-storage');
 var { Query } = AV;
-const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar
+const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
+const notifier = require('node-notifier')
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null,
@@ -27,7 +28,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
     store = null,
-    isLoose = false;
+    isLoose = false, isScreenLocked = false;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -72,7 +73,7 @@ function createWindow() {
         if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && app.isPackaged) {
             event.preventDefault();
             if (win != null)
-                notificationSolution("wnr", i18n.__('prevent-stop'), "normal");
+                notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
         }
     });
 
@@ -319,7 +320,7 @@ app.on('ready', () => {
     else hasMultiDisplays = false;
 
     if (process.platform == "win32") {
-        app.setAppUserModelId(process.execPath);//set the appUserModelId to use notification in Windows
+        app.setAppUserModelId("com.scrisstudio.wnr");//set the appUserModelId to use notification in Windows
         if (windowsRelease() == '7' && win != null) {
             let isNotified = store.has("windows-7-notification");
             if (isNotified == false) {
@@ -354,6 +355,11 @@ app.on('ready', () => {
         else return false;
     }
 
+    try {
+        store.set("version", require("./package.json").version);
+    } catch (e) {
+        console.log(e);
+    }
     try {
         if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
         else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
@@ -482,6 +488,7 @@ app.on('ready', () => {
                     powerSaveBlocker.stop(powerSaveBlockerId);
             if (win != null) win.webContents.send('alter-start-stop', 'stop');
         }
+        isScreenLocked = true;
     })
 
     powerMonitor.on('unlock-screen', () => {
@@ -489,8 +496,9 @@ app.on('ready', () => {
             if (!powerSaveBlocker.isStarted(powerSaveBlockerId))
                 powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
         if (store.get("should-stop-locked") != true) {
-            if (win != null) win.webContents.send('alter-start-stop', 'start')
+            if (win != null) win.webContents.send('alter-start-stop', 'start');
         }
+        isScreenLocked = false;
     })
 
     if (process.platform == "win32") {
@@ -566,41 +574,28 @@ function showOrHide() {
         }
 }
 
+// possible funcs: non-important, normal, hide-or-show, push-notification
 function notificationSolution(title, body, func) {
-    if (Notification.isSupported()) {
-        let notifier = new Notification({
+    notifier.notify(
+        {
+            sound: true,
+            wait: (func == "non-important") ? false : true,
             title: title,
-            body: body,
+            message: body,
             silent: false,
             icon: path.join(__dirname, process.platform == "darwin" ? '/res/icons/iconMac.png' : '\\res\\icons\\wnrIcon.png')
-        })
-        notifier.show();
-        notifier.removeAllListeners("click");
-        if (func == "hide-or-show")
-            notifier.once("click", function () {
-                if (win != null) {
-                    win.show();
-                }
-            });
-        else if (func == "push-notification")
-            notifier.once("click", function () {
-                shell.openExternal(pushNotificationLink);
-            });
-    } else {
-        if (win != null) {
-            dialog.showMessageBox(win, {
-                title: title,
-                type: "warning",
-                message: body,
-            }).then(function (response) {
-                if (func == "hide-or-show") {
-                    win.show();
-                } else if (func == "push-notification") {
-                    shell.openExternal(pushNotificationLink);
-                }
-            })
         }
-    }
+    );
+
+    notifier.removeAllListeners("click");
+    notifier.on('click', function () {
+        if (func == "hide-or-show") {
+            if (win != null) {
+                win.show();
+            }
+        } else if (func == "push-notification")
+            shell.openExternal(pushNotificationLink);
+    });
 }
 
 function traySolution(isFullScreen) {
@@ -617,7 +612,7 @@ function traySolution(isFullScreen) {
                 type: 'separator'
             }, {
                 label: i18n.__('start-or-stop'),
-                enabled: false,
+                enabled: isTimerWin,
                 click: function () {
                     if (win != null) win.webContents.send('start-or-stop')
                 }
@@ -665,6 +660,7 @@ function traySolution(isFullScreen) {
                     }
                 });//tray
                 tray.setContextMenu(contextMenu);
+                tray.setToolTip("wnr");
             }
         } else {
             if (win != null && (!isLoose)) win.closable = false;
@@ -683,6 +679,7 @@ function traySolution(isFullScreen) {
                 tray.removeAllListeners('click');
                 tray.setContextMenu(contextMenu);
                 tray.on('click', () => { ; })
+                tray.setToolTip("wnr");
             }
         }
     }
@@ -955,6 +952,12 @@ ipcMain.on('warning-giver-workend', function () {
                 }
             }
         }
+        if (isScreenLocked) {
+            notificationSolution((store.has("personalization-notification.work-time-end") ?
+                store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                (store.has("personalization-notification.work-time-end-msg") ?
+                    store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg')), "normal");
+        }
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: (store.has("personalization-notification.work-time-end") ?
@@ -962,7 +965,7 @@ ipcMain.on('warning-giver-workend', function () {
                 type: "warning",
                 message: (store.has("personalization-notification.work-time-end-msg") ?
                     store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
-                    + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                    + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
             }).then(function (response) {
                 if (restTimeFocused && (!isLoose)) {
                     fullScreenProtection = true;
@@ -1015,6 +1018,12 @@ ipcMain.on('warning-giver-restend', function () {
                 }
             }
         }
+        if (isScreenLocked) {
+            notificationSolution((store.has("personalization-notification.rest-time-end") ?
+                store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                (store.has("personalization-notification.rest-time-end-msg") ?
+                    store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
+        }
         setTimeout(function () {
             dialog.showMessageBox(win, {
                 title: (store.has("personalization-notification.rest-time-end") ?
@@ -1022,7 +1031,7 @@ ipcMain.on('warning-giver-restend', function () {
                 type: "warning",
                 message: (store.has("personalization-notification.rest-time-end-msg") ?
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
-                    + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                    + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
             }).then(function (response) {
                 if (workTimeFocused) {
                     fullScreenProtection = true;
@@ -1059,6 +1068,12 @@ ipcMain.on('warning-giver-all-task-end', function () {
             macOSFullscreenSolution(false);
             traySolution(false);
             win.setFocusable(true);
+        }
+        if (isScreenLocked) {
+            notificationSolution((store.has("personalization-notification.all-task-end") ?
+                store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
+                (store.has("personalization-notification.all-task-end-msg") ?
+                    store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')), "normal");
         }
         setTimeout(function () {
             dialog.showMessageBox(win, {
@@ -1424,7 +1439,7 @@ ipcMain.on('locker-passcode', function (event, message) {
 
 ipcMain.on('only-one-min-left', function () {
     if (!fullScreenProtection)
-        notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "normal")
+        notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "non-important")
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
@@ -1466,9 +1481,6 @@ ipcMain.on("timer-win", function (event, message) {
         traySolution();
         macOSFullscreenSolution();
         touchBarSolution("timer");
-        if (tray != null) {
-            contextMenu.items[2].enabled = true;
-        }
     } else {
         if (win != null) {
             win.focus();
@@ -1488,10 +1500,6 @@ ipcMain.on("timer-win", function (event, message) {
         traySolution();
         macOSFullscreenSolution();
         touchBarSolution("index");
-        if (tray != null) {
-            tray.setToolTip('wnr');
-            contextMenu.items[2].enabled = false;
-        }
         multiScreenSolution("off")
     }
 })

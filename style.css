@@ -208,6 +208,11 @@ li input[type="checkbox"]::after {
     margin: 5px;
 }
 
+.display-1 {
+    font-size: 7.5rem;
+    font-weight: 200;
+}
+
 .hotkeyset {
     color: #6c757d;
     width: 24px;
