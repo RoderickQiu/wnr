@@ -1251,10 +1251,10 @@ humanize-duration@^3.21.0:
   resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.22.0.tgz#b0b577e2071f231e69b71bfae25e1bb342ffb915"
   integrity sha1-sLV34gcfIx5ptxv64l4bs0L/uRU=
 
-i18n@0.8.6:
-  version "0.8.6"
-  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.8.6.tgz#9608c58bfb8e29db34aa9a09e37dccb9b5666e01"
-  integrity sha1-lgjFi/uOKds0qpoJ433MubVmbgE=
+i18n@0.9.0:
+  version "0.9.0"
+  resolved "https://registry.npmjs.org/i18n/-/i18n-0.9.0.tgz#5688d524e345a2f8787f11e1319c90755f20cbde"
+  integrity sha512-/Sie5k0xz8VoB0dilo0OPJic5gukT6j+/24aprosU700iWgHcyP5GqDwgNuNscwK2YkGHRE3fO/wn5d2Nc7dBw==
   dependencies:
     debug "*"
     make-plural "^6.0.1"
