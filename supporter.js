@@ -42,7 +42,7 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    const isDarkMode = store.get('isdark');
+    const isDarkMode = (store.get("dark-or-white") == "dark") || store.get('isdark');
     if (isDarkMode) {
         $('body').append(
             '<style id="darkmode-jetplane">\

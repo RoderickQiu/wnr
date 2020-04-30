@@ -235,7 +235,7 @@
                     $("#skipper").css("display", "inline");
                     if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                 });
-                if (store.get("fullscreen-experience") != true && store.get("settings-experience") != true) {
+                if (store.get("fullscreen-experience") != true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
                     try {
                         store.set("fullscreen-experience", true);
@@ -305,12 +305,14 @@
                     window.clearInterval(int);
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
+                    ipc.send("tray-image-change", "stop");
                 } else {
                     if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     int = self.setInterval(clock, 100);
                     $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                     isClockWorking = 1;//to restart
+                    ipc.send("tray-image-change", "start");
                 }
             }
 
@@ -369,7 +371,7 @@
                             $timeBar.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
-                            if (store.get("fullscreen-experience") != true && store.get("settings-experience") != true) {
+                            if (store.get("fullscreen-experience") != true) {
                                 $("#fullscreen-experience-tip").css("display", "inline-block");
                                 try {
                                     store.set("fullscreen-experience", true);
@@ -401,6 +403,14 @@
                             $timeBarMacOS.addClass("time-bar-focus");
                             $nowTiming.addClass("display-1");
                             $nowTiming.removeClass("h1");
+                            if (store.get("fullscreen-experience") != true) {
+                                $("#fullscreen-experience-tip").css("display", "inline-block");
+                                try {
+                                    store.set("fullscreen-experience", true);
+                                } catch (e) {
+                                    console.log(e);
+                                }
+                            }
                         } else if (restTimeFocused == true) {
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");

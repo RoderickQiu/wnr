@@ -175,10 +175,6 @@
     "paste": "粘貼",
     "select-all": "全選",
     "cut": "剪切",
-    "should-sent": "使用數據發送設置：",
-    "should-sent-msg-part-1": "我們會匿名采集打開wnr的次數、你來自什麽國家等不重要的非隱私數據；你的使用記錄、設置等不會被上傳。你有權拒絕上傳數據，雖然我們希望獲得數據以改進服務。數據不會用于商業目的公開，並將會被匿名保存。",
-    "should-sent-msg-part-2": "如果需要，你可以查看我們的服務提供商的",
-    "should-sent-msg-part-3": "隱私協議",
     "notification-settings": "1. 提醒設置",
     "timer-settings": "2. 計時器設置",
     "general-settings": "3. 通用設置",
@@ -186,8 +182,8 @@
     "windows-7-notification-msg": "如果你在使用時出現wnr黑屏的情況，請爲wnr打開“Vista兼容模式”。",
     "personalization": "個性化設置",
     "is-hide-from-dock-setting-on": "從Dock隱藏設置：",
-    "is-hide-from-dock-setting-on-tip": "如果此項被選中，則將會把wnr從Dock隱藏，你將會只能從狀態欄菜單打開wnr（不推薦）。",
-    "fullscreen-experience-tip": "你可能是第一次使用全屏專心模式。",
+    "is-hide-from-dock-setting-on-tip": "如果此項被選中，則將會把wnr從Dock隱藏，你將會只能從狀態欄菜單打開wnr。",
+    "fullscreen-experience-tip": "你可能是第一次使用全屏專心模式。（如果你不需要強力體驗，可以在設置中開啓寬松全屏模式。）",
     "fullscreen-experience-tip-mistake": "誤點？這次你可以撤銷",
     "quit-from-timer-in-lock-mode-msg": "鎖定模式下退出需輸入密碼",
     "personalization-notification": "通知文本個性化：",
@@ -212,5 +208,10 @@
     "is-still-count-setting-on-tip": "如果此項被選中，則將會在電腦睡眠或鎖屏後繼續計時，而不會暫停。",
     "suggest-star": "似乎wnr對你有用。",
     "suggest-star-msg": "如果有GitHub的帳號，歡迎前往GitHub給我們一個寶貴的Star！",
-    "suggest-star-chk": "前往GitHub項目地址"
+    "suggest-star-chk": "前往GitHub項目地址",
+    "personalization-white-or-dark": "個性化選擇顔色模式：",
+    "personalization-white-or-dark-tip": "選擇是始終使用明亮模式、暗黑模式還是自動切換（部分系統不支持自動切換，將會始終使用明亮模式）。",
+    "personalization-white-or-dark-mode-white": "明亮模式",
+    "personalization-white-or-dark-mode-dark": "暗黑模式",
+    "personalization-white-or-dark-mode-auto": "自動選擇"
 }

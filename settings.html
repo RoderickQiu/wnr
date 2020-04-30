@@ -416,26 +416,6 @@
                     </div>
                 </div>
                 <br />
-                <!-- data sent setting -->
-                <div class="row">
-                    <div class="col-1 text-center">
-                        <input id="data-sent-setting" type="checkbox" onchange="dataSentSetting()" />
-                    </div>
-                    <div class="col-11 text-left">
-                        <label>
-                            <script>document.write(i18n.__('should-sent'));</script>
-                        </label>
-                        <br />
-                        <span class="text-muted small">
-                            <script>
-                                document.write(i18n.__('should-sent-msg-part-1') + i18n.__('should-sent-msg-part-2')
-                                    + "<a href=\"javascript:require('electron').shell.openExternal('https://tongji.baidu.com/web/help/article?id=330&type=0')\">"
-                                    + i18n.__('should-sent-msg-part-3') + "</a>" + i18n.__('period-symbol'));
-                            </script>
-                        </span>
-                    </div>
-                </div>
-                <br />
             </div>
 
             <!-- 4. lock mode settings -->
@@ -557,6 +537,32 @@
             <!-- 6. personalization -->
             <div id="personalization" class="should-lock">
                 <ul>
+                    <li>
+                        <script>document.write(i18n.__('personalization-white-or-dark'));</script>
+                        <br />
+                        <div class="dropdown">
+                            <a class="btn btn-outline-secondary dropdown-toggle" id="white-or-dark-dropdown-button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-menu" id="white-or-dark-select"
+                                aria-labelledby="white-or-dark-dropdown-button">
+                                <a class='dropdown-item' href='javascript:darkOrWhiteSetting("light")'>
+                                    <script>document.write(i18n.__('personalization-white-or-dark-mode-white'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:darkOrWhiteSetting("dark")'>
+                                    <script>document.write(i18n.__('personalization-white-or-dark-mode-dark'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:darkOrWhiteSetting("auto")'>
+                                    <script>document.write(i18n.__('personalization-white-or-dark-mode-auto'));</script>
+                                </a>
+                            </div>
+                        </div>
+                        <p class="small text-muted">
+                            <script>
+                                document.write(i18n.__('personalization-white-or-dark-tip'));
+                            </script>
+                        </p>
+                    </li>
                     <!-- personalization for notification -->
                     <li>
                         <script>document.write(i18n.__('personalization-notification'));</script>
@@ -974,12 +980,6 @@
             if (document.getElementById("infinity-mode-setting").checked == true) store.set("infinity", true);
             else store.set("infinity", false);
         }
-        if (store.get("should-sent") != false) document.getElementById("data-sent-setting").checked = true;
-        else document.getElementById("data-sent-setting").checked = false;
-        function dataSentSetting() {
-            if (document.getElementById("data-sent-setting").checked != false) store.set("should-sent", true);
-            else store.set("should-sent", false);
-        }
         if (store.get("dock-hide") == true) document.getElementById("hide-from-dock-setting").checked = true;
         else document.getElementById("hide-from-dock-setting").checked = false;
         function hideFromDockSetting() {
@@ -1164,6 +1164,21 @@
                 player.play();
             } catch (e) {
                 console.log(e);
+            }
+        }
+
+        if (store.get("dark-or-white") == "light") $("#white-or-dark-dropdown-button").html(i18n.__('personalization-white-or-dark-mode-white'));
+        else if (store.get("dark-or-white") == "dark") $("#white-or-dark-dropdown-button").html(i18n.__('personalization-white-or-dark-mode-dark'));
+        else $("#white-or-dark-dropdown-button").html(i18n.__('personalization-white-or-dark-mode-auto'));
+        function darkOrWhiteSetting(val) {
+            if (store.get('dark-or-white') != val) {
+                try {
+                    if (val == "auto") store.delete("dark-or-white");
+                    else store.set("dark-or-white", val);
+                } catch (e) {
+                    console.log(e);
+                }
+                timeOut = setTimeout("call('relauncher')", 500);
             }
         }
     </script>

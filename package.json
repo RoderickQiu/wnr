@@ -40,7 +40,7 @@
     "winreg": "1.2.4"
   },
   "devDependencies": {
-    "electron": "7.2.3",
+    "electron": "7.2.4",
     "electron-builder": "22.3.2"
   }
 }

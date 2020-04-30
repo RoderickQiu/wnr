@@ -175,10 +175,6 @@
     "paste": "Paste",
     "select-all": "Select All",
     "cut": "Cut",
-    "should-sent": "Data sending setting: ",
-    "should-sent-msg-part-1": "We will collect some non-privacy information anonymously, such as which country you came from. Your settings and usage logs won't be uploaded. You have the right to secede, though we sincerely want to have some basic data to improve our service quality. Your data won't be identified and will be stored anonymously, and will never be shown for commercial use. ",
-    "should-sent-msg-part-2": "If it is needed, you can refer to our analysis service provider's",
-    "should-sent-msg-part-3": "Privacy Policy",
     "notification-settings": "1. Notifications",
     "timer-settings": "2. Timer",
     "general-settings": "3. General",
@@ -212,5 +208,10 @@
     "is-still-count-setting-on-tip": "If this is enabled, then the timer won't pause when the computer sleeps or is locked.",
     "suggest-star": "We hope you like wnr.",
     "suggest-star-msg": "Can you give us a star on GitHub? ",
-    "suggest-star-chk": "Go to GitHub"
+    "suggest-star-chk": "Go to GitHub",
+    "personalization-white-or-dark": "Personalization about color mode: ",
+    "personalization-white-or-dark-tip": "Select whether you like light mode or the dark one.",
+    "personalization-white-or-dark-mode-white": "Light Mode",
+    "personalization-white-or-dark-mode-dark": "Dark Mode",
+    "personalization-white-or-dark-mode-auto": "Auto Switch"
 }

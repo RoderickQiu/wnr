@@ -28,7 +28,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
     store = null,
-    isLoose = false, isScreenLocked = false;
+    isLoose = false, isScreenLocked = false,
+    isStopped = false;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -76,20 +77,6 @@ function createWindow() {
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
         }
     });
-
-    //triggers for focusing
-    /*win.on('blur', () => {
-        win.maximizable = false;
-        if (isTimerWin && fullScreenProtection && win != null) {
-            win.hide();
-            win.setKiosk(false);
-            win.moveTop();
-            win.setKiosk(true);
-            win.show();
-            if (!dockHide)
-                notificationSolution(i18n.__('stop-now'), i18n.__('stop-now-msg'), "hide-or-show");//notify not to do meaningless things
-        }
-    });*/
 
     win.on('show', () => {
         if (isTimerWin) {
@@ -394,25 +381,27 @@ app.on('ready', () => {
             notificationSolution(i18n.__('wrong-folder-notification-title'), i18n.__('wrong-folder-notification-content'), "normal");
         }
         nativeTheme.on('updated', function theThemeHasChanged() {
-            if (nativeTheme.shouldUseDarkColors) {
-                try {
-                    store.set('isdark', true);
-                } catch (e) {
-                    console.log(e);
-                }
-                if (win != null) {
-                    win.setBackgroundColor('#191919');
-                    win.webContents.send('darkModeChanges');
-                }
-            } else {
-                try {
-                    store.set('isdark', false);
-                } catch (e) {
-                    console.log(e);
-                }
-                if (win != null) {
-                    win.setBackgroundColor('#fefefe');
-                    win.webContents.send('darkModeChanges');
+            if (!store.has("dark-or-white")) {
+                if (nativeTheme.shouldUseDarkColors) {
+                    try {
+                        store.set('isdark', true);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    if (win != null) {
+                        win.setBackgroundColor('#191919');
+                        win.webContents.send('darkModeChanges');
+                    }
+                } else {
+                    try {
+                        store.set('isdark', false);
+                    } catch (e) {
+                        console.log(e);
+                    }
+                    if (win != null) {
+                        win.setBackgroundColor('#fefefe');
+                        win.webContents.send('darkModeChanges');
+                    }
                 }
             }
         })
@@ -600,6 +589,9 @@ function notificationSolution(title, body, func) {
 
 function traySolution(isFullScreen) {
     if (app.isReady()) {
+        if (tray != null) {
+            if (!isTimerWin) tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+        }
         if (!isFullScreen) {
             if ((!store.get("islocked")) && win != null) win.closable = true;
             if (process.platform == "win32" && win != null) win.setSkipTaskbar(false);
@@ -860,12 +852,17 @@ function leanCloudSolution() {
 
 function isDarkMode() {
     if (app.isReady()) {
-        try {
-            store.set('isdark', false);
-            darkModeSettingsFinder();
-            return store.get('isdark');
-        } catch (e) {
-            console.log(e)
+        if (store.has("dark-or-white")) {
+            if (store.get("dark-or-white") == "light") return false;
+            else return true;
+        } else {
+            try {
+                store.set('isdark', false);
+                darkModeSettingsFinder();
+                return store.get('isdark');
+            } catch (e) {
+                console.log(e)
+            }
         }
     }
 }
@@ -1315,8 +1312,8 @@ function settings(mode) {
                 console.log(e);
             }
             settingsWin.loadFile("settings.html");
-            win.setAlwaysOnTop(true);
-            settingsWin.setAlwaysOnTop(true);
+            if (app.isPackaged) win.setAlwaysOnTop(true);
+            if (app.isPackaged) settingsWin.setAlwaysOnTop(true);
             settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
@@ -1440,6 +1437,18 @@ ipcMain.on('locker-passcode', function (event, message) {
 ipcMain.on('only-one-min-left', function () {
     if (!fullScreenProtection)
         notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "non-important")
+})
+
+ipcMain.on('tray-image-change', function (event, message) {
+    if (tray != null && process.platform == "win32") {
+        if (message == "stop") {
+            tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
+            isStopped = true;
+        } else {
+            tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+            isStopped = false;
+        }
+    }
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {

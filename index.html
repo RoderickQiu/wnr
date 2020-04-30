@@ -203,29 +203,6 @@
     </div>
 
     <script>
-        if (store.get("should-sent") != false)
-            if (!store.has("never-sent")) {
-                request('https://wnr-tj.now.sh/index.html', function (error, response, body) {//analysis for users
-                    if (error || response.statusCode != 200) {
-                        console.log("Analysis got an error.")
-                    } else {
-                        try {
-                            store.set("never-sent", false);
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    }
-                });
-            } else {
-                request('https://wnr-tj.now.sh/analysis.html', function (error, response, body) {//analysis for users
-                    if (error || response.statusCode != 200) {
-                        console.log("Analysis got an error.")
-                    }
-                });
-            }
-    </script>
-
-    <script>
         isTimerWindow(false);
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
