@@ -88,7 +88,7 @@ function createWindow() {
 
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
-        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged && (!isLoose))) app.relaunch();
+        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged && (!isLoose))) relaunchSolution();
     });
 
     screen.on('display-added', (event, newDisplay) => {
@@ -123,6 +123,20 @@ function alarmSet() {
                     "hide-or-show");
             }
         }, 600000)//alarm you for using wnr
+    }
+}
+
+function relaunchSolution() {
+    if (process.env.PORTABLE_EXECUTABLE_DIR) {
+        var opt = { args: process.argv.slice(1).concat(['--relaunch']), execPath: process.execPath };
+        if (app.isPackaged && process.env.PORTABLE_EXECUTABLE_FILE != undefined) {
+            opt.execPath = process.env.PORTABLE_EXECUTABLE_FILE;
+        }
+        app.relaunch(opt);
+        app.quit();
+    } else {
+        app.relaunch();
+        app.quit()
     }
 }
 
@@ -1165,8 +1179,7 @@ ipcMain.on('delete-all-data', function () {
         }).then(function (msg) {
             if (msg.checkboxChecked || msg.response != 0) {
                 store.clear();
-                app.relaunch();
-                app.quit()
+                relaunchSolution()
             }
         })
     }
@@ -1222,11 +1235,10 @@ ipcMain.on('global-shortcut-set', function (event, message) {
 ipcMain.on('relauncher', function () {
     try {
         store.set('just-relaunched', true);
-        app.relaunch();
     } catch (e) {
         console.log(e);
     }
-    app.exit(0)
+    relaunchSolution()
 })
 
 ipcMain.on('window-hide', function () {
@@ -1428,8 +1440,7 @@ ipcMain.on('locker-passcode', function (event, message) {
             if (message == "lock-mode-on" || message == "lock-mode-off") {
                 if (settingsWin != null) settingsWin.close();
                 settingsWin = null;
-                app.relaunch();
-                app.exit()
+                relaunchSolution()
             }
         })
 })
