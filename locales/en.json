@@ -213,5 +213,6 @@
     "personalization-white-or-dark-tip": "Select whether you like light mode or the dark one.",
     "personalization-white-or-dark-mode-white": "Light Mode",
     "personalization-white-or-dark-mode-dark": "Dark Mode",
-    "personalization-white-or-dark-mode-auto": "Auto Switch"
+    "personalization-white-or-dark-mode-auto": "Auto Switch",
+    "stopped": "Stopped"
 }

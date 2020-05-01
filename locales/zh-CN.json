@@ -120,7 +120,7 @@
 	"working": "工作",
 	"resting": "休息",
 	"looping": "循环",
-	"time-left": "% 时间剩余",
+	"time-left": "% 剩余",
 	"add": "添加",
 	"delete": "删除",
 	"predefined-tasks-settings": "预设设置",
@@ -213,5 +213,6 @@
 	"personalization-white-or-dark-tip": "选择是始终使用明亮模式、暗黑模式还是自动切换（部分系统不支持自动切换，将会始终使用明亮模式）。",
 	"personalization-white-or-dark-mode-white": "明亮模式",
 	"personalization-white-or-dark-mode-dark": "暗黑模式",
-	"personalization-white-or-dark-mode-auto": "自动选择"
+	"personalization-white-or-dark-mode-auto": "自动选择",
+	"stopped": "已暂停"
 }

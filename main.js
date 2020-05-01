@@ -604,7 +604,10 @@ function notificationSolution(title, body, func) {
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (tray != null) {
-            if (!isTimerWin) tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+            if (!isTimerWin) {
+                if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+                else tray.setTitle("");
+            }
         }
         if (!isFullScreen) {
             if ((!store.get("islocked")) && win != null) win.closable = true;
@@ -1451,12 +1454,14 @@ ipcMain.on('only-one-min-left', function () {
 })
 
 ipcMain.on('tray-image-change', function (event, message) {
-    if (tray != null && process.platform == "win32") {
+    if (tray != null) {
         if (message == "stop") {
-            tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
+            if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
+            else tray.setTitle(" " + i18n.__('stopped'));
             isStopped = true;
         } else {
-            tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+            if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+            else tray.setTitle(" " + 100 - (progress * 100) + timeLeftTip);
             isStopped = false;
         }
     }
@@ -1466,8 +1471,10 @@ ipcMain.on("progress-bar-set", function (event, message) {
     progress = 1 - message / 100;
     if (win != null) win.setProgressBar(progress);
     if (tray != null) tray.setToolTip(message + timeLeftTip)
-    if (process.platform == "darwin")
+    if (process.platform == "darwin") {
         if (timeLeftOnBar != null) timeLeftOnBar.label = message + timeLeftTip;
+        if (tray != null) tray.setTitle(" " + message + timeLeftTip);
+    }
 })
 
 ipcMain.on("notify", function (event, message) {

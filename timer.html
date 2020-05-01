@@ -385,6 +385,7 @@
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");
                             $nowTiming.addClass("h1");
+                            $("#fullscreen-experience-tip").css("display", "none");
                         }
                         warningGiver(1);
                     } else {
@@ -416,6 +417,7 @@
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");
                             $nowTiming.addClass("h1");
+                            $("#fullscreen-experience-tip").css("display", "none");
                         }
                         if (shouldNap) {
                             lastNapSecond = workTime / 1000;
@@ -431,6 +433,7 @@
                 canStop = false;
                 window.clearInterval(int);
                 $("#only-one").css("display", "none");
+                $("#fullscreen-experience-tip").css("display", "none");
                 $("#work-rest").text("");
                 $nowTiming.text(i18n.__('ended'));
                 isClockWorking = 0;
