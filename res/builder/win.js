@@ -7,7 +7,8 @@ const config = {
             "./node_modules/node-notifier/vendor/**"
         ],
         "target": [
-            "nsis"
+            "nsis",
+            "zip"
         ],
         "icon": "res/icons/iconWin.ico",
         "files": [
