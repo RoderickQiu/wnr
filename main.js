@@ -436,21 +436,21 @@ app.on('ready', () => {
             console.log(e);
         }
         predefinedTasks = new Array({
-            name: "wnr recommended",
+            name: i18n.__('predefined-task-wnr-recommended'),
             workTime: 30,
             restTime: 6,
             loops: 5,
             focusWhenWorking: false,
             focusWhenResting: true
         }, {
-            name: "pomodoro",
+            name: i18n.__('predefined-task-pomodoro'),
             workTime: 25,
             restTime: 5,
             loops: 4,
             focusWhenWorking: false,
             focusWhenResting: true
         }, {
-            name: "class time",
+            name: i18n.__('predefined-task-class-time'),
             workTime: 40,
             restTime: 10,
             loops: 1,
@@ -1376,8 +1376,8 @@ function tourguide() {
         if (win != null) {
             tourWin = new BrowserWindow({
                 parent: win,
-                width: 672,
-                height: 600,
+                width: 400,
+                height: 720,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,

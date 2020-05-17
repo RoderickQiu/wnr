@@ -902,10 +902,10 @@ electron-store@5.1.1:
     conf "^6.2.1"
     type-fest "^0.7.1"
 
-electron@7.2.4:
-  version "7.2.4"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-7.2.4.tgz#9fc0446dae23ead897af8742470cb18da55c6ce9"
-  integrity sha1-n8BEba4j6tiXr4dCRwyxjaVcbOk=
+electron@7.3.0:
+  version "7.3.0"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-7.3.0.tgz#b4e1bd1efe32314534dba9b60ea5cc688216f3b3"
+  integrity sha1-tOG9Hv4yMUU026m2DqXMaIIW87M=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -1246,21 +1246,21 @@ http-signature@~1.2.0:
     jsprim "^1.2.2"
     sshpk "^1.7.0"
 
-humanize-duration@^3.21.0:
+humanize-duration@^3.22.0:
   version "3.22.0"
   resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.22.0.tgz#b0b577e2071f231e69b71bfae25e1bb342ffb915"
   integrity sha1-sLV34gcfIx5ptxv64l4bs0L/uRU=
 
-i18n@0.9.0:
-  version "0.9.0"
-  resolved "https://registry.npmjs.org/i18n/-/i18n-0.9.0.tgz#5688d524e345a2f8787f11e1319c90755f20cbde"
-  integrity sha512-/Sie5k0xz8VoB0dilo0OPJic5gukT6j+/24aprosU700iWgHcyP5GqDwgNuNscwK2YkGHRE3fO/wn5d2Nc7dBw==
+i18n@0.9.1:
+  version "0.9.1"
+  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.9.1.tgz#a9dda09e582286c81a584374ac9f2aaef7ec37fb"
+  integrity sha1-qd2gnlgihsgaWEN0rJ8qrvfsN/s=
   dependencies:
     debug "*"
-    make-plural "^6.0.1"
+    make-plural "^6.2.1"
     math-interval-parser "^2.0.1"
     messageformat "^2.3.0"
-    mustache "*"
+    mustache "^4.0.1"
     sprintf-js "^1.1.2"
 
 iconv-lite@^0.5.1:
@@ -1608,10 +1608,10 @@ make-plural@^4.3.0:
   optionalDependencies:
     minimist "^1.2.0"
 
-make-plural@^6.0.1:
-  version "6.1.0"
-  resolved "https://registry.npm.taobao.org/make-plural/download/make-plural-6.1.0.tgz?cache=0&sync_timestamp=1583663748886&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fmake-plural%2Fdownload%2Fmake-plural-6.1.0.tgz#490b381874b7c454bace11b23b899809b95b9e8b"
-  integrity sha1-SQs4GHS3xFS6zhGyO4mYCblbnos=
+make-plural@^6.2.1:
+  version "6.2.1"
+  resolved "https://registry.npm.taobao.org/make-plural/download/make-plural-6.2.1.tgz#2790af1d05fb2fc35a111ce759ffdb0aca1339a3"
+  integrity sha1-J5CvHQX7L8NaERznWf/bCsoTOaM=
 
 matcher@^2.1.0:
   version "2.1.0"
@@ -1731,7 +1731,7 @@ ms@^2.1.1:
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
 
-mustache@*:
+mustache@^4.0.1:
   version "4.0.1"
   resolved "https://registry.npm.taobao.org/mustache/download/mustache-4.0.1.tgz#d99beb031701ad433338e7ea65e0489416c854a2"
   integrity sha1-2ZvrAxcBrUMzOOfqZeBIlBbIVKI=
@@ -1753,14 +1753,14 @@ node-notifier@7.0.0:
     uuid "^7.0.3"
     which "^2.0.2"
 
-node-shi@0.4.1:
-  version "0.4.1"
-  resolved "https://registry.npm.taobao.org/node-shi/download/node-shi-0.4.1.tgz#478e14034bb302e1c8cf033ae344632cbdc8cedb"
-  integrity sha1-R44UA0uzAuHIzwM640RjLL3Izts=
+node-shi@0.4.2:
+  version "0.4.2"
+  resolved "https://registry.npm.taobao.org/node-shi/download/node-shi-0.4.2.tgz#fc7a6aadf95d614320b4226aee2366be189a1405"
+  integrity sha1-/HpqrfldYUMgtCJq7iNmvhiaFAU=
   dependencies:
     chinese-numbers-converter "^2.3.1"
     english2number "^1.0.8"
-    humanize-duration "^3.21.0"
+    humanize-duration "^3.22.0"
     js-pinyin "^0.1.9"
 
 normalize-package-data@^2.5.0:

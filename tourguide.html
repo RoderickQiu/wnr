@@ -14,6 +14,7 @@
     <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
     <script src="res/lib/jquery.slim.min.js"></script>
     <script src="res/lib/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="res/lib/iconfont.css" />
     <link rel="stylesheet" type="text/css" href="res/lib/bootstrap.min.css" />
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
@@ -21,11 +22,12 @@
 <body>
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
-        <div id="about" class="justify-content-center text-center small">
+        <div id="tourguide" class="justify-content-center text-center small">
             <div id="tourguide-part-1">
-                <p class="h3 rest font-weight-bolder">
+                <img src="res/icons/wnrIcon.png" width="60px" /><br /><br />
+                <p class="h2 rest font-weight-bolder">
                     <script>document.write(i18n.__('welcome-part-1'))</script>
-                </p>
+                </p><br />
                 <center class="text-muted">
                     <script>document.write(i18n.__('welcome-part-2'))</script>
                 </center><br />
@@ -36,12 +38,82 @@
                 | <a href="javascript:window.close()">
                     <script>document.write(i18n.__('welcome-part-4'))</script></a><br /><br />
             </div>
+            <div id="tourguide-part-2">
+                <img src="res/icons/wnrIcon.png" width="40px" /><br /><br />
+                <p class="h2 rest font-weight-bolder" id="title">
+                </p><br />
+                <div class="lead" id="content">
+                </div><br />
+                <div id="switch">
+                    <a href="javascript:switcher('prev')" class="text-muted">
+                        <i class="iconfont icon-angle-left" id="prev"></i></a>
+                    <a href="javascript:switcher('next')" class="text-muted">
+                        <i class="iconfont icon-angle-right" id="next"></i></a>
+                    <script>
+                        $("#prev").attr("title", i18n.__('tourguide-prev'));
+                        $("#next").attr("title", i18n.__('tourguide-next'));
+                    </script>
+                </div>
+                <div id="finish" class="text-center">
+                    <a href="javascript:window.close()" class="btn btn-primary">
+                        <script>document.write(i18n.__('tourguide-finish'))</script></a>
+                    &nbsp;|&nbsp;
+                    <a href="javascript:switcher('prev')">
+                        <script>document.write(i18n.__('tourguide-prev'))</script>
+                    </a>
+                </div>
+                <br />
+            </div>
         </div>
+        <img id="tourguide-img" src="res/tourguide/2-1.png" />
     </div>
     <script>
+        var nowAt = 0;
+        $("#tourguide-part-2").hide();
+        $("#tourguide-img").hide();
         function tourguide() {
-            getHelp("guide/1-basic-usage");
-            setTimeout("window.close()", 500);
+            $("#tourguide-part-1").hide();
+            $("#tourguide-part-2").show();
+            $("#tourguide-img").show();
+            switcher("next");
+        }
+        function switcher(mode) {
+            if (mode == "next") {
+                nowAt++;
+            } else nowAt--;
+            if (nowAt > 0 && nowAt < 6) {
+                $("#tourguide-img").attr("src", "res/tourguide/2-" + nowAt + ".png");
+                if (nowAt == 1)
+                    $("#content").html(i18n.__('tourguide-part-2-1-content-part-1') + "<br />"
+                        + i18n.__('tourguide-part-2-1-content-part-2') + "<br />" + i18n.__('tourguide-part-2-1-content-part-3') + "<br /><b>" + i18n.__('tourguide-part-2-1-content-part-4') + "</b>");
+                else if (nowAt == 2)
+                    $("#content").html('<b>' + i18n.__('tourguide-part-2-2-content-part-1') + "</b><br />"
+                        + i18n.__('tourguide-part-2-2-content-part-2') + "<br />" + i18n.__('tourguide-part-2-2-content-part-3'));
+                else if (nowAt == 3)
+                    $("#content").html(i18n.__('tourguide-part-2-3-content-part-1') + "<b>"
+                        + i18n.__('tourguide-part-2-3-content-part-2') + "</b><br />" + i18n.__('tourguide-part-2-3-content-part-3') + "<br /><span class='extreme-small'>"
+                        + i18n.__('tourguide-part-2-3-content-part-4') + "</span>");
+                else if (nowAt == 4)
+                    $("#content").html(i18n.__('tourguide-part-2-4-content-part-1') + "<br />"
+                        + i18n.__('tourguide-part-2-4-content-part-2') + "<b>" + i18n.__('tourguide-part-2-4-content-part-3') + "</b>");
+                else if (nowAt == 5)
+                    $("#content").html(i18n.__('tourguide-part-2-5-content-part-1') + "<b>"
+                        + i18n.__('tourguide-part-2-5-content-part-2') + "</b><br />" + i18n.__('tourguide-part-2-5-content-part-3') + "<br />" +
+                        i18n.__('tourguide-part-2-5-content-part-4') + "<br /><b>"
+                        + i18n.__('tourguide-part-2-5-content-part-5') + "</b><br />");
+                $("#title").text(i18n.__('tourguide-part-2-' + nowAt + '-title'));
+            } else if (nowAt <= 0) {
+                $("#tourguide-part-2").hide();
+                $("#tourguide-part-1").show();
+                $("#tourguide-img").hide();
+            }
+            if (nowAt == 5) {
+                $("#switch").hide();
+                $("#finish").show();
+            } else {
+                $("#switch").show();
+                $("#finish").hide();
+            }
         }
     </script>
     <script src="renderer.js"></script>

@@ -8,7 +8,7 @@ const config = {
         ],
         "target": [
             "nsis",
-            "zip"
+            "7z"
         ],
         "icon": "res/icons/iconWin.ico",
         "files": [
@@ -17,6 +17,7 @@ const config = {
             "!res/icons/*Mac*",
             "!res/icons/*.psd"
         ],
+        "artifactName": "${productName}-${version}-Win.${ext}"
     },
     "nsis": {
         "installerLanguages": [
