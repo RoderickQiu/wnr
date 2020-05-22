@@ -503,7 +503,7 @@ li input[type="checkbox"]::after {
 
 #tourguide {
     position: absolute;
-    width: 80%;
+    width: 72%;
     height: 100%;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -520,7 +520,7 @@ li input[type="checkbox"]::after {
     position: absolute;
     line-height: 1.5;
     text-align: left;
-    top: 5%;
+    top: 8%;
     border: none;
     outline: none;
 }
