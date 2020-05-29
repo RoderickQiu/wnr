@@ -51,6 +51,11 @@
   resolved "https://registry.npm.taobao.org/@leancloud/adapter-types/download/@leancloud/adapter-types-1.0.2.tgz?cache=0&sync_timestamp=1584687046261&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40leancloud%2Fadapter-types%2Fdownload%2F%40leancloud%2Fadapter-types-1.0.2.tgz#1cac623f71b73c1224e6415633a3deb54aaa102e"
   integrity sha1-HKxiP3G3PBIk5kFWM6PetUqqEC4=
 
+"@leancloud/adapter-types@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/adapter-types/download/@leancloud/adapter-types-3.0.0.tgz#71c5e8e37065bea4914650848b55a6262d658577"
+  integrity sha1-ccXo43BlvqSRRlCEi1WmJi1lhXc=
+
 "@leancloud/adapters-superagent@^1.0.2":
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.0.2.tgz#15ac9cdc0390762bb2a2c1a5557c7311dcda6bc6"
@@ -60,7 +65,16 @@
     "@types/superagent" "^4.1.7"
     superagent "^5.2.2"
 
-"@leancloud/platform-adapters-browser@^1.0.1", "@leancloud/platform-adapters-browser@^1.0.2":
+"@leancloud/adapters-superagent@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.0.4.tgz#05d4d5a67a50fddf51e80ea775aac9457414a10b"
+  integrity sha1-BdTVpnpQ/d9R6A6ndarJRXQUoQs=
+  dependencies:
+    "@leancloud/adapter-types" "^3.0.0"
+    "@types/superagent" "^4.1.7"
+    superagent "^5.2.2"
+
+"@leancloud/platform-adapters-browser@^1.0.1":
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.0.2.tgz#c26e020451c12917db81b74e80758024e7cde9bc"
   integrity sha1-wm4CBFHBKRfbgbdOgHWAJOfN6bw=
@@ -68,7 +82,15 @@
     "@leancloud/adapter-types" "^1.0.2"
     "@leancloud/adapters-superagent" "^1.0.2"
 
-"@leancloud/platform-adapters-node@^1.0.1", "@leancloud/platform-adapters-node@^1.0.2":
+"@leancloud/platform-adapters-browser@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.1.0.tgz#bc6f114752c985e9651ef197747699b365251a86"
+  integrity sha1-vG8RR1LJhellHvGXdHaZs2UlGoY=
+  dependencies:
+    "@leancloud/adapter-types" "^3.0.0"
+    "@leancloud/adapters-superagent" "^1.0.4"
+
+"@leancloud/platform-adapters-node@^1.0.1":
   version "1.0.2"
   resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-node/download/@leancloud/platform-adapters-node-1.0.2.tgz#256d8095d1063cf02d50ddfabc70133a28ab066f"
   integrity sha1-JW2AldEGPPAtUN36vHATOiirBm8=
@@ -79,12 +101,32 @@
     localstorage-memory "^1.0.2"
     ws "^5.2.2"
 
-"@leancloud/platform-adapters-weapp@^1.0.2", "@leancloud/platform-adapters-weapp@^1.0.3":
+"@leancloud/platform-adapters-node@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-node/download/@leancloud/platform-adapters-node-1.1.0.tgz#2368537335ce88a507969970c8759268cf434b28"
+  integrity sha1-I2hTczXOiKUHlplwyHWSaM9DSyg=
+  dependencies:
+    "@leancloud/adapter-types" "^3.0.0"
+    "@leancloud/adapters-superagent" "^1.0.4"
+    "@types/ws" "^7.2.2"
+    localstorage-memory "^1.0.2"
+    ws "^5.2.2"
+
+"@leancloud/platform-adapters-weapp@^1.0.2":
   version "1.0.3"
   resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-weapp/download/@leancloud/platform-adapters-weapp-1.0.3.tgz#2c4175b6440a3d56051ae43836bc956a030cd7a1"
   integrity sha1-LEF1tkQKPVYFGuQ4NryVagMM16E=
   dependencies:
     "@leancloud/adapter-types" "^1.0.2"
+    event-target-shim "^5.0.1"
+    miniprogram-api-typings "^2.10.2"
+
+"@leancloud/platform-adapters-weapp@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-weapp/download/@leancloud/platform-adapters-weapp-1.2.0.tgz#1cd4d5fc52bb8a83264dfa00f85fe67dc999f6cc"
+  integrity sha1-HNTV/FK7ioMmTfoA+F/mfcmZ9sw=
+  dependencies:
+    "@leancloud/adapter-types" "^3.0.0"
     event-target-shim "^5.0.1"
     miniprogram-api-typings "^2.10.2"
 
@@ -1275,10 +1317,10 @@ humanize-duration@^3.22.0:
   resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.22.0.tgz#b0b577e2071f231e69b71bfae25e1bb342ffb915"
   integrity sha1-sLV34gcfIx5ptxv64l4bs0L/uRU=
 
-i18n@0.9.1:
-  version "0.9.1"
-  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.9.1.tgz#a9dda09e582286c81a584374ac9f2aaef7ec37fb"
-  integrity sha1-qd2gnlgihsgaWEN0rJ8qrvfsN/s=
+i18n@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.10.0.tgz#a4ec14176f81e29302331bd106403edfce535cce"
+  integrity sha1-pOwUF2+B4pMCMxvRBkA+385TXM4=
   dependencies:
     debug "*"
     make-plural "^6.2.1"
@@ -1571,15 +1613,15 @@ leancloud-realtime@^5.0.0-rc.2:
     protobufjs "^5.0.1"
     uuid "^3.0.0"
 
-leancloud-storage@4.5.3:
-  version "4.5.3"
-  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.5.3.tgz?cache=0&sync_timestamp=1585890395242&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fleancloud-storage%2Fdownload%2Fleancloud-storage-4.5.3.tgz#2d90ef4816537be918f62140a79d7a3c06f9a9a5"
-  integrity sha1-LZDvSBZTe+kY9iFAp516PAb5qaU=
+leancloud-storage@4.6.0:
+  version "4.6.0"
+  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.6.0.tgz#3e47573f18ff33f92642632565d21f20a58f5d06"
+  integrity sha1-PkdXPxj/M/kmQmMlZdIfIKWPXQY=
   dependencies:
-    "@leancloud/adapter-types" "^1.0.2"
-    "@leancloud/platform-adapters-browser" "^1.0.2"
-    "@leancloud/platform-adapters-node" "^1.0.2"
-    "@leancloud/platform-adapters-weapp" "^1.0.3"
+    "@leancloud/adapter-types" "^3.0.0"
+    "@leancloud/platform-adapters-browser" "^1.1.0"
+    "@leancloud/platform-adapters-node" "^1.1.0"
+    "@leancloud/platform-adapters-weapp" "^1.2.0"
     babel-runtime "^6.26.0"
     debug "^3.1.0"
     eventemitter3 "^2.0.3"
@@ -1789,10 +1831,10 @@ nice-try@^1.0.4:
   resolved "https://registry.npm.taobao.org/nice-try/download/nice-try-1.0.5.tgz?cache=0&sync_timestamp=1584699726257&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnice-try%2Fdownload%2Fnice-try-1.0.5.tgz#a3378a7696ce7d223e88fc9b764bd7ef1089e366"
   integrity sha1-ozeKdpbOfSI+iPybdkvX7xCJ42Y=
 
-node-notifier@7.0.0:
-  version "7.0.0"
-  resolved "https://registry.npm.taobao.org/node-notifier/download/node-notifier-7.0.0.tgz#513bc42f2aa3a49fce1980a7ff375957c71f718a"
-  integrity sha1-UTvELyqjpJ/OGYCn/zdZV8cfcYo=
+node-notifier@7.0.1:
+  version "7.0.1"
+  resolved "https://registry.npm.taobao.org/node-notifier/download/node-notifier-7.0.1.tgz#a355e33e6bebacef9bf8562689aed0f4230ca6f9"
+  integrity sha1-o1XjPmvrrO+b+FYmia7Q9CMMpvk=
   dependencies:
     growly "^1.3.0"
     is-wsl "^2.1.1"

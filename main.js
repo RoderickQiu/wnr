@@ -258,6 +258,8 @@ app.on('will-quit', () => {
 app.on('ready', () => {
     createWindow();
 
+    app.allowRendererProcessReuse = false;
+
     if (process.env.PORTABLE_EXECUTABLE_DIR) {
         store = new Store({ cwd: process.env.PORTABLE_EXECUTABLE_DIR, name: 'wnr-config' });//accept portable
     } else store = new Store();
@@ -272,7 +274,11 @@ app.on('ready', () => {
     i18n.configure({
         locales: languageCodeList,
         directory: __dirname + '/locales',
-        register: global
+        register: global,
+        missingKeyFn(locale, value) {
+            console.warn(`missing translation of "${value}" in [${locale}]!`)
+            return `${value}-[${locale}]`;
+        }
     });
     if (store.get("i18n") == undefined) {
         var lang = app.getLocale();

@@ -21,7 +21,11 @@ const languageList = ['en', 'zh-CN', 'zh-TW'],//locale code
 
 i18n.configure({
     locales: languageList,
-    directory: __dirname + '/locales'
+    directory: __dirname + '/locales',
+    missingKeyFn(locale, value) {
+        console.warn(`missing translation of "${value}" in [${locale}]!`)
+        return `${value}-[${locale}]`;
+    }
 });
 i18n.setLocale(store.get("i18n"));//国际化组件默认设置
 
