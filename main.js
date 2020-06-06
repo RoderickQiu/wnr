@@ -978,28 +978,40 @@ ipcMain.on('warning-giver-workend', function () {
                 (store.has("personalization-notification.work-time-end-msg") ?
                     store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg')), "normal");
         }
-        setTimeout(function () {
-            dialog.showMessageBox(win, {
-                title: (store.has("personalization-notification.work-time-end") ?
-                    store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
-                type: "warning",
-                message: (store.has("personalization-notification.work-time-end-msg") ?
-                    store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
-                    + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
-            }).then(function (response) {
-                if (restTimeFocused && (!isLoose)) {
-                    fullScreenProtection = true;
-                } else {
-                    if (store.get("top") != true) {
-                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                        win.moveTop();
-                    }
-                    if (dockHide) app.dock.hide();
+        if (store.get("no-check-time-end")) {
+            if (restTimeFocused && (!isLoose)) {
+                fullScreenProtection = true;
+            } else {
+                if (store.get("top") != true) {
+                    win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                    win.moveTop();
                 }
-                win.webContents.send('warning-closed');
-                win.maximizable = false;
-            })
-        }, 1500)
+                if (dockHide) app.dock.hide();
+            }
+            win.maximizable = false;
+        } else
+            setTimeout(function () {
+                dialog.showMessageBox(win, {
+                    title: (store.has("personalization-notification.work-time-end") ?
+                        store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                    type: "warning",
+                    message: (store.has("personalization-notification.work-time-end-msg") ?
+                        store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                        + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                }).then(function (response) {
+                    if (restTimeFocused && (!isLoose)) {
+                        fullScreenProtection = true;
+                    } else {
+                        if (store.get("top") != true) {
+                            win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                            win.moveTop();
+                        }
+                        if (dockHide) app.dock.hide();
+                    }
+                    win.webContents.send('warning-closed');
+                    win.maximizable = false;
+                })
+            }, 1500)
     }
 })
 
@@ -1044,28 +1056,40 @@ ipcMain.on('warning-giver-restend', function () {
                 (store.has("personalization-notification.rest-time-end-msg") ?
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
         }
-        setTimeout(function () {
-            dialog.showMessageBox(win, {
-                title: (store.has("personalization-notification.rest-time-end") ?
-                    store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
-                type: "warning",
-                message: (store.has("personalization-notification.rest-time-end-msg") ?
-                    store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
-                    + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
-            }).then(function (response) {
-                if (workTimeFocused) {
-                    fullScreenProtection = true;
-                } else {
-                    if (store.get("top") != true) {
-                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                        win.moveTop();
-                    }
-                    if (dockHide) app.dock.hide();
+        if (store.get("no-check-time-end")) {
+            if (workTimeFocused) {
+                fullScreenProtection = true;
+            } else {
+                if (store.get("top") != true) {
+                    win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                    win.moveTop();
                 }
-                win.webContents.send('warning-closed');
-                win.maximizable = false;
-            })
-        }, 1000)
+                if (dockHide) app.dock.hide();
+            }
+            win.maximizable = false;
+        } else
+            setTimeout(function () {
+                dialog.showMessageBox(win, {
+                    title: (store.has("personalization-notification.rest-time-end") ?
+                        store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                    type: "warning",
+                    message: (store.has("personalization-notification.rest-time-end-msg") ?
+                        store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                        + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                }).then(function (response) {
+                    if (workTimeFocused) {
+                        fullScreenProtection = true;
+                    } else {
+                        if (store.get("top") != true) {
+                            win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                            win.moveTop();
+                        }
+                        if (dockHide) app.dock.hide();
+                    }
+                    win.webContents.send('warning-closed');
+                    win.maximizable = false;
+                })
+            }, 1000)
     }
 })
 
@@ -1095,45 +1119,57 @@ ipcMain.on('warning-giver-all-task-end', function () {
                 (store.has("personalization-notification.all-task-end-msg") ?
                     store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')), "normal");
         }
-        setTimeout(function () {
-            dialog.showMessageBox(win, {
-                title: (store.has("personalization-notification.all-task-end") ?
-                    store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
-                type: "warning",
-                message: (store.has("personalization-notification.all-task-end-msg") ?
-                    store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
-            }).then(function (response) {
-                win.loadFile('index.html');//automatically back
-                if (!store.has("suggest-star")) {
-                    dialog.showMessageBox(win, {
-                        title: i18n.__('suggest-star'),
-                        type: "warning",
-                        message: i18n.__('suggest-star-msg'),
-                        checkboxLabel: i18n.__('suggest-star-chk'),
-                        checkboxChecked: true
-                    }).then(function (msg) {
-                        if (msg.checkboxChecked) {
-                            shell.openExternal("https://github.com/RoderickQiu/wnr");
-                        }
-                        try {
-                            store.set("suggest-star", "suggested");
-                        } catch (e) {
-                            console.log(e);
-                        }
-                    });
+        if (store.get("no-check-time-end")) {
+            win.maximizable = false;
+            if (store.get("top") != true) {
+                win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                win.moveTop();
+            }
+            if (sleepBlockerId) {
+                if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                    powerSaveBlocker.stop(sleepBlockerId);
                 }
-                win.maximizable = false;
-                if (store.get("top") != true) {
-                    win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                    win.moveTop();
-                }
-                if (sleepBlockerId) {
-                    if (powerSaveBlocker.isStarted(sleepBlockerId)) {
-                        powerSaveBlocker.stop(sleepBlockerId);
+            }
+        } else
+            setTimeout(function () {
+                dialog.showMessageBox(win, {
+                    title: (store.has("personalization-notification.all-task-end") ?
+                        store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
+                    type: "warning",
+                    message: (store.has("personalization-notification.all-task-end-msg") ?
+                        store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
+                }).then(function (response) {
+                    win.loadFile('index.html');//automatically back
+                    if (!store.has("suggest-star")) {
+                        dialog.showMessageBox(win, {
+                            title: i18n.__('suggest-star'),
+                            type: "warning",
+                            message: i18n.__('suggest-star-msg'),
+                            checkboxLabel: i18n.__('suggest-star-chk'),
+                            checkboxChecked: true
+                        }).then(function (msg) {
+                            if (msg.checkboxChecked) {
+                                shell.openExternal("https://github.com/RoderickQiu/wnr");
+                            }
+                            try {
+                                store.set("suggest-star", "suggested");
+                            } catch (e) {
+                                console.log(e);
+                            }
+                        });
                     }
-                }
-            })
-        }, 1000);
+                    win.maximizable = false;
+                    if (store.get("top") != true) {
+                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                        win.moveTop();
+                    }
+                    if (sleepBlockerId) {
+                        if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                            powerSaveBlocker.stop(sleepBlockerId);
+                        }
+                    }
+                })
+            }, 1000);
         alarmSet()
     }
 })

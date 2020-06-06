@@ -188,6 +188,23 @@
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('notification-settings'));</script>
                 </p>
+                <!-- check after time end setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="check-after-time-end-setting" type="checkbox" onchange="checkAfterTimeEndSetting()"
+                            checked />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('check-after-time-end-setting'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('check-after-time-end-setting-tip'));</script>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- notifying sound setting -->
                 <div class="row">
                     <div class="col-1 text-center">
@@ -1017,6 +1034,12 @@
         function looseSetting() {
             if (document.getElementById("loose-setting").checked == true) store.set("loose-mode", true);
             else store.set("loose-mode", false);
+        }
+        if (store.get("no-check-time-end") == true) document.getElementById("check-after-time-end-setting").checked = false;
+        else document.getElementById("check-after-time-end-setting").checked = true;
+        function checkAfterTimeEndSetting() {
+            if (document.getElementById("check-after-time-end-setting").checked == true) store.set("no-check-time-end", false);
+            else store.set("no-check-time-end", true);
         }
         if (store.get("should-stop-locked") == true) document.getElementById("still-count-setting").checked = true;
         else document.getElementById("still-count-setting").checked = false;

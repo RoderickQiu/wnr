@@ -214,10 +214,10 @@
     "personalization-white-or-dark-mode-dark": "Dark Mode",
     "personalization-white-or-dark-mode-auto": "Auto Switch",
     "stopped": "Stopped",
-    "tourguide-part-2-1-content-part-1": "- People often study or work too much in a row, which can lead to the decline of working efficiency.",
+    "tourguide-part-2-1-content-part-1": "- People often study or work too much in a row, which can cause decline of working efficiency.",
     "tourguide-part-2-1-content-part-2": "- People sometimes stare at the screen all the day.",
     "tourguide-part-2-1-content-part-3": "- People sometimes relax too much.",
-    "tourguide-part-2-1-content-part-4": "And wnr aimes to solve these problems.",
+    "tourguide-part-2-1-content-part-4": "And wnr aims to solve these problems.",
     "tourguide-part-2-1-title": "It's for you.",
     "tourguide-part-2-2-content-part-1": "Light, Simple, Elegant, Restrained.",
     "tourguide-part-2-2-content-part-2": "These minimalist principles are also wnr's design goals.",
@@ -243,5 +243,7 @@
     "tourguide-next": "Next page",
     "predefined-task-wnr-recommended": "wnr recommended",
     "predefined-task-pomodoro": "pomodoro",
-    "predefined-task-class-time": "class time"
+    "predefined-task-class-time": "class time",
+    "check-after-time-end-setting": "Check after periods end: ",
+    "check-after-time-end-setting-tip": "If this is enabled, then a check box will be shown each time a period ends, and only when the check box is closed will next period starts."
 }

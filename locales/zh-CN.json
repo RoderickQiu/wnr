@@ -243,5 +243,7 @@
 	"tourguide-next": "进入下一页",
 	"predefined-task-wnr-recommended": "建议计划",
 	"predefined-task-pomodoro": "番茄计时",
-	"predefined-task-class-time": "上课时间"
+	"predefined-task-class-time": "上课时间",
+	"check-after-time-end-setting": "时间结束后确认框显示设置：",
+	"check-after-time-end-setting-tip": "如果此项被选中，则一段时间结束后，将会持续播放提示音并显示确认框，点击确认后才会开始下一段时间。不选中时将直接开始下一段时间并只播放一声提示音。"
 }

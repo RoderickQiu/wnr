@@ -174,7 +174,8 @@
             h = i18n.__('h'),
             min = i18n.__('min'),
             s = i18n.__('s'),
-            player = document.createElement("audio");//alert player
+            player = document.createElement("audio"),//alert player
+            stopperTimeout = null;
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -229,7 +230,7 @@
                 $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
-                let stopperTimeout = setTimeout(stopper, 500);
+                if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                 ipc.once('warning-closed', function () {
                     stopper();
                     $("#skipper").css("display", "inline");
@@ -334,15 +335,23 @@
                     }
                     player.loop = true;
                     player.play();
-                    setTimeout(function () {
-                        player.loop = false;
-                    }, 20000);
+                    if (store.get("no-check-time-end")) {
+                        setTimeout(function () {
+                            player.loop = false;
+                        }, 3000);
+                        $("#skipper").css("display", "inline");
+                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        canStop = true;
+                    } else
+                        setTimeout(function () {
+                            player.loop = false;
+                        }, 20000);
                 }//different sound for different circumstances
                 if (isend == 0) ipc.send('warning-giver-all-task-end');
                 else {
                     if (isend == 1) ipc.send('warning-giver-workend');
                     else ipc.send('warning-giver-restend');
-                    let stopperTimeout = setTimeout(stopper, 500);
+                    if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         player.loop = false;
                         player.pause();
@@ -438,6 +447,7 @@
                 $nowTiming.text(i18n.__('ended'));
                 isClockWorking = 0;
                 $("#stopper").text("");
+                $bottomBar.css("width", "0%");
                 ipc.send("progress-bar-set", 2);//the progress-bar-set is using (1-message), so when message is 2, the answer is -1
                 if (systemName != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");

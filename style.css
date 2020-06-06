@@ -434,7 +434,7 @@ li input[type="checkbox"]::after {
     right: 14px;
 }
 
-#controller, #time-bar, #time-bar-macos {
+#controller, #time-bar, #time-bar-macos, #logo-bar {
     position: absolute;
     top: 4px;
     font-size: 18px;
@@ -450,6 +450,14 @@ li input[type="checkbox"]::after {
 #time-bar {
     left: 8px;
     padding: 2px;
+}
+
+#logo-bar {
+    left: 8px;
+    display: inline-block;
+    border: 5px solid transparent;
+    background-clip: padding-box;
+    -webkit-app-region: drag;
 }
 
 #work-rest, #now-timing {
@@ -531,6 +539,13 @@ li input[type="checkbox"]::after {
     transform: translateX(-50%);
     width: 100%;
     bottom: 0;
+    z-index: -9999;
+}
+
+#switch a {
+    font-size: 24px;
+    padding: 6px;
+    z-index: 9999;
 }
 
 #bottom-bar {
