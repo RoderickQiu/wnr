@@ -544,7 +544,7 @@ app.on('ready', () => {
         })
     }//backport when shadow disabled
 
-    leanId = process.env.LEAN_ID, leanKey = process.env.LEAN_KEY;
+    leanId = process.env.LEAN_ID ? process.env.LEAN_ID : null, leanKey = process.env.LEAN_KEY ? process.env.LEAN_KEY : null;
     leanCloudSolution();
 })
 
@@ -836,41 +836,43 @@ ipcMain.on("settings-win-context-menu", function (event, message) {
 })
 
 function leanCloudSolution() {
-    try {
-        AV.init({
-            appId: leanId,
-            appKey: leanKey
-        });
+    if (leanId != null && leanKey != null)
+        try {
+            AV.init({
+                appId: leanId,
+                appKey: leanKey
+            });
 
-        var pushNotifications = new AV.Query('notifications');
-        pushNotifications.descending('createdAt');
-        pushNotifications.limit(3);
+            var pushNotifications = new AV.Query('notifications');
+            pushNotifications.descending('createdAt');
+            pushNotifications.limit(3);
 
-        pushNotifications.find().then(function (notifications) {
-            notifications.forEach(function (notification) {
-                let targetVersion = notification.get('targetVersion').replace("v", "");
-                if (targetVersion == null || targetVersion == "" || targetVersion == require("./package.json").version.toString()) {
-                    let content = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
-                    let title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
-                    let link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
-                    let id = notification.get('objectId');
-                    if (!store.get(id)) {
-                        pushNotificationLink = link;
-                        if (pushNotificationLink != "" && pushNotificationLink != null)
-                            notificationSolution(title, content, "push-notification");
-                        else notificationSolution(title, content, "normal");
-                        try {
-                            store.set(id, true);
-                        } catch (e) {
-                            console.log(e);
+            pushNotifications.find().then(function (notifications) {
+                notifications.forEach(function (notification) {
+                    let targetVersion = notification.get('targetVersion').replace("v", "");
+                    if (targetVersion == null || targetVersion == "" || targetVersion == require("./package.json").version.toString()) {
+                        let content = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
+                        let title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
+                        let link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
+                        let id = notification.get('objectId');
+                        if (!store.get(id)) {
+                            pushNotificationLink = link;
+                            if (pushNotificationLink != "" && pushNotificationLink != null)
+                                notificationSolution(title, content, "push-notification");
+                            else notificationSolution(title, content, "normal");
+                            try {
+                                store.set(id, true);
+                            } catch (e) {
+                                console.log(e);
+                            }
                         }
                     }
-                }
+                })
             })
-        })
-    } catch (e) {
-        console.log(e)
-    }
+        } catch (e) {
+            console.log(e)
+        }
+    else console.log("No LeanCloud key provided, skipped.")
 }
 
 function isDarkMode() {

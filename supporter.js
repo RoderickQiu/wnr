@@ -70,6 +70,7 @@ function isInDark() {
             #settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container input:hover,\
             #settings-container .dropdown .btn:hover, #dropdown-menu-button:hover{border-bottom-color: #cccccc28 !important;}\
             .hotkey-setting {color: #aaaaaa;}\
+            html {border: #ffffff33 1px solid;}\
             </style>'
         );
     } else {
