@@ -1119,12 +1119,12 @@
         var encoding = require("crypto-js/enc-utf8");
         var copyToClipboard = require("copy-to-clipboard");
         function settingsBackup() {
-            var cipherText = aes.encrypt(JSON.stringify(store.store), String(process.env.SETTING_BACKUP_KEY));
+            var cipherText = aes.encrypt(JSON.stringify(store.store), String("We all love wnr, so please do not use this passcode to do bad things."));
             copyToClipboard(cipherText.toString());
             ipc.send("notify", i18n.__('copied'));
         }
         function settingsImport(token) {
-            var bytes = aes.decrypt(token, String(process.env.SETTING_BACKUP_KEY));
+            var bytes = aes.decrypt(token, String("We all love wnr, so please do not use this passcode to do bad things."));
             var isAllRight = true;
             try {
                 var decryptedData = JSON.parse(bytes.toString(encoding));
