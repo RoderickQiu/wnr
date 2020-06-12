@@ -933,10 +933,10 @@ electron-publish@22.6.1:
     lazy-val "^1.0.4"
     mime "^2.4.5"
 
-electron-store@5.1.1:
-  version "5.1.1"
-  resolved "https://registry.npm.taobao.org/electron-store/download/electron-store-5.1.1.tgz#3040e5b4ad25d2e4caea59d505646c1e7c94a09b"
-  integrity sha1-MEDltK0l0uTK6lnVBWRsHnyUoJs=
+electron-store@5.2.0:
+  version "5.2.0"
+  resolved "https://registry.npm.taobao.org/electron-store/download/electron-store-5.2.0.tgz#a15718fc1fa21acfd07af55f9b94f9fa6a536665"
+  integrity sha1-oVcY/B+iGs/QevVfm5T5+mpTZmU=
   dependencies:
     conf "^6.2.1"
     type-fest "^0.7.1"
@@ -1613,10 +1613,10 @@ leancloud-realtime@^5.0.0-rc.2:
     protobufjs "^5.0.1"
     uuid "^3.0.0"
 
-leancloud-storage@4.6.0:
-  version "4.6.0"
-  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.6.0.tgz#3e47573f18ff33f92642632565d21f20a58f5d06"
-  integrity sha1-PkdXPxj/M/kmQmMlZdIfIKWPXQY=
+leancloud-storage@4.6.1:
+  version "4.6.1"
+  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.6.1.tgz#48d11ab0a8a313e320f5de3f1b5d2c8983fb8491"
+  integrity sha1-SNEasKijE+Mg9d4/G10siYP7hJE=
   dependencies:
     "@leancloud/adapter-types" "^3.0.0"
     "@leancloud/platform-adapters-browser" "^1.1.0"
@@ -2737,10 +2737,10 @@ window-size@^0.1.4:
   resolved "https://registry.npm.taobao.org/window-size/download/window-size-0.1.4.tgz#f8e1aa1ee5a53ec5bf151ffa09742a6ad7697876"
   integrity sha1-+OGqHuWlPsW/FR/6CXQqatdpeHY=
 
-windows-release@3.3.0:
-  version "3.3.0"
-  resolved "https://registry.npm.taobao.org/windows-release/download/windows-release-3.3.0.tgz#dce167e9f8be733f21c849ebd4d03fe66b29b9f0"
-  integrity sha1-3OFn6fi+cz8hyEnr1NA/5mspufA=
+windows-release@3.3.1:
+  version "3.3.1"
+  resolved "https://registry.npm.taobao.org/windows-release/download/windows-release-3.3.1.tgz?cache=0&sync_timestamp=1591610095899&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fwindows-release%2Fdownload%2Fwindows-release-3.3.1.tgz#cb4e80385f8550f709727287bf71035e209c4ace"
+  integrity sha1-y06AOF+FUPcJcnKHv3EDXiCcSs4=
   dependencies:
     execa "^1.0.0"
 

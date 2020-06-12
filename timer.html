@@ -175,7 +175,8 @@
             min = i18n.__('min'),
             s = i18n.__('s'),
             player = document.createElement("audio"),//alert player
-            stopperTimeout = null;
+            stopperTimeout = null,
+            pausingTimeout = null;
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -307,6 +308,7 @@
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
+                    if (store.get("alarmtip") != false) pausingTimeout = setInterval(function () { ipc.send("notify", { title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'), msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content') }); }, 600000);
                 } else {
                     if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
@@ -314,6 +316,7 @@
                     $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                     isClockWorking = 1;//to restart
                     ipc.send("tray-image-change", "start");
+                    if (pausingTimeout) window.clearInterval(pausingTimeout);
                 }
             }
 
@@ -461,6 +464,7 @@
             }
 
             function skipper() {
+                if (pausingTimeout) window.clearInterval(pausingTimeout);
                 $("#skipper").css("display", "none");
                 $("#skipper-space").css("display", "none");
                 $("#passcode-rechecker").css("display", "none");
