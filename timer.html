@@ -279,7 +279,7 @@
             } else shouldNap = false;
 
             startTime = new Date().getTime();
-            int = setInterval(clock, 200);
+            int = setInterval(clock, 250);
 
             if (methodFromStart == 2) skipper();
 
@@ -312,7 +312,7 @@
                 } else {
                     if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                     else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    int = self.setInterval(clock, 100);
+                    int = self.setInterval(clock, 250);
                     $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                     isClockWorking = 1;//to restart
                     ipc.send("tray-image-change", "start");
