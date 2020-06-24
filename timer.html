@@ -76,6 +76,11 @@
                         '<br /><a href="javascript:mistakeResolver()" class="rest">' +
                         i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
+            <div id="fullscreen-too-long-tip" class="small font-weight-bold text-muted text-center">
+                <script>document.write(i18n.__('fullscreen-too-long-tip') +
+                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+            </div>
             <script>
                 $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
                 $('#back-index').attr('title', i18n.__('back-index'));
@@ -223,6 +228,7 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#notes").html(note);
+            $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
                 ipc.send('warning-giver-restend');
                 $("#controller").css("display", "none");
@@ -244,6 +250,11 @@
                     } catch (e) {
                         console.log(e);
                     }
+                } else if (workTime >= 600000) {
+                    $("#fullscreen-too-long-tip").css("display", "block");
+                    setTimeout(function () {
+                        $("#fullscreen-too-long-tip").css("display", "none");
+                    }, 12000);
                 }
             }
 

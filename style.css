@@ -392,9 +392,6 @@ li input[type="checkbox"]::after {
     border-bottom-width: 3px;
     color: #6c757d;
     transition: all .08s;
-}
-
-#settings-container .dropdown .btn {
     border-bottom-color: #33333315;
 }
 
@@ -464,17 +461,9 @@ li input[type="checkbox"]::after {
     -webkit-user-select: none;
 }
 
-#tip {
-    position: absolute;
-    bottom: 8px;
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: none;
-}
-
 #all-sum {
     position: absolute;
-    bottom: 30px;
+    bottom: 8px;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;

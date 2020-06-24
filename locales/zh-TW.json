@@ -183,6 +183,7 @@
     "is-hide-from-dock-setting-on": "從Dock隱藏設置：",
     "is-hide-from-dock-setting-on-tip": "如果此項被選中，則將會把wnr從Dock隱藏，你將會只能從狀態欄菜單打開wnr。",
     "fullscreen-experience-tip": "你可能是第一次使用全屏專心模式。（如果你不需要強力體驗，可以在設置中開啓寬松全屏模式。）",
+    "fullscreen-too-long-tip": "這次你似乎將開啓一段很長的專心時間。",
     "fullscreen-experience-tip-mistake": "誤點？這次你可以撤銷",
     "quit-from-timer-in-lock-mode-msg": "鎖定模式下退出需輸入密碼",
     "personalization-notification": "通知文本個性化：",
@@ -245,5 +246,9 @@
     "predefined-task-pomodoro": "番茄計時",
     "predefined-task-class-time": "上課時間",
     "check-after-time-end-setting": "時間結束後確認框顯示設置：",
-    "check-after-time-end-setting-tip": "如果此項被選中，則一段時間結束後，將會持續播放提示音並顯示確認框，點擊確認後才會開始下一段時間。不選中時將直接開始下一段時間並只播放一聲提示音。"
+    "check-after-time-end-setting-tip": "如果此項被選中，則一段時間結束後，將會持續播放提示音並顯示確認框，點擊確認後才會開始下一段時間。不選中時將直接開始下一段時間並只播放一聲提示音。",
+    "focus-notify-pre": "當",
+    "focus-notify-working": "工作",
+    "focus-notify-resting": "休息",
+    "focus-notify-body": "時開啓全屏專心模式，到時將無法退出"
 }

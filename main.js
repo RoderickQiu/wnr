@@ -39,8 +39,8 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 function createWindow() {
     //create the main window
     win = new BrowserWindow({
-        width: 364,
-        height: 396,
+        width: 376,
+        height: 420,
         frame: false,
         backgroundColor: "#fefefe",
         resizable: false,
@@ -127,17 +127,24 @@ function alarmSet() {
 }
 
 function relaunchSolution() {
-    if (process.env.PORTABLE_EXECUTABLE_DIR) {
-        var opt = { args: process.argv.slice(1).concat(['--relaunch']), execPath: process.execPath };
-        if (app.isPackaged && process.env.PORTABLE_EXECUTABLE_FILE != undefined) {
-            opt.execPath = process.env.PORTABLE_EXECUTABLE_FILE;
-        }
-        app.relaunch(opt);
-        app.quit();
-    } else {
-        app.relaunch();
-        app.quit()
+    fullScreenProtection = false;
+    if (win != null) {
+        win.setKiosk(false);
+        win.hide();
     }
+    setTimeout(function () {
+        if (process.env.PORTABLE_EXECUTABLE_DIR) {
+            var opt = { args: process.argv.slice(1).concat(['--relaunch']), execPath: process.execPath };
+            if (app.isPackaged && process.env.PORTABLE_EXECUTABLE_FILE != undefined) {
+                opt.execPath = process.env.PORTABLE_EXECUTABLE_FILE;
+            }
+            app.relaunch(opt);
+            app.exit();
+        } else {
+            app.relaunch();
+            app.exit();
+        }
+    }, 500)
 }
 
 function setFullScreenMode(flag) {

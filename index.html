@@ -118,9 +118,6 @@
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div id="tip" class="extreme-small font-weight-bold text-muted">
-            <script>document.write(i18n.__('tip'));</script>
-        </div>
         <div id="set" class="container-fluid">
             <form action="timer.html" method="GET" class="justify-content-center align-content-center">
                 <div class="dropdown dropdown-default" id="dropdown-tasks">
@@ -148,7 +145,7 @@
                 <div class="align-content-center">
                     <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
                         required />
-                    <input id="focus-work-set" type="checkbox" />
+                    <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                     <span class="focuser extreme-small work">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
@@ -156,7 +153,7 @@
                 <br />
                 <div class="align-content-center">
                     <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
-                    <input id="focus-rest-set" type="checkbox" />
+                    <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
                     <span class="focuser extreme-small rest">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
@@ -197,10 +194,29 @@
                 $(".focuser").attr('title', i18n.__('full-screen-focus-mode-tip'));
             </script>
         </div>
-        <div id="all-sum" class="small font-weight-bold text-muted">
+        <div id="all-sum" class="small font-weight-bold text-muted text-center">
             <script>document.write(i18n.__('all-sum-part-1'));</script> <span id="all-sum-num">---</span>
             <script>document.write(i18n.__('all-sum-part-2'));</script> <span id="to-num-h">--</span>:<span
                 id="to-num-min">--</span>
+            <div class="extreme-small font-weight-normal" id="focus-notify-box">
+                <br />
+                &nbsp;
+                <span id="notify-pre">
+                    <script>document.write(i18n.__('focus-notify-pre'));</script>
+                </span>
+                <span id="work-notify">
+                    <script>document.write(i18n.__('focus-notify-working'));</script>
+                </span>
+                <span id="rest-notify">
+                    <script>document.write(i18n.__('focus-notify-resting'));</script>
+                </span>
+                <span id="notify-body">
+                    <script>document.write(i18n.__('focus-notify-body'));</script>
+                </span>
+            </div>
+            <div id="the-tip" class="extreme-small font-weight-normal">
+                <script>document.write(i18n.__('tip'));</script>
+            </div>
         </div>
         <button id="bottom-btn" type="button" class="btn btn-primary" onclick="keyDownSubmitter()">
             <script>document.write(i18n.__('submitter'));</script>
@@ -258,6 +274,22 @@
             allClear();
         }
 
+        function focusNotifier() {
+            var workFocus = document.getElementById("focus-work-set").checked;
+            var restFocus = document.getElementById("focus-rest-set").checked;
+            if ((workFocus || restFocus) && (workFocus != restFocus)) {
+                if (workFocus) $("#work-notify").css("display", "inline");
+                else $("#work-notify").css("display", "none");
+                if (restFocus) $("#rest-notify").css("display", "inline");
+                else $("#rest-notify").css("display", "none");
+                $("#focus-notify-box").css("display", "inline");
+                $("#bottom-btn").css("height", "56px");
+            } else {
+                $("#focus-notify-box").css("display", "none");
+                $("#bottom-btn").css("height", "40px");
+            }
+        }
+
         function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
             $("#expand-left").html(name);
             $("#work-time").val(shi.ArabicNumberTimeParser(workTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
@@ -299,6 +331,7 @@
         });
 
         setTimeout(function () {
+            focusNotifier();
             try {
                 if ((store.get("last-recorded-hours-left") > 0 || store.get("last-recorded-minutes-left") > 0)) {
                     if (store.get('last-recorded-hours-left') <= 0 && store.get("last-recorded-minutes-left") < 2)
