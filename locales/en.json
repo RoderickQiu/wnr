@@ -34,7 +34,7 @@
     "tip": "Press Enter to submit",
     "back-index": "Give up the schedule & Back",
     "skipper": "Skip current timer",
-    "not-enough": "Some information wasn't given or the time is less than 1 minutes, so we cannot start the timer.",
+    "not-enough": "Some information wasn't given or the time is less than 1 minute, so we cannot start the timer.",
     "too-long": "The time is too long. Please make your work time and your rest time less than a day.",
     "back": "Back",
     "ended": "End!",
