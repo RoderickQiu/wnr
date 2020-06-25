@@ -46,7 +46,7 @@ Until now, wnr has get these languages:
 
 ## 如何贡献
 
-1. 翻译文件的命名规范应当遵循 [这份指南](https://www.electronjs.org/docs/api/locales)。所有翻译文件都是 JSON 格式，使用 [i18n-node](https://github.com/mashpie/i18n-node)。这些文件应当被存储在此文件夹中
+1. 翻译文件的命名规范应当遵循 [这份指南](https://www.electronjs.org/docs/api/locales)。所有翻译文件都是 JSON 格式，使用 [i18n-node](https://github.com/mashpie/i18n-node)。这些文件应当被存储在此文件夹中。
     - 例如，你想贡献 français（法语）的翻译文件时，应该添加 `fr.json`，翻译成 Deutsch（德语）时则添加 `de.json`。
 
 2. 添加翻译文件后请更改这些内容：
@@ -78,7 +78,7 @@ Until now, wnr has get these languages:
 
 ## 如何貢獻
 
-1. 翻譯文件的命名規範應當遵循 [這份指南](https://www.electronjs.org/docs/api/locales)。所有翻譯文件都是 JSON 格式，使用 [i18n-node](https://github.com/mashpie/i18n-node)。這些文件應當被存儲在此文件夾中
+1. 翻譯文件的命名規範應當遵循 [這份指南](https://www.electronjs.org/docs/api/locales)。所有翻譯文件都是 JSON 格式，使用 [i18n-node](https://github.com/mashpie/i18n-node)。這些文件應當被存儲在此文件夾中。
     - 例如，你想貢獻 français（法語）的翻譯文件時，應該添加 `fr.json`，翻譯成 Deutsch（德語）時則添加 `de.json`。
 
 2. 添加翻譯文件後請更改這些內容：
