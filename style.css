@@ -431,9 +431,9 @@ li input[type="checkbox"]::after {
     right: 14px;
 }
 
-#controller, #time-bar, #time-bar-macos, #logo-bar {
+#controller, #time-bar, #time-bar-macos {
     position: absolute;
-    top: 4px;
+    top: 8px;
     font-size: 18px;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -441,20 +441,23 @@ li input[type="checkbox"]::after {
 }
 
 #controller, #time-bar-macos {
-    right: 8px;
+    right: 10px;
 }
 
 #time-bar {
-    left: 8px;
+    left: 10px;
     padding: 2px;
 }
 
 #logo-bar {
+    position: absolute;
+    top: 6px;
     left: 8px;
     display: inline-block;
-    border: 5px solid transparent;
     background-clip: padding-box;
-    -webkit-app-region: drag;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
 }
 
 #work-rest, #now-timing {
@@ -542,8 +545,9 @@ li input[type="checkbox"]::after {
     bottom: 0px;
     right: 0px;
     width: 0%;
-    height: 5px;
-    background-color: #ea5454c2;
+    height: 1.9%;
+    background-color: #ea545419;
+    z-index: -9999;
 }
 
 #window-hide {

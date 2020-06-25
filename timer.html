@@ -230,6 +230,7 @@
             if (note) $("#notes").html(note);
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
+                $bottomBar.css("height", "100%");
                 ipc.send('warning-giver-restend');
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
@@ -384,10 +385,11 @@
                         $(".work").addClass("rest");
                         $(".work").removeClass("work");
                         $("#work-rest").html(i18n.__('resting'));
-                        $bottomBar.css("background-color", "#5490eac2");
+                        $bottomBar.css("background-color", "#5490ea19");
                         method = 2;
                         store.set("last-recorded-state.method", 2);
                         if (restTimeFocused == true) {
+                            $bottomBar.css("height", "100%");
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
                             $timeBarMacOS.addClass("time-bar-focus");
@@ -403,6 +405,7 @@
                                 }
                             }
                         } else if (workTimeFocused == true) {
+                            $bottomBar.css("height", "1.9%");
                             if (systemName != "darwin") $("#controller").css("display", "block");
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");
@@ -416,11 +419,12 @@
                         $(".rest").addClass("work");
                         $(".rest").removeClass("rest");
                         $("#work-rest").html(i18n.__('working'));
-                        $bottomBar.css("background-color", "#ea5454c2");
+                        $bottomBar.css("background-color", "#ea545419");
                         method = 1;
                         store.set("last-recorded-state.method", 1);
                         if (systemName != "darwin") $("#controller").css("display", "block");
                         if (workTimeFocused == true) {
+                            $bottomBar.css("height", "100%");
                             $("#controller").css("display", "none");
                             $("#more-options").css("display", "none");
                             $timeBar.addClass("time-bar-focus");
@@ -436,6 +440,7 @@
                                 }
                             }
                         } else if (restTimeFocused == true) {
+                            $bottomBar.css("height", "1.9%");
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");

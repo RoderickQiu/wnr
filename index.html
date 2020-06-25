@@ -76,15 +76,10 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
-            <img src="res/icons/wnrIcon.png" width="18px" />
-        </div>
-        <div id="controller">
-            <div class="dropdown dropleft dropdown-default">
-                <a class="dropdown-toggle" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
+            <div class="dropdown dropright dropdown-default">
+                <a class="dropdown-toggle rest" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                    <span class="dropdown-default rest" id="dropdown-more">
-                        <i class="iconfont icon-bars"></i>
-                    </span>
+                    <img src="res/icons/wnrIcon.png" width="18px" />
                 </a>
                 <div class="dropdown-menu" aria-labelledby="controller-dropdown">
                     <div class="dropdown-header extreme-small">
@@ -101,6 +96,8 @@
                         <script>document.write(i18n.__('info'));</script></a>
                 </div>
             </div>
+        </div>
+        <div id="controller">
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
                 <i class="iconfont icon-info" id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
