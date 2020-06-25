@@ -17,6 +17,10 @@
         (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载</a>（7nzh）
 </p>
 
+<p align="center">
+    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh_cn.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh_tw.md">正體中文簡介</a>
+</p>
+
 ---
 
 ## Online Version
