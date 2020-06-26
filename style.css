@@ -89,6 +89,7 @@ input[type="range"]::-webkit-slider-thumb {
 input[type="checkbox"] {
     -webkit-appearance: none;
     /* remove default style */
+    cursor: pointer;
     border: solid #5490ea 2px;
     border-radius: 15px;
     width: 24px;
@@ -479,6 +480,8 @@ li input[type="checkbox"]::after {
     position: absolute;
     bottom: 8px;
     z-index: 999;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
 }
 
 #bottom-btn:hover, #buttom-btn:focus {
