@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh_cn.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh_tw.md">正體中文簡介</a>
+    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a>
 </p>
 
 ---

@@ -549,7 +549,7 @@ li input[type="checkbox"]::after {
     right: 0px;
     width: 0%;
     height: 1.9%;
-    background-color: #ea545419;
+    background-color: #ea545499;
     z-index: -9999;
 }
 
