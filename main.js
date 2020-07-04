@@ -673,7 +673,9 @@ function traySolution(isFullScreen) {
             }, {
                 label: i18n.__('show-or-hide'), click: function () { showOrHide() }
             }, {
-                label: i18n.__('mini-mode'), click: function () {
+                label: i18n.__('mini-mode'),
+                enabled: isTimerWin,
+                click: function () {
                     if (win != null) win.webContents.send("floating-message", "enter");
                 }
             }, {
@@ -687,7 +689,7 @@ function traySolution(isFullScreen) {
             if (tray != null) {
                 tray.removeAllListeners('click');
                 tray.on('click', function () {
-                    if (fullScreenProtection == false) {
+                    if (fullScreenProtection == false && process.platform == "win32") {
                         showOrHide();
                     }
                 });//tray
@@ -1525,7 +1527,7 @@ function floating() {
                     frame: false,
                     show: false,
                     center: false,
-                    titleBarStyle: "hidden",
+                    titleBarStyle: "customButtonsOnHover",
                     webPreferences: { nodeIntegration: true },
                     skipTaskbar: true
                 });
