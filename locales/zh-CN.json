@@ -250,5 +250,8 @@
 	"focus-notify-pre": "当",
 	"focus-notify-working": "工作",
 	"focus-notify-resting": "休息",
-	"focus-notify-body": "时开启全屏专心模式，到时将无法退出"
+	"focus-notify-body": "时开启全屏专心模式，到时将无法退出",
+	"recover": "退出MINI模式",
+	"mini-mode": "进入MINI模式",
+	"min-left": "分钟剩余"
 }

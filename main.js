@@ -15,7 +15,7 @@ const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
-let win = null, settingsWin = null, aboutWin = null, tourWin = null,
+let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null,
     tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
@@ -27,9 +27,9 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null,
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
-    store = null,
     isLoose = false, isScreenLocked = false,
-    isStopped = false;
+    hasFloating = false,
+    store = null;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -255,8 +255,11 @@ function touchBarSolution(mode) {
 app.on('will-quit', () => {
     globalShortcut.unregisterAll();
     if (tray != null) {
-        tray.destroy(tray);
+        tray.destroy();
         tray = null
+    }
+    if (floatingWin != null) {
+        floatingWin.close();
     }
 })
 
@@ -581,13 +584,14 @@ function showOrHide() {
             tourWin.show();
         }
     if (win != null)
-        if (win.isVisible()) {
-            win.minimize();
-            win.hide();
-        } else {
-            win.restore();
-            win.show()
-        }
+        if (floatingWin == null)
+            if (win.isVisible()) {
+                win.minimize();
+                win.hide();
+            } else {
+                win.restore();
+                win.show()
+            }
 }
 
 // possible funcs: non-important, normal, hide-or-show, push-notification
@@ -1455,19 +1459,18 @@ function tourguide() {
                     click: () => tourWin.close()
                 });
                 tourWin.setTouchBar(tourWinTouchBar);
-            })
+            });
             tourWin.on('closed', () => {
                 tourWin = null;
                 if (store.get("top") != true) win.setAlwaysOnTop(false);
                 win.moveTop();
                 win.focus();
-            })
+            });
             notificationSolution(i18n.__('welcome-part-1'), i18n.__('welcome-part-2'), "normal");
         }
     }
 }
 ipcMain.on('tourguide', tourguide);
-
 
 function predefiner() {
     settings('predefined-tasks');
@@ -1499,6 +1502,60 @@ ipcMain.on('locker-passcode', function (event, message) {
         })
 })
 
+function floating() {
+    if (app.isReady()) {
+        if (win != null) {
+            if (!hasFloating) {
+                hasFloating = true;
+                floatingWin = new BrowserWindow({
+                    width: 78,
+                    height: 78,
+                    x: store.has("floating-axis") ? store.get("floating-axis").x : 33,
+                    y: store.has("floating-axis") ? store.get("floating-axis").y : 33,
+                    backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                    resizable: false,
+                    maximizable: false,
+                    minimizable: false,
+                    frame: false,
+                    show: false,
+                    center: false,
+                    titleBarStyle: "hidden",
+                    webPreferences: { nodeIntegration: true },
+                    skipTaskbar: true
+                });
+                floatingWin.loadFile("floating.html");
+                floatingWin.once('ready-to-show', () => {
+                    floatingWin.show();
+                    floatingWin.setAlwaysOnTop(true);
+                    floatingWin.focus();
+                });
+                floatingWin.on('closed', () => {
+                    floatingWin = null;
+                    if (store.get("top") != true) win.setAlwaysOnTop(false);
+                    if (win != null) {
+                        win.moveTop();
+                        win.focus();
+                    }
+                });
+                floatingWin.on('move', () => {
+                    try {
+                        store.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
+                    } catch (e) {
+                        console.log(e);
+                    }
+                })
+            }
+        }
+    }
+}
+ipcMain.on('floating', floating);
+ipcMain.on('floating-destroy', function () {
+    if (floatingWin != null) {
+        hasFloating = false;
+        floatingWin.close();
+    }
+})
+
 ipcMain.on('only-one-min-left', function () {
     if (!fullScreenProtection)
         notificationSolution(i18n.__('only-one-min-left'), i18n.__('only-one-min-left-msg'), "non-important")
@@ -1509,11 +1566,9 @@ ipcMain.on('tray-image-change', function (event, message) {
         if (message == "stop") {
             if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
             else tray.setTitle(" " + i18n.__('stopped'));
-            isStopped = true;
         } else {
             if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
             else tray.setTitle(" " + 100 - (progress * 100) + timeLeftTip);
-            isStopped = false;
         }
     }
 })
@@ -1579,5 +1634,30 @@ ipcMain.on("timer-win", function (event, message) {
         macOSFullscreenSolution();
         touchBarSolution("index");
         multiScreenSolution("off")
+    }
+})
+
+ipcMain.on("floating-conversation", function (event, message) {
+    if (message.topic == "time-left") {
+        if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method });
+    } else if (message.topic == "stop") {
+        if (win != null) win.webContents.send('start-or-stop');
+    } else if (message.topic == "skip") {
+        if (win != null) {
+            win.restore();
+            win.show();
+        }
+        if (win != null) win.webContents.send('floating-message', 'skipper');
+    } else if (message.topic == "recover") {
+        if (win != null) {
+            win.restore();
+            win.show();
+        }
+    } else if (message.topic == "back") {
+        if (win != null) {
+            win.restore();
+            win.show();
+        }
+        if (win != null) win.webContents.send('floating-message', 'back');
     }
 })

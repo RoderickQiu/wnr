@@ -250,5 +250,8 @@
     "focus-notify-pre": "When",
     "focus-notify-working": "working",
     "focus-notify-resting": "resting",
-    "focus-notify-body": "focus mode will be on"
+    "focus-notify-body": "focus mode will be on",
+    "recover": "Exit the mini mode",
+    "mini-mode": "Enter the mini mode",
+    "min-left": "min left"
 }

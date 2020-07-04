@@ -230,7 +230,7 @@
 
         var timeCount, myDate, h, min, defaultArray;
         function sumGet(workTimeGet, restTimeGet, loopGet) {
-            timeCount = (Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet);
+            timeCount = Math.floor((Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet));
             if (timeCount != NaN) {
                 $("#all-sum-num").html(timeCount);
                 myDate = new Date();

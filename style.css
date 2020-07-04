@@ -1,5 +1,15 @@
+@font-face {
+    font-family: SourceHanSansCNLight;
+    src: url('res/fonts/SourceHanSansSC-Light.ttf');
+}
+
+@font-face {
+    font-family: SourceHanSansCN;
+    src: url('res/fonts/SourceHanSansSC-Regular.ttf');
+}
+
 html, body {
-    font-family: "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-family: SourceHanSansCN, "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
     width: 100%;
     height: 100%;
     display: -webkit-flex;
@@ -161,6 +171,10 @@ li input[type="checkbox"]::after {
 
 .iconfont {
     font-size: inherit;
+}
+
+.display-1 {
+    font-family: SourceHanSansCNLight, "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
 }
 
 .settings-sidebar-block {
@@ -327,6 +341,12 @@ li input[type="checkbox"]::after {
 
 #stopper i::before {
     font-size: 2rem;
+}
+
+#only-one {
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
 }
 
 #main {
@@ -580,4 +600,70 @@ li input[type="checkbox"]::after {
 
 #personalization label {
     font-size: smaller;
+}
+
+#floating-bottom-bar {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 0%;
+    height: 100%;
+    background-color: #ea545419;
+    z-index: -9999;
+}
+
+#floating-unhover {
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+    transition: all .16s;
+}
+
+#floating-hover {
+    opacity: 0;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    transition: all .16s;
+}
+
+#floating-hover:hover {
+    opacity: 1;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    transition: all .16s;
+}
+
+#floating-skipper {
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    -webkit-app-region: no-drag;
+}
+
+#floating-back {
+    position: absolute;
+    left: 0px;
+    bottom: 0px;
+    -webkit-app-region: no-drag;
+}
+
+#floating-recover {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    -webkit-app-region: no-drag;
+}
+
+#floating-close {
+    position: absolute;
+    right: 0px;
+    top: 0px;
+    -webkit-app-region: no-drag;
+}
+
+#floating-stopper {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+    transform: translate(50%, -39%);
+    -webkit-app-region: no-drag;
 }
