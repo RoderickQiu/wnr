@@ -77,9 +77,9 @@
         let isWorking = true;
         function stopper() {
             ipc.send("floating-conversation", { topic: "stop" });
-            if (isWorking) $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
-            else $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
             isWorking = !isWorking;
+            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
         }
 
         function skipper() {
@@ -101,6 +101,10 @@
 
         let method = 1;
         ipc.on("floating-time-left", function (event, message) {
+            isWorking = message.isWorking;
+            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
+
             $("#time-left").text(message.minute == 0 ? '<1' : message.minute);
             $('#floating-bottom-bar').css("width", message.percentage + "%");
 
@@ -117,6 +121,12 @@
                 $('#floating-bottom-bar').css("background-color", "#ea545419");
                 method = 1;
             }
+
+            ipc.on("floating-stop-sync", function (event, message) {
+                isWorking = message;
+                if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+                else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
+            });
         });
     </script>
     <script src="renderer.js"></script>

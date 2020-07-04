@@ -120,7 +120,7 @@
 
             //repeat so always able to be sent
             for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
-                setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method }); }, 500 * floatingRepeater);
+                setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
         }
 
         //for first time users
@@ -311,18 +311,23 @@
             if (methodFromStart == 2) skipper();
 
             ipc.on('start-or-stop', function () {
-                if (canStop) stopper();
+                if (canStop) {
+                    stopper();
+                    ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                }
             });
 
             ipc.on('alter-start-stop', function (event, message) {
                 if (message == "start") {
                     if ((!isClockWorking) && (wasCounting)) {
                         stopper();
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
                         wasCounting = !wasCounting;
                     }
                 } else if (message == "stop") {
                     if (isClockWorking && wasCounting) {
                         stopper();
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
                         wasCounting = !wasCounting;
                     }
                 }
@@ -331,6 +336,8 @@
             ipc.on('floating-message', function (event, message) {
                 if (message == "skipper") skipper();
                 else if (message == "back") backcheck();
+                else if (message == "stop") stopper();
+                else if (message == "enter") floatingOpener();
             });
 
             function stopper() {
@@ -550,7 +557,7 @@
                         lastRecordedProgress = progress;
                         naturalProgress = Math.round(lastRecordedProgress * 100);
                         ipc.send("progress-bar-set", naturalProgress);
-                        if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: naturalProgress, method: method });
+                        if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: naturalProgress, method: method, isWorking: isClockWorking });
                         $bottomBar.css("width", naturalProgress + "%");
                     }
                     if (shouldNap && method == 1) {

@@ -671,16 +671,22 @@ function traySolution(isFullScreen) {
             }, {
                 type: 'separator'
             }, {
-                label: i18n.__('show-or-hide'), click: () => { showOrHide() }
+                label: i18n.__('show-or-hide'), click: function () { showOrHide() }
+            }, {
+                label: i18n.__('mini-mode'), click: function () {
+                    if (win != null) win.webContents.send("floating-message", "enter");
+                }
+            }, {
+                type: 'separator'
             }, {
                 label: i18n.__('exit'),
                 enabled: !store.get('islocked'),
-                click: () => { windowCloseChk() }
+                click: function () { windowCloseChk() }
             }
             ]);
             if (tray != null) {
                 tray.removeAllListeners('click');
-                tray.on('click', () => {
+                tray.on('click', function () {
                     if (fullScreenProtection == false) {
                         showOrHide();
                     }
@@ -704,7 +710,7 @@ function traySolution(isFullScreen) {
             if (tray != null) {
                 tray.removeAllListeners('click');
                 tray.setContextMenu(contextMenu);
-                tray.on('click', () => { ; })
+                tray.on('click', function () { ; })
                 tray.setToolTip("wnr");
             }
         }
@@ -1639,9 +1645,9 @@ ipcMain.on("timer-win", function (event, message) {
 
 ipcMain.on("floating-conversation", function (event, message) {
     if (message.topic == "time-left") {
-        if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method });
+        if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
     } else if (message.topic == "stop") {
-        if (win != null) win.webContents.send('start-or-stop');
+        if (win != null) win.webContents.send('floating-message', 'stop');
     } else if (message.topic == "skip") {
         if (win != null) {
             win.restore();
@@ -1659,5 +1665,7 @@ ipcMain.on("floating-conversation", function (event, message) {
             win.show();
         }
         if (win != null) win.webContents.send('floating-message', 'back');
+    } else if (message.topic == "stop-sync") {
+        if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
     }
 })
