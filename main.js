@@ -29,6 +29,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     newWindows = new Array, displays = null, hasMultiDisplays = null,
     isLoose = false, isScreenLocked = false,
     hasFloating = false,
+    kioskInterval = null,
     store = null;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
@@ -149,8 +150,17 @@ function relaunchSolution() {
 
 function setFullScreenMode(flag) {
     if (win != null) {
-        if (!isLoose) win.setKiosk(flag);
-        else if (process.platform == "darwin") win.setSimpleFullScreen(flag);
+        if (!isLoose) {
+            win.setKiosk(flag);
+            if (flag) {
+                kioskInterval = setInterval(function () {
+                    win.restore();
+                    win.show();
+                    win.moveTop();
+                    win.setKiosk(true);
+                }, 5000);
+            } else clearInterval(kioskInterval);
+        } else if (process.platform == "darwin") win.setSimpleFullScreen(flag);
         else win.setFullScreen(flag);
     }
 }
@@ -176,7 +186,7 @@ function addScreenSolution(windowNumber, display) {
     if (app.isPackaged) newWindows[windowNumber].setFocusable(false);
     newWindows[windowNumber].setFullScreen(true);
     newWindows[windowNumber].moveTop();
-    newWindows[windowNumber].setAlwaysOnTop(true);
+    newWindows[windowNumber].setAlwaysOnTop(true, "floating");
 }
 function multiScreenSolution(mode) {
     if (app.isReady()) {
@@ -361,7 +371,7 @@ app.on('ready', () => {
     if (store.get("loose-mode")) isLoose = true;
 
     if (win != null) {
-        if (store.get("top") == true) win.setAlwaysOnTop(true);
+        if (store.get("top") == true) win.setAlwaysOnTop(true, "floating");
         else win.setAlwaysOnTop(false);
     }
 
@@ -967,7 +977,7 @@ ipcMain.on('warning-giver-workend', function () {
         if (restTimeFocused != true) win.show();
         win.center();
         win.flashFrame(true);
-        if (!isLoose) win.setAlwaysOnTop(true);
+        if (!isLoose) win.setAlwaysOnTop(true, "floating");
         win.moveTop();
         if (restTimeFocused == true) {
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
@@ -1045,7 +1055,7 @@ ipcMain.on('warning-giver-restend', function () {
         if (workTimeFocused != true) win.show();
         win.center();
         win.flashFrame(true);
-        win.setAlwaysOnTop(true);
+        win.setAlwaysOnTop(true, "floating");
         win.moveTop();
         if (workTimeFocused == true) {
             multiScreenSolution("on");
@@ -1123,7 +1133,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         win.show();
         win.center();
         win.flashFrame(true);
-        win.setAlwaysOnTop(true);
+        win.setAlwaysOnTop(true, "floating");
         win.moveTop();
         win.setProgressBar(-1);
         if (restTimeFocused == true) {
@@ -1336,8 +1346,8 @@ function about() {
                 webPreferences: { nodeIntegration: true }
             });
             aboutWin.loadFile("about.html");
-            win.setAlwaysOnTop(true);
-            aboutWin.setAlwaysOnTop(true);
+            win.setAlwaysOnTop(true, "floating");
+            aboutWin.setAlwaysOnTop(true, "floating");
             aboutWin.focus();
             aboutWin.once('ready-to-show', () => {
                 aboutWin.show();
@@ -1390,8 +1400,8 @@ function settings(mode) {
                 console.log(e);
             }
             settingsWin.loadFile("settings.html");
-            if (app.isPackaged) win.setAlwaysOnTop(true);
-            if (app.isPackaged) settingsWin.setAlwaysOnTop(true);
+            if (app.isPackaged) win.setAlwaysOnTop(true, "floating");
+            if (app.isPackaged) settingsWin.setAlwaysOnTop(true, "floating");
             settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
@@ -1452,8 +1462,8 @@ function tourguide() {
                 webPreferences: { nodeIntegration: true }
             });
             tourWin.loadFile("tourguide.html");
-            win.setAlwaysOnTop(true);
-            tourWin.setAlwaysOnTop(true);
+            win.setAlwaysOnTop(true, "floating");
+            tourWin.setAlwaysOnTop(true, "floating");
             tourWin.focus();
             tourWin.once('ready-to-show', () => {
                 tourWin.show();
@@ -1527,6 +1537,7 @@ function floating() {
                     frame: false,
                     show: false,
                     center: false,
+                    type: 'toolbar',
                     titleBarStyle: "customButtonsOnHover",
                     webPreferences: { nodeIntegration: true },
                     skipTaskbar: true
@@ -1534,7 +1545,7 @@ function floating() {
                 floatingWin.loadFile("floating.html");
                 floatingWin.once('ready-to-show', () => {
                     floatingWin.show();
-                    floatingWin.setAlwaysOnTop(true);
+                    floatingWin.setAlwaysOnTop(true, "floating");
                     floatingWin.focus();
                 });
                 floatingWin.on('closed', () => {
