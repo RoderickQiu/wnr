@@ -6,7 +6,9 @@
   "scripts": {
     "upd-dependency": "yarn",
     "start": "electron .",
-    "win": "node ./res/builder/win.js",
+    "nsis": "node ./res/builder/nsis.js",
+    "nsis-ia32": "node ./res/builder/nsis-ia32.js",
+    "7zip": "node ./res/builder/win-zip.js",
     "portable": "node ./res/builder/portable.js",
     "mac": "node ./res/builder/mac.js",
     "linux": "node ./res/builder/linux.js"

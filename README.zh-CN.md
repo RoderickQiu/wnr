@@ -116,15 +116,21 @@
 ## 如何构建
 
 ```shell
-yarn
+yarn # 安装依赖
 
-yarn start
+yarn start # 运行程序
 
-yarn win
+yarn nsis # Windows平台NSIS安装包打包
 
-yarn mac
+yarn nsis-ia32 # Windows平台NSIS安装包打包（32位）
 
-yarn linux
+yarn portable # Windows平台便携版打包
+
+yarn win-zip # Windows平台7ZIP包打包
+
+yarn mac # macOS版本打包
+
+yarn linux # Linux版本打包
 ```
 
 Linux 版本还未经测试 *（如果你在使用 Linux，你可以自己尝试修改然后贡献）*。

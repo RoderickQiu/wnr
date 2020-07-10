@@ -7,7 +7,6 @@ const config = {
             "./node_modules/node-notifier/vendor/**"
         ],
         "target": [
-            "nsis",
             "7z"
         ],
         "icon": "res/icons/iconWin.ico",
@@ -18,19 +17,6 @@ const config = {
             "!res/icons/*.psd"
         ],
         "artifactName": "${productName}-${version}-Win.${ext}"
-    },
-    "nsis": {
-        "installerLanguages": [
-            "en-US",
-            "zh-CN",
-            "zh-TW"
-        ],
-        "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
-        "license": "LICENSE",
-        "oneClick": false,
-        "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
-        "artifactName": "${productName}-${version}-Setup.${ext}",
-        "allowToChangeInstallationDirectory": true
     }
 }
 

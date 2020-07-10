@@ -116,15 +116,21 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 ## How to Build
 
 ```shell
-yarn
+yarn # install deps
 
-yarn start
+yarn start # launch the app
 
-yarn win
+yarn nsis # windows nsis installer
 
-yarn mac
+yarn nsis-ia32 # windows nsis installer (x86)
 
-yarn linux
+yarn portable # windows portable
+
+yarn win-zip # windows 7-zip
+
+yarn mac # macos
+
+yarn linux # linux
 ```
 
 Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
