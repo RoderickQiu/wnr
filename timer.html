@@ -112,15 +112,17 @@
             console.log(e);
         }
 
-        hasFloating = false;
+        hasFloating = false, canOpenFloating = true;
         function floatingOpener() {
-            call("window-hide");
-            call("floating");
-            hasFloating = true;
+            if (canOpenFloating) {
+                call("window-hide");
+                call("floating");
+                hasFloating = true;
 
-            //repeat so always able to be sent
-            for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
-                setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
+                //repeat so always able to be sent
+                for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
+                    setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
+            }
         }
 
         //for first time users
@@ -216,7 +218,7 @@
 
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
-        if ((loop < 1 && loop != 0) || workTime <= 60000 || restTime <= 60000 || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+        if ((loop < 1 && loop != 0) || (workTime <= 60000 && workTime != 12000) || (restTime <= 60000 && restTime != 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             try {
                 store.set("last-recorded-minutes-left", 0);
                 store.set("last-recorded-hours-left", 0);
@@ -338,6 +340,7 @@
                 else if (message == "back") backcheck();
                 else if (message == "stop") stopper();
                 else if (message == "enter") floatingOpener();
+                else if (message == "closed") hasFloating = false;
             });
 
             function stopper() {
@@ -432,14 +435,21 @@
                                     console.log(e);
                                 }
                             }
-                        } else if (workTimeFocused == true) {
-                            $bottomBar.css("height", "1.9%");
-                            if (systemName != "darwin") $("#controller").css("display", "block");
-                            $("#more-options").css("display", "block");
-                            $(".time-bar-focus").removeClass("time-bar-focus");
-                            $nowTiming.removeClass("display-1");
-                            $nowTiming.addClass("h1");
-                            $("#fullscreen-experience-tip").css("display", "none");
+                        } else {
+                            if (hasFloating) {
+                                floatingOpener();
+                                $("#skipper").css("display", "inline");
+                            }
+
+                            if (workTimeFocused == true) {
+                                $bottomBar.css("height", "1.9%");
+                                if (systemName != "darwin") $("#controller").css("display", "block");
+                                $("#more-options").css("display", "block");
+                                $(".time-bar-focus").removeClass("time-bar-focus");
+                                $nowTiming.removeClass("display-1");
+                                $nowTiming.addClass("h1");
+                                $("#fullscreen-experience-tip").css("display", "none");
+                            }
                         }
                         warningGiver(1);
                     } else {
@@ -468,13 +478,20 @@
                                     console.log(e);
                                 }
                             }
-                        } else if (restTimeFocused == true) {
-                            $bottomBar.css("height", "1.9%");
-                            $("#more-options").css("display", "block");
-                            $(".time-bar-focus").removeClass("time-bar-focus");
-                            $nowTiming.removeClass("display-1");
-                            $nowTiming.addClass("h1");
-                            $("#fullscreen-experience-tip").css("display", "none");
+                        } else {
+                            if (hasFloating) {
+                                floatingOpener();
+                                $("#skipper").css("display", "inline");
+                            }
+
+                            if (restTimeFocused == true) {
+                                $bottomBar.css("height", "1.9%");
+                                $("#more-options").css("display", "block");
+                                $(".time-bar-focus").removeClass("time-bar-focus");
+                                $nowTiming.removeClass("display-1");
+                                $nowTiming.addClass("h1");
+                                $("#fullscreen-experience-tip").css("display", "none");
+                            }
                         }
                         if (shouldNap) {
                             lastNapSecond = workTime / 1000;
@@ -509,7 +526,7 @@
             }
 
             function skipper() {
-                call("floating-destroy");
+                canOpenFloating = true;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
                 $("#skipper").css("display", "none");
                 $("#skipper-space").css("display", "none");
@@ -570,6 +587,8 @@
                     minutes = Math.floor((seconds - hours * 3600) / 60);
                     seconds -= hours * 3600 + minutes * 60;
                     $nowTiming.text(hours + h + minutes + min + seconds + s);
+
+                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                     if (systemName != "darwin") $timeBar.html(timeGot);

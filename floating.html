@@ -93,7 +93,7 @@
         function skipper() {
             ipc.send("floating-conversation", { topic: "skip" });
             $("#floating-skipper").css("display", "none");
-            call("floating-destroy");
+            call("floating-destroy", "property-stay");
         }
 
         function recover() {
@@ -130,6 +130,7 @@
                 method = 1;
             }
 
+            ipc.removeAllListeners('floating-stop-sync');
             ipc.on("floating-stop-sync", function (event, message) {
                 isWorking = message;
                 if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");

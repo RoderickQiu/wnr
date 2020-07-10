@@ -565,7 +565,7 @@ app.on('ready', () => {
     }//backport when shadow disabled
 
     leanId = process.env.LEAN_ID ? process.env.LEAN_ID : null, leanKey = process.env.LEAN_KEY ? process.env.LEAN_KEY : null;
-    leanCloudSolution();
+    if (app.isPackaged) leanCloudSolution();
 })
 
 function showOrHide() {
@@ -973,12 +973,14 @@ ipcMain.on('warning-giver-workend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
-        win.restore();
-        if (restTimeFocused != true) win.show();
-        win.center();
-        win.flashFrame(true);
-        if (!isLoose) win.setAlwaysOnTop(true, "floating");
-        win.moveTop();
+        if (!hasFloating) {
+            win.restore();
+            if (restTimeFocused != true) win.show();
+            win.center();
+            win.flashFrame(true);
+            if (!isLoose) win.setAlwaysOnTop(true, "floating");
+            win.moveTop();
+        }
         if (restTimeFocused == true) {
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             if (!isLoose) multiScreenSolution("on");
@@ -1002,6 +1004,10 @@ ipcMain.on('warning-giver-workend', function () {
                     powerSaveBlocker.stop(sleepBlockerId);
                 }
             }
+            if (hasFloating && win != null) {
+                win.minimize();
+                win.hide();
+            }
         }
         if (isScreenLocked) {
             notificationSolution((store.has("personalization-notification.work-time-end") ?
@@ -1015,7 +1021,7 @@ ipcMain.on('warning-giver-workend', function () {
             } else {
                 if (store.get("top") != true) {
                     win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                    win.moveTop();
+                    if (!hasFloating) win.moveTop();
                 }
                 if (dockHide) app.dock.hide();
             }
@@ -1035,7 +1041,7 @@ ipcMain.on('warning-giver-workend', function () {
                     } else {
                         if (store.get("top") != true) {
                             win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                            win.moveTop();
+                            if (!hasFloating) win.moveTop();
                         }
                         if (dockHide) app.dock.hide();
                     }
@@ -1051,12 +1057,14 @@ ipcMain.on('warning-giver-restend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = true;
-        win.restore();
-        if (workTimeFocused != true) win.show();
-        win.center();
-        win.flashFrame(true);
-        win.setAlwaysOnTop(true, "floating");
-        win.moveTop();
+        if (!hasFloating) {
+            win.restore();
+            if (workTimeFocused != true) win.show();
+            win.center();
+            win.flashFrame(true);
+            win.setAlwaysOnTop(true, "floating");
+            win.moveTop();
+        }
         if (workTimeFocused == true) {
             multiScreenSolution("on");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
@@ -1080,6 +1088,10 @@ ipcMain.on('warning-giver-restend', function () {
                     powerSaveBlocker.stop(sleepBlockerId);
                 }
             }
+            if (hasFloating && win != null) {
+                win.minimize();
+                win.hide();
+            }
         }
         if (isScreenLocked) {
             notificationSolution((store.has("personalization-notification.rest-time-end") ?
@@ -1093,7 +1105,7 @@ ipcMain.on('warning-giver-restend', function () {
             } else {
                 if (store.get("top") != true) {
                     win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                    win.moveTop();
+                    if (!hasFloating) win.moveTop();
                 }
                 if (dockHide) app.dock.hide();
             }
@@ -1113,7 +1125,7 @@ ipcMain.on('warning-giver-restend', function () {
                     } else {
                         if (store.get("top") != true) {
                             win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                            win.moveTop();
+                            if (!hasFloating) win.moveTop();
                         }
                         if (dockHide) app.dock.hide();
                     }
@@ -1551,10 +1563,6 @@ function floating() {
                 floatingWin.on('closed', () => {
                     floatingWin = null;
                     if (store.get("top") != true) win.setAlwaysOnTop(false);
-                    if (win != null) {
-                        win.moveTop();
-                        win.focus();
-                    }
                 });
                 floatingWin.on('move', () => {
                     try {
@@ -1568,10 +1576,15 @@ function floating() {
     }
 }
 ipcMain.on('floating', floating);
-ipcMain.on('floating-destroy', function () {
+ipcMain.on('floating-destroy', function (event, message) {
     if (floatingWin != null) {
         hasFloating = false;
-        floatingWin.close();
+        if (message == null)
+            try {
+                floatingWin.close();
+            } catch (e) {
+                console.log(e);
+            }
     }
 })
 
@@ -1657,28 +1670,29 @@ ipcMain.on("timer-win", function (event, message) {
 })
 
 ipcMain.on("floating-conversation", function (event, message) {
-    if (message.topic == "time-left") {
-        if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
-    } else if (message.topic == "stop") {
-        if (win != null) win.webContents.send('floating-message', 'stop');
-    } else if (message.topic == "skip") {
-        if (win != null) {
-            win.restore();
-            win.show();
+    try {
+        if (message.topic == "time-left") {
+            if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
+        } else if (message.topic == "stop") {
+            if (win != null) win.webContents.send('floating-message', 'stop');
+        } else if (message.topic == "skip") {
+            if (win != null) win.webContents.send('floating-message', 'skipper');
+        } else if (message.topic == "recover") {
+            if (win != null) {
+                win.restore();
+                win.show();
+            }
+            if (win != null) win.webContents.send('floating-message', 'closed');
+        } else if (message.topic == "back") {
+            if (win != null) {
+                win.restore();
+                win.show();
+            }
+            if (win != null) win.webContents.send('floating-message', 'back');
+        } else if (message.topic == "stop-sync") {
+            if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
         }
-        if (win != null) win.webContents.send('floating-message', 'skipper');
-    } else if (message.topic == "recover") {
-        if (win != null) {
-            win.restore();
-            win.show();
-        }
-    } else if (message.topic == "back") {
-        if (win != null) {
-            win.restore();
-            win.show();
-        }
-        if (win != null) win.webContents.send('floating-message', 'back');
-    } else if (message.topic == "stop-sync") {
-        if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
+    } catch (e) {
+        console.log(e);
     }
 })
