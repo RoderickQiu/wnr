@@ -1028,7 +1028,7 @@ ipcMain.on('warning-giver-workend', function () {
             win.maximizable = false;
         } else
             setTimeout(function () {
-                dialog.showMessageBox(win, {
+                dialog.showMessageBox({
                     title: (store.has("personalization-notification.work-time-end") ?
                         store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                     type: "warning",
@@ -1112,7 +1112,7 @@ ipcMain.on('warning-giver-restend', function () {
             win.maximizable = false;
         } else
             setTimeout(function () {
-                dialog.showMessageBox(win, {
+                dialog.showMessageBox({
                     title: (store.has("personalization-notification.rest-time-end") ?
                         store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                     type: "warning",
