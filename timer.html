@@ -129,8 +129,8 @@
         function mistakeResolver() {
             call('floating-destroy');
             try {
-                store.set("last-recorded-minutes-left", -1);
-                store.set("last-recorded-hours-left", -1);
+                timingData.set("last-recorded-minutes-left", -1);
+                timingData.set("last-recorded-hours-left", -1);
                 store.set("fullscreen-experience", true);
             } catch (e) {
                 console.log(e);
@@ -155,8 +155,8 @@
         function backer() {
             call('floating-destroy');
             try {
-                store.set("last-recorded-minutes-left", -1);
-                store.set("last-recorded-hours-left", -1);
+                timingData.set("last-recorded-minutes-left", -1);
+                timingData.set("last-recorded-hours-left", -1);
             } catch (e) {
                 console.log(e);
             }
@@ -202,7 +202,7 @@
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
         try {
-            store.set("last-recorded-state", {
+            timingData.set("last-recorded-state", {
                 workTime: workTime / 60000,
                 restTime: restTime / 60000,
                 loop: loop,
@@ -220,8 +220,8 @@
 
         if ((loop < 1 && loop != 0) || (workTime <= 60000 && workTime != 12000) || (restTime <= 60000 && restTime != 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             try {
-                store.set("last-recorded-minutes-left", 0);
-                store.set("last-recorded-hours-left", 0);
+                timingData.set("last-recorded-minutes-left", 0);
+                timingData.set("last-recorded-hours-left", 0);
             } catch (e) {
                 console.log(e);
             }
@@ -231,8 +231,8 @@
             document.onkeydown = keydownOnError;
         } else if (workTime > 86400000 || restTime > 86400000 || (workTime + restTime) * loop > 86400000) {
             try {
-                store.set("last-recorded-minutes-left", 0);
-                store.set("last-recorded-hours-left", 0);
+                timingData.set("last-recorded-minutes-left", 0);
+                timingData.set("last-recorded-hours-left", 0);
             } catch (e) {
                 console.log(e);
             }
@@ -246,6 +246,7 @@
             if (note) $("#notes").html(note);
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
+                if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
                 $bottomBar.css("background-color", "#ea545419");
                 $bottomBar.css("height", "100%");
                 ipc.send('warning-giver-restend');
@@ -367,8 +368,8 @@
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
                 canStop = false;
                 try {
-                    store.set("last-recorded-minutes-left", -1);
-                    store.set("last-recorded-hours-left", -1);
+                    timingData.set("last-recorded-minutes-left", -1);
+                    timingData.set("last-recorded-hours-left", -1);
                 } catch (e) {
                     console.log(e);
                 }
@@ -417,8 +418,9 @@
                         $("#work-rest").html(i18n.__('resting'));
                         $bottomBar.css("background-color", "#5490ea99");
                         method = 2;
-                        store.set("last-recorded-state.method", 2);
+                        timingData.set("last-recorded-state.method", 2);
                         if (restTimeFocused == true) {
+                            if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
                             $bottomBar.css("background-color", "#5490ea19");
                             $bottomBar.css("height", "100%");
                             $("#controller").css("display", "none");
@@ -442,6 +444,7 @@
                             }
 
                             if (workTimeFocused == true) {
+                                if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
                                 $bottomBar.css("height", "1.9%");
                                 if (systemName != "darwin") $("#controller").css("display", "block");
                                 $("#more-options").css("display", "block");
@@ -459,9 +462,10 @@
                         $("#work-rest").html(i18n.__('working'));
                         $bottomBar.css("background-color", "#ea545499");
                         method = 1;
-                        store.set("last-recorded-state.method", 1);
+                        timingData.set("last-recorded-state.method", 1);
                         if (systemName != "darwin") $("#controller").css("display", "block");
                         if (workTimeFocused == true) {
+                            if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
                             $bottomBar.css("background-color", "#ea545419");
                             $bottomBar.css("height", "100%");
                             $("#controller").css("display", "none");
@@ -485,6 +489,7 @@
                             }
 
                             if (restTimeFocused == true) {
+                                if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
                                 $bottomBar.css("height", "1.9%");
                                 $("#more-options").css("display", "block");
                                 $(".time-bar-focus").removeClass("time-bar-focus");
@@ -517,6 +522,7 @@
                 if (systemName != "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
+                if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
                 if (restTimeFocused == true) {
                     $(".time-bar-focus").removeClass("time-bar-focus");
                     $nowTiming.removeClass("display-1");
@@ -596,11 +602,11 @@
 
                     if (lastRecordedHoursLeft != hours) {
                         lastRecordedHoursLeft = hours;
-                        store.set("last-recorded-hours-left", lastRecordedHoursLeft);
+                        timingData.set("last-recorded-hours-left", lastRecordedHoursLeft);
                     }
                     if (lastRecordedMinutesLeft != minutes) {
                         lastRecordedMinutesLeft = minutes;
-                        store.set("last-recorded-minutes-left", lastRecordedMinutesLeft + 1);
+                        timingData.set("last-recorded-minutes-left", lastRecordedMinutesLeft + 1);
                     }
 
                     if (minutes == 0 && moreThanOneMin && hours == 0) {

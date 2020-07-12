@@ -10,6 +10,6 @@ function isLockMode() {
 }//lock mode settings
 isLockMode()
 
-if (store.get("is-shadowless")) {
+if (styleCache.get("is-shadowless")) {
     $('html').css('border', '#33333333 1px solid')
 }

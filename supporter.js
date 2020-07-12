@@ -11,7 +11,9 @@ if (process.env.PORTABLE_EXECUTABLE_DIR) {
         console.log(e);
         store = new Store();
     }
-} else store = new Store()
+} else store = new Store();
+let styleCache = new Store({ name: 'style-cache' });//just contains styling cache
+let timingData = new Store({ name: 'timing-data' });//just contains timing cache
 
 isInDark();
 
@@ -27,7 +29,7 @@ i18n.configure({
         return `${value}-[${locale}]`;
     }
 });
-i18n.setLocale(store.get("i18n"));//国际化组件默认设置
+i18n.setLocale(store.get("i18n"));//set locale
 
 function isTimerWindow(isTimer) {
     if (isTimer) {
@@ -46,7 +48,7 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    const isDarkMode = (store.get("dark-or-white") == "dark") || store.get('isdark');
+    const isDarkMode = (store.get("dark-or-white") == "dark") || styleCache.get('isdark');
     if (isDarkMode) {
         $('body').append(
             '<style id="darkmode-jetplane">\

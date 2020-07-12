@@ -330,30 +330,30 @@
         setTimeout(function () {
             focusNotifier();
             try {
-                if ((store.get("last-recorded-hours-left") > 0 || store.get("last-recorded-minutes-left") > 0)) {
-                    if (store.get('last-recorded-hours-left') <= 0 && store.get("last-recorded-minutes-left") < 2)
-                        store.set("last-recorded-minutes-left", 2);
-                    if (store.get("last-recorded-state").method == 1) {
+                if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
+                    if (store.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 2)
+                        timingData.set("last-recorded-minutes-left", 2);
+                    if (timingData.get("last-recorded-state").method == 1) {
                         window.location.href =
-                            "timer.html?title=" + store.get("last-recorded-state").title
-                            + "&work-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
-                            + "&rest-time=" + store.get("last-recorded-state").restTime
+                            "timer.html?title=" + timingData.get("last-recorded-state").title
+                            + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
+                            + "&rest-time=" + timingData.get("last-recorded-state").restTime
                             + "&loop=" + (store.get("infinity") ? 0 : 1)
-                            + "&note=" + store.get("last-recorded-state").note
+                            + "&note=" + timingData.get("last-recorded-state").note
                             + "&method=1"
-                            + "&work-time-focused=" + store.get("last-recorded-state").isWorkTimeFocused
-                            + "&rest-time-focused=" + store.get("last-recorded-state").isRestTimeFocused
+                            + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
+                            + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true";
                     } else {
                         window.location.href =
-                            "timer.html?title=" + store.get("last-recorded-state").title
-                            + "&work-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
-                            + "&rest-time=" + Number(store.get("last-recorded-hours-left") * 60 + store.get("last-recorded-minutes-left"))
+                            "timer.html?title=" + timingData.get("last-recorded-state").title
+                            + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
+                            + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                             + "&loop=" + (store.get("infinity") ? 0 : 1)
-                            + "&note=" + store.get("last-recorded-state").note
+                            + "&note=" + timingData.get("last-recorded-state").note
                             + "&method=2"
-                            + "&work-time-focused=" + store.get("last-recorded-state").isWorkTimeFocused
-                            + "&rest-time-focused=" + store.get("last-recorded-state").isRestTimeFocused
+                            + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
+                            + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true";
                     }
                 }

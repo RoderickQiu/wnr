@@ -30,7 +30,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     isLoose = false, isScreenLocked = false,
     hasFloating = false,
     kioskInterval = null,
-    store = null;
+    store = null, styleCache = null;
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -154,10 +154,12 @@ function setFullScreenMode(flag) {
             win.setKiosk(flag);
             if (flag) {
                 kioskInterval = setInterval(function () {
-                    win.restore();
-                    win.show();
-                    win.moveTop();
-                    win.setKiosk(true);
+                    if (fullScreenProtection) {
+                        win.restore();
+                        win.show();
+                        win.moveTop();
+                        win.setKiosk(true);
+                    }
                 }, 5000);
             } else clearInterval(kioskInterval);
         } else if (process.platform == "darwin") win.setSimpleFullScreen(flag);
@@ -283,6 +285,8 @@ app.on('ready', () => {
     if (process.env.PORTABLE_EXECUTABLE_DIR) {
         store = new Store({ cwd: process.env.PORTABLE_EXECUTABLE_DIR, name: 'wnr-config' });//accept portable
     } else store = new Store();
+
+    styleCache = new Store({ name: 'style-cache' });
 
     require('dotenv').config();
 
@@ -424,7 +428,7 @@ app.on('ready', () => {
             if (!store.has("dark-or-white")) {
                 if (nativeTheme.shouldUseDarkColors) {
                     try {
-                        store.set('isdark', true);
+                        styleCache.set('isdark', true);
                     } catch (e) {
                         console.log(e);
                     }
@@ -434,7 +438,7 @@ app.on('ready', () => {
                     }
                 } else {
                     try {
-                        store.set('isdark', false);
+                        styleCache.set('isdark', false);
                     } catch (e) {
                         console.log(e);
                     }
@@ -498,7 +502,7 @@ app.on('ready', () => {
             loops: store.get('looptime'),
             focusWhenWorking: store.get("fullscreen-work"),
             focusWhenResting: store.get("fullscreen")
-        })
+        });
         try {
             store.delete("worktime");
             store.delete("resttime");
@@ -544,7 +548,7 @@ app.on('ready', () => {
                         if (parseInt(items[i].value, 16).toString(2).charAt(21) == 1 && systemPreferences.isAeroGlassEnabled()) {
                             isShadowless = false;
                             try {
-                                store.set("is-shadowless", false);
+                                styleCache.set("is-shadowless", false);
                             }
                             catch (e) {
                                 console.log(e);
@@ -552,7 +556,7 @@ app.on('ready', () => {
                         } else {
                             isShadowless = true;
                             try {
-                                store.set("is-shadowless", true);
+                                styleCache.set("is-shadowless", true);
                             }
                             catch (e) {
                                 console.log(e);
@@ -911,9 +915,9 @@ function isDarkMode() {
             else return true;
         } else {
             try {
-                store.set('isdark', false);
+                styleCache.set('isdark', false);
                 darkModeSettingsFinder();
-                return store.get('isdark');
+                return styleCache.get('isdark');
             } catch (e) {
                 console.log(e)
             }
@@ -923,13 +927,13 @@ function isDarkMode() {
 function darkModeSettingsFinder() {
     if (process.platform == "darwin") {
         if (nativeTheme.shouldUseDarkColors) {
-            store.set('isdark', true);
+            styleCache.set('isdark', true);
             if (win != null) {
                 win.setBackgroundColor('#191919');
                 win.webContents.send('darkModeChanges');
             }
         } else {
-            store.set('isdark', false);
+            styleCache.set('isdark', false);
         }
     } else if (process.platform == 'win32') {
         var regKey = new Registry({
@@ -943,7 +947,7 @@ function darkModeSettingsFinder() {
                 for (var i = 0; i < items.length; i++) {
                     if (items[i].name == 'AppsUseLightTheme') {
                         if (items[i].value == "0x0") {
-                            store.set('isdark', true);
+                            styleCache.set('isdark', true);
                             if (win != null) {
                                 win.setBackgroundColor('#191919');
                                 win.webContents.send('darkModeChanges');
@@ -1028,7 +1032,28 @@ ipcMain.on('warning-giver-workend', function () {
             win.maximizable = false;
         } else
             setTimeout(function () {
-                dialog.showMessageBox({
+                if (process.platform != "darwin" || (process.platform == "darwin" && restTimeFocused))
+                    dialog.showMessageBox(win, {
+                        title: (store.has("personalization-notification.work-time-end") ?
+                            store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                        type: "warning",
+                        message: (store.has("personalization-notification.work-time-end-msg") ?
+                            store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                            + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                    }).then(function (response) {
+                        if (restTimeFocused && (!isLoose)) {
+                            fullScreenProtection = true;
+                        } else {
+                            if (store.get("top") != true) {
+                                win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                                if (!hasFloating) win.moveTop();
+                            }
+                            if (dockHide) app.dock.hide();
+                        }
+                        win.webContents.send('warning-closed');
+                        win.maximizable = false;
+                    });
+                else dialog.showMessageBox({
                     title: (store.has("personalization-notification.work-time-end") ?
                         store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                     type: "warning",
@@ -1112,7 +1137,28 @@ ipcMain.on('warning-giver-restend', function () {
             win.maximizable = false;
         } else
             setTimeout(function () {
-                dialog.showMessageBox({
+                if (process.platform != "darwin" || (process.platform == "darwin" && workTimeFocused))
+                    dialog.showMessageBox(win, {
+                        title: (store.has("personalization-notification.rest-time-end") ?
+                            store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                        type: "warning",
+                        message: (store.has("personalization-notification.rest-time-end-msg") ?
+                            store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                            + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                    }).then(function (response) {
+                        if (workTimeFocused) {
+                            fullScreenProtection = true;
+                        } else {
+                            if (store.get("top") != true) {
+                                win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
+                                if (!hasFloating) win.moveTop();
+                            }
+                            if (dockHide) app.dock.hide();
+                        }
+                        win.webContents.send('warning-closed');
+                        win.maximizable = false;
+                    })
+                else dialog.showMessageBox({
                     title: (store.has("personalization-notification.rest-time-end") ?
                         store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                     type: "warning",
@@ -1540,8 +1586,8 @@ function floating() {
                 floatingWin = new BrowserWindow({
                     width: 78,
                     height: 78,
-                    x: store.has("floating-axis") ? store.get("floating-axis").x : 33,
-                    y: store.has("floating-axis") ? store.get("floating-axis").y : 33,
+                    x: styleCache.has("floating-axis") ? styleCache.get("floating-axis").x : 33,
+                    y: styleCache.has("floating-axis") ? styleCache.get("floating-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                     resizable: false,
                     maximizable: false,
@@ -1566,7 +1612,7 @@ function floating() {
                 });
                 floatingWin.on('move', () => {
                     try {
-                        store.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
+                        styleCache.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
                     } catch (e) {
                         console.log(e);
                     }
