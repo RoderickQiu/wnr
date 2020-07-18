@@ -895,11 +895,7 @@
         }
         function languageSetting(val) {
             if (store.get('i18n') != val) {
-                try {
-                    store.set("i18n", val);
-                } catch (e) {
-                    console.log(e);
-                }
+                store.set("i18n", val);
                 timeOut = setTimeout("call('relauncher')", 500);
             }
         }
@@ -1050,29 +1046,25 @@
 
         //lock mode settings
         function lock(passcode, again) {
-            try {
-                var md5 = require('crypto-js/md5');
-                if (passcode == "" || again == "") ipc.send("locker-passcode", 'empty');
-                else
-                    if (!store.get('islocked')) {
-                        if (passcode == again) {
-                            store.set('lockerpasscode', md5(passcode).toString());
-                            store.set('islocked', true);
-                            ipc.send("locker-passcode", 'lock-mode-on');
+            var md5 = require('crypto-js/md5');
+            if (passcode == "" || again == "") ipc.send("locker-passcode", 'empty');
+            else
+                if (!store.get('islocked')) {
+                    if (passcode == again) {
+                        store.set('lockerpasscode', md5(passcode).toString());
+                        store.set('islocked', true);
+                        ipc.send("locker-passcode", 'lock-mode-on');
+                        window.close();
+                    } else ipc.send("locker-passcode", 'not-same-password');
+                } else {
+                    if (passcode == again) {
+                        if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) {
+                            store.set('islocked', false);
+                            ipc.send("locker-passcode", 'lock-mode-off');
                             window.close();
-                        } else ipc.send("locker-passcode", 'not-same-password');
-                    } else {
-                        if (passcode == again) {
-                            if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) {
-                                store.set('islocked', false);
-                                ipc.send("locker-passcode", 'lock-mode-off');
-                                window.close();
-                            } else ipc.send("locker-passcode", 'wrong-passcode');
-                        } else ipc.send("locker-passcode", 'not-same-password');
-                    }
-            } catch (e) {
-                console.log(e);
-            }
+                        } else ipc.send("locker-passcode", 'wrong-passcode');
+                    } else ipc.send("locker-passcode", 'not-same-password');
+                }
         }
 
         //other things
@@ -1144,22 +1136,18 @@
 
         function personalizedNotification() {
             $(".personalization-notification").each(function () {
-                try {
-                    if ($(this).val() && $(this).val() != "")
-                        store.set("personalization-notification." + $(this).attr("name"), $(this).val());
-                    else store.delete("personalization-notification." + $(this).attr("name"));
-                } catch (e) {
-                    console.log(e);
-                }
+                if ($(this).val() && $(this).val() != "")
+                    store.set("personalization-notification." + $(this).attr("name"), $(this).val());
+                else store.delete("personalization-notification." + $(this).attr("name"));
             });
         }
 
         var player = document.createElement("audio");//alert player
-        let workTimeEndSoundList = ['alarming', 'beep', 'beep2', 'clock', 'gun', 'tick', 'trumpet', 'whistle'];
-        for (i in workTimeEndSoundList) {
+        let soundList = ['alarming', 'beep', 'clock', 'tick', 'trumpet', 'whistle', 'horns', 'magic', 'piano'];
+        for (i in soundList) {
             $("#work-time-end-sound-select").append("\
-            <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + workTimeEndSoundList[i] + "\")'>"
-                + workTimeEndSoundList[i] + "</a>");
+            <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
+                + soundList[i] + "</a>");
         }
         $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
         function workTimeEndSoundSetting(val) {
@@ -1174,11 +1162,10 @@
             }
         }
 
-        let allTimeEndSoundList = ['clock', 'horns', 'magic', 'piano', 'tick', 'whistle'];
-        for (i in allTimeEndSoundList) {
+        for (i in soundList) {
             $("#all-time-end-sound-select").append("\
-            <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + allTimeEndSoundList[i] + "\")'>"
-                + allTimeEndSoundList[i] + "</a>");
+            <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
+                + soundList[i] + "</a>");
         }
         $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "piano");
         function allTimeEndSoundSetting(val) {
@@ -1198,12 +1185,8 @@
         else $("#white-or-dark-dropdown-button").html(i18n.__('personalization-white-or-dark-mode-auto'));
         function darkOrWhiteSetting(val) {
             if (store.get('dark-or-white') != val) {
-                try {
-                    if (val == "auto") store.delete("dark-or-white");
-                    else store.set("dark-or-white", val);
-                } catch (e) {
-                    console.log(e);
-                }
+                if (val == "auto") store.delete("dark-or-white");
+                else store.set("dark-or-white", val);
                 timeOut = setTimeout("call('relauncher')", 500);
             }
         }

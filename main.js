@@ -360,11 +360,7 @@ app.on('ready', () => {
                     type: "warning",
                     message: i18n.__('windows-7-notification-msg'),
                 }).then(function () {
-                    try {
-                        store.set("windows-7-notification", 1);
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    store.set("windows-7-notification", 1);
                 });
             }
         }
@@ -386,23 +382,14 @@ app.on('ready', () => {
         else return false;
     }
 
-    try {
-        store.set("version", require("./package.json").version);
-    } catch (e) {
-        console.log(e);
-    }
-    try {
-        if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
-        else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
-    } catch (e) {
-        console.log(e);
-    }
-    try {
-        if (!store.get('hotkey2')) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + S');
-        else if (isTagNude(store.get('hotkey2'))) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey2'));
-    } catch (e) {
-        console.log(e);
-    }
+    store.set("version", require("./package.json").version);
+
+
+    if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
+    else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
+
+    if (!store.get('hotkey2')) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + S');
+    else if (isTagNude(store.get('hotkey2'))) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey2'));
 
     globalShortcut.register(store.get('hotkey1'), () => {
         if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose)) || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
@@ -414,11 +401,7 @@ app.on('ready', () => {
         win.closable = false;
     }
 
-    try {
-        store.set("just-launched", true);
-    } catch (e) {
-        console.log(e);
-    }
+    store.set("just-launched", true);
 
     if (process.platform == "darwin") {
         if (!app.isInApplicationsFolder()) {
@@ -427,21 +410,13 @@ app.on('ready', () => {
         nativeTheme.on('updated', function theThemeHasChanged() {
             if (!store.has("dark-or-white")) {
                 if (nativeTheme.shouldUseDarkColors) {
-                    try {
-                        styleCache.set('isdark', true);
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    styleCache.set('isdark', true);
                     if (win != null) {
                         win.setBackgroundColor('#191919');
                         win.webContents.send('darkModeChanges');
                     }
                 } else {
-                    try {
-                        styleCache.set('isdark', false);
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    styleCache.set('isdark', false);
                     if (win != null) {
                         win.setBackgroundColor('#fefefe');
                         win.webContents.send('darkModeChanges');
@@ -460,11 +435,8 @@ app.on('ready', () => {
     settingsWinContextMenuSolution();
 
     if (!store.has("predefined-tasks-created")) {
-        try {
-            store.set("predefined-tasks-created", true);
-        } catch (e) {
-            console.log(e);
-        }
+        store.set("predefined-tasks-created", true);
+
         predefinedTasks = new Array({
             name: i18n.__('predefined-task-wnr-recommended'),
             workTime: 30,
@@ -487,12 +459,8 @@ app.on('ready', () => {
             focusWhenWorking: true,
             focusWhenResting: false
         });
-        try {
-            store.set("predefined-tasks", predefinedTasks);
-            store.set("default-task", -1);//-1: not set yet
-        } catch (e) {
-            console.log(e);
-        }
+        store.set("predefined-tasks", predefinedTasks);
+        store.set("default-task", -1);//-1: not set yet
     } else predefinedTasks = store.get("predefined-tasks", predefinedTasks);//init predefined tasks
     if (store.get("worktime")) {
         predefinedTasks.push({
@@ -547,20 +515,10 @@ app.on('ready', () => {
                     if (items[i].name == 'UserPreferencesMask') {
                         if (parseInt(items[i].value, 16).toString(2).charAt(21) == 1 && systemPreferences.isAeroGlassEnabled()) {
                             isShadowless = false;
-                            try {
-                                styleCache.set("is-shadowless", false);
-                            }
-                            catch (e) {
-                                console.log(e);
-                            }
+                            styleCache.set("is-shadowless", false);
                         } else {
                             isShadowless = true;
-                            try {
-                                styleCache.set("is-shadowless", true);
-                            }
-                            catch (e) {
-                                console.log(e);
-                            }
+                            styleCache.set("is-shadowless", true);
                         }
                     }
                 }
@@ -893,11 +851,7 @@ function leanCloudSolution() {
                             if (pushNotificationLink != "" && pushNotificationLink != null)
                                 notificationSolution(title, content, "push-notification");
                             else notificationSolution(title, content, "normal");
-                            try {
-                                store.set(id, true);
-                            } catch (e) {
-                                console.log(e);
-                            }
+                            store.set(id, true);
                         }
                     }
                 })
@@ -914,13 +868,9 @@ function isDarkMode() {
             if (store.get("dark-or-white") == "light") return false;
             else return true;
         } else {
-            try {
-                styleCache.set('isdark', false);
-                darkModeSettingsFinder();
-                return styleCache.get('isdark');
-            } catch (e) {
-                console.log(e)
-            }
+            styleCache.set('isdark', false);
+            darkModeSettingsFinder();
+            return styleCache.get('isdark');
         }
     }
 }
@@ -1240,11 +1190,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
                             if (msg.checkboxChecked) {
                                 shell.openExternal("https://github.com/RoderickQiu/wnr");
                             }
-                            try {
-                                store.set("suggest-star", "suggested");
-                            } catch (e) {
-                                console.log(e);
-                            }
+                            store.set("suggest-star", "suggested");
                         });
                     }
                     win.maximizable = false;
@@ -1357,11 +1303,7 @@ ipcMain.on('global-shortcut-set', function (event, message) {
         console.log(e);
     } finally {
         if (!hasFailed) {
-            try {
-                store.set("hotkey" + message.type, message.to);
-            } catch (err) {
-                console.log(err);
-            }
+            store.set("hotkey" + message.type, message.to);
         }
     }
 })
@@ -1450,13 +1392,9 @@ function settings(mode) {
                 webPreferences: { nodeIntegration: true },
                 titleBarStyle: "hidden"
             });
-            try {
-                if (mode == 'locker') store.set("settings-goto", "locker");
-                else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
-                else store.set("settings-goto", "normal");
-            } catch (e) {
-                console.log(e);
-            }
+            if (mode == 'locker') store.set("settings-goto", "locker");
+            else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
+            else store.set("settings-goto", "normal");
             settingsWin.loadFile("settings.html");
             if (app.isPackaged) win.setAlwaysOnTop(true, "floating");
             if (app.isPackaged) settingsWin.setAlwaysOnTop(true, "floating");
@@ -1488,11 +1426,7 @@ function settings(mode) {
                 else isLoose = false;
             })
             if (!store.get("settings-experience")) {
-                try {
-                    store.set("settings-experience", true);
-                } catch (e) {
-                    console.log(e);
-                }
+                store.set("settings-experience", true);
                 notificationSolution(i18n.__('newbie-for-settings'), i18n.__('newbie-for-settings-tip'), "normal");
                 if (process.platfrom == "darwin")
                     notificationSolution(i18n.__('newbie-for-settings'), i18n.__('permission-ask'), "normal")
@@ -1611,11 +1545,7 @@ function floating() {
                     if (store.get("top") != true) win.setAlwaysOnTop(false);
                 });
                 floatingWin.on('move', () => {
-                    try {
-                        styleCache.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
-                    } catch (e) {
-                        console.log(e);
-                    }
+                    styleCache.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
                 })
             }
         }
@@ -1716,29 +1646,25 @@ ipcMain.on("timer-win", function (event, message) {
 })
 
 ipcMain.on("floating-conversation", function (event, message) {
-    try {
-        if (message.topic == "time-left") {
-            if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
-        } else if (message.topic == "stop") {
-            if (win != null) win.webContents.send('floating-message', 'stop');
-        } else if (message.topic == "skip") {
-            if (win != null) win.webContents.send('floating-message', 'skipper');
-        } else if (message.topic == "recover") {
-            if (win != null) {
-                win.restore();
-                win.show();
-            }
-            if (win != null) win.webContents.send('floating-message', 'closed');
-        } else if (message.topic == "back") {
-            if (win != null) {
-                win.restore();
-                win.show();
-            }
-            if (win != null) win.webContents.send('floating-message', 'back');
-        } else if (message.topic == "stop-sync") {
-            if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
+    if (message.topic == "time-left") {
+        if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
+    } else if (message.topic == "stop") {
+        if (win != null) win.webContents.send('floating-message', 'stop');
+    } else if (message.topic == "skip") {
+        if (win != null) win.webContents.send('floating-message', 'skipper');
+    } else if (message.topic == "recover") {
+        if (win != null) {
+            win.restore();
+            win.show();
         }
-    } catch (e) {
-        console.log(e);
+        if (win != null) win.webContents.send('floating-message', 'closed');
+    } else if (message.topic == "back") {
+        if (win != null) {
+            win.restore();
+            win.show();
+        }
+        if (win != null) win.webContents.send('floating-message', 'back');
+    } else if (message.topic == "stop-sync") {
+        if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
     }
 })

@@ -253,5 +253,6 @@
     "focus-notify-body": "時開啓全屏專心模式，到時將無法退出",
     "recover": "退出MINI模式",
     "mini-mode": "MINI模式",
-    "min-left": "分鍾剩余"
+    "min-left": "分鍾剩余",
+    "statistics": "使用統計"
 }

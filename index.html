@@ -39,14 +39,10 @@
     <script src="supporter.js"></script><!-- support wnr running -->
     <script src="updater.js"></script><!-- check for updates -->
     <script>
-        try {
-            if (!store.get('tour')) {
-                store.set('tour', 'true');
-                store.set('islocked', false);
-                ipc.send("tourguide");
-            }
-        } catch (e) {
-            console.log(e);
+        if (!store.get('tour')) {
+            store.set('tour', 'true');
+            store.set('islocked', false);
+            ipc.send("tourguide");
         }
 
         const shi = require("node-shi");
@@ -86,6 +82,8 @@
                         <script>document.write(i18n.__('menu'));</script>
                     </div>
                     <div class="dropdown-divider"></div>
+                    <a href="javascript:statistics()" class="small dropdown-item">
+                        <script>document.write(i18n.__('statistics'));</script></a>
                     <a href="javascript:call('locker')" class="small dropdown-item">
                         <script>document.write(i18n.__('locker-settings'));</script></a>
                     <a href="javascript:call('settings')" class="small dropdown-item should-lock">
@@ -228,6 +226,10 @@
             $("#no-use-space").css("display", "none");
         }
 
+        function statistics() {
+            window.location.href = "statistics.html";
+        }
+
         var timeCount, myDate, h, min, defaultArray;
         function sumGet(workTimeGet, restTimeGet, loopGet) {
             timeCount = Math.floor((Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet));
@@ -329,36 +331,32 @@
 
         setTimeout(function () {
             focusNotifier();
-            try {
-                if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
-                    if (store.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 2)
-                        timingData.set("last-recorded-minutes-left", 2);
-                    if (timingData.get("last-recorded-state").method == 1) {
-                        window.location.href =
-                            "timer.html?title=" + timingData.get("last-recorded-state").title
-                            + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
-                            + "&rest-time=" + timingData.get("last-recorded-state").restTime
-                            + "&loop=" + (store.get("infinity") ? 0 : 1)
-                            + "&note=" + timingData.get("last-recorded-state").note
-                            + "&method=1"
-                            + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
-                            + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
-                            + "&restored=true";
-                    } else {
-                        window.location.href =
-                            "timer.html?title=" + timingData.get("last-recorded-state").title
-                            + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
-                            + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
-                            + "&loop=" + (store.get("infinity") ? 0 : 1)
-                            + "&note=" + timingData.get("last-recorded-state").note
-                            + "&method=2"
-                            + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
-                            + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
-                            + "&restored=true";
-                    }
+            if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
+                if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 2)
+                    timingData.set("last-recorded-minutes-left", 2);
+                if (timingData.get("last-recorded-state").method == 1) {
+                    window.location.href =
+                        "timer.html?title=" + timingData.get("last-recorded-state").title
+                        + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
+                        + "&rest-time=" + timingData.get("last-recorded-state").restTime
+                        + "&loop=" + (store.get("infinity") ? 0 : 1)
+                        + "&note=" + timingData.get("last-recorded-state").note
+                        + "&method=1"
+                        + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
+                        + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
+                        + "&restored=true";
+                } else {
+                    window.location.href =
+                        "timer.html?title=" + timingData.get("last-recorded-state").title
+                        + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
+                        + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
+                        + "&loop=" + (store.get("infinity") ? 0 : 1)
+                        + "&note=" + timingData.get("last-recorded-state").note
+                        + "&method=2"
+                        + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
+                        + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
+                        + "&restored=true";
                 }
-            } catch (e) {
-                console.log(e);
             }
         }, 500);
     </script>

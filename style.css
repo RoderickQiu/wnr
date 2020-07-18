@@ -452,7 +452,7 @@ li input[type="checkbox"]::after {
     right: 14px;
 }
 
-#controller, #time-bar, #time-bar-macos {
+#controller, #time-bar, #time-bar-macos, #logo-bar {
     position: absolute;
     top: 8px;
     font-size: 18px;
@@ -472,7 +472,7 @@ li input[type="checkbox"]::after {
 
 #logo-bar {
     position: absolute;
-    top: 6px;
+    top: 4px;
     left: 8px;
     display: inline-block;
     background-clip: padding-box;

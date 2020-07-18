@@ -253,5 +253,6 @@
     "focus-notify-body": "focus mode will be on",
     "recover": "Exit the mini mode",
     "mini-mode": "Mini mode",
-    "min-left": "min left"
+    "min-left": "min left",
+    "statistics": "Statistics"
 }
