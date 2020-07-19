@@ -1,12 +1,11 @@
 # GitIgnore
 
 # Personal files
-dist*/*
 .markdownlint.json
-design*/*
-
-# Created by https://www.gitignore.io/api/node,macos,windows,visualstudiocode
-# Edit at https://www.gitignore.io/?templates=node,macos,windows,visualstudiocode
+dist/*
+designs/*
+output/*
+packaged/*
 
 ### macOS ###
 # General
@@ -151,4 +150,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.gitignore.io/api/node,macos,windows,visualstudiocode
-yarn.lock

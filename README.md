@@ -120,6 +120,8 @@ yarn # install deps
 
 yarn start # launch the app
 
+yarn node-minify # minify the app
+
 yarn nsis # windows nsis installer
 
 yarn nsis-ia32 # windows nsis installer (x86)
@@ -133,7 +135,11 @@ yarn mac # macos
 yarn linux # linux
 ```
 
-Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
+Please note that:
+
+- Node-minify is required after each time you've made some changes and is willing to build a new package because the files to be built will be copied from the `output` directory, which is the folder that `node-minify` outputs into.
+
+- Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
 
 ## Copyright & Credit
 
