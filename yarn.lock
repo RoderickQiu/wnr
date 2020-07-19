@@ -436,6 +436,11 @@ boolean@^3.0.0:
   resolved "https://registry.npm.taobao.org/boolean/download/boolean-3.0.1.tgz#35ecf2b4a2ee191b0b44986f14eb5f052a5cbb4f"
   integrity sha1-NezytKLuGRsLRJhvFOtfBSpcu08=
 
+bootstrap@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.npm.taobao.org/bootstrap/download/bootstrap-4.5.0.tgz#97d9dbcb5a8972f8722c9962483543b907d9b9ec"
+  integrity sha1-l9nby1qJcvhyLJliSDVDuQfZuew=
+
 boxen@^4.2.0:
   version "4.2.0"
   resolved "https://registry.npm.taobao.org/boxen/download/boxen-4.2.0.tgz#e411b62357d6d6d36587c8ac3d5d974daa070e64"
@@ -1491,6 +1496,11 @@ javascript-state-machine@^2.3.5:
   resolved "https://registry.npm.taobao.org/javascript-state-machine/download/javascript-state-machine-2.4.0.tgz#d8be31ec38f24ac1a1832f0b672fc3cd5f79c96e"
   integrity sha1-2L4x7DjySsGhgy8LZy/DzV95yW4=
 
+jquery@^3.5.1:
+  version "3.5.1"
+  resolved "https://registry.npm.taobao.org/jquery/download/jquery-3.5.1.tgz#d7b4d08e1bfdb86ad2f1a3d039ea17304717abb5"
+  integrity sha1-17TQjhv9uGrS8aPQOeoXMEcXq7U=
+
 js-pinyin@^0.1.9:
   version "0.1.9"
   resolved "https://registry.npm.taobao.org/js-pinyin/download/js-pinyin-0.1.9.tgz#cdf19335645ddb20d4630df1058aac25d256adfd"
@@ -2043,6 +2053,11 @@ pkg-up@^3.1.0:
   integrity sha1-EA7CNcwVDk/UJRlBJZaihRKg3vU=
   dependencies:
     find-up "^3.0.0"
+
+popper.js@^1.16.1:
+  version "1.16.1"
+  resolved "https://registry.npm.taobao.org/popper.js/download/popper.js-1.16.1.tgz#2a223cb3dc7b6213d740e40372be40de43e65b1b"
+  integrity sha1-KiI8s9x7YhPXQOQDcr5A3kPmWxs=
 
 prepend-http@^2.0.0:
   version "2.0.0"
