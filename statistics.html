@@ -52,23 +52,267 @@
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div>
-            to be done
+        <div id="top-bar">
+            <a id="today" href="javascript:switchMode('today')">今天</a> | <a id="yesterday"
+                href="javascript:switchMode('yesterday')">昨天</a> | <a id="this-week"
+                href="javascript:switchMode('this-week')">本周</a> | <a id="this-year"
+                href="javascript:switchMode('this-year')">本年</a>
+            | <a id="all-time" href="javascript:switchMode('all-time')">全部时间</a>
+            <hr />
         </div>
-    </div>
+        <div id="statistics-no-chart">
+            <span class="small">
+                <script>document.write(i18n.__('statistics-work-time'));</script>
+            </span><br />
+            <h1 class="rest">
+                <span id="work-time">--</span>
+                <small>
+                    <script>document.write(i18n.__('min'));</script>
+                </small>
+            </h1>
+            <span class="small">
+                <script>document.write(i18n.__('statistics-rest-time'));</script>
+            </span><br />
+            <h1 class="work">
+                <span id="rest-time">--</span>
+                <small>
+                    <script>document.write(i18n.__('min'));</script>
+                </small>
+            </h1>
+            <span class="small">
+                <script>document.write(i18n.__('statistics-time-sum'));</script>
+            </span><br />
+            <h1 class="text-muted">
+                <span id="sum">--</span>
+                <small>
+                    <script>document.write(i18n.__('min'));</script>
+                </small>
+            </h1>
+        </div>
+        <div id="statistics-with-chart">
+            <br />
+            <div class="container">
+                <div class="row">
+                    <div class="col">
+                        <span class="small">
+                            <script>document.write(i18n.__('statistics-work-time'));</script>
+                        </span><br />
+                        <b class="rest">
+                            <span id="work-time-with-chart">--</span>
+                            <small>
+                                <script>document.write(i18n.__('min'));</script>
+                            </small>
+                        </b>
+                    </div>
+                    <div class="col">
+                        <span class="small">
+                            <script>document.write(i18n.__('statistics-rest-time'));</script>
+                        </span><br />
+                        <b class="work">
+                            <span id="rest-time-with-chart">--</span>
+                            <small>
+                                <script>document.write(i18n.__('min'));</script>
+                            </small>
+                        </b>
+                    </div>
+                    <div class="col">
+                        <span class="small">
+                            <script>document.write(i18n.__('statistics-time-sum'));</script>
+                        </span><br />
+                        <b class="text-muted">
+                            <span id="sum-with-chart">--</span>
+                            <small>
+                                <script>document.write(i18n.__('min'));</script>
+                            </small>
+                        </b>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div id="statistics-graph">
+                <canvas id="graph"></canvas>
+            </div>
+        </div>
 
-    <script>
-        isTimerWindow(false);
-        if (process.platform == "darwin") {
-            $("#win-hider").css("display", "none");
-            $("#no-use-space").css("display", "none");
-        }
+        <script>
+            isTimerWindow(false);
+            if (process.platform == "darwin") {
+                $("#win-hider").css("display", "none");
+                $("#no-use-space").css("display", "none");
+            }
 
-        function backer() {
-            window.location.href = "index.html";
-        }
-    </script>
-    <script src="renderer.js"></script>
+            function backer() {
+                window.location.href = "index.html";
+            }
+
+            const schart = require("schart.js");
+            let statistics = new Store({ name: 'statistics' });
+
+            let nowDate = new Date();//get date and have preparations
+            let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
+            statistics.set("year", nowDate.getFullYear().toString());
+            statistics.set("mon", months[nowDate.getMonth()]);//"mon" represents month
+            statistics.set("day", nowDate.getDate().toString());
+            let yearAndMon = statistics.get("year") + statistics.get("mon");
+            let yearMonDay = statistics.get("year") + statistics.get("mon") + statistics.get("day");
+
+            let yesterdayDate = new Date();//get yesterday info
+            yesterdayDate.setDate(yesterdayDate.getDate() - 1);
+            let yesterdayYearMonDay = yesterdayDate.getFullYear().toString() + months[yesterdayDate.getMonth()] + yesterdayDate.getDate().toString();
+
+            let thisWeekDate = new Date();//get info about this week
+            thisWeekDate.setDate(thisWeekDate.getDate() - thisWeekDate.getDay());
+            let thisWeekWorkTimeSum = 0, thisWeekRestTimeSum = 0, thisWeekTimeSum = 0;
+            let weekDayYearMonDay;
+            let thisWeekWorkTimes = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimes = [0, 0, 0, 0, 0, 0, 0];
+            for (let weekDay = 0; weekDay < 7; weekDay++) {
+                weekDayYearMonDay = thisWeekDate.getFullYear().toString() + months[thisWeekDate.getMonth()] + thisWeekDate.getDate().toString();
+                thisWeekWorkTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
+                thisWeekWorkTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
+                thisWeekRestTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
+                thisWeekRestTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
+                thisWeekTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).sum : 0;
+
+                thisWeekDate.setDate(thisWeekDate.getDate() + 1);
+            }
+
+            let monthYearAndMon;//get info about this year
+            let thisYearWorkTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], thisYearRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+            for (let monthVar = 0; monthVar < 12; monthVar++) {
+                monthYearAndMon = statistics.get("year") + months[monthVar];
+                thisYearWorkTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).workTime : 0;
+                thisYearRestTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).restTime : 0;
+            }
+
+            let allTimeWorkTimeSum = 0, allTimeRestTimeSum = 0, allTimeTimeSum = 0;//get info about all time
+            let yearVar = Number(statistics.get("year"));
+            while (yearVar) {
+                if (statistics.has(yearVar.toString())) {
+                    allTimeWorkTimeSum += statistics.get(yearVar.toString()).workTime;
+                    allTimeRestTimeSum += statistics.get(yearVar.toString()).restTime;
+                    allTimeTimeSum += statistics.get(yearVar.toString()).sum;
+                    yearVar--;
+                } else break;
+            }
+
+            let statisticsMode = "today";
+            $(function () { switchMode(statisticsMode); });
+            function switchMode(mode) {
+                statisticsMode = mode;
+                if (statisticsMode == "today") {
+                    $("#today").css("font-weight", "bold");
+                    $("#yesterday").css("font-weight", "normal");
+                    $("#this-week").css("font-weight", "normal");
+                    $("#this-year").css("font-weight", "normal");
+                    $("#all-time").css("font-weight", "normal");
+
+                    $("#statistics-with-chart").css("display", "none");
+                    $("#statistics-no-chart").css("display", "block");
+
+                    $("#work-time").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0");
+                    $("#rest-time").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0");
+                    $("#sum").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0");
+                } else if (statisticsMode == "yesterday") {
+                    $("#today").css("font-weight", "normal");
+                    $("#yesterday").css("font-weight", "bold");
+                    $("#this-week").css("font-weight", "normal");
+                    $("#this-year").css("font-weight", "normal");
+                    $("#all-time").css("font-weight", "normal");
+
+                    $("#statistics-with-chart").css("display", "none");
+                    $("#statistics-no-chart").css("display", "block");
+
+                    $("#work-time").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0");
+                    $("#rest-time").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0");
+                    $("#sum").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0");
+                } else if (statisticsMode == "this-week") {
+                    $("#today").css("font-weight", "normal");
+                    $("#yesterday").css("font-weight", "normal");
+                    $("#this-week").css("font-weight", "bold");
+                    $("#this-year").css("font-weight", "normal");
+                    $("#all-time").css("font-weight", "normal");
+
+                    $("#statistics-with-chart").css("display", "block");
+                    $("#statistics-no-chart").css("display", "none");
+
+                    $("#work-time-with-chart").text(thisWeekWorkTimeSum);
+                    $("#rest-time-with-chart").text(thisWeekRestTimeSum);
+                    $("#sum-with-chart").text(thisWeekTimeSum);
+
+                    let options = {
+                        type: 'bar',
+                        legend: {
+                            display: false
+                        },
+                        bgColor: '#ffffff',
+                        labels: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+                        topPadding: 19,
+                        bottomPadding: 49,
+                        showGrid: false,
+                        datasets: [{
+                            fillColor: '#5490eacc',
+                            data: thisWeekWorkTimes
+                        }, {
+                            fillColor: '#ea5454cc',
+                            data: thisWeekRestTimes
+                        }]
+                    }
+                    new schart('graph', options);//statistics graph
+                } else if (statisticsMode == "this-year") {
+                    $("#today").css("font-weight", "normal");
+                    $("#yesterday").css("font-weight", "normal");
+                    $("#this-week").css("font-weight", "normal");
+                    $("#this-year").css("font-weight", "bold");
+                    $("#all-time").css("font-weight", "normal");
+
+                    $("#statistics-with-chart").css("display", "block");
+                    $("#statistics-no-chart").css("display", "none");
+
+                    $("#work-time-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0");
+                    $("#rest-time-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).restTime : "0");
+                    $("#sum-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).sum : "0");
+
+                    let options = {
+                        type: 'line',
+                        legend: {
+                            display: false
+                        },
+                        bgColor: '#ffffff',
+                        labels: months,
+                        xRorate: 45,
+                        yEqual: 3,
+                        topPadding: 19,
+                        bottomPadding: 69,
+                        showGrid: false,
+                        showValue: false,
+                        datasets: [{
+                            fillColor: '#5490eacc',
+                            data: thisYearWorkTimes
+                        }, {
+                            fillColor: '#ea5454cc',
+                            data: thisYearRestTimes
+                        }]
+                    }
+                    new schart('graph', options);//statistics graph
+                } else if (statisticsMode == "all-time") {
+                    $("#today").css("font-weight", "normal");
+                    $("#yesterday").css("font-weight", "normal");
+                    $("#this-week").css("font-weight", "normal");
+                    $("#this-year").css("font-weight", "normal");
+                    $("#all-time").css("font-weight", "bold");
+
+                    $("#statistics-with-chart").css("display", "none");
+                    $("#statistics-no-chart").css("display", "block");
+
+                    $("#work-time").text(allTimeWorkTimeSum);
+                    $("#rest-time").text(allTimeRestTimeSum);
+                    $("#sum").text(allTimeTimeSum);
+                }
+            }//to show the stuffs
+
+
+        </script>
+        <script src="renderer.js"></script>
 </body>
 
 </html>

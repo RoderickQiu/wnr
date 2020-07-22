@@ -159,6 +159,12 @@
     "settings-import": "Paste here",
     "settings-import-tip": "Paste the token here and then press Enter to import settings.",
     "settings-import-error": "Invalid token.",
+    "statistics-backup-msg": "Back statistics up: ",
+    "statistics-backup-tip": "Click \"Copy\" to copy the statistics token to clipboard.",
+    "statistics-import-msg": "Import statistics: ",
+    "statistics-import": "Paste here",
+    "statistics-import-tip": "Paste the token here and then press Enter to import statistics.",
+    "statistics-import-error": "Invalid token.",
     "menu": "Menu",
     "prevent-stop": "Cannot exit, because you've entered lock mode.",
     "infinity": "infinity mode",
@@ -254,5 +260,8 @@
     "recover": "Exit the mini mode",
     "mini-mode": "Mini mode",
     "min-left": "min left",
-    "statistics": "Statistics"
+    "statistics": "Statistics",
+    "statistics-work-time": "Working time",
+    "statistics-rest-time": "Resting time",
+    "statistics-time-sum": "All together"
 }

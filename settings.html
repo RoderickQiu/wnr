@@ -516,7 +516,7 @@
                     <li>
                         <script>document.write(i18n.__('settings-backup-msg'));</script>
                         <p class="small text-muted">
-                            <a href="javascript:settingsBackup()" class="rest underlined">
+                            <a href="javascript:settingsBackup('settings')" class="rest underlined">
                                 <script>document.write(i18n.__('copy') + i18n.__('period-symbol'));</script>
                             </a>&nbsp;
                             <script>document.write(i18n.__('settings-backup-tip'));</script>
@@ -527,10 +527,34 @@
                         <script>document.write(i18n.__('settings-import-msg'));</script>
                         <br />
                         <input name="settings-import-input" id="settings-import-input" type="password"
-                            onkeydown="if(event.keyCode == 13) settingsImport($('#settings-import-input').val());" />
+                            onkeydown="if(event.keyCode == 13) settingsImport($('#settings-import-input').val(),'settings');" />
                         <script> $('#settings-import-input').attr('placeholder', i18n.__('settings-import'));</script>
                         <p class="small text-muted">
                             <script>document.write(i18n.__('settings-import-tip'));</script>
+                            <b>
+                                <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                            </b>
+                        </p>
+                    </li>
+                    <!-- statistics backup -->
+                    <li>
+                        <script>document.write(i18n.__('statistics-backup-msg'));</script>
+                        <p class="small text-muted">
+                            <a href="javascript:settingsBackup('statistics')" class="rest underlined">
+                                <script>document.write(i18n.__('copy') + i18n.__('period-symbol'));</script>
+                            </a>&nbsp;
+                            <script>document.write(i18n.__('statistics-backup-tip'));</script>
+                        </p>
+                    </li>
+                    <!-- statistics import -->
+                    <li>
+                        <script>document.write(i18n.__('statistics-import-msg'));</script>
+                        <br />
+                        <input name="statistics-import-input" id="statistics-import-input" type="password"
+                            onkeydown="if(event.keyCode == 13) settingsImport($('#statistics-import-input').val(),'statistics');" />
+                        <script> $('#statistics-import-input').attr('placeholder', i18n.__('statistics-import'));</script>
+                        <p class="small text-muted">
+                            <script>document.write(i18n.__('statistics-import-tip'));</script>
                             <b>
                                 <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                             </b>
@@ -1107,26 +1131,36 @@
         var aes = require("crypto-js/aes");
         var encoding = require("crypto-js/enc-utf8");
         var copyToClipboard = require("copy-to-clipboard");
-        function settingsBackup() {
-            var cipherText = aes.encrypt(JSON.stringify(store.store), String("We all love wnr, so please do not use this passcode to do bad things."));
+        var statistics = new Store({ name: 'statistics' });
+        function settingsBackup(mode) {
+            var cipherText = aes.encrypt(JSON.stringify((mode == "statistics") ? statistics.store : store.store), (mode == "statistics") ? String("She's awesome.") : String("We all love wnr, so please do not use this passcode to do bad things."));
             copyToClipboard(cipherText.toString());
             ipc.send("notify", i18n.__('copied'));
         }
-        function settingsImport(token) {
-            var bytes = aes.decrypt(token, String("We all love wnr, so please do not use this passcode to do bad things."));
-            var isAllRight = true;
+        function settingsImport(token, mode) {
+            var bytes = aes.decrypt(token, (mode == "statistics") ? String("She's awesome.") : String("We all love wnr, so please do not use this passcode to do bad things."));
+            var isAllRight = true, formerData = null, importTimeout = null;
             try {
                 var decryptedData = JSON.parse(bytes.toString(encoding));
-                store.set(decryptedData);
-            } catch (error) {
-                if (error instanceof SyntaxError) {
-                    ipc.send("alert", i18n.__('settings-import-error'))
-                    isAllRight = false;
+                if (mode == "statistics") {
+                    formerData = statistics.store;
+                    statistics.clear();
+                    statistics.set(decryptedData);
+                } else {
+                    formerData = store.store;
+                    store.clear();
+                    store.set(decryptedData);
                 }
+            } catch (error) {
+                ipc.send("alert", i18n.__('settings-import-error'))
+                isAllRight = false;
+                if (importTimeout != null) clearTimeout(importTimeout);
+                if (mode == "statistics") statistics.set(formerData);
+                else store.set(formerData);
             }
-            setTimeout(function () {
+            importTimeout = setTimeout(function () {
                 if (isAllRight) call('relauncher');
-            }, 500);
+            }, 1000);
         }
 
         //personalization

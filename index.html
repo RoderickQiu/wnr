@@ -70,7 +70,7 @@
     </script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
-            <div class="dropdown dropright dropdown-default">
+            <div class="dropdown dropdown-default">
                 <a class="dropdown-toggle rest" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
                     aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                     <img src="res/icons/wnrIcon.png" width="18px" />
@@ -155,13 +155,14 @@
                 <div class="align-content-center">
                     <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                     <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdown-extend-button"
+                        <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                             <span class="dropdown-default extreme-small">
                                 <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
                             </span>
                         </a>
-                        <div class="dropdown-menu p-1" aria-labelledby="dropdown-extend-button">
+                        <div class="dropdown-menu p-1" id="dropdown-menu-extend"
+                            aria-labelledby="dropdown-extend-button">
                             <p class="extreme-small">&nbsp;</p>
                             <div class="form-group px-2" id="extend-form">
                                 <input name="title" id="title" type="text" class="small" maxlength="14" />

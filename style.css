@@ -255,12 +255,16 @@ li input[type="checkbox"]::after {
 
 .dropdown-menu {
     border-width: 1.5px;
-    margin-top: 6px;
+    margin-top: 9px;
 }
 
 .dropdown-item {
     font-size: 12px;
     line-height: 240%;
+}
+
+.dropdown-toggle::after {
+    vertical-align: .055em;
 }
 
 .time-bar-focus {
@@ -278,7 +282,16 @@ li input[type="checkbox"]::after {
     color: #5490ea;
 }
 
-#dropdown-extend-button {
+#set .dropdown-menu {
+    margin-top: 6px;
+    transform: translateY(39px) !important;
+}
+
+#set #dropdown-menu-extend {
+    transform: translate3d(-233px, -14px, 0px) !important;
+}
+
+#dropdown-button-extend {
     color: #6c757d8f;
 }
 
@@ -472,7 +485,7 @@ li input[type="checkbox"]::after {
 
 #logo-bar {
     position: absolute;
-    top: 4px;
+    top: 2px;
     left: 8px;
     display: inline-block;
     background-clip: padding-box;
@@ -666,4 +679,44 @@ li input[type="checkbox"]::after {
     top: 50%;
     transform: translate(50%, -39%);
     -webkit-app-region: no-drag;
+}
+
+#top-bar {
+    position: absolute;
+    right: 50%;
+    top: 20%;
+    width: 80%;
+    transform: translate(50%, -39%);
+    text-align: center;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
+#top-bar a {
+    color: #6c757d;
+}
+
+#statistics-no-chart {
+    transform: translateY(19%);
+    text-align: center;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: text;
+}
+
+#statistics-no-chart h1 {
+    margin: 12px;
+}
+
+#statistics-with-chart {
+    position: absolute;
+    text-align: center;
+    vertical-align: top;
+    top: 24%;
+    width: 80%;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: text;
+}
+
+#statistics-graph {
+    height: 200px;
 }

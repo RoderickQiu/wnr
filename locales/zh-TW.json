@@ -159,6 +159,12 @@
     "settings-import": "粘貼在此",
     "settings-import-tip": "粘貼口令進文本框然後按下Enter鍵，導入設置項。",
     "settings-import-error": "口令無效，請重試。",
+    "statistics-backup-msg": "備份wnr的時間統計：",
+    "statistics-backup-tip": "點擊“複制”，可以複制並備份wnr時間統計項的口令。將口令粘貼到wnr的“導入時間統計”中，就可以實現時間統計的快捷導入。",
+    "statistics-import-msg": "導入wnr的時間統計：",
+    "statistics-import": "粘貼在此",
+    "statistics-import-tip": "粘貼口令進文本框然後按下Enter鍵，導入時間統計。",
+    "statistics-import-error": "口令無效，請重試。",
     "menu": "菜單列表",
     "prevent-stop": "目前處於鎖定糢式或者正在執行專心任務，不能退出",
     "infinity": "無限模式",
@@ -254,5 +260,8 @@
     "recover": "退出MINI模式",
     "mini-mode": "MINI模式",
     "min-left": "分鍾剩余",
-    "statistics": "使用統計"
+    "statistics": "使用統計",
+    "statistics-work-time": "工作時間",
+    "statistics-rest-time": "休息時間",
+    "statistics-time-sum": "時間總計"
 }

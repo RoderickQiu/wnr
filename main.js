@@ -30,7 +30,10 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     isLoose = false, isScreenLocked = false,
     hasFloating = false,
     kioskInterval = null,
-    store = null, styleCache = null;
+    recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
+    store = null, styleCache = null, statistics = null;
+
+let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW']//locale code
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
@@ -287,6 +290,7 @@ app.on('ready', () => {
     } else store = new Store();
 
     styleCache = new Store({ name: 'style-cache' });
+    statistics = new Store({ name: 'statistics' });
 
     require('dotenv').config();
 
@@ -384,6 +388,7 @@ app.on('ready', () => {
 
     store.set("version", require("./package.json").version);
 
+    statisticsInitializer();
 
     if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
     else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
@@ -910,6 +915,61 @@ function darkModeSettingsFinder() {
     }
 }
 
+function statisticsInitializer() {
+    tempDate = new Date();
+
+    year = tempDate.getFullYear().toString();
+    yearAndMon = year + months[tempDate.getMonth()];//"mon" represents month
+    yearMonDay = yearAndMon + tempDate.getDate().toString();
+    statistics.set("year", year);
+    statistics.set("mon", months[tempDate.getMonth()]);
+    statistics.set("day", tempDate.getDate().toString());
+}
+
+function statisticsWriter() {
+    statisticsInitializer();
+
+    if (isTimerWin) {
+        if (isWorkMode) {
+            let workTimePeriod = Math.floor((tempDate.getTime() - recorderDate.getTime()) / 60000);
+            recorderDate = tempDate;
+            statistics.set(yearMonDay, {
+                "workTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime + workTimePeriod : workTimePeriod,
+                "restTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : 0,
+                "sum": statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum + workTimePeriod : workTimePeriod
+            });
+            statistics.set(yearAndMon, {
+                "workTime": statistics.has(yearAndMon) ? statistics.get(yearAndMon).workTime + workTimePeriod : workTimePeriod,
+                "restTime": statistics.has(yearAndMon) ? statistics.get(yearAndMon).restTime : 0,
+                "sum": statistics.has(yearAndMon) ? statistics.get(yearAndMon).sum + workTimePeriod : workTimePeriod
+            });
+            statistics.set(year, {
+                "workTime": statistics.has(year) ? statistics.get(year).workTime + workTimePeriod : workTimePeriod,
+                "restTime": statistics.has(year) ? statistics.get(year).restTime : 0,
+                "sum": statistics.has(year) ? statistics.get(year).sum + workTimePeriod : workTimePeriod
+            });
+        } else {
+            let restTimePeriod = Math.floor((tempDate.getTime() - recorderDate.getTime()) / 60000);
+            recorderDate = tempDate;
+            statistics.set(yearMonDay, {
+                "workTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : 0,
+                "restTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime + restTimePeriod : restTimePeriod,
+                "sum": statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum + restTimePeriod : restTimePeriod
+            });
+            statistics.set(yearAndMon, {
+                "workTime": statistics.has(yearAndMon) ? statistics.get(yearAndMon).workTime : 0,
+                "restTime": statistics.has(yearAndMon) ? statistics.get(yearAndMon).restTime + restTimePeriod : restTimePeriod,
+                "sum": statistics.has(yearAndMon) ? statistics.get(yearAndMon).sum + restTimePeriod : restTimePeriod
+            });
+            statistics.set(year, {
+                "workTime": statistics.has(year) ? statistics.get(year).workTime : 0,
+                "restTime": statistics.has(year) ? statistics.get(year).restTime + restTimePeriod : restTimePeriod,
+                "sum": statistics.has(year) ? statistics.get(year).sum + restTimePeriod : restTimePeriod
+            });
+        }
+    }
+}
+
 app.on('activate', () => {
     if (win === null) {
         createWindow()
@@ -920,9 +980,12 @@ ipcMain.on('focus-mode-settings', function (event, message) {
     workTimeFocused = message.workTimeFocused;
     restTimeFocused = message.restTimeFocused;
     isWorkMode = true;
+    recorderDate = new Date()
 })
 
 ipcMain.on('warning-giver-workend', function () {
+    statisticsWriter();
+
     fullScreenProtection = false;
     if (win != null) {
         win.maximizable = false;
@@ -1028,6 +1091,8 @@ ipcMain.on('warning-giver-workend', function () {
 })
 
 ipcMain.on('warning-giver-restend', function () {
+    statisticsWriter();
+
     fullScreenProtection = false;
     if (win != null) {
         win.maximizable = false;
@@ -1133,6 +1198,8 @@ ipcMain.on('warning-giver-restend', function () {
 })
 
 ipcMain.on('warning-giver-all-task-end', function () {
+    statisticsWriter();
+
     fullScreenProtection = false;
     if (win != null) {
         win.maximizable = false;
@@ -1275,8 +1342,12 @@ function windowCloseChk() {
             checkboxChecked: false
         }).then(function (msger) {
             if (msger.checkboxChecked) {
-                multiScreenSolution("off");
-                app.quit();
+                statisticsWriter();
+
+                setTimeout(function () {
+                    multiScreenSolution("off");
+                    app.quit();
+                }, 500);
             }
         })
     else {
@@ -1627,6 +1698,9 @@ ipcMain.on("timer-win", function (event, message) {
             win.focus();
             win.setProgressBar(-1);
         }
+
+        statisticsWriter();
+
         if (dockHide) app.dock.hide();
         if (globalShortcut.isRegistered(store.get('hotkey2')))
             globalShortcut.unregister(store.get('hotkey2'));

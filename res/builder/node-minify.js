@@ -36,13 +36,13 @@ function minifier() {
                     output: path.join(outputUrl, fileName),
                     callback: function (err, min) { }
                 });
-            else if (fileName.indexOf(".html") != -1)
+            /*else if (fileName.indexOf(".html") != -1)
                 minify({
                     compressor: htmlMinifier,
                     input: path.join(originUrl, fileName),
                     output: path.join(outputUrl, fileName),
                     callback: function (err, min) { }
-                });
+                });*///disabled because it's sometimes buggy
         } catch (e) {
             console.log(e);
         }
@@ -61,6 +61,10 @@ function minifier() {
             console.log(e);
         }
     });//change locale jsons with minified ones
+
+    setTimeout(function () {
+        console.log("\nMinification finished. If you saw some warnings, just ignore them - in most cases, wnr will be fine. ");
+    }, 500);
 }
 
 function removePromise(dir) {
