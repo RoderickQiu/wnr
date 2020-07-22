@@ -6,8 +6,8 @@ const jsonMinify = require('@node-minify/jsonminify');
 const fs = require('fs');
 const path = require('path');
 
-const originUrl = path.join(__dirname, '\\../../');
-const outputUrl = path.join(__dirname, '\\../../output');
+const originUrl = path.join(__dirname, '/../../');
+const outputUrl = path.join(__dirname, '/../../output');
 
 if (fs.existsSync(outputUrl)) {//if the folder already exists
     removePromise(outputUrl).then(() => {//remove the former folder
