@@ -718,5 +718,16 @@ li input[type="checkbox"]::after {
 }
 
 #statistics-graph {
-    height: 200px;
+    height: 180px;
+}
+
+#statistics-back{
+    position: absolute;
+    bottom: 2px;
+    left: 8px;
+    display: inline-block;
+    background-clip: padding-box;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
 }

@@ -1,0 +1,3 @@
+const builder=require("electron-builder"),Platform=builder.Platform,config={directories:{output:"packaged/",app:"output/"},mac:{asarUnpack:["./node_modules/node-notifier/vendor/**"],target:["dmg"],icon:"res/icons/iconMac.icns",darkModeSupport:!0,files:["**/*",
+//! to exclude
+"!res/icons/*Win*","!res/icons/*.psd"]},dmg:{icon:"res/icons/iconMac.icns",backgroundColor:"#fefefe",artifactName:"${productName}-${version}-MacOS.${ext}"}};builder.build({targets:Platform.MAC.createTarget(),config:config}).then(e=>{console.log("Done!")}).catch(e=>{console.error(e)});

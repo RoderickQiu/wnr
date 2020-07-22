@@ -263,5 +263,10 @@
     "statistics": "Statistics",
     "statistics-work-time": "Working time",
     "statistics-rest-time": "Resting time",
-    "statistics-time-sum": "All together"
+    "statistics-time-sum": "All together",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "this-week": "This Week",
+    "this-year": "This Year",
+    "all-time": "All Time"
 }

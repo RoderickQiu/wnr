@@ -1,0 +1,3 @@
+const builder=require("electron-builder"),Platform=builder.Platform,config={directories:{output:"packaged/",app:"output/"},win:{asarUnpack:["./node_modules/node-notifier/vendor/**"],target:["portable"],icon:"res/icons/iconWin.ico",files:["**/*",
+//! to exclude
+"!res/icons/*Mac*","!res/icons/*.psd"],publisherName:"Roderick Qiu",artifactName:"${productName}-${version}-Portable.${ext}"}};builder.build({targets:Platform.WINDOWS.createTarget(),config:config}).then(e=>{console.log("Done!")}).catch(e=>{console.error(e)});

@@ -34,7 +34,7 @@
     <script src="supporter.js"></script><!-- support wnr running -->
 
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
-        <div id="logo-bar">
+        <div id="statistics-back">
             <a href="javascript:backer()" class="rest"><i class="iconfont icon-angle-left" id="back-index"></i></a>
         </div>
         <div id="controller">
@@ -45,19 +45,24 @@
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
-                $('#back-index').attr('title', i18n.__('back-index'));
+                $('#back-index').attr('title', i18n.__('back'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div id="top-bar">
-            <a id="today" href="javascript:switchMode('today')">今天</a> | <a id="yesterday"
-                href="javascript:switchMode('yesterday')">昨天</a> | <a id="this-week"
-                href="javascript:switchMode('this-week')">本周</a> | <a id="this-year"
-                href="javascript:switchMode('this-year')">本年</a>
-            | <a id="all-time" href="javascript:switchMode('all-time')">全部时间</a>
+        <div id="top-bar" class="extreme-small">
+            <a id="today" href="javascript:switchMode('today')">
+                <script>document.write(i18n.__('today'));</script></a> | <a id="yesterday"
+                href="javascript:switchMode('yesterday')">
+                <script>document.write(i18n.__('yesterday'));</script></a> | <a id="this-week"
+                href="javascript:switchMode('this-week')">
+                <script>document.write(i18n.__('this-week'));</script></a> | <a id="this-year"
+                href="javascript:switchMode('this-year')">
+                <script>document.write(i18n.__('this-year'));</script></a>
+            | <a id="all-time" href="javascript:switchMode('all-time')">
+                <script>document.write(i18n.__('all-time'));</script></a>
             <hr />
         </div>
         <div id="statistics-no-chart">

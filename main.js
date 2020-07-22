@@ -628,6 +628,12 @@ function traySolution(isFullScreen) {
                     locker();
                 }
             }, {
+                enabled: !isTimerWin,
+                label: i18n.__('statistics'),
+                click: function () {
+                    if (win != null) win.loadFile('statistics.html');
+                }
+            }, {
                 enabled: (!store.get('islocked')) && (!isTimerWin),
                 label: i18n.__('settings'),
                 click: function () {
@@ -736,6 +742,12 @@ function macOSFullscreenSolution(isFullScreen) {
                 }, {
                     label: i18n.__('operations'),
                     submenu: [{
+                        enabled: !isTimerWin,
+                        label: i18n.__('statistics'),
+                        click: function () {
+                            if (win != null) win.loadFile('statistics.html');
+                        }
+                    }, {
                         enabled: (!store.get('islocked')) && (!isTimerWin),
                         label: i18n.__('settings'),
                         click: function () {
