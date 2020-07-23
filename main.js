@@ -291,6 +291,7 @@ app.on('ready', () => {
 
     styleCache = new Store({ name: 'style-cache' });
     statistics = new Store({ name: 'statistics' });
+    timingData = new Store({ name: 'timing-data' });
 
     require('dotenv').config();
 
@@ -1338,6 +1339,9 @@ ipcMain.on('delete-all-data', function () {
         }).then(function (msg) {
             if (msg.checkboxChecked || msg.response != 0) {
                 store.clear();
+                statistics.clear();
+                styleCache.clear();
+                timingData.clear();
                 relaunchSolution()
             }
         })
