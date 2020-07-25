@@ -38,6 +38,8 @@
             <a href="javascript:backer()" class="rest"><i class="iconfont icon-angle-left" id="back-index"></i></a>
         </div>
         <div id="controller">
+            <a href="javascript:getHelp('guide/3-statistics')" class="small rest"><i class="iconfont icon-info"
+                    id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
@@ -45,6 +47,7 @@
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
+                $('#helper').attr('title', i18n.__('helper'));
                 $('#back-index').attr('title', i18n.__('back'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));

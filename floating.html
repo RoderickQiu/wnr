@@ -24,7 +24,7 @@
                     <script>document.write(i18n.__('min-left'));</script>
                 </div>
             </div>
-            <div id="floating-hover" onmouseover="hover()" onmouseleave="unhover()">
+            <div id="floating-hover" onmouseover="hover()" onmouseleave="unhover()" ontouchstart="semihover()">
                 <div class="small" id="floating-stopper">
                     <a id="stopper" href="javascript:stopper()" class="text-muted">
                         <i class="iconfont icon-pause"></i>
@@ -74,6 +74,10 @@
         }
         function unhover() {
             $("#floating-unhover").css("opacity", "1");
+        }
+        function semihover() {
+            $("#floating-unhover").css("opacity", "0");
+            setTimeout(function () { $("#floating-unhover").css("opacity", "1"); }, 500);
         }
 
         let isWorking = true;

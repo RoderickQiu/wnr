@@ -640,6 +640,7 @@ li input[type="checkbox"]::after {
 
 #floating-hover:hover {
     opacity: 1;
+    background-color: #fefefe;
     -webkit-app-region: no-drag;
     -webkit-user-select: none;
     transition: all .16s;
@@ -684,7 +685,7 @@ li input[type="checkbox"]::after {
 #top-bar {
     position: absolute;
     right: 50%;
-    top: 20%;
+    top: 18%;
     width: 80%;
     transform: translate(50%, -39%);
     text-align: center;
@@ -697,7 +698,7 @@ li input[type="checkbox"]::after {
 }
 
 #statistics-no-chart {
-    transform: translateY(19%);
+    transform: translateY(14%);
     text-align: center;
     -webkit-app-region: no-drag;
     -webkit-user-select: text;
@@ -711,7 +712,7 @@ li input[type="checkbox"]::after {
     position: absolute;
     text-align: center;
     vertical-align: top;
-    top: 24%;
+    top: 20%;
     width: 80%;
     -webkit-app-region: no-drag;
     -webkit-user-select: text;
@@ -721,7 +722,7 @@ li input[type="checkbox"]::after {
     height: 180px;
 }
 
-#statistics-back{
+#statistics-back {
     position: absolute;
     bottom: 2px;
     left: 8px;
