@@ -52,8 +52,7 @@
     "@node-minify/html-minifier": "6.0.0",
     "@node-minify/jsonminify": "6.0.0",
     "@node-minify/terser": "6.0.0",
-    "electron": "8.4.0",
-    "electron-builder": "22.6.1",
-    "node-copydir": "1.0.1"
+    "electron": "8.4.1",
+    "electron-builder": "22.6.1"
   }
 }

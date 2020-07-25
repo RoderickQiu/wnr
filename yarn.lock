@@ -1089,10 +1089,10 @@ electron-store@6.0.0:
     conf "^7.1.1"
     type-fest "^0.16.0"
 
-electron@8.4.0:
-  version "8.4.0"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-8.4.0.tgz#30692166dc8b2a511b3c01c70960d467efe2b8e6"
-  integrity sha1-MGkhZtyLKlEbPAHHCWDUZ+/iuOY=
+electron@8.4.1:
+  version "8.4.1"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-8.4.1.tgz?cache=0&sync_timestamp=1595559431313&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-8.4.1.tgz#124d6c65d02a644b389f498d549f2411a0a94c27"
+  integrity sha1-Ek1sZdAqZEs4n0mNVJ8kEaCpTCc=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -1305,15 +1305,6 @@ formidable@^1.2.1:
   version "1.2.2"
   resolved "https://registry.npm.taobao.org/formidable/download/formidable-1.2.2.tgz?cache=0&sync_timestamp=1582754486789&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fformidable%2Fdownload%2Fformidable-1.2.2.tgz#bf69aea2972982675f00865342b982986f6b8dd9"
   integrity sha1-v2muopcpgmdfAIZTQrmCmG9rjdk=
-
-fs-extra@^7.0.1:
-  version "7.0.1"
-  resolved "https://registry.npm.taobao.org/fs-extra/download/fs-extra-7.0.1.tgz#4f189c44aa123b895f722804f55ea23eadc348e9"
-  integrity sha1-TxicRKoSO4lfcigE9V6iPq3DSOk=
-  dependencies:
-    graceful-fs "^4.1.2"
-    jsonfile "^4.0.0"
-    universalify "^0.1.0"
 
 fs-extra@^8.1.0:
   version "8.1.0"
@@ -2137,13 +2128,6 @@ no-case@^2.2.0:
   integrity sha1-YLgTOWvjmz8SiKTB7V0efSi0ZKw=
   dependencies:
     lower-case "^1.1.1"
-
-node-copydir@1.0.1:
-  version "1.0.1"
-  resolved "https://registry.npm.taobao.org/node-copydir/download/node-copydir-1.0.1.tgz#b54878e789e39a807cdbbeb143e7d592c1bd3b92"
-  integrity sha1-tUh454njmoB8276xQ+fVksG9O5I=
-  dependencies:
-    fs-extra "^7.0.1"
 
 node-notifier@7.0.1:
   version "7.0.1"
