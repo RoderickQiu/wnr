@@ -185,6 +185,7 @@ li input[type="checkbox"]::after {
     width: 100%;
     color: #6c757d;
     background-color: #fefefe;
+    cursor: pointer;
 }
 
 .settings-sidebar-block-highlighted {
@@ -378,6 +379,7 @@ li input[type="checkbox"]::after {
     width: 100%;
     border-bottom: #33333322 solid 1px;
     padding-bottom: 17.3px;
+    z-index: -9999;
 }
 
 #predefined-tasks-sidebar {
@@ -404,7 +406,7 @@ li input[type="checkbox"]::after {
     left: 32%;
     overflow-y: scroll;
     height: 375px;
-    width: 64%;
+    width: 63%;
     word-break: normal;
 }
 
