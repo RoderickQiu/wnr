@@ -13,6 +13,7 @@ var AV = require('leancloud-storage');
 var { Query } = AV;
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
+const fetch = require('node-fetch');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null,
@@ -1065,7 +1066,7 @@ ipcMain.on('warning-giver-workend', function () {
                         type: "warning",
                         message: (store.has("personalization-notification.work-time-end-msg") ?
                             store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
-                            + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                            + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function (response) {
                         if (restTimeFocused && (!isLoose)) {
                             fullScreenProtection = true;
@@ -1085,7 +1086,7 @@ ipcMain.on('warning-giver-workend', function () {
                     type: "warning",
                     message: (store.has("personalization-notification.work-time-end-msg") ?
                         store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
-                        + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function (response) {
                     if (restTimeFocused && (!isLoose)) {
                         fullScreenProtection = true;
@@ -1172,7 +1173,7 @@ ipcMain.on('warning-giver-restend', function () {
                         type: "warning",
                         message: (store.has("personalization-notification.rest-time-end-msg") ?
                             store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
-                            + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                            + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function (response) {
                         if (workTimeFocused) {
                             fullScreenProtection = true;
@@ -1192,7 +1193,7 @@ ipcMain.on('warning-giver-restend', function () {
                     type: "warning",
                     message: (store.has("personalization-notification.rest-time-end-msg") ?
                         store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
-                        + " " + (hasMultiDisplays ? i18n.__('has-multi-displays') : ""),
+                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function (response) {
                     if (workTimeFocused) {
                         fullScreenProtection = true;
@@ -1290,24 +1291,38 @@ ipcMain.on('warning-giver-all-task-end', function () {
 })
 
 ipcMain.on('update-feedback', function (event, message) {
-    if (settingsWin != null) {
-        if (message == "update-available")
-            dialog.showMessageBox(settingsWin, {
-                title: i18n.__('update'),
-                type: "warning",
-                message: i18n.__('update-msg'),
-                checkboxLabel: i18n.__('update-chk'),
-                checkboxChecked: true
-            }).then(function (msg) {
-                if (msg.checkboxChecked) {
-                    shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+    if (message == "update-available") {
+        let updateMessage = "";
+        fetch('https://gitee.com/roderickqiu/wnr-backup/raw/master/update.json')
+            .then(res => res.json())
+            .then(json => {
+                for (let updateIterator = 0; updateIterator < json.content[store.get('i18n')].length; updateIterator++) {
+                    updateMessage += (updateIterator + 1).toString() + ". " + json.content[store.get('i18n')][updateIterator] + '\r';
                 }
+                dialog.showMessageBox((settingsWin != null) ? settingsWin : win, {
+                    title: i18n.__('update'),
+                    type: "warning",
+                    message: i18n.__('update-msg'),
+                    detail: i18n.__('update-content') + "\r" + updateMessage,
+                    buttons: [i18n.__('update-refuse'), i18n.__('update-chk'), i18n.__('update-lanzous')],
+                    cancelId: 0,
+                    noLink: true
+                }).then(function (index) {
+                    if (index.response == 1) {
+                        shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+                    } else if (index.response == 2) {
+                        shell.openExternal("https://www.lanzous.com/b01n0tb4j");
+                    }
+                });
             })
-        else if (message == "no-update")
-            notificationSolution(i18n.__('no-update'), i18n.__('no-update-msg'), "normal");
-        else
-            notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
+            .catch(err => {
+                notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
+            });
     }
+    else if (message == "no-update")
+        notificationSolution(i18n.__('no-update'), i18n.__('no-update-msg'), "normal");
+    else
+        notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
 })
 
 ipcMain.on('alert', function (event, message) {
