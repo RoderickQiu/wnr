@@ -2,6 +2,9 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
+    "directories": {
+        "output": "packaged/"
+    },
     "mac": {
         "asarUnpack": [
             "./node_modules/node-notifier/vendor/**"
@@ -16,6 +19,7 @@ const config = {
             //! to exclude
             "!res/icons/*Win*",
             "!res/icons/*.psd",
+            "./node_modules/node-notifier/vendor/snoreToast/**"
         ]
     },
     "dmg": {

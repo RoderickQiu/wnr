@@ -2,6 +2,9 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
+    "directories": {
+        "output": "packaged/"
+    },
     "win": {
         "target": [
             "portable"
