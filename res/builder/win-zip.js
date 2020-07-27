@@ -17,7 +17,8 @@ const config = {
             "**/*",
             //! to exclude
             "!res/icons/*Mac*",
-            "!res/icons/*.psd"
+            "!res/icons/*.psd",
+            "!designs/**"
         ],
         "artifactName": "${productName}-${version}-Win.${ext}"
     }

@@ -20,6 +20,7 @@ const config = {
             //! to exclude
             "!res/icons/*Mac*",
             "!res/icons/*.psd",
+            "!designs/**"
         ]
     },
     "nsis": {

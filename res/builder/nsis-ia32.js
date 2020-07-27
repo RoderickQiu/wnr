@@ -22,7 +22,8 @@ const config = {
             "**/*",
             //! to exclude
             "!res/icons/*Mac*",
-            "!res/icons/*.psd"
+            "!res/icons/*.psd",
+            "!designs/**"
         ]
     },
     "nsis": {

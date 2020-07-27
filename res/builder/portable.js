@@ -14,7 +14,8 @@ const config = {
             "**/*",
             //! to exclude
             "!res/icons/*Mac*",
-            "!res/icons/*.psd"
+            "!res/icons/*.psd",
+            "!designs/**"
         ],
         "publisherName": "Roderick Qiu",
         "artifactName": "${productName}-${version}-Portable.${ext}",
