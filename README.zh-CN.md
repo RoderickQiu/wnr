@@ -175,6 +175,10 @@ yarn linux # Linux版本打包
 - windows-release，sindresorhus，MIT 许可证。
 - leancloud-storage，leancloud，MIT 许可证。
 - electron-debug，sindresorhus，MIT 许可证。
+- node-fetch，node-fetch，MIT 许可证。
+- node-notifier，mikaelbr，MIT 许可证。
+- popper.js，popperjs，MIT 许可证。
+- schart.js，lin-xin，MIT 许可证。
 
 #### 网站 / 文档 *([wnr-guide](https://github.com/RoderickQiu/wnr-guide)，使用 [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] 许可证)*
 

@@ -170,11 +170,14 @@ yarn linux # Linux版本打包
 - jquery，jquery，MIT 許可證。
 - bootstrap，twbs，MIT 許可證。
 - iconfont，ALIMAMA MUX，許可證參見 [此網站](https://www.iconfont.cn/)。
-- node-md5，pvorb，BSD-3-Clause 許可證。
 - dotenv，motdotla，BSD-2-Clause 許可證。
 - windows-release，sindresorhus，MIT 許可證。
 - leancloud-storage，leancloud，MIT 許可證。
 - electron-debug，sindresorhus，MIT 許可證。
+- node-fetch，node-fetch，MIT 許可證。
+- node-notifier，mikaelbr，MIT 許可證。
+- popper.js，popperjs，MIT 許可證。
+- schart.js，lin-xin，MIT 許可證。
 
 #### 網站 / 文檔 *([wnr-guide](https://github.com/RoderickQiu/wnr-guide)，使用 [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] 許可證)*
 

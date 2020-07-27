@@ -7,7 +7,7 @@ const config = {
             "./node_modules/node-notifier/vendor/**"
         ],
         "target": [
-            "dir"
+            "dmg"
         ],
         "icon": "res/icons/iconMac.icns",
         "darkModeSupport": true,

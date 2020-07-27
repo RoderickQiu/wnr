@@ -153,7 +153,7 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 
 #### Main Program
 
-For the full text of licenses, go see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which is also included in every copy of wnr.
+For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which is also included in every copy of wnr.
 
 - node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
 - cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
@@ -170,11 +170,14 @@ For the full text of licenses, go see [this file](https://github.com/RoderickQiu
 - jquery, jquery, MIT License.
 - bootstrap, twbs, MIT License.
 - iconfont, ALIMAMA MUX, for license go to [the site](https://www.iconfont.cn/).
-- node-md5, pvorb, BSD-3-Clause License.
 - dotenv, motdotla, BSD-2-Clause License.
 - windows-release, sindresorhus, MIT License.
 - leancloud-storage, leancloud, MIT License.
 - electron-debug, sindresorhus, MIT License.
+- node-fetch, node-fetch, MIT License.
+- node-notifier, mikaelbr, MIT License.
+- popper.js, popperjs, MIT License.
+- schart.js, lin-xin, MIT License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 
