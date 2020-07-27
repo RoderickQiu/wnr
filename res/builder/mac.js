@@ -2,16 +2,12 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
-    "directories": {
-        "output": "packaged/",
-        "app": "output/"
-    },
     "mac": {
         "asarUnpack": [
             "./node_modules/node-notifier/vendor/**"
         ],
         "target": [
-            "dmg"
+            "dir"
         ],
         "icon": "res/icons/iconMac.icns",
         "darkModeSupport": true,

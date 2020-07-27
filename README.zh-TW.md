@@ -124,8 +124,6 @@ yarn # 安裝依賴
 
 yarn start # 運行程序
 
-yarn node-minify # 精簡化代碼用于輸出
-
 yarn nsis # Windows平台NSIS安裝包打包
 
 yarn nsis-ia32 # Windows平台NSIS安裝包打包（32位）
@@ -140,8 +138,6 @@ yarn linux # Linux版本打包
 ```
 
 請注意：
-
-- 每次編譯前請運行一次`node-minify`指令。
 
 - Linux 版本還未經測試 *（如果你在使用 Linux，你可以自己嘗試修改然後貢獻）*。
 

@@ -2,10 +2,6 @@ const builder = require('electron-builder')
 const Platform = builder.Platform
 
 const config = {
-    "directories": {
-        "output": "packaged/",
-        "app": "output/"
-    },
     "win": {
         "asarUnpack": [
             "./node_modules/node-notifier/vendor/**"

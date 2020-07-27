@@ -5,7 +5,6 @@
   "main": "main.js",
   "scripts": {
     "upd-dependency": "yarn",
-    "node-minify": "node ./res/builder/node-minify.js",
     "start": "electron .",
     "nsis": "node ./res/builder/nsis.js",
     "nsis-ia32": "node ./res/builder/nsis-ia32.js",
@@ -47,11 +46,6 @@
     "winreg": "1.2.4"
   },
   "devDependencies": {
-    "@node-minify/core": "6.0.0",
-    "@node-minify/csso": "6.0.0",
-    "@node-minify/html-minifier": "6.0.0",
-    "@node-minify/jsonminify": "6.0.0",
-    "@node-minify/terser": "6.0.0",
     "electron": "8.4.1",
     "electron-builder": "22.6.1"
   }
