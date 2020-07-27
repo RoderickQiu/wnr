@@ -21,6 +21,10 @@
     <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a>
 </p>
 
+<p align="center">
+    <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">Development Guide</a>
+</p>
+
 ---
 
 ## Online Version
@@ -140,6 +144,8 @@ Please note that:
 - Node-minify is required after each time you've made some changes and is willing to build a new package because the files to be built will be copied from the `output` directory, which is the folder that `node-minify` outputs into.
 
 - Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
+
+For more info about development, go to [**DEVELOPMENT_GUIDE**](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md).
 
 ## Copyright & Credit
 

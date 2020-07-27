@@ -21,6 +21,10 @@
     <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a>
 </p>
 
+<p align="center">
+    <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">开发导引文档</a>
+</p>
+
 ---
 
 ## 在线版本
@@ -141,6 +145,8 @@ yarn linux # Linux版本打包
 
 - Linux 版本还未经测试 *（如果你在使用 Linux，你可以自己尝试修改然后贡献）*。
 
+更多有关wnr的技术细节和开发建议，请查看[**DEVELOPMENT_GUIDE**](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md)。
+
 ## 版权和鸣谢
 
 版权所有 (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
@@ -180,7 +186,7 @@ yarn linux # Linux版本打包
 - vuepress-plugin-sitemap，ekoeryanto，MIT 许可证。
 - vuepress-theme-api，sqrthree，MIT 许可证。
 
-### 环境用途
+### 开发环境
 
 - **node，nodejs，[许可证](https://github.com/nodejs/node/blob/master/LICENSE)**。
 - NSIS，Nullsoft，zlib/libpng 许可证。
