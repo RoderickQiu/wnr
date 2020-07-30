@@ -25,7 +25,7 @@ const config = {
             "!res/icons/*.psd",
             "!designs/**"
         ],
-        "artifactName": "${productName}-${version}-Win.${ext}"
+        "artifactName": "${productName}-${version}-Win-32.${ext}"
     }
 }
 

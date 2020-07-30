@@ -22,7 +22,7 @@ const config = {
             "!res/icons/*.psd",
             "!designs/**"
         ],
-        "artifactName": "${productName}-${version}-Win.${ext}"
+        "artifactName": "${productName}-${version}-Win-64.${ext}"
     }
 }
 
