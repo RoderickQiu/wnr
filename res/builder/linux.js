@@ -1,6 +1,8 @@
 const builder = require('electron-builder')
 const Platform = builder.Platform
 
+require("./env_commit")
+
 const config = {
     "directories": {
         "output": "packaged/"

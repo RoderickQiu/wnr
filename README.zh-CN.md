@@ -128,9 +128,9 @@ yarn nsis # Windows平台NSIS安装包打包
 
 yarn nsis-ia32 # Windows平台NSIS安装包打包（32位）
 
-yarn portable # Windows平台便携版打包
+yarn 7zip # Windows平台7z便携版打包
 
-yarn win-zip # Windows平台7ZIP包打包
+yarn 7zip-ia32 # Windows平台7z便携版打包（32位）
 
 yarn mac # macOS版本打包
 
@@ -179,6 +179,7 @@ yarn linux # Linux版本打包
 - node-notifier，mikaelbr，MIT 许可证。
 - popper.js，popperjs，MIT 许可证。
 - schart.js，lin-xin，MIT 许可证。
+- cross-env，kentcdodds，MIT 许可证。
 
 #### 网站 / 文档 *([wnr-guide](https://github.com/RoderickQiu/wnr-guide)，使用 [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] 许可证)*
 

@@ -126,11 +126,11 @@ yarn start # launch the app
 
 yarn nsis # windows nsis installer
 
-yarn nsis-ia32 # windows nsis installer (x86)
+yarn nsis-ia32 # windows nsis installer (x86/ia32)
 
-yarn portable # windows portable
+yarn 7zip # windows 7zip protable version
 
-yarn win-zip # windows 7-zip
+yarn 7zip-ia32 # windows 7zip portable version (x86/ia32)
 
 yarn mac # macos
 
@@ -178,6 +178,7 @@ For the full text of licenses, go and see [this file](https://github.com/Roderic
 - node-notifier, mikaelbr, MIT License.
 - popper.js, popperjs, MIT License.
 - schart.js, lin-xin, MIT License.
+- cross-env, kentcdodds, MIT License.
 
 #### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 

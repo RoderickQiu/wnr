@@ -6,8 +6,16 @@ const config = {
         "output": "packaged/"
     },
     "win": {
+        "asarUnpack": [
+            "./node_modules/node-notifier/vendor/**"
+        ],
         "target": [
-            "portable"
+            {
+                "target": "7z",
+                "arch": [
+                    "ia32"
+                ]
+            }
         ],
         "icon": "res/icons/iconWin.ico",
         "files": [
@@ -17,9 +25,8 @@ const config = {
             "!res/icons/*.psd",
             "!designs/**"
         ],
-        "publisherName": "Roderick Qiu",
-        "artifactName": "${productName}-${version}-Portable.${ext}",
-    },
+        "artifactName": "${productName}-${version}-Win.${ext}"
+    }
 }
 
 builder.build({

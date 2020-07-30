@@ -76,7 +76,7 @@ function createWindow() {
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && app.isPackaged) {
+        if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && (process.env.NODE_ENV != "development")) {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
@@ -93,7 +93,7 @@ function createWindow() {
 
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
-        if (store.get('islocked') || (fullScreenProtection && isTimerWin && app.isPackaged && (!isLoose))) relaunchSolution();
+        if (store.get('islocked') || (fullScreenProtection && isTimerWin && (process.env.NODE_ENV != "development") && (!isLoose))) relaunchSolution();
     });
 
     screen.on('display-added', (event, newDisplay) => {
@@ -137,19 +137,9 @@ function relaunchSolution() {
         win.setKiosk(false);
         win.hide();
     }
-    setTimeout(function () {
-        if (process.env.PORTABLE_EXECUTABLE_DIR) {
-            var opt = { args: process.argv.slice(1).concat(['--relaunch']), execPath: process.execPath };
-            if (app.isPackaged && process.env.PORTABLE_EXECUTABLE_FILE != undefined) {
-                opt.execPath = process.env.PORTABLE_EXECUTABLE_FILE;
-            }
-            app.relaunch(opt);
-            app.exit();
-        } else {
-            app.relaunch();
-            app.exit();
-        }
-    }, 500)
+
+    app.relaunch();
+    app.exit();
 }
 
 function setFullScreenMode(flag) {
@@ -189,7 +179,7 @@ function addScreenSolution(windowNumber, display) {
 
     newWindows[windowNumber].loadFile('placeholder.html');
 
-    if (app.isPackaged) newWindows[windowNumber].setFocusable(false);
+    if (process.env.NODE_ENV != "development") newWindows[windowNumber].setFocusable(false);
     newWindows[windowNumber].setFullScreen(true);
     newWindows[windowNumber].moveTop();
     newWindows[windowNumber].setAlwaysOnTop(true, "floating");
@@ -282,21 +272,23 @@ app.on('will-quit', () => {
 //when created the app, triggers
 //some apis can be only used inside ready
 app.on('ready', () => {
+    require('dotenv').config({ path: path.join(__dirname, '.env') });
+
     createWindow();
 
     app.allowRendererProcessReuse = false;
 
-    if (process.env.PORTABLE_EXECUTABLE_DIR) {
-        store = new Store({ cwd: process.env.PORTABLE_EXECUTABLE_DIR, name: 'wnr-config' });//accept portable
-    } else store = new Store();
-
+    if (process.env.NODE_ENV == "portable") {
+        store = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-config' });//accept portable
+        statistics = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+    } else {
+        store = new Store();
+        statistics = new Store({ name: 'statistics' });
+    }
     styleCache = new Store({ name: 'style-cache' });
-    statistics = new Store({ name: 'statistics' });
     timingData = new Store({ name: 'timing-data' });
 
-    require('dotenv').config();
-
-    if (!app.isPackaged) {
+    if (process.env.NODE_ENV != "development") {
         const debug = require('electron-debug');
         debug({ showDevTools: false });
     }
@@ -534,7 +526,7 @@ app.on('ready', () => {
     }//backport when shadow disabled
 
     leanId = process.env.LEAN_ID ? process.env.LEAN_ID : null, leanKey = process.env.LEAN_KEY ? process.env.LEAN_KEY : null;
-    if (app.isPackaged) leanCloudSolution();
+    if (process.env.NODE_ENV != "development") leanCloudSolution();
 })
 
 function showOrHide() {
@@ -1018,7 +1010,7 @@ ipcMain.on('warning-giver-workend', function () {
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
-            if (app.isPackaged && (!isLoose)) win.setFocusable(false);
+            if ((process.env.NODE_ENV != "development") && (!isLoose)) win.setFocusable(false);
             if (sleepBlockerId) {
                 if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
                     sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
@@ -1125,7 +1117,7 @@ ipcMain.on('warning-giver-restend', function () {
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
-            if (app.isPackaged) win.setFocusable(false);
+            if (process.env.NODE_ENV != "development") win.setFocusable(false);
             if (sleepBlockerId) {
                 if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
                     sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
@@ -1364,7 +1356,7 @@ ipcMain.on('delete-all-data', function () {
 })
 
 function windowCloseChk() {
-    if (app.isPackaged && win != null)
+    if ((process.env.NODE_ENV != "development") && win != null)
         dialog.showMessageBox(win, {
             title: i18n.__('window-close-dialog-box-title'),
             type: "warning",
@@ -1498,8 +1490,8 @@ function settings(mode) {
             else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
             settingsWin.loadFile("settings.html");
-            if (app.isPackaged) win.setAlwaysOnTop(true, "floating");
-            if (app.isPackaged) settingsWin.setAlwaysOnTop(true, "floating");
+            if (process.env.NODE_ENV != "development") win.setAlwaysOnTop(true, "floating");
+            if (process.env.NODE_ENV != "development") settingsWin.setAlwaysOnTop(true, "floating");
             settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();

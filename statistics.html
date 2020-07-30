@@ -154,7 +154,13 @@
             }
 
             const schart = require("schart.js");
-            let statistics = new Store({ name: 'statistics' });
+            let statistics = null;
+
+            if (process.env.NODE_ENV == "portable") {
+                statistics = new Store({ cwd: require("electron").remote.app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+            } else {
+                statistics = new Store({ name: 'statistics' });
+            }
 
             let nowDate = new Date();//get date and have preparations
             let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];

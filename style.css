@@ -551,6 +551,8 @@ li input[type="checkbox"]::after {
 #tourguide-part-1 {
     position: absolute;
     line-height: 1.5;
+    transform: translateX(-50%);
+    left: 50%;
     top: 25%;
 }
 
