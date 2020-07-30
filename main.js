@@ -80,6 +80,9 @@ function createWindow() {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
+        } else if ((isTimerWin && process.platform == "darwin") && (process.env.NODE_ENV != "development")) {
+            event.preventDefault();
+            windowCloseChk();
         }
     });
 
@@ -1366,10 +1369,10 @@ function windowCloseChk() {
         }).then(function (msger) {
             if (msger.checkboxChecked) {
                 statisticsWriter();
+                multiScreenSolution("off");
 
                 setTimeout(function () {
-                    multiScreenSolution("off");
-                    app.quit();
+                    app.exit(0);
                 }, 500);
             }
         })
@@ -1682,6 +1685,7 @@ ipcMain.on("progress-bar-set", function (event, message) {
     if (process.platform == "darwin") {
         if (timeLeftOnBar != null) timeLeftOnBar.label = message + timeLeftTip;
         if (tray != null) tray.setTitle(" " + message + timeLeftTip);
+        if (win != null) win.maximizable = false;
     }
 })
 

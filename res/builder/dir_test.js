@@ -21,11 +21,27 @@ const config = {
             "!res/icons/*.psd",
             "!designs/**"
         ]
-    }
+    },
+    "mac": {
+        "asarUnpack": [
+            "./node_modules/node-notifier/vendor/**"
+        ],
+        "target": [
+            "dir"
+        ],
+        "darkModeSupport": true,
+        "files": [
+            "**/*",
+            //! to exclude
+            "!res/icons/*Win*",
+            "!res/icons/*.psd",
+            "!./node_modules/node-notifier/vendor/snoreToast/**"
+        ]
+    },
 }
 
 builder.build({
-    targets: Platform.WINDOWS.createTarget(),
+    targets: (process.platform == "darwin") ? Platform.MAC.createTarget() : ((process.platform == "win32") ? Platform.WINDOWS.createTarget() : Platform.LINUX.createTarget()),
     config,
 })
     .then(m => {
