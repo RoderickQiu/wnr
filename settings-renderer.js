@@ -402,7 +402,11 @@ function keyDownTriggerRemover() {
 var aes = require("crypto-js/aes");
 var encoding = require("crypto-js/enc-utf8");
 var copyToClipboard = require("copy-to-clipboard");
-var statistics = new Store({ name: 'statistics' });
+if (process.env.NODE_ENV == "portable") {
+    statistics = new Store({ cwd: require("electron").remote.app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+} else {
+    statistics = new Store({ name: 'statistics' });
+}
 function settingsBackup(mode) {
     var cipherText = aes.encrypt(JSON.stringify((mode == "statistics") ? statistics.store : store.store), (mode == "statistics") ? String("She's awesome.") : String("We all love wnr, so please do not use this passcode to do bad things."));
     copyToClipboard(cipherText.toString());
