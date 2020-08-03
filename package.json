@@ -4,7 +4,7 @@
   "description": "Work and rest, with wnr now!",
   "main": "main.js",
   "scripts": {
-    "upd-dependency": "yarn",
+    "dep-update": "yarn",
     "start": "cross-env NODE_ENV=development electron .",
     "nsis": "cross-env NODE_ENV=production node ./res/builder/nsis.js",
     "nsis-ia32": "cross-env NODE_ENV=production node ./res/builder/nsis-ia32.js",
@@ -39,7 +39,7 @@
     "jquery": "3.5.1",
     "leancloud-storage": "4.6.1",
     "node-fetch": "2.6.0",
-    "node-notifier": "7.0.1",
+    "node-notifier": "7.0.2",
     "node-shi": "0.4.2",
     "popper.js": "1.16.1",
     "schart.js": "3.0.0",

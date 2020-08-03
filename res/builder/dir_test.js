@@ -20,7 +20,8 @@ const config = {
             "!res/icons/*Mac*",
             "!res/icons/*.psd",
             "!designs/**"
-        ]
+        ],
+        "icon": "res/icons/iconWin.ico"
     },
     "mac": {
         "asarUnpack": [
@@ -29,6 +30,7 @@ const config = {
         "target": [
             "dir"
         ],
+        "icon": "res/icons/iconMac.icns",
         "darkModeSupport": true,
         "files": [
             "**/*",

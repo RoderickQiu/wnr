@@ -236,7 +236,7 @@
                 if (store.get("fullscreen-experience") != true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
                     store.set("fullscreen-experience", true);
-                } else if (workTime >= 600000) {
+                } else if (workTime >= 600000 && restored == false) {
                     $("#fullscreen-too-long-tip").css("display", "block");
                     setTimeout(function () {
                         $("#fullscreen-too-long-tip").css("display", "none");
