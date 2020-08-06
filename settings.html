@@ -417,7 +417,7 @@
                 </div>
                 <br />
                 <!-- auto update check setting -->
-                <div class="row">
+                <div class="row update-check">
                     <div class="col-1 text-center">
                         <input id="auto-check-update-setting" type="checkbox" onchange="autoCheckSetting()" />
                     </div>
@@ -429,9 +429,10 @@
                         <span class="text-muted small">
                             <script>document.write(i18n.__('auto-check-update-setting-tip'));</script>
                         </span>
+                        <br />
                     </div>
+                    <br />
                 </div>
-                <br />
             </div>
 
             <!-- 4. lock mode settings -->
@@ -469,7 +470,7 @@
             <div id="other-things" class="should-lock">
                 <ul>
                     <!-- manually check for update -->
-                    <li>
+                    <li class="update-check">
                         <script>document.write(i18n.__('manually-check-for-update-msg'));</script>
                         <p class="small text-muted">
                             <a href="javascript:updateChecker(2)" class="rest underlined">
@@ -696,6 +697,8 @@
         $(".get-help").attr('title', i18n.__('helper'));
 
         if (process.platform != "darwin") $("#hide-from-dock-setting-container").css("display", "none");
+
+        if (process.env.NODE_ENV == "msstore") $(".update-check").css("display", "none");
 
         window.addEventListener('contextmenu', function (e) {
             e.preventDefault();

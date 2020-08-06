@@ -12,7 +12,8 @@
     "7zip-ia32": "cross-env NODE_ENV=portable node ./res/builder/win-zip-ia32.js",
     "mac": "cross-env NODE_ENV=production node ./res/builder/mac.js",
     "linux": "cross-env NODE_ENV=production node ./res/builder/linux.js",
-    "dir": "cross-env NODE_ENV=production node ./res/builder/dir_test.js"
+    "dir": "cross-env NODE_ENV=production node ./res/builder/dir_test.js",
+    "ms-store": "cross-env NODE_ENV=msstore node ./res/builder/dir_test.js"
   },
   "repository": {
     "type": "git",

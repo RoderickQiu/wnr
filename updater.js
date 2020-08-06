@@ -2,7 +2,11 @@ const nowTime = new Date().getTime();
 const version = require("./package.json")["version"];
 const fetch = require('node-fetch');
 const compareVersion = require('compare-version');
+
 var manuallyCheckText = '';
+
+require('dotenv').config({ path: path.join(__dirname, '.env') });
+
 function updateChecker(method) {
     if (method == 2) {
         manuallyCheckText = document.getElementById("manually").innerHTML;
@@ -26,7 +30,8 @@ function updateChecker(method) {
         });
     store.set("last-check-time", nowTime);
 }
-if (store.get("autocheck") != false) {
+
+if (store.get("autocheck") != false && process.env.NODE_ENV != "msstore") {
     if (store.get("last-check-time") == undefined || store.get("last-check-time") - nowTime > 86400000) {
         updateChecker(1);
     }// check for updates every day

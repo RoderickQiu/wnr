@@ -47,7 +47,8 @@ builder.build({
     config,
 })
     .then(m => {
-        console.log("Done!")
+        if (process.env.NODE_ENV != "msstore") console.log("Done!")
+        else console.log("Now, use electron-windows-store for further packaging. ")
     })
     .catch(e => {
         console.error(e)
