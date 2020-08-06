@@ -46,7 +46,14 @@
         const shi = require("node-shi");
 
         function keyDownSubmitter() {
-            if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
+            if (onlyrest)
+                window.location.href =
+                    "timer.html?title=&work-time=2&rest-time="
+                    + shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
+                    + document.getElementById("focus-rest-set-onlyrest").checked
+                    + "&restored=false";
+            else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
             else
                 window.location.href = "timer.html?title=" + $("#title").val()
@@ -80,6 +87,8 @@
                         <script>document.write(i18n.__('menu'));</script>
                     </div>
                     <div class="dropdown-divider"></div>
+                    <a href="javascript:onlyRest('in')" class="small dropdown-item">
+                        <script>document.write(i18n.__('onlyrest'));</script></a>
                     <a href="javascript:statistics()" class="small dropdown-item">
                         <script>document.write(i18n.__('statistics'));</script></a>
                     <a href="javascript:call('locker')" class="small dropdown-item">
@@ -92,6 +101,10 @@
                         <script>document.write(i18n.__('info'));</script></a>
                 </div>
             </div>
+        </div>
+        <div id="statistics-back">
+            <a href="javascript:onlyRest('out')" class="rest"><i class="iconfont icon-angle-left"
+                    id="back-onlyrest"></i></a>
         </div>
         <div id="controller">
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
@@ -108,72 +121,81 @@
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
+                $('#back-onlyrest').attr('title', i18n.__('back'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
         </div>
+        <div id="set-onlyrest" class="container-fluid">
+            <div class="align-content-center">
+                <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
+                    class="rest lead" required />
+                <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
+                <span class="focuser extreme-small rest">
+                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                </span>
+            </div>
+            <br />
+        </div>
         <div id="set" class="container-fluid">
-            <form action="timer.html" method="GET" class="justify-content-center align-content-center">
-                <div class="dropdown dropdown-default" id="dropdown-tasks">
-                    <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span id="expand-left">
-                            <script>document.write(i18n.__('default'));</script>
+            <div class="dropdown dropdown-default" id="dropdown-tasks">
+                <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+                    <span id="expand-left">
+                        <script>document.write(i18n.__('default'));</script>
+                    </span>
+                    <span id="expand-right"><i class="iconfont icon-caret-down"></i></span>
+                    &nbsp;
+                </a>
+                <div class="dropdown-menu" id="dropdown-menu-menu" aria-labelledby="dropdown-menu-button">
+                    <div id="dropdown-itemlist">
+                    </div>
+                    <div class="dropdown-divider" id="predefined-tasks-divider"></div>
+                    <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
+                        href="javascript:call('predefined-tasks')">
+                        <span class="text-info underlined">
+                            <script>document.write(i18n.__('edit'));</script>
                         </span>
-                        <span id="expand-right"><i class="iconfont icon-caret-down"></i></span>
-                        &nbsp;
                     </a>
-                    <div class="dropdown-menu" id="dropdown-menu-menu" aria-labelledby="dropdown-menu-button">
-                        <div id="dropdown-itemlist">
-                        </div>
-                        <div class="dropdown-divider" id="predefined-tasks-divider"></div>
-                        <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
-                            href="javascript:call('predefined-tasks')">
-                            <span class="text-info underlined">
-                                <script>document.write(i18n.__('edit'));</script>
-                            </span>
-                        </a>
-                    </div>
                 </div>
-                <br /><br />
-                <div class="align-content-center">
-                    <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
-                        required />
-                    <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
-                    <span class="focuser extreme-small work">
-                        <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
-                    </span>
-                </div>
-                <br />
-                <div class="align-content-center">
-                    <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
-                    <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
-                    <span class="focuser extreme-small rest">
-                        <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
-                    </span>
-                </div>
-                <br />
-                <div class="align-content-center">
-                    <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
-                    <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
-                        <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                            <span class="dropdown-default extreme-small">
-                                <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
-                            </span>
-                        </a>
-                        <div class="dropdown-menu p-1" id="dropdown-menu-extend"
-                            aria-labelledby="dropdown-extend-button">
-                            <p class="extreme-small">&nbsp;</p>
-                            <div class="form-group px-2" id="extend-form">
-                                <input name="title" id="title" type="text" class="small" maxlength="14" />
-                                <br />
-                                <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
-                            </div>
+            </div>
+            <br /><br />
+            <div class="align-content-center">
+                <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
+                    required />
+                <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
+                <span class="focuser extreme-small work">
+                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                </span>
+            </div>
+            <br />
+            <div class="align-content-center">
+                <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+                <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
+                <span class="focuser extreme-small rest">
+                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                </span>
+            </div>
+            <br />
+            <div class="align-content-center">
+                <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
+                <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                        <span class="dropdown-default extreme-small">
+                            <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
+                        </span>
+                    </a>
+                    <div class="dropdown-menu p-1" id="dropdown-menu-extend" aria-labelledby="dropdown-extend-button">
+                        <p class="extreme-small">&nbsp;</p>
+                        <div class="form-group px-2" id="extend-form">
+                            <input name="title" id="title" type="text" class="small" maxlength="14" />
+                            <br />
+                            <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
                         </div>
                     </div>
                 </div>
-                <br />
-            </form>
+            </div>
+            <br />
             <script>
                 $('#work-time').attr('placeholder', i18n.__('work-time'));
                 $('#title').attr('placeholder', i18n.__('title'));
@@ -225,9 +247,29 @@
             $("#no-use-space").css("display", "none");
         }
 
+        let onlyrest = false;
+        $("#set-onlyrest").hide();
+        $("#statistics-back").hide();
+
         function statistics() {
             window.location.href = "statistics.html";
         }
+
+        function onlyRest(mode) {
+            if (mode == 'in') {
+                $("#set").hide();
+                $("#set-onlyrest").show();
+                $("#statistics-back").show();
+                $("#logo-bar").hide();
+                onlyrest = true;
+                allSet();
+            } else {
+                if (onlyrest) window.location.reload();
+            }
+        }
+        ipc.on('onlyrest', function () {
+            onlyRest("in");
+        });
 
         var timeCount, myDate, h, min, defaultArray;
         function sumGet(workTimeGet, restTimeGet, loopGet) {
@@ -246,17 +288,26 @@
         }
         function allSet() {
             try {
-                var timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-                var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
-                    restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
-                    loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
-                    if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
+                if (onlyrest) {
+                    var restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true });
+                    if (!isNaN(restTimeGet))
+                        if (restTimeGet > 1 && restTimeGet <= 1440)
+                            sumGet(0, restTimeGet, 1);
+                        else allClear();
                     else allClear();
                 } else {
-                    allClear();
+                    var timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                    var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
+                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
+                        loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
+                    if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
+                        if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
+                        else allClear();
+                    } else {
+                        allClear();
+                    }
+                    if (store.get("infinity")) infinityMode();
                 }
-                if (store.get("infinity")) infinityMode();
             } catch {
                 allClear();
             }
@@ -273,8 +324,8 @@
         }
 
         function focusNotifier() {
-            var workFocus = document.getElementById("focus-work-set").checked;
-            var restFocus = document.getElementById("focus-rest-set").checked;
+            var workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
+            var restFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : document.getElementById("focus-rest-set").checked;
             if ((workFocus || restFocus) && (workFocus != restFocus)) {
                 if (workFocus) $("#work-notify").css("display", "inline");
                 else $("#work-notify").css("display", "none");
@@ -296,6 +347,10 @@
             else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
+
+            $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
+            document.getElementById("focus-rest-set-onlyrest").checked = focusWhenResting;
+
             allSet();
         }
 

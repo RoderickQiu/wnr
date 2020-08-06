@@ -257,6 +257,9 @@ li input[type="checkbox"]::after {
 .dropdown-menu {
     border-width: 1.5px;
     margin-top: 9px;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: none;
 }
 
 .dropdown-item {
@@ -728,8 +731,9 @@ li input[type="checkbox"]::after {
 
 #statistics-back {
     position: absolute;
-    bottom: 2px;
-    left: 8px;
+    top: 4px;
+    left: 10px;
+    font-size: 18px;
     display: inline-block;
     background-clip: padding-box;
     -webkit-app-region: no-drag;

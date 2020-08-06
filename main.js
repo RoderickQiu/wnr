@@ -614,7 +614,7 @@ function traySolution(isFullScreen) {
                 label: i18n.__('start-or-stop'),
                 enabled: isTimerWin,
                 click: function () {
-                    if (win != null) win.webContents.send('start-or-stop')
+                    if (win != null) win.webContents.send('start-or-stop');
                 }
             }, {
                 type: 'separator'
@@ -635,6 +635,17 @@ function traySolution(isFullScreen) {
                 label: i18n.__('settings'),
                 click: function () {
                     settings();
+                }
+            }, {
+                enabled: !isTimerWin,
+                label: i18n.__('onlyrest'),
+                click: function () {
+                    if (win != null) {
+                        win.loadFile('index.html');
+                        win.webContents.once('did-finish-load', function () {
+                            win.webContents.send("onlyrest");
+                        });
+                    }
                 }
             }, {
                 type: 'separator'
@@ -739,6 +750,17 @@ function macOSFullscreenSolution(isFullScreen) {
                 }, {
                     label: i18n.__('operations'),
                     submenu: [{
+                        enabled: !isTimerWin,
+                        label: i18n.__('onlyrest'),
+                        click: function () {
+                            if (win != null) {
+                                win.loadFile('index.html');
+                                win.webContents.once('did-finish-load', function () {
+                                    win.webContents.send("onlyrest");
+                                });
+                            }
+                        }
+                    }, {
                         enabled: !isTimerWin,
                         label: i18n.__('statistics'),
                         click: function () {
@@ -1493,8 +1515,10 @@ function settings(mode) {
             else if (mode == 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
             settingsWin.loadFile("settings.html");
-            if (process.env.NODE_ENV != "development") win.setAlwaysOnTop(true, "floating");
-            if (process.env.NODE_ENV != "development") settingsWin.setAlwaysOnTop(true, "floating");
+            if (process.env.NODE_ENV != "development") {
+                win.setAlwaysOnTop(true, "floating");
+                settingsWin.setAlwaysOnTop(true, "floating");
+            }
             settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
@@ -1632,9 +1656,9 @@ function floating() {
                     skipTaskbar: true
                 });
                 floatingWin.loadFile("floating.html");
-                floatingWin.once('ready-to-show', () => {
+                floatingWin.webContents.once('did-finish-load', () => {
                     floatingWin.show();
-                    floatingWin.setAlwaysOnTop(true, "floating");
+                    floatingWin.setAlwaysOnTop(true, "pop-up-menu");
                     floatingWin.focus();
                 });
                 floatingWin.on('closed', () => {
