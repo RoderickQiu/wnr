@@ -13,6 +13,7 @@ html, body {
     width: 100%;
     height: 100%;
     display: -webkit-flex;
+    background-color: #00000000;
     overflow: hidden;
     align-items: center;
     /* center in v/h */
@@ -408,7 +409,7 @@ li input[type="checkbox"]::after {
     top: 88px;
     left: 32%;
     overflow-y: scroll;
-    height: 375px;
+    height: 350px;
     width: 63%;
     word-break: normal;
 }

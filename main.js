@@ -216,7 +216,7 @@ function touchBarSolution(mode) {
                 if (mode == "index") {
                     let settingsSubmitter = new TouchBarButton({
                         label: i18n.__('settings'),
-                        click: () => settings()
+                        click: () => settings("normal")
                     });
                     let helperSubmitter = new TouchBarButton({
                         label: i18n.__('website'),
@@ -634,7 +634,7 @@ function traySolution(isFullScreen) {
                 enabled: (!store.get('islocked')) && (!isTimerWin),
                 label: i18n.__('settings'),
                 click: function () {
-                    settings();
+                    settings("normal");
                 }
             }, {
                 enabled: !isTimerWin,
@@ -901,8 +901,13 @@ function leanCloudSolution() {
 function isDarkMode() {
     if (app.isReady()) {
         if (store.has("dark-or-white")) {
-            if (store.get("dark-or-white") == "light") return false;
-            else return true;
+            if (store.get("dark-or-white") == "light") {
+                win.setBackgroundColor('#fefefe');
+                return false;
+            } else {
+                win.setBackgroundColor('#191919');
+                return true;
+            }
         } else {
             styleCache.set('isdark', false);
             darkModeSettingsFinder();
@@ -1500,7 +1505,7 @@ function settings(mode) {
             settingsWin = new BrowserWindow({
                 parent: win,
                 width: isChinese ? 780 : 888,
-                height: 480,
+                height: 453,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
