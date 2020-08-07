@@ -493,7 +493,7 @@ li input[type="checkbox"]::after {
     position: absolute;
     top: 2px;
     left: 8px;
-    display: inline-block;
+    display: none;
     background-clip: padding-box;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -732,7 +732,7 @@ li input[type="checkbox"]::after {
 
 #statistics-back {
     position: absolute;
-    top: 4px;
+    bottom: 4px;
     left: 10px;
     font-size: 18px;
     display: inline-block;

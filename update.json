@@ -1,20 +1,20 @@
 {
-    "version": "1.17.1",
+    "version": "1.18.0",
     "content": {
         "zh-CN": [
-            "修复问题，包括可能导致macOS系统上看不到通知的问题。",
-            "改善触摸屏使用体验，尤其是对于设置页面和Mini模式。",
-            "修复并升级更新组件，现在可以在应用程序内查看更新日志。"
+            "修复了几个问题。",
+            "改善暗黑模式使用体验。",
+            "增加“仅休息”模式。"
         ],
         "zh-TW": [
-            "修複問題，包括可能導致macOS系統上看不到通知的問題。",
-            "改善觸摸屏使用體驗，尤其是對于設置頁面和Mini模式。",
-            "修複並升級更新組件，現在可以在應用程序內查看更新日志。"
+            "修復了幾個問題。",
+            "改善暗黑模式使用體驗。",
+            "增加“僅休息”模式。"
         ],
         "en": [
-            "Bugs fixed, including one on macOS that could cause notifications failed to be sent.",
-            "Mini mode exprience improved for touchscreen.",
-            "Updater optimized and now allows users to directly see release notes inside the software."
+            "Bugs fixed.",
+            "Dark mode improved.",
+            "\"Only Rest\" mode added."
         ]
     }
 }

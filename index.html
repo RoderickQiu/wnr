@@ -242,9 +242,10 @@
     <script>
         isTimerWindow(false);
         if (process.platform == "darwin") {
-            $("#logo-bar").css("display", "none");
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
+        } else {
+            $("#logo-bar").css("display", "inline-block");
         }
 
         let onlyrest = false;
