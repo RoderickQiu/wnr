@@ -1457,8 +1457,8 @@ function about() {
         if (win != null) {
             aboutWin = new BrowserWindow({
                 parent: win,
-                width: 279,
-                height: 279,
+                width: 780,
+                height: 453,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
