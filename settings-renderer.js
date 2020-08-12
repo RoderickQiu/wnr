@@ -143,7 +143,7 @@ function append(item, index) {
         i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
         item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
         i18n.__('time(s)') +
-        "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='edit(" + index + ")' /> | " +
+        "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='edit(" + index + ")' />&nbsp;&nbsp;|&nbsp;" +
         i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='edit(" + index + ")' />\
                 <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
                 <span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
