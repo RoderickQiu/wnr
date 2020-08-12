@@ -471,6 +471,10 @@ li input[type="checkbox"]::after {
     right: 14px;
 }
 
+#other-things-sidebar {
+    height: 62px;
+}
+
 #controller, #time-bar, #time-bar-macos, #logo-bar {
     position: absolute;
     top: 8px;
