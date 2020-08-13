@@ -527,11 +527,20 @@ li input:nth-last-child(4)::after {
 }
 
 #about {
-    position: absolute;
-    width: 75%;
+    height: 80%;
+    width: 90%;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: text;
+}
+
+#about-content {
+    height: 100%;
+    border-left: #33333322 solid 1px;
+}
+
+#about-content p {
+    line-height: 67%;
 }
 
 #tourguide {

@@ -1321,7 +1321,7 @@ ipcMain.on('update-feedback', function (event, message) {
                 for (let updateIterator = 0; updateIterator < json.content[store.get('i18n')].length; updateIterator++) {
                     updateMessage += (updateIterator + 1).toString() + ". " + json.content[store.get('i18n')][updateIterator] + '\r';
                 }
-                dialog.showMessageBox((settingsWin != null) ? settingsWin : win, {
+                dialog.showMessageBox((settingsWin != null) ? settingsWin : ((aboutWin != null) ? aboutWin : win), {
                     title: i18n.__('update'),
                     type: "warning",
                     message: i18n.__('update-msg'),
@@ -1457,8 +1457,8 @@ function about() {
         if (win != null) {
             aboutWin = new BrowserWindow({
                 parent: win,
-                width: 780,
-                height: 453,
+                width: 720,
+                height: 420,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
