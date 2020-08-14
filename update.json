@@ -1,20 +1,23 @@
 {
-    "version": "1.18.0",
+    "version": "1.19.0",
     "content": {
         "zh-CN": [
-            "修复了几个问题。",
-            "改善暗黑模式使用体验。",
-            "增加“仅休息”模式。"
+            "增加“禁止暂停”功能。",
+            "重新设计了关于页面。",
+            "改善UI的暗黑模式和跨平台使用体验。",
+            "优化性能，修复漏洞。"
         ],
         "zh-TW": [
-            "修復了幾個問題。",
-            "改善暗黑模式使用體驗。",
-            "增加“僅休息”模式。"
+            "增加“禁止暂停”功能。",
+            "重新设计了关于页面。",
+            "改善UI的暗黑模式和跨平台使用体验。",
+            "优化性能，修复漏洞。"
         ],
         "en": [
-            "Bugs fixed.",
-            "Dark mode improved.",
-            "\"Only Rest\" mode added."
+            "\"Disable Pausing\" feature added.",
+            "About page redesigned.",
+            "Improved UI for dark mode etc.",
+            "Optimized and had bugs fixed."
         ]
     }
 }
