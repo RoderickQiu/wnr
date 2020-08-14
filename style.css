@@ -459,7 +459,7 @@ li input:nth-last-child(4)::after {
 }
 
 #other-things-sidebar {
-    height: 62px;
+    height: 61px;
 }
 
 #controller, #time-bar, #time-bar-macos, #logo-bar {

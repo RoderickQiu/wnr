@@ -68,6 +68,9 @@
         } else {
             $("#stopper-spacing").css("display", "none");
         }
+        if (store.get('disable-pausing') == true) {
+            $("#stopper").remove();
+        }
 
         function hover() {
             $("#floating-unhover").css("opacity", "0");

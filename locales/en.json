@@ -271,5 +271,8 @@
     "this-week": "This Week",
     "this-year": "This Year",
     "all-time": "All Time",
-    "onlyrest": "Only Rest"
+    "onlyrest": "Only Rest",
+    "disable-pausing-setting": "Disable pausing setting: ",
+    "disable-pausing-setting-tip": "If it is enabled, then you will not be able to pause the timer. ",
+    "pausing-disabled": "Pausing is disabled. "
 }

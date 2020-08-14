@@ -99,6 +99,9 @@
             $("#time-bar").remove();
             $("#time-bar-macos").remove();
         }
+        if (store.get('disable-pausing') == true) {
+            $("#stopper").remove();
+        }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
         store.set('just-launched', false);
@@ -282,8 +285,12 @@
 
             ipc.on('start-or-stop', function () {
                 if (canStop) {
-                    stopper();
-                    ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                    if (store.get("disable-pausing") == true)
+                        ipc.send("alert", i18n.__('pausing-disabled'));
+                    else {
+                        stopper();
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                    }
                 }
             });
 

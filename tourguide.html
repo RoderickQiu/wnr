@@ -78,7 +78,7 @@
                 nowAt++;
             } else nowAt--;
             if (nowAt > 0 && nowAt < 6) {
-                $("#tourguide-img").attr("src", "res/tourguide/2-" + nowAt + ".png");
+                $("#tourguide-img").attr("src", (isDarkMode ? "res/tourguide/reverted/2-" : "res/tourguide/2-") + nowAt + ".png");
                 if (nowAt == 1)
                     $("#content").html(i18n.__('tourguide-part-2-1-content-part-1') + "<br />"
                         + i18n.__('tourguide-part-2-1-content-part-2') + "<br />" + i18n.__('tourguide-part-2-1-content-part-3') + "<br /><b>" + i18n.__('tourguide-part-2-1-content-part-4') + "</b>");

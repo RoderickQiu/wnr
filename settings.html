@@ -202,6 +202,23 @@
                     </div>
                 </div>
                 <br />
+                <!-- allow disabling pausing setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="disable-pausing-setting" type="checkbox" onchange="disablePausingSetting()"
+                            checked />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('disable-pausing-setting'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('disable-pausing-setting-tip'));</script>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- notifying sound setting -->
                 <div class="row">
                     <div class="col-1 text-center">

@@ -329,6 +329,12 @@ function checkAfterTimeEndSetting() {
     if (document.getElementById("check-after-time-end-setting").checked == true) store.set("no-check-time-end", false);
     else store.set("no-check-time-end", true);
 }
+if (store.get("disable-pausing") == true) document.getElementById("disable-pausing-setting").checked = true;
+else document.getElementById("disable-pausing-setting").checked = false;
+function disablePausingSetting() {
+    if (document.getElementById("disable-pausing-setting").checked == true) store.set("disable-pausing", true);
+    else store.set("disable-pausing", false);
+}
 if (store.get("should-stop-locked") == true) document.getElementById("still-count-setting").checked = true;
 else document.getElementById("still-count-setting").checked = false;
 function stillCountSetting() {

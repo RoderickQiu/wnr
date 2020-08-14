@@ -271,5 +271,8 @@
 	"this-week": "本週",
 	"this-year": "本年",
 	"all-time": "全部時間",
-	"onlyrest": "僅休息"
+	"onlyrest": "僅休息",
+	"disable-pausing-setting": "禁止計時暫停設置：",
+	"disable-pausing-setting-tip": "如果此項被選中，則計時時將會不能暫停計時器，用于避免壹直拖延和逃避的行爲。",
+	"pausing-disabled": "暫停功能被停用。"
 }
