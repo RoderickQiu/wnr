@@ -534,12 +534,25 @@
                         progress = ((seconds / restTime) * 1000).toFixed(2);
                     }
 
+                    hours = Math.floor(seconds / 3600);
+                    minutes = Math.floor((seconds - hours * 3600) / 60);
+                    seconds -= hours * 3600 + minutes * 60;
+                    $nowTiming.text(hours + h + minutes + min + seconds + s);
+
+                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
+
                     if (progress != lastRecordedProgress) {
                         lastRecordedProgress = progress;
                         naturalProgress = Math.round(lastRecordedProgress * 100);
-                        ipc.send("progress-bar-set", naturalProgress);
+                        ipc.send("progress-bar-set", progress);
                         if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: naturalProgress, method: method, isWorking: isClockWorking });
                         $bottomBar.css("width", naturalProgress + "%");
+
+                        ipc.send("tray-time-set", {
+                            h: hours,
+                            min: minutes,
+                            percentage: naturalProgress
+                        });
                     }
                     if (shouldNap && method == 1) {
                         if (lastNapSecond - seconds > napInterval) {
@@ -547,12 +560,6 @@
                             ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
                         }
                     }
-                    hours = Math.floor(seconds / 3600);
-                    minutes = Math.floor((seconds - hours * 3600) / 60);
-                    seconds -= hours * 3600 + minutes * 60;
-                    $nowTiming.text(hours + h + minutes + min + seconds + s);
-
-                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                     if (systemName != "darwin") $timeBar.html(timeGot);

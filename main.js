@@ -20,7 +20,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
-    timeLeftTip = null, predefinedTasks = null,
+    timeLeftTip = null, trayTimeMsg = null, predefinedTasks = null,
     pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
@@ -80,9 +80,9 @@ function createWindow() {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
-        } else if ((isTimerWin && process.platform == "darwin") && (process.env.NODE_ENV != "development")) {
+        } else if ((process.platform == "darwin") && (process.env.NODE_ENV != "development")) {
             event.preventDefault();
-            windowCloseChk();
+            win.hide();
         }
     });
 
@@ -114,8 +114,8 @@ function createWindow() {
     });
 
     screen.on('display-removed', () => {
+        multiScreenSolution("off");
         if (fullScreenProtection && isTimerWin && (!isLoose)) {
-            multiScreenSolution("off");
             setTimeout(function () { multiScreenSolution("on"); }, 1500);
         }
     });
@@ -171,13 +171,13 @@ function addScreenSolution(windowNumber, display) {
         x: display.bounds.x,
         y: display.bounds.y,
         frame: false,
-        backgroundColor: "#fefefe",
+        backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
         show: true,
         hasShadow: true,
         webPreferences: { nodeIntegration: true, webgl: false },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png",
-        visibleOnAllWorkspaces: true
+        skipTaskbar: true
     });//optimize for cross platfrom
 
     newWindows[windowNumber].loadFile('placeholder.html');
@@ -606,7 +606,10 @@ function traySolution(isFullScreen) {
             contextMenu = Menu.buildFromTemplate([{
                 label: 'wnr' + i18n.__('v') + require("./package.json").version,
                 click: function () {
-                    about()
+                    if (!isTimerWin) {
+                        if (process.platform == "darwin" && win != null) win.show();
+                        about();
+                    }
                 }
             }, {
                 type: 'separator'
@@ -622,6 +625,7 @@ function traySolution(isFullScreen) {
                 enabled: !isTimerWin,
                 label: i18n.__('locker'),
                 click: function () {
+                    if (process.platform == "darwin" && win != null) win.show();
                     locker();
                 }
             }, {
@@ -629,11 +633,13 @@ function traySolution(isFullScreen) {
                 label: i18n.__('statistics'),
                 click: function () {
                     if (win != null) win.loadFile('statistics.html');
+                    if (process.platform == "darwin" && win != null) win.show();
                 }
             }, {
                 enabled: (!store.get('islocked')) && (!isTimerWin),
                 label: i18n.__('settings'),
                 click: function () {
+                    if (process.platform == "darwin" && win != null) win.show();
                     settings("normal");
                 }
             }, {
@@ -646,6 +652,7 @@ function traySolution(isFullScreen) {
                             win.webContents.send("onlyrest");
                         });
                     }
+                    if (process.platform == "darwin" && win != null) win.show();
                 }
             }, {
                 type: 'separator'
@@ -1443,7 +1450,7 @@ ipcMain.on('relauncher', function () {
 
 ipcMain.on('window-hide', function () {
     if (win != null) {
-        win.minimize();
+        if (process.platform != "darwin") win.minimize();
         win.hide()
     }
 })
@@ -1668,7 +1675,10 @@ function floating() {
                 });
                 floatingWin.on('closed', () => {
                     floatingWin = null;
-                    if (store.get("top") != true) win.setAlwaysOnTop(false);
+                    hasFloating = false;
+                    if (win != null) {
+                        if (store.get("top") != true) win.setAlwaysOnTop(false);
+                    }
                 });
                 floatingWin.on('move', () => {
                     styleCache.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
@@ -1708,15 +1718,19 @@ ipcMain.on('tray-image-change', function (event, message) {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    progress = 1 - message / 100;
+    progress = 1 - message;
     if (win != null) win.setProgressBar(progress);
-    if (tray != null) tray.setToolTip(message + timeLeftTip)
+})
+
+ipcMain.on("tray-time-set", function (event, message) {
+    trayTimeMsg = (message.h ? (message.h + i18n.__('h')) : "") + message.min + i18n.__('min') + '| ' + message.percentage + timeLeftTip;
+    if (tray != null) tray.setToolTip(trayTimeMsg);
     if (process.platform == "darwin") {
-        if (timeLeftOnBar != null) timeLeftOnBar.label = message + timeLeftTip;
-        if (tray != null) tray.setTitle(" " + message + timeLeftTip);
+        if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;
+        if (tray != null) tray.setTitle(" " + trayTimeMsg);
         if (win != null) win.maximizable = false;
     }
-})
+});
 
 ipcMain.on("notify", function (event, message) {
     if (message != null) {
