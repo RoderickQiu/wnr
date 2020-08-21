@@ -534,6 +534,13 @@
                         progress = ((seconds / restTime) * 1000).toFixed(2);
                     }
 
+                    if (shouldNap && method == 1) {
+                        if (lastNapSecond - seconds > napInterval) {
+                            lastNapSecond = seconds;
+                            ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
+                        }
+                    }
+
                     hours = Math.floor(seconds / 3600);
                     minutes = Math.floor((seconds - hours * 3600) / 60);
                     seconds -= hours * 3600 + minutes * 60;
@@ -553,12 +560,6 @@
                             min: minutes,
                             percentage: naturalProgress
                         });
-                    }
-                    if (shouldNap && method == 1) {
-                        if (lastNapSecond - seconds > napInterval) {
-                            lastNapSecond = seconds;
-                            ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
-                        }
                     }
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());

@@ -409,24 +409,25 @@ app.on('ready', () => {
         if (!app.isInApplicationsFolder()) {
             notificationSolution(i18n.__('wrong-folder-notification-title'), i18n.__('wrong-folder-notification-content'), "normal");
         }
-        nativeTheme.on('updated', function theThemeHasChanged() {
-            if (!store.has("dark-or-white")) {
-                if (nativeTheme.shouldUseDarkColors) {
-                    styleCache.set('isdark', true);
-                    if (win != null) {
-                        win.setBackgroundColor('#191919');
-                        win.webContents.send('darkModeChanges');
-                    }
-                } else {
-                    styleCache.set('isdark', false);
-                    if (win != null) {
-                        win.setBackgroundColor('#fefefe');
-                        win.webContents.send('darkModeChanges');
-                    }
+    }
+
+    nativeTheme.on('updated', function theThemeHasChanged() {
+        if (!store.has("dark-or-white")) {
+            if (nativeTheme.shouldUseDarkColors) {
+                styleCache.set('isdark', true);
+                if (win != null) {
+                    win.setBackgroundColor('#191919');
+                    win.webContents.send('darkModeChanges');
+                }
+            } else {
+                styleCache.set('isdark', false);
+                if (win != null) {
+                    win.setBackgroundColor('#fefefe');
+                    win.webContents.send('darkModeChanges');
                 }
             }
-        })
-    }
+        }
+    });
 
     if (process.platform == "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
     else if (process.platform == "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
@@ -923,38 +924,12 @@ function isDarkMode() {
     }
 }
 function darkModeSettingsFinder() {
-    if (process.platform == "darwin") {
-        if (nativeTheme.shouldUseDarkColors) {
-            styleCache.set('isdark', true);
-            if (win != null) {
-                win.setBackgroundColor('#191919');
-                win.webContents.send('darkModeChanges');
-            }
-        } else {
-            styleCache.set('isdark', false);
+    if (nativeTheme.shouldUseDarkColors) {
+        styleCache.set('isdark', true);
+        if (win != null) {
+            win.setBackgroundColor('#191919');
+            win.webContents.send('darkModeChanges');
         }
-    } else if (process.platform == 'win32') {
-        var regKey = new Registry({
-            hive: Registry.HKCU,
-            key: '\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize'
-        })
-        regKey.values(function (err, items) {
-            if (err)
-                return 'unset';
-            else {
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].name == 'AppsUseLightTheme') {
-                        if (items[i].value == "0x0") {
-                            styleCache.set('isdark', true);
-                            if (win != null) {
-                                win.setBackgroundColor('#191919');
-                                win.webContents.send('darkModeChanges');
-                            }
-                        }
-                    }
-                }
-            }
-        })
     }
 }
 
