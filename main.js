@@ -1698,7 +1698,8 @@ ipcMain.on("progress-bar-set", function (event, message) {
 })
 
 ipcMain.on("tray-time-set", function (event, message) {
-    trayTimeMsg = (message.h ? (message.h + i18n.__('h')) : "") + message.min + i18n.__('min') + '| ' + message.percentage + timeLeftTip;
+    trayTimeMsg = (message.h ? (message.h + ' ' + i18n.__('h')) : "") + message.min + ' ' + i18n.__('min') + '| ' + message.percentage + timeLeftTip;
+    
     if (tray != null) tray.setToolTip(trayTimeMsg);
     if (process.platform == "darwin") {
         if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;

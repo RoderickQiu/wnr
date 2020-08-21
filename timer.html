@@ -543,10 +543,6 @@
 
                     hours = Math.floor(seconds / 3600);
                     minutes = Math.floor((seconds - hours * 3600) / 60);
-                    seconds -= hours * 3600 + minutes * 60;
-                    $nowTiming.text(hours + h + minutes + min + seconds + s);
-
-                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
 
                     if (progress != lastRecordedProgress) {
                         lastRecordedProgress = progress;
@@ -561,6 +557,11 @@
                             percentage: naturalProgress
                         });
                     }
+
+                    seconds -= hours * 3600 + minutes * 60;
+                    $nowTiming.text(hours + h + minutes + min + seconds + s);
+
+                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                     if (systemName != "darwin") $timeBar.html(timeGot);
