@@ -703,13 +703,6 @@ debounce-fn@^4.0.0:
   dependencies:
     mimic-fn "^3.0.0"
 
-debug@*, debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.npm.taobao.org/debug/download/debug-4.1.1.tgz?cache=0&sync_timestamp=1592843160836&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
-  integrity sha1-O3ImAlUQnGtYnO4FDx1RYTlmR5E=
-  dependencies:
-    ms "^2.1.1"
-
 debug@^2.6.9:
   version "2.6.9"
   resolved "https://registry.npm.taobao.org/debug/download/debug-2.6.9.tgz?cache=0&sync_timestamp=1592843160836&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-2.6.9.tgz#5d128515df134ff327e90a4c93f4e077a536341f"
@@ -721,6 +714,13 @@ debug@^3.1.0:
   version "3.2.6"
   resolved "https://registry.npm.taobao.org/debug/download/debug-3.2.6.tgz?cache=0&sync_timestamp=1592843160836&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-3.2.6.tgz#e83d17de16d8a7efb7717edbe5fb10135eee629b"
   integrity sha1-6D0X3hbYp++3cX7b5fsQE17uYps=
+  dependencies:
+    ms "^2.1.1"
+
+debug@^4.0.1, debug@^4.1.0, debug@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.npm.taobao.org/debug/download/debug-4.1.1.tgz?cache=0&sync_timestamp=1592843160836&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.1.1.tgz#3b72260255109c6b589cee050f1d516139664791"
+  integrity sha1-O3ImAlUQnGtYnO4FDx1RYTlmR5E=
   dependencies:
     ms "^2.1.1"
 
@@ -1199,13 +1199,13 @@ humanize-duration@^3.22.0:
   resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.23.1.tgz#59cb8d01287479c1aa7cd5b1efc260d799bef89b"
   integrity sha1-WcuNASh0ecGqfNWx78Jg15m++Js=
 
-i18n@0.12.0:
-  version "0.12.0"
-  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.12.0.tgz#d33137d5f1baeb0ea4feaa9022d4e42586856f62"
-  integrity sha1-0zE31fG66w6k/qqQItTkJYaFb2I=
+i18n@0.13.2:
+  version "0.13.2"
+  resolved "https://registry.npm.taobao.org/i18n/download/i18n-0.13.2.tgz#3886678fe7cbbed45bac2ce53b8144c788a1c1b5"
+  integrity sha1-OIZnj+fLvtRbrCzlO4FEx4ihwbU=
   dependencies:
-    debug "*"
-    make-plural "^6.2.1"
+    debug "^4.1.1"
+    make-plural "^6.2.2"
     math-interval-parser "^2.0.1"
     messageformat "^2.3.0"
     mustache "^4.0.1"
@@ -1562,7 +1562,7 @@ make-plural@^4.3.0:
   optionalDependencies:
     minimist "^1.2.0"
 
-make-plural@^6.2.1:
+make-plural@^6.2.2:
   version "6.2.2"
   resolved "https://registry.npm.taobao.org/make-plural/download/make-plural-6.2.2.tgz#beb5fd751355e72660eeb2218bb98eec92853c6c"
   integrity sha1-vrX9dRNV5yZg7rIhi7mO7JKFPGw=

@@ -1,6 +1,6 @@
 {
   "name": "wnr",
-  "version": "1.19.0",
+  "version": "1.19.1",
   "description": "Work and rest, with wnr now!",
   "main": "main.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "dotenv": "8.2.0",
     "electron-debug": "3.1.0",
     "electron-store": "6.0.0",
-    "i18n": "0.12.0",
+    "i18n": "0.13.2",
     "jquery": "3.5.1",
     "leancloud-storage": "4.6.1",
     "node-fetch": "2.6.0",
