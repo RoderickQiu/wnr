@@ -41,7 +41,8 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="notes" class="text-center small text-muted"></div><br /><br />
+            <div id="notes" class="text-center small text-muted"></div><br />
+            <div id="time-cnt" class="text-center small text-muted"></div><br />
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
             </div><br />
@@ -218,6 +219,8 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#notes").html(note);
+            if (restored || loop == 0) $("#time-cnt").css("display", "none");
+            else $("#time-cnt").text('1' + ' / ' + loop + ' ' + i18n.__('times'));
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
                 if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
@@ -469,6 +472,7 @@
             function ender() {
                 canStop = false;
                 window.clearInterval(int);
+                $("#time-cnt").css("display", "none");
                 $("#only-one").css("display", "none");
                 $("#fullscreen-experience-tip").css("display", "none");
                 $("#work-rest").text("");
@@ -496,6 +500,7 @@
                 $("#skipper-space").css("display", "none");
                 $("#passcode-rechecker").css("display", "none");
                 times++;
+                $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
                 if (isClockWorking) {
                     if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {
                         startTime = new Date().getTime();
@@ -553,8 +558,7 @@
 
                         ipc.send("tray-time-set", {
                             h: hours,
-                            min: minutes,
-                            percentage: naturalProgress
+                            min: minutes
                         });
                     }
 

@@ -21,6 +21,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, trayTimeMsg = null, predefinedTasks = null,
+    trayH = null, trayMin = null,
     pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
@@ -1704,7 +1705,7 @@ ipcMain.on('tray-image-change', function (event, message) {
             else tray.setTitle(" " + i18n.__('stopped'));
         } else {
             if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-            else tray.setTitle(" " + 100 - (progress * 100) + timeLeftTip);
+            else tray.setTitle(" " + (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip);
         }
     }
 })
@@ -1715,7 +1716,9 @@ ipcMain.on("progress-bar-set", function (event, message) {
 })
 
 ipcMain.on("tray-time-set", function (event, message) {
-    trayTimeMsg = (message.h ? (message.h + ' ' + i18n.__('h')) : "") + message.min + ' ' + i18n.__('min') + '| ' + message.percentage + timeLeftTip;
+    trayH = message.h;
+    trayMin = message.min;
+    trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip;
 
     if (tray != null) tray.setToolTip(trayTimeMsg);
     if (process.platform == "darwin") {
