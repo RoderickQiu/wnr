@@ -74,6 +74,10 @@ function createWindow() {
         aboutWin = null;
     });
 
+    win.on('session-end', () => {
+        app.exit(0);
+    });
+
     //triggers for macos lock
     win.on('close', (event) => {
         if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && (process.env.NODE_ENV != "development")) {
@@ -493,7 +497,7 @@ app.on('ready', () => {
             if (win != null) win.webContents.send('alter-start-stop', 'stop');
         }
         isScreenLocked = true;
-    })
+    });
 
     powerMonitor.on('unlock-screen', () => {
         if (powerSaveBlockerId)
@@ -503,7 +507,11 @@ app.on('ready', () => {
             if (win != null) win.webContents.send('alter-start-stop', 'start');
         }
         isScreenLocked = false;
-    })
+    });
+
+    powerMonitor.on('shutdown', () => {
+        app.exit(0);
+    });
 
     if (process.platform == "win32") {
         var regKey = new Registry({
@@ -721,6 +729,15 @@ function traySolution(isFullScreen) {
 function macOSFullscreenSolution(isFullScreen) {
     if (app.isReady()) {
         if (process.platform === 'darwin') {
+            //dock
+            const dockMenu = Menu.buildFromTemplate([{
+                label: i18n.__('show-or-hide'),
+                click: () => showOrHide()
+            }]);
+
+            app.dock.setMenu(dockMenu);
+
+            //top bar
             if (!isFullScreen)
                 var template = [{
                     label: 'wnr',
@@ -1699,7 +1716,7 @@ ipcMain.on("progress-bar-set", function (event, message) {
 
 ipcMain.on("tray-time-set", function (event, message) {
     trayTimeMsg = (message.h ? (message.h + ' ' + i18n.__('h')) : "") + message.min + ' ' + i18n.__('min') + '| ' + message.percentage + timeLeftTip;
-    
+
     if (tray != null) tray.setToolTip(trayTimeMsg);
     if (process.platform == "darwin") {
         if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;
