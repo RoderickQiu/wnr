@@ -287,6 +287,38 @@ li input:nth-last-child(4)::after {
     border-color: #5490ea;
 }
 
+.header-resize {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 5px;
+    -webkit-app-region: no-drag;
+}
+
+.bottom-resize {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 5px;
+    -webkit-app-region: no-drag;
+}
+
+.left-resize, .right-resize {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    -webkit-app-region: no-drag;
+}
+
+.left-resize {
+    left: 0;
+}
+
+.right-resize {
+    right: 0;
+}
+
 #controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
     color: #5490ea;
 }
@@ -705,18 +737,7 @@ li input:nth-last-child(4)::after {
     color: #6c757d;
 }
 
-#statistics-no-chart {
-    transform: translateY(14%);
-    text-align: center;
-    -webkit-app-region: no-drag;
-    -webkit-user-select: text;
-}
-
-#statistics-no-chart h1 {
-    margin: 12px;
-}
-
-#statistics-with-chart {
+#statistics-no-chart, #statistics-with-chart {
     position: absolute;
     text-align: center;
     vertical-align: top;
@@ -724,6 +745,10 @@ li input:nth-last-child(4)::after {
     width: 80%;
     -webkit-app-region: no-drag;
     -webkit-user-select: text;
+}
+
+#statistics-no-chart h1 {
+    margin: 12px;
 }
 
 #statistics-graph {

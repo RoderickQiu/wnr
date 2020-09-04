@@ -49,7 +49,7 @@
   },
   "devDependencies": {
     "cross-env": "7.0.2",
-    "electron": "8.5.0",
+    "electron": "8.5.1",
     "electron-builder": "22.6.1"
   }
 }
