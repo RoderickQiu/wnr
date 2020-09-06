@@ -189,7 +189,7 @@
 	"windows-7-notification-msg": "如果你在使用时出现wnr黑屏的情况，请为wnr打开“Vista兼容模式”。",
 	"personalization": "个性化设置",
 	"is-hide-from-dock-setting-on": "从Dock隐藏设置：",
-	"is-hide-from-dock-setting-on-tip": "如果此项被选中，则将会把wnr从Dock隐藏，你将会只能从状态栏菜单打开wnr。",
+	"is-hide-from-dock-setting-on-tip": "如果此项被选中，则将会把wnr从Dock和顶栏隐藏，你将会只能从状态栏菜单打开wnr。",
 	"fullscreen-experience-tip": "你可能是第一次使用全屏专心模式。（如果你不需要强力体验，可以在设置中开启宽松全屏模式。）",
 	"fullscreen-too-long-tip": "这次你似乎将开启一段很长的专心时间。",
 	"fullscreen-experience-tip-mistake": "误点？这次你可以撤销",

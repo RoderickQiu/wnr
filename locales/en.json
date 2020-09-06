@@ -189,7 +189,7 @@
     "windows-7-notification-msg": "If the application isn't working properly, please apply for \"Vista Compatibility Mode\". ",
     "personalization": "Personalization",
     "is-hide-from-dock-setting-on": "Hide from dock setting: ",
-    "is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and you'll only be able to find wnr via the tray menu (not recommended).",
+    "is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and the top bar and you'll only be able to find wnr via the tray menu (not recommended).",
     "fullscreen-experience-tip": "It seems it's the first time that you enabled fullscreen focus mode. ",
     "fullscreen-too-long-tip": "It seems that you are going to start a long period of fullscreen focusing.",
     "fullscreen-experience-tip-mistake": "Cancel (only for this time)",
