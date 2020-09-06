@@ -347,6 +347,24 @@
                     </div>
                     <br />
                 </div>
+                <!-- no top bar time shown setting -->
+                <div class="row" id="top-bar-time-setting-container">
+                    <div class="col-1 text-center">
+                        <input id="top-bar-time-setting" type="checkbox" onchange="topBarTimeSetting()" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('is-top-bar-time-setting-on'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('is-top-bar-time-setting-on-tip'));</script>
+                            <br />
+                        </span>
+                        <br />
+                    </div>
+                    <br />
+                </div>
                 <!-- auto start the default task setting -->
                 <div class="row">
                     <div class="col-1 text-center">
@@ -713,7 +731,10 @@
     <script>
         $(".get-help").attr('title', i18n.__('helper'));
 
-        if (process.platform != "darwin") $("#hide-from-dock-setting-container").css("display", "none");
+        if (process.platform != "darwin") {
+            $("#hide-from-dock-setting-container").css("display", "none");
+            $("#top-bar-time-setting-container").css("display", "none");
+        }
 
         if (process.env.NODE_ENV == "msstore") $(".update-check").css("display", "none");
 
@@ -746,8 +767,10 @@
         });//long-touch menu
     </script>
 
-    <script src="updater.js"></script>
+    <!-- the settings script -->
     <script src="settings-renderer.js"></script>
+
+    <script src="updater.js"></script>
     <script src="renderer.js"></script>
 </body>
 

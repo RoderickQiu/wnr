@@ -295,6 +295,12 @@ function hideFromDockSetting() {
     else store.set("dock-hide", false);
     timeOut = setTimeout("call('relauncher')", 500);
 }
+if (store.get("tray-time") != false) document.getElementById("top-bar-time-setting").checked = true;
+else document.getElementById("top-bar-time-setting").checked = false;
+function topBarTimeSetting() {
+    if (document.getElementById("top-bar-time-setting").checked != false) store.set("tray-time", true);
+    else store.set("tray-time", false);
+}
 if (store.get("nap") == true) document.getElementById("nap-setting").checked = true;
 else {
     document.getElementById("nap-setting").checked = false;

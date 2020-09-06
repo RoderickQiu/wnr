@@ -1718,16 +1718,18 @@ ipcMain.on("progress-bar-set", function (event, message) {
 })
 
 ipcMain.on("tray-time-set", function (event, message) {
-    trayH = message.h;
-    trayMin = message.min;
-    trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip;
+    if (store.get("tray-time") != false || process.platform != "darwin") {
+        trayH = message.h;
+        trayMin = message.min;
+        trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip;
 
-    if (tray != null) tray.setToolTip(trayTimeMsg);
-    if (process.platform == "darwin") {
-        if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;
-        if (tray != null) tray.setTitle(" " + trayTimeMsg);
-        if (win != null) win.maximizable = false;
-    }
+        if (tray != null) tray.setToolTip(trayTimeMsg);
+        if (process.platform == "darwin") {
+            if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;
+            if (tray != null) tray.setTitle(" " + trayTimeMsg);
+            if (win != null) win.maximizable = false;
+        }
+    } else tray.setTitle("");
 });
 
 ipcMain.on("notify", function (event, message) {

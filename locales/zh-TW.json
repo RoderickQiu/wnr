@@ -274,5 +274,7 @@
 	"onlyrest": "僅休息",
 	"disable-pausing-setting": "禁止計時暫停設置：",
 	"disable-pausing-setting-tip": "如果此項被選中，則計時時將會不能暫停計時器，用于避免壹直拖延和逃避的行爲。",
-	"pausing-disabled": "暫停功能被停用。"
+	"pausing-disabled": "暫停功能被停用。",
+	"is-top-bar-time-setting-on": "頂欄計時信息顯示設置：",
+	"is-top-bar-time-setting-on-tip": "如果此項被選中，則計時時將會在頂欄上顯示剩余時間等信息。"
 }
