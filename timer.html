@@ -97,6 +97,28 @@
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="bottom-bar">&nbsp;</div>
+
+    <script>
+        function dynamicResizer() {//dynamically resize the countdown text as the window resizes
+            var hdWidth = document.body.getBoundingClientRect().width;
+            var defaultWidth = 376;
+            var scale = hdWidth / defaultWidth;
+
+            $("#now-timing").css("font-size", (2.5 * ((scale - 1) / 2 + 1)) + 'rem');
+            if (hdWidth > 630) {
+                $("#now-timing").css("font-family", "SourceHanSansCNLight, sans-serif");
+                if (hdWidth < 800) $("#now-timing").css("font-weight", "bolder");
+                else $("#now-timing").css("font-weight", "normal");
+            } else {
+                $("#now-timing").css("font-family", "SourceHanSansCN, sans-serif");
+                $("#now-timing").css("font-weight", "normal");
+            }
+        }
+
+        dynamicResizer();
+        window.onresize = dynamicResizer;
+    </script>
+
     <script>
         if (process.platform == "darwin") {
             $("#win-hider").css("display", "none");
