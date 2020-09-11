@@ -1688,10 +1688,10 @@ mustache@^4.0.1:
   resolved "https://registry.npm.taobao.org/mustache/download/mustache-4.0.1.tgz#d99beb031701ad433338e7ea65e0489416c854a2"
   integrity sha1-2ZvrAxcBrUMzOOfqZeBIlBbIVKI=
 
-node-fetch@2.6.0:
-  version "2.6.0"
-  resolved "https://registry.npm.taobao.org/node-fetch/download/node-fetch-2.6.0.tgz?cache=0&sync_timestamp=1597047232655&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-fetch%2Fdownload%2Fnode-fetch-2.6.0.tgz#e633456386d4aa55863f676a7ab0daa8fdecb0fd"
-  integrity sha1-5jNFY4bUqlWGP2dqerDaqP3ssP0=
+node-fetch@2.6.1:
+  version "2.6.1"
+  resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
+  integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
 node-notifier@8.0.0:
   version "8.0.0"

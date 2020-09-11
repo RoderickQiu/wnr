@@ -1,6 +1,6 @@
 {
   "name": "wnr",
-  "version": "1.19.1",
+  "version": "1.19.2",
   "description": "Work and rest, with wnr now!",
   "main": "main.js",
   "scripts": {
@@ -39,7 +39,7 @@
     "i18n": "0.13.2",
     "jquery": "3.5.1",
     "leancloud-storage": "4.6.1",
-    "node-fetch": "2.6.0",
+    "node-fetch": "2.6.1",
     "node-notifier": "8.0.0",
     "node-shi": "0.4.2",
     "popper.js": "1.16.1",

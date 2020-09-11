@@ -1,23 +1,23 @@
 {
-    "version": "1.19.1",
+    "version": "1.19.2",
     "content": {
         "zh-CN": [
-            "为macOS系统优化，包括窗口关闭逻辑，外接屏幕处理逻辑，托盘菜单显示，MINI模式使用逻辑和系统触发关机后的反应方面的优化。",
-            "为Windows系统优化，主要包括托盘菜单显示和暗黑模式自动切换逻辑优化。",
-            "添加了循环次数显示的功能。",
+            "允许改变窗口大小。",
+            "为macOS系统顶栏体验优化，现在可以在设置里关闭信息显示。",
+            "为Windows系统优化，主要是修复了MINI模式的几个问题。",
             "优化性能，修复漏洞。"
         ],
         "zh-TW": [
-            "爲macOS系統優化，包括窗口關閉邏輯，外接屏幕處理邏輯，托盤菜單顯示，MINI模式使用邏輯和系統觸發關機後的反應方面的優化。",
-            "爲Windows系統優化，主要包括托盤菜單顯示和暗黑模式自動切換邏輯優化。",
-            "添加了循環次數顯示的功能。",
-            "優化性能，修複漏洞。"
+            "允許改變窗口大小。",
+            "為macOS系統頂欄體驗優化，現在可以在設置裏關閉信息顯示。",
+            "為Windows系統優化，主要是修復了MINI模式的幾個問題。",
+            "優化性能，修復漏洞。"
         ],
         "en": [
-            "Optimized for macOS on several things, includes windows closing strategy, multiscreen strategy, tray strategy, mini mode strategy and behavior after system shutdowns.",
-            "Optimized for Windows on dark mode's auto switch feature and the tray.",
-            "Bugs fixed and a typo fix (#25).",
-            "Loop count feature added."
+            "Window resize available.",
+            "Optimized for macOS so that you can disable showing info on the top bar.",
+            "Optimized for Windows for the mini mode.",
+            "Bugs fixed and generally improved."
         ]
     }
 }
