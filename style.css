@@ -230,7 +230,7 @@ li input:nth-last-child(4)::after {
 }
 
 .display-1 {
-    font-size: 7.5rem;
+    font-size: 7.5rem !important;
     font-weight: 200;
 }
 
