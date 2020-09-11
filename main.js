@@ -1725,7 +1725,7 @@ ipcMain.on("tray-time-set", function (event, message) {
     if (store.get("tray-time") != false || process.platform != "darwin") {
         trayH = message.h;
         trayMin = message.min;
-        trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip;
+        trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + Math.floor(100 - progress * 100) + timeLeftTip;
 
         if (tray != null) tray.setToolTip(trayTimeMsg);
         if (process.platform == "darwin") {
