@@ -499,6 +499,7 @@
 
             function ender() {
                 canStop = false;
+                call('floating-destroy');
                 window.clearInterval(int);
                 $("#time-cnt").css("display", "none");
                 $("#only-one").css("display", "none");

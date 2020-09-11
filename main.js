@@ -158,7 +158,7 @@ function setFullScreenMode(flag) {
             win.setKiosk(flag);
             if (flag) {
                 kioskInterval = setInterval(function () {
-                    if (fullScreenProtection) {
+                    if (fullScreenProtection && win != null) {
                         win.restore();
                         win.show();
                         win.moveTop();
@@ -1028,7 +1028,7 @@ ipcMain.on('warning-giver-workend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
-        if (!hasFloating) {
+        if (!hasFloating || restTimeFocused) {
             win.restore();
             if (restTimeFocused != true) win.show();
             win.center();
@@ -1135,7 +1135,7 @@ ipcMain.on('warning-giver-restend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = true;
-        if (!hasFloating) {
+        if (!hasFloating || workTimeFocused) {
             win.restore();
             if (workTimeFocused != true) win.show();
             win.center();
@@ -1284,6 +1284,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
                         store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
                 }).then(function (response) {
                     win.loadFile('index.html');//automatically back
+                    setFullScreenMode(false);
                     if (!store.has("suggest-star")) {
                         dialog.showMessageBox(win, {
                             title: i18n.__('suggest-star'),
@@ -1683,17 +1684,20 @@ function floating() {
     }
 }
 ipcMain.on('floating', floating);
-ipcMain.on('floating-destroy', function (event, message) {
+function floatingDestroyer(message) {
     if (floatingWin != null) {
         hasFloating = false;
-        if (message == null)
+        if (message == "")
             try {
                 floatingWin.close();
             } catch (e) {
                 console.log(e);
             }
     }
-})
+}
+ipcMain.on('floating-destroy', function (event, message) {
+    floatingDestroyer(message ? message : "");
+});
 
 ipcMain.on('only-one-min-left', function () {
     if (!fullScreenProtection)
