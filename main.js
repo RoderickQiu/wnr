@@ -590,18 +590,16 @@ function notificationSolution(title, body, func) {
             message: body,
             silent: false,
             icon: path.join(__dirname, process.platform == "darwin" ? '/res/icons/iconMac.png' : '\\res\\icons\\wnrIcon.png')
+        },
+        function (error, response) {
+            if (func == "hide-or-show") {
+                if (win != null) {
+                    win.show();
+                }
+            } else if (func == "push-notification")
+                shell.openExternal(pushNotificationLink);
         }
     );
-
-    notifier.removeAllListeners("click");
-    notifier.on('click', function () {
-        if (func == "hide-or-show") {
-            if (win != null) {
-                win.show();
-            }
-        } else if (func == "push-notification")
-            shell.openExternal(pushNotificationLink);
-    });
 }
 
 function traySolution(isFullScreen) {
