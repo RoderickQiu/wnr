@@ -1037,6 +1037,7 @@ ipcMain.on('warning-giver-workend', function () {
             win.moveTop();
         }
         if (restTimeFocused == true) {
+            if (hasFloating) floatingDestroyer("property-stay");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             if (!isLoose) multiScreenSolution("on");
             setFullScreenMode(true);
@@ -1060,6 +1061,9 @@ ipcMain.on('warning-giver-workend', function () {
                 }
             }
             if (hasFloating && win != null) {
+                if (floatingWin == null) {
+                    floating();
+                }
                 win.minimize();
                 win.hide();
             }
@@ -1144,6 +1148,7 @@ ipcMain.on('warning-giver-restend', function () {
             win.moveTop();
         }
         if (workTimeFocused == true) {
+            if (hasFloating) floatingDestroyer("property-stay");
             multiScreenSolution("on");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             setFullScreenMode(true);
@@ -1167,6 +1172,9 @@ ipcMain.on('warning-giver-restend', function () {
                 }
             }
             if (hasFloating && win != null) {
+                if (floatingWin == null) {
+                    floating();
+                }
                 win.minimize();
                 win.hide();
             }
@@ -1644,7 +1652,7 @@ ipcMain.on('locker-passcode', function (event, message) {
 function floating() {
     if (app.isReady()) {
         if (win != null) {
-            if (!hasFloating) {
+            if (!hasFloating || floatingWin == null) {
                 hasFloating = true;
                 floatingWin = new BrowserWindow({
                     width: 78,
@@ -1672,9 +1680,6 @@ function floating() {
                 floatingWin.on('closed', () => {
                     floatingWin = null;
                     hasFloating = false;
-                    if (win != null) {
-                        if (store.get("top") != true) win.setAlwaysOnTop(false);
-                    }
                 });
                 floatingWin.on('move', () => {
                     styleCache.set("floating-axis", { x: floatingWin.getContentBounds().x, y: floatingWin.getContentBounds().y });
@@ -1686,13 +1691,12 @@ function floating() {
 ipcMain.on('floating', floating);
 function floatingDestroyer(message) {
     if (floatingWin != null) {
-        hasFloating = false;
-        if (message == "")
-            try {
-                floatingWin.close();
-            } catch (e) {
-                console.log(e);
-            }
+        if (message == "") hasFloating = false;
+        try {
+            floatingWin.close();
+        } catch (e) {
+            console.log(e);
+        }
     }
 }
 ipcMain.on('floating-destroy', function (event, message) {
