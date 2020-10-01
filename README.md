@@ -25,13 +25,14 @@
     <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">Development Guide</a>
 </p>
 
+<table border="0" align="center">
+    <tr>
+        <td align="right"><img src="https://i.loli.net/2020/10/01/D72AIFTGQ49OpYd.png" ></td>
+        <td align="left"><img src="https://i.loli.net/2020/10/01/XMiGmRJNwtyf1SY.png" ></td>
+    </tr>
+</table>
+
 ---
-
-## Online Version
-
-The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
-
-*(just a demo version, may not be fully useful on phones or other devices due to a lot of reasons.)*
 
 ## Features
 
@@ -49,9 +50,7 @@ The online wnr is now out: [wnr-jr](https://wnr-jr.scris.top).
 
 - semantic time input
 
-- work time settings
-
-- rest time settings
+- work time / rest time settings
 
 - automatic loops
 
@@ -123,6 +122,8 @@ Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projec
 yarn # install deps
 
 yarn start # launch the app
+
+yarn dir # build executable only
 
 yarn nsis # windows nsis installer
 

@@ -25,13 +25,14 @@
     <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">開發導引文檔</a>
 </p>
 
+<table border="0" align="center">
+    <tr>
+        <td align="right"><img src="https://i.loli.net/2020/10/01/ZjTHdYQCzhqPor6.png" ></td>
+        <td align="left"><img src="https://i.loli.net/2020/10/01/vwfECA8z6yQkaZB.png" ></td>
+    </tr>
+</table>
+
 ---
-
-## 在線版本
-
-在線的 wnr 現已發佈：[wnr-jr](https://wnr-jr.scris.top)。
-
-*（僅僅是預覽版，可能因爲許多原因而無法在手機或其他設備上正常工作。）*
 
 ## 特性
 
@@ -45,13 +46,11 @@
 
 - 多虛擬桌面支持
 
-- 擁有便攜版 *（目前支持 Window）*
+- 擁有便攜版 *（目前支持 Windows）*
 
 - 用自然語言輸入時間
 
-- 設置工作時間
-
-- 設置休息時間
+- 設置工作時間、休息時間
 
 - 自動循環
 
@@ -93,8 +92,6 @@
 
 - ...
 
-這個軟件會經常更新，這個榜單也一樣。
-
 ## 聯繫方式
 
 - 主頁： [getwnr.com](https://getwnr.com/)。
@@ -123,6 +120,8 @@
 yarn # 安裝依賴
 
 yarn start # 運行程序
+
+yarn dir # 僅僅打包基礎可執行文件
 
 yarn nsis # Windows平台NSIS安裝包打包
 

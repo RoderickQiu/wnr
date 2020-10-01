@@ -25,13 +25,14 @@
     <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">开发导引文档</a>
 </p>
 
+<table border="0" align="center">
+    <tr>
+        <td align="right"><img src="https://i.loli.net/2020/10/01/lX6Q9uqFNWSUB7k.png" ></td>
+        <td align="left"><img src="https://i.loli.net/2020/10/01/d92EyIKFejBrl4w.png" ></td>
+    </tr>
+</table>
+
 ---
-
-## 在线版本
-
-在线的 wnr 现已发布：[wnr-jr](https://wnr-jr.scris.top)。
-
-*（仅仅是预览版，可能因为许多原因而无法在手机或其他设备上正常工作。）*
 
 ## 特性
 
@@ -45,13 +46,11 @@
 
 - 多虚拟桌面支持
 
-- 拥有便携版 *（目前支持 Window）*
+- 拥有便携版 *（目前支持 Windows）*
 
 - 用自然语言输入时间
 
-- 设置工作时间
-
-- 设置休息时间
+- 设置工作时间、休息时间
 
 - 自动循环
 
@@ -123,6 +122,8 @@
 yarn # 安装依赖
 
 yarn start # 运行程序
+
+yarn dir # 仅仅打包基础可执行文件
 
 yarn nsis # Windows平台NSIS安装包打包
 
