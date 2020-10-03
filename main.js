@@ -364,9 +364,10 @@ app.on('ready', () => {
             let isNotified = store.has("windows-7-notification");
             if (isNotified == false) {
                 dialog.showMessageBox(win, {
-                    title: i18n.__('windows-7-notification'),
+                    title: " wnr",
+                    message: i18n.__('windows-7-notification'),
                     type: "warning",
-                    message: i18n.__('windows-7-notification-msg'),
+                    detail: i18n.__('windows-7-notification-msg'),
                 }).then(function () {
                     store.set("windows-7-notification", 1);
                 });
@@ -910,7 +911,7 @@ function leanCloudSolution() {
                             pushNotificationLink = link;
                             store.set(id, true);
                             dialog.showMessageBox(win, {
-                                title: "wnr",
+                                title: " wnr",
                                 type: "warning",
                                 message: title,
                                 detail: content,
@@ -1099,10 +1100,10 @@ ipcMain.on('warning-giver-workend', function () {
             setTimeout(function () {
                 if (process.platform != "darwin" || (process.platform == "darwin" && restTimeFocused))
                     dialog.showMessageBox(win, {
-                        title: "wnr",
+                        title: " wnr",
                         message: (store.has("personalization-notification.work-time-end") ?
                             store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
-                        type: "warning",
+                        type: "info",
                         detail: (store.has("personalization-notification.work-time-end-msg") ?
                             store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
@@ -1120,10 +1121,10 @@ ipcMain.on('warning-giver-workend', function () {
                         win.maximizable = false;
                     });
                 else dialog.showMessageBox({
-                    title: "wnr",
+                    title: " wnr",
                     message: (store.has("personalization-notification.work-time-end") ?
                         store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
-                    type: "warning",
+                    type: "info",
                     detail: (store.has("personalization-notification.work-time-end-msg") ?
                         store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
@@ -1217,10 +1218,10 @@ ipcMain.on('warning-giver-restend', function () {
             setTimeout(function () {
                 if (process.platform != "darwin" || (process.platform == "darwin" && workTimeFocused))
                     dialog.showMessageBox(win, {
-                        title: "wnr",
+                        title: " wnr",
                         message: (store.has("personalization-notification.rest-time-end") ?
                             store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
-                        type: "warning",
+                        type: "info",
                         detail: (store.has("personalization-notification.rest-time-end-msg") ?
                             store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
@@ -1238,10 +1239,10 @@ ipcMain.on('warning-giver-restend', function () {
                         win.maximizable = false;
                     })
                 else dialog.showMessageBox({
-                    title: "wnr",
+                    title: " wnr",
                     message: (store.has("personalization-notification.rest-time-end") ?
                         store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
-                    type: "warning",
+                    type: "info",
                     detail: (store.has("personalization-notification.rest-time-end-msg") ?
                         store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
@@ -1304,10 +1305,10 @@ ipcMain.on('warning-giver-all-task-end', function () {
         } else
             setTimeout(function () {
                 dialog.showMessageBox(win, {
-                    title: "wnr",
+                    title: " wnr",
                     message: (store.has("personalization-notification.all-task-end") ?
                         store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
-                    type: "warning",
+                    type: "info",
                     detail: (store.has("personalization-notification.all-task-end-msg") ?
                         store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
                 }).then(function (response) {
@@ -1315,9 +1316,9 @@ ipcMain.on('warning-giver-all-task-end', function () {
                     setFullScreenMode(false);
                     if (!store.has("suggest-star")) {
                         dialog.showMessageBox(win, {
-                            title: "wnr",
+                            title: " wnr",
                             message: i18n.__('suggest-star'),
-                            type: "warning",
+                            type: "info",
                             detail: i18n.__('suggest-star-msg'),
                             checkboxLabel: i18n.__('suggest-star-chk'),
                             checkboxChecked: true
@@ -1354,7 +1355,7 @@ ipcMain.on('update-feedback', function (event, message) {
                     updateMessage += (updateIterator + 1).toString() + ". " + json.content[store.get('i18n')][updateIterator] + '\r';
                 }
                 dialog.showMessageBox((settingsWin != null) ? settingsWin : ((aboutWin != null) ? aboutWin : win), {
-                    title: i18n.__('update'),
+                    title: " wnr",
                     type: "warning",
                     message: i18n.__('update-msg'),
                     detail: i18n.__('update-content') + "\r" + updateMessage,
@@ -1382,7 +1383,7 @@ ipcMain.on('update-feedback', function (event, message) {
 ipcMain.on('alert', function (event, message) {
     if (settingsWin != null) {
         dialog.showMessageBox(settingsWin, {
-            title: "wnr",
+            title: " wnr",
             type: "info",
             message: message
         }).then(function () {
@@ -1390,7 +1391,7 @@ ipcMain.on('alert', function (event, message) {
         });
     } else {
         dialog.showMessageBox(win, {
-            title: "wnr",
+            title: " wnr",
             type: "info",
             message: message
         })
@@ -1400,7 +1401,7 @@ ipcMain.on('alert', function (event, message) {
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
         dialog.showMessageBox(settingsWin, {
-            title: "wnr",
+            title: " wnr",
             message: i18n.__('delete-all-data-dialog-box-title'),
             type: "warning",
             detail: i18n.__('delete-all-data-dialog-box-content'),
@@ -1421,7 +1422,7 @@ ipcMain.on('delete-all-data', function () {
 function windowCloseChk() {
     if ((process.env.NODE_ENV != "development") && win != null)
         dialog.showMessageBox(win, {
-            title: "wnr",
+            title: " wnr",
             message: i18n.__('window-close-dialog-box-title'),
             type: "warning",
             detail: i18n.__('window-close-dialog-box-content'),
@@ -1660,7 +1661,7 @@ ipcMain.on('locker-passcode', function (event, message) {
     if (message == "empty") lockerMessage = i18n.__('locker-settings-empty-password');
     if (settingsWin != null)
         dialog.showMessageBox(settingsWin, {
-            title: "wnr",
+            title: " wnr",
             message: i18n.__('locker-settings'),
             type: "warning",
             detail: lockerMessage
