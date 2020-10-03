@@ -580,24 +580,22 @@ function showOrHide() {
             }
 }
 
-// possible funcs: non-important, normal, hide-or-show, push-notification
+// possible funcs: non-important, normal, hide-or-show
 function notificationSolution(title, body, func) {
-    notifier.notify(
-        {
-            sound: true,
-            wait: (func == "non-important") ? false : true,
-            title: title,
-            message: body,
-            silent: false,
-            icon: path.join(__dirname, process.platform == "darwin" ? '/res/icons/iconMac.png' : '\\res\\icons\\wnrIcon.png')
-        },
+    notifier.notify({
+        sound: true,
+        timeout: 5,
+        title: title,
+        message: body,
+        silent: false,
+        icon: path.join(__dirname, process.platform == "darwin" ? '/res/icons/iconMac.png' : '\\res\\icons\\wnrIcon.png')
+    },
         function (error, response) {
             if (func == "hide-or-show") {
                 if (win != null) {
                     win.show();
                 }
-            } else if (func == "push-notification")
-                shell.openExternal(pushNotificationLink);
+            }
         }
     );
 }
@@ -908,18 +906,27 @@ function leanCloudSolution() {
                         let title = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
                         let link = (store.get("i18n").indexOf("zh") != -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
                         let id = notification.get('objectId');
-                        if (!store.get(id)) {
+                        if (!store.get(id) && win != null) {
                             pushNotificationLink = link;
-                            if (pushNotificationLink != "" && pushNotificationLink != null)
-                                notificationSolution(title, content, "push-notification");
-                            else notificationSolution(title, content, "normal");
                             store.set(id, true);
+                            dialog.showMessageBox(win, {
+                                title: "wnr",
+                                type: "warning",
+                                message: title,
+                                detail: content,
+                                buttons: [i18n.__('cancel'), i18n.__('ok')],
+                                cancelId: 0
+                            }).then(function (response) {
+                                if (response.response != 0)
+                                    if (pushNotificationLink != "" && pushNotificationLink != null)
+                                        shell.openExternal(pushNotificationLink);
+                            });
                         }
                     }
                 })
             })
         } catch (e) {
-            console.log(e)
+            console.log(e);
         }
     else console.log("No LeanCloud key provided, skipped.")
 }

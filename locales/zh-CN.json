@@ -276,5 +276,7 @@
 	"disable-pausing-setting-tip": "如果此项被选中，则计时时将会不能暂停计时器，用于避免一直拖延和逃避的行为。",
 	"pausing-disabled": "暂停功能被停用。",
 	"is-top-bar-time-setting-on": "顶栏计时信息显示设置：",
-	"is-top-bar-time-setting-on-tip": "如果此项被选中，则计时时将会在顶栏上显示剩余时间等信息。"
+	"is-top-bar-time-setting-on-tip": "如果此项被选中，则计时时将会在顶栏上显示剩余时间等信息。",
+	"cancel": "取消",
+	"ok": "确认"
 }
