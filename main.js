@@ -1026,16 +1026,14 @@ ipcMain.on('warning-giver-workend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
-        if (!hasFloating || restTimeFocused) {
+        if (restTimeFocused == true) {
+            if (hasFloating) floatingDestroyer("property-stay");
             win.restore();
-            if (restTimeFocused != true) win.show();
+            win.show();
             win.center();
             win.flashFrame(true);
             if (!isLoose) win.setAlwaysOnTop(true, "floating");
             win.moveTop();
-        }
-        if (restTimeFocused == true) {
-            if (hasFloating) floatingDestroyer("property-stay");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
             if (!isLoose) multiScreenSolution("on");
             setFullScreenMode(true);
@@ -1064,6 +1062,13 @@ ipcMain.on('warning-giver-workend', function () {
                 }
                 win.minimize();
                 win.hide();
+            } else {
+                win.restore();
+                win.show();
+                win.center();
+                win.flashFrame(true);
+                if (!isLoose) win.setAlwaysOnTop(true, "floating");
+                win.moveTop();
             }
         }
         if (isScreenLocked) {
@@ -1137,18 +1142,16 @@ ipcMain.on('warning-giver-restend', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = true;
-        if (!hasFloating || workTimeFocused) {
+        if (workTimeFocused == true) {
+            if (hasFloating) floatingDestroyer("property-stay");
             win.restore();
-            if (workTimeFocused != true) win.show();
+            win.show();
             win.center();
             win.flashFrame(true);
             win.setAlwaysOnTop(true, "floating");
             win.moveTop();
-        }
-        if (workTimeFocused == true) {
-            if (hasFloating) floatingDestroyer("property-stay");
-            multiScreenSolution("on");
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
+            multiScreenSolution("on");
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
@@ -1175,6 +1178,13 @@ ipcMain.on('warning-giver-restend', function () {
                 }
                 win.minimize();
                 win.hide();
+            } else {
+                win.restore();
+                win.show();
+                win.center();
+                win.flashFrame(true);
+                win.setAlwaysOnTop(true, "floating");
+                win.moveTop();
             }
         }
         if (isScreenLocked) {
