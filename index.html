@@ -58,7 +58,8 @@
                     + shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true })
                     + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
                     + document.getElementById("focus-rest-set-onlyrest").checked
-                    + "&restored=false";
+                    + "&restored=false"
+                    + "&times=0";
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
             else
@@ -70,7 +71,8 @@
                     + "&method=1"
                     + "&work-time-focused=" + document.getElementById("focus-work-set").checked
                     + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
-                    + "&restored=false";
+                    + "&restored=false"
+                    + "&times=0";
         }
         function keydown(e) {
             var currKey = 0, e = e || event;
@@ -380,7 +382,8 @@
                             + "&method=1"
                             + "&work-time-focused=" + item.focusWhenWorking
                             + "&rest-time-focused=" + item.focusWhenResting
-                            + "&restored=false";
+                            + "&restored=false"
+                            + "&times=0";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -400,23 +403,25 @@
                         "timer.html?title=" + timingData.get("last-recorded-state").title
                         + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                         + "&rest-time=" + timingData.get("last-recorded-state").restTime
-                        + "&loop=" + (store.get("infinity") ? 0 : 1)
+                        + "&loop=" + (store.get("infinity") ? 0 : timingData.get("last-recorded-state").loop)
                         + "&note=" + timingData.get("last-recorded-state").note
                         + "&method=1"
                         + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                         + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
-                        + "&restored=true";
+                        + "&restored=true"
+                        + "&times=" + Number(timingData.get("last-recorded-times-left"));
                 } else {
                     window.location.href =
                         "timer.html?title=" + timingData.get("last-recorded-state").title
                         + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                         + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
-                        + "&loop=" + (store.get("infinity") ? 0 : 1)
+                        + "&loop=" + (store.get("infinity") ? 0 : timingData.get("last-recorded-state").loop)
                         + "&note=" + timingData.get("last-recorded-state").note
                         + "&method=2"
                         + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                         + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
-                        + "&restored=true";
+                        + "&restored=true"
+                        + "&times=" + Number(timingData.get("last-recorded-times-left"));
                 }
             }
         }, 500);

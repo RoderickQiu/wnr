@@ -206,6 +206,7 @@
             workTimeFocused = (decodeURI($_GET['work-time-focused']) == "false") ? false : true,
             restTimeFocused = (decodeURI($_GET['rest-time-focused']) == "false") ? false : true,
             restored = (decodeURI($_GET['restored']) == "false") ? false : true,
+            times = (Number(decodeURI($_GET['times'])) == NaN) ? 0 : Number(decodeURI($_GET['times'])),
             methodFromStart = Number(decodeURI($_GET['method'])),
             h = i18n.__('h'),
             min = i18n.__('min'),
@@ -227,11 +228,14 @@
             method: methodFromStart
         });
 
+        timingData.set("last-recorded-times-left", times);
+
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
         if ((loop < 1 && loop != 0) || (workTime <= 60000 && workTime != 12000) || (restTime <= 60000 && restTime != 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
+            timingData.set("last-recorded-times-left", 0);
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='javascript:backer()' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -239,6 +243,7 @@
         } else if (workTime > 86400000 || restTime > 86400000 || (workTime + restTime) * loop > 86400000) {
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
+            timingData.set("last-recorded-times-left", 0);
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('too-long') + "<br/><a href='javascript:backer()' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -247,8 +252,8 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#notes").html(note);
-            if (restored || loop == 0) $("#time-cnt").css("display", "none");
-            else $("#time-cnt").text('1' + ' / ' + loop + ' ' + i18n.__('times'));
+            if (loop == 0) $("#time-cnt").css("display", "none");
+            else $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
                 if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
@@ -278,7 +283,7 @@
                 }
             }
 
-            //method: 1-work / 2-rest, times: time-reset times, moreThanOneMin: more than 1 min left
+            //method: 1-work / 2-rest, moreThanOneMin: more than 1 min left
             var startTime,
                 int,
                 tempVariable,
@@ -288,7 +293,6 @@
                 minutes,
                 hours,
                 method = 1,
-                times = 0,
                 isClockWorking = 1,
                 moreThanOneMin = 1,
                 lastRecordedMinutesLeft = -1,
@@ -529,21 +533,22 @@
                 $("#skipper-space").css("display", "none");
                 $("#passcode-rechecker").css("display", "none");
                 times++;
+                timingData.set("last-recorded-times-left", times);
                 $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
                 if (isClockWorking) {
-                    if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {
+                    if (times < loop * 2 || loop == 0) {
                         startTime = new Date().getTime();
                         themeChanger();
-                    } else if ((times == loop * 2) || ((method == 2 && restored == true) == true)) {
+                    } else if (times == loop * 2) {
                         ender();
                     }
                 } else {
                     stopper();
                     setTimeout(function () {
-                        if (times < loop * 2 || (loop == 0 && ((method == 2 && restored == true) == false))) {
+                        if (times < loop * 2 || loop == 0) {
                             startTime = new Date().getTime();
                             themeChanger();
-                        } else if ((times == loop * 2) || ((method == 2 && restored == true) == true)) {
+                        } else if (times == loop * 2) {
                             ender();
                         }
                     }, 250);
