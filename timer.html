@@ -218,6 +218,8 @@
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
+        if (restored && methodFromStart == 2) times--;//workaround: method = 2 causes an extra skipper()
+
         timingData.set("last-recorded-state", {
             workTime: workTime / 60000,
             restTime: restTime / 60000,
