@@ -278,5 +278,8 @@
 	"is-top-bar-time-setting-on": "頂欄計時信息顯示設置：",
 	"is-top-bar-time-setting-on-tip": "如果此項被選中，則計時時將會在頂欄上顯示剩余時間等信息。",
 	"cancel": "取消",
-	"ok": "確認"
+	"ok": "確認",
+	"positive": "正計時",
+	"positive-msg": "不設時長，自由計時，只有小憩提醒。",
+	"min-already": "分鍾已經"
 }

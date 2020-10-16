@@ -59,7 +59,7 @@
                 <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
                         id="back-index"></i></a>
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href="javascript:skipper()" class="text-muted">
+                <a href="javascript:skipper()" class="text-muted" id="skipper-container">
                     <i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
                 <br />
@@ -143,8 +143,9 @@
                 hasFloating = true;
 
                 //repeat so always able to be sent
-                for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
-                    setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
+                if (methodFromStart != 3)
+                    for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
+                        setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
             }
         }
 
@@ -232,6 +233,18 @@
 
         var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
+        //method = 3 means liberal / positive timer
+        if (methodFromStart == 3) {
+            $(".work").addClass("positive");
+            $("#skipper-container").css("display", "none");
+            $("#skipper-space").css("display", "none");
+            $("#bottom-bar").css("display", "none");
+
+            timingData.set("last-recorded-minutes-left", 0);
+            timingData.set("last-recorded-hours-left", 0);
+            timingData.set("last-recorded-times-left", 0);
+        }
+
         if ((loop < 1 && loop != 0) || (workTime <= 60000 && workTime != 12000) || (restTime <= 60000 && restTime != 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
@@ -269,7 +282,7 @@
                 if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                 ipc.once('warning-closed', function () {
                     stopper();
-                    $("#skipper").css("display", "inline");
+                    $("#skipper-container").css("display", "inline");
                     if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                 });
                 if (store.get("fullscreen-experience") != true) {
@@ -306,15 +319,22 @@
                 lastNapSecond = 0,
                 canStop = true;
 
-            if (store.get("nap")) {
+            if (store.get("nap") || methodFromStart == 3) {
                 shouldNap = true;
                 napInterval = (store.has("nap-time") ? store.get("nap-time") : 10) * 60;
                 if (isNaN(napInterval)) napInterval = 600;
-                lastNapSecond = workTime / 1000;
+                if (methodFromStart != 3) lastNapSecond = workTime / 1000;
+                else lastNapSecond = 0;
             } else shouldNap = false;
 
-            startTime = new Date().getTime();
-            int = setInterval(clock, 250);
+            if (methodFromStart != 3) {
+                startTime = new Date().getTime();
+                int = setInterval(clock, 250);
+            } else {
+                startTime = new Date().getTime();
+                int = setInterval(positive, 250);
+                ipc.send("progress-bar-set", 2);
+            }
 
             if (methodFromStart == 2) skipper();
 
@@ -362,9 +382,14 @@
                     ipc.send("tray-image-change", "stop");
                     if (store.get("alarmtip") != false) pausingTimeout = setInterval(function () { ipc.send("notify", { title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'), msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content') }); }, 600000);
                 } else {
-                    if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
-                    int = self.setInterval(clock, 250);
+                    if (methodFromStart != 3) {
+                        if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                        else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                        int = self.setInterval(clock, 250);
+                    } else {
+                        startTime = new Date().getTime() - hours * 3600000 - minutes * 60000 - seconds * 1000;
+                        int = self.setInterval(positive, 250);
+                    }
                     $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                     isClockWorking = 1;//to restart
                     ipc.send("tray-image-change", "start");
@@ -390,7 +415,7 @@
                         setTimeout(function () {
                             player.loop = false;
                         }, 3000);
-                        $("#skipper").css("display", "inline");
+                        $("#skipper-container").css("display", "inline");
                         if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                         canStop = true;
                     } else
@@ -407,7 +432,7 @@
                         player.loop = false;
                         player.pause();
                         stopper();
-                        $("#skipper").css("display", "inline");
+                        $("#skipper-container").css("display", "inline");
                         if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                         canStop = true;
                     });
@@ -440,7 +465,7 @@
                     } else {
                         if (hasFloating) {
                             floatingOpener();
-                            $("#skipper").css("display", "inline");
+                            $("#skipper-container").css("display", "inline");
                         }
 
                         if (workTimeFocused == true) {
@@ -481,7 +506,7 @@
                     } else {
                         if (hasFloating) {
                             floatingOpener();
-                            $("#skipper").css("display", "inline");
+                            $("#skipper-container").css("display", "inline");
                         }
 
                         if (restTimeFocused == true) {
@@ -529,7 +554,7 @@
             function skipper() {
                 canOpenFloating = true;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
-                $("#skipper").css("display", "none");
+                $("#skipper-container").css("display", "none");
                 $("#skipper-space").css("display", "none");
                 $("#passcode-rechecker").css("display", "none");
                 times++;
@@ -561,6 +586,31 @@
                 return num;
             }
 
+            //positive timer
+            function positive() {
+                nowTime = new Date();
+                tempVariable = nowTime.getTime();
+                seconds = Math.floor((tempVariable - startTime) / 1000);
+
+                if (seconds - lastNapSecond > napInterval) {
+                    lastNapSecond = seconds;
+                    ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
+                }
+
+                hours = Math.floor(seconds / 3600);
+                minutes = Math.floor((seconds - hours * 3600) / 60);
+
+                if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: 0, method: 3, isWorking: isClockWorking });
+
+                seconds -= hours * 3600 + minutes * 60;
+                $nowTiming.text(hours + h + minutes + min + seconds + s);
+
+                timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
+                if (systemName != "darwin") $timeBar.html(timeGot);
+                else $timeBarMacOS.html(timeGot);//display the current time
+            }
+
+            //countdown timer
             function clock() {
                 nowTime = new Date();
                 tempVariable = nowTime.getTime();

@@ -95,10 +95,13 @@
                         <script>document.write(i18n.__('menu'));</script>
                     </div>
                     <div class="dropdown-divider"></div>
+                    <a href="javascript:liberalTiming()" class="small dropdown-item">
+                        <script>document.write(i18n.__('positive'));</script></a>
                     <a href="javascript:onlyRest('in')" class="small dropdown-item">
                         <script>document.write(i18n.__('onlyrest'));</script></a>
                     <a href="javascript:statistics()" class="small dropdown-item">
                         <script>document.write(i18n.__('statistics'));</script></a>
+                    <div class="dropdown-divider"></div>
                     <a href="javascript:call('locker')" class="small dropdown-item">
                         <script>document.write(i18n.__('locker-settings'));</script></a>
                     <a href="javascript:call('settings')" class="small dropdown-item should-lock">
@@ -278,6 +281,17 @@
         }
         ipc.on('onlyrest', function () {
             onlyRest("in");
+        });
+
+        function liberalTiming() {
+            window.location.href =
+                "timer.html?title=" + i18n.__('positive')
+                + "&work-time=3&rest-time=3&loop=0"
+                + "&note=" + i18n.__('positive-msg')
+                + "&method=3&work-time-focused=false&rest-time-focused=false&restored=false&times=0";
+        }
+        ipc.on('positive', function () {
+            liberalTiming();
         });
 
         var timeCount, myDate, h, min, defaultArray;

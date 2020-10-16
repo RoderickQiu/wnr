@@ -131,6 +131,13 @@
                 method = 1;
             }
 
+            if (message.method == 3 && method != 3) {
+                $(".work").addClass("positive");
+                $('#floating-bottom-bar').css("display", "none");
+                $('#floating-skipper').css("display", "none");
+                $("#time-left-msg").text(i18n.__('min-already'));
+            }
+
             ipc.removeAllListeners('floating-stop-sync');
             ipc.on("floating-stop-sync", function (event, message) {
                 isWorking = message;

@@ -218,8 +218,12 @@ li input:nth-last-child(4)::after {
     color: #5490eac2;
 }
 
-.text-grey {
-    color: #6c757d;
+.text-grey, .positive, .positive::-webkit-input-placeholder, .positive:hover {
+    color: #17a2b8;
+}
+
+.positive:focus::-webkit-input-placeholder, .positive:hover::-webkit-input-placeholder {
+    color: #17a2b8;
 }
 
 .extreme-small {
@@ -269,7 +273,7 @@ li input:nth-last-child(4)::after {
 
 .dropdown-item {
     font-size: 12px;
-    line-height: 240%;
+    line-height: 200%;
 }
 
 .dropdown-toggle::after {

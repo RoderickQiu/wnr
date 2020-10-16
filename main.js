@@ -664,6 +664,18 @@ function traySolution(isFullScreen) {
                     if (process.platform == "darwin" && win != null) win.show();
                 }
             }, {
+                enabled: !isTimerWin,
+                label: i18n.__('positive'),
+                click: function () {
+                    if (win != null) {
+                        win.loadFile('index.html');
+                        win.webContents.once('did-finish-load', function () {
+                            win.webContents.send("positive");
+                        });
+                    }
+                    if (process.platform == "darwin" && win != null) win.show();
+                }
+            }, {
                 type: 'separator'
             }, {
                 label: i18n.__('website'),
@@ -784,6 +796,19 @@ function macOSFullscreenSolution(isFullScreen) {
                                     win.webContents.send("onlyrest");
                                 });
                             }
+                            if (process.platform == "darwin" && win != null) win.show();
+                        }
+                    }, {
+                        enabled: !isTimerWin,
+                        label: i18n.__('positive'),
+                        click: function () {
+                            if (win != null) {
+                                win.loadFile('index.html');
+                                win.webContents.once('did-finish-load', function () {
+                                    win.webContents.send("positive");
+                                });
+                            }
+                            if (process.platform == "darwin" && win != null) win.show();
                         }
                     }, {
                         enabled: !isTimerWin,
@@ -1680,8 +1705,8 @@ function floating() {
             if (!hasFloating || floatingWin == null) {
                 hasFloating = true;
                 floatingWin = new BrowserWindow({
-                    width: 78,
-                    height: 78,
+                    width: 84,
+                    height: 84,
                     x: styleCache.has("floating-axis") ? styleCache.get("floating-axis").x : 33,
                     y: styleCache.has("floating-axis") ? styleCache.get("floating-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
