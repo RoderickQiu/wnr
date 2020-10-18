@@ -134,11 +134,10 @@ function alarmSet() {
             if (store.get('alarmtip') != false) {
                 if (win != null) {
                     win.flashFrame(true);
-                    win.restore();
                     win.show();
                     app.focus();
                 }
-                dialog.showMessageBox({
+                dialog.showMessageBox(win, {
                     title: " wnr",
                     type: "warning",
                     message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
@@ -147,7 +146,6 @@ function alarmSet() {
                     cancelId: 0
                 }).then(function (response) {
                     if (response.response != 0) {
-                        win.restore();
                         win.show();
                         win.moveTop();
                     }
@@ -175,7 +173,6 @@ function setFullScreenMode(flag) {
             if (flag) {
                 kioskInterval = setInterval(function () {
                     if (fullScreenProtection && win != null) {
-                        win.restore();
                         win.show();
                         win.moveTop();
                         win.setKiosk(true);
@@ -564,35 +561,27 @@ app.on('ready', () => {
 function showOrHide() {
     if (settingsWin != null)
         if (settingsWin.isVisible()) {
-            settingsWin.minimize();
             settingsWin.hide();
         } else {
-            settingsWin.restore();
             settingsWin.show();
         }
     if (aboutWin != null)
         if (aboutWin.isVisible()) {
-            aboutWin.minimize();
             aboutWin.hide();
         } else {
-            aboutWin.restore();
             aboutWin.show();
         }
     if (tourWin != null)
         if (tourWin.isVisible()) {
-            tourWin.minimize();
             tourWin.hide();
         } else {
-            tourWin.restore();
             tourWin.show();
         }
     if (win != null)
         if (floatingWin == null)
             if (win.isVisible()) {
-                win.minimize();
                 win.hide();
             } else {
-                win.restore();
                 win.show()
             }
 }
@@ -1077,7 +1066,6 @@ ipcMain.on('warning-giver-workend', function () {
         isWorkMode = false;
         if (restTimeFocused == true) {
             if (hasFloating) floatingDestroyer("property-stay");
-            win.restore();
             win.show();
             win.center();
             win.flashFrame(true);
@@ -1109,10 +1097,8 @@ ipcMain.on('warning-giver-workend', function () {
                 if (floatingWin == null) {
                     floating();
                 }
-                win.minimize();
                 win.hide();
             } else {
-                win.restore();
                 win.show();
                 win.center();
                 win.flashFrame(true);
@@ -1195,7 +1181,6 @@ ipcMain.on('warning-giver-restend', function () {
         isWorkMode = true;
         if (workTimeFocused == true) {
             if (hasFloating) floatingDestroyer("property-stay");
-            win.restore();
             win.show();
             win.center();
             win.flashFrame(true);
@@ -1227,10 +1212,8 @@ ipcMain.on('warning-giver-restend', function () {
                 if (floatingWin == null) {
                     floating();
                 }
-                win.minimize();
                 win.hide();
             } else {
-                win.restore();
                 win.show();
                 win.center();
                 win.flashFrame(true);
@@ -1311,7 +1294,6 @@ ipcMain.on('warning-giver-all-task-end', function () {
     if (win != null) {
         win.maximizable = false;
         isWorkMode = false;
-        win.restore();
         win.show();
         win.center();
         win.flashFrame(true);
@@ -1519,7 +1501,6 @@ ipcMain.on('relauncher', function () {
 
 ipcMain.on('window-hide', function () {
     if (win != null) {
-        if (process.platform != "darwin") win.minimize();
         win.hide()
     }
 })
@@ -1872,16 +1853,14 @@ ipcMain.on("floating-conversation", function (event, message) {
         if (win != null) win.webContents.send('floating-message', 'skipper');
     } else if (message.topic == "recover") {
         if (win != null) {
-            win.restore();
             win.show();
+            win.webContents.send('floating-message', 'closed');
         }
-        if (win != null) win.webContents.send('floating-message', 'closed');
     } else if (message.topic == "back") {
         if (win != null) {
-            win.restore();
             win.show();
+            win.webContents.send('floating-message', 'back');
         }
-        if (win != null) win.webContents.send('floating-message', 'back');
     } else if (message.topic == "stop-sync") {
         if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
     }
