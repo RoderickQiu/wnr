@@ -132,10 +132,26 @@ function alarmSet() {
     if (!resetAlarm) {
         resetAlarm = setInterval(function () {
             if (store.get('alarmtip') != false) {
-                if (win != null) win.flashFrame(true);
-                notificationSolution(i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
-                    i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                    "hide-or-show");
+                if (win != null) {
+                    win.flashFrame(true);
+                    win.restore();
+                    win.show();
+                    app.focus();
+                }
+                dialog.showMessageBox({
+                    title: " wnr",
+                    type: "warning",
+                    message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                    detail: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
+                    buttons: [i18n.__('cancel'), i18n.__('ok')],
+                    cancelId: 0
+                }).then(function (response) {
+                    if (response.response != 0) {
+                        win.restore();
+                        win.show();
+                        win.moveTop();
+                    }
+                });
             }
         }, 600000)//alarm you for using wnr
     }
