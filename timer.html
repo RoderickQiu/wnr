@@ -146,6 +146,9 @@
                 if (methodFromStart != 3)
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
                         setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
+                else
+                    for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
+                        setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: 0, method: 3, isWorking: isClockWorking }) }, 500 * floatingRepeater);
             }
         }
 
