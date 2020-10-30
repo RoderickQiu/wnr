@@ -881,10 +881,10 @@ electron-store@6.0.1:
     conf "^7.1.2"
     type-fest "^0.16.0"
 
-electron@8.5.2:
-  version "8.5.2"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-8.5.2.tgz?cache=0&sync_timestamp=1601355119809&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-8.5.2.tgz#7b0246c6676a39df0e5e384b11cfe854fe5917f0"
-  integrity sha1-ewJGxmdqOd8OXjhLEc/oVP5ZF/A=
+electron@8.5.3:
+  version "8.5.3"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-8.5.3.tgz?cache=0&sync_timestamp=1604023860151&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-8.5.3.tgz#f7abb8f5350fa54ac14df6ca24e9b6aec2ef1498"
+  integrity sha1-96u49TUPpUrBTfbKJOm2rsLvFJg=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
