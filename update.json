@@ -1,21 +1,24 @@
 {
-    "version": "1.19.3",
+    "version": "1.20.0",
     "feature-introduction": true,
     "content": {
         "zh-CN": [
-            "修复了开启MINI模式后有时不能直接开始全屏专心的问题。",
-            "UI设计优化，如优化确认框的样式等。",
-            "优化性能，修复漏洞。"
+            "正计时模式推出。",
+            "重新设计了长时间未使用软件时的提示。",
+            "优化计时中断后的处理逻辑。",
+            "优化使用体验，修复漏洞。"
         ],
         "zh-TW": [
-            "修復了開啟MINI模式後有時不能直接開始全屏專心的問題。",
-            "UI設計優化，如優化確認框的樣式等。",
-            "優化性能，修復漏洞。"
+            "正計時模式推出。",
+            "重新設計了長時間未使用軟件時的提示。",
+            "優化計時中斷後的處理邏輯。",
+            "優化使用體驗，修複漏洞。"
         ],
         "en": [
-            "Fixed MINI mode with fullscreen focus mode on.",
-            "UI improved, with better dialog boxes etc.",
-            "Other general problems fixed."
+            "New liberal timing mode.",
+            "Redesigned the long-time-no-see notice.",
+            "Optimized the timer-restore logic.",
+            "User interaction improved, with other general problems fixed."
         ]
     },
     "introduce": {
