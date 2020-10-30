@@ -83,6 +83,7 @@
             keyDownSubmitter();
         });
     </script>
+
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
             <div class="dropdown dropdown-default">
@@ -135,6 +136,23 @@
                 $('#back-onlyrest').attr('title', i18n.__('back'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
             </script>
+        </div>
+        <div id="new-feature" class="container-fluid">
+            <div class="align-content-center small text-center">
+                <br />
+                <h4 id="new-feature-title" class="rest">Introduce Liberal Timing</h4>
+                <hr />
+                <p id="new-feature-description">How to start: Top Bar -> Operations -> Liberal Timing.</p>
+                <p id="new-feature-description-universal">Even more liberal timing experience brought to you, with
+                    integrated nap-taking notifications.
+                </p>
+                <hr />
+                <img id="new-feature-image" src="https://i.loli.net/2020/10/30/HMJhuL6PibGRkgO.png" width="72%" />
+                <br />
+                <button type="button" class="btn btn-primary" width="233px" onclick="newFeatureClose()">
+                    <script>document.write(i18n.__('ok'));</script>
+                </button>
+            </div>
         </div>
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
@@ -262,6 +280,26 @@
         let onlyrest = false;
         $("#set-onlyrest").hide();
         $("#statistics-back").hide();
+        $("#new-feature").hide();
+
+        //new feature message
+        if (require("./update.json")["feature-introduction"] && !store.has("introduced-" + require("./update.json").version)) {
+            $("#new-feature-title").text(require("./update.json")["introduce"][store.get("i18n")]["title"]);
+            $("#new-feature-description").text(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
+            $("#new-feature-description-universal").text(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
+            $("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
+            $("#new-feature").show();
+            $("#bottom-btn").hide();
+            $("#set").hide();
+            $("#all-sum").hide();
+            store.set("introduced-" + require("./update.json").version, true);
+        }
+        function newFeatureClose() {
+            $("#new-feature").hide();
+            $("#bottom-btn").show();
+            $("#set").show();
+            $("#all-sum").show();
+        }
 
         function statistics() {
             window.location.href = "statistics.html";

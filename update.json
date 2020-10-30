@@ -1,5 +1,6 @@
 {
     "version": "1.19.3",
+    "feature-introduction": true,
     "content": {
         "zh-CN": [
             "修复了开启MINI模式后有时不能直接开始全屏专心的问题。",
@@ -16,5 +17,35 @@
             "UI improved, with better dialog boxes etc.",
             "Other general problems fixed."
         ]
+    },
+    "introduce": {
+        "id": "introduced-1.20.0",
+        "zh-CN": {
+            "title": "介绍正计时。",
+            "description": {
+                "darwin": "访问操作->正计时来试试吧！",
+                "win32": "点击wnr徽标，选择“正计时”来开始吧！",
+                "universal": "正计时带给你更自由的计时功能，还支持小憩提醒。\n此外，从今以后，大的功能更新都会有应用内提示。"
+            },
+            "image": "https://i.loli.net/2020/10/30/6LXY9AUnoeb1OHP.png"
+        },
+        "zh-TW": {
+            "title": "介紹正計時。",
+            "description": {
+                "darwin": "訪問顶栏->操作->正計時來試試吧！",
+                "win32": "點擊wnr徽標，選擇“正計時”來開始吧！",
+                "universal": "正計時帶給你更自由的計時功能，還支持小憩提醒。\n此外，從今以後，大的功能更新都會有應用內提示。"
+            },
+            "image": "https://i.loli.net/2020/10/30/eotnjLku5xG2TrB.png"
+        },
+        "en": {
+            "title": "Introduce Liberal Timing",
+            "description": {
+                "darwin": "How to start: Top Bar -> Operations -> Liberal Timing.",
+                "win32": "Click the wnr logo button and click \"Liberal Timing\" to start.",
+                "universal": "Even more liberal timing experience brought to you, with integrated nap-taking notifications."
+            },
+            "image": "https://i.loli.net/2020/10/30/HMJhuL6PibGRkgO.png"
+        }
     }
 }
