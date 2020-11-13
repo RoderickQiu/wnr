@@ -980,7 +980,7 @@ function isDarkMode() {
     }
 }
 function darkModeSettingsFinder() {
-    if (nativeTheme.shouldUseDarkColors || store.get("dark-or-white") != "light") {
+    if (nativeTheme.shouldUseDarkColors && store.get("dark-or-white") != "light") {
         styleCache.set('isdark', true);
         if (win != null) {
             win.setBackgroundColor('#191919');
