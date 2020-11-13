@@ -50,7 +50,7 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    isDarkMode = (store.get("dark-or-white") == "dark") || styleCache.get('isdark');
+    isDarkMode = (store.get("dark-or-white") == "dark") || (styleCache.get('isdark') && store.get("dark-or-white") != "light");
     if (isDarkMode) {
         $('.whitemode-jetplane').remove();
         $('body').append(
