@@ -118,9 +118,9 @@ defaultArray.forEach(function (item, index, array) {
 if (store.has("default-task")) setAsDefault(store.get("default-task"));
 function edit(index) {
     defaultArray[index].name = $("#title" + index).val();
-    if (Number($("#work-time" + index).val()) != NaN && Number($("#work-time" + index).val()) >= 2) defaultArray[index].workTime = $("#work-time" + index).val();
+    if (Number($("#work-time" + index).val()) != NaN && Number($("#work-time" + index).val()) >= 0.2) defaultArray[index].workTime = $("#work-time" + index).val();
     else $("#work-time" + index).val(defaultArray[index].workTime);
-    if (Number($("#rest-time" + index).val()) != NaN && Number($("#rest-time" + index).val()) >= 2) defaultArray[index].restTime = $("#rest-time" + index).val();
+    if (Number($("#rest-time" + index).val()) != NaN && Number($("#rest-time" + index).val()) >= 0.2) defaultArray[index].restTime = $("#rest-time" + index).val();
     else $("#rest-time" + index).val(defaultArray[index].restTime);
     if (Number($("#loops" + index).val()) != NaN && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
     else $("#loops" + index).val(defaultArray[index].loops);
@@ -135,10 +135,10 @@ function append(item, index) {
         "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='lead rest' maxlength='15' value='" +
         item.name + "'onchange='edit(" + index + ")' /> <br /><div class='text-muted small'>" +
         i18n.__('predefined-tasks-settings-tip-part-1') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.workTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+        item.workTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-2') + " <input id='rest-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.restTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+        item.restTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
         item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +

@@ -250,7 +250,7 @@
             timingData.set("last-recorded-times-left", 0);
         }
 
-        if ((loop < 1 && loop != 0) || (workTime <= 60000 && workTime != 12000) || (restTime <= 60000 && restTime != 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+        if ((loop < 1 && loop != 0) || (workTime < 12000) || (restTime < 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
             timingData.set("last-recorded-times-left", 0);
@@ -312,7 +312,7 @@
                 hours,
                 method = 1,
                 isClockWorking = 1,
-                moreThanOneMin = 1,
+                moreThanOneMin = (method == 1 && workTime > 60000) ? 1 : 0,
                 lastRecordedMinutesLeft = -1,
                 lastRecordedHoursLeft = -1,
                 systemName = process.platform,
@@ -403,7 +403,8 @@
             }
 
             function warningGiver(isend) {
-                moreThanOneMin = 1;
+                if ((method == 1 && workTime > 60000) || (method == 2 && restTime > 60000)) moreThanOneMin = 1;
+                else moreThanOneMin = 0;//if less than 1 min, prevent less than 1min warning
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);

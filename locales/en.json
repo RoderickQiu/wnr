@@ -38,7 +38,7 @@
     "tip": "Press Enter to submit",
     "back-index": "Give up the schedule & Back",
     "skipper": "Skip current timer",
-    "not-enough": "Some information wasn't given or the time is less than 1 minute, so the timer cannot start.",
+    "not-enough": "Some information wasn't given or the time is less than 12 seconds, so the timer cannot start.",
     "too-long": "The time is too long. Please make it less than a day.",
     "back": "Back",
     "ended": "End!",
@@ -281,5 +281,7 @@
     "ok": "OK",
     "positive": "Liberal Timing",
     "positive-msg": "A free timer, or a stopwatch.",
-    "min-already": "min already"
+    "min-already": "min already",
+    "what-can-be-here-index": "You can input things like \"1 hour\", \"2 minutes\" and \"30 seconds\". ",
+    "what-can-be-here-predefined-tasks": "You can input things like \"320\", \"16\" and \"0.8\" on behalf of minutes. "
 }

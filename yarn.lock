@@ -881,10 +881,10 @@ electron-store@6.0.1:
     conf "^7.1.2"
     type-fest "^0.16.0"
 
-electron@8.5.3:
-  version "8.5.3"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-8.5.3.tgz?cache=0&sync_timestamp=1604023860151&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-8.5.3.tgz#f7abb8f5350fa54ac14df6ca24e9b6aec2ef1498"
-  integrity sha1-96u49TUPpUrBTfbKJOm2rsLvFJg=
+electron@8.5.5:
+  version "8.5.5"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-8.5.5.tgz?cache=0&sync_timestamp=1605824329934&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-8.5.5.tgz#17b12bd70139c0099f750fc5de0d480bf03acb96"
+  integrity sha1-F7Er1wE5wAmfdQ/F3g1IC/A6y5Y=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -1486,10 +1486,10 @@ leancloud-realtime@^5.0.0-rc.2:
     protobufjs "^5.0.1"
     uuid "^3.0.0"
 
-leancloud-storage@4.7.0:
-  version "4.7.0"
-  resolved "https://registry.npmjs.org/leancloud-storage/-/leancloud-storage-4.7.0.tgz#b4ae3184ca574463990f1f821cf66cae278de4b8"
-  integrity sha512-xP+U6MjIqoxjeY3Yb04rI9HAAnWQ48BzTxgMSyt4r66fpY+uYJuOt8quQSzrcb6LKz3Z6m6Bvl/wPPS6+d598Q==
+leancloud-storage@4.8.0:
+  version "4.8.0"
+  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.8.0.tgz#87bbb90ec8b57401cf045c924bb1bdb25abd418a"
+  integrity sha1-h7u5Dsi1dAHPBFySS7G9slq9QYo=
   dependencies:
     "@leancloud/adapter-types" "^3.0.0"
     "@leancloud/platform-adapters-browser" "^1.1.0"

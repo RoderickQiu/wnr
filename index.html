@@ -164,6 +164,10 @@
                 </span>
             </div>
             <br />
+            <script>
+                $('#rest-time-onlyrest').attr('placeholder', i18n.__('rest-time'));
+                $('#rest-time-onlyrest').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
+            </script>
         </div>
         <div id="set" class="container-fluid">
             <div class="dropdown dropdown-default" id="dropdown-tasks">
@@ -231,9 +235,9 @@
                 $('#rest-time').attr('placeholder', i18n.__('rest-time'));
                 $('#loop').attr('placeholder', i18n.__('loop'));
                 $('#note').attr('placeholder', i18n.__('note'));
-                $('#work-time').attr('title', i18n.__('work-time'));
+                $('#work-time').attr('title', i18n.__('work-time') + i18n.__('what-can-be-here-index'));
                 $('#title').attr('title', i18n.__('title'));
-                $('#rest-time').attr('title', i18n.__('rest-time'));
+                $('#rest-time').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
                 $('#loop').attr('title', i18n.__('loop'));
                 $('#note').attr('title', i18n.__('note'));
                 $(".focuser").attr('title', i18n.__('full-screen-focus-mode-tip'));
