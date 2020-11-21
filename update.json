@@ -1,24 +1,21 @@
 {
-    "version": "1.20.0",
-    "feature-introduction": true,
+    "version": "1.20.1",
+    "feature-introduction": false,
     "content": {
         "zh-CN": [
-            "正计时模式推出。",
-            "重新设计了长时间未使用软件时的提示。",
-            "优化计时中断后的处理逻辑。",
-            "优化使用体验，修复漏洞。"
+            "支持长度一分钟以内的任务。",
+            "修复暗黑模式判断逻辑。",
+            "升级到Electron10，提升运行速度。"
         ],
         "zh-TW": [
-            "正計時模式推出。",
-            "重新設計了長時間未使用軟件時的提示。",
-            "優化計時中斷後的處理邏輯。",
-            "優化使用體驗，修複漏洞。"
+            "支持長度一分鍾以內的任務。",
+            "修複暗黑模式判斷邏輯。",
+            "升級到Electron10，提升運行速度。"
         ],
         "en": [
-            "New liberal timing mode.",
-            "Redesigned the long-time-no-see notice.",
-            "Optimized the timer-restore logic.",
-            "User interaction improved, with other general problems fixed."
+            "Now supports tasks less than 1 minute.",
+            "Fixed dark mode detecting logic.",
+            "Updated to Electron 10 for better performance."
         ]
     },
     "introduce": {
