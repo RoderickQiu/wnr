@@ -881,10 +881,10 @@ electron-store@6.0.1:
     conf "^7.1.2"
     type-fest "^0.16.0"
 
-electron@10.1.6:
-  version "10.1.6"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-10.1.6.tgz?cache=0&sync_timestamp=1605824329934&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-10.1.6.tgz#1b74838fc5f8263dcf198dc16bd6a88b095a59bb"
-  integrity sha1-G3SDj8X4Jj3PGY3Ba9aoiwlaWbs=
+electron@10.1.7:
+  version "10.1.7"
+  resolved "https://registry.npmjs.org/electron/-/electron-10.1.7.tgz#a99571e0cb74e669d96070ee14ad308bfb4e46f1"
+  integrity sha512-bF4baD2jT6+Y6ijFcCHnPySWsXBb7r/1Ila3xYfBxqElH7mt3xFvEK6m8puFhFQbaSSJHRfWMI2XrzpYoC53gg==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -1486,10 +1486,10 @@ leancloud-realtime@^5.0.0-rc.2:
     protobufjs "^5.0.1"
     uuid "^3.0.0"
 
-leancloud-storage@4.8.0:
-  version "4.8.0"
-  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.8.0.tgz#87bbb90ec8b57401cf045c924bb1bdb25abd418a"
-  integrity sha1-h7u5Dsi1dAHPBFySS7G9slq9QYo=
+leancloud-storage@4.8.2:
+  version "4.8.2"
+  resolved "https://registry.npmjs.org/leancloud-storage/-/leancloud-storage-4.8.2.tgz#efa3e65c431fc2cd63f46cab6ffd9dc68a6905e2"
+  integrity sha512-kIOv1/4mwNqr4k8yew4mK9e6qte6d2P9zTcBDz429xuCfjCzvkPLSRpGS2T+8X+WBCsMdnCU6O4SGZpwB7PCKQ==
   dependencies:
     "@leancloud/adapter-types" "^3.0.0"
     "@leancloud/platform-adapters-browser" "^1.1.0"
@@ -1690,10 +1690,10 @@ node-fetch@2.6.1:
   resolved "https://registry.npmjs.org/node-fetch/-/node-fetch-2.6.1.tgz#045bd323631f76ed2e2b55573394416b639a0052"
   integrity sha512-V4aYg89jEoVRxRb2fJdAg8FHvI7cEyYdVAh94HH0UIK8oJxUfkjlDQN9RbMx+bEjP7+ggMiFRprSti032Oipxw==
 
-node-notifier@8.0.0:
-  version "8.0.0"
-  resolved "https://registry.npm.taobao.org/node-notifier/download/node-notifier-8.0.0.tgz?cache=0&sync_timestamp=1597311356373&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fnode-notifier%2Fdownload%2Fnode-notifier-8.0.0.tgz#a7eee2d51da6d0f7ff5094bc7108c911240c1620"
-  integrity sha1-p+7i1R2m0Pf/UJS8cQjJESQMFiA=
+node-notifier@9.0.0:
+  version "9.0.0"
+  resolved "https://registry.npmjs.org/node-notifier/-/node-notifier-9.0.0.tgz#46c5bbecbb796d4a803f646cea5bc91403f2ff38"
+  integrity sha512-SkwNwGnMMlSPrcoeH4CSo9XyWe72acAHEJGDdPdB+CyBVHsIYaTQ4U/1wk3URsyzC75xZLg2vzU2YaALlqDF1Q==
   dependencies:
     growly "^1.3.0"
     is-wsl "^2.2.0"
