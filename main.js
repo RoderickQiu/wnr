@@ -181,8 +181,7 @@ function setFullScreenMode(flag) {
                     }
                 }, 5000);
             } else clearInterval(kioskInterval);
-        } else if (process.platform == "darwin") win.setSimpleFullScreen(flag);
-        else win.setFullScreen(flag);
+        } else win.setFullScreen(flag);
     }
 }
 
