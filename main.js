@@ -29,7 +29,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = new Array, displays = null, hasMultiDisplays = null,
-    isLoose = false, isScreenLocked = false,
+    isLoose = false, isScreenLocked = false, isAlarmDialogClosed = true,
     hasFloating = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
@@ -131,11 +131,12 @@ function createWindow() {
 function alarmSet() {
     if (!resetAlarm) {
         resetAlarm = setInterval(function () {
-            if (store.get('alarmtip') != false) {
+            if (store.get('alarmtip') != false && isAlarmDialogClosed) {
                 if (win != null) {
                     win.flashFrame(true);
                     win.show();
                     app.focus();
+                    isAlarmDialogClosed = false;
                 }
                 dialog.showMessageBox(win, {
                     title: " wnr",
@@ -145,6 +146,7 @@ function alarmSet() {
                     buttons: [i18n.__('cancel'), i18n.__('ok')],
                     cancelId: 0
                 }).then(function (response) {
+                    isAlarmDialogClosed = true;
                     if (response.response != 0) {
                         win.show();
                         win.moveTop();
