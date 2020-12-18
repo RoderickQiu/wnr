@@ -370,7 +370,7 @@
                 }
             });
 
-            ipc.on('floating-message', function (event, message) {
+            ipc.on('remote-control-msg', function (event, message) {
                 if (message == "skipper") skipper();
                 else if (message == "back") backcheck();
                 else if (message == "stop") stopper();

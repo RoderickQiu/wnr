@@ -396,28 +396,11 @@ app.on('ready', () => {
         else win.setAlwaysOnTop(false);
     }
 
-    function isTagNude(tag) {
-        if (tag.indexOf('Control') == -1 && tag.indexOf('Shift') == -1
-            && tag.indexOf('Alt') == -1 && tag.indexOf('Command') == -1 && tag.indexOf('Win') == -1)
-            return true;
-        else return false;
-    }
-
     store.set("version", require("./package.json").version);
 
     statisticsInitializer();
 
-    if (!store.get('hotkey1')) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + W');
-    else if (isTagNude(store.get('hotkey1'))) store.set('hotkey1', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
-
-    if (!store.get('hotkey2')) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + S');
-    else if (isTagNude(store.get('hotkey2'))) store.set('hotkey2', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey2'));
-
-    globalShortcut.register(store.get('hotkey1'), () => {
-        if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose)) || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
-            showOrHide();
-        }//prevent using hotkeys to quit
-    })
+    hotkeyInit();
 
     if (store.get('islocked') && win != null) {//locked mode
         win.closable = false;
@@ -557,6 +540,105 @@ app.on('ready', () => {
     if (process.env.NODE_ENV != "development") leanCloudSolution();
 })
 
+function hotkeyInit() {
+    function isTagNude(tag) {
+        if (tag.indexOf('Control') == -1 && tag.indexOf('Shift') == -1
+            && tag.indexOf('Alt') == -1 && tag.indexOf('Command') == -1 && tag.indexOf('Win') == -1)
+            return true;
+        else return false;
+    }
+
+    //delete the old style show-or-hide
+    if (store.has('hotkey1')) {
+        if (isTagNude(store.get('hotkey1')))
+            store.set('hotkey.showOrHide', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey1'));
+        else
+            store.set('hotkey.showOrHide', {
+                name: 'showOrHide',
+                value: store.get('hotkey1')
+            });
+        store.delete('hotkey1');
+    }
+
+    //delete the old style start-or-stop
+    if (store.has('hotkey2')) {
+        if (isTagNude(store.get('hotkey2')))
+            store.set('hotkey.startOrStop', cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + store.get('hotkey2'));
+        else
+            store.set('hotkey.startOrStop', {
+                name: 'startOrStop',
+                value: store.get('hotkey2')
+            });
+        store.delete('hotkey2');
+    }
+
+    //the new, convenient style of hotkey definitions
+    const hotkeyList = [
+        {
+            name: "startOrStop",
+            defaultHotkey: 'S',
+            function: () => {
+                if (isTimerWin) if (win != null) win.webContents.send('start-or-stop');
+            }
+        },
+        {
+            name: "showOrHide",
+            defaultHotkey: 'W',
+            function: () => {
+                if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose))
+                    || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
+                    showOrHide();
+                }//prevent using hotkeys to quit
+            }
+        },
+        {
+            name: "settings",
+            defaultHotkey: 'P',
+            function: () => {
+                if (!isTimerWin) settings();
+            }
+        },
+        {
+            name: "backHome",
+            defaultHotkey: 'B',
+            function: () => {
+                if (isTimerWin) win.webContents.send("remote-control-msg", "back");
+            }
+        },
+        {
+            name: "nextPeriod",
+            defaultHotkey: 'N',
+            function: () => {
+                if (isTimerWin) win.webContents.send("remote-control-msg", "skipper");
+            }
+        },
+        {
+            name: "miniMode",
+            defaultHotkey: 'M',
+            function: () => {
+                if (isTimerWin) {
+                    if (!hasFloating) win.webContents.send("remote-control-msg", "enter");
+                    else {
+                        floatingDestroyer("");
+                        win.show();
+                    }
+                }
+            }
+        }
+    ];
+
+    for (i in hotkeyList) {
+        if (!store.has("hotkey." + hotkeyList[i].name))
+            store.set("hotkey." + hotkeyList[i].name,
+                {
+                    name: hotkeyList[i].name,
+                    value: cmdOrCtrl._("long", "pascal") + ' + Alt + Shift + ' + hotkeyList[i].defaultHotkey
+                });
+        if (!globalShortcut.isRegistered(store.get('hotkey.' + hotkeyList[i].name).value))
+            globalShortcut.register(store.get('hotkey.' + hotkeyList[i].name).value, hotkeyList[i].function);
+    }
+}
+
 function showOrHide() {
     if (settingsWin != null)
         if (settingsWin.isVisible()) {
@@ -585,7 +667,7 @@ function showOrHide() {
             }
 }
 
-// possible funcs: non-important, normal, hide-or-show
+// possible funcs: normal, hide-or-show
 function notificationSolution(title, body, func) {
     notifier.notify({
         sound: true,
@@ -699,7 +781,7 @@ function traySolution(isFullScreen) {
                 label: i18n.__('mini-mode'),
                 enabled: isTimerWin,
                 click: function () {
-                    if (win != null) win.webContents.send("floating-message", "enter");
+                    if (win != null) win.webContents.send("remote-control-msg", "enter");
                 }
             }, {
                 type: 'separator'
@@ -1471,20 +1553,21 @@ ipcMain.on('global-shortcut-set', function (event, message) {
     try {
         if (globalShortcut.isRegistered(message.before))
             globalShortcut.unregister(message.before);
-        if (message.type == '1') {
-            globalShortcut.register(message.to, () => {
-                if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose)) || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
-                    showOrHide();
-                }//prevent using hotkeys to quit
-            })
-        }
+        store.set("hotkey." + message.type, {
+            name: message.type,
+            value: message.to
+        });
+        hotkeyInit();
     } catch (e) {
         hasFailed = true;
         notificationSolution(i18n.__('settings'), i18n.__('hotkey-failed'), "normal");
         console.log(e);
     } finally {
-        if (!hasFailed) {
-            store.set("hotkey" + message.type, message.to);
+        if (hasFailed) {
+            store.set("hotkey." + message.type, {
+                name: message.type,
+                value: message.before
+            });
         }
     }
 })
@@ -1557,7 +1640,7 @@ ipcMain.on('about', about);
 
 function settings(mode) {
     if (app.isReady()) {
-        if (win != null) {
+        if (win != null && settingsWin == null) {
             settingsWin = new BrowserWindow({
                 parent: win,
                 width: isChinese ? 780 : 888,
@@ -1620,7 +1703,7 @@ ipcMain.on('settings', settings);
 
 function tourguide() {
     if (app.isReady()) {
-        if (win != null) {
+        if (win != null && tourWin == null) {
             tourWin = new BrowserWindow({
                 parent: win,
                 width: 400,
@@ -1806,9 +1889,6 @@ ipcMain.on("timer-win", function (event, message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();
-        globalShortcut.register(store.get('hotkey2'), () => {
-            if (win != null) win.webContents.send('start-or-stop');
-        })
         if (resetAlarm) {
             clearTimeout(resetAlarm);
         }
@@ -1826,8 +1906,6 @@ ipcMain.on("timer-win", function (event, message) {
         statisticsWriter();
 
         if (dockHide) app.dock.hide();
-        if (globalShortcut.isRegistered(store.get('hotkey2')))
-            globalShortcut.unregister(store.get('hotkey2'));
         alarmSet();
         if (powerSaveBlockerId)
             if (powerSaveBlocker.isStarted(powerSaveBlockerId))
@@ -1847,18 +1925,18 @@ ipcMain.on("floating-conversation", function (event, message) {
     if (message.topic == "time-left") {
         if (floatingWin != null) floatingWin.webContents.send('floating-time-left', { minute: message.val, percentage: message.percentage, method: message.method, isWorking: message.isWorking });
     } else if (message.topic == "stop") {
-        if (win != null) win.webContents.send('floating-message', 'stop');
+        if (win != null) win.webContents.send('remote-control-msg', 'stop');
     } else if (message.topic == "skip") {
-        if (win != null) win.webContents.send('floating-message', 'skipper');
+        if (win != null) win.webContents.send('remote-control-msg', 'skipper');
     } else if (message.topic == "recover") {
         if (win != null) {
             win.show();
-            win.webContents.send('floating-message', 'closed');
+            win.webContents.send('remote-control-msg', 'closed');
         }
     } else if (message.topic == "back") {
         if (win != null) {
             win.show();
-            win.webContents.send('floating-message', 'back');
+            win.webContents.send('remote-control-msg', 'back');
         }
     } else if (message.topic == "stop-sync") {
         if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);

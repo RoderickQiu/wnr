@@ -518,26 +518,6 @@
                             </b>
                         </p>
                     </li>
-                    <!-- hotkey for show or hide -->
-                    <li id="hotkey-tip">
-                        <script>document.write(i18n.__('hotkey-for-show-or-hide-setting'));</script>
-                        <p class="small text-muted">
-                            <input name="hotkey-1" id="hotkey-1" class="hotkey-setting" type="text" readonly
-                                onclick="keyDownCapturer('1')" onblur="keyDownTriggerRemover()" ime-mode="disabled" />
-                            <br />
-                            <script>document.write(i18n.__('hotkey-for-show-or-hide-setting-tip')); </script>
-                        </p>
-                    </li>
-                    <!-- hotkey for start or stop the task -->
-                    <li id="hotkey2-tip">
-                        <script>document.write(i18n.__('hotkey-for-start-or-stop-setting'));</script>
-                        <p class="small text-muted">
-                            <input name="hotkey-2" id="hotkey-2" class="hotkey-setting" type="text" readonly
-                                onclick="keyDownCapturer('2')" onblur="keyDownTriggerRemover()" ime-mode="disabled" />
-                            <br />
-                            <script>document.write(i18n.__('hotkey-for-start-or-stop-setting-tip')); </script>
-                        </p>
-                    </li>
                     <!-- delete all the data -->
                     <li>
                         <script>document.write(i18n.__('delete-all-data-msg'));</script>
@@ -681,6 +661,17 @@
                         <p class="small text-muted">
                             <script>
                                 document.write(i18n.__('personalization-notification-tip'));
+                            </script>
+                        </p>
+                    </li>
+                    <!-- personalization for hotkey -->
+                    <li>
+                        <script>document.write(i18n.__('hotkey-set'));</script>
+                        <br />
+                        <div id="hotkey-box"></div>
+                        <p class="small text-muted">
+                            <script>
+                                document.write(i18n.__('hotkey-set-tip'));
                             </script>
                         </p>
                     </li>

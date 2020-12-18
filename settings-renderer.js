@@ -372,9 +372,18 @@ function lock(passcode, again) {
 }
 
 //other things
-let hotkeyTo = "", keyDownGet = "";;
-$("#hotkey-1").val(store.get("hotkey1"));
-$("#hotkey-2").val(store.get("hotkey2"));
+let hotkeyTo = "", keyDownGet = "";
+let hotkeyList = store.get("hotkey");
+
+for (i in hotkeyList) {
+    $("#hotkey-box").append("\
+        <label id = \"hotkey-for-"+ hotkeyList[i].name + "\" class= \"hotkey-set-label text-muted\" ></label>\
+    <input id=\"hotkey-"+ hotkeyList[i].name + "\" class=\"hotkey-set-input\" type=\"text\" maxlength=\"64\"\
+        onclick=\"keyDownCapturer(\'"+ hotkeyList[i].name + "\')\" onblur=\"keyDownTriggerRemover()\" /><br />");
+    $("#hotkey-for-" + hotkeyList[i].name).text(i18n.__("hotkey-for-" + hotkeyList[i].name));
+    $("#hotkey-" + hotkeyList[i].name).val(hotkeyList[i].value);
+}
+
 function keyDownCapturer(to) {
     hotkeyTo = to;
     document.addEventListener('keydown', KeyDownTrigger, false);
@@ -397,13 +406,13 @@ function KeyDownTrigger(event) {
 
     if (event.metaKey) keyDownGet += (process.platform == "darwin") ? "Command + " : "";
     if (event.ctrlKey) keyDownGet += "Control + ";
-    if (event.shiftKey) keyDownGet += "Shift + ";
     if (event.altKey) keyDownGet += "Alt + ";
+    if (event.shiftKey) keyDownGet += "Shift + ";
     if (keyName) keyDownGet += keyName.toUpperCase();
     if (keyName.indexOf("Unidentified") == -1 && keyName.indexOf("Dead") == -1 && keyName.indexOf("PROCESS") == -1) {
         if (isTagNude(keyDownGet)) keyDownGet = cmdOrCtrl._('long', 'pascal') + " + Shift + Alt + " + keyDownGet;
         $("#hotkey-" + hotkeyTo).val(keyDownGet);
-        ipc.send("global-shortcut-set", { type: hotkeyTo, before: store.get("hotkey" + hotkeyTo), to: keyDownGet });
+        ipc.send("global-shortcut-set", { type: hotkeyTo, before: store.get("hotkey." + hotkeyTo).value, to: keyDownGet });
     } else keyDownGet = "";
 }
 
