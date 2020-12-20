@@ -585,8 +585,8 @@ function hotkeyInit() {
             name: "showOrHide",
             defaultHotkey: 'W',
             function: () => {
-                if (!isTimerWin || (isWorkMode && (workTimeFocused == false) && (!isLoose))
-                    || ((!isWorkMode) && (restTimeFocused == false) && (!isLoose))) {
+                if (!isTimerWin || (isWorkMode && (workTimeFocused == false))
+                    || ((!isWorkMode) && (restTimeFocused == false)) || isLoose) {
                     showOrHide();
                 }//prevent using hotkeys to quit
             }
@@ -602,21 +602,26 @@ function hotkeyInit() {
             name: "backHome",
             defaultHotkey: 'B',
             function: () => {
-                if (isTimerWin) win.webContents.send("remote-control-msg", "back");
+                if (isTimerWin && ((isWorkMode && (workTimeFocused == false))
+                    || ((!isWorkMode) && (restTimeFocused == false))))
+                    win.webContents.send("remote-control-msg", "back");
             }
         },
         {
             name: "nextPeriod",
             defaultHotkey: 'N',
             function: () => {
-                if (isTimerWin) win.webContents.send("remote-control-msg", "skipper");
+                if (isTimerWin && ((isWorkMode && (workTimeFocused == false))
+                    || ((!isWorkMode) && (restTimeFocused == false))))
+                    win.webContents.send("remote-control-msg", "skipper");
             }
         },
         {
             name: "miniMode",
             defaultHotkey: 'M',
             function: () => {
-                if (isTimerWin) {
+                if (isTimerWin && ((isWorkMode && (workTimeFocused == false))
+                    || ((!isWorkMode) && (restTimeFocused == false)))) {
                     if (!hasFloating) win.webContents.send("remote-control-msg", "enter");
                     else {
                         floatingDestroyer("");
