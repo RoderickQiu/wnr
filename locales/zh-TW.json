@@ -287,5 +287,7 @@
 	"positive-msg": "不設時長，自由計時，只有小憩提醒。",
 	"min-already": "分鍾已經",
 	"what-can-be-here-index": "你可以輸入如“一小時”“30分鍾”“12秒”。",
-	"what-can-be-here-predefined-tasks": "你可以輸入如“320”“16”“0.8”，以分鍾的形式。"
+	"what-can-be-here-predefined-tasks": "你可以輸入如“320”“16”“0.8”，以分鍾的形式。",
+	"close-tip-darwin": "窗口已經隱藏。",
+	"close-tip-darwin-tip": "如要退出應用，請找到頂欄圖標，選擇“退出”。"
 }

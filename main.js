@@ -89,6 +89,10 @@ function createWindow() {
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
         } else if ((process.platform == "darwin") && (process.env.NODE_ENV != "development")) {
             event.preventDefault();
+            if (!store.has("close-tip-darwin")) {
+                notificationSolution(i18n.__('close-tip-darwin'), i18n.__('close-tip-darwin-tip'), "normal");
+                store.set("close-tip-darwin", true);
+            }
             win.hide();
         }
     });
@@ -1529,7 +1533,8 @@ ipcMain.on('delete-all-data', function () {
 })
 
 function windowCloseChk() {
-    if ((process.env.NODE_ENV != "development") && win != null)
+    if ((process.env.NODE_ENV != "development") && win != null) {
+        win.show();
         dialog.showMessageBox(win, {
             title: " wnr",
             message: i18n.__('window-close-dialog-box-title'),
@@ -1547,7 +1552,7 @@ function windowCloseChk() {
                 }, 500);
             }
         })
-    else {
+    } else {
         app.quit()
     }
 }
