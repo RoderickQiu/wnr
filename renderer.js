@@ -18,3 +18,45 @@ history.pushState(null, null, document.URL);
 window.addEventListener('popstate', function () {
     history.pushState(null, null, document.URL)
 })//prevent back
+
+var titleAlternative = {
+    x: 10,
+    y: 20,
+    tipElements: "a, i, span, img, div, input",
+    noTitle: false,
+    init: function () {
+        var b = this.noTitle;
+        $(this.tipElements).each(function () {
+            $(this).mouseover(function (e) {
+                if (b) {
+                    isTitle = true
+                } else {
+                    isTitle = $.trim(this.title) != ''
+                }
+                if (isTitle) {
+                    this.myTitle = this.title;
+                    this.title = "";
+                    var a = "<div class='tooltip'><div class='tipsy-arrow tipsy-arrow-n'></div><div class='tipsy-inner'>" + this.myTitle + "</div></div>";
+                    $('body').append(a);
+                    $('.tooltip').css({
+                        "top": (e.pageY + 24) + "px",
+                        "left": (e.pageX - 24) + "px"
+                    }).show('fast');
+                }
+            }).mouseout(function () {
+                if (this.myTitle != null) {
+                    this.title = this.myTitle;
+                    $('.tooltip').remove()
+                };
+            }).mousemove(function (e) {
+                $('.tooltip').css({
+                    "top": (e.pageY + 24) + "px",
+                    "left": (e.pageX - 24) + "px"
+                })
+            })
+        })
+    }
+}
+$(function () {
+    titleAlternative.init()
+})//title attr alternative

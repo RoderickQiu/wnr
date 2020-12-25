@@ -770,3 +770,39 @@ li input:nth-last-child(4)::after {
     /* let it clickable */
     -webkit-user-select: none;
 }
+
+.tooltip {
+    font-size: 12px;
+    position: absolute;
+    padding: 5px;
+    z-index: 100000;
+    opacity: .8;
+}
+
+.tipsy-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    line-height: 0;
+    border: 6px dashed #000;
+    top: 0;
+    left: 20%;
+    margin-left: -5px;
+    border-bottom-style: solid;
+    border-top: 0;
+    border-left-color: transparent;
+    border-right-color: transparent;
+}
+
+.tipsy-arrow-n {
+    border-bottom-color: #6c757dc2;
+}
+
+.tipsy-inner {
+    background-color: #6c757dc2;
+    color: #FFF;
+    max-width: 200px;
+    padding: 5px 8px 4px 8px;
+    text-align: center;
+    border-radius: 3px;
+}
