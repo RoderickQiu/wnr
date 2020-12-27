@@ -279,7 +279,7 @@
     "this-week": "This Week",
     "this-year": "This Year",
     "all-time": "All Time",
-    "onlyrest": "Only Rest",
+    "onlyrest": "Just Timing",
     "disable-pausing-setting": "Disable pausing setting: ",
     "disable-pausing-setting-tip": "If it is enabled, then you will not be able to pause the timer. ",
     "pausing-disabled": "Pausing is disabled. ",
@@ -293,5 +293,8 @@
     "what-can-be-here-index": "You can input things like \"1 hour\", \"2 minutes\" and \"30 seconds\". ",
     "what-can-be-here-predefined-tasks": "You can input things like \"320\", \"16\" and \"0.8\" on behalf of minutes. ",
     "close-tip-darwin": "Window is now hidden.",
-    "close-tip-darwin-tip": "To exit the app, click the wnr icon on the top bar and select \"Exit\"."
+    "close-tip-darwin-tip": "To exit the app, click the wnr icon on the top bar and select \"Exit\".",
+    "continueloop-part-1": "Interference",
+    "continueloop-part-2": "Free",
+    "continueloop-tip": "The interference-free mode let you to loop one period of time without being interpreted."
 }

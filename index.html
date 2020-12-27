@@ -157,17 +157,26 @@
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
-                    class="rest lead" required />
-                <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
-                <span class="focuser extreme-small rest">
-                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
-                </span>
+                    class="rest lead text-center" required />
+                <br /><br />
+                <center>
+                    <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
+                    <span class="focuser extreme-small rest text-left" id="focuser-onlyrest">
+                        <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                    </span>
+                    &nbsp;
+                    <input id="focus-continueloop-set-onlyrest" type="checkbox" onchange="onlyRestEdgeCaseSolution()" />
+                    <span id="continueloop" class="focuser extreme-small rest text-left">
+                        <script>document.write(i18n.__('continueloop-part-1') + "<br />" + i18n.__('continueloop-part-2'))</script>
+                    </span>
+                </center>
             </div>
             <br />
             <script>
                 $('#rest-time-onlyrest').attr('placeholder', i18n.__('rest-time'));
                 $('#rest-time-onlyrest').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
                 $("#focus-rest-set-onlyrest").attr('title', i18n.__('full-screen-focus-mode-tip'));
+                $("#focus-continueloop-set-onlyrest").attr('title', i18n.__('continueloop-tip'));
                 $('#back-onlyrest').attr('title', i18n.__('back'));
             </script>
         </div>
@@ -245,6 +254,7 @@
                 $("#focus-work-set").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#focus-rest-set").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $(".focuser").attr('title', i18n.__('full-screen-focus-mode-tip'));
+                $("#continueloop").attr('title', i18n.__('continueloop-tip'));
             </script>
         </div>
         <div id="all-sum" class="small font-weight-bold text-muted text-center">
@@ -321,6 +331,7 @@
                 $("#logo-bar").hide();
                 onlyrest = true;
                 allSet();
+                $("#rest-time-onlyrest").focus();
             } else {
                 if (onlyrest) window.location.reload();
             }
@@ -405,6 +416,29 @@
             } else {
                 $("#focus-notify-box").css("display", "none");
                 $("#bottom-btn").css("height", "40px");
+            }
+        }
+
+        function onlyRestEdgeCaseSolution() {
+            function disableOnlyRestFocusButton(flag) {
+                if (flag) $("#focus-rest-set-onlyrest").attr("disabled", "disabled");
+                else $("#focus-rest-set-onlyrest").removeAttr("disabled");
+
+                let s = document.createElement('style');
+                if (flag) s.innerText = "#focus-rest-set-onlyrest::after {color: #6c757d;}";
+                else s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
+                document.body.appendChild(s);
+            }//to disable the focus button
+
+            if (document.getElementById("focus-continueloop-set-onlyrest").checked) {
+                document.getElementById("focus-rest-set-onlyrest").checked = false;
+                focusNotifier();
+
+                $("#focuser-onlyrest").css("color", "#6c757d");
+                disableOnlyRestFocusButton(true);
+            } else {
+                $("#focuser-onlyrest").css("color", "#5490ea");
+                disableOnlyRestFocusButton(false);
             }
         }
 
