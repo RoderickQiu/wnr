@@ -590,7 +590,8 @@ function hotkeyInit() {
             defaultHotkey: 'W',
             function: () => {
                 if (!isTimerWin || (isWorkMode && (workTimeFocused == false))
-                    || ((!isWorkMode) && (restTimeFocused == false)) || isLoose) {
+                    || ((!isWorkMode) && (restTimeFocused == false))
+                    || (isLoose && process.platform != "darwin")) {
                     showOrHide();
                 }//prevent using hotkeys to quit
             }
@@ -1274,14 +1275,14 @@ ipcMain.on('warning-giver-restend', function () {
             win.show();
             win.center();
             win.flashFrame(true);
-            win.setAlwaysOnTop(true, "floating");
+            if (!isLoose) win.setAlwaysOnTop(true, "floating");
             win.moveTop();
             if (dockHide) app.dock.show();//prevent kiosk error, show in dock
-            multiScreenSolution("on");
+            if (!isLoose) multiScreenSolution("on");
             setFullScreenMode(true);
             macOSFullscreenSolution(true);
             traySolution(true);
-            if (process.env.NODE_ENV != "development") win.setFocusable(false);
+            if ((process.env.NODE_ENV != "development") && (!isLoose)) win.setFocusable(false);
             if (sleepBlockerId) {
                 if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
                     sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
@@ -1307,7 +1308,7 @@ ipcMain.on('warning-giver-restend', function () {
                 win.show();
                 win.center();
                 win.flashFrame(true);
-                win.setAlwaysOnTop(true, "floating");
+                if (!isLoose) win.setAlwaysOnTop(true, "floating");
                 win.moveTop();
             }
         }
@@ -1318,7 +1319,7 @@ ipcMain.on('warning-giver-restend', function () {
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
         }
         if (store.get("no-check-time-end")) {
-            if (workTimeFocused) {
+            if (workTimeFocused && (!isLoose)) {
                 fullScreenProtection = true;
             } else {
                 if (store.get("top") != true) {
@@ -1340,7 +1341,7 @@ ipcMain.on('warning-giver-restend', function () {
                             store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function (response) {
-                        if (workTimeFocused) {
+                        if (workTimeFocused && (!isLoose)) {
                             fullScreenProtection = true;
                         } else {
                             if (store.get("top") != true) {
@@ -1361,7 +1362,7 @@ ipcMain.on('warning-giver-restend', function () {
                         store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function (response) {
-                    if (workTimeFocused) {
+                    if (workTimeFocused && (!isLoose)) {
                         fullScreenProtection = true;
                     } else {
                         if (store.get("top") != true) {
