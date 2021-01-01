@@ -1,51 +1,56 @@
 {
-    "version": "1.20.1",
-    "feature-introduction": false,
+    "version": "1.21.0",
+    "feature-introduction": true,
     "content": {
         "zh-CN": [
-            "支持长度一分钟以内的任务。",
-            "修复暗黑模式判断逻辑。",
-            "升级到Electron10，提升运行速度。"
+            "新的快捷键系统，提供更多快捷键可供设置。",
+            "新的“单纯计时”模式，支持无干扰反复运行一个任务。",
+            "在全屏专心时屏幕不熄灭。",
+            "修复宽松的全屏模式有时不正常的问题。",
+            "进行各种综合性优化和问题修复，提升用户体验，还升级到了Electron11。",
+            "我们已经定好了中文名，将在一个月之后公布。"
         ],
         "zh-TW": [
-            "支持長度一分鍾以內的任務。",
-            "修複暗黑模式判斷邏輯。",
-            "升級到Electron10，提升運行速度。"
+            "新的快捷鍵系統，提供更多快捷鍵可供設置。",
+            "新的“單純計時”模式，支持無幹擾反復運行壹個任務。",
+            "在全屏專心時屏幕不熄滅。",
+            "修復寬松的全屏模式有時不正常的問題。",
+            "進行各種綜合性優化和問題修復，提升用戶體驗，還升級到了Electron11。",
+            "我們已經定好了中文名，將在一個月之後公布。"
         ],
         "en": [
-            "Now supports tasks less than 1 minute.",
-            "Fixed dark mode detecting logic.",
-            "Updated to Electron 10 for better performance."
+            "A new hotkey system.",
+            "A new \"Just Timing\" mode.",
+            "Now wnr keeps the display on when fullscreen timing.",
+            "Fixed the bug that loose fullscreen mode sometimes behaviors badly.",
+            "Other general improvements and bug fixes & update to Electron 11."
         ]
     },
     "introduce": {
-        "id": "introduced-1.20.0",
+        "id": "introduced-1.21.0",
         "zh-CN": {
-            "title": "介绍正计时。",
+            "title": "不少新功能。",
             "description": {
-                "darwin": "访问操作->正计时来试试吧！",
-                "win32": "点击wnr徽标，选择“正计时”来开始吧！",
-                "universal": "正计时带给你更自由的计时功能，还支持小憩提醒。\n此外，从今以后，大的功能更新都会有应用内提示。"
-            },
-            "image": "https://i.loli.net/2020/10/30/6LXY9AUnoeb1OHP.png"
+                "darwin": "我们有了新的快捷键系统。访问操作->设置->个性化设置见识一下它们。",
+                "win32": "我们有了新的快捷键系统。点击wnr徽标，选择“设置->个性化设置”来见识一下它们。",
+                "universal": "\n此外，新的“单纯计时”模式等更新，大概也会让你耳目一新吧。"
+            }
         },
         "zh-TW": {
-            "title": "介紹正計時。",
+            "title": "不少新功能。",
             "description": {
-                "darwin": "訪問顶栏->操作->正計時來試試吧！",
-                "win32": "點擊wnr徽標，選擇“正計時”來開始吧！",
-                "universal": "正計時帶給你更自由的計時功能，還支持小憩提醒。\n此外，從今以後，大的功能更新都會有應用內提示。"
-            },
-            "image": "https://i.loli.net/2020/10/30/eotnjLku5xG2TrB.png"
+                "darwin": "我們有了新的快捷鍵系統。訪問操作->設置->個性化設置見識一下它們。",
+                "win32": "我們有了新的快捷鍵系統。點擊wnr徽標，選擇“設置->個性化設置”來見識一下它們。",
+                "universal": "\n此外，新的“單純計時”模式等更新，大概也會讓你耳目一新吧。"
+            }
         },
         "en": {
-            "title": "Introduce Liberal Timing",
+            "title": "Many new features",
             "description": {
-                "darwin": "How to start: Top Bar -> Operations -> Liberal Timing.",
-                "win32": "Click the wnr logo button and click \"Liberal Timing\" to start.",
-                "universal": "Even more liberal timing experience brought to you, with integrated nap-taking notifications."
-            },
-            "image": "https://i.loli.net/2020/10/30/HMJhuL6PibGRkgO.png"
+                "darwin": "We now have a new hotkey system. Go to Top Bar -> Operations -> Settings -> Personalization to see it.",
+                "win32": "We now have a new hotkey system. Click Logo icon -> Settings -> Personalization to see it.",
+                "universal": "\n Moreover, other new features like the new \"Just Timing\" mode may also attract you!"
+            }
         }
     }
 }
