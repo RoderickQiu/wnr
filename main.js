@@ -186,6 +186,12 @@ function setFullScreenMode(flag) {
                 }, 5000);
             } else clearInterval(kioskInterval);
         } else win.setFullScreen(flag);
+
+        //when fullscreen, prevent sleep
+        if (sleepBlockerId) {
+            if (!powerSaveBlocker.isStarted(sleepBlockerId))
+                sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+        } else sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
     }
 }
 
@@ -499,15 +505,23 @@ app.on('ready', () => {
                     powerSaveBlocker.stop(powerSaveBlockerId);
             if (win != null) win.webContents.send('alter-start-stop', 'stop');
         }
+        if (sleepBlockerId)
+            if (powerSaveBlocker.isStarted(sleepBlockerId))
+                powerSaveBlocker.stop(sleepBlockerId);
         isScreenLocked = true;
     });
 
     powerMonitor.on('unlock-screen', () => {
-        if (powerSaveBlockerId)
-            if (!powerSaveBlocker.isStarted(powerSaveBlockerId))
-                powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
-        if (store.get("should-stop-locked") != true) {
-            if (win != null) win.webContents.send('alter-start-stop', 'start');
+        if (isTimerWin) {
+            if (powerSaveBlockerId)
+                if (!powerSaveBlocker.isStarted(powerSaveBlockerId))
+                    powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');
+            if (sleepBlockerId)
+                if (!powerSaveBlocker.isStarted(sleepBlockerId))
+                    sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
+            if (store.get("should-stop-locked") != true) {
+                if (win != null) win.webContents.send('alter-start-stop', 'start');
+            }
         }
         isScreenLocked = false;
     });
