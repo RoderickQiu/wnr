@@ -59,7 +59,8 @@
                     + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
                     + document.getElementById("focus-rest-set-onlyrest").checked
                     + "&restored=false"
-                    + "&times=0";
+                    + "&times=0&continueloop="
+                    + document.getElementById("focus-continueloop-set-onlyrest").checked;
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
             else
@@ -72,7 +73,7 @@
                     + "&work-time-focused=" + document.getElementById("focus-work-set").checked
                     + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
                     + "&restored=false"
-                    + "&times=0";
+                    + "&times=0&continueloop=false";
         }
         function keydown(e) {
             var currKey = 0, e = e || event;
@@ -97,20 +98,27 @@
                     </div>
                     <div class="dropdown-divider"></div>
                     <a href="javascript:liberalTiming()" class="small dropdown-item">
-                        <script>document.write(i18n.__('positive'));</script></a>
+                        <script>document.write(i18n.__('positive'));</script>
+                    </a>
                     <a href="javascript:onlyRest('in')" class="small dropdown-item">
-                        <script>document.write(i18n.__('onlyrest'));</script></a>
+                        <script>document.write(i18n.__('onlyrest'));</script>
+                    </a>
                     <a href="javascript:statistics()" class="small dropdown-item">
-                        <script>document.write(i18n.__('statistics'));</script></a>
+                        <script>document.write(i18n.__('statistics'));</script>
+                    </a>
                     <div class="dropdown-divider"></div>
                     <a href="javascript:call('locker')" class="small dropdown-item">
-                        <script>document.write(i18n.__('locker-settings'));</script></a>
+                        <script>document.write(i18n.__('locker-settings'));</script>
+                    </a>
                     <a href="javascript:call('settings')" class="small dropdown-item should-lock">
-                        <script>document.write(i18n.__('settings'));</script></a>
+                        <script>document.write(i18n.__('settings'));</script>
+                    </a>
                     <a href="javascript:call('tourguide')" class="small dropdown-item">
-                        <script>document.write(i18n.__('tourguide'));</script></a>
+                        <script>document.write(i18n.__('tourguide'));</script>
+                    </a>
                     <a href="javascript:call('about')" class="small dropdown-item">
-                        <script>document.write(i18n.__('info'));</script></a>
+                        <script>document.write(i18n.__('info'));</script>
+                    </a>
                 </div>
             </div>
         </div>
@@ -128,7 +136,7 @@
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
-                $('#dropdown-more').attr('title', i18n.__('menu'));
+                $('#controller-dropdown').attr('title', i18n.__('menu'));
                 $('#get-help').attr('title', i18n.__('helper'))
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
@@ -345,7 +353,7 @@
                 "timer.html?title=" + i18n.__('positive')
                 + "&work-time=3&rest-time=3&loop=0"
                 + "&note=" + i18n.__('positive-msg')
-                + "&method=3&work-time-focused=false&rest-time-focused=false&restored=false&times=0";
+                + "&method=3&work-time-focused=false&rest-time-focused=false&restored=false&times=0&continueloop=false";
         }
         ipc.on('positive', function () {
             liberalTiming();
@@ -477,7 +485,7 @@
                             + "&work-time-focused=" + item.focusWhenWorking
                             + "&rest-time-focused=" + item.focusWhenResting
                             + "&restored=false"
-                            + "&times=0";
+                            + "&times=0&continueloop=false";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -503,7 +511,8 @@
                         + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                         + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                         + "&restored=true"
-                        + "&times=" + Number(timingData.get("last-recorded-times-left"));
+                        + "&times=" + Number(timingData.get("last-recorded-times-left"))
+                        + "&continueloop=false";
                 } else {
                     window.location.href =
                         "timer.html?title=" + timingData.get("last-recorded-state").title
@@ -515,7 +524,8 @@
                         + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                         + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                         + "&restored=true"
-                        + "&times=" + Number(timingData.get("last-recorded-times-left"));
+                        + "&times=" + Number(timingData.get("last-recorded-times-left"))
+                        + "&continueloop=false";
                 }
             }
         }, 500);

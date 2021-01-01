@@ -90,6 +90,7 @@
                 $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
                 $('#back-index').attr('title', i18n.__('back-index'));
                 $('#backindex2').attr('title', i18n.__('back-index'));
+                $('#stopper').attr('title', i18n.__('start-or-stop'))
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
                 if (process.platform == "darwin") $("#controller").css("display", "none");
@@ -212,6 +213,7 @@
             restored = (decodeURI($_GET['restored']) == "false") ? false : true,
             times = (Number(decodeURI($_GET['times'])) == NaN) ? 0 : Number(decodeURI($_GET['times'])),
             methodFromStart = Number(decodeURI($_GET['method'])),
+            continueLoop = (decodeURI($_GET['continueloop']) == "false") ? false : true,
             h = i18n.__('h'),
             min = i18n.__('min'),
             s = i18n.__('s'),
@@ -270,7 +272,7 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#notes").html(note);
-            if (loop == 0) $("#time-cnt").css("display", "none");
+            if (loop == 0 || continueLoop) $("#time-cnt").css("display", "none");
             else $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
@@ -450,7 +452,8 @@
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
-                    $("#work-rest").html(i18n.__('resting'));
+                    if (continueLoop) $("#work-rest").text(i18n.__('onlyrest'));
+                    else $("#work-rest").html(i18n.__('resting'));
                     $bottomBar.css("background-color", "#5490ea99");
                     method = 2;
                     timingData.set("last-recorded-state.method", 2);
@@ -560,14 +563,23 @@
             function skipper() {
                 canOpenFloating = true;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
-                $("#skipper-container").css("display", "none");
-                $("#skipper-space").css("display", "none");
-                $("#passcode-rechecker").css("display", "none");
-                times++;
-                timingData.set("last-recorded-times-left", times);
-                $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
+                if (continueLoop && method == 2) {
+                    //if continueloop then only play once and no other thing
+                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                    player.loop = false;
+                    player.play();
+                } else {
+                    $("#skipper-container").css("display", "none");
+                    $("#skipper-space").css("display", "none");
+                    $("#passcode-rechecker").css("display", "none");
+                    times++;
+                    timingData.set("last-recorded-times-left", times);
+                    $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
+                }
                 if (isClockWorking) {
-                    if (times < loop * 2 || loop == 0) {
+                    if (continueLoop && method == 2) {
+                        startTime = new Date().getTime();
+                    } else if (times < loop * 2 || loop == 0) {
                         startTime = new Date().getTime();
                         themeChanger();
                     } else if (times == loop * 2) {
@@ -576,7 +588,9 @@
                 } else {
                     stopper();
                     setTimeout(function () {
-                        if (times < loop * 2 || loop == 0) {
+                        if (continueLoop && method == 2) {
+                            startTime = new Date().getTime();
+                        } else if (times < loop * 2 || loop == 0) {
                             startTime = new Date().getTime();
                             themeChanger();
                         } else if (times == loop * 2) {
