@@ -424,7 +424,7 @@ var aes = require("crypto-js/aes");
 var encoding = require("crypto-js/enc-utf8");
 var copyToClipboard = require("copy-to-clipboard");
 if (process.env.NODE_ENV == "portable") {
-    statistics = new Store({ cwd: require("electron").remote.app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+    statistics = new Store({ cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
 } else {
     statistics = new Store({ name: 'statistics' });
 }

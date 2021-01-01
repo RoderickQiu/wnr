@@ -55,7 +55,12 @@ function createWindow() {
         maximizable: false,
         show: false,
         hasShadow: true,
-        webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+        webPreferences: {
+            nodeIntegration: true,
+            webgl: false,
+            contextIsolation: false,
+            enableRemoteModule: true
+        },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png"
     });//optimize for cross platfrom
@@ -205,7 +210,12 @@ function addScreenSolution(windowNumber, display) {
         backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
         show: true,
         hasShadow: true,
-        webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+        webPreferences: {
+            nodeIntegration: true,
+            webgl: false,
+            contextIsolation: false,
+            enableRemoteModule: true
+        },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png",
         skipTaskbar: true
@@ -307,6 +317,8 @@ app.on('will-quit', () => {
 //some apis can be only used inside ready
 app.on('ready', () => {
     require('dotenv').config({ path: path.join(__dirname, '.env') });
+
+    require('@electron/remote/main').initialize();
 
     createWindow();
 
@@ -1631,7 +1643,12 @@ function about() {
                 show: false,
                 center: true,
                 titleBarStyle: "hidden",
-                webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+                webPreferences: {
+                    nodeIntegration: true,
+                    webgl: false,
+                    contextIsolation: false,
+                    enableRemoteModule: true
+                },
             });
             aboutWin.loadFile("about.html");
             win.setAlwaysOnTop(true, "floating");
@@ -1677,7 +1694,12 @@ function settings(mode) {
                 frame: false,
                 show: false,
                 center: true,
-                webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+                webPreferences: {
+                    nodeIntegration: true,
+                    webgl: false,
+                    contextIsolation: false,
+                    enableRemoteModule: true
+                },
                 titleBarStyle: "hidden"
             });
             if (mode == 'locker') store.set("settings-goto", "locker");
@@ -1741,7 +1763,12 @@ function tourguide() {
                 show: false,
                 center: true,
                 titleBarStyle: "hidden",
-                webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+                webPreferences: {
+                    nodeIntegration: true,
+                    webgl: false,
+                    contextIsolation: false,
+                    enableRemoteModule: true
+                },
             });
             tourWin.loadFile("tourguide.html");
             win.setAlwaysOnTop(true, "floating");
@@ -1822,7 +1849,12 @@ function floating() {
                     center: false,
                     type: 'toolbar',
                     titleBarStyle: "customButtonsOnHover",
-                    webPreferences: { nodeIntegration: true, webgl: false, enableRemoteModule: true },
+                    webPreferences: {
+                        nodeIntegration: true,
+                        webgl: false,
+                        contextIsolation: false,
+                        enableRemoteModule: true
+                    },
                     skipTaskbar: true
                 });
                 floatingWin.loadFile("floating.html");

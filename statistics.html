@@ -63,15 +63,17 @@
         </div>
         <div id="top-bar" class="extreme-small">
             <a id="today" href="javascript:switchMode('today')">
-                <script>document.write(i18n.__('today'));</script></a> | <a id="yesterday"
-                href="javascript:switchMode('yesterday')">
-                <script>document.write(i18n.__('yesterday'));</script></a> | <a id="this-week"
-                href="javascript:switchMode('this-week')">
-                <script>document.write(i18n.__('this-week'));</script></a> | <a id="this-year"
-                href="javascript:switchMode('this-year')">
-                <script>document.write(i18n.__('this-year'));</script></a>
+                <script>document.write(i18n.__('today'));</script>
+            </a> | <a id="yesterday" href="javascript:switchMode('yesterday')">
+                <script>document.write(i18n.__('yesterday'));</script>
+            </a> | <a id="this-week" href="javascript:switchMode('this-week')">
+                <script>document.write(i18n.__('this-week'));</script>
+            </a> | <a id="this-year" href="javascript:switchMode('this-year')">
+                <script>document.write(i18n.__('this-year'));</script>
+            </a>
             | <a id="all-time" href="javascript:switchMode('all-time')">
-                <script>document.write(i18n.__('all-time'));</script></a>
+                <script>document.write(i18n.__('all-time'));</script>
+            </a>
             <hr />
         </div>
         <div id="statistics-no-chart">
@@ -164,7 +166,7 @@
             let statistics = null;
 
             if (process.env.NODE_ENV == "portable") {
-                statistics = new Store({ cwd: require("electron").remote.app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+                statistics = new Store({ cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
             } else {
                 statistics = new Store({ name: 'statistics' });
             }
