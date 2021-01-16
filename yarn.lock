@@ -7,14 +7,6 @@
   resolved "https://registry.npm.taobao.org/7zip-bin/download/7zip-bin-5.0.3.tgz#bc5b5532ecafd923a61f2fb097e3b108c0106a3f"
   integrity sha1-vFtVMuyv2SOmHy+wl+OxCMAQaj8=
 
-"@babel/runtime-corejs2@^7.10.2":
-  version "7.11.2"
-  resolved "https://registry.npm.taobao.org/@babel/runtime-corejs2/download/@babel/runtime-corejs2-7.11.2.tgz?cache=0&sync_timestamp=1596637734824&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime-corejs2%2Fdownload%2F%40babel%2Fruntime-corejs2-7.11.2.tgz#700a03945ebad0d31ba6690fc8a6bcc9040faa47"
-  integrity sha1-cAoDlF660NMbpmkPyKa8yQQPqkc=
-  dependencies:
-    core-js "^2.6.5"
-    regenerator-runtime "^0.13.4"
-
 "@babel/runtime@^7.10.2":
   version "7.11.2"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.11.2.tgz?cache=0&sync_timestamp=1596637824771&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
@@ -69,6 +61,14 @@
     "@leancloud/adapter-types" "^4.0.0"
     event-target-shim "^5.0.1"
 
+"@leancloud/adapter-utils@^1.2.0":
+  version "1.2.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/adapter-utils/download/@leancloud/adapter-utils-1.2.0.tgz#fcfa38a7728413aae6886fe9fbfe81ecbf0e544a"
+  integrity sha1-/Po4p3KEE6rmiG/p+/6B7L8OVEo=
+  dependencies:
+    "@leancloud/adapter-types" "^4.0.0"
+    event-target-shim "^5.0.1"
+
 "@leancloud/adapters-superagent@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.2.0.tgz#764c73b8d57a2ca88caead0726fed42530e8eddc"
@@ -79,6 +79,16 @@
     "@types/superagent" "^4.1.7"
     superagent "^5.2.2"
 
+"@leancloud/adapters-superagent@^1.3.0":
+  version "1.3.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.3.0.tgz#8a5f4ff22bce109da149a73aecc2b4396e43f047"
+  integrity sha1-il9P8ivOEJ2hSac67MK0OW5D8Ec=
+  dependencies:
+    "@leancloud/adapter-types" "^4.0.0"
+    "@leancloud/adapter-utils" "^1.2.0"
+    "@types/superagent" "^4.1.7"
+    superagent "^5.2.2"
+
 "@leancloud/platform-adapters-browser@^1.1.0":
   version "1.3.0"
   resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.3.0.tgz#d8ca3e050f8b1234beeab545c5148e97d4022857"
@@ -86,6 +96,14 @@
   dependencies:
     "@leancloud/adapter-types" "^4.0.0"
     "@leancloud/adapters-superagent" "^1.2.0"
+
+"@leancloud/platform-adapters-browser@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.4.0.tgz#b414adf4c53bf18d6159c87f11c5f4b088a82793"
+  integrity sha1-tBSt9MU78Y1hWch/EcX0sIioJ5M=
+  dependencies:
+    "@leancloud/adapter-types" "^4.0.0"
+    "@leancloud/adapters-superagent" "^1.3.0"
 
 "@leancloud/platform-adapters-node@^1.1.0":
   version "1.3.0"
@@ -98,6 +116,17 @@
     localstorage-memory "^1.0.2"
     ws "^5.2.2"
 
+"@leancloud/platform-adapters-node@^1.4.0":
+  version "1.4.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-node/download/@leancloud/platform-adapters-node-1.4.0.tgz#8fba1d74e5d4393586ca47b8936dabe38d7bc889"
+  integrity sha1-j7oddOXUOTWGyke4k22r4417yIk=
+  dependencies:
+    "@leancloud/adapter-types" "^4.0.0"
+    "@leancloud/adapters-superagent" "^1.3.0"
+    "@types/ws" "^7.2.2"
+    localstorage-memory "^1.0.2"
+    ws "^5.2.2"
+
 "@leancloud/platform-adapters-weapp@^1.2.0":
   version "1.4.0"
   resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-weapp/download/@leancloud/platform-adapters-weapp-1.4.0.tgz#118ddf88105d00fbf55389a45de9ad7d41902aea"
@@ -105,6 +134,16 @@
   dependencies:
     "@leancloud/adapter-types" "^4.0.0"
     "@leancloud/adapter-utils" "^1.1.0"
+    miniprogram-api-typings "^2.10.2"
+
+"@leancloud/platform-adapters-weapp@^1.5.0":
+  version "1.5.0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-weapp/download/@leancloud/platform-adapters-weapp-1.5.0.tgz#1a0d662a903dff6f3327f7871eba821b2f1058ef"
+  integrity sha1-Gg1mKpA9/28zJ/eHHrqCGy8QWO8=
+  dependencies:
+    "@leancloud/adapter-types" "^4.0.0"
+    "@leancloud/adapter-utils" "^1.2.0"
+    event-target-shim "^5.0.1"
     miniprogram-api-typings "^2.10.2"
 
 "@sindresorhus/is@^0.14.0":
@@ -655,7 +694,7 @@ copy-to-clipboard@3.3.1:
   dependencies:
     toggle-selection "^1.0.6"
 
-core-js@^2.4.0, core-js@^2.6.5:
+core-js@^2.4.0:
   version "2.6.11"
   resolved "https://registry.npm.taobao.org/core-js/download/core-js-2.6.11.tgz?cache=0&sync_timestamp=1592843203000&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcore-js%2Fdownload%2Fcore-js-2.6.11.tgz#38831469f9922bded8ee21c9dc46985e0399308c"
   integrity sha1-OIMUafmSK97Y7iHJ3EaYXgOZMIw=
@@ -670,10 +709,10 @@ core-util-is@~1.0.0:
   resolved "https://registry.npm.taobao.org/core-util-is/download/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
   integrity sha1-tf1UIgqivFq1eqtxQMlAdUUDwac=
 
-cross-env@7.0.2:
-  version "7.0.2"
-  resolved "https://registry.npm.taobao.org/cross-env/download/cross-env-7.0.2.tgz#bd5ed31339a93a3418ac4f3ca9ca3403082ae5f9"
-  integrity sha1-vV7TEzmpOjQYrE88qco0Awgq5fk=
+cross-env@7.0.3:
+  version "7.0.3"
+  resolved "https://registry.npm.taobao.org/cross-env/download/cross-env-7.0.3.tgz#865264b29677dc015ba8418918965dd232fc54cf"
+  integrity sha1-hlJkspZ33AFbqEGJGJZd0jL8VM8=
   dependencies:
     cross-spawn "^7.0.1"
 
@@ -836,10 +875,10 @@ electron-builder@22.9.1:
     update-notifier "^4.1.1"
     yargs "^16.0.3"
 
-electron-debug@3.1.0:
-  version "3.1.0"
-  resolved "https://registry.npm.taobao.org/electron-debug/download/electron-debug-3.1.0.tgz#0df17297487fa3c82344d810812853bf67f0bd69"
-  integrity sha1-DfFyl0h/o8gjRNgQgShTv2fwvWk=
+electron-debug@3.2.0:
+  version "3.2.0"
+  resolved "https://registry.npm.taobao.org/electron-debug/download/electron-debug-3.2.0.tgz#46a15b555c3b11872218c65ea01d058aa0814920"
+  integrity sha1-RqFbVVw7EYciGMZeoB0FiqCBSSA=
   dependencies:
     electron-is-dev "^1.1.0"
     electron-localshortcut "^3.1.0"
@@ -886,10 +925,10 @@ electron-store@6.0.1:
     conf "^7.1.2"
     type-fest "^0.16.0"
 
-electron@11.1.1:
-  version "11.1.1"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-11.1.1.tgz#188f036f8282798398dca9513e9bb3b10213e3aa"
-  integrity sha1-GI8Db4KCeYOY3KlRPpuzsQIT46o=
+electron@11.2.0:
+  version "11.2.0"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-11.2.0.tgz#f8577ea4c9ba94068850256145be26b0b89a5dd7"
+  integrity sha1-+Fd+pMm6lAaIUCVhRb4msLiaXdc=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -1471,13 +1510,12 @@ leancloud-realtime-plugin-live-query@^1.2.0:
   resolved "https://registry.npm.taobao.org/leancloud-realtime-plugin-live-query/download/leancloud-realtime-plugin-live-query-1.2.0.tgz#1e07da1b5b99e44cddbc3b052234422f278c4ab9"
   integrity sha1-HgfaG1uZ5EzdvDsFIjRCLyeMSrk=
 
-leancloud-realtime@^5.0.0-rc.2:
-  version "5.0.0-rc.3"
-  resolved "https://registry.npm.taobao.org/leancloud-realtime/download/leancloud-realtime-5.0.0-rc.3.tgz#3a590d8c99685aa54849529d5d7fbbca0ea45152"
-  integrity sha1-OlkNjJloWqVISVKdXX+7yg6kUVI=
+leancloud-realtime@^5.0.0-rc.4:
+  version "5.0.0-rc.5"
+  resolved "https://registry.npm.taobao.org/leancloud-realtime/download/leancloud-realtime-5.0.0-rc.5.tgz#760d0101b5a6ce34fa1ad9b4f9175f3b3a12b4cd"
+  integrity sha1-dg0BAbWmzjT6Gtm0+RdfOzoStM0=
   dependencies:
     "@babel/runtime" "^7.10.2"
-    "@babel/runtime-corejs2" "^7.10.2"
     "@leancloud/adapter-types" "^3.0.0"
     "@leancloud/platform-adapters-browser" "^1.1.0"
     "@leancloud/platform-adapters-node" "^1.1.0"
@@ -1491,19 +1529,19 @@ leancloud-realtime@^5.0.0-rc.2:
     protobufjs "^5.0.1"
     uuid "^3.0.0"
 
-leancloud-storage@4.8.2:
-  version "4.8.2"
-  resolved "https://registry.npmjs.org/leancloud-storage/-/leancloud-storage-4.8.2.tgz#efa3e65c431fc2cd63f46cab6ffd9dc68a6905e2"
-  integrity sha512-kIOv1/4mwNqr4k8yew4mK9e6qte6d2P9zTcBDz429xuCfjCzvkPLSRpGS2T+8X+WBCsMdnCU6O4SGZpwB7PCKQ==
+leancloud-storage@4.9.0:
+  version "4.9.0"
+  resolved "https://registry.npm.taobao.org/leancloud-storage/download/leancloud-storage-4.9.0.tgz#5fdf472c7b7954120ee2100b555909521ce2dbe7"
+  integrity sha1-X99HLHt5VBIO4hALVVkJUhzi2+c=
   dependencies:
-    "@leancloud/adapter-types" "^3.0.0"
-    "@leancloud/platform-adapters-browser" "^1.1.0"
-    "@leancloud/platform-adapters-node" "^1.1.0"
-    "@leancloud/platform-adapters-weapp" "^1.2.0"
+    "@leancloud/adapter-types" "^4.0.0"
+    "@leancloud/platform-adapters-browser" "^1.4.0"
+    "@leancloud/platform-adapters-node" "^1.4.0"
+    "@leancloud/platform-adapters-weapp" "^1.5.0"
     babel-runtime "^6.26.0"
     debug "^3.1.0"
     eventemitter3 "^2.0.3"
-    leancloud-realtime "^5.0.0-rc.2"
+    leancloud-realtime "^5.0.0-rc.4"
     leancloud-realtime-plugin-live-query "^1.2.0"
     md5 "^2.0.0"
     promise-timeout "^1.3.0"
