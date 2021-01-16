@@ -1,8 +1,20 @@
 {
     "files.exclude": {
-        "**/output": true
+        "**/desktop.ini": true,
+        "**/node_modules": true,
+        "**/.gitignore": true,
+        "**/.vscode": true,
+        "**/.yarnclean": true,
+        "**/designs": true,
+        "**/packaged": true
     },
     "files.watcherExclude": {
-        "**/output/**": true
-    }
+        "**/designs": true,
+        "**/packaged": true
+    },
+    "editor.formatOnSave": true,
+    "editor.formatOnPaste": true,
+    "editor.fontFamily": "'FiraCode QiHei NF', Menlo, Monaco, 'Courier New', monospace",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 13.5,
 }
