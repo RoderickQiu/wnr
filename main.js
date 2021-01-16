@@ -462,6 +462,9 @@ app.on('ready', () => {
     isDarkMode();
     settingsWinContextMenuSolution();
 
+    if (store.get("tray-time") != false && process.platform == "darwin")
+        tray.setTitle(' ' + i18n.__('not-timing'));
+
     if (!store.has("predefined-tasks-created")) {
         store.set("predefined-tasks-created", true);
 
@@ -1974,7 +1977,11 @@ ipcMain.on("timer-win", function (event, message) {
         traySolution();
         macOSFullscreenSolution();
         touchBarSolution("index");
-        multiScreenSolution("off")
+        multiScreenSolution("off");
+
+        if (store.get("tray-time") != false && process.platform == "darwin")
+            tray.setTitle(' ' + i18n.__('not-timing'));
+        else tray.setTitle("");
     }
 })
 
