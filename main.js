@@ -1295,6 +1295,7 @@ ipcMain.on('warning-giver-workend', function () {
                     }
                     win.webContents.send('warning-closed');
                     win.maximizable = false;
+                    if (hasFloating && (process.platform == "darwin" && win != null)) win.hide();
                 })
             }, 1500)
     }
@@ -1410,6 +1411,7 @@ ipcMain.on('warning-giver-restend', function () {
                     }
                     win.webContents.send('warning-closed');
                     win.maximizable = false;
+                    if (hasFloating && (process.platform == "darwin" && win != null)) win.hide();
                 })
             }, 1000)
     }
