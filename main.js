@@ -1163,6 +1163,14 @@ function statisticsWriter() {
         }
     }
 }
+function statisticsPauseDealer(startOrStop) {
+    if (startOrStop == "start") {
+        tempDate = new Date();
+        recorderDate = tempDate;
+    } else {
+        statisticsWriter();
+    }
+}
 
 app.on('activate', () => {
     if (win === null) {
@@ -1898,6 +1906,8 @@ ipcMain.on('only-one-min-left', function () {
 })
 
 ipcMain.on('tray-image-change', function (event, message) {
+    statisticsPauseDealer(message);
+
     if (tray != null) {
         if (message == "stop") {
             if (process.platform == "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
