@@ -29,17 +29,17 @@
     "@electron/remote": "1.0.2",
     "@types/winreg": "1.2.30",
     "auto-launch": "5.0.5",
-    "bootstrap": "4.5.3",
+    "bootstrap": "4.6.0",
     "cmd-or-ctrl": "0.3.1",
     "compare-version": "0.1.2",
     "copy-to-clipboard": "3.3.1",
     "crypto-js": "4.0.0",
     "dotenv": "8.2.0",
     "electron-debug": "3.2.0",
-    "electron-store": "6.0.1",
+    "electron-store": "7.0.0",
     "i18n": "0.13.2",
     "jquery": "3.5.1",
-    "leancloud-storage": "4.9.0",
+    "leancloud-storage": "4.10.0",
     "node-fetch": "2.6.1",
     "node-notifier": "9.0.0",
     "node-shi": "0.4.2",
@@ -50,7 +50,7 @@
   },
   "devDependencies": {
     "cross-env": "7.0.3",
-    "electron": "11.2.0",
+    "electron": "11.2.1",
     "electron-builder": "22.9.1"
   }
 }
