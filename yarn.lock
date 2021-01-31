@@ -83,7 +83,7 @@
 
 "@leancloud/adapters-superagent@^1.4.2":
   version "1.4.2"
-  resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.4.2.tgz#6d4b416a6e38be10509453b158bba744f03414f3"
+  resolved "https://registry.npm.taobao.org/@leancloud/adapters-superagent/download/@leancloud/adapters-superagent-1.4.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40leancloud%2Fadapters-superagent%2Fdownload%2F%40leancloud%2Fadapters-superagent-1.4.2.tgz#6d4b416a6e38be10509453b158bba744f03414f3"
   integrity sha1-bUtBam44vhBQlFOxWLunRPA0FPM=
   dependencies:
     "@leancloud/adapter-types" "^5.0.0"
@@ -101,7 +101,7 @@
 
 "@leancloud/platform-adapters-browser@^1.5.2":
   version "1.5.2"
-  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.5.2.tgz#5c5220479ea4801b3db0e0184599e4339bb1ee46"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-browser/download/@leancloud/platform-adapters-browser-1.5.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40leancloud%2Fplatform-adapters-browser%2Fdownload%2F%40leancloud%2Fplatform-adapters-browser-1.5.2.tgz#5c5220479ea4801b3db0e0184599e4339bb1ee46"
   integrity sha1-XFIgR56kgBs9sOAYRZnkM5ux7kY=
   dependencies:
     "@leancloud/adapter-types" "^5.0.0"
@@ -120,7 +120,7 @@
 
 "@leancloud/platform-adapters-node@^1.5.2":
   version "1.5.2"
-  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-node/download/@leancloud/platform-adapters-node-1.5.2.tgz#0b4f47bb73da0a063f24c970b6b6dda95d54edb0"
+  resolved "https://registry.npm.taobao.org/@leancloud/platform-adapters-node/download/@leancloud/platform-adapters-node-1.5.2.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40leancloud%2Fplatform-adapters-node%2Fdownload%2F%40leancloud%2Fplatform-adapters-node-1.5.2.tgz#0b4f47bb73da0a063f24c970b6b6dda95d54edb0"
   integrity sha1-C09Hu3PaCgY/JMlwtrbdqV1U7bA=
   dependencies:
     "@leancloud/adapter-types" "^5.0.0"
@@ -944,10 +944,10 @@ electron-store@7.0.0:
     conf "^9.0.0"
     type-fest "^0.20.2"
 
-electron@11.2.1:
-  version "11.2.1"
-  resolved "https://registry.npm.taobao.org/electron/download/electron-11.2.1.tgz?cache=0&sync_timestamp=1611858747036&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron%2Fdownload%2Felectron-11.2.1.tgz#8641dd1a62911a1144e0c73c34fd9f37ccc65c2b"
-  integrity sha1-hkHdGmKRGhFE4Mc8NP2fN8zGXCs=
+electron@11.1.1:
+  version "11.1.1"
+  resolved "https://registry.npm.taobao.org/electron/download/electron-11.1.1.tgz#188f036f8282798398dca9513e9bb3b10213e3aa"
+  integrity sha1-GI8Db4KCeYOY3KlRPpuzsQIT46o=
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
