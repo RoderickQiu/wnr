@@ -1,29 +1,21 @@
 {
-    "version": "1.21.0",
-    "feature-introduction": true,
+    "version": "1.21.1",
+    "feature-introduction": false,
     "content": {
         "zh-CN": [
-            "新的快捷键系统，提供更多快捷键可供设置。",
-            "新的“单纯计时”模式，支持无干扰反复运行一个任务。",
-            "在全屏专心时屏幕不熄灭。",
-            "修复宽松的全屏模式有时不正常的问题。",
-            "进行各种综合性优化和问题修复，提升用户体验，还升级到了Electron11。",
-            "我们已经定好了中文名，将在一个月之后公布。"
+            "修复了MacOS上MINI模式和全屏专心模式的衔接问题。",
+            "修复了统计功能工作不正常的问题。",
+            "我们正在花许多时间构建许多令人激动的功能。"
         ],
         "zh-TW": [
-            "新的快捷鍵系統，提供更多快捷鍵可供設置。",
-            "新的“單純計時”模式，支持無幹擾反復運行壹個任務。",
-            "在全屏專心時屏幕不熄滅。",
-            "修復寬松的全屏模式有時不正常的問題。",
-            "進行各種綜合性優化和問題修復，提升用戶體驗，還升級到了Electron11。",
-            "我們已經定好了中文名，將在一個月之後公布。"
+            "修復了MacOS上MINI模式和全屏專心模式的銜接問題。",
+            "修復了統計功能工作不正常的問題。",
+            "我們正在花許多時間構建許多令人激動的功能。"
         ],
         "en": [
-            "A new hotkey system.",
-            "A new \"Just Timing\" mode.",
-            "Now wnr keeps the display on when fullscreen timing.",
-            "Fixed the bug that loose fullscreen mode sometimes behaviors badly.",
-            "Other general improvements and bug fixes & update to Electron 11."
+            "Fixed MINI mode on macOS.",
+            "Fixed statistics bugs related to pausing.",
+            "We are currently spending time making some brilliant new features."
         ]
     },
     "introduce": {
