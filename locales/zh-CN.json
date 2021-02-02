@@ -139,7 +139,7 @@
 	"window-close-dialog-box-content": "如果确实要退出则勾选选框。",
 	"window-close-dialog-box-chk": "确定要退出",
 	"locker": "开/关锁定模式",
-	"locker-settings": "锁定模式",
+	"locker-settings": "锁定模式：",
 	"locker-settings-tip-part-1": "打开锁定模式后，将无法修改设置，无法随意退出程序。",
 	"locker-settings-tip-part-2": "功能类似于家长控制。如果自控力较弱，不妨让别人输入密码，打开锁定模式。目前的状态：",
 	"on": "开",
@@ -295,5 +295,8 @@
 	"continueloop-tip": "自动循环模式使得你可以不断重复运行一个计时器而不受到任何干扰。若选择，将不断重复。若不选择，则将在持续一次后停止。此外，选择此项之后将无法选择全屏专心模式。",
 	"not-timing": "不在计时，请尽快开始",
 	"force-long-focus-request": "很长的全屏专心时间",
-	"force-long-focus-request-tip": "到时你将无法退出。"
+	"force-long-focus-request-tip": "到时你将无法退出。",
+	"advanced-settings": "高级设置",
+	"task-reservation": "预约任务：",
+	"task-reservation-tip": "预约任务功能让你可以为接下来的某个时间点或者一组时间点预约计时任务。开始前会给出提示。"
 }

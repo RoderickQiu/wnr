@@ -139,7 +139,7 @@
 	"window-close-dialog-box-content": "如果確實要退出則勾選選框。",
 	"window-close-dialog-box-chk": "確定要退出",
 	"locker": "開/關鎖定模式",
-	"locker-settings": "鎖定模式",
+	"locker-settings": "鎖定模式：",
 	"locker-settings-tip-part-1": "打開鎖定模式後，將無法修改設置，無法隨意退出程序。",
 	"locker-settings-tip-part-2": "功能類似於家長控制。如果自控力較弱，不妨讓別人輸入密碼，打開鎖定模式。目前的狀態：",
 	"on": "開",
@@ -295,5 +295,8 @@
 	"continueloop-tip": "自動循環模式使得你可以不斷重復運行一個計時器而不受到任何幹擾。若選擇，將不斷重復。若不選擇，則將在持續一次後停止。此外，選擇此項之後將無法選擇全屏專心模式。",
 	"not-timing": "不在計時，請盡快開始",
 	"force-long-focus-request": "很長的全屏專心時間",
-	"force-long-focus-request-tip": "到時你將無法退出。"
+	"force-long-focus-request-tip": "到時你將無法退出。",
+	"advanced-settings": "高級設置",
+	"task-reservation": "預約任務：",
+	"task-reservation-tip": "預約任務功能讓你可以爲接下來的某個時間點或者一組時間點預約計時任務。開始前會給出提示。"
 }

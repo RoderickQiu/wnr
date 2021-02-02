@@ -88,18 +88,6 @@
                 else $("#global-settings-sidebar-icon").addClass("icon-globe-europe");
             </script>
         </div>
-        <div class="settings-sidebar-block lead" id="locker-sidebar" onclick="settingsGoto('locker')">
-            <div class="container-fluid">
-                <div class="row align-items-start">
-                    <div class="col-3 text-center">
-                        <i class="iconfont icon-lock" aria-hidden="true"></i>
-                    </div>
-                    <div class="col-9">
-                        <script>document.write(i18n.__('locker-settings'));</script>
-                    </div>
-                </div>
-            </div>
-        </div>
         <div class="settings-sidebar-block lead should-lock" id="personalization-sidebar"
             onclick="settingsGoto('personalization')">
             <div class="container-fluid">
@@ -122,6 +110,18 @@
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('other-things'));</script>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="settings-sidebar-block lead" id="locker-sidebar" onclick="settingsGoto('locker')">
+            <div class="container-fluid">
+                <div class="row align-items-start">
+                    <div class="col-3 text-center">
+                        <i class="iconfont icon-programming-flag" aria-hidden="true"></i>
+                    </div>
+                    <div class="col-9">
+                        <script>document.write(i18n.__('advanced-settings'));</script>
                     </div>
                 </div>
             </div>
@@ -470,34 +470,51 @@
                 </div>
             </div>
 
-            <!-- 4. lock mode settings -->
+            <!-- 4. advanced settings (former locker) -->
             <div id="locker">
-                <div class="align-content-center form-text">
-                    <label>
-                        <script>
-                            document.write(i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '<span class="font-weight-bold rest">'
-                                + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
-                        </script>
-                    </label>
-                    <br />
-                    <input name="passcode-locker" id="passcode-locker" type="password" maxlength="11"
-                        onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
-                    <br />
-                    <input name="passcode-locker-again" id="passcode-locker-again" type="password" maxlength="11"
-                        onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
-                    <br />
-                    <span class="text-muted small">
-                        <script>
-                            $('#passcode-locker').attr('placeholder', i18n.__('locker-settings-input'));
-                            $('#passcode-locker-again').attr('placeholder', i18n.__('locker-settings-input-again'));
-                            document.write(store.get('islocked') ? i18n.__('locker-settings-input-tip-lock-mode-on') : i18n.__('locker-settings-input-tip-lock-mode-off'));
-                        </script>
-                        <br />
-                        <b>
-                            <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
-                        </b>
-                    </span>
-                </div>
+                <ul>
+                    <!-- locker mode -->
+                    <li id="locker-mode">
+                        <script>document.write(i18n.__('locker-settings'));</script>
+                        <p class="small text-muted">
+                            <label class="text-muted">
+                                <script>
+                                    document.write(i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '<span class="font-weight-bold rest">'
+                                        + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
+                                </script>
+                            </label>
+                            <br />
+                            <input name="passcode-locker" id="passcode-locker" type="password" maxlength="11"
+                                onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                            <br />
+                            <input name="passcode-locker-again" id="passcode-locker-again" type="password"
+                                maxlength="11"
+                                onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                            <br />
+                            <span class="text-muted small">
+                                <script>
+                                    $('#passcode-locker').attr('placeholder', i18n.__('locker-settings-input'));
+                                    $('#passcode-locker-again').attr('placeholder', i18n.__('locker-settings-input-again'));
+                                    document.write(store.get('islocked') ? i18n.__('locker-settings-input-tip-lock-mode-on') : i18n.__('locker-settings-input-tip-lock-mode-off'));
+                                </script>
+                                <b>
+                                    <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
+                                </b>
+                            </span>
+                        </p>
+                    </li>
+                    <li class="should-lock">
+                        <script>document.write(i18n.__('task-reservation'));</script>
+                        <p class="small text-muted">
+                            <label class="text-muted">
+                                <script>
+                                    document.write(i18n.__('task-reservation-tip'));
+                                </script>
+                            </label>
+                            <br />
+                        </p>
+                    </li>
+                </ul>
                 <br />
             </div>
 
