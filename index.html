@@ -51,6 +51,8 @@
 
         const shi = require("node-shi");
 
+        var isForceLongFocus = false;
+
         function keyDownSubmitter() {
             if (onlyrest)
                 window.location.href =
@@ -63,6 +65,8 @@
                     + document.getElementById("focus-continueloop-set-onlyrest").checked;
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
+            else if (((document.getElementById("focus-work-set").checked && shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }) > 10) || (document.getElementById("focus-rest-set").checked && shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }) > 10)) && !isForceLongFocus)
+                ipc.send("force-long-focus-request");
             else
                 window.location.href = "timer.html?title=" + $("#title").val()
                     + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
@@ -75,6 +79,10 @@
                     + "&restored=false"
                     + "&times=0&continueloop=false";
         }
+        ipc.on("force-long-focus-granted", function () {
+            isForceLongFocus = true;
+            keyDownSubmitter();
+        });
         function keydown(e) {
             var currKey = 0, e = e || event;
             if (e.keyCode == 13) keyDownSubmitter();
@@ -484,7 +492,7 @@
                             + "&method=1"
                             + "&work-time-focused=" + item.focusWhenWorking
                             + "&rest-time-focused=" + item.focusWhenResting
-                            + "&restored=false"
+                            + "&restored=true"
                             + "&times=0&continueloop=false";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);

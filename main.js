@@ -1178,6 +1178,23 @@ app.on('activate', () => {
     }
 })
 
+ipcMain.on('force-long-focus-request', function () {
+    if (win != null)
+        dialog.showMessageBox(win, {
+            title: " wnr",
+            type: "warning",
+            message: i18n.__("force-long-focus-request"),
+            detail: i18n.__("force-long-focus-request-tip"),
+            buttons: [i18n.__('cancel'), i18n.__('ok')],
+            cancelId: 0,
+            noLink: true
+        }).then(function (index) {
+            if (index.response == 1) {
+                win.webContents.send("force-long-focus-granted");
+            }
+        });
+})
+
 ipcMain.on('focus-mode-settings', function (event, message) {
     workTimeFocused = message.workTimeFocused;
     restTimeFocused = message.restTimeFocused;

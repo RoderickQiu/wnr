@@ -297,5 +297,7 @@
     "continueloop-part-1": "Interference",
     "continueloop-part-2": "Free",
     "continueloop-tip": "The interference-free mode let you to loop one period of time without being interpreted.",
-    "not-timing": "Not Timing"
+    "not-timing": "Not Timing",
+    "force-long-focus-request": "Long fullscreen focus period",
+    "force-long-focus-request-tip": "Attention! You won't be able to quit once focus period starts."
 }
