@@ -63,9 +63,9 @@
                     <i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
                 <br />
-                <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
-                    onkeydown="if(event.keyCode == 13) recheck($('#passcode-rechecker').val());" />
             </div>
+            <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
+                onkeydown="if(event.keyCode == 13) recheck($('#passcode-rechecker').val());" />
             <br />
             <div class="text-center lead" id="backer">
                 <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
@@ -155,11 +155,8 @@
 
         //for first time users
         function mistakeResolver() {
-            call('floating-destroy');
-            timingData.set("last-recorded-minutes-left", -1);
-            timingData.set("last-recorded-hours-left", -1);
-            store.set("fullscreen-experience", true);
-            call('relauncher');
+            if (store.get("islocked")) $("#passcode-rechecker").css("display", "inline");
+            else backRelauncher();
         }
         $("#fullscreen-experience-tip").css("display", "none");
 
@@ -167,7 +164,7 @@
         function recheck(passcode) {
             var md5 = require('crypto-js/md5');
             if (passcode == "") ipc.send("alert", i18n.__('locker-settings-empty-password'));
-            else if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) backer();
+            else if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) backRelauncher();
             else ipc.send("alert", i18n.__('locker-settings-input-tip-wrong-password'));
         }
 
@@ -176,11 +173,25 @@
             else backer();
         }
 
+        function backRelauncher() {
+            call('floating-destroy');
+            timingData.set("last-recorded-minutes-left", -1);
+            timingData.set("last-recorded-hours-left", -1);
+            store.set("fullscreen-experience", true);
+            if (!isClockWorking) {
+                stopper();
+                setTimeout(function () { call('relauncher'); }, 500);
+            } else call('relauncher');
+        }
+
         function backer() {
             call('floating-destroy');
             timingData.set("last-recorded-minutes-left", -1);
             timingData.set("last-recorded-hours-left", -1);
-            window.location.href = "index.html";
+            if (!isClockWorking) {
+                stopper();
+                setTimeout(function () { window.location.href = "index.html"; }, 500);
+            } else window.location.href = "index.html";
         }
 
         function keydownOnError(e) {
