@@ -141,7 +141,8 @@
 	"locker": "开/关锁定模式",
 	"locker-settings": "锁定模式：",
 	"locker-settings-tip-part-1": "打开锁定模式后，将无法修改设置，无法随意退出程序。",
-	"locker-settings-tip-part-2": "功能类似于家长控制。如果自控力较弱，不妨让别人输入密码，打开锁定模式。目前的状态：",
+	"locker-settings-tip-part-2": "功能类似于家长控制。如果自控力较弱，不妨让别人输入密码，打开锁定模式。",
+	"locker-settings-tip-part-3": "目前的状态：",
 	"on": "开",
 	"off": "关",
 	"period-symbol": "。",
@@ -298,5 +299,11 @@
 	"force-long-focus-request-tip": "到时你将无法退出。",
 	"advanced-settings": "高级设置",
 	"task-reservation": "预约任务：",
-	"task-reservation-tip": "预约任务功能让你可以为接下来的某个时间点或者一组时间点预约计时任务。开始前会给出提示。"
+	"task-reservation-tip": "预约任务功能让你可以为接下来的某个时间点或者一组时间点预约计时任务。开始前会给出提示。",
+	"task-reservation-settings-tip-part1": "当点击“添加”后页面将会刷新，并将出现一条新记录。",
+	"task-reservation-settings-tip-part2": "预约任务循环设置中通过输入1来代表周一，2来代表周二，以此类推，到7代表周日。如167表示对于周一、周六、周日启用计划。输入0则代表不循环。而若直接开始设置被选中，则到时间后不是提示开始而是自动开始，比较强力。",
+	"task-reservation-time-setting": "任务开始时间：",
+	"task-reservation-cycle": "任务循环设置：",
+	"task-reservation-follow-plan": "依照预设：",
+	"task-reservation-direct-start": "是否直接开始："
 }

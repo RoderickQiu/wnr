@@ -59,6 +59,10 @@ input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
 
+input[type="time"] {
+    width: fit-content !important;
+}
+
 input[type="text"], input[type="number"], input[type="password"] {
     border-color: transparent;
     border-bottom-width: 3px;
@@ -429,11 +433,12 @@ li input:nth-last-child(4)::after {
     /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 88px;
+    top: 96px;
     left: 32%;
     overflow-y: scroll;
-    height: 350px;
+    height: 336px;
     width: 63%;
+    padding-right: 18px;
     word-break: normal;
 }
 
@@ -771,7 +776,17 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-.tooltip {
+.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved {
+    width: 96px !important;
+    font-size: small;
+}
+
+.reserved-direct-start {
+    margin-left: 5px !important;
+    margin-top: 10px !important;
+}
+
+.reserved- .tooltip {
     font-size: 12px;
     position: absolute;
     padding: 5px;

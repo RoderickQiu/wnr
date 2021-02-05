@@ -141,7 +141,8 @@
 	"locker": "開/關鎖定模式",
 	"locker-settings": "鎖定模式：",
 	"locker-settings-tip-part-1": "打開鎖定模式後，將無法修改設置，無法隨意退出程序。",
-	"locker-settings-tip-part-2": "功能類似於家長控制。如果自控力較弱，不妨讓別人輸入密碼，打開鎖定模式。目前的狀態：",
+	"locker-settings-tip-part-2": "功能類似於家長控制。如果自控力較弱，不妨讓別人輸入密碼，打開鎖定模式。",
+	"locker-settings-tip-part-3": "目前的狀態：",
 	"on": "開",
 	"off": "關",
 	"period-symbol": "。",
@@ -298,5 +299,11 @@
 	"force-long-focus-request-tip": "到時你將無法退出。",
 	"advanced-settings": "高級設置",
 	"task-reservation": "預約任務：",
-	"task-reservation-tip": "預約任務功能讓你可以爲接下來的某個時間點或者一組時間點預約計時任務。開始前會給出提示。"
+	"task-reservation-tip": "預約任務功能讓妳可以爲接下來的某個時間點或者一組時間點預約計時任務。開始前會給出提示。",
+	"task-reservation-settings-tip-part1": "當點擊“添加”後頁面將會刷新，並將出現一條新記錄。",
+	"task-reservation-settings-tip-part2": "預約任務循環設置中通過輸入1來代表周一，2來代表周二，以此類推，到7代表周日。如167表示對于周一、周六、周日啓用計劃。輸入0則代表不循環。而若直接開始設置被選中，則到時間後不是提示開始而是自動開始，比較強力。",
+	"task-reservation-time-setting": "任務開始時間：",
+	"task-reservation-cycle": "任務循環設置：",
+	"task-reservation-follow-plan": "依照預設：",
+	"task-reservation-direct-start": "是否直接開始："
 }

@@ -145,7 +145,8 @@
     "locker": "Lock Mode",
     "locker-settings": "Lock mode settings: ",
     "locker-settings-tip-part-1": "When lock mode is on, you will not be able to edit settings or exit wnr. Also, exiting from a counting timer will need the password in that circumstance. ",
-    "locker-settings-tip-part-2": "On macOS, the dock icon and top bar will be hidden. Status: ",
+    "locker-settings-tip-part-2": "On macOS, the dock icon and top bar will be hidden.",
+    "locker-settings-tip-part-3": "Status: ",
     "on": "on",
     "off": "off",
     "period-symbol": ".",
@@ -302,5 +303,11 @@
     "force-long-focus-request-tip": "Attention! You won't be able to quit once focus period starts.",
     "advanced-settings": "Advanced",
     "task-reservation": "Task reservation: ",
-    "task-reservation-tip": "The task reservation feature enables you to preplan a timing task for the future. Notifications will be shown before the reserved tasks are about to start."
+    "task-reservation-tip": "The task reservation feature enables you to preplan a timing task for the future. Notifications will be shown before the reserved tasks are about to start.",
+    "task-reservation-settings-tip-part1": "The page will be refreshed after you added a new task.",
+    "task-reservation-settings-tip-part2": "In the task cycle setting, we use 1 for Monday, 2 for Tuesday and so on. For example, 167 means the task is for Monday, Saturday and Sunday. And 0 represents that the task will only run once. As for the directly start setting, if it is enabled, then the timer will automatically be started when it's time, rather than simply warn you to start the timer.",
+    "task-reservation-time-setting": "Task start time: ",
+    "task-reservation-cycle": "Task cycle: ",
+    "task-reservation-follow-plan": "Follow plan: ",
+    "task-reservation-direct-start": "Directly start: "
 }

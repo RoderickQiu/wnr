@@ -143,7 +143,7 @@
                         <br /><br />
                     </div>
                     <div class="align-self-start text-left">
-                        <a href="javascript:add()" class="text-info underlined">
+                        <a href="javascript:planAdd()" class="text-info underlined">
                             <script>document.write(i18n.__('add'));</script>
                         </a>
                     </div>
@@ -476,10 +476,10 @@
                     <!-- locker mode -->
                     <li id="locker-mode">
                         <script>document.write(i18n.__('locker-settings'));</script>
-                        <p class="small text-muted">
-                            <label class="text-muted">
+                        <div class="small text-muted">
+                            <label>
                                 <script>
-                                    document.write(i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '<span class="font-weight-bold rest">'
+                                    document.write('<span class="text-muted">' + i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '</span><br />' + i18n.__('locker-settings-tip-part-3') + '<span class="font-weight-bold rest"> '
                                         + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
                                 </script>
                             </label>
@@ -501,21 +501,33 @@
                                     <script>document.write(i18n.__('need-to-restart-now-tip'));</script>
                                 </b>
                             </span>
-                        </p>
+                        </div>
                     </li>
                     <li class="should-lock">
                         <script>document.write(i18n.__('task-reservation'));</script>
-                        <p class="small text-muted">
+                        <div class="small text-muted">
                             <label class="text-muted">
                                 <script>
                                     document.write(i18n.__('task-reservation-tip'));
                                 </script>
                             </label>
                             <br />
-                        </p>
+                            <ul class="text-muted" id="reservation-list"></ul>
+                            <div class="align-self-start text-left">
+                                <a href="javascript:reservedAdd()" class="text-info underlined">
+                                    <script>document.write(i18n.__('add'));</script>
+                                </a>
+                            </div>
+                            <span class="text-muted small">
+                                <script>
+                                    document.write(i18n.__('task-reservation-settings-tip-part1'));
+                                    if (store.has("reserved") && store.get("reserved").toString() != "")
+                                        document.write('<br />' + i18n.__('task-reservation-settings-tip-part2'));
+                                </script>
+                            </span>
+                        </div>
                     </li>
                 </ul>
-                <br />
             </div>
 
             <!-- 5. other things -->

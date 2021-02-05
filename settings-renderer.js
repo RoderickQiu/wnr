@@ -113,10 +113,10 @@ let newItem = {
     focusWhenResting: false
 };
 defaultArray.forEach(function (item, index, array) {
-    append(item, index);
+    planAppend(item, index);
 });
 if (store.has("default-task")) setAsDefault(store.get("default-task"));
-function edit(index) {
+function planEdit(index) {
     defaultArray[index].name = $("#title" + index).val();
     if (Number($("#work-time" + index).val()) != NaN && Number($("#work-time" + index).val()) >= 0.2) defaultArray[index].workTime = $("#work-time" + index).val();
     else $("#work-time" + index).val(defaultArray[index].workTime);
@@ -130,23 +130,23 @@ function edit(index) {
     else defaultArray[index].focusWhenResting = false;
     store.set("predefined-tasks", defaultArray);
 }
-function append(item, index) {
+function planAppend(item, index) {
     $("#itemlist-ul").append(
         "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='lead rest' maxlength='15' value='" +
-        item.name + "'onchange='edit(" + index + ")' /> <br /><div class='text-muted small'>" +
+        item.name + "'onchange='planEdit(" + index + ")' /> <br /><div class='text-muted small'>" +
         i18n.__('predefined-tasks-settings-tip-part-1') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.workTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
+        item.workTime + "'onchange='planEdit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-2') + " <input id='rest-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.restTime + "'onchange='edit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
+        item.restTime + "'onchange='planEdit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
-        item.loops + "'onchange='edit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
+        item.loops + "'onchange='planEdit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
         i18n.__('time(s)') +
-        "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='edit(" + index + ")' />&nbsp;&nbsp;|&nbsp;" +
-        i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='edit(" + index + ")' />\
+        "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />&nbsp;&nbsp;|&nbsp;" +
+        i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />\
                 <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
-                <span id='deleter" + index + "'><a href='javascript:erase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
+                <span id='deleter" + index + "'><a href='javascript:planErase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
                 </div><hr /></li>"
     );
     if (item.focusWhenWorking) document.getElementById("focus-when-working" + index).checked = true;
@@ -154,15 +154,15 @@ function append(item, index) {
     if (item.focusWhenResting) document.getElementById("focus-when-resting" + index).checked = true;
     else document.getElementById("focus-when-resting" + index).checked = false;
 }
-function erase(index) {
+function planErase(index) {
     defaultArray.splice(index, 1);
     store.set("predefined-tasks", defaultArray);
     $("#item" + index).remove();
 }
-function add() {
+function planAdd() {
     defaultArray.push(newItem);
     store.set("predefined-tasks", defaultArray);
-    append(newItem, defaultArray.length - 1);
+    planAppend(newItem, defaultArray.length - 1);
 }
 function setAsDefault(index) {
     $("#deleter" + store.get("default-task")).css("display", "inline");
@@ -348,7 +348,7 @@ function stillCountSetting() {
     else store.set("should-stop-locked", false);
 }
 
-//lock mode settings
+//advanced settings
 function lock(passcode, again) {
     var md5 = require('crypto-js/md5');
     if (passcode == "" || again == "") ipc.send("locker-passcode", 'empty');
@@ -369,6 +369,78 @@ function lock(passcode, again) {
                 } else ipc.send("locker-passcode", 'wrong-passcode');
             } else ipc.send("locker-passcode", 'not-same-password');
         }
+}
+
+let reservedUseDefaultArray = store.get("predefined-tasks");
+let reservedArray = store.has("reserved") ? store.get("reserved") : [];
+let newReservedItem = {
+    time: "23:59",
+    plan: "0",
+    cycle: "0",
+    directStart: false
+};
+reservedArray.forEach(function (item, index, array) {
+    reservedAppend(item, index);
+});
+function reservedAppend(item, index) {
+    $("#reservation-list").append('<li id="reserved-' + index + '">\
+        '+ i18n.__('task-reservation-time-setting') + ' <input id="reserved-time-' + index + '" type="time"\
+        onchange="reservedEdit('+ index + ')" value="' + item.time + '" />&nbsp;&nbsp;&nbsp;|&nbsp;'
+        + i18n.__('task-reservation-follow-plan') +
+        '<div class="dropdown dropdown-default">\
+            <a class="btn btn-outline-secondary dropdown-toggle dropdown-reserved-button"\
+                id="dropdown-reserved-button-'+ index + '" data-toggle="dropdown" aria-haspopup="true"\
+                aria-expanded="false">\
+                <span id="dropdown-reserved-title-'+ index + '">' + reservedUseDefaultArray[item.plan].name + '</span>\
+            </a>\
+            <div class="dropdown-menu" class="dropdown-menu-reserved"\
+                aria-labelledby="dropdown-reserved-button-'+ index + '">\
+                <div id="dropdown-itemlist-'+ index + '" value="' + item.plan + '"></div>\
+            </div>\
+        </div><br />'+
+        i18n.__('task-reservation-cycle') +
+        '<input type="number" id="reserved-cycle-' + index + '" class="reserved-cycle"\
+            onchange="reservedEdit('+ index + ')" value="' + item.cycle + '"\
+            oninput="value = value.replace(/[89e.-]+/g, \'\').slice(0, 7);"\
+            style="ime-mode:Disabled" />\
+        &nbsp;|&nbsp;&nbsp;'+ i18n.__("task-reservation-direct-start") +
+        '<input type="checkbox" id="reserved-direct-start-' + index + '" onchange="reservedEdit(' + index + ')"\
+        class="reserved-direct-start" /><br />\
+        <span id="deleter' + index + '"><a href="javascript:reservedErase(' + index + ')" class="work underlined">' + i18n.__('delete') + '</a></span></div><hr />\
+        </li>'
+    );
+
+    if (item.directStart) document.getElementById("reserved-direct-start-" + index).checked = true;
+    else document.getElementById("reserved-direct-start-" + index).checked = false;
+    reservedUseDefaultArray.forEach(function (defaultArrayItem, defaultArrayIndex, defaultArray) {
+        $("#dropdown-itemlist-" + index).append("<a class='dropdown-item' value='" + defaultArrayIndex + "' href='javascript:reservedEditDropdownTrigger(" + index + ',' + defaultArrayIndex + ")' >" + defaultArrayItem.name + "</a>");
+    });
+}
+function reservedErase(index) {
+    reservedArray.splice(index, 1);
+    store.set("reserved", reservedArray);
+    $("#reserved-" + index).remove();
+}
+function reservedAdd() {
+    reservedArray.push(newReservedItem);
+    store.set("reserved", reservedArray);
+    reservedAppend(newReservedItem, reservedArray.length - 1);
+    store.set("settings-goto", "locker");
+    location.reload();
+}
+function reservedEditDropdownTrigger(index, val) {
+    $("#dropdown-reserved-title-" + index).text(reservedUseDefaultArray[val].name);
+    $("#dropdown-itemlist-" + index).attr("value", val);
+    reservedEdit(index);
+}
+function reservedEdit(index) {
+    reservedArray[index].time = $("#reserved-time-" + index).val();
+    reservedArray[index].plan = $("#dropdown-itemlist-" + index).attr("value");
+    reservedArray[index].cycle = $("#reserved-cycle-" + index).val();
+    if (document.getElementById("reserved-direct-start-" + index).checked == true)
+        reservedArray[index].directStart = true;
+    else reservedArray[index].directStart = false;
+    store.set("reserved", reservedArray);
 }
 
 //other things
