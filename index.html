@@ -131,8 +131,10 @@
             </div>
         </div>
         <div id="statistics-back">
-            <a href="javascript:onlyRest('out')" class="rest"><i class="iconfont icon-angle-left"
-                    id="back-onlyrest"></i></a>
+            <a href="javascript:onlyRest('out')" class="work"><i class="iconfont icon-angle-left"></i></a>
+            <script>
+                $('#statistics-back i').attr('title', i18n.__('back'));
+            </script>
         </div>
         <div id="controller">
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
@@ -293,9 +295,6 @@
                     <script>document.write(i18n.__('focus-notify-body'));</script>
                 </span>
             </div>
-            <div id="the-tip" class="extreme-small font-weight-normal">
-                <script>document.write(i18n.__('tip'));</script>
-            </div>
         </div>
         <button id="bottom-btn" type="button" class="btn btn-primary" onclick="keyDownSubmitter()">
             <script>document.write(i18n.__('submitter'));</script>
@@ -428,10 +427,8 @@
                 if (restFocus) $("#rest-notify").css("display", "inline");
                 else $("#rest-notify").css("display", "none");
                 $("#focus-notify-box").css("display", "inline");
-                $("#bottom-btn").css("height", "56px");
             } else {
                 $("#focus-notify-box").css("display", "none");
-                $("#bottom-btn").css("height", "40px");
             }
         }
 

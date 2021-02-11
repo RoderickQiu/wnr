@@ -538,25 +538,21 @@ li input:nth-last-child(4)::after {
 
 #all-sum {
     position: absolute;
-    bottom: 8px;
+    bottom: 60px;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
 }
 
 #bottom-btn {
-    opacity: 0;
-    transition: all 0.16s;
-    width: 233px;
+    opacity: 0.75;
+    width: 110%;
+    height: 50px;
     position: absolute;
-    bottom: 8px;
+    bottom: 0px;
     z-index: 999;
     -webkit-app-region: no-drag;
     /* let it clickable */
-}
-
-#bottom-btn:hover, #buttom-btn:focus {
-    opacity: 1;
 }
 
 #notes {
@@ -630,7 +626,7 @@ li input:nth-last-child(4)::after {
     bottom: 0px;
     right: 0px;
     width: 0%;
-    height: 1.9%;
+    height: 2.5%;
     background-color: #ea545499;
     z-index: -9999;
 }
@@ -766,10 +762,11 @@ li input:nth-last-child(4)::after {
 
 #statistics-back {
     position: absolute;
-    bottom: 4px;
+    bottom: 50%;
     left: 10px;
-    font-size: 18px;
+    font-size: 24px;
     display: inline-block;
+    z-index: 9999;
     background-clip: padding-box;
     -webkit-app-region: no-drag;
     /* let it clickable */
