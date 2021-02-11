@@ -542,6 +542,7 @@ app.on('ready', () => {
     });
 
     powerMonitor.on('shutdown', () => {
+        win.closable = true;
         app.exit(0);
     });
 
