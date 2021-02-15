@@ -331,6 +331,10 @@ li input:nth-last-child(4)::after {
     color: #5490ea;
 }
 
+#set {
+    transform: translateY(-15px);
+}
+
 #set .dropdown-menu {
     margin-top: 6px;
     transform: translateY(39px) !important;
