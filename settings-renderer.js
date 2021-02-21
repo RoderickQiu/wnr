@@ -374,10 +374,10 @@ function lock(passcode, again) {
 let reservedUseDefaultArray = store.get("predefined-tasks");
 let reservedArray = store.has("reserved") ? store.get("reserved") : [];
 let newReservedItem = {
+    id: store.get("reserved-record") + 1,
     time: "23:59",
     plan: "0",
-    cycle: "0",
-    directStart: false
+    cycle: "0"
 };
 reservedArray.forEach(function (item, index, array) {
     reservedAppend(item, index);
@@ -402,16 +402,11 @@ function reservedAppend(item, index) {
         '<input type="number" id="reserved-cycle-' + index + '" class="reserved-cycle"\
             onchange="reservedEdit('+ index + ')" value="' + item.cycle + '"\
             oninput="value = value.replace(/[89e.-]+/g, \'\').slice(0, 7);"\
-            style="ime-mode:Disabled" />\
-        &nbsp;|&nbsp;&nbsp;'+ i18n.__("task-reservation-direct-start") +
-        '<input type="checkbox" id="reserved-direct-start-' + index + '" onchange="reservedEdit(' + index + ')"\
-        class="reserved-direct-start" /><br />\
+            style="ime-mode:Disabled" /><br />\
         <span id="deleter' + index + '"><a href="javascript:reservedErase(' + index + ')" class="work underlined">' + i18n.__('delete') + '</a></span></div><hr />\
         </li>'
     );
 
-    if (item.directStart) document.getElementById("reserved-direct-start-" + index).checked = true;
-    else document.getElementById("reserved-direct-start-" + index).checked = false;
     reservedUseDefaultArray.forEach(function (defaultArrayItem, defaultArrayIndex, defaultArray) {
         $("#dropdown-itemlist-" + index).append("<a class='dropdown-item' value='" + defaultArrayIndex + "' href='javascript:reservedEditDropdownTrigger(" + index + ',' + defaultArrayIndex + ")' >" + defaultArrayItem.name + "</a>");
     });
@@ -419,14 +414,30 @@ function reservedAppend(item, index) {
 function reservedErase(index) {
     reservedArray.splice(index, 1);
     store.set("reserved", reservedArray);
+    store.set("reserved-cnt", store.get("reserved-cnt") - 1);
     $("#reserved-" + index).remove();
 }
 function reservedAdd() {
     reservedArray.push(newReservedItem);
-    store.set("reserved", reservedArray);
+    reservedListReorder();
+    store.set("reserved-record", store.get("reserved-record") + 1);
+    newReservedItem.id = store.get("reserved-record") + 1;
+    store.set("reserved-cnt", store.get("reserved-cnt") + 1);
     reservedAppend(newReservedItem, reservedArray.length - 1);
     store.set("settings-goto", "locker");
     location.reload();
+}
+function reservedListReorder() {
+    let newReservedArray = [];
+    for (i in reservedArray) {
+        if (reservedArray[i].cycle.indexOf("0") != -1) {
+            newReservedArray.unshift(reservedArray[i]);
+        } else {
+            newReservedArray.push(reservedArray[i]);
+        }
+    }
+
+    store.set("reserved", newReservedArray);
 }
 function reservedEditDropdownTrigger(index, val) {
     $("#dropdown-reserved-title-" + index).text(reservedUseDefaultArray[val].name);
@@ -437,9 +448,6 @@ function reservedEdit(index) {
     reservedArray[index].time = $("#reserved-time-" + index).val();
     reservedArray[index].plan = $("#dropdown-itemlist-" + index).attr("value");
     reservedArray[index].cycle = $("#reserved-cycle-" + index).val();
-    if (document.getElementById("reserved-direct-start-" + index).checked == true)
-        reservedArray[index].directStart = true;
-    else reservedArray[index].directStart = false;
     store.set("reserved", reservedArray);
 }
 

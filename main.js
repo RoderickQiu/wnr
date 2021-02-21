@@ -428,6 +428,9 @@ app.on('ready', () => {
         win.closable = false;
     }
 
+    if (!store.has("reserved-record")) store.set("reserved-record", 0);
+    if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
+
     store.set("just-launched", true);
 
     if (process.platform == "darwin") {

@@ -470,13 +470,71 @@
             allSet();
         }
 
+
+        let currentTime = new Date();
+        if (currentTime.getDay() != store.get("last-time-day-in-week")) {
+            store.set("last-time-day-in-week", currentTime.getDay());
+            store.set("reserved-today-done", []);
+        }
+        setInterval(reservedTimerInterval, 60000);
+        reservedTimerInterval();
+        function reservedTimerInterval() {
+            var currentTodoTask = null;
+
+            if (store.has("reserved")) {
+                currentTime = new Date();
+                let reservedArray = store.get("reserved");
+                if (reservedArray.length > 0) {
+                    for (var i = 0; i < reservedArray.length; i++) {
+                        if (reservedArray[i].cycle.indexOf(currentTime.getDay() + 1) != -1 || reservedArray[i].cycle.indexOf("0") != -1) {
+                            if (reservedArray[i].time.slice(0, 2) < currentTime.getHours() || (reservedArray[i].time.slice(3, 5) <= currentTime.getMinutes() && reservedArray[i].time.slice(0, 2) < currentTime.getHours())) {
+                                if (!store.get("reserved-today-done").includes(reservedArray[i].id)) {
+                                    if (currentTodoTask == null) {
+                                        currentTodoTask = reservedArray[i];
+                                    }
+
+                                    let doneArray = store.get("reserved-today-done");
+                                    doneArray.push(reservedArray[i].id);
+                                    store.set("reserved-today-done", doneArray);
+
+                                    if (reservedArray[i].cycle.indexOf("0") != -1) {
+                                        reservedArray.splice(i, 1);//no longer using
+                                        store.set("reserved", reservedArray);
+                                        store.set("reserved-cnt", store.get("reserved-cnt") - 1);
+                                        i--;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (currentTodoTask != null) {
+                let plan = store.get("predefined-tasks")[(Number)(currentTodoTask.plan)];
+                if (plan.focusWhenWorking && plan.focusWhenResting)
+                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
+                else {
+                    if (plan != null)
+                        window.location.href =
+                            "timer.html?title=&work-time=" + plan.workTime
+                            + "&rest-time=" + plan.restTime
+                            + "&loop=" + plan.loops
+                            + "&note=&method=1"
+                            + "&work-time-focused=" + plan.focusWhenWorking
+                            + "&rest-time-focused=" + plan.focusWhenResting
+                            + "&restored=true&times=0&continueloop=false";
+                }
+            }
+        }
+
         defaultArray = store.get("predefined-tasks");
         defaultArray.forEach(function (item, index, array) {
             if (store.get("default-task") == index) {
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
                 if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
-                    (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on   
+                    (!store.get("just-relaunched")) && (store.get("reserved-cnt") == 0)) {//auto-send the form is autostarttask is on   
                     if (item.focusWhenWorking && item.focusWhenResting)
                         ipc.send("alert", i18n.__('all-focus-mode-warn'));
                     else
