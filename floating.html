@@ -62,28 +62,33 @@
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="floating-bottom-bar">&nbsp;</div>
     <script>
-        if (process.platform == "darwin") {
+        if (process.platform === "darwin") {
             $("#floating-recover").css("display", "none");
             $("#floating-close").css("display", "none");
         } else {
             $("#stopper-spacing").css("display", "none");
         }
-        if (store.get('disable-pausing') == true) {
+        if (store.get('disable-pausing') === true) {
             $("#stopper").remove();
         }
 
         function hover() {
             $("#floating-unhover").css("opacity", "0");
         }
+
         function unhover() {
             $("#floating-unhover").css("opacity", "1");
         }
+
         function semihover() {
             $("#floating-unhover").css("opacity", "0");
-            setTimeout(function () { $("#floating-unhover").css("opacity", "1"); }, 500);
+            setTimeout(function () {
+                $("#floating-unhover").css("opacity", "1");
+            }, 500);
         }
 
         let isWorking = true;
+
         function stopper() {
             ipc.send("floating-conversation", { topic: "stop" });
             isWorking = !isWorking;
@@ -114,24 +119,24 @@
             if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
             else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
 
-            $("#time-left").text(message.minute == 0 ? '<1' : message.minute);
+            $("#time-left").text(message.minute === 0 ? '<1' : message.minute);
             $('#floating-bottom-bar').css("width", message.percentage + "%");
 
-            if (message.method == 2 && method == 1) {
+            if (message.method === 2 && method === 1) {
                 $(".work").addClass("rest");
                 $(".work").removeClass("work");
                 $('#floating-bottom-bar').css("background-color", "#5490ea19");
                 method = 2;
             }
 
-            if (message.method == 1 && method == 2) {
+            if (message.method === 1 && method === 2) {
                 $(".rest").addClass("work");
                 $(".rest").removeClass("rest");
                 $('#floating-bottom-bar').css("background-color", "#ea545419");
                 method = 1;
             }
 
-            if (message.method == 3 && method != 3) {
+            if (message.method === 3 && method !== 3) {
                 $(".work").addClass("positive");
                 $('#floating-bottom-bar').css("display", "none");
                 $('#floating-skipper').css("display", "none");

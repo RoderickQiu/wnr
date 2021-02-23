@@ -28,17 +28,19 @@
     <script>
         window.onload = function () {
             $("body").addClass("loaded");
-            setTimeout(function () { $('#loader-wrapper').remove() }, 1000);
-        } 
+            setTimeout(function () {
+                $('#loader-wrapper').remove()
+            }, 1000);
+        }
     </script>
 
     <script src="supporter.js"></script>
     <div id="controller">
         <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close"
-                id="exit-and-save"></i></a>
+                                                                  id="exit-and-save"></i></a>
         <script>
             $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
-            if (process.platform == "darwin") $("#controller").css("display", "none");
+            if (process.platform === "darwin") $("#controller").css("display", "none");
         </script>
     </div>
     <div class="d-flex h3 rest" id="settings-title">
@@ -47,7 +49,7 @@
 
     <div id="settings-sidebar">
         <div class="settings-sidebar-block lead should-lock" id="predefined-tasks-sidebar"
-            onclick="settingsGoto('predefined-tasks')">
+             onclick="settingsGoto('predefined-tasks')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -59,7 +61,8 @@
                 </div>
             </div>
         </div>
-        <div class="settings-sidebar-block lead should-lock" id="languages-sidebar" onclick="settingsGoto('languages')">
+        <div class="settings-sidebar-block lead should-lock" id="languages-sidebar"
+             onclick="settingsGoto('languages')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -72,7 +75,7 @@
             </div>
         </div>
         <div class="settings-sidebar-block lead should-lock" id="global-settings-sidebar"
-            onclick="settingsGoto('global-settings')">
+             onclick="settingsGoto('global-settings')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -89,7 +92,7 @@
             </script>
         </div>
         <div class="settings-sidebar-block lead should-lock" id="personalization-sidebar"
-            onclick="settingsGoto('personalization')">
+             onclick="settingsGoto('personalization')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -102,7 +105,7 @@
             </div>
         </div>
         <div class="settings-sidebar-block lead should-lock" id="other-things-sidebar"
-            onclick="settingsGoto('other-things')">
+             onclick="settingsGoto('other-things')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -159,7 +162,7 @@
                     <br />
                     <div class="dropdown">
                         <a class="btn btn-outline-secondary dropdown-toggle" id="language-dropdown-button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         </a>
                         <div class="dropdown-menu" id="language-select" aria-labelledby="language-dropdown-button">
                         </div>
@@ -188,8 +191,9 @@
                 <!-- check after time end setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="check-after-time-end-setting" type="checkbox" onchange="checkAfterTimeEndSetting()"
-                            checked />
+                        <input id="check-after-time-end-setting" type="checkbox"
+                               onchange="checkAfterTimeEndSetting()"
+                               checked />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -206,7 +210,7 @@
                 <div class="row">
                     <div class="col-1 text-center">
                         <input id="disable-pausing-setting" type="checkbox" onchange="disablePausingSetting()"
-                            checked />
+                               checked />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -223,7 +227,7 @@
                 <div class="row">
                     <div class="col-1 text-center">
                         <input id="notifying-sound-setting" type="checkbox" onchange="notifyingSoundSetting()"
-                            checked />
+                               checked />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -240,7 +244,7 @@
                 <div class="row">
                     <div class="col-1 text-center">
                         <input id="alarm-for-not-using-wnr-dialog-box-title-setting" type="checkbox"
-                            onchange="alarmForNotUsingSetting()" />
+                               onchange="alarmForNotUsingSetting()" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -257,7 +261,7 @@
                 <div class="row">
                     <div class="col-1 text-center">
                         <input id="one-min-left-notification-setting" type="checkbox"
-                            onchange="oneMinLeftNotificationSetting()" />
+                               onchange="oneMinLeftNotificationSetting()" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -285,7 +289,7 @@
                             <span id="nap-time-set">
                                 <script>document.write(i18n.__('is-nap-on-time-msg'));</script>
                                 <input name="nap-time-msg" id="nap-time-msg" type="number" maxlength="11"
-                                    onblur="napTimeChange()" class="hotkeyset" />
+                                       onblur="napTimeChange()" class="hotkeyset" />
                             </span>
                         </span>
                     </div>
@@ -368,7 +372,8 @@
                 <!-- auto start the default task setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="auto-start-task-setting" type="checkbox" onchange="autoStartDefaultTaskSetting()" />
+                        <input id="auto-start-task-setting" type="checkbox"
+                               onchange="autoStartDefaultTaskSetting()" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -485,11 +490,11 @@
                             </label>
                             <br />
                             <input name="passcode-locker" id="passcode-locker" type="password" maxlength="11"
-                                onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
                             <br />
                             <input name="passcode-locker-again" id="passcode-locker-again" type="password"
-                                maxlength="11"
-                                onkeydown="if(event.keyCode == 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                                   maxlength="11"
+                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
                             <br />
                             <span class="text-muted small">
                                 <script>
@@ -521,7 +526,7 @@
                             <span class="text-muted small">
                                 <script>
                                     document.write(i18n.__('task-reservation-settings-tip-part1'));
-                                    if (store.has("reserved") && store.get("reserved").toString() != "")
+                                    if (store.has("reserved") && store.get("reserved").toString() !== "")
                                         document.write('<br />' + i18n.__('task-reservation-settings-tip-part2') + '<br />' + i18n.__('task-reservation-settings-tip-part3'));
                                 </script>
                             </span>
@@ -574,7 +579,7 @@
                         <script>document.write(i18n.__('settings-import-msg'));</script>
                         <br />
                         <input name="settings-import-input" id="settings-import-input" type="password"
-                            onkeydown="if(event.keyCode == 13) settingsImport($('#settings-import-input').val(),'settings');" />
+                               onkeydown="if(event.keyCode === 13) settingsImport($('#settings-import-input').val(),'settings');" />
                         <script> $('#settings-import-input').attr('placeholder', i18n.__('settings-import'));</script>
                         <p class="small text-muted">
                             <script>document.write(i18n.__('settings-import-tip'));</script>
@@ -598,7 +603,7 @@
                         <script>document.write(i18n.__('statistics-import-msg'));</script>
                         <br />
                         <input name="statistics-import-input" id="statistics-import-input" type="password"
-                            onkeydown="if(event.keyCode == 13) settingsImport($('#statistics-import-input').val(),'statistics');" />
+                               onkeydown="if(event.keyCode === 13) settingsImport($('#statistics-import-input').val(),'statistics');" />
                         <script> $('#statistics-import-input').attr('placeholder', i18n.__('statistics-import'));</script>
                         <p class="small text-muted">
                             <script>document.write(i18n.__('statistics-import-tip'));</script>
@@ -627,10 +632,10 @@
                         <br />
                         <div class="dropdown">
                             <a class="btn btn-outline-secondary dropdown-toggle" id="white-or-dark-dropdown-button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" id="white-or-dark-select"
-                                aria-labelledby="white-or-dark-dropdown-button">
+                                 aria-labelledby="white-or-dark-dropdown-button">
                                 <a class='dropdown-item' href='javascript:darkOrWhiteSetting("light")'>
                                     <script>document.write(i18n.__('personalization-white-or-dark-mode-white'));</script>
                                 </a>
@@ -654,27 +659,32 @@
                     <!-- personalization for notification -->
                     <li>
                         <script>document.write(i18n.__('personalization-notification'));</script>
-                        <br /><label id="work-time-end" class="personalization-notification-label text-muted"></label>
+                        <br /><label id="work-time-end"
+                                     class="personalization-notification-label text-muted"></label>
                         <input name="work-time-end" class="personalization-notification" type="text" maxlength="64"
-                            onchange="personalizedNotification()" />
+                               onchange="personalizedNotification()" />
                         <br /><label id="work-time-end-msg"
-                            class="personalization-notification-label text-muted"></label>
-                        <input name="work-time-end-msg" class="personalization-notification" type="text" maxlength="64"
-                            onchange="personalizedNotification()" />
-                        <br /><label id="rest-time-end" class="personalization-notification-label text-muted"></label>
+                                     class="personalization-notification-label text-muted"></label>
+                        <input name="work-time-end-msg" class="personalization-notification" type="text"
+                               maxlength="64"
+                               onchange="personalizedNotification()" />
+                        <br /><label id="rest-time-end"
+                                     class="personalization-notification-label text-muted"></label>
                         <input name="rest-time-end" type="text" class="personalization-notification" maxlength="64"
-                            onchange="personalizedNotification()" />
+                               onchange="personalizedNotification()" />
                         <br /><label id="rest-time-end-msg"
-                            class="personalization-notification-label text-muted"></label>
-                        <input name="rest-time-end-msg" class="personalization-notification" type="text" maxlength="64"
-                            onchange="personalizedNotification()" />
+                                     class="personalization-notification-label text-muted"></label>
+                        <input name="rest-time-end-msg" class="personalization-notification" type="text"
+                               maxlength="64"
+                               onchange="personalizedNotification()" />
                         <br /><label id="all-task-end" class="personalization-notification-label text-muted"></label>
                         <input name="all-task-end" class="personalization-notification" type="text" maxlength="64"
-                            onchange="personalizedNotification()" />
+                               onchange="personalizedNotification()" />
                         <br /><label id="all-task-end-msg"
-                            class="personalization-notification-label text-muted"></label>
-                        <input name="all-task-end-msg" class="personalization-notification" type="text" maxlength="64"
-                            onchange="personalizedNotification()" />
+                                     class="personalization-notification-label text-muted"></label>
+                        <input name="all-task-end-msg" class="personalization-notification" type="text"
+                               maxlength="64"
+                               onchange="personalizedNotification()" />
                         <br />
                         <script>
                             $(".personalization-notification").each(function () {
@@ -712,22 +722,23 @@
                         </label>
                         <div class="dropdown">
                             <a class="btn btn-outline-secondary dropdown-toggle"
-                                id="work-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
-                                aria-expanded="false">
+                               id="work-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" id="work-time-end-sound-select"
-                                aria-labelledby="work-time-end-sound-dropdown-button">
+                                 aria-labelledby="work-time-end-sound-dropdown-button">
                             </div>
                         </div>
                         <label>
                             <script>document.write(i18n.__("personalization-notify-sound-msg-all-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle" id="all-time-end-sound-dropdown-button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a class="btn btn-outline-secondary dropdown-toggle"
+                               id="all-time-end-sound-dropdown-button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" id="all-time-end-sound-select"
-                                aria-labelledby="all-time-end-sound-dropdown-button">
+                                 aria-labelledby="all-time-end-sound-dropdown-button">
                             </div>
                         </div>
                         <p class="small text-muted">
@@ -751,12 +762,12 @@
     <script>
         $(".get-help").attr('title', i18n.__('helper'));
 
-        if (process.platform != "darwin") {
+        if (process.platform !== "darwin") {
             $("#hide-from-dock-setting-container").css("display", "none");
             $("#top-bar-time-setting-container").css("display", "none");
         }
 
-        if (process.env.NODE_ENV == "msstore") $(".update-check").css("display", "none");
+        if (process.env.NODE_ENV === "msstore") $(".update-check").css("display", "none");
 
         window.addEventListener('contextmenu', function (e) {
             e.preventDefault();
@@ -781,7 +792,7 @@
                 clearTimeout(timeOutEvent);
                 timeOutEvent = 0;
             },
-            touchend: function (e) {
+            touchend: function () {
                 clearTimeout(timeOutEvent);
             }
         });//long-touch menu

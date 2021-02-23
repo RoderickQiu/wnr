@@ -1,14 +1,17 @@
-var i18n = require("i18n");
+let i18n = require("i18n");
 const Store = require('electron-store');
 const ipc = require('electron').ipcRenderer;
 const path = require("path");
 const cmdOrCtrl = require("cmd-or-ctrl");
 
-var isDarkMode = false;
+let isDarkMode = false;
 
-if (process.env.NODE_ENV == "portable") {
+if (process.env.NODE_ENV === "portable") {
     try {
-        store = new Store({ cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-config' });//accept portable
+        store = new Store({
+            cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""),
+            name: 'wnr-config'
+        });//accept portable
     } catch (e) {
         console.log(e);
         store = new Store();
@@ -21,14 +24,14 @@ isInDark();
 
 const languageList = ['en', 'zh-CN', 'zh-TW'],//locale code
     languageNameList = ['English', '简体中文', '正體中文'],//real name
-    isChinese = store.get("i18n").indexOf("zh") != -1 ? true : false;
+    isChinese = store.get("i18n").indexOf("zh") !== -1;
 
 i18n.configure({
     locales: languageList,
     directory: __dirname + '/locales',
     missingKeyFn(locale, value) {
-        console.warn(`missing translation of "${value}" in [${locale}]!`)
-        return `${value}-[${locale}]`;
+        console.warn(`missing translation of "${ value }" in [${ locale }]!`)
+        return `${ value }-[${ locale }]`;
     }
 });
 i18n.setLocale(store.get("i18n"));//set locale
@@ -50,7 +53,7 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    isDarkMode = (store.get("dark-or-white") == "dark") || (styleCache.get('isdark') && store.get("dark-or-white") != "light");
+    isDarkMode = (store.get("dark-or-white") === "dark") || (styleCache.get('isdark') && store.get("dark-or-white") !== "light");
     if (isDarkMode) {
         $('.whitemode-jetplane').remove();
         $('body').append(
@@ -61,6 +64,7 @@ function isInDark() {
         $('body').append('<style class="whitemode-jetplane">body {background-color: #fefefe;}</style>');
     }
 }
+
 ipc.on('darkModeChanges', function () {
     isInDark();
 });//dark mode settings

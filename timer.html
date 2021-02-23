@@ -28,14 +28,17 @@
         <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="iconfont icon-info"
-                    id="helper"></i></a>&nbsp;&nbsp;
+                                                                                      id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:floatingOpener()" class="small work should-lock"><i class="iconfont icon-suoxiao"
-                    id="mini-mode"></i></a>&nbsp;&nbsp;
+                                                                                    id="mini-mode"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
-                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span
+                id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small work"><i class="iconfont icon-minus"
-                    id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small work should-lock"><i class="iconfont icon-close"
+                                                                               id="window-minimize"></i></a><span
+                class="should-lock">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-close-chk')" class="small work should-lock"><i
+                    class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
                 $('#helper').attr('title', i18n.__('helper'));
@@ -47,17 +50,22 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="title" class="text-center h4"></div>
-            <div id="notes" class="text-center small text-muted"></div><br />
-            <div id="time-cnt" class="text-center small text-muted"></div><br />
+            <div id="notes" class="text-center small text-muted"></div>
+            <br />
+            <div id="time-cnt" class="text-center small text-muted"></div>
+            <br />
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
-            </div><br />
-            <div id="now-timing" class="text-center h1 work"></div><br />
+            </div>
+            <br />
+            <div id="now-timing" class="text-center h1 work"></div>
+            <br />
             <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
-                        class="iconfont icon-pause"></i></a></div><br />
+                    class="iconfont icon-pause"></i></a></div>
+            <br />
             <div class="text-center text-muted" id="more-options">
                 <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
-                        id="back-index"></i></a>
+                                                                       id="back-index"></i></a>
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <a href="javascript:skipper()" class="text-muted" id="skipper-container">
                     <i class="iconfont icon-fastforward" id="skipper"></i>
@@ -65,11 +73,11 @@
                 <br />
             </div>
             <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
-                onkeydown="if(event.keyCode == 13) recheck($('#passcode-rechecker').val());" />
+                   onkeydown="if(event.keyCode === 13) recheck($('#passcode-rechecker').val());" />
             <br />
             <div class="text-center lead" id="backer">
                 <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
-                        id="backindex2"></i></a>
+                                                                       id="backindex2"></i></a>
             </div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
@@ -78,13 +86,13 @@
             </div>
             <div id="fullscreen-experience-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-experience-tip') +
-                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
-                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+                    '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                    i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
             <div id="fullscreen-too-long-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-too-long-tip') +
-                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
-                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+                    '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                    i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
             <script>
                 $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
@@ -93,7 +101,7 @@
                 $('#stopper').attr('title', i18n.__('start-or-stop'))
                 $('#backer').css('display', 'none');
                 $('#skipper').attr('title', i18n.__('skipper'));
-                if (process.platform == "darwin") $("#controller").css("display", "none");
+                if (process.platform === "darwin") $("#controller").css("display", "none");
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
@@ -101,9 +109,9 @@
 
     <script>
         function dynamicResizer() {//dynamically resize the countdown text as the window resizes
-            var hdWidth = document.body.getBoundingClientRect().width;
-            var defaultWidth = 376;
-            var scale = hdWidth / defaultWidth;
+            let hdWidth = document.body.getBoundingClientRect().width;
+            let defaultWidth = 376;
+            let scale = hdWidth / defaultWidth;
 
             $("#now-timing").css("font-size", (2.5 * ((scale - 1) / 2 + 1)) + 'rem');
             if (hdWidth > 630) {
@@ -121,22 +129,24 @@
     </script>
 
     <script>
-        if (process.platform == "darwin") {
+        if (process.platform === "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         }
-        if (store.get('localtime') == false) {
+        if (store.get('localtime') === false) {
             $("#time-bar").remove();
             $("#time-bar-macos").remove();
         }
-        if (store.get('disable-pausing') == true) {
+        if (store.get('disable-pausing') === true) {
             $("#stopper").remove();
         }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
         store.set('just-launched', false);
 
-        hasFloating = false, canOpenFloating = true;
+        hasFloating = false;
+        canOpenFloating = true;
+
         function floatingOpener() {
             if (canOpenFloating) {
                 call("window-hide");
@@ -144,12 +154,28 @@
                 hasFloating = true;
 
                 //repeat so always able to be sent
-                if (methodFromStart != 3)
+                if (methodFromStart !== 3)
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
-                        setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor((((method == 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000), percentage: Math.round(lastRecordedProgress * 100), method: method, isWorking: isClockWorking }); }, 500 * floatingRepeater);
+                        setTimeout(function () {
+                            ipc.send("floating-conversation", {
+                                topic: "time-left",
+                                val: Math.floor((((method === 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000),
+                                percentage: Math.round(lastRecordedProgress * 100),
+                                method: method,
+                                isWorking: isClockWorking
+                            });
+                        }, 500 * floatingRepeater);
                 else
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
-                        setTimeout(function () { ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: 0, method: 3, isWorking: isClockWorking }) }, 500 * floatingRepeater);
+                        setTimeout(function () {
+                            ipc.send("floating-conversation", {
+                                topic: "time-left",
+                                val: Math.floor(seconds / 60),
+                                percentage: 0,
+                                method: 3,
+                                isWorking: isClockWorking
+                            })
+                        }, 500 * floatingRepeater);
             }
         }
 
@@ -158,13 +184,14 @@
             if (store.get("islocked")) $("#passcode-rechecker").css("display", "inline");
             else backRelauncher();
         }
+
         $("#fullscreen-experience-tip").css("display", "none");
 
         //lock mode settings
         function recheck(passcode) {
-            var md5 = require('crypto-js/md5');
-            if (passcode == "") ipc.send("alert", i18n.__('locker-settings-empty-password'));
-            else if (passcode == store.get('lockerpasscode') || md5(passcode).toString() == store.get('lockerpasscode')) backRelauncher();
+            let md5 = require('crypto-js/md5');
+            if (passcode === "") ipc.send("alert", i18n.__('locker-settings-empty-password'));
+            else if (passcode === store.get('lockerpasscode') || md5(passcode).toString() === store.get('lockerpasscode')) backRelauncher();
             else ipc.send("alert", i18n.__('locker-settings-input-tip-wrong-password'));
         }
 
@@ -180,7 +207,9 @@
             store.set("fullscreen-experience", true);
             if (!isClockWorking) {
                 stopper();
-                setTimeout(function () { call('relauncher'); }, 500);
+                setTimeout(function () {
+                    call('relauncher');
+                }, 500);
             } else call('relauncher');
         }
 
@@ -190,22 +219,24 @@
             timingData.set("last-recorded-hours-left", -1);
             if (!isClockWorking) {
                 stopper();
-                setTimeout(function () { window.location.href = "index.html"; }, 500);
+                setTimeout(function () {
+                    window.location.href = "index.html";
+                }, 500);
             } else window.location.href = "index.html";
         }
 
         function keydownOnError(e) {
-            var currKey = 0, e = e || event;
-            if (e.keyCode == 13) backer();
+            if (e.keyCode === 13) backer();
         }
-        var $_GET = (function () {
-            var url = window.document.location.href.toString();
-            var u = url.split("?");
+
+        let $_GET = (function () {
+            let url = window.document.location.href.toString();
+            let u = url.split("?");
             if (typeof (u[1]) == "string") {
                 u = u[1].split("&");
-                var get = {};
-                for (var i in u) {
-                    var j = u[i].split("=");
+                let get = {};
+                for (let i in u) {
+                    let j = u[i].split("=");
                     get[j[0]] = j[1];
                 }
                 return get;
@@ -218,13 +249,13 @@
             note = decodeURI($_GET['note']),
             workTime = decodeURI($_GET['work-time']) * 60000,
             restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
-            loop = decodeURI($_GET['loop']),
-            workTimeFocused = (decodeURI($_GET['work-time-focused']) == "false") ? false : true,
-            restTimeFocused = (decodeURI($_GET['rest-time-focused']) == "false") ? false : true,
-            restored = (decodeURI($_GET['restored']) == "false") ? false : true,
-            times = (Number(decodeURI($_GET['times'])) == NaN) ? 0 : Number(decodeURI($_GET['times'])),
+            loop = Number(decodeURI($_GET['loop'])),
+            workTimeFocused = (decodeURI($_GET['work-time-focused']) !== "false"),
+            restTimeFocused = (decodeURI($_GET['rest-time-focused']) !== "false"),
+            restored = (decodeURI($_GET['restored']) !== "false"),
+            times = (isNaN(Number(decodeURI($_GET['times'])))) ? 0 : Number(decodeURI($_GET['times'])),
             methodFromStart = Number(decodeURI($_GET['method'])),
-            continueLoop = (decodeURI($_GET['continueloop']) == "false") ? false : true,
+            continueLoop = (decodeURI($_GET['continueloop']) !== "false"),
             h = i18n.__('h'),
             min = i18n.__('min'),
             s = i18n.__('s'),
@@ -232,9 +263,9 @@
             stopperTimeout = null,
             pausingTimeout = null;
 
-        ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
+        ipc.send('focus-mode-settings', {workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused});
 
-        if (restored && methodFromStart == 2) times--;//workaround: method = 2 causes an extra skipper()
+        if (restored && methodFromStart === 2) times--;//workaround: method = 2 causes an extra skipper()
 
         timingData.set("last-recorded-state", {
             workTime: workTime / 60000,
@@ -249,10 +280,11 @@
 
         timingData.set("last-recorded-times-left", times);
 
-        var $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"), $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
+        let $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"),
+            $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
         //method = 3 means liberal / positive timer
-        if (methodFromStart == 3) {
+        if (methodFromStart === 3) {
             $(".work").addClass("positive");
             $("#skipper-container").css("display", "none");
             $("#skipper-space").css("display", "none");
@@ -263,7 +295,7 @@
             timingData.set("last-recorded-times-left", 0);
         }
 
-        if ((loop < 1 && loop != 0) || (workTime < 12000) || (restTime < 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+        if ((loop < 1 && loop !== 0) || (workTime < 12000) || (restTime < 12000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
             timingData.set("last-recorded-times-left", 0);
@@ -283,11 +315,11 @@
             isTimerWindow(true);
             if (title) $("#title").html(title);
             if (note) $("#notes").html(note);
-            if (loop == 0 || continueLoop) $("#time-cnt").css("display", "none");
+            if (loop === 0 || continueLoop) $("#time-cnt").css("display", "none");
             else $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
-                if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
+                if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
                 $bottomBar.css("background-color", "#ea545419");
                 $bottomBar.css("height", "100%");
                 ipc.send('warning-giver-restend');
@@ -303,10 +335,10 @@
                     $("#skipper-container").css("display", "inline");
                     if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                 });
-                if (store.get("fullscreen-experience") != true) {
+                if (store.get("fullscreen-experience") !== true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
                     store.set("fullscreen-experience", true);
-                } else if (workTime >= 600000 && restored == false) {
+                } else if (workTime >= 600000 && restored === false) {
                     $("#fullscreen-too-long-tip").css("display", "block");
                     setTimeout(function () {
                         $("#fullscreen-too-long-tip").css("display", "none");
@@ -325,7 +357,7 @@
                 hours,
                 method = 1,
                 isClockWorking = 1,
-                moreThanOneMin = (method == 1 && workTime > 60000) ? 1 : 0,
+                moreThanOneMin = (method === 1 && workTime > 60000) ? 1 : 0,
                 lastRecordedMinutesLeft = -1,
                 lastRecordedHoursLeft = -1,
                 systemName = process.platform,
@@ -337,15 +369,15 @@
                 lastNapSecond = 0,
                 canStop = true;
 
-            if (store.get("nap") || methodFromStart == 3) {
+            if (store.get("nap") || methodFromStart === 3) {
                 shouldNap = true;
                 napInterval = (store.has("nap-time") ? store.get("nap-time") : 10) * 60;
                 if (isNaN(napInterval)) napInterval = 600;
-                if (methodFromStart != 3) lastNapSecond = workTime / 1000;
+                if (methodFromStart !== 3) lastNapSecond = workTime / 1000;
                 else lastNapSecond = 0;
             } else shouldNap = false;
 
-            if (methodFromStart != 3) {
+            if (methodFromStart !== 3) {
                 startTime = new Date().getTime();
                 int = setInterval(clock, 250);
             } else {
@@ -354,41 +386,41 @@
                 ipc.send("progress-bar-set", 2);
             }
 
-            if (methodFromStart == 2) skipper();
+            if (methodFromStart === 2) skipper();
 
             ipc.on('start-or-stop', function () {
                 if (canStop) {
-                    if (store.get("disable-pausing") == true)
+                    if (store.get("disable-pausing") === true)
                         ipc.send("alert", i18n.__('pausing-disabled'));
                     else {
                         stopper();
-                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
                     }
                 }
             });
 
             ipc.on('alter-start-stop', function (event, message) {
-                if (message == "start") {
+                if (message === "start") {
                     if ((!isClockWorking) && (wasCounting)) {
                         stopper();
-                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
                         wasCounting = !wasCounting;
                     }
-                } else if (message == "stop") {
+                } else if (message === "stop") {
                     if (isClockWorking && wasCounting) {
                         stopper();
-                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
                         wasCounting = !wasCounting;
                     }
                 }
             });
 
             ipc.on('remote-control-msg', function (event, message) {
-                if (message == "skipper") skipper();
-                else if (message == "back") backcheck();
-                else if (message == "stop") stopper();
-                else if (message == "enter") floatingOpener();
-                else if (message == "closed") hasFloating = false;
+                if (message === "skipper") skipper();
+                else if (message === "back") backcheck();
+                else if (message === "stop") stopper();
+                else if (message === "enter") floatingOpener();
+                else if (message === "closed") hasFloating = false;
             });
 
             function stopper() {
@@ -398,10 +430,15 @@
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
-                    if (store.get("alarmtip") != false) pausingTimeout = setInterval(function () { ipc.send("notify", { title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'), msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content') }); }, 600000);
+                    if (store.get("alarmtip") !== false) pausingTimeout = setInterval(function () {
+                        ipc.send("notify", {
+                            title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                            msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content')
+                        });
+                    }, 600000);
                 } else {
-                    if (methodFromStart != 3) {
-                        if (method == 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
+                    if (methodFromStart !== 3) {
+                        if (method === 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                         else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                         int = self.setInterval(clock, 250);
                     } else {
@@ -416,14 +453,14 @@
             }
 
             function warningGiver(isend) {
-                if ((method == 1 && workTime > 60000) || (method == 2 && restTime > 60000)) moreThanOneMin = 1;
+                if ((method === 1 && workTime > 60000) || (method === 2 && restTime > 60000)) moreThanOneMin = 1;
                 else moreThanOneMin = 0;//if less than 1 min, prevent less than 1min warning
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);
                 timingData.set("last-recorded-hours-left", -1);
-                if (store.get("sound") != false) {
-                    if (isend != 0) {
+                if (store.get("sound") !== false) {
+                    if (isend !== 0) {
                         player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
                     } else {
                         player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
@@ -442,9 +479,9 @@
                             player.loop = false;
                         }, 20000);
                 }//different sound for different circumstances
-                if (isend == 0) ipc.send('warning-giver-all-task-end');
+                if (isend === 0) ipc.send('warning-giver-all-task-end');
                 else {
-                    if (isend == 1) ipc.send('warning-giver-workend');
+                    if (isend === 1) ipc.send('warning-giver-workend');
                     else ipc.send('warning-giver-restend');
                     if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
@@ -459,7 +496,7 @@
             }
 
             function themeChanger() {
-                if (method == 1) {
+                if (method === 1) {
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
@@ -468,8 +505,8 @@
                     $bottomBar.css("background-color", "#5490ea99");
                     method = 2;
                     timingData.set("last-recorded-state.method", 2);
-                    if (restTimeFocused == true) {
-                        if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
+                    if (restTimeFocused === true) {
+                        if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
                         $bottomBar.css("background-color", "#5490ea19");
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
@@ -478,7 +515,7 @@
                         $timeBar.addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
                         $nowTiming.removeClass("h1");
-                        if (store.get("fullscreen-experience") != true) {
+                        if (store.get("fullscreen-experience") !== true) {
                             $("#fullscreen-experience-tip").css("display", "inline-block");
                             store.set("fullscreen-experience", true);
                         }
@@ -488,10 +525,10 @@
                             $("#skipper-container").css("display", "inline");
                         }
 
-                        if (workTimeFocused == true) {
+                        if (workTimeFocused === true) {
                             if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
                             $bottomBar.css("height", "1.9%");
-                            if (systemName != "darwin") $("#controller").css("display", "block");
+                            if (systemName !== "darwin") $("#controller").css("display", "block");
                             $("#more-options").css("display", "block");
                             $(".time-bar-focus").removeClass("time-bar-focus");
                             $nowTiming.removeClass("display-1");
@@ -508,9 +545,9 @@
                     $bottomBar.css("background-color", "#ea545499");
                     method = 1;
                     timingData.set("last-recorded-state.method", 1);
-                    if (systemName != "darwin") $("#controller").css("display", "block");
-                    if (workTimeFocused == true) {
-                        if (styleCache.get("is-shadowless") != true) $("html").css("border", "none");
+                    if (systemName !== "darwin") $("#controller").css("display", "block");
+                    if (workTimeFocused === true) {
+                        if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
                         $bottomBar.css("background-color", "#ea545419");
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
@@ -519,7 +556,7 @@
                         $timeBarMacOS.addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
                         $nowTiming.removeClass("h1");
-                        if (store.get("fullscreen-experience") != true) {
+                        if (store.get("fullscreen-experience") !== true) {
                             $("#fullscreen-experience-tip").css("display", "inline-block");
                             store.set("fullscreen-experience", true);
                         }
@@ -529,7 +566,7 @@
                             $("#skipper-container").css("display", "inline");
                         }
 
-                        if (restTimeFocused == true) {
+                        if (restTimeFocused === true) {
                             if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
                             $bottomBar.css("height", "1.9%");
                             $("#more-options").css("display", "block");
@@ -559,11 +596,11 @@
                 $("#stopper").text("");
                 $bottomBar.css("width", "0%");
                 ipc.send("progress-bar-set", 2);//the progress-bar-set is using (1-message), so when message is 2, the answer is -1
-                if (systemName != "darwin") $("#controller").css("display", "block");
+                if (systemName !== "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
                 if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");
-                if (restTimeFocused == true) {
+                if (restTimeFocused === true) {
                     $(".time-bar-focus").removeClass("time-bar-focus");
                     $nowTiming.removeClass("display-1");
                     $nowTiming.addClass("h1");
@@ -574,7 +611,7 @@
             function skipper() {
                 canOpenFloating = true;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
-                if (continueLoop && method == 2) {
+                if (continueLoop && method === 2) {
                     //if continueloop then only play once and no other thing
                     player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
                     player.loop = false;
@@ -588,23 +625,23 @@
                     $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
                 }
                 if (isClockWorking) {
-                    if (continueLoop && method == 2) {
+                    if (continueLoop && method === 2) {
                         startTime = new Date().getTime();
-                    } else if (times < loop * 2 || loop == 0) {
+                    } else if (times < loop * 2 || loop === 0) {
                         startTime = new Date().getTime();
                         themeChanger();
-                    } else if (times == loop * 2) {
+                    } else if (times === loop * 2) {
                         ender();
                     }
                 } else {
                     stopper();
                     setTimeout(function () {
-                        if (continueLoop && method == 2) {
+                        if (continueLoop && method === 2) {
                             startTime = new Date().getTime();
-                        } else if (times < loop * 2 || loop == 0) {
+                        } else if (times < loop * 2 || loop === 0) {
                             startTime = new Date().getTime();
                             themeChanger();
-                        } else if (times == loop * 2) {
+                        } else if (times === loop * 2) {
                             ender();
                         }
                     }, 250);
@@ -612,7 +649,7 @@
             }
 
             function positionCover(str) {//cover the positions of '0'
-                var num;
+                let num;
                 str >= 10 ? num = str : num = "0" + str;
                 return num;
             }
@@ -625,19 +662,25 @@
 
                 if (seconds - lastNapSecond > napInterval) {
                     lastNapSecond = seconds;
-                    ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
+                    ipc.send("notify", {title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg')});
                 }
 
                 hours = Math.floor(seconds / 3600);
                 minutes = Math.floor((seconds - hours * 3600) / 60);
 
-                if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: 0, method: 3, isWorking: isClockWorking });
+                if (hasFloating) ipc.send("floating-conversation", {
+                    topic: "time-left",
+                    val: Math.floor(seconds / 60),
+                    percentage: 0,
+                    method: 3,
+                    isWorking: isClockWorking
+                });
 
                 seconds -= hours * 3600 + minutes * 60;
                 $nowTiming.text(hours + h + minutes + min + seconds + s);
 
                 timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
-                if (systemName != "darwin") $timeBar.html(timeGot);
+                if (systemName !== "darwin") $timeBar.html(timeGot);
                 else $timeBarMacOS.html(timeGot);//display the current time
             }
 
@@ -645,30 +688,39 @@
             function clock() {
                 nowTime = new Date();
                 tempVariable = nowTime.getTime();
-                if (method == 1) seconds = Math.floor((workTime - tempVariable + startTime) / 1000);
+                if (method === 1) seconds = Math.floor((workTime - tempVariable + startTime) / 1000);
                 else seconds = Math.floor((restTime - tempVariable + startTime) / 1000);
                 if (seconds > 0) {
-                    if (method == 1) {
+                    if (method === 1) {
                         progress = ((seconds / workTime) * 1000).toFixed(2);
                     } else {
                         progress = ((seconds / restTime) * 1000).toFixed(2);
                     }
 
-                    if (shouldNap && method == 1) {
+                    if (shouldNap && method === 1) {
                         if (lastNapSecond - seconds > napInterval) {
                             lastNapSecond = seconds;
-                            ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
+                            ipc.send("notify", {
+                                title: i18n.__('should-nap-now'),
+                                msg: i18n.__('should-nap-now-msg')
+                            });
                         }
                     }
 
                     hours = Math.floor(seconds / 3600);
                     minutes = Math.floor((seconds - hours * 3600) / 60);
 
-                    if (progress != lastRecordedProgress) {
+                    if (progress !== lastRecordedProgress) {
                         lastRecordedProgress = progress;
                         naturalProgress = Math.round(lastRecordedProgress * 100);
                         ipc.send("progress-bar-set", progress);
-                        if (hasFloating) ipc.send("floating-conversation", { topic: "time-left", val: Math.floor(seconds / 60), percentage: naturalProgress, method: method, isWorking: isClockWorking });
+                        if (hasFloating) ipc.send("floating-conversation", {
+                            topic: "time-left",
+                            val: Math.floor(seconds / 60),
+                            percentage: naturalProgress,
+                            method: method,
+                            isWorking: isClockWorking
+                        });
                         $bottomBar.css("width", naturalProgress + "%");
 
                         ipc.send("tray-time-set", {
@@ -680,27 +732,27 @@
                     seconds -= hours * 3600 + minutes * 60;
                     $nowTiming.text(hours + h + minutes + min + seconds + s);
 
-                    if (hours == 0 && minutes == 0 && seconds < 10) canOpenFloating = false;
+                    if (hours === 0 && minutes === 0 && seconds < 10) canOpenFloating = false;
 
                     timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
-                    if (systemName != "darwin") $timeBar.html(timeGot);
+                    if (systemName !== "darwin") $timeBar.html(timeGot);
                     else $timeBarMacOS.html(timeGot);//display the current time
 
-                    if (lastRecordedHoursLeft != hours) {
+                    if (lastRecordedHoursLeft !== hours) {
                         lastRecordedHoursLeft = hours;
                         timingData.set("last-recorded-hours-left", lastRecordedHoursLeft);
                     }
-                    if (lastRecordedMinutesLeft != minutes) {
+                    if (lastRecordedMinutesLeft !== minutes) {
                         lastRecordedMinutesLeft = minutes;
                         timingData.set("last-recorded-minutes-left", lastRecordedMinutesLeft + 1);
                     }
 
-                    if (minutes == 0 && moreThanOneMin && hours == 0) {
-                        if (store.get("onemintip") != false) {
-                            if ((method == 1 && workTimeFocused == false) || (method == 2 && restTimeFocused == false))
+                    if (minutes === 0 && moreThanOneMin && hours === 0) {
+                        if (store.get("onemintip") !== false) {
+                            if ((method === 1 && workTimeFocused === false) || (method === 2 && restTimeFocused === false))
                                 ipc.send("only-one-min-left");
                             else {
-                                if (store.get("sound") != false) {
+                                if (store.get("sound") !== false) {
                                     player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
                                     player.loop = false;
                                     player.play();

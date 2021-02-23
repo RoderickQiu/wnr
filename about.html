@@ -20,10 +20,11 @@
     <script src="updater.js"></script>
     <div class="d-flex mx-auto text-dark" id="about">
         <div id="controller">
-            <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close" id="close"></i></a>
+            <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close"
+                                                                      id="close"></i></a>
             <script>
                 $('#close').attr('title', i18n.__('close'));
-                if (process.platform == "darwin") $("#controller").css("display", "none");
+                if (process.platform === "darwin") $("#controller").css("display", "none");
             </script>
         </div>
         <div class="container-fluid align-self-center">
@@ -34,7 +35,8 @@
                 <div class="col-8" id="about-content">
                     <h1>wnr</h1>
                     <p class="small text-muted">
-                        <script>document.write(i18n.__('version') + require("./package.json").version);</script> |
+                        <script>document.write(i18n.__('version') + require("./package.json").version);</script>
+                        |
                         <a href="javascript:updateChecker(2)" class="rest underlined">
                             <span id="manually">
                                 <script>document.write(i18n.__('manually-check-for-update'));</script>
@@ -46,20 +48,22 @@
                         <script>document.write(i18n.__('info'));</script>
                     </h3>
                     <p class="small text-muted">&nbsp; (c) <a class="rest"
-                            href="javascript:require('electron').shell.openExternal('https://r-q.name')">Roderick
-                            Qiu</a> and
+                                                              href="javascript:require('electron').shell.openExternal('https://r-q.name')">Roderick
+                        Qiu</a> and
                         Contributors.
                     </p>
                     <p class="small text-muted">
                         <a class="rest"
-                            href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">
-                            <script>document.write(i18n.__('homepage'));</script></a> |
+                           href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">
+                            <script>document.write(i18n.__('homepage'));</script>
+                        </a> |
                         <a class="rest"
-                            href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">
-                            <script>document.write(i18n.__('on-github'));</script></a>
-                        | <a class="rest" href="mailto:scrisqiu@hotmail.com">
-                            <script>document.write(i18n.__('email-to'));</script>
+                           href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">
+                            <script>document.write(i18n.__('on-github'));</script>
                         </a>
+                        | <a class="rest" href="mailto:scrisqiu@hotmail.com">
+                        <script>document.write(i18n.__('email-to'));</script>
+                    </a>
                     </p>
 
                     <h3>
@@ -67,10 +71,11 @@
                     </h3>
                     <ul>
                         <li class="small text-muted">This software follows <a class="rest"
-                                href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/LICENSE')">MPL2.0</a>
-                            License.</li>
+                                                                              href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/LICENSE')">MPL2.0</a>
+                            License.
+                        </li>
                         <li class="small text-muted">To see dependencies' licenses, go to <a class="rest"
-                                href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md')">NOTICE.md</a>.
+                                                                                             href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md')">NOTICE.md</a>.
                         </li>
                     </ul>
                 </div>

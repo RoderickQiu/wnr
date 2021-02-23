@@ -30,7 +30,9 @@
     <script>
         window.onload = function () {
             $("body").addClass("loaded");
-            setTimeout(function () { $('#loader-wrapper').remove() }, 1000);
+            setTimeout(function () {
+                $('#loader-wrapper').remove()
+            }, 1000);
         }
     </script>
 
@@ -65,12 +67,28 @@
                     + document.getElementById("focus-continueloop-set-onlyrest").checked;
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
-            else if (((document.getElementById("focus-work-set").checked && shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }) > 10) || (document.getElementById("focus-rest-set").checked && shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }) > 10)) && !isForceLongFocus)
+            else if (((document.getElementById("focus-work-set").checked && shi.humanTimeParser($("#work-time").val(), {
+                as: "m",
+                to: "m",
+                ignoreError: true
+            }) > 10) || (document.getElementById("focus-rest-set").checked && shi.humanTimeParser($("#rest-time").val(), {
+                as: "m",
+                to: "m",
+                ignoreError: true
+            }) > 10)) && !isForceLongFocus)
                 ipc.send("force-long-focus-request");
             else
                 window.location.href = "timer.html?title=" + $("#title").val()
-                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
-                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    })
+                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    })
                     + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
                     + "&note=" + $("#note").val()
                     + "&method=1"
@@ -79,14 +97,16 @@
                     + "&restored=false"
                     + "&times=0&continueloop=false";
         }
+
         ipc.on("force-long-focus-granted", function () {
             isForceLongFocus = true;
             keyDownSubmitter();
         });
+
         function keydown(e) {
-            var currKey = 0, e = e || event;
-            if (e.keyCode == 13) keyDownSubmitter();
+            if (e.keyCode === 13) keyDownSubmitter();
         }
+
         document.onkeydown = keydown;
         ipc.on('submitter', function () {
             keyDownSubmitter();
@@ -96,8 +116,9 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
             <div class="dropdown dropdown-default">
-                <a class="dropdown-toggle rest" href="#" role="button" id="controller-dropdown" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                <a class="dropdown-toggle rest" href="#" role="button" id="controller-dropdown"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                     <img src="res/icons/wnrIcon.png" width="18px" />
                 </a>
                 <div class="dropdown-menu" aria-labelledby="controller-dropdown">
@@ -140,10 +161,13 @@
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small rest" id="get-help">
                 <i class="iconfont icon-info" id="helper"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
-                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span id="no-use-space">&nbsp;&nbsp;</span>
+                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span
+                id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
-                    id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i class="iconfont icon-close"
+                                                                               id="window-minimize"></i></a><span
+                class="should-lock">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i
+                    class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
                 $('#controller-dropdown').attr('title', i18n.__('menu'));
@@ -175,7 +199,7 @@
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
-                    class="rest lead text-center" required />
+                       class="rest lead text-center" required />
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
@@ -183,7 +207,8 @@
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
                     &nbsp;
-                    <input id="focus-continueloop-set-onlyrest" type="checkbox" onchange="onlyRestEdgeCaseSolution()" />
+                    <input id="focus-continueloop-set-onlyrest" type="checkbox"
+                           onchange="onlyRestEdgeCaseSolution()" />
                     <span id="continueloop" class="focuser extreme-small rest text-left">
                         <script>document.write(i18n.__('continueloop-part-1') + "<br />" + i18n.__('continueloop-part-2'))</script>
                     </span>
@@ -200,8 +225,9 @@
         </div>
         <div id="set" class="container-fluid">
             <div class="dropdown dropdown-default" id="dropdown-tasks">
-                <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
+                   data-toggle="dropdown"
+                   aria-haspopup="true" aria-expanded="false">
                     <span id="expand-left">
                         <script>document.write(i18n.__('default'));</script>
                     </span>
@@ -213,7 +239,7 @@
                     </div>
                     <div class="dropdown-divider" id="predefined-tasks-divider"></div>
                     <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
-                        href="javascript:call('predefined-tasks')">
+                       href="javascript:call('predefined-tasks')">
                         <span class="text-info underlined">
                             <script>document.write(i18n.__('edit'));</script>
                         </span>
@@ -223,7 +249,7 @@
             <br /><br />
             <div class="align-content-center">
                 <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
-                    required />
+                       required />
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small work">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -241,13 +267,15 @@
             <div class="align-content-center">
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
+                       data-toggle="dropdown"
+                       aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                         <span class="dropdown-default extreme-small">
                             <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
                         </span>
                     </a>
-                    <div class="dropdown-menu p-1" id="dropdown-menu-extend" aria-labelledby="dropdown-extend-button">
+                    <div class="dropdown-menu p-1" id="dropdown-menu-extend"
+                         aria-labelledby="dropdown-extend-button">
                         <p class="extreme-small">&nbsp;</p>
                         <div class="form-group px-2" id="extend-form">
                             <input name="title" id="title" type="text" class="small" maxlength="14" />
@@ -276,8 +304,10 @@
             </script>
         </div>
         <div id="all-sum" class="small font-weight-bold text-muted text-center">
-            <script>document.write(i18n.__('all-sum-part-1'));</script> <span id="all-sum-num">---</span>
-            <script>document.write(i18n.__('all-sum-part-2'));</script> <span id="to-num-h">--</span>:<span
+            <script>document.write(i18n.__('all-sum-part-1'));</script>
+            <span id="all-sum-num">---</span>
+            <script>document.write(i18n.__('all-sum-part-2'));</script>
+            <span id="to-num-h">--</span>:<span
                 id="to-num-min">--</span>
             <div class="extreme-small font-weight-normal" id="focus-notify-box">
                 <br />
@@ -303,7 +333,7 @@
 
     <script>
         isTimerWindow(false);
-        if (process.platform == "darwin") {
+        if (process.platform === "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
         } else {
@@ -327,6 +357,7 @@
             $("#all-sum").hide();
             store.set("introduced-" + require("./update.json").version, true);
         }
+
         function newFeatureClose() {
             $("#new-feature").hide();
             $("#bottom-btn").show();
@@ -339,7 +370,7 @@
         }
 
         function onlyRest(mode) {
-            if (mode == 'in') {
+            if (mode === 'in') {
                 $("#set").hide();
                 $("#set-onlyrest").show();
                 $("#statistics-back").show();
@@ -351,6 +382,7 @@
                 if (onlyrest) window.location.reload();
             }
         }
+
         ipc.on('onlyrest', function () {
             onlyRest("in");
         });
@@ -362,14 +394,16 @@
                 + "&note=" + i18n.__('positive-msg')
                 + "&method=3&work-time-focused=false&rest-time-focused=false&restored=false&times=0&continueloop=false";
         }
+
         ipc.on('positive', function () {
             liberalTiming();
         });
 
-        var timeCount, myDate, h, min, defaultArray;
+        let timeCount, myDate, h, min, defaultArray;
+
         function sumGet(workTimeGet, restTimeGet, loopGet) {
             timeCount = Math.floor((Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet));
-            if (timeCount != NaN) {
+            if (!isNaN(timeCount)) {
                 $("#all-sum-num").html(timeCount);
                 myDate = new Date();
                 h = myDate.getHours() + Number(timeCount / 60);
@@ -381,20 +415,33 @@
                 else $("#to-num-min").html("0" + parseInt(min));
             }
         }
+
         function allSet() {
             try {
                 if (onlyrest) {
-                    var restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true });
+                    let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    });
                     if (!isNaN(restTimeGet))
                         if (restTimeGet > 1 && restTimeGet <= 1440)
                             sumGet(0, restTimeGet, 1);
                         else allClear();
                     else allClear();
                 } else {
-                    var timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-                    var workTimeGet = shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true }),
-                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true }),
-                        loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
+                    let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                    let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    });
+                    let restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    });
+                    let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
                     if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
                         if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
                         else allClear();
@@ -407,6 +454,7 @@
                 allClear();
             }
         }
+
         function allClear() {
             $("#all-sum-num").html("---");
             $("#to-num-h").html("--");
@@ -419,9 +467,9 @@
         }
 
         function focusNotifier() {
-            var workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
-            var restFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : document.getElementById("focus-rest-set").checked;
-            if ((workFocus || restFocus) && (workFocus != restFocus)) {
+            let workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
+            let restFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : document.getElementById("focus-rest-set").checked;
+            if ((workFocus || restFocus) && (workFocus !== restFocus)) {
                 if (workFocus) $("#work-notify").css("display", "inline");
                 else $("#work-notify").css("display", "none");
                 if (restFocus) $("#rest-notify").css("display", "inline");
@@ -457,14 +505,26 @@
 
         function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
             $("#expand-left").html(name);
-            $("#work-time").val(shi.ArabicNumberTimeParser(workTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
-            $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
+            $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
+                as: 'm',
+                lang: store.get("i18n").replace(/-/g, '_'),
+                ignoreError: true
+            }));
+            $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, {
+                as: 'm',
+                lang: store.get("i18n").replace(/-/g, '_'),
+                ignoreError: true
+            }));
             if (loops > 1) $("#loop").val(loops + ' ' + i18n.__('times'));
             else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
 
-            $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, { as: 'm', lang: store.get("i18n").replace(/-/g, '_'), ignoreError: true }));
+            $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, {
+                as: 'm',
+                lang: store.get("i18n").replace(/-/g, '_'),
+                ignoreError: true
+            }));
             document.getElementById("focus-rest-set-onlyrest").checked = focusWhenResting;
 
             allSet();
@@ -472,21 +532,22 @@
 
 
         let currentTime = new Date();
-        if (currentTime.getDay() != store.get("last-time-day-in-week")) {
+        if (currentTime.getDay() !== store.get("last-time-day-in-week")) {
             store.set("last-time-day-in-week", currentTime.getDay());
             store.set("reserved-today-done", []);
         }
         setInterval(reservedTimerInterval, 60000);
         reservedTimerInterval();
+
         function reservedTimerInterval() {
-            var currentTodoTask = null;
+            let currentTodoTask = null;
 
             if (store.has("reserved")) {
                 currentTime = new Date();
                 let reservedArray = store.get("reserved");
                 if (reservedArray.length > 0) {
                     for (var i = 0; i < reservedArray.length; i++) {
-                        if (reservedArray[i].cycle.indexOf(currentTime.getDay() + 1) != -1 || reservedArray[i].cycle.indexOf("0") != -1) {
+                        if (reservedArray[i].cycle.indexOf(String(currentTime.getDay() + 1)) !== -1 || reservedArray[i].cycle.indexOf("0") !== -1) {
                             if (reservedArray[i].time.slice(0, 2) < currentTime.getHours() || (reservedArray[i].time.slice(3, 5) <= currentTime.getMinutes() && reservedArray[i].time.slice(0, 2) < currentTime.getHours())) {
                                 if (!store.get("reserved-today-done").includes(reservedArray[i].id)) {
                                     if (currentTodoTask == null) {
@@ -497,7 +558,7 @@
                                     doneArray.push(reservedArray[i].id);
                                     store.set("reserved-today-done", doneArray);
 
-                                    if (reservedArray[i].cycle.indexOf("0") != -1) {
+                                    if (reservedArray[i].cycle.indexOf("0") !== -1) {
                                         reservedArray.splice(i, 1);//no longer using
                                         store.set("reserved", reservedArray);
                                         store.set("reserved-cnt", store.get("reserved-cnt") - 1);
@@ -515,7 +576,7 @@
                 if (plan.focusWhenWorking && plan.focusWhenResting)
                     ipc.send("alert", i18n.__('all-focus-mode-warn'));
                 else {
-                    if (plan != null)
+                    if (true)
                         window.location.href =
                             "timer.html?title=&work-time=" + plan.workTime
                             + "&rest-time=" + plan.restTime
@@ -530,18 +591,26 @@
 
         defaultArray = store.get("predefined-tasks");
         defaultArray.forEach(function (item, index, array) {
-            if (store.get("default-task") == index) {
+            if (store.get("default-task") === index) {
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
                 if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
-                    (!store.get("just-relaunched")) && (store.get("reserved-cnt") == 0)) {//auto-send the form is autostarttask is on   
+                    (!store.get("just-relaunched")) && (store.get("reserved-cnt") === 0)) {//auto-send the form is autostarttask is on
                     if (item.focusWhenWorking && item.focusWhenResting)
                         ipc.send("alert", i18n.__('all-focus-mode-warn'));
                     else
                         window.location.href =
                             "timer.html?title=" + $("#title").val()
-                            + "&work-time=" + shi.humanTimeParser($("#work-time").val(), { as: "m", to: "m", ignoreError: true })
-                            + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), { as: "m", to: "m", ignoreError: true })
+                            + "&work-time=" + shi.humanTimeParser($("#work-time").val(), {
+                                as: "m",
+                                to: "m",
+                                ignoreError: true
+                            })
+                            + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), {
+                                as: "m",
+                                to: "m",
+                                ignoreError: true
+                            })
                             + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
                             + "&note=" + $("#note").val()
                             + "&method=1"
@@ -563,7 +632,7 @@
             if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
                 if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 2)
                     timingData.set("last-recorded-minutes-left", 2);
-                if (timingData.get("last-recorded-state").method == 1) {
+                if (timingData.get("last-recorded-state").method === 1) {
                     window.location.href =
                         "timer.html?title=" + timingData.get("last-recorded-state").title
                         + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
