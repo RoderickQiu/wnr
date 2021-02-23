@@ -598,7 +598,8 @@ ij_coffeescript_use_semicolon_after_statement = false
 ij_coffeescript_var_declaration_wrap = normal
 
 [{*.har,*.jsb2,*.jsb3,*.json,.babelrc,.eslintrc,.prettierrc,.stylelintrc,bowerrc,jest.config}]
-indent_size = 2
+indent_style = tab
+ij_wrap_on_typing = true
 ij_json_keep_blank_lines_in_code = 0
 ij_json_keep_indents_on_empty_lines = false
 ij_json_keep_line_breaks = true
@@ -608,7 +609,7 @@ ij_json_space_before_colon = true
 ij_json_space_before_comma = false
 ij_json_spaces_within_braces = false
 ij_json_spaces_within_brackets = false
-ij_json_wrap_long_lines = false
+ij_json_wrap_long_lines = true
 
 [{*.htm,*.html,*.ng,*.sht,*.shtm,*.shtml}]
 ij_html_add_new_line_before_tags = body,div,p,form,h1,h2,h3

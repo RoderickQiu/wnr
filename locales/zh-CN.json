@@ -306,5 +306,6 @@
 	"task-reservation-time-setting": "任务开始时间：",
 	"task-reservation-cycle": "任务循环设置：",
 	"task-reservation-follow-plan": "依照预设：",
-	"task-reservation-direct-start": "是否直接开始："
+	"task-reservation-start-tip": "开始预设，从",
+	"to": "到"
 }
