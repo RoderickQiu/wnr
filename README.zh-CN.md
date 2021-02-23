@@ -14,7 +14,7 @@
 <p align="center">
     下载地址 <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载</a>（7nzh）
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载</a>
 </p>
 
 <p align="center">
@@ -146,7 +146,7 @@ yarn linux # Linux版本打包
 
 ## 版权和鸣谢
 
-版权所有 (c) 2019-2020 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
+版权所有 (c) 2019-2021 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
 
 使用 **[MPL 2.0 许可证](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)** 进行许可。
 
@@ -190,6 +190,6 @@ yarn linux # Linux版本打包
 
 ### 开发环境
 
-- **node，nodejs，[许可证](https://github.com/nodejs/node/blob/master/LICENSE)**。
+- **node，nodejs，**[**许可证**](https://github.com/nodejs/node/blob/master/LICENSE)。
 - NSIS，Nullsoft，zlib/libpng 许可证。
-- VS Code，microsoft，MIT 许可证。
+- WebStorm，JetBrains，[许可证](https://www.jetbrains.com/legal/#licensing)。
