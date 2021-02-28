@@ -130,12 +130,12 @@ input[type="checkbox"]:checked::after {
 
 input::-webkit-input-placeholder {
     color: #6c757d;
-    transition: color.5s;
+    transition: color .5s;
 }
 
 input:focus::-webkit-input-placeholder, input:hover::-webkit-input-placeholder {
     color: #6c757dc2;
-    transition: color.5s;
+    transition: color .5s;
 }
 
 select {
@@ -143,7 +143,7 @@ select {
     margin-top: 5px;
 }
 
-select>option:focus {
+select > option:focus {
     background-color: #5490ea;
     color: #fefefe;
 }
@@ -777,7 +777,7 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved {
+.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved, #disable-pausing-set-button {
     width: 96px !important;
     font-size: small;
 }

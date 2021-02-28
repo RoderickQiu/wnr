@@ -434,6 +434,8 @@ app.on('ready', () => {
     if (!store.has("reserved-record")) store.set("reserved-record", 0);
     if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
 
+    if (!store.has("disable-pausing-special")) store.set("disable-pausing-special", "all");
+
     store.set("just-launched", true);
 
     if (process.platform === "darwin") {

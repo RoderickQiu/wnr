@@ -283,6 +283,7 @@
 	"onlyrest": "Just Timing",
 	"disable-pausing-setting": "Disable pausing setting: ",
 	"disable-pausing-setting-tip": "If it is enabled, then you will not be able to pause the timer. ",
+	"disable-pausing-set-msg": "Only applied to: ",
 	"pausing-disabled": "Pausing is disabled. ",
 	"is-top-bar-time-setting-on": "Top bar info setting: ",
 	"is-top-bar-time-setting-on-tip": "If it is enabled, then the timer info will be shown on the top bar. ",

@@ -349,7 +349,28 @@ function checkAfterTimeEndSetting() {
     else store.set("no-check-time-end", true);
 }
 
-document.getElementById("disable-pausing-setting").checked = store.get("disable-pausing") === true;
+if (store.get("disable-pausing") === true) {
+    document.getElementById("disable-pausing-setting").checked = true;
+    if (store.get("disable-pausing-special") === "work")
+        $("#disable-pausing-set-button").html(i18n.__('statistics-work-time'));
+    else if (store.get("disable-pausing-special") === "rest")
+        $("#disable-pausing-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-pausing-set-button").html(i18n.__('all-time'));
+} else {
+    document.getElementById("disable-pausing-setting").checked = true;
+    $("#disable-pausing-set").css("display", "none");
+}
+
+function disablePausingSpecialChange(type) {
+    store.set("disable-pausing-special", type);
+    if (type === "work")
+        $("#disable-pausing-set-button").html(i18n.__('statistics-work-time'));
+    else if (type === "rest")
+        $("#disable-pausing-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-pausing-set-button").html(i18n.__('all-time'));
+}
 
 function disablePausingSetting() {
     if (document.getElementById("disable-pausing-setting").checked === true) store.set("disable-pausing", true);

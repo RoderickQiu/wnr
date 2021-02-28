@@ -61,8 +61,7 @@
                 </div>
             </div>
         </div>
-        <div class="settings-sidebar-block lead should-lock" id="languages-sidebar"
-             onclick="settingsGoto('languages')">
+        <div class="settings-sidebar-block lead should-lock" id="languages-sidebar" onclick="settingsGoto('languages')">
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
@@ -170,10 +169,10 @@
                     <span class="text-muted small">
                         <script>
                             document.write(i18n.__('language-contribute-tip-part-1')
-                                + "<a href=\"javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/locales/README.md')\">"
-                                + i18n.__('language-contribute-tip-part-2')
-                                + "</a>"
-                                + i18n.__('feedback-tip-part-4'));
+                                    + "<a href=\"javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/locales/README.md')\">"
+                                    + i18n.__('language-contribute-tip-part-2')
+                                    + "</a>"
+                                    + i18n.__('feedback-tip-part-4'));
                         </script>
                         <br />
                         <b>
@@ -191,8 +190,7 @@
                 <!-- check after time end setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="check-after-time-end-setting" type="checkbox"
-                               onchange="checkAfterTimeEndSetting()"
+                        <input id="check-after-time-end-setting" type="checkbox" onchange="checkAfterTimeEndSetting()"
                                checked />
                     </div>
                     <div class="col-11 text-left">
@@ -219,6 +217,26 @@
                         <br />
                         <span class="text-muted small">
                             <script>document.write(i18n.__('disable-pausing-setting-tip'));</script>
+                            <div id="disable-pausing-set">
+                                <script>document.write(i18n.__('disable-pausing-set-msg'));</script>
+                                <div class="dropdown d-inline">
+                                <a class="btn btn-outline-secondary dropdown-toggle" id="disable-pausing-set-button"
+                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                </a>
+                                <div class="dropdown-menu" id="disable-pausing-set-dropdwon"
+                                     aria-labelledby="disable-pausing-set-button">
+                                <a class='dropdown-item' href='javascript:disablePausingSpecialChange("work")'>
+                                    <script>document.write(i18n.__('statistics-work-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disablePausingSpecialChange("rest")'>
+                                    <script>document.write(i18n.__('statistics-rest-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disablePausingSpecialChange("all")'>
+                                    <script>document.write(i18n.__('all-time'));</script>
+                                </a>
+                                </div>
+                        </div>
+                            </div>
                         </span>
                     </div>
                 </div>
@@ -372,8 +390,7 @@
                 <!-- auto start the default task setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="auto-start-task-setting" type="checkbox"
-                               onchange="autoStartDefaultTaskSetting()" />
+                        <input id="auto-start-task-setting" type="checkbox" onchange="autoStartDefaultTaskSetting()" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -485,7 +502,7 @@
                             <label>
                                 <script>
                                     document.write('<span class="text-muted">' + i18n.__('locker-settings-tip-part-1') + i18n.__('locker-settings-tip-part-2') + '</span><br />' + i18n.__('locker-settings-tip-part-3') + '<span class="font-weight-bold rest"> '
-                                        + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
+                                            + (store.get('islocked') ? i18n.__('on') : i18n.__('off')) + '</span>' + i18n.__('period-symbol'));
                                 </script>
                             </label>
                             <br />
@@ -659,31 +676,26 @@
                     <!-- personalization for notification -->
                     <li>
                         <script>document.write(i18n.__('personalization-notification'));</script>
-                        <br /><label id="work-time-end"
-                                     class="personalization-notification-label text-muted"></label>
+                        <br /><label id="work-time-end" class="personalization-notification-label text-muted"></label>
                         <input name="work-time-end" class="personalization-notification" type="text" maxlength="64"
                                onchange="personalizedNotification()" />
                         <br /><label id="work-time-end-msg"
                                      class="personalization-notification-label text-muted"></label>
-                        <input name="work-time-end-msg" class="personalization-notification" type="text"
-                               maxlength="64"
+                        <input name="work-time-end-msg" class="personalization-notification" type="text" maxlength="64"
                                onchange="personalizedNotification()" />
-                        <br /><label id="rest-time-end"
-                                     class="personalization-notification-label text-muted"></label>
+                        <br /><label id="rest-time-end" class="personalization-notification-label text-muted"></label>
                         <input name="rest-time-end" type="text" class="personalization-notification" maxlength="64"
                                onchange="personalizedNotification()" />
                         <br /><label id="rest-time-end-msg"
                                      class="personalization-notification-label text-muted"></label>
-                        <input name="rest-time-end-msg" class="personalization-notification" type="text"
-                               maxlength="64"
+                        <input name="rest-time-end-msg" class="personalization-notification" type="text" maxlength="64"
                                onchange="personalizedNotification()" />
                         <br /><label id="all-task-end" class="personalization-notification-label text-muted"></label>
                         <input name="all-task-end" class="personalization-notification" type="text" maxlength="64"
                                onchange="personalizedNotification()" />
                         <br /><label id="all-task-end-msg"
                                      class="personalization-notification-label text-muted"></label>
-                        <input name="all-task-end-msg" class="personalization-notification" type="text"
-                               maxlength="64"
+                        <input name="all-task-end-msg" class="personalization-notification" type="text" maxlength="64"
                                onchange="personalizedNotification()" />
                         <br />
                         <script>
@@ -694,7 +706,7 @@
                             });
                             $(".personalization-notification-label").each(function () {
                                 $(this).text(i18n.__('personalization-notification-label-begin') +
-                                    i18n.__($(this).attr("id")) + i18n.__('personalization-notification-label-end'));
+                                        i18n.__($(this).attr("id")) + i18n.__('personalization-notification-label-end'));
                             });
                         </script>
                         <p class="small text-muted">
@@ -733,8 +745,7 @@
                             <script>document.write(i18n.__("personalization-notify-sound-msg-all-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle"
-                               id="all-time-end-sound-dropdown-button"
+                            <a class="btn btn-outline-secondary dropdown-toggle" id="all-time-end-sound-dropdown-button"
                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             </a>
                             <div class="dropdown-menu" id="all-time-end-sound-select"

@@ -86,13 +86,13 @@
             </div>
             <div id="fullscreen-experience-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-experience-tip') +
-                    '<br /><a href="javascript:mistakeResolver()" class="rest">' +
-                    i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
             <div id="fullscreen-too-long-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-too-long-tip') +
-                    '<br /><a href="javascript:mistakeResolver()" class="rest">' +
-                    i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
+                        '<br /><a href="javascript:mistakeResolver()" class="rest">' +
+                        i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
             <script>
                 $('#passcode-rechecker').attr('placeholder', i18n.__('quit-from-timer-in-lock-mode-msg'));
@@ -137,8 +137,8 @@
             $("#time-bar").remove();
             $("#time-bar-macos").remove();
         }
-        if (store.get('disable-pausing') === true) {
-            $("#stopper").remove();
+        if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
+            $("#stopper").css("display", "none");
         }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
@@ -246,24 +246,24 @@
         })();
 
         var title = decodeURI($_GET['title']),
-            note = decodeURI($_GET['note']),
-            workTime = decodeURI($_GET['work-time']) * 60000,
-            restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
-            loop = Number(decodeURI($_GET['loop'])),
-            workTimeFocused = (decodeURI($_GET['work-time-focused']) !== "false"),
-            restTimeFocused = (decodeURI($_GET['rest-time-focused']) !== "false"),
-            restored = (decodeURI($_GET['restored']) !== "false"),
-            times = (isNaN(Number(decodeURI($_GET['times'])))) ? 0 : Number(decodeURI($_GET['times'])),
-            methodFromStart = Number(decodeURI($_GET['method'])),
-            continueLoop = (decodeURI($_GET['continueloop']) !== "false"),
-            h = i18n.__('h'),
-            min = i18n.__('min'),
-            s = i18n.__('s'),
-            player = document.createElement("audio"),//alert player
-            stopperTimeout = null,
-            pausingTimeout = null;
+                note = decodeURI($_GET['note']),
+                workTime = decodeURI($_GET['work-time']) * 60000,
+                restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
+                loop = Number(decodeURI($_GET['loop'])),
+                workTimeFocused = (decodeURI($_GET['work-time-focused']) !== "false"),
+                restTimeFocused = (decodeURI($_GET['rest-time-focused']) !== "false"),
+                restored = (decodeURI($_GET['restored']) !== "false"),
+                times = (isNaN(Number(decodeURI($_GET['times'])))) ? 0 : Number(decodeURI($_GET['times'])),
+                methodFromStart = Number(decodeURI($_GET['method'])),
+                continueLoop = (decodeURI($_GET['continueloop']) !== "false"),
+                h = i18n.__('h'),
+                min = i18n.__('min'),
+                s = i18n.__('s'),
+                player = document.createElement("audio"),//alert player
+                stopperTimeout = null,
+                pausingTimeout = null;
 
-        ipc.send('focus-mode-settings', {workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused});
+        ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
         if (restored && methodFromStart === 2) times--;//workaround: method = 2 causes an extra skipper()
 
@@ -281,7 +281,7 @@
         timingData.set("last-recorded-times-left", times);
 
         let $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"),
-            $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
+                $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
         //method = 3 means liberal / positive timer
         if (methodFromStart === 3) {
@@ -348,26 +348,26 @@
 
             //method: 1-work / 2-rest, moreThanOneMin: more than 1 min left
             var startTime,
-                int,
-                tempVariable,
-                nowTime,
-                timeGot,
-                seconds,
-                minutes,
-                hours,
-                method = 1,
-                isClockWorking = 1,
-                moreThanOneMin = (method === 1 && workTime > 60000) ? 1 : 0,
-                lastRecordedMinutesLeft = -1,
-                lastRecordedHoursLeft = -1,
-                systemName = process.platform,
-                progress = 0.00,
-                lastRecordedProgress = 0.00,
-                wasCounting = true,
-                shouldNap,
-                napInterval = 0,
-                lastNapSecond = 0,
-                canStop = true;
+                    int,
+                    tempVariable,
+                    nowTime,
+                    timeGot,
+                    seconds,
+                    minutes,
+                    hours,
+                    method = 1,
+                    isClockWorking = 1,
+                    moreThanOneMin = (method === 1 && workTime > 60000) ? 1 : 0,
+                    lastRecordedMinutesLeft = -1,
+                    lastRecordedHoursLeft = -1,
+                    systemName = process.platform,
+                    progress = 0.00,
+                    lastRecordedProgress = 0.00,
+                    wasCounting = true,
+                    shouldNap,
+                    napInterval = 0,
+                    lastNapSecond = 0,
+                    canStop = true;
 
             if (store.get("nap") || methodFromStart === 3) {
                 shouldNap = true;
@@ -390,11 +390,11 @@
 
             ipc.on('start-or-stop', function () {
                 if (canStop) {
-                    if (store.get("disable-pausing") === true)
+                    if (store.get("disable-pausing") === true && ((store.get("disable-pausing-special") === "work" && method === 1) || (store.get("disable-pausing-special") === "rest" && method === 2) || store.get("disable-pausing-special") === "all"))
                         ipc.send("alert", i18n.__('pausing-disabled'));
                     else {
                         stopper();
-                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
                     }
                 }
             });
@@ -403,13 +403,13 @@
                 if (message === "start") {
                     if ((!isClockWorking) && (wasCounting)) {
                         stopper();
-                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
                         wasCounting = !wasCounting;
                     }
                 } else if (message === "stop") {
                     if (isClockWorking && wasCounting) {
                         stopper();
-                        ipc.send("floating-conversation", {topic: "stop-sync", val: isClockWorking});
+                        ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
                         wasCounting = !wasCounting;
                     }
                 }
@@ -497,6 +497,9 @@
 
             function themeChanger() {
                 if (method === 1) {
+                    if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "rest" || store.get("disable-pausing-special") === "all")) {
+                        $("#stopper").css("display", "none");
+                    } else $("#stopper").css("display", "block");
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
@@ -538,11 +541,14 @@
                     }
                     warningGiver(1);
                 } else {
+                    if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
+                        $("#stopper").css("display", "none");
+                    } else $("#stopper").css("display", "block");
                     $("#only-one").css("display", "none");
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html(i18n.__('working'));
-                    $bottomBar.css("background-color", "#ea545499");
+                    $bottomBar.css("background-color", "rgba(234,84,84,0.6)");
                     method = 1;
                     timingData.set("last-recorded-state.method", 1);
                     if (systemName !== "darwin") $("#controller").css("display", "block");
@@ -662,7 +668,7 @@
 
                 if (seconds - lastNapSecond > napInterval) {
                     lastNapSecond = seconds;
-                    ipc.send("notify", {title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg')});
+                    ipc.send("notify", { title: i18n.__('should-nap-now'), msg: i18n.__('should-nap-now-msg') });
                 }
 
                 hours = Math.floor(seconds / 3600);
