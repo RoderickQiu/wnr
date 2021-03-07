@@ -218,7 +218,10 @@
             timingData.set("last-recorded-minutes-left", -1);
             timingData.set("last-recorded-hours-left", -1);
             if (!isClockWorking) {
-                stopper();
+                try {
+                    stopper();
+                } catch {
+                }
                 setTimeout(function () {
                     window.location.href = "index.html";
                 }, 500);
