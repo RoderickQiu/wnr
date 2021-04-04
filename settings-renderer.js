@@ -360,7 +360,7 @@ if (store.get("disable-pausing") === true) {
     else
         $("#disable-pausing-set-button").html(i18n.__('all-time'));
 } else {
-    document.getElementById("disable-pausing-setting").checked = true;
+    document.getElementById("disable-pausing-setting").checked = false;
     $("#disable-pausing-set").css("display", "none");
 }
 
@@ -375,8 +375,13 @@ function disablePausingSpecialChange(type) {
 }
 
 function disablePausingSetting() {
-    if (document.getElementById("disable-pausing-setting").checked === true) store.set("disable-pausing", true);
-    else store.set("disable-pausing", false);
+    if (document.getElementById("disable-pausing-setting").checked === true) {
+        store.set("disable-pausing", true);
+        $("#disable-pausing-set").css("display", "inline-block");
+    } else {
+        store.set("disable-pausing", false);
+        $("#disable-pausing-set").css("display", "none");
+    }
 }
 
 document.getElementById("still-count-setting").checked = store.get("should-stop-locked") === true;
