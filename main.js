@@ -1810,7 +1810,7 @@ ipcMain.on('locker-passcode', function (event, message) {
     if (settingsWin != null)
         dialog.showMessageBox(settingsWin, {
             title: " wnr",
-            message: i18n.__('locker-settings'),
+            message: i18n.__('locker'),
             type: "warning",
             detail: lockerMessage
         }).then(function () {

@@ -536,6 +536,17 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
+
+#logo-bar .dropdown-menu {
+    margin-top: 6px;
+    transform: translate(4px, 36px) !important;
+    padding: .36em 0;
+}
+
+#logo-bar .dropdown-menu .extreme-small {
+    margin: 0;
+}
+
 #work-rest, #now-timing {
     -webkit-user-select: none;
 }
