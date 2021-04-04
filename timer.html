@@ -129,6 +129,7 @@
     </script>
 
     <script>
+        store.set("just-back", false);
         if (process.platform === "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
@@ -202,6 +203,7 @@
 
         function backRelauncher() {
             call('floating-destroy');
+            store.set("just-back", true);
             timingData.set("last-recorded-minutes-left", -1);
             timingData.set("last-recorded-hours-left", -1);
             store.set("fullscreen-experience", true);
@@ -215,6 +217,7 @@
 
         function backer() {
             call('floating-destroy');
+            store.set("just-back", true);
             timingData.set("last-recorded-minutes-left", -1);
             timingData.set("last-recorded-hours-left", -1);
             if (!isClockWorking) {

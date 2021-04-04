@@ -379,6 +379,7 @@
                 allSet();
                 $("#rest-time-onlyrest").focus();
             } else {
+                store.set("just-back", true);
                 if (onlyrest) window.location.reload();
             }
         }
@@ -398,6 +399,21 @@
         ipc.on('positive', function () {
             liberalTiming();
         });
+
+        //switch default page to other pages
+        if (!store.get("just-back"))
+            switch (store.get("default-page")) {
+                case "1":
+                    break;
+                case "2":
+                    liberalTiming();
+                    break;
+                case "3":
+                    onlyRest('in');
+                    break;
+                default:
+                    break;
+            }
 
         let timeCount, myDate, h, min, defaultArray;
 

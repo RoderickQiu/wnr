@@ -526,6 +526,34 @@
                         </div>
                     </li>
                     <li class="should-lock">
+                        <script>document.write(i18n.__('default-page'));</script>
+                        <br />
+                        <div class="dropdown">
+                            <a class="btn btn-outline-secondary dropdown-toggle" id="default-page-dropdown-button"
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            </a>
+                            <div class="dropdown-menu" id="default-page-select"
+                                 aria-labelledby="default-page-dropdown-button">
+                            </div>
+                        </div>
+                        <span class="text-muted small">
+                        <script>
+                            document.write(i18n.__('default-page-tip'));
+
+                            for (var i = 1; i <= 3; i++) {
+                                $("#default-page-select").append("\
+            <a class='dropdown-item' href='javascript:defaultPageSetting(\"" + String(i) + "\")'>"
+                                        + i18n.__('default-page-sel-' + String(i)) + "</a>");
+                            }
+                            if (store.has("default-page")) {
+                                $("#default-page-dropdown-button").text(i18n.__('default-page-sel-' + store.get("default-page")));
+                            } else {
+                                $("#default-page-dropdown-button").text(i18n.__('default-page-sel-1'));
+                            }
+                        </script>
+                    </span>
+                    </li>
+                    <li class="should-lock">
                         <script>document.write(i18n.__('task-reservation'));</script>
                         <div class="small text-muted">
                             <label class="text-muted">

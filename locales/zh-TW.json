@@ -308,5 +308,10 @@
 	"task-reservation-cycle": "任務循環設置：",
 	"task-reservation-follow-plan": "依照預設：",
 	"task-reservation-start-tip": "開始預設，從",
-	"to": "到"
+	"to": "到",
+	"default-page": "默認打開頁面設置：",
+	"default-page-tip": "選擇默認打開普通計時模式、正計時模式還是單純計時模式。",
+	"default-page-sel-1": "普通計時",
+	"default-page-sel-2": "正計時",
+	"default-page-sel-3": "單純計時"
 }

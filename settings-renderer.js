@@ -3,6 +3,8 @@ let timeOut = null;//temporary variable
 //settings page router
 settingsGoto(store.get("settings-goto"));
 
+store.set("just-back", false);
+
 function settingsGoto(mask) {
     if (mask === "locker") {
         $("#settings-helper a").attr("href", "javascript:getHelp('settings/4-lock-mode-settings')");
@@ -503,6 +505,13 @@ function reservedEdit(index) {
     reservedArray[index].endTime = endTimeHourPart + ":" + endTimeMinutePart;
 
     store.set("reserved", reservedArray);
+}
+
+function defaultPageSetting(val) {
+    if (store.get('default-page') !== String(val)) {
+        store.set("default-page", String(val));
+        $("#default-page-dropdown-button").text(i18n.__('default-page-sel-' + String(val)));
+    }
 }
 
 //other things

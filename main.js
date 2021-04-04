@@ -307,6 +307,7 @@ function touchBarSolution(mode) {
 
 //before quit
 app.on('will-quit', () => {
+    store.set("just-back", false);
     globalShortcut.unregisterAll();
     if (tray != null) {
         tray.destroy();
