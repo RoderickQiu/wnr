@@ -554,6 +554,7 @@ li input:nth-last-child(4)::after {
 #all-sum {
     position: absolute;
     bottom: 60px;
+    z-index: -9999;
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;

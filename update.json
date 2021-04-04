@@ -1,27 +1,24 @@
 {
-	"version": "1.22.0",
+	"version": "1.22.1",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"添加了预设任务功能。",
-			"添加了只对休息或工作时禁止暂停的功能。",
-			"重新设计了MacOS上的图标，使之符合最新规范。",
-			"优化了其它数个功能。",
-			"由于我比预想中更忙，一些预定要上线的功能暂时还没做。"
+			"添加了置换首页的功能。",
+			"修复了几个工作不正常的设置项。",
+			"将最短时间缩短至5秒。",
+			"还进行了一些其它优化。"
 		],
 		"zh-TW": [
-			"添加了預設任務功能。",
-			"添加了只對休息或工作時禁止暫停的功能。",
-			"重新設計了MacOS上的圖標，使之符合最新規範。",
-			"優化了其它數個功能。",
-			"由于我比預想中更忙，一些預定要上線的功能暫時還沒做。"
+			"添加了置換首頁的功能。",
+			"修復了幾個工作不正常的設置項。",
+			"將最短時間縮短至5秒。",
+			"還進行了一些其它優化。"
 		],
 		"en": [
-			"Add reserved tasks feature.",
-			"Add setting to only ban pausing when working or resting.",
-			"Redesigned icon on macOS to follow Big Sur rules.",
-			"Optimized & bugs fixed.",
-			"Because I was actually buuuussssy recently, some granted features hadn't been finished."
+			"Add change default page feature.",
+			"Fix some settings items that were malfunctioning.",
+			"Change the minimum period length from 12s to 5s.",
+			"Optimized & bugs fixed."
 		]
 	},
 	"introduce": {
