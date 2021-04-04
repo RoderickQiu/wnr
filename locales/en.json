@@ -38,7 +38,7 @@
 	"tip": "Press Enter to submit",
 	"back-index": "Give up the schedule & Back",
 	"skipper": "Skip current timer",
-	"not-enough": "Some information wasn't given or the time is less than 12 seconds, so the timer cannot start.",
+	"not-enough": "Some items weren't set or the time is less than 5s, so the timer cannot start.",
 	"too-long": "The time is too long. Please make it less than a day.",
 	"back": "Back",
 	"ended": "End!",
