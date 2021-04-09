@@ -107,7 +107,7 @@ function settingsGoto(mask) {
 
 //defaults settings
 let defaultArray = store.get("predefined-tasks");
-let newItem = {
+const newItem = {
     name: "new item",
     workTime: 30,
     restTime: 10,
@@ -166,6 +166,8 @@ function planAdd() {
     defaultArray.push(newItem);
     store.set("predefined-tasks", defaultArray);
     planAppend(newItem, defaultArray.length - 1);
+    store.set("settings-goto", "predefined-tasks");
+    location.reload();
 }
 
 function setAsDefault(index) {

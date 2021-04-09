@@ -353,6 +353,14 @@ li input:nth-last-child(4)::after {
     text-align: left;
 }
 
+#dropdown-menu-menu {
+    padding-top: 16px;
+    padding-left: 4px;
+    padding-bottom: 0 !important;
+    max-height: 180px;
+    overflow: scroll;
+}
+
 #dropdown-menu-button #expand-right {
     text-align: right;
     display: inline-block;

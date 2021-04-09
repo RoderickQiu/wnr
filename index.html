@@ -552,7 +552,7 @@
             store.set("last-time-day-in-week", currentTime.getDay());
             store.set("reserved-today-done", []);
         }
-        setInterval(reservedTimerInterval, 60000);
+        setInterval(reservedTimerInterval, 30000);
         reservedTimerInterval();
 
         function reservedTimerInterval() {
