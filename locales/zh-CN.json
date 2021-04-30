@@ -313,5 +313,6 @@
 	"default-page-tip": "选择默认打开普通计时模式、正计时模式还是单纯计时模式。",
 	"default-page-sel-1": "普通计时",
 	"default-page-sel-2": "正计时",
-	"default-page-sel-3": "单纯计时"
+	"default-page-sel-3": "单纯计时",
+	"already-paused": "暂停"
 }

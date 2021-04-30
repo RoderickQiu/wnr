@@ -52,15 +52,16 @@
             <div id="title" class="text-center h4"></div>
             <div id="notes" class="text-center small text-muted"></div>
             <br />
-            <div id="time-cnt" class="text-center small text-muted"></div>
-            <br />
+            <span id="time-cnt" class="text-center small text-muted"></span>
+            <span id="stop-count" class="text-center small text-muted"></span>
+            <br /><br />
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
             </div>
             <br />
             <div id="now-timing" class="text-center h1 work"></div>
             <br />
-            <div class="text-center"><a id="stopper" href="javascript:stopper()" class="text-muted"><i
+            <div class="text-center"><a id="stopper" href="javascript:stopAndCount()" class="text-muted"><i
                     class="iconfont icon-pause"></i></a></div>
             <br />
             <div class="text-center text-muted" id="more-options">
@@ -373,7 +374,8 @@
                     shouldNap,
                     napInterval = 0,
                     lastNapSecond = 0,
-                    canStop = true;
+                    canStop = true,
+                    stopCounter = 0;
 
             if (store.get("nap") || methodFromStart === 3) {
                 shouldNap = true;
@@ -428,6 +430,12 @@
                 else if (message === "enter") floatingOpener();
                 else if (message === "closed") hasFloating = false;
             });
+
+            function stopAndCount() {
+                stopper();
+                if (!wasCounting) stopCounter++;
+                if (stopCounter) $("#stop-count").text(" | " + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
+            }
 
             function stopper() {
                 wasCounting = !wasCounting;

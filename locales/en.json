@@ -317,5 +317,6 @@
 	"default-page-tip": "Select whether you want to see the normal timer page, the interference-free mode page or the liberal timing mode page when wnr starts. ",
 	"default-page-sel-1": "Normal Timer",
 	"default-page-sel-2": "Liberal Timing",
-	"default-page-sel-3": "Interference-Free"
+	"default-page-sel-3": "Interference-Free",
+	"already-paused": "paused"
 }
