@@ -122,9 +122,9 @@ if (store.has("default-task")) setAsDefault(store.get("default-task"));
 
 function planEdit(index) {
     defaultArray[index].name = $("#title" + index).val();
-    if (!isNaN(Number($("#work-time" + index).val())) && Number($("#work-time" + index).val()) >= 0.2) defaultArray[index].workTime = $("#work-time" + index).val();
+    if (!isNaN(Number($("#work-time" + index).val())) && Number($("#work-time" + index).val()) >= 0.083) defaultArray[index].workTime = $("#work-time" + index).val();
     else $("#work-time" + index).val(defaultArray[index].workTime);
-    if (!isNaN(Number($("#rest-time" + index).val())) && Number($("#rest-time" + index).val()) >= 0.2) defaultArray[index].restTime = $("#rest-time" + index).val();
+    if (!isNaN(Number($("#rest-time" + index).val())) && Number($("#rest-time" + index).val()) >= 0.083) defaultArray[index].restTime = $("#rest-time" + index).val();
     else $("#rest-time" + index).val(defaultArray[index].restTime);
     if (!isNaN(Number($("#loops" + index).val())) && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
     else $("#loops" + index).val(defaultArray[index].loops);
