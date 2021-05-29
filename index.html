@@ -415,20 +415,25 @@
                     break;
             }
 
-        let timeCount, myDate, h, min, defaultArray;
-
         function sumGet(workTimeGet, restTimeGet, loopGet) {
-            timeCount = Math.floor((Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet));
+            // the unit is minute
+            let timeCount = (Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet);
             if (!isNaN(timeCount)) {
-                $("#all-sum-num").html(timeCount);
-                myDate = new Date();
-                h = myDate.getHours() + Number(timeCount / 60);
-                min = myDate.getMinutes() + timeCount % 60;
-                if (min >= 60) min -= 60, h++;
-                while (h >= 24) h -= 24;
-                $("#to-num-h").html(parseInt(h));
-                if (min >= 10) $("#to-num-min").html(parseInt(min));
-                else $("#to-num-min").html("0" + parseInt(min));
+                let timeCountString = timeCount.toFixed(1);
+                // strip ".0"
+                if (timeCountString[timeCountString.length - 1] === "0") {
+                    timeCountString = timeCountString.slice(0, timeCountString.length - 2)
+                }
+                $("#all-sum-num").html(timeCountString);
+                let myDate = new Date();
+                // hours and minutes increase automatically
+                myDate.setSeconds(myDate.getSeconds() + Number(timeCount * 60));
+                $("#to-num-h").html(myDate.getHours());
+                let minuteString = myDate.getMinutes().toString();
+                if (minuteString.length < 2) {
+                    minuteString = "0" + minuteString;
+                }
+                $("#to-num-min").html(minuteString);
             }
         }
 
@@ -441,7 +446,7 @@
                         ignoreError: true
                     });
                     if (!isNaN(restTimeGet))
-                        if (restTimeGet > 1 && restTimeGet <= 1440)
+                        if (restTimeGet > 0 && restTimeGet <= 1440)
                             sumGet(0, restTimeGet, 1);
                         else allClear();
                     else allClear();
@@ -458,7 +463,7 @@
                         ignoreError: true
                     });
                     let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 1 && restTimeGet > 1 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
+                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
                         if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
                         else allClear();
                     } else {
@@ -605,8 +610,7 @@
             }
         }
 
-        defaultArray = store.get("predefined-tasks");
-        defaultArray.forEach(function (item, index, array) {
+        store.get("predefined-tasks").forEach(function (item, index, array) {
             if (store.get("default-task") === index) {
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
                 if (store.get("infinity")) infinityMode();
