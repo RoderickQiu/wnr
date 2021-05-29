@@ -302,7 +302,7 @@
             timingData.set("last-recorded-times-left", 0);
         }
 
-        if ((loop < 1 && loop !== 0) || (workTime < 5000) || (restTime < 5000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
+        if ((loop !== Math.floor(loop)) || (loop < 1 && loop !== 0) || (workTime < 5000) || (restTime < 5000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
             timingData.set("last-recorded-times-left", 0);
