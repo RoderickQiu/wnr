@@ -14,7 +14,7 @@
 <p align="center">
     下載地址 <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度網盤</a>（swh3） | <a href="https://www.lanzous.com/b01n0tb4j">藍奏雲高速下載</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度網盤</a>（swh3） | <a href="https://scris.lanzoui.com/b01n0tb4j">藍奏雲高速下載</a>
 </p>
 
 <p align="center">

@@ -14,7 +14,7 @@
 <p align="center">
     Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://www.lanzous.com/b01n0tb4j">蓝奏云高速下载</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
 </p>
 
 <p align="center">
@@ -40,7 +40,8 @@
 
 - multi-platforms support *(currently Windows & macOS)*
 
-- multi-languages support *(you can help to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
+- multi-languages support *(you can help
+  to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
 
 - multi-monitor support
 
@@ -100,17 +101,20 @@ This application is being frequently updated, so does this list.
 
 - Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
 
-- Need Help: [Go to Help Page](https://getwnr.com/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com).
+- Need Help: [Go to Help Page](https://getwnr.com/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com)
+  .
 
 ## Contributing
 
 I appreciate it if you can help contribute.
 
-- If you have any feature requests / bugs to report, feel free to [have a issue](https://github.com/RoderickQiu/wnr/issues/new).
+- If you have any feature requests / bugs to report, feel free
+  to [have a issue](https://github.com/RoderickQiu/wnr/issues/new).
 
 - If you have done something brilliant, then [go for a pull request](https://github.com/RoderickQiu/wnr/pulls).
 
-- If you want to add a new language to wnr, [see this guide first](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md).
+- If you want to add a new language to
+  wnr, [see this guide first](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md).
 
 ## To-do List
 
@@ -142,7 +146,8 @@ Please note that:
 
 - Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
 
-For more info about development, go to [**DEVELOPMENT_GUIDE**](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md).
+For more info about development, go to [**
+DEVELOPMENT_GUIDE**](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md).
 
 ## Copyright & Credit
 
@@ -154,7 +159,8 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 
 #### Main Program
 
-For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which is also included in every copy of wnr.
+For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which
+is also included in every copy of wnr.
 
 - node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
 - cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
@@ -181,7 +187,8 @@ For the full text of licenses, go and see [this file](https://github.com/Roderic
 - schart.js, lin-xin, MIT License.
 - cross-env, kentcdodds, MIT License.
 
-#### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
+#### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided
+with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
 
 - **vuepress, vuejs, MIT License**.
 - vuepress-plugin-sitemap, ekoeryanto, MIT License.
