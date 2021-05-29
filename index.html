@@ -415,9 +415,8 @@
                     break;
             }
 
-        function sumGet(workTimeGet, restTimeGet, loopGet) {
-            // the unit is minute
-            let timeCount = (Number(workTimeGet) + Number(restTimeGet)) * Number(loopGet);
+        function sumGet(timeCount) {
+            // the unit of timeCount is minute
             if (!isNaN(timeCount)) {
                 let timeCountString = timeCount.toFixed(1);
                 // strip ".0"
@@ -447,7 +446,7 @@
                     });
                     if (!isNaN(restTimeGet))
                         if (restTimeGet > 0 && restTimeGet <= 1440)
-                            sumGet(0, restTimeGet, 1);
+                            sumGet(restTimeGet);
                         else allClear();
                     else allClear();
                 } else {
@@ -463,9 +462,8 @@
                         ignoreError: true
                     });
                     let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440) {
-                        if ((workTimeGet + restTimeGet) * loopGet) sumGet(workTimeGet, restTimeGet, loopGet);
-                        else allClear();
+                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
+                        sumGet((workTimeGet + restTimeGet) * loopGet);
                     } else {
                         allClear();
                     }
