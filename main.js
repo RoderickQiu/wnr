@@ -1495,7 +1495,7 @@ ipcMain.on('update-feedback', function (event, message) {
                     if (index.response === 1) {
                         shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
                     } else if (index.response === 2) {
-                        shell.openExternal("https://www.lanzous.com/b01n0tb4j");
+                        shell.openExternal("https://scris.lanzoui.com/b01n0tb4j");
                     }
                 });
             })
