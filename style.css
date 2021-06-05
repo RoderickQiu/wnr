@@ -606,28 +606,21 @@ li input:nth-last-child(4)::after {
 
 #tourguide {
     position: absolute;
-    width: 72%;
+    width: 80%;
     height: 100%;
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: text;
+    -webkit-app-region: drag;
 }
 
-#tourguide-part-1 {
-    position: absolute;
-    line-height: 1.5;
-    transform: translateX(-50%);
-    left: 50%;
-    top: 25%;
-}
-
-#tourguide-part-2 {
+#tourguide-content {
     position: absolute;
     line-height: 1.5;
     text-align: left;
-    top: 8%;
+    top: 12%;
     border: none;
     outline: none;
+    -webkit-app-region: no-drag;
+    /* let it clickable */
+    -webkit-user-select: text;
 }
 
 #tourguide-img {
@@ -807,12 +800,12 @@ li input:nth-last-child(4)::after {
     margin-top: 10px !important;
 }
 
-.reserved- .tooltip {
+.tipsy {
     font-size: 12px;
     position: absolute;
     padding: 5px;
     z-index: 100000;
-    opacity: .8;
+    opacity: 0.8;
 }
 
 .tipsy-arrow {
@@ -822,7 +815,7 @@ li input:nth-last-child(4)::after {
     line-height: 0;
     border: 6px dashed #000;
     top: 0;
-    left: 20%;
+    left: 25%;
     margin-left: -5px;
     border-bottom-style: solid;
     border-top: 0;
@@ -838,6 +831,7 @@ li input:nth-last-child(4)::after {
     background-color: #6c757dc2;
     color: #FFF;
     max-width: 200px;
+    margin-top: 1px;
     padding: 5px 8px 4px 8px;
     text-align: center;
     border-radius: 3px;

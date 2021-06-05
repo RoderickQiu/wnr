@@ -36,9 +36,9 @@ let titleAlternative = {
                 if (isTitle) {
                     this.myTitle = this.title;
                     this.title = "";
-                    let a = "<div class='tooltip'><div class='tipsy-arrow tipsy-arrow-n'></div><div class='tipsy-inner'>" + this.myTitle + "</div></div>";
+                    let a = "<div class='tipsy'><div class='tipsy-arrow tipsy-arrow-n'></div><div class='tipsy-inner'>" + this.myTitle + "</div></div>";
                     $('body').append(a);
-                    $('.tooltip').css({
+                    $('.tipsy').css({
                         "top": (e.pageY + 24) + "px",
                         "left": (e.pageX - 24) + "px"
                     }).show('fast');
@@ -46,17 +46,22 @@ let titleAlternative = {
             }).mouseout(function () {
                 if (this.myTitle != null) {
                     this.title = this.myTitle;
-                    $('.tooltip').remove()
+                    $('.tipsy').remove()
                 }
             }).mousemove(function (e) {
-                $('.tooltip').css({
+                $('.tipsy').css({
                     "top": (e.pageY + 24) + "px",
                     "left": (e.pageX - 24) + "px"
-                })
+                }).show('fast');
             })
         })
     }
 }
 $(function () {
-    titleAlternative.init()
+    try {
+        if (!isMiniMode)
+            titleAlternative.init();
+    } catch (e) {
+        titleAlternative.init()
+    }
 })//title attr alternative

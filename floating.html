@@ -53,6 +53,7 @@
                 </div>
             </div>
             <script>
+                $('#stopper').attr('title', i18n.__('start-or-stop'));
                 $('#back-index').attr('title', i18n.__('back-index'));
                 $('#skipper').attr('title', i18n.__('skipper'));
                 $('#recover').attr('title', i18n.__('recover'));
@@ -62,6 +63,8 @@
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="floating-bottom-bar">&nbsp;</div>
     <script>
+        var isMiniMode = true;
+
         if (process.platform === "darwin") {
             $("#floating-recover").css("display", "none");
             $("#floating-close").css("display", "none");
