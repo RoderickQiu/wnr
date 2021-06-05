@@ -1,6 +1,6 @@
 {
 	"name": "wnr",
-	"version": "1.22.1",
+	"version": "1.22.2",
 	"description": "Work and rest, with wnr now!",
 	"main": "main.js",
 	"scripts": {

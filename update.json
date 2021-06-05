@@ -1,24 +1,27 @@
 {
-	"version": "1.22.1",
+	"version": "1.22.2",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"添加了置换首页的功能。",
-			"修复了几个工作不正常的设置项。",
-			"将最短时间缩短至5秒。",
-			"还进行了一些其它优化。"
+			"应用内提供的蓝奏云链接已经失效，请前往官网获取最新链接。",
+			"新增暂停计数功能。",
+			"升级到Electron12以提升性能。",
+			"优化了数个功能。",
+			"修复了数个问题。"
 		],
 		"zh-TW": [
-			"添加了置換首頁的功能。",
-			"修復了幾個工作不正常的設置項。",
-			"將最短時間縮短至5秒。",
-			"還進行了一些其它優化。"
+			"应用内提供的蓝奏云链接已经失效，请前往官网获取最新链接。",
+			"新增暂停计数功能。",
+			"升级到Electron12以提升性能。",
+			"优化了数个功能。",
+			"修复了数个问题。"
 		],
 		"en": [
-			"Add change default page feature.",
-			"Fix some settings items that were malfunctioning.",
-			"Change the minimum period length from 12s to 5s.",
-			"Optimized & bugs fixed."
+			"The Chinese server is down, go to the website for the new link.",
+			"Added pause count feature.",
+			"Updated to Electron 12 for better speed.",
+			"Optimized several pages.",
+			"Fixed several bugs."
 		]
 	},
 	"introduce": {
