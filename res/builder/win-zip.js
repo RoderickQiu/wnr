@@ -9,7 +9,8 @@ const config = {
     },
     "win": {
         "asarUnpack": [
-            "./node_modules/node-notifier/vendor/**"
+            "./node_modules/node-notifier/vendor/**",
+            "./res/icons/**"
         ],
         "target": [
             "7z"

@@ -9,16 +9,17 @@ const config = {
     },
     "win": {
         "asarUnpack": [
-            "./node_modules/node-notifier/vendor/**"
+            "./node_modules/node-notifier/vendor/**",
+            "./res/icons/**"
         ],
         "target": [
             "dir"
         ],
         "files": [
-            "**/*",
+            "**/**",
             //! to exclude
-            "!res/icons/*Mac*",
-            "!res/icons/*.psd",
+            "!res/icons/**Mac**",
+            "!res/icons/**.psd",
             "!designs/**"
         ],
         "icon": "res/icons/iconWin.ico"

@@ -723,7 +723,7 @@ function notificationSolution(title, body, func) {
             title: title,
             message: body,
             silent: false,
-            icon: path.join(__dirname, process.platform === "darwin" ? '/res/icons/iconMac.png' : '\\res\\icons\\wnrIcon.png')
+            icon: path.join(__dirname, app.isPackaged ? (process.platform === "darwin" ? '../app.asar.unpacked/res/icons/iconMac.png' : '../app.asar.unpacked/res/icons/wnrIcon.png') : "/res/icons/wnrIcon.png")
         },
         function () {
             if (func === "hide-or-show") {
