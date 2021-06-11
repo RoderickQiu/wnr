@@ -481,27 +481,35 @@
                     }
                     player.loop = true;
                     player.play();
-                    if (store.get("no-check-time-end")) {
+                    if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
+                        $("#skipper").css("display", "none");
                         setTimeout(function () {
                             player.loop = false;
+                            $("#skipper").css("display", "inline");
                         }, 3000);
                         $("#skipper-container").css("display", "inline");
                         if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                         canStop = true;
-                    } else
+                    } else {
+                        setTimeout(function () {
+                            if (isClockWorking) stopper();
+                        }, 1500);
                         setTimeout(function () {
                             player.loop = false;
                         }, 20000);
+                    }
                 }//different sound for different circumstances
                 if (isend === 0) ipc.send('warning-giver-all-task-end');
                 else {
                     if (isend === 1) ipc.send('warning-giver-workend');
                     else ipc.send('warning-giver-restend');
-                    if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
+                    if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end")))
+                        if (!isClockWorking) stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         player.loop = false;
                         player.pause();
-                        stopper();
+
+                        if (!isClockWorking) stopper();
                         $("#skipper-container").css("display", "inline");
                         if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                         canStop = true;
@@ -608,6 +616,7 @@
                 call('floating-destroy');
                 window.clearInterval(int);
                 $("#time-cnt").css("display", "none");
+                $("#stop-count").css("display", "none");
                 $("#only-one").css("display", "none");
                 $("#fullscreen-experience-tip").css("display", "none");
                 $("#work-rest").text("");

@@ -437,6 +437,12 @@ app.on('ready', () => {
 
     if (!store.has("disable-pausing-special")) store.set("disable-pausing-special", "all");
 
+    if (store.has("no-check-time-end")) {
+        store.set("no-check-work-time-end", store.get("no-check-time-end"));
+        store.set("no-check-rest-time-end", store.get("no-check-time-end"));
+        store.delete("no-check-time-end");
+    }
+
     store.set("just-launched", true);
 
     if (process.platform === "darwin") {
@@ -1267,7 +1273,7 @@ function nonFocusSolution() {
     }
 }
 
-function timeEndDialogDispose(mode) {
+function noCheckTimeSolution(mode) {
     if ((mode === "rest" ? workTimeFocused : restTimeFocused) && (!isLoose)) {
         fullScreenProtection = true;
     } else {
@@ -1277,21 +1283,12 @@ function timeEndDialogDispose(mode) {
         }
         if (dockHide) app.dock.hide();
     }
-    win.webContents.send('warning-closed');
     win.maximizable = false;
 }
 
-function noCheckTimeSolution() {
-    if (restTimeFocused && (!isLoose)) {
-        fullScreenProtection = true;
-    } else {
-        if (store.get("top") !== true) {
-            win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-            if (!hasFloating) win.moveTop();
-        }
-        if (dockHide) app.dock.hide();
-    }
-    win.maximizable = false;
+function timeEndDialogDispose(mode) {
+    noCheckTimeSolution(mode);
+    win.webContents.send('warning-closed');
 }
 
 ipcMain.on('warning-giver-workend', function () {
@@ -1312,9 +1309,11 @@ ipcMain.on('warning-giver-workend', function () {
                 (store.has("personalization-notification.work-time-end-msg") ?
                     store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg')), "normal");
         }
-        if (store.get("no-check-time-end")) {
-            noCheckTimeSolution();
-        } else
+
+        if (store.get("no-check-work-time-end")) {
+            noCheckTimeSolution("work");
+            setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+        } else {
             setTimeout(function () {
                 if (process.platform !== "darwin" || (process.platform === "darwin" && restTimeFocused))
                     dialog.showMessageBox(win, {
@@ -1327,6 +1326,7 @@ ipcMain.on('warning-giver-workend', function () {
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("work");
+                        //win.webContents.send("alter-start-stop", "start");
                     });
                 else dialog.showMessageBox({
                     title: " wnr",
@@ -1338,9 +1338,11 @@ ipcMain.on('warning-giver-workend', function () {
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("work");
+                    //win.webContents.send("alter-start-stop", "start");
                     if (hasFloating && (process.platform === "darwin")) win.hide();
                 })
             }, 1500)
+        }
     }
 })
 
@@ -1362,9 +1364,11 @@ ipcMain.on('warning-giver-restend', function () {
                 (store.has("personalization-notification.rest-time-end-msg") ?
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
         }
-        if (store.get("no-check-time-end")) {
-            noCheckTimeSolution();
-        } else
+        win.webContents.send("alter-start-stop", "stop");
+        if (store.get("no-check-rest-time-end")) {
+            noCheckTimeSolution("rest");
+            setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+        } else {
             setTimeout(function () {
                 if (process.platform !== "darwin" || (process.platform === "darwin" && workTimeFocused))
                     dialog.showMessageBox(win, {
@@ -1377,6 +1381,7 @@ ipcMain.on('warning-giver-restend', function () {
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("rest");
+                        //win.webContents.send("alter-start-stop", "start");
                     })
                 else dialog.showMessageBox({
                     title: " wnr",
@@ -1388,8 +1393,11 @@ ipcMain.on('warning-giver-restend', function () {
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("rest");
+                    //win.webContents.send("alter-start-stop", "start");
+                    if (hasFloating && (process.platform === "darwin")) win.hide();
                 })
             }, 1000)
+        }
     }
 })
 

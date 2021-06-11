@@ -346,12 +346,20 @@ function looseSetting() {
     else store.set("loose-mode", false);
 }
 
-document.getElementById("check-after-time-end-setting").checked = store.get("no-check-time-end") !== true;
+document.getElementById("check-after-work-time-end-setting").checked = store.get("no-check-work-time-end") !== true;
 
-function checkAfterTimeEndSetting() {
-    if (document.getElementById("check-after-time-end-setting").checked === true) store.set("no-check-time-end", false);
-    else store.set("no-check-time-end", true);
+function checkAfterWorkTimeEndSetting() {
+    if (document.getElementById("check-after-work-time-end-setting").checked === true) store.set("no-check-work-time-end", false);
+    else store.set("no-check-work-time-end", true);
 }
+
+document.getElementById("check-after-rest-time-end-setting").checked = store.get("no-check-rest-time-end") !== true;
+
+function checkAfterRestTimeEndSetting() {
+    if (document.getElementById("check-after-rest-time-end-setting").checked === true) store.set("no-check-rest-time-end", false);
+    else store.set("no-check-rest-time-end", true);
+}
+
 
 if (store.get("disable-pausing") === true) {
     document.getElementById("disable-pausing-setting").checked = true;

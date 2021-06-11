@@ -187,19 +187,38 @@
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('notification-settings'));</script>
                 </p>
-                <!-- check after time end setting -->
+                <!-- check after work time end setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="check-after-time-end-setting" type="checkbox" onchange="checkAfterTimeEndSetting()"
+                        <input id="check-after-work-time-end-setting" type="checkbox"
+                               onchange="checkAfterWorkTimeEndSetting()"
                                checked />
                     </div>
                     <div class="col-11 text-left">
                         <label>
-                            <script>document.write(i18n.__('check-after-time-end-setting'));</script>
+                            <script>document.write(i18n.__('check-after-work-time-end-setting'));</script>
                         </label>
                         <br />
                         <span class="text-muted small">
-                            <script>document.write(i18n.__('check-after-time-end-setting-tip'));</script>
+                            <script>document.write(i18n.__('check-after-work-time-end-setting-tip'));</script>
+                        </span>
+                    </div>
+                </div>
+                <br />
+                <!-- check after rest time end setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="check-after-rest-time-end-setting" type="checkbox"
+                               onchange="checkAfterRestTimeEndSetting()"
+                               checked />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('check-after-rest-time-end-setting'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('check-after-rest-time-end-setting-tip'));</script>
                         </span>
                     </div>
                 </div>
