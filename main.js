@@ -1366,7 +1366,6 @@ ipcMain.on('warning-giver-restend', function () {
                 (store.has("personalization-notification.rest-time-end-msg") ?
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
         }
-        win.webContents.send("alter-start-stop", "stop");
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
