@@ -297,5 +297,8 @@
 	"default-page-sel-1": "普通計時",
 	"default-page-sel-2": "正計時",
 	"default-page-sel-3": "單純計時",
-	"already-paused": "暫停"
+	"already-paused": "暫停",
+	"external-title": "將標題在專門窗口中顯示，用於提示",
+	"title-edit-msg": "點擊以編輯標題",
+	"notes-edit-msg": "點擊以編輯筆記"
 }

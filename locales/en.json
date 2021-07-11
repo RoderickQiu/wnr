@@ -301,5 +301,8 @@
 	"default-page-sel-1": "Normal Timer",
 	"default-page-sel-2": "Liberal Timing",
 	"default-page-sel-3": "Interference-Free",
-	"already-paused": "paused"
+	"already-paused": "paused",
+	"external-title": "Show title in a seperate window to remind you",
+	"title-edit-msg": "Click to edit title",
+	"notes-edit-msg": "Click to edit notes"
 }

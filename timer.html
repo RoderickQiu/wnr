@@ -49,8 +49,69 @@
             </script>
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
-            <div id="title" class="text-center h4"></div>
-            <div id="notes" class="text-center small text-muted"></div>
+            <input type="text" id="title" class="text-center h4" maxlength="14"
+                   style="transform: translateX(5px); font-size: 0.4rem" />
+            <a href="javascript:openExternalTitleWin()" id="external" class="work"><i
+                    class="iconfont icon-external-link"></i></a><br />
+            <input type="text" id="notes" class="text-center small text-muted" maxlength="39"
+                   style="font-size: 0.4rem" /><br id="notes-space" />
+            <script>
+                function openExternalTitleWin() {
+                    ipc.send("open-external-title-win", { title: $("#title").val(), notes: $("#notes").val() });
+                }
+
+                $("#external").attr('title', i18n.__('external-title'));
+                $("#title").attr('title', i18n.__('title-edit-msg'));
+                $("#notes").attr('title', i18n.__('notes-edit-msg'));
+
+                $("#external").css("display", "none");
+
+                let titleNode = document.getElementById("title");
+                titleNode.addEventListener('input', titleNodeResizer);
+
+                function titleNodeResizer() {
+                    let n = document.createElement('h4');
+                    n.style.display = "inline-block"
+                    n.style.whiteSpace = "pre"
+                    n.style.maxWidth = "100%"
+                    n.innerHTML = titleNode.value;
+                    titleNode.parentNode.insertBefore(n, titleNode.nextSibling);
+                    let spanW = n.getBoundingClientRect().width;
+                    if (spanW < 10) {
+                        spanW = 192;
+                        $("#external").css("display", "none");
+                        $("#title").css("font-size", "0.4rem");
+                    } else {
+                        $("#external").css("display", "inline-block");
+                        $("#title").css("font-size", "1.5rem");
+                    }
+                    titleNode.parentNode.removeChild(n);
+                    titleNode.style.width = spanW + 'px'
+                }
+
+                let notesNode = document.getElementById("notes");
+                notesNode.addEventListener('input', notesNodeResizer);
+
+                function notesNodeResizer() {
+                    let n = document.createElement('span');
+                    n.style.display = "inline-block"
+                    n.style.whiteSpace = "pre"
+                    n.style.maxWidth = "100%"
+                    n.innerHTML = notesNode.value;
+                    notesNode.parentNode.insertBefore(n, notesNode.nextSibling);
+                    let spanW = n.getBoundingClientRect().width;
+                    if (spanW < 5) {
+                        spanW = 300;
+                        $("#notes-space").css("display", "none");
+                        $("#notes").css("font-size", "0.4rem");
+                    } else {
+                        $("#notes-space").css("display", "block");
+                        $("#notes").css("font-size", "inherit");
+                    }
+                    notesNode.parentNode.removeChild(n);
+                    notesNode.style.width = spanW + 'px'
+                }
+            </script>
             <br />
             <span id="time-cnt" class="text-center small text-muted"></span>
             <span id="stop-count" class="text-center small text-muted"></span>
@@ -320,8 +381,14 @@
             document.onkeydown = keydownOnError;
         } else {
             isTimerWindow(true);
-            if (title) $("#title").html(title);
-            if (note) $("#notes").html(note);
+            if (title) {
+                $("#title").val(title);
+                titleNodeResizer();
+            }
+            if (note) {
+                $("#notes").val(note);
+                notesNodeResizer();
+            }
             if (loop === 0 || continueLoop) $("#time-cnt").css("display", "none");
             else $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
             $("#fullscreen-too-long-tip").css("display", "none");

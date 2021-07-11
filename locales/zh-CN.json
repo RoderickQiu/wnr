@@ -297,5 +297,8 @@
 	"default-page-sel-1": "普通计时",
 	"default-page-sel-2": "正计时",
 	"default-page-sel-3": "单纯计时",
-	"already-paused": "暂停"
+	"already-paused": "暂停",
+	"external-title": "将标题在专门窗口中显示，用于提示",
+	"title-edit-msg": "点击以编辑标题",
+	"notes-edit-msg": "点击以编辑笔记"
 }

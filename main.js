@@ -17,7 +17,7 @@ const notifier = require('node-notifier')
 const fetch = require('node-fetch');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
-let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null,
+let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
     tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null,
@@ -31,7 +31,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
     isLoose = false, isScreenLocked = false, isAlarmDialogClosed = true, isShadowless = false,
-    hasFloating = false,
+    hasFloating = false, hasExternalTitle = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
     store = null, styleCache = null, statistics = null, timingData = null;
@@ -60,7 +60,8 @@ function createWindow() {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            spellcheck: false
         },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png"
@@ -217,7 +218,8 @@ function addScreenSolution(windowNumber, display) {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true
+            enableRemoteModule: true,
+            spellcheck: false
         },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png",
@@ -1644,7 +1646,8 @@ function about() {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true
+                    enableRemoteModule: true,
+                    spellcheck: false
                 },
             });
             aboutWin.loadFile("about.html");
@@ -1696,7 +1699,8 @@ function settings(mode) {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true
+                    enableRemoteModule: true,
+                    spellcheck: false
                 },
                 titleBarStyle: "hidden"
             });
@@ -1765,7 +1769,8 @@ function tourguide() {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true
+                    enableRemoteModule: true,
+                    spellcheck: false
                 },
             });
             tourWin.loadFile("tourguide.html");
@@ -1831,6 +1836,74 @@ ipcMain.on('locker-passcode', function (event, message) {
         })
 })
 
+ipcMain.on("open-external-title-win", function (event, message) {
+    let title = message.title, notes = message.notes;
+    externalTitle(title, notes);
+})
+
+ipcMain.on("external-title-resize", function (event, message) {
+    if (externalTitleWin != null) {
+        externalTitleWin.setSize(Math.floor(Number(message)), 84);
+    }
+})
+
+ipcMain.on("external-title-destroy", function () {
+    if (externalTitleWin != null) {
+        hasExternalTitle = false;
+        externalTitleWin.close()
+    }
+})
+
+function externalTitle(title, notes) {
+    if (app.isReady()) {
+        if (win != null) {
+            if (!hasExternalTitle || externalTitleWin == null) {
+                hasExternalTitle = true;
+                externalTitleWin = new BrowserWindow({
+                    width: 160,
+                    height: 84,
+                    x: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").x : 33,
+                    y: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").y : 33,
+                    backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                    maximizable: false,
+                    minimizable: false,
+                    frame: false,
+                    show: false,
+                    center: false,
+                    type: 'toolbar',
+                    titleBarStyle: "customButtonsOnHover",
+                    webPreferences: {
+                        nodeIntegration: true,
+                        webgl: false,
+                        contextIsolation: false,
+                        enableRemoteModule: true,
+                        spellcheck: false
+                    },
+                    skipTaskbar: true
+                });
+                externalTitleWin.loadFile("external-title.html");
+                externalTitleWin.webContents.once('did-finish-load', () => {
+                    externalTitleWin.show();
+                    externalTitleWin.setAlwaysOnTop(true, "pop-up-menu");
+                    externalTitleWin.focus();
+
+                    externalTitleWin.webContents.send('send-title', { title: title, notes: notes });
+                });
+                externalTitleWin.on('closed', () => {
+                    externalTitleWin = null;
+                    hasExternalTitle = false;
+                });
+                externalTitleWin.on('move', () => {
+                    styleCache.set("external-title-axis", {
+                        x: externalTitleWin.getContentBounds().x,
+                        y: externalTitleWin.getContentBounds().y
+                    });
+                })
+            }
+        }
+    }
+}
+
 function floating() {
     if (app.isReady()) {
         if (win != null) {
@@ -1854,7 +1927,8 @@ function floating() {
                         nodeIntegration: true,
                         webgl: false,
                         contextIsolation: false,
-                        enableRemoteModule: true
+                        enableRemoteModule: true,
+                        spellcheck: false
                     },
                     skipTaskbar: true
                 });
@@ -1968,6 +2042,7 @@ ipcMain.on("timer-win", function (event, message) {
             win.focus();
             win.setProgressBar(-1);
         }
+        if (externalTitleWin != null) externalTitleWin.close();
 
         statisticsWriter();
 

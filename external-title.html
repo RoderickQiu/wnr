@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>
+        window.$ = require("jquery/dist/jquery.slim.min.js");
+    </script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="res/fonts/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script src="supporter.js"></script>
+    <div class="d-flex mx-auto text-dark" id="main">
+        <div id="timer" class="justify-content-left align-content-left text-left">
+            <input type="text" id="title" class="h5" maxlength="14" width="100px" /><br />
+            <input type="text" id="notes" class="extreme-small text-muted" maxlength="39" width="100px" /><br
+                id="notes-space" />
+            <div class="extreme-small" id="floating-close">
+                <a href="javascript: call('external-title-destroy')" class="text-muted text-right">
+                    <i class="iconfont icon-close" id="exit"></i>
+                </a>
+            </div>
+            <script>
+                $('#exit').attr('title', i18n.__('exit'));
+            </script>
+        </div>
+    </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
+    <script>
+        if (process.platform === "darwin") {
+            $("#floating-close").css("display", "none");
+        }
+
+        let largerSpanW = 160;
+        let titleNode = document.getElementById("title");
+        titleNode.addEventListener('input', titleNodeResizer);
+
+        function titleNodeResizer() {
+            let n = document.createElement('h5');
+            n.style.display = "inline-block";
+            n.style.whiteSpace = "pre";
+            n.style.maxWidth = "100%";
+            n.innerHTML = titleNode.value;
+            titleNode.parentNode.insertBefore(n, titleNode.nextSibling);
+            let spanW = n.getBoundingClientRect().width;
+            if (spanW < 10) spanW = 100;
+            if (spanW > largerSpanW) {
+                largerSpanW = spanW;
+                ipc.send("external-title-resize", largerSpanW + 16);
+            } else turnSmallerResizer();
+            titleNode.parentNode.removeChild(n);
+            titleNode.style.width = spanW + 'px'
+        }
+
+        let notesNode = document.getElementById("notes");
+        notesNode.addEventListener('input', notesNodeResizer);
+
+        function notesNodeResizer() {
+            let n = document.createElement('span');
+            n.classList.add("extreme-small");
+            n.style.display = "inline-block";
+            n.style.whiteSpace = "pre";
+            n.style.maxWidth = "100%";
+            n.innerHTML = notesNode.value;
+            notesNode.parentNode.insertBefore(n, notesNode.nextSibling);
+            let spanW = n.getBoundingClientRect().width;
+            if (spanW < 5) spanW = 100;
+            if (spanW > largerSpanW) {
+                largerSpanW = spanW;
+                ipc.send("external-title-resize", largerSpanW + 16);
+            } else turnSmallerResizer();
+            notesNode.parentNode.removeChild(n);
+            notesNode.style.width = spanW + 'px'
+        }
+
+        function turnSmallerResizer() {
+            function max(width1, width2) {
+                return (width1 > width2) ? width1 : width2;
+            }
+
+            if (max(document.getElementById("title").getBoundingClientRect().width, document.getElementById("notes").getBoundingClientRect().width) < largerSpanW) {
+                largerSpanW = max(document.getElementById("title").getBoundingClientRect().width, document.getElementById("notes").getBoundingClientRect().width);
+                ipc.send("external-title-resize", largerSpanW + 16);
+            }
+        }
+
+        ipc.on("send-title", function (event, message) {
+            $("#title").val(message.title);
+            $("#notes").val(message.notes);
+
+            titleNodeResizer();
+            notesNodeResizer();
+        })
+    </script>
+    <script src="renderer.js"></script>
+</body>
+
+</html>
