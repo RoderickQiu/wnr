@@ -113,7 +113,6 @@
         function backer() {
             ipc.send("floating-conversation", { topic: "back" });
             $("#floating-back").css("display", "none");
-            call("floating-destroy");
         }
 
         let method = 1;
