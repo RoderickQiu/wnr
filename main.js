@@ -396,6 +396,15 @@ app.on('ready', () => {
         });
     }//prevent wnr from running more than one instance
 
+    if (win != null) {
+        if (styleCache.has("win-size")) {
+            win.setSize(styleCache.get("win-size").width, styleCache.get("win-size").height);
+        }
+        win.on('resized', () => {
+            styleCache.set("win-size", { "width": win.getSize()[0], "height": win.getSize()[1] });
+        });
+    }
+
     hasMultiDisplays = screen.getAllDisplays().length > 1;
 
     if (process.platform === "win32") {
