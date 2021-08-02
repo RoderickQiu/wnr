@@ -790,7 +790,7 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved, #disable-pausing-set-button {
+.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved, #disable-pausing-set-button, #disable-skipping-set-button, #disable-backing-set-button {
     width: 96px !important;
     font-size: small;
 }

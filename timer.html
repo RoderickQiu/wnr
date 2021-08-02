@@ -203,6 +203,14 @@
         if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
             $("#stopper").css("display", "none");
         }
+        if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
+            $("#skipper").css("display", "none");
+            $("#skipper-space").css("display", "none");
+        }
+        if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all")) {
+            $("#back-index").css("display", "none");
+            $("#skipper-space").css("display", "none");
+        }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
         store.set('just-launched', false);
@@ -406,8 +414,10 @@
                 if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                 ipc.once('warning-closed', function () {
                     stopper();
-                    $("#skipper-container").css("display", "inline");
-                    if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                    if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
+                        $("#skipper-container").css("display", "inline");
+                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                    }
                 });
                 if (store.get("fullscreen-experience") !== true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
@@ -550,12 +560,14 @@
                     player.play();
                     if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
                         $("#skipper").css("display", "none");
-                        setTimeout(function () {
-                            player.loop = false;
-                            $("#skipper").css("display", "inline");
-                        }, 3000);
-                        $("#skipper-container").css("display", "inline");
-                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
+                            setTimeout(function () {
+                                player.loop = false;
+                                $("#skipper").css("display", "inline");
+                            }, 3000);
+                            $("#skipper-container").css("display", "inline");
+                            if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        }
                         canStop = true;
                     } else {
                         setTimeout(function () {
@@ -576,9 +588,12 @@
                         player.loop = false;
                         player.pause();
 
+
                         if (!isClockWorking) stopper();
-                        $("#skipper-container").css("display", "inline");
-                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
+                            $("#skipper-container").css("display", "inline");
+                            if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                        }
                         canStop = true;
                     });
                 }
@@ -589,6 +604,20 @@
                     if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "rest" || store.get("disable-pausing-special") === "all")) {
                         $("#stopper").css("display", "none");
                     } else $("#stopper").css("display", "block");
+                    if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "rest" || store.get("disable-skipping-special") === "all")) {
+                        $("#skipper").css("display", "none");
+                        $("#skipper-space").css("display", "none");
+                    } else {
+                        $("#skipper").css("display", "block");
+                        $("#skipper-space").css("display", "block");
+                    }
+                    if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "rest" || store.get("disable-backing-special") === "all")) {
+                        $("#back-index").css("display", "none");
+                        $("#skipper-space").css("display", "none");
+                    } else {
+                        $("#back-index").css("display", "block");
+                        $("#skipper-space").css("display", "block");
+                    }
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
@@ -614,7 +643,8 @@
                     } else {
                         if (hasFloating) {
                             floatingOpener();
-                            $("#skipper-container").css("display", "inline");
+                            if (!(store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "rest" || store.get("disable-skipping-special") === "all")))
+                                $("#skipper-container").css("display", "inline");
                         }
 
                         if (workTimeFocused === true) {
@@ -633,6 +663,20 @@
                     if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
                         $("#stopper").css("display", "none");
                     } else $("#stopper").css("display", "block");
+                    if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
+                        $("#skipper").css("display", "none");
+                        $("#skipper-space").css("display", "none");
+                    } else {
+                        $("#skipper").css("display", "block");
+                        $("#skipper-space").css("display", "block");
+                    }
+                    if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all")) {
+                        $("#back-index").css("display", "none");
+                        $("#skipper-space").css("display", "none");
+                    } else {
+                        $("#back-index").css("display", "block");
+                        $("#skipper-space").css("display", "block");
+                    }
                     $("#only-one").css("display", "none");
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
@@ -658,7 +702,8 @@
                     } else {
                         if (hasFloating) {
                             floatingOpener();
-                            $("#skipper-container").css("display", "inline");
+                            if (!(store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")))
+                                $("#skipper-container").css("display", "inline");
                         }
 
                         if (restTimeFocused === true) {

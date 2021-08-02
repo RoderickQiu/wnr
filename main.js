@@ -447,6 +447,8 @@ app.on('ready', () => {
     if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
 
     if (!store.has("disable-pausing-special")) store.set("disable-pausing-special", "all");
+    if (!store.has("disable-skipping-special")) store.set("disable-skipping-special", "all");
+    if (!store.has("disable-backing-special")) store.set("disable-backing-special", "all");
 
     if (store.has("no-check-time-end")) {
         store.set("no-check-work-time-end", store.get("no-check-time-end"));
@@ -1316,7 +1318,7 @@ ipcMain.on('warning-giver-workend', function () {
         }
         if (isScreenLocked) {
             notificationSolution((store.has("personalization-notification.work-time-end") ?
-                store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                    store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                 (store.has("personalization-notification.work-time-end-msg") ?
                     store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg')), "normal");
         }
@@ -1333,7 +1335,7 @@ ipcMain.on('warning-giver-workend', function () {
                             store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                         type: "info",
                         detail: (store.has("personalization-notification.work-time-end-msg") ?
-                            store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                                store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("work");
@@ -1345,7 +1347,7 @@ ipcMain.on('warning-giver-workend', function () {
                         store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
                     type: "info",
                     detail: (store.has("personalization-notification.work-time-end-msg") ?
-                        store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                            store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("work");
@@ -1371,7 +1373,7 @@ ipcMain.on('warning-giver-restend', function () {
         }
         if (isScreenLocked) {
             notificationSolution((store.has("personalization-notification.rest-time-end") ?
-                store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                    store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                 (store.has("personalization-notification.rest-time-end-msg") ?
                     store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
         }
@@ -1387,7 +1389,7 @@ ipcMain.on('warning-giver-restend', function () {
                             store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                         type: "info",
                         detail: (store.has("personalization-notification.rest-time-end-msg") ?
-                            store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                                store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("rest");
@@ -1399,7 +1401,7 @@ ipcMain.on('warning-giver-restend', function () {
                         store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
                     type: "info",
                     detail: (store.has("personalization-notification.rest-time-end-msg") ?
-                        store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                            store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("rest");
@@ -1434,7 +1436,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         }
         if (isScreenLocked) {
             notificationSolution((store.has("personalization-notification.all-task-end") ?
-                store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
+                    store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
                 (store.has("personalization-notification.all-task-end-msg") ?
                     store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')), "normal");
         }

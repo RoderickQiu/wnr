@@ -74,6 +74,12 @@
         if (store.get('disable-pausing') === true) {
             $("#stopper").remove();
         }
+        if (store.get('disable-skipping') === true) {
+            $("#floating-skipper").remove();
+        }
+        if (store.get('disable-backing') === true) {
+            $("#floating-back").remove();
+        }
 
         function hover() {
             $("#floating-unhover").css("opacity", "0");

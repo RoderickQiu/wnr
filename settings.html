@@ -4,18 +4,18 @@
 <head>
     <title>Settings</title>
     <meta charset="UTF-8" />
-    <meta http-equiv="Content-Type" content="text/html" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
-    <link rel="preload" as="style" href="loader.css" onload="this.rel='stylesheet'">
+    <meta content="text/html" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" name="viewport" />
+    <link as="style" href="loader.css" onload="this.rel='stylesheet'" rel="preload">
     <!-- loader style preload -->
     <script>
         window.$ = require("jquery/dist/jquery.slim.min.js");
         require("popper.js");
         require("bootstrap/dist/js/bootstrap.min.js");
     </script>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="res/fonts/iconfont.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="res/fonts/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -36,7 +36,7 @@
 
     <script src="supporter.js"></script>
     <div id="controller">
-        <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close"
+        <a class="small rest" href="javascript:window.close()"><i class="iconfont icon-close"
                                                                   id="exit-and-save"></i></a>
         <script>
             $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
@@ -53,7 +53,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont icon-bolt" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont icon-bolt"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('predefined-tasks-settings'));</script>
@@ -65,7 +65,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont icon-translation" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont icon-translation"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('languages'));</script>
@@ -78,7 +78,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont" id="global-settings-sidebar-icon" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont" id="global-settings-sidebar-icon"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('global-settings'));</script>
@@ -95,7 +95,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont icon-palette" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont icon-palette"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('personalization'));</script>
@@ -108,7 +108,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont icon-more" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont icon-more"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('other-things'));</script>
@@ -120,7 +120,7 @@
             <div class="container-fluid">
                 <div class="row align-items-start">
                     <div class="col-3 text-center">
-                        <i class="iconfont icon-programming-flag" aria-hidden="true"></i>
+                        <i aria-hidden="true" class="iconfont icon-programming-flag"></i>
                     </div>
                     <div class="col-9">
                         <script>document.write(i18n.__('advanced-settings'));</script>
@@ -133,7 +133,7 @@
     <div class="d-flex" id="settings-container">
         <div class="text-left">
             <!-- 1. predefined tasks settings -->
-            <div id="predefined-tasks" class="should-lock">
+            <div class="should-lock" id="predefined-tasks">
                 <div class="align-content-center form-text">
                     <label class="align-self-start text-left" type="none">
                         <script>document.write(i18n.__('predefined-tasks-settings-tip'));</script>
@@ -145,7 +145,7 @@
                         <br /><br />
                     </div>
                     <div class="align-self-start text-left">
-                        <a href="javascript:planAdd()" class="text-info underlined">
+                        <a class="text-info underlined" href="javascript:planAdd()">
                             <script>document.write(i18n.__('add'));</script>
                         </a>
                     </div>
@@ -153,17 +153,18 @@
             </div>
 
             <!-- 2. languages -->
-            <div id="languages" class="should-lock">
+            <div class="should-lock" id="languages">
                 <div class="align-content-center form-text">
                     <label class="align-self-start text-left" type="none">
                         <script>document.write(i18n.__('language-setting-tip'));</script>
                     </label>
                     <br />
                     <div class="dropdown">
-                        <a class="btn btn-outline-secondary dropdown-toggle" id="language-dropdown-button"
-                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a aria-expanded="false" aria-haspopup="true"
+                           class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                           id="language-dropdown-button">
                         </a>
-                        <div class="dropdown-menu" id="language-select" aria-labelledby="language-dropdown-button">
+                        <div aria-labelledby="language-dropdown-button" class="dropdown-menu" id="language-select">
                         </div>
                     </div>
                     <span class="text-muted small">
@@ -183,16 +184,16 @@
             </div>
 
             <!-- 3. global settings -->
-            <div id="global-settings" class="should-lock container">
+            <div class="should-lock container" id="global-settings">
                 <p class="text-muted small text-right">
                     <script>document.write(i18n.__('notification-settings'));</script>
                 </p>
                 <!-- check after work time end setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="check-after-work-time-end-setting" type="checkbox"
+                        <input checked id="check-after-work-time-end-setting"
                                onchange="checkAfterWorkTimeEndSetting()"
-                               checked />
+                               type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -208,9 +209,9 @@
                 <!-- check after rest time end setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="check-after-rest-time-end-setting" type="checkbox"
+                        <input checked id="check-after-rest-time-end-setting"
                                onchange="checkAfterRestTimeEndSetting()"
-                               checked />
+                               type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -223,10 +224,84 @@
                     </div>
                 </div>
                 <br />
+                <!-- allow disabling backing setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="disable-backing-setting" onchange="disableBackingSetting()" type="checkbox" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('disable-backing-setting'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('disable-backing-setting-tip'));</script>
+                            <div id="disable-backing-set">
+                                <script>document.write(i18n.__('disable-backing-set-msg'));</script>
+                                <div class="dropdown d-inline">
+                                <a aria-expanded="false" aria-haspopup="true"
+                                   class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                   id="disable-backing-set-button">
+                                </a>
+                                <div aria-labelledby="disable-backing-set-button" class="dropdown-menu"
+                                     id="disable-backing-set-dropdwon">
+                                <a class='dropdown-item' href='javascript:disableBackingSpecialChange("work")'>
+                                    <script>document.write(i18n.__('statistics-work-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disableBackingSpecialChange("rest")'>
+                                    <script>document.write(i18n.__('statistics-rest-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disableBackingSpecialChange("all")'>
+                                    <script>document.write(i18n.__('all-time'));</script>
+                                </a>
+                                </div>
+                        </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <br />
+                <!-- allow disabling skipping setting -->
+                <div class="row">
+                    <div class="col-1 text-center">
+                        <input id="disable-skipping-setting" onchange="disableSkippingSetting()" type="checkbox" />
+                    </div>
+                    <div class="col-11 text-left">
+                        <label>
+                            <script>document.write(i18n.__('disable-skipping-setting'));</script>
+                        </label>
+                        <br />
+                        <span class="text-muted small">
+                            <script>document.write(i18n.__('disable-skipping-setting-tip'));</script>
+                            <div id="disable-skipping-set">
+                                <script>document.write(i18n.__('disable-skipping-set-msg'));</script>
+                                <div class="dropdown d-inline">
+                                <a aria-expanded="false" aria-haspopup="true"
+                                   class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                   id="disable-skipping-set-button">
+                                </a>
+                                <div aria-labelledby="disable-skipping-set-button" class="dropdown-menu"
+                                     id="disable-skipping-set-dropdwon">
+                                <a class='dropdown-item' href='javascript:disableSkippingSpecialChange("work")'>
+                                    <script>document.write(i18n.__('statistics-work-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disableSkippingSpecialChange("rest")'>
+                                    <script>document.write(i18n.__('statistics-rest-time'));</script>
+                                </a>
+                                <a class='dropdown-item' href='javascript:disableSkippingSpecialChange("all")'>
+                                    <script>document.write(i18n.__('all-time'));</script>
+                                </a>
+                                </div>
+                        </div>
+                            </div>
+                        </span>
+                    </div>
+                </div>
+                <br />
                 <!-- allow disabling pausing setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="disable-pausing-setting" type="checkbox" onchange="disablePausingSetting()" />
+                        <input id="disable-pausing-setting" onchange="disablePausingSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -238,11 +313,12 @@
                             <div id="disable-pausing-set">
                                 <script>document.write(i18n.__('disable-pausing-set-msg'));</script>
                                 <div class="dropdown d-inline">
-                                <a class="btn btn-outline-secondary dropdown-toggle" id="disable-pausing-set-button"
-                                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a aria-expanded="false" aria-haspopup="true"
+                                   class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                                   id="disable-pausing-set-button">
                                 </a>
-                                <div class="dropdown-menu" id="disable-pausing-set-dropdwon"
-                                     aria-labelledby="disable-pausing-set-button">
+                                <div aria-labelledby="disable-pausing-set-button" class="dropdown-menu"
+                                     id="disable-pausing-set-dropdwon">
                                 <a class='dropdown-item' href='javascript:disablePausingSpecialChange("work")'>
                                     <script>document.write(i18n.__('statistics-work-time'));</script>
                                 </a>
@@ -262,8 +338,8 @@
                 <!-- notifying sound setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="notifying-sound-setting" type="checkbox" onchange="notifyingSoundSetting()"
-                               checked />
+                        <input checked id="notifying-sound-setting" onchange="notifyingSoundSetting()"
+                               type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -279,8 +355,9 @@
                 <!-- alarm for not using setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="alarm-for-not-using-wnr-dialog-box-title-setting" type="checkbox"
-                               onchange="alarmForNotUsingSetting()" />
+                        <input id="alarm-for-not-using-wnr-dialog-box-title-setting"
+                               onchange="alarmForNotUsingSetting()"
+                               type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -296,8 +373,8 @@
                 <!-- one minute left setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="one-min-left-notification-setting" type="checkbox"
-                               onchange="oneMinLeftNotificationSetting()" />
+                        <input id="one-min-left-notification-setting" onchange="oneMinLeftNotificationSetting()"
+                               type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -313,7 +390,7 @@
                 <!-- nap notifying setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="nap-setting" type="checkbox" onchange="napSetting()" />
+                        <input id="nap-setting" onchange="napSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -324,8 +401,8 @@
                             <script>document.write(i18n.__('is-nap-on-tip'));</script>
                             <span id="nap-time-set">
                                 <script>document.write(i18n.__('is-nap-on-time-msg'));</script>
-                                <input name="nap-time-msg" id="nap-time-msg" type="number" maxlength="11"
-                                       onblur="napTimeChange()" class="hotkeyset" />
+                                <input class="hotkeyset" id="nap-time-msg" maxlength="11" name="nap-time-msg"
+                                       onblur="napTimeChange()" type="number" />
                             </span>
                         </span>
                     </div>
@@ -337,7 +414,7 @@
                 <!-- should count after locked setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="still-count-setting" type="checkbox" onchange="stillCountSetting()" />
+                        <input id="still-count-setting" onchange="stillCountSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -353,7 +430,7 @@
                 <!-- loose mode setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="loose-setting" type="checkbox" onchange="looseSetting()" />
+                        <input id="loose-setting" onchange="looseSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -369,7 +446,7 @@
                 <!-- hide from dock setting -->
                 <div class="row" id="hide-from-dock-setting-container">
                     <div class="col-1 text-center">
-                        <input id="hide-from-dock-setting" type="checkbox" onchange="hideFromDockSetting()" />
+                        <input id="hide-from-dock-setting" onchange="hideFromDockSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -390,7 +467,7 @@
                 <!-- no top bar time shown setting -->
                 <div class="row" id="top-bar-time-setting-container">
                     <div class="col-1 text-center">
-                        <input id="top-bar-time-setting" type="checkbox" onchange="topBarTimeSetting()" />
+                        <input id="top-bar-time-setting" onchange="topBarTimeSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -408,7 +485,7 @@
                 <!-- auto start the default task setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="auto-start-task-setting" type="checkbox" onchange="autoStartDefaultTaskSetting()" />
+                        <input id="auto-start-task-setting" onchange="autoStartDefaultTaskSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -424,7 +501,7 @@
                 <!-- local time shown when timer setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="local-time-setting" type="checkbox" onchange="localTimeSetting()" />
+                        <input id="local-time-setting" onchange="localTimeSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -440,7 +517,7 @@
                 <!-- infinity mode setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="infinity-mode-setting" type="checkbox" onchange="infinityModeSetting()" />
+                        <input id="infinity-mode-setting" onchange="infinityModeSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -456,7 +533,7 @@
                 <!-- always-on-top setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="always-on-top-setting" type="checkbox" onchange="alwaysOnTopSetting()" />
+                        <input id="always-on-top-setting" onchange="alwaysOnTopSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -478,7 +555,7 @@
                 <!-- wnr auto-start setting -->
                 <div class="row">
                     <div class="col-1 text-center">
-                        <input id="auto-start-setting" type="checkbox" onchange="autoStartSetting()" />
+                        <input id="auto-start-setting" onchange="autoStartSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -494,7 +571,7 @@
                 <!-- auto update check setting -->
                 <div class="row update-check">
                     <div class="col-1 text-center">
-                        <input id="auto-check-update-setting" type="checkbox" onchange="autoCheckSetting()" />
+                        <input id="auto-check-update-setting" onchange="autoCheckSetting()" type="checkbox" />
                     </div>
                     <div class="col-11 text-left">
                         <label>
@@ -524,12 +601,13 @@
                                 </script>
                             </label>
                             <br />
-                            <input name="passcode-locker" id="passcode-locker" type="password" maxlength="11"
-                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                            <input id="passcode-locker" maxlength="11" name="passcode-locker"
+                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());"
+                                   type="password" />
                             <br />
-                            <input name="passcode-locker-again" id="passcode-locker-again" type="password"
-                                   maxlength="11"
-                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());" />
+                            <input id="passcode-locker-again" maxlength="11" name="passcode-locker-again"
+                                   onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());"
+                                   type="password" />
                             <br />
                             <span class="text-muted small">
                                 <script>
@@ -547,11 +625,12 @@
                         <script>document.write(i18n.__('default-page'));</script>
                         <br />
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle" id="default-page-dropdown-button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a aria-expanded="false" aria-haspopup="true"
+                               class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                               id="default-page-dropdown-button">
                             </a>
-                            <div class="dropdown-menu" id="default-page-select"
-                                 aria-labelledby="default-page-dropdown-button">
+                            <div aria-labelledby="default-page-dropdown-button" class="dropdown-menu"
+                                 id="default-page-select">
                             </div>
                         </div>
                         <span class="text-muted small">
@@ -582,7 +661,7 @@
                             <br />
                             <ul class="text-muted" id="reservation-list"></ul>
                             <div class="align-self-start text-left">
-                                <a href="javascript:reservedAdd()" class="text-info underlined">
+                                <a class="text-info underlined" href="javascript:reservedAdd()">
                                     <script>document.write(i18n.__('add'));</script>
                                 </a>
                             </div>
@@ -599,13 +678,13 @@
             </div>
 
             <!-- 5. other things -->
-            <div id="other-things" class="should-lock">
+            <div class="should-lock" id="other-things">
                 <ul>
                     <!-- manually check for update -->
                     <li class="update-check">
                         <script>document.write(i18n.__('manually-check-for-update-msg'));</script>
                         <p class="small text-muted">
-                            <a href="javascript:updateChecker(2)" class="rest underlined">
+                            <a class="rest underlined" href="javascript:updateChecker(2)">
                                 <span id="manually">
                                     <script>document.write(i18n.__('manually-check-for-update'));</script>
                                 </span>
@@ -619,7 +698,7 @@
                     <li>
                         <script>document.write(i18n.__('delete-all-data-msg'));</script>
                         <p class="small text-muted">
-                            <a href="javascript:call('delete-all-data')" class="rest underlined">
+                            <a class="rest underlined" href="javascript:call('delete-all-data')">
                                 <script>document.write(i18n.__('delete-all-data') + i18n.__('period-symbol'));</script>
                             </a>&nbsp;
                             <b>
@@ -631,7 +710,7 @@
                     <li>
                         <script>document.write(i18n.__('settings-backup-msg'));</script>
                         <p class="small text-muted">
-                            <a href="javascript:settingsBackup('settings')" class="rest underlined">
+                            <a class="rest underlined" href="javascript:settingsBackup('settings')">
                                 <script>document.write(i18n.__('copy') + i18n.__('period-symbol'));</script>
                             </a>&nbsp;
                             <script>document.write(i18n.__('settings-backup-tip'));</script>
@@ -641,8 +720,9 @@
                     <li>
                         <script>document.write(i18n.__('settings-import-msg'));</script>
                         <br />
-                        <input name="settings-import-input" id="settings-import-input" type="password"
-                               onkeydown="if(event.keyCode === 13) settingsImport($('#settings-import-input').val(),'settings');" />
+                        <input id="settings-import-input" name="settings-import-input"
+                               onkeydown="if(event.keyCode === 13) settingsImport($('#settings-import-input').val(),'settings');"
+                               type="password" />
                         <script> $('#settings-import-input').attr('placeholder', i18n.__('settings-import'));</script>
                         <p class="small text-muted">
                             <script>document.write(i18n.__('settings-import-tip'));</script>
@@ -655,7 +735,7 @@
                     <li>
                         <script>document.write(i18n.__('statistics-backup-msg'));</script>
                         <p class="small text-muted">
-                            <a href="javascript:settingsBackup('statistics')" class="rest underlined">
+                            <a class="rest underlined" href="javascript:settingsBackup('statistics')">
                                 <script>document.write(i18n.__('copy') + i18n.__('period-symbol'));</script>
                             </a>&nbsp;
                             <script>document.write(i18n.__('statistics-backup-tip'));</script>
@@ -665,8 +745,9 @@
                     <li>
                         <script>document.write(i18n.__('statistics-import-msg'));</script>
                         <br />
-                        <input name="statistics-import-input" id="statistics-import-input" type="password"
-                               onkeydown="if(event.keyCode === 13) settingsImport($('#statistics-import-input').val(),'statistics');" />
+                        <input id="statistics-import-input" name="statistics-import-input"
+                               onkeydown="if(event.keyCode === 13) settingsImport($('#statistics-import-input').val(),'statistics');"
+                               type="password" />
                         <script> $('#statistics-import-input').attr('placeholder', i18n.__('statistics-import'));</script>
                         <p class="small text-muted">
                             <script>document.write(i18n.__('statistics-import-tip'));</script>
@@ -688,17 +769,18 @@
             </div>
 
             <!-- 6. personalization -->
-            <div id="personalization" class="should-lock">
+            <div class="should-lock" id="personalization">
                 <ul>
                     <li>
                         <script>document.write(i18n.__('personalization-white-or-dark'));</script>
                         <br />
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle" id="white-or-dark-dropdown-button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a aria-expanded="false" aria-haspopup="true"
+                               class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                               id="white-or-dark-dropdown-button">
                             </a>
-                            <div class="dropdown-menu" id="white-or-dark-select"
-                                 aria-labelledby="white-or-dark-dropdown-button">
+                            <div aria-labelledby="white-or-dark-dropdown-button" class="dropdown-menu"
+                                 id="white-or-dark-select">
                                 <a class='dropdown-item' href='javascript:darkOrWhiteSetting("light")'>
                                     <script>document.write(i18n.__('personalization-white-or-dark-mode-white'));</script>
                                 </a>
@@ -722,27 +804,33 @@
                     <!-- personalization for notification -->
                     <li>
                         <script>document.write(i18n.__('personalization-notification'));</script>
-                        <br /><label id="work-time-end" class="personalization-notification-label text-muted"></label>
-                        <input name="work-time-end" class="personalization-notification" type="text" maxlength="64"
-                               onchange="personalizedNotification()" />
-                        <br /><label id="work-time-end-msg"
-                                     class="personalization-notification-label text-muted"></label>
-                        <input name="work-time-end-msg" class="personalization-notification" type="text" maxlength="64"
-                               onchange="personalizedNotification()" />
-                        <br /><label id="rest-time-end" class="personalization-notification-label text-muted"></label>
-                        <input name="rest-time-end" type="text" class="personalization-notification" maxlength="64"
-                               onchange="personalizedNotification()" />
-                        <br /><label id="rest-time-end-msg"
-                                     class="personalization-notification-label text-muted"></label>
-                        <input name="rest-time-end-msg" class="personalization-notification" type="text" maxlength="64"
-                               onchange="personalizedNotification()" />
-                        <br /><label id="all-task-end" class="personalization-notification-label text-muted"></label>
-                        <input name="all-task-end" class="personalization-notification" type="text" maxlength="64"
-                               onchange="personalizedNotification()" />
-                        <br /><label id="all-task-end-msg"
-                                     class="personalization-notification-label text-muted"></label>
-                        <input name="all-task-end-msg" class="personalization-notification" type="text" maxlength="64"
-                               onchange="personalizedNotification()" />
+                        <br /><label class="personalization-notification-label text-muted" id="work-time-end"></label>
+                        <input class="personalization-notification" maxlength="64" name="work-time-end"
+                               onchange="personalizedNotification()"
+                               type="text" />
+                        <br /><label class="personalization-notification-label text-muted"
+                                     id="work-time-end-msg"></label>
+                        <input class="personalization-notification" maxlength="64" name="work-time-end-msg"
+                               onchange="personalizedNotification()"
+                               type="text" />
+                        <br /><label class="personalization-notification-label text-muted" id="rest-time-end"></label>
+                        <input class="personalization-notification" maxlength="64" name="rest-time-end"
+                               onchange="personalizedNotification()"
+                               type="text" />
+                        <br /><label class="personalization-notification-label text-muted"
+                                     id="rest-time-end-msg"></label>
+                        <input class="personalization-notification" maxlength="64" name="rest-time-end-msg"
+                               onchange="personalizedNotification()"
+                               type="text" />
+                        <br /><label class="personalization-notification-label text-muted" id="all-task-end"></label>
+                        <input class="personalization-notification" maxlength="64" name="all-task-end"
+                               onchange="personalizedNotification()"
+                               type="text" />
+                        <br /><label class="personalization-notification-label text-muted"
+                                     id="all-task-end-msg"></label>
+                        <input class="personalization-notification" maxlength="64" name="all-task-end-msg"
+                               onchange="personalizedNotification()"
+                               type="text" />
                         <br />
                         <script>
                             $(".personalization-notification").each(function () {
@@ -779,23 +867,25 @@
                             <script>document.write(i18n.__("personalization-notify-sound-msg-time-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle"
-                               id="work-time-end-sound-dropdown-button" data-toggle="dropdown" aria-haspopup="true"
-                               aria-expanded="false">
+                            <a aria-expanded="false"
+                               aria-haspopup="true" class="btn btn-outline-secondary dropdown-toggle"
+                               data-toggle="dropdown"
+                               id="work-time-end-sound-dropdown-button">
                             </a>
-                            <div class="dropdown-menu" id="work-time-end-sound-select"
-                                 aria-labelledby="work-time-end-sound-dropdown-button">
+                            <div aria-labelledby="work-time-end-sound-dropdown-button" class="dropdown-menu"
+                                 id="work-time-end-sound-select">
                             </div>
                         </div>
                         <label>
                             <script>document.write(i18n.__("personalization-notify-sound-msg-all-end"));</script>
                         </label>
                         <div class="dropdown">
-                            <a class="btn btn-outline-secondary dropdown-toggle" id="all-time-end-sound-dropdown-button"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <a aria-expanded="false" aria-haspopup="true"
+                               class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown"
+                               id="all-time-end-sound-dropdown-button">
                             </a>
-                            <div class="dropdown-menu" id="all-time-end-sound-select"
-                                 aria-labelledby="all-time-end-sound-dropdown-button">
+                            <div aria-labelledby="all-time-end-sound-dropdown-button" class="dropdown-menu"
+                                 id="all-time-end-sound-select">
                             </div>
                         </div>
                         <p class="small text-muted">

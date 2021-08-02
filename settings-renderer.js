@@ -360,6 +360,71 @@ function checkAfterRestTimeEndSetting() {
     else store.set("no-check-rest-time-end", true);
 }
 
+if (store.get("disable-backing") === true) {
+    document.getElementById("disable-backing-setting").checked = true;
+    if (store.get("disable-backing-special") === "work")
+        $("#disable-backing-set-button").html(i18n.__('statistics-work-time'));
+    else if (store.get("disable-backing-special") === "rest")
+        $("#disable-backing-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-backing-set-button").html(i18n.__('all-time'));
+} else {
+    document.getElementById("disable-backing-setting").checked = false;
+    $("#disable-backing-set").css("display", "none");
+}
+
+function disableBackingSpecialChange(type) {
+    store.set("disable-backing-special", type);
+    if (type === "work")
+        $("#disable-backing-set-button").html(i18n.__('statistics-work-time'));
+    else if (type === "rest")
+        $("#disable-backing-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-backing-set-button").html(i18n.__('all-time'));
+}
+
+function disableBackingSetting() {
+    if (document.getElementById("disable-backing-setting").checked === true) {
+        store.set("disable-backing", true);
+        $("#disable-backing-set").css("display", "inline-block");
+    } else {
+        store.set("disable-backing", false);
+        $("#disable-backing-set").css("display", "none");
+    }
+}
+
+if (store.get("disable-skipping") === true) {
+    document.getElementById("disable-skipping-setting").checked = true;
+    if (store.get("disable-skipping-special") === "work")
+        $("#disable-skipping-set-button").html(i18n.__('statistics-work-time'));
+    else if (store.get("disable-skipping-special") === "rest")
+        $("#disable-skipping-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-skipping-set-button").html(i18n.__('all-time'));
+} else {
+    document.getElementById("disable-skipping-setting").checked = false;
+    $("#disable-skipping-set").css("display", "none");
+}
+
+function disableSkippingSpecialChange(type) {
+    store.set("disable-skipping-special", type);
+    if (type === "work")
+        $("#disable-skipping-set-button").html(i18n.__('statistics-work-time'));
+    else if (type === "rest")
+        $("#disable-skipping-set-button").html(i18n.__('statistics-rest-time'));
+    else
+        $("#disable-skipping-set-button").html(i18n.__('all-time'));
+}
+
+function disableSkippingSetting() {
+    if (document.getElementById("disable-skipping-setting").checked === true) {
+        store.set("disable-skipping", true);
+        $("#disable-skipping-set").css("display", "inline-block");
+    } else {
+        store.set("disable-skipping", false);
+        $("#disable-skipping-set").css("display", "none");
+    }
+}
 
 if (store.get("disable-pausing") === true) {
     document.getElementById("disable-pausing-setting").checked = true;
