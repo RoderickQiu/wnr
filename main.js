@@ -142,32 +142,30 @@ function createWindow() {
 }
 
 function alarmSet() {
-    if (!resetAlarm) {
-        resetAlarm = setInterval(function () {
-            if (store.get('alarmtip') !== false && isAlarmDialogClosed) {
-                if (win != null) {
-                    win.flashFrame(true);
-                    win.show();
-                    app.focus();
-                    isAlarmDialogClosed = false;
-                }
-                dialog.showMessageBox(win, {
-                    title: " wnr",
-                    type: "warning",
-                    message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
-                    detail: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                    buttons: [i18n.__('cancel'), i18n.__('ok')],
-                    cancelId: 0
-                }).then(function (response) {
-                    isAlarmDialogClosed = true;
-                    if (response.response !== 0) {
-                        win.show();
-                        win.moveTop();
-                    }
-                });
+    resetAlarm = setInterval(function () {
+        if (store.get('alarmtip') !== false && isAlarmDialogClosed) {
+            if (win != null) {
+                win.flashFrame(true);
+                win.show();
+                app.focus();
+                isAlarmDialogClosed = false;
             }
-        }, 600000)//alarm you for using wnr
-    }
+            dialog.showMessageBox(win, {
+                title: " wnr",
+                type: "warning",
+                message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                detail: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
+                buttons: [i18n.__('cancel'), i18n.__('ok')],
+                cancelId: 0
+            }).then(function (response) {
+                isAlarmDialogClosed = true;
+                if (response.response !== 0) {
+                    win.show();
+                    win.moveTop();
+                }
+            });
+        }
+    }, 600000)//alarm you for using wnr
 }
 
 function relaunchSolution() {
