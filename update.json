@@ -1,26 +1,20 @@
 {
-	"version": "1.23.0",
+	"version": "1.23.1",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"新增单独的计时标题提醒窗口（在首页选择”更多设置“以设置计时标题），助你时刻专心于应做的事。",
-			"新增在计时中途修改标题、笔记的功能。",
-			"新增将工作时间后确认、休息时间后确认设置分开的功能。",
-			"优化了数个功能、修复了数个问题。",
+			"增加了禁止取消计时、禁止跳过计时的设置项。",
+			"修复了使用 wnr 提醒有时不出现的问题、使用 MINI 模式意外崩溃的问题等。",
 			"【你可能已经注意到这个应用的更新频率比先前慢了，而一些长期处在Todo列表的的功能并未开发，这主要是因为作者正在准备升学考试并面临繁重的课业压力，请理解。】"
 		],
 		"zh-TW": [
-			"新增單獨的計時標題提醒窗口（在首頁選擇”更多設置“以設置計時標題），助你時刻專心於應做的事。",
-			"新增在計時中途修改標題、筆記的功能。",
-			"新增將工作時間後確認、休息時間後確認設置分開的功能。",
-			"優化了數個功能、修復了數個問題。",
+			"增加了禁止取消計時、禁止跳過計時的設置項。",
+			"修復了使用 wnr 提醒有時不出現的問題、使用 MINI 模式意外崩潰的問題等。",
 			"『你可能已經注意到這個應用的更新頻率比先前慢了，而一些長期處在Todo列表的的功能並未開發，這主要是因爲作者正在準備升學考試並面臨繁重的課業壓力，請理解。』"
 		],
 		"en": [
-			"Added a external window to show the title of current timer to help you get focused.",
-			"Added the function to edit the title and notes of current timer during timing.",
-			"Added separate settings section for alerting after working and alerting after resting.",
-			"Enhanced and have bugs fixed.",
+			"Added the settings to ban cancelling and ban skipping.",
+			"Fixed the bug causing notification for starting timer fail to show and a bug related to mini mode that cause the app to crash.",
 			"PLEASE UNDERSTAND THAT I'VE BEEN EXTREMELY BUSY ON ACADEMIC LEARNING RECENTLY AND I SUPPOSE I WON'T BE VERY ACTIVE ON DEVELOPING BEFORE JUNE, 2022. AND THIS IS THE REASON WHY SOME FEATURES HAVEN'T BEEN IMPLEMENTED YET."
 
 		]
