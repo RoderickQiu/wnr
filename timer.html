@@ -562,11 +562,11 @@
                     player.play();
                     if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
                         $("#skipper").css("display", "none");
+                        setTimeout(function () {
+                            player.loop = false;
+                            $("#skipper").css("display", "inline");
+                        }, 3000);
                         if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
-                            setTimeout(function () {
-                                player.loop = false;
-                                $("#skipper").css("display", "inline");
-                            }, 3000);
                             $("#skipper-container").css("display", "inline");
                             if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
                         }
