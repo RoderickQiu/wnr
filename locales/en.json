@@ -269,7 +269,7 @@
 	"disable-pausing-set-msg": "Only applied to: ",
 	"pausing-disabled": "Pausing is disabled. ",
 	"disable-backing-setting": "Disable cancelling setting: ",
-	"disable-backing-setting-tip": "If it is enabled, then you will not be able to cancel the timer.",
+	"disable-backing-setting-tip": "If it is enabled, then you will not be able to cancel the timer. This setting does not apply to infinity mode and liberal timing. ",
 	"disable-backing-set-msg": "Only applied to: ",
 	"backing-disabled": "Cancelling is disabled.",
 	"disable-skipping-setting": "Disable skipping setting: ",

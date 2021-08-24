@@ -200,17 +200,6 @@
             $("#time-bar").remove();
             $("#time-bar-macos").remove();
         }
-        if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
-            $("#stopper").css("display", "none");
-        }
-        if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
-            $("#skipper").css("display", "none");
-            $("#skipper-space").css("display", "none");
-        }
-        if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all")) {
-            $("#back-index").css("display", "none");
-            $("#skipper-space").css("display", "none");
-        }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
         store.set('just-launched', false);
@@ -369,6 +358,19 @@
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
             timingData.set("last-recorded-times-left", 0);
+        }
+
+        if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {
+            $("#stopper").css("display", "none");
+        }
+        if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
+            $("#skipper").css("display", "none");
+            $("#skipper-space").css("display", "none");
+        }
+        // special dealing for enabling back for infinity mode and liberal timing
+        if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all") && methodFromStart !== 3 && loop !== 0) {
+            $("#back-index").css("display", "none");
+            $("#skipper-space").css("display", "none");
         }
 
         if ((loop !== Math.floor(loop)) || (loop < 1 && loop !== 0) || (workTime < 5000) || (restTime < 5000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s

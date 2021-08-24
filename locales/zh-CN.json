@@ -265,7 +265,7 @@
 	"disable-pausing-set-msg": "只对某一种时间禁止暂停：",
 	"pausing-disabled": "暂停功能被停用。",
 	"disable-backing-setting": "禁止计时取消设置：",
-	"disable-backing-setting-tip": "如果此项被选中，则计时时将会不能取消计时器，用于避免通过取消计时逃避工作/休息的行为。",
+	"disable-backing-setting-tip": "如果此项被选中，则计时时将会不能取消计时器，用于避免通过取消计时逃避工作/休息的行为。此选项对无限模式和正计时不生效。",
 	"disable-backing-set-msg": "只对某一种时间禁止取消：",
 	"backing-disabled": "取消功能被停用。",
 	"disable-skipping-setting": "禁止计时跳过设置：",
