@@ -19,7 +19,7 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="timer" class="justify-content-center align-content-center text-center">
             <div id="floating-unhover">
-                <div id="time-left" class="text-center h4 work">--</div>
+                <div id="time-left" class="text-center h6 work">--</div>
                 <div id="time-left-msg" class="text-center small work">
                     <script>document.write(i18n.__('min-left'));</script>
                 </div>
@@ -121,13 +121,44 @@
             $("#floating-back").css("display", "none");
         }
 
+        let timeLeft = $("#time-left");
+        let lastTimeHasHours = null;
+        let h = " " + i18n.__("h"), min = " " + i18n.__("min");
+
+        function getStyledTimeLeft(minute) {
+            if (lastTimeHasHours == null) {
+                lastTimeHasHours = Math.floor(minute / 60) > 0;
+                if (!lastTimeHasHours) {
+                    timeLeft.removeClass("h6");
+                    timeLeft.addClass("h4");
+                }
+            }
+            let hour = Math.floor(minute / 60);
+            if (hour > 0) {
+                if (!lastTimeHasHours) {
+                    timeLeft.removeClass("h4");
+                    timeLeft.addClass("h6");
+                    lastTimeHasHours = true;
+                }
+                return hour + h + (minute - hour * 60) + min;
+            } else {
+                if (lastTimeHasHours) {
+                    timeLeft.removeClass("h6");
+                    timeLeft.addClass("h4");
+                    lastTimeHasHours = false;
+                }
+                if (minute === 0) return "<1" + min;
+                return minute + min;
+            }
+        }
+
         let method = 1;
         ipc.on("floating-time-left", function (event, message) {
             isWorking = message.isWorking;
             if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
             else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
 
-            $("#time-left").text(message.minute === 0 ? '<1' : message.minute);
+            $("#time-left").text(getStyledTimeLeft(message.minute));
             $('#floating-bottom-bar').css("width", message.percentage + "%");
 
             if (message.method === 2 && method === 1) {
