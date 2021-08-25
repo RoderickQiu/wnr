@@ -1849,6 +1849,23 @@ ipcMain.on("open-external-title-win", function (event, message) {
     externalTitle(title, notes);
 })
 
+ipcMain.on("modify-external-title-win", function (event, message) {
+    if (externalTitleWin != null)
+        externalTitleWin.webContents.send('send-title', {
+            title: message.title,
+            notes: message.notes
+        });
+})
+
+ipcMain.on("sync-timer-win-title", function (event, message) {
+    if (win != null && isTimerWin) {
+        win.webContents.send('sync-title', {
+            title: message.title,
+            notes: message.notes
+        })
+    }
+})
+
 ipcMain.on("external-title-resize", function (event, message) {
     if (externalTitleWin != null) {
         externalTitleWin.setSize(Math.floor(Number(message)), 84);

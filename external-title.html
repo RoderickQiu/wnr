@@ -54,7 +54,9 @@
                 ipc.send("external-title-resize", largerSpanW + 16);
             } else turnSmallerResizer();
             titleNode.parentNode.removeChild(n);
-            titleNode.style.width = spanW + 'px'
+            titleNode.style.width = spanW + 'px';
+
+            ipc.send("sync-timer-win-title", { title: titleNode.value, notes: notesNode.value })
         }
 
         let notesNode = document.getElementById("notes");
@@ -75,7 +77,9 @@
                 ipc.send("external-title-resize", largerSpanW + 16);
             } else turnSmallerResizer();
             notesNode.parentNode.removeChild(n);
-            notesNode.style.width = spanW + 'px'
+            notesNode.style.width = spanW + 'px';
+
+            ipc.send("sync-timer-win-title", { title: titleNode.value, notes: notesNode.value })
         }
 
         function turnSmallerResizer() {

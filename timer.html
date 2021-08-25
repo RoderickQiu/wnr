@@ -50,15 +50,27 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             <input type="text" id="title" class="text-center h4" maxlength="14"
-                   style="transform: translateX(5px); font-size: 0.4rem" />
+                   style="transform: translateX(5px); font-size: 0.4rem" oninput="modifyExternalTitleWin()" />
             <a href="javascript:openExternalTitleWin()" id="external" class="work"><i
                     class="iconfont icon-external-link"></i></a><br />
             <input type="text" id="notes" class="text-center small text-muted" maxlength="39"
-                   style="font-size: 0.4rem" /><br id="notes-space" />
+                   style="font-size: 0.4rem" oninput="modifyExternalTitleWin()" /><br id="notes-space" />
             <script>
                 function openExternalTitleWin() {
                     ipc.send("open-external-title-win", { title: $("#title").val(), notes: $("#notes").val() });
                 }
+
+                function modifyExternalTitleWin() {
+                    ipc.send("modify-external-title-win", { title: $("#title").val(), notes: $("#notes").val() });
+                }
+
+                ipc.on("sync-title", function (event, message) {
+                    $("#title").val(message.title);
+                    $("#notes").val(message.notes);
+
+                    titleNodeResizer();
+                    notesNodeResizer();
+                });
 
                 $("#external").attr('title', i18n.__('external-title'));
                 $("#title").attr('title', i18n.__('title-edit-msg'));
