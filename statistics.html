@@ -88,32 +88,23 @@
             </span><br />
             <h1 class="rest">
                 <span id="work-time">--</span>
-                <small>
-                    <script>document.write(i18n.__('min'));</script>
-                </small>
             </h1>
             <span class="small">
                 <script>document.write(i18n.__('statistics-rest-time'));</script>
             </span><br />
             <h1 class="work">
                 <span id="rest-time">--</span>
-                <small>
-                    <script>document.write(i18n.__('min'));</script>
-                </small>
             </h1>
             <span class="small">
                 <script>document.write(i18n.__('statistics-time-sum'));</script>
             </span><br />
             <h1 class="text-muted">
                 <span id="sum">--</span>
-                <small>
-                    <script>document.write(i18n.__('min'));</script>
-                </small>
             </h1>
         </div>
         <div id="statistics-with-chart">
             <br />
-            <div class="container">
+            <div class="container" style="padding: 0">
                 <div class="row">
                     <div class="col">
                         <span class="small">
@@ -121,9 +112,6 @@
                         </span><br />
                         <b class="rest">
                             <span id="work-time-with-chart">--</span>
-                            <small>
-                                <script>document.write(i18n.__('min'));</script>
-                            </small>
                         </b>
                     </div>
                     <div class="col">
@@ -132,9 +120,6 @@
                         </span><br />
                         <b class="work">
                             <span id="rest-time-with-chart">--</span>
-                            <small>
-                                <script>document.write(i18n.__('min'));</script>
-                            </small>
                         </b>
                     </div>
                     <div class="col">
@@ -143,9 +128,6 @@
                         </span><br />
                         <b class="text-muted">
                             <span id="sum-with-chart">--</span>
-                            <small>
-                                <script>document.write(i18n.__('min'));</script>
-                            </small>
                         </b>
                     </div>
                 </div>
@@ -210,7 +192,7 @@
 
         let monthYearAndMon;//get info about this year
         let thisYearWorkTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-            thisYearRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+                thisYearRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for (let monthVar = 0; monthVar < 12; monthVar++) {
             monthYearAndMon = statistics.get("year") + months[monthVar];
             thisYearWorkTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).workTime : 0;
@@ -233,6 +215,14 @@
             switchMode(statisticsMode);
         });
 
+        let h = i18n.__("h"), min = i18n.__("min");
+
+        function getStyledTime(minute) {
+            let hour = Math.floor(minute / 60);
+            if (hour > 0) return hour + h + (minute - hour * 60) + min;
+            else return minute + min;
+        }
+
         function switchMode(mode) {
             statisticsMode = mode;
             if (statisticsMode === "today") {
@@ -245,9 +235,9 @@
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
 
-                $("#work-time").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0");
-                $("#rest-time").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0");
-                $("#sum").text(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0");
+                $("#work-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0"));
+                $("#rest-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0"));
+                $("#sum").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0"));
             } else if (statisticsMode === "yesterday") {
                 $("#today").css("font-weight", "normal");
                 $("#yesterday").css("font-weight", "bold");
@@ -258,9 +248,9 @@
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
 
-                $("#work-time").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0");
-                $("#rest-time").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0");
-                $("#sum").text(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0");
+                $("#work-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0"));
+                $("#rest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0"));
+                $("#sum").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0"));
             } else if (statisticsMode === "this-week") {
                 $("#today").css("font-weight", "normal");
                 $("#yesterday").css("font-weight", "normal");
@@ -271,9 +261,9 @@
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
 
-                $("#work-time-with-chart").text(thisWeekWorkTimeSum);
-                $("#rest-time-with-chart").text(thisWeekRestTimeSum);
-                $("#sum-with-chart").text(thisWeekTimeSum);
+                $("#work-time-with-chart").text(getStyledTime(thisWeekWorkTimeSum));
+                $("#rest-time-with-chart").text(getStyledTime(thisWeekRestTimeSum));
+                $("#sum-with-chart").text(getStyledTime(thisWeekTimeSum));
 
                 let options = {
                     type: 'bar',
@@ -304,9 +294,9 @@
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
 
-                $("#work-time-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0");
-                $("#rest-time-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).restTime : "0");
-                $("#sum-with-chart").text(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).sum : "0");
+                $("#work-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0"));
+                $("#rest-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).restTime : "0"));
+                $("#sum-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).sum : "0"));
 
                 let options = {
                     type: 'line',
@@ -340,9 +330,9 @@
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
 
-                $("#work-time").text(allTimeWorkTimeSum);
-                $("#rest-time").text(allTimeRestTimeSum);
-                $("#sum").text(allTimeTimeSum);
+                $("#work-time").text(getStyledTime(allTimeWorkTimeSum));
+                $("#rest-time").text(getStyledTime(allTimeRestTimeSum));
+                $("#sum").text(getStyledTime(allTimeTimeSum));
             }
         }//to show the stuffs
 
