@@ -1,22 +1,18 @@
 {
-	"version": "1.23.1",
+	"version": "1.23.2",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"增加了禁止取消计时、禁止跳过计时的设置项。",
-			"修复了使用 wnr 提醒有时不出现的问题、使用 MINI 模式意外崩溃的问题等。",
-			"【你可能已经注意到这个应用的更新频率比先前慢了，而一些长期处在Todo列表的的功能并未开发，这主要是因为作者正在准备升学考试并面临繁重的课业压力，请理解。】"
+			"修复了禁止取消、跳过计时功能造成的 BUG。",
+			"优化了标题提醒窗口、统计和 MINI 模式。"
 		],
 		"zh-TW": [
-			"增加了禁止取消計時、禁止跳過計時的設置項。",
-			"修復了使用 wnr 提醒有時不出現的問題、使用 MINI 模式意外崩潰的問題等。",
-			"『你可能已經注意到這個應用的更新頻率比先前慢了，而一些長期處在Todo列表的的功能並未開發，這主要是因爲作者正在準備升學考試並面臨繁重的課業壓力，請理解。』"
+			"修復了禁止取消、跳過計時功能造成的 BUG。",
+			"優化了標題提醒窗口、統計和 MINI 模式。"
 		],
 		"en": [
-			"Added the settings to ban cancelling and ban skipping.",
-			"Fixed the bug causing notification for starting timer fail to show and a bug related to mini mode that cause the app to crash.",
-			"PLEASE UNDERSTAND THAT I'VE BEEN EXTREMELY BUSY ON ACADEMIC LEARNING RECENTLY AND I SUPPOSE I WON'T BE VERY ACTIVE ON DEVELOPING BEFORE JUNE, 2022. AND THIS IS THE REASON WHY SOME FEATURES HAVEN'T BEEN IMPLEMENTED YET."
-
+			"Fixed some bugs related to the disable pause / back feature. ",
+			"Optimized external title window, statistics and mini mode. "
 		]
 	},
 	"introduce": {

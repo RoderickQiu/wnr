@@ -179,12 +179,15 @@
         let thisWeekWorkTimeSum = 0, thisWeekRestTimeSum = 0, thisWeekTimeSum = 0;
         let weekDayYearMonDay;
         let thisWeekWorkTimes = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimes = [0, 0, 0, 0, 0, 0, 0];
+        let thisWeekWorkTimesInHour = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimesInHour = [0, 0, 0, 0, 0, 0, 0];
         for (let weekDay = 0; weekDay < 7; weekDay++) {
             weekDayYearMonDay = thisWeekDate.getFullYear().toString() + months[thisWeekDate.getMonth()] + thisWeekDate.getDate().toString();
             thisWeekWorkTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
             thisWeekWorkTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
+            thisWeekWorkTimesInHour[weekDay] = Math.floor(thisWeekWorkTimes[weekDay] / 60);
             thisWeekRestTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
             thisWeekRestTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
+            thisWeekRestTimesInHour[weekDay] = Math.floor(thisWeekRestTimes[weekDay] / 60);
             thisWeekTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).sum : 0;
 
             thisWeekDate.setDate(thisWeekDate.getDate() + 1);
@@ -193,10 +196,14 @@
         let monthYearAndMon;//get info about this year
         let thisYearWorkTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 thisYearRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let thisYearWorkTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                thisYearRestTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for (let monthVar = 0; monthVar < 12; monthVar++) {
             monthYearAndMon = statistics.get("year") + months[monthVar];
             thisYearWorkTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).workTime : 0;
+            thisYearWorkTimesInHour[monthVar] = Math.floor(thisYearWorkTimes[monthVar] / 60);
             thisYearRestTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).restTime : 0;
+            thisYearRestTimesInHour[monthVar] = Math.floor(thisYearRestTimes[monthVar] / 60);
         }
 
         let allTimeWorkTimeSum = 0, allTimeRestTimeSum = 0, allTimeTimeSum = 0;//get info about all time
@@ -277,10 +284,10 @@
                     showGrid: false,
                     datasets: [{
                         fillColor: '#5490eacc',
-                        data: thisWeekWorkTimes
+                        data: thisWeekWorkTimesInHour
                     }, {
                         fillColor: '#ea5454cc',
-                        data: thisWeekRestTimes
+                        data: thisWeekRestTimesInHour
                     }]
                 }
                 new schart('graph', options);//statistics graph
@@ -313,10 +320,10 @@
                     showValue: false,
                     datasets: [{
                         fillColor: '#5490eacc',
-                        data: thisYearWorkTimes
+                        data: thisYearWorkTimesInHour
                     }, {
                         fillColor: '#ea5454cc',
-                        data: thisYearRestTimes
+                        data: thisYearRestTimesInHour
                     }]
                 }
                 new schart('graph', options);//statistics graph
