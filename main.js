@@ -30,7 +30,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
-    isLoose = false, isScreenLocked = false, isAlarmDialogClosed = true, isShadowless = false,
+    isLoose = false, isScreenLocked = false,
+    isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false,
     hasFloating = false, hasExternalTitle = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
@@ -143,7 +144,7 @@ function createWindow() {
 
 function alarmSet() {
     resetAlarm = setInterval(function () {
-        if (store.get('alarmtip') !== false && isAlarmDialogClosed) {
+        if (store.get('alarmtip') !== false && isAlarmDialogClosed && isAlarmTipOn) {
             if (win != null) {
                 win.flashFrame(true);
                 win.show();
@@ -2054,9 +2055,9 @@ ipcMain.on("timer-win", function (event, message) {
         if (aboutWin != null) aboutWin.close();
         if (tourWin != null) tourWin.close();
         if (settingsWin != null) settingsWin.close();
-        if (resetAlarm) {
+        if (resetAlarm)
             clearTimeout(resetAlarm);
-        }
+        isAlarmTipOn = false;
         powerSaveBlockerId = powerSaveBlocker.start('prevent-app-suspension');//prevent wnr to be suspended when timing
         isTimerWin = true;
         traySolution();
@@ -2073,6 +2074,7 @@ ipcMain.on("timer-win", function (event, message) {
 
         if (dockHide) app.dock.hide();
         alarmSet();
+        isAlarmTipOn = true;
         if (powerSaveBlockerId)
             if (powerSaveBlocker.isStarted(powerSaveBlockerId))
                 powerSaveBlocker.stop(powerSaveBlockerId);
@@ -2089,6 +2091,8 @@ ipcMain.on("timer-win", function (event, message) {
             tray.setTitle(' ' + i18n.__('not-timing'));
         else tray.setTitle("");
     }
+
+    console.log(resetAlarm == null ? "null" : resetAlarm);
 })
 
 ipcMain.on("floating-conversation", function (event, message) {
