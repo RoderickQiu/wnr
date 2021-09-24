@@ -140,6 +140,8 @@ yarn 7zip-ia32 # windows 7zip portable version (x86/ia32)
 yarn mac # macos
 
 yarn linux # linux
+
+yarn appimage # linux AppImage
 ```
 
 Please note that:
