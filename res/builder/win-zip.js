@@ -24,7 +24,8 @@ const config = {
             "!designs/**"
         ],
         "artifactName": "${productName}-${version}-Win-64.${ext}"
-    }
+    },
+    "publish": null
 }
 
 builder.build({

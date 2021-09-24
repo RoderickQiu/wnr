@@ -22,8 +22,13 @@ const config = {
             "!res/icons/*Win*",
             "!res/icons/*.psd",
             "!./node_modules/node-notifier/vendor/snoreToast/**"
-        ]
-    }
+        ],
+        "category": "Utility"
+    },
+    "appImage": {
+        "artifactName": "${productName}-${version}-Linux.${ext}"
+    },
+    "publish": null
 }
 
 builder.build({

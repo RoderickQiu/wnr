@@ -41,6 +41,7 @@ const config = {
             "!./node_modules/node-notifier/vendor/snoreToast/**"
         ]
     },
+    "publish": null
 }
 
 builder.build({

@@ -29,7 +29,8 @@ const config = {
         "icon": "res/icons/iconMac.icns",
         "backgroundColor": "#fefefe",
         "artifactName": "${productName}-${version}-MacOS.${ext}"
-    }
+    },
+    "publish": null
 }
 
 builder.build({
