@@ -12,7 +12,7 @@ const config = {
             "./node_modules/node-notifier/vendor/**"
         ],
         "target": [
-            "dir"
+            "AppImage"
         ],
         "icon": "res/icons/wnrIcon.png",
         "files": [
@@ -24,6 +24,9 @@ const config = {
             "!./node_modules/node-notifier/vendor/snoreToast/**"
         ],
         "category": "Utility"
+    },
+    "appImage": {
+        "artifactName": "${productName}-${version}-Linux.${ext}"
     },
     "publish": null
 }

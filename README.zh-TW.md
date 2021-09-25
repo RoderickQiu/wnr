@@ -134,6 +134,8 @@ yarn 7zip-ia32 # Windows平台7z便攜版打包（32位）
 yarn mac # macOS版本打包
 
 yarn linux # Linux版本打包
+
+yarn appimage # linux AppImage打包
 ```
 
 請注意：

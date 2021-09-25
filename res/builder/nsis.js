@@ -38,7 +38,8 @@ const config = {
         "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
         "artifactName": "${productName}-${version}-Setup-64.${ext}",
         "allowToChangeInstallationDirectory": true
-    }
+    },
+    "publish": null
 }
 
 builder.build({
