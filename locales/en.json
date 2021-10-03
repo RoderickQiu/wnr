@@ -199,7 +199,7 @@
 	"personalization": "Personalization",
 	"is-hide-from-dock-setting-on": "Hide from dock setting: ",
 	"is-hide-from-dock-setting-on-tip": "If it is enabled, wnr will be hidden from dock and the top bar and you'll only be able to find wnr via the tray menu (not recommended).",
-	"fullscreen-experience-tip": "It seems it's the first time that you enabled fullscreen focus mode. ",
+	"fullscreen-experience-tip": "It seems it's the first time that you enabled fullscreen focus mode (IN CASE YOU DON'T LIKE ITS ULTIMATE STRENGTH, GO TO SETTINGS AND ENABLE LOOSE FULLSCREEN MODE). ",
 	"fullscreen-too-long-tip": "It seems that you are going to start a long period of fullscreen focusing.",
 	"fullscreen-experience-tip-mistake": "Cancel (only for this time)",
 	"quit-from-timer-in-lock-mode-msg": "need passcode to quit",
