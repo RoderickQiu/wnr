@@ -237,8 +237,12 @@ function multiScreenSolution(mode) {
     if (app.isReady()) {
         displays = screen.getAllDisplays();
         hasMultiDisplays = (displays.length > 1);
+        let winBounds = win.getBounds();
+        //get the screen that contains the window
+        let distScreen = screen.getDisplayNearestPoint({ x: winBounds.x, y: winBounds.y });
+        console.log(distScreen)
         for (i in displays) {
-            if (displays[i].id !== screen.getPrimaryDisplay().id) {
+            if (displays[i].id !== distScreen.id) {
                 if (mode === "on") {
                     addScreenSolution(i, displays[i]);
                 } else {
@@ -2091,8 +2095,6 @@ ipcMain.on("timer-win", function (event, message) {
             tray.setTitle(' ' + i18n.__('not-timing'));
         else tray.setTitle("");
     }
-
-    console.log(resetAlarm == null ? "null" : resetAlarm);
 })
 
 ipcMain.on("floating-conversation", function (event, message) {
