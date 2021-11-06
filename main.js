@@ -487,7 +487,12 @@ app.on('ready', () => {
 
     if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
     else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
-    if (tray != null) tray.setToolTip('wnr');
+    else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
+    try {
+        tray.setToolTip('wnr');
+    } catch (e) {
+        console.log(e);
+    }
     traySolution(false);
     macOSFullscreenSolution(false);
     isDarkMode();
@@ -867,11 +872,12 @@ function traySolution(isFullScreen) {
             ]);
             if (tray != null) {
                 tray.removeAllListeners('click');
-                tray.on('click', function () {
-                    if (fullScreenProtection === false && process.platform === "win32") {
-                        showOrHide();
-                    }
-                });//tray
+                if (process.platform !== "linux")
+                    tray.on('click', function () {
+                        if (fullScreenProtection === false && process.platform === "win32") {
+                            showOrHide();
+                        }
+                    });//tray
                 tray.setContextMenu(contextMenu);
                 tray.setToolTip("wnr");
             }
@@ -891,8 +897,9 @@ function traySolution(isFullScreen) {
             if (tray != null) {
                 tray.removeAllListeners('click');
                 tray.setContextMenu(contextMenu);
-                tray.on('click', function () {
-                })
+                if (process.platform !== "linux")
+                    tray.on('click', function () {
+                    })
                 tray.setToolTip("wnr");
             }
         }
