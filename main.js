@@ -11,7 +11,6 @@ let i18n = require("i18n");
 let Registry = require('winreg');
 const windowsRelease = require('windows-release');
 let cmdOrCtrl = require('cmd-or-ctrl');
-let AV = require('leancloud-storage');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
@@ -26,7 +25,6 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
-    leanId = null, leanKey = null,
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
@@ -326,8 +324,6 @@ app.on('will-quit', () => {
 //when created the app, triggers
 //some apis can be only used inside ready
 app.on('ready', () => {
-    require('dotenv').config({ path: path.join(__dirname, '.env') });
-
     require('@electron/remote/main').initialize();
 
     createWindow();
@@ -605,10 +601,6 @@ app.on('ready', () => {
             }
         })
     }//backport when shadow disabled
-
-    leanId = process.env.LEAN_ID ? process.env.LEAN_ID : null;
-    leanKey = process.env.LEAN_KEY ? process.env.LEAN_KEY : null;
-    if (process.env.NODE_ENV !== "development") leanCloudSolution();
 })
 
 function hotkeyInit() {
@@ -1081,51 +1073,6 @@ ipcMain.on("settings-win-context-menu", function (event, message) {
         }
     }
 })
-
-function leanCloudSolution() {
-    if (leanId != null && leanKey != null)
-        try {
-            AV.init({
-                appId: leanId,
-                appKey: leanKey
-            });
-
-            let pushNotifications = new AV.Query('notifications');
-            pushNotifications.descending('createdAt');
-            pushNotifications.limit(3);
-
-            pushNotifications.find().then(function (notifications) {
-                notifications.forEach(function (notification) {
-                    let targetVersion = notification.get('targetVersion').replace("v", "");
-                    if (targetVersion == null || targetVersion === "" || targetVersion === require("./package.json").version.toString()) {
-                        let content = (store.get("i18n").indexOf("zh") !== -1) ? notification.get('notificationContentChinese') : notification.get('notificationContentEnglish');
-                        let title = (store.get("i18n").indexOf("zh") !== -1) ? notification.get('notificationTitleChinese') : notification.get('notificationTitleEnglish');
-                        let link = (store.get("i18n").indexOf("zh") !== -1) ? notification.get('notificationLinkChinese') : notification.get('notificationLinkEnglish');
-                        let id = notification.get('objectId');
-                        if (!store.get(id) && win != null) {
-                            pushNotificationLink = link;
-                            store.set(id, true);
-                            dialog.showMessageBox(win, {
-                                title: " wnr",
-                                type: "warning",
-                                message: title,
-                                detail: content,
-                                buttons: [i18n.__('cancel'), i18n.__('ok')],
-                                cancelId: 0
-                            }).then(function (response) {
-                                if (response.response !== 0)
-                                    if (pushNotificationLink !== "" && pushNotificationLink != null)
-                                        shell.openExternal(pushNotificationLink);
-                            });
-                        }
-                    }
-                })
-            })
-        } catch (e) {
-            console.log(e);
-        }
-    else console.log("No LeanCloud key provided, skipped.")
-}
 
 function isDarkMode() {
     if (app.isReady()) {

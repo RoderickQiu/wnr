@@ -5,8 +5,6 @@ const compareVersion = require('compare-version');
 
 let manuallyCheckText = '';
 
-require('dotenv').config({ path: path.join(__dirname, '.env') });
-
 function updateChecker(method) {
     if (method === 2) {
         manuallyCheckText = document.getElementById("manually").innerHTML;

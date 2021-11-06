@@ -1,18 +1,21 @@
 {
-	"version": "1.23.2",
+	"version": "1.23.3",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"修复了禁止取消、跳过计时功能造成的 BUG。",
-			"优化了标题提醒窗口、统计和 MINI 模式。"
+			"测试提供 Linux 版本，使用 AppImage 封裝，感谢 @NKID00 参与。注意，它仍然存在一些 BUG。",
+			"修复了当 wnr 不位于主显示器时，不能正常覆盖所有显示器的问题。",
+			"修复了一些和 UI 相关的 BUG，如修复了有时计时界面按钮错位的问题，并优化了一些交互。"
 		],
 		"zh-TW": [
-			"修復了禁止取消、跳過計時功能造成的 BUG。",
-			"優化了標題提醒窗口、統計和 MINI 模式。"
+			"測試提供 Linux 版本，使用 AppImage 封裝，感謝 @NKID00 參與。注意，它仍然存在一些 BUG。",
+			"修復了當 wnr 不位於主顯示器時，不能正常覆蓋所有顯示器的問題。",
+			"修復了一些和 UI 相關的 BUG，如修復了有時計時界面按鈕錯位的問題，並優化了一些交互。"
 		],
 		"en": [
-			"Fixed some bugs related to the disable pause / back feature. ",
-			"Optimized external title window, statistics and mini mode. "
+			"Start to provide Linux package in .AppImage (BETA), thanks to @NKID00.",
+			"Fixed multi-screen bug that it didn't work when wnr is not on the primary screen. ",
+			"Enhanced UI and some other things."
 		]
 	},
 	"introduce": {
