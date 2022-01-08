@@ -349,16 +349,16 @@ li input:nth-last-child(4)::after {
 }
 
 #dropdown-menu-button, #dropdown-menu-menu {
-    width: 250px;
+    width: 256px;
     text-align: left;
 }
 
 #dropdown-menu-menu {
-    padding-top: 16px;
+    padding-top: 8px;
     padding-left: 4px;
     padding-bottom: 0 !important;
     max-height: 180px;
-    overflow: scroll;
+    overflow: auto;
 }
 
 #dropdown-menu-button #expand-right {
@@ -382,6 +382,14 @@ li input:nth-last-child(4)::after {
 #edit-defaults {
     width: 40px;
     font-size: xx-small;
+}
+
+#predefined-tasks-edit, #dropdown-menu-menu .dropdown-item {
+    border-right: 4px solid transparent;
+}
+
+#predefined-tasks-edit {
+    margin-bottom: 8px;
 }
 
 #focus-work-set::after, #focus-work-set:checked::after {
@@ -447,7 +455,7 @@ li input:nth-last-child(4)::after {
     position: absolute;
     top: 96px;
     left: 32%;
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 336px;
     width: 63%;
     padding-right: 18px;
