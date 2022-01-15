@@ -1,19 +1,17 @@
 const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, systemPreferences,
-    nativeTheme, screen, TouchBar
+    powerMonitor, nativeTheme, screen, TouchBar
 }
     = require('electron');
 const Store = require('electron-store');
 const path = require("path");
 let i18n = require("i18n");
-let Registry = require('winreg');
-const windowsRelease = require('windows-release');
 let cmdOrCtrl = require('cmd-or-ctrl');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
+const winReleaseId = require('win-release-id');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
@@ -22,7 +20,6 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     isTimerWin = null, isWorkMode = null, isChinese = null,
     timeLeftTip = null, trayTimeMsg = null, predefinedTasks = null,
     trayH = null, trayMin = null,
-    pushNotificationLink = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
     progress = -1, timeLeftOnBar = null,
@@ -408,14 +405,14 @@ app.on('ready', () => {
 
     if (process.platform === "win32") {
         app.setAppUserModelId("com.scrisstudio.wnr");//set the appUserModelId to use notification in Windows
-        if (windowsRelease() === '7' && win != null) {
+        if (winReleaseId() === -1 && win != null) {
             let isNotified = store.has("windows-7-notification");
             if (isNotified === false) {
                 dialog.showMessageBox(win, {
                     title: " wnr",
-                    message: i18n.__('windows-7-notification'),
+                    message: i18n.__('old-windows-compatibility-notification'),
                     type: "warning",
-                    detail: i18n.__('windows-7-notification-msg'),
+                    detail: i18n.__('old-windows-compatibility-notification-msg'),
                 }).then(function () {
                     store.set("windows-7-notification", 1);
                 });
@@ -579,27 +576,8 @@ app.on('ready', () => {
     });
 
     if (process.platform === "win32") {
-        let regKey = new Registry({
-            hive: Registry.HKCU,
-            key: '\\Control Panel\\Desktop\\'
-        })
-        regKey.values(function (err, items) {
-            if (err)
-                return 'unset';
-            else {
-                for (let i = 0; i < items.length; i++) {
-                    if (items[i].name === 'UserPreferencesMask') {
-                        if (parseInt(items[i].value, 16).toString(2).charAt(21) === "1" && systemPreferences.isAeroGlassEnabled()) {
-                            isShadowless = false;
-                            styleCache.set("is-shadowless", false);
-                        } else {
-                            isShadowless = true;
-                            styleCache.set("is-shadowless", true);
-                        }
-                    }
-                }
-            }
-        })
+        isShadowless = true;
+        styleCache.set("is-shadowless", true);
     }//backport when shadow disabled
 })
 

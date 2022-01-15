@@ -124,11 +124,6 @@
   resolved "https://registry.npm.taobao.org/@types/verror/download/@types/verror-1.10.4.tgz?cache=0&sync_timestamp=1613385796701&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fverror%2Fdownload%2F%40types%2Fverror-1.10.4.tgz#805c0612b3a0c124cf99f517364142946b74ba3b"
   integrity sha1-gFwGErOgwSTPmfUXNkFClGt0ujs=
 
-"@types/winreg@^1.2.31":
-  version "1.2.31"
-  resolved "https://repo.huaweicloud.com/repository/npm/@types/winreg/-/winreg-1.2.31.tgz#914a7f076fd8f0f39964eb2e5c624c4fbdca77f7"
-  integrity sha512-SDatEMEtQ1cJK3esIdH6colduWBP+42Xw9Guq1sf/N6rM3ZxgljBduvZOwBsxRps/k5+Wwf5HJun6pH8OnD2gg==
-
 "@types/yargs-parser@*":
   version "20.2.0"
   resolved "https://registry.npm.taobao.org/@types/yargs-parser/download/@types/yargs-parser-20.2.0.tgz?cache=0&sync_timestamp=1613385244031&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40types%2Fyargs-parser%2Fdownload%2F%40types%2Fyargs-parser-20.2.0.tgz#dd3e6699ba3237f0348cd085e4698780204842f9"
@@ -651,7 +646,7 @@ cross-env@^7.0.3:
   dependencies:
     cross-spawn "^7.0.1"
 
-cross-spawn@^7.0.0, cross-spawn@^7.0.1:
+cross-spawn@^7.0.1:
   version "7.0.3"
   resolved "https://registry.npm.taobao.org/cross-spawn/download/cross-spawn-7.0.3.tgz?cache=0&sync_timestamp=1606748073153&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fcross-spawn%2Fdownload%2Fcross-spawn-7.0.3.tgz#f73a85b9d5d41d045551c177e2882d4ac85728a6"
   integrity sha1-9zqFudXUHQRVUcF34ogtSshXKKY=
@@ -695,6 +690,13 @@ debug@^4.3.2:
   version "4.3.2"
   resolved "https://registry.npm.taobao.org/debug/download/debug-4.3.2.tgz?cache=0&sync_timestamp=1614330710870&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fdebug%2Fdownload%2Fdebug-4.3.2.tgz#f0a49c18ac8779e31d4a0c6029dfb76873c7428b"
   integrity sha1-8KScGKyHeeMdSgxgKd+3aHPHQos=
+  dependencies:
+    ms "2.1.2"
+
+debug@^4.3.3:
+  version "4.3.3"
+  resolved "https://repo.huaweicloud.com/repository/npm/debug/-/debug-4.3.3.tgz#04266e0b70a98d4462e6e288e38259213332b664"
+  integrity sha512-/zxw5+vh1Tfv+4Qn7a5nsbcJKPaSvCDhojn6FEl9vupwK2VCSDtEiEtqr8DFtzYFOdz63LBkxec7DYuc2jon6Q==
   dependencies:
     ms "2.1.2"
 
@@ -935,21 +937,6 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.npm.taobao.org/escape-string-regexp/download/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha1-FLqDpdNz49MR5a/KKc9b+tllvzQ=
 
-execa@^4.0.2:
-  version "4.1.0"
-  resolved "https://registry.npm.taobao.org/execa/download/execa-4.1.0.tgz?cache=0&sync_timestamp=1606971095699&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fexeca%2Fdownload%2Fexeca-4.1.0.tgz#4e5491ad1572f2f17a77d388c6c857135b22847a"
-  integrity sha1-TlSRrRVy8vF6d9OIxshXE1sihHo=
-  dependencies:
-    cross-spawn "^7.0.0"
-    get-stream "^5.0.0"
-    human-signals "^1.1.1"
-    is-stream "^2.0.0"
-    merge-stream "^2.0.0"
-    npm-run-path "^4.0.0"
-    onetime "^5.1.0"
-    signal-exit "^3.0.2"
-    strip-final-newline "^2.0.0"
-
 extract-zip@^1.0.3:
   version "1.7.0"
   resolved "https://registry.npm.taobao.org/extract-zip/download/extract-zip-1.7.0.tgz#556cc3ae9df7f452c493a0cfb51cc30277940927"
@@ -1041,7 +1028,7 @@ get-stream@^4.1.0:
   dependencies:
     pump "^3.0.0"
 
-get-stream@^5.0.0, get-stream@^5.1.0:
+get-stream@^5.1.0:
   version "5.2.0"
   resolved "https://registry.npm.taobao.org/get-stream/download/get-stream-5.2.0.tgz?cache=0&sync_timestamp=1597056585216&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fget-stream%2Fdownload%2Fget-stream-5.2.0.tgz#4966a1795ee5ace65e706c4b7beb71257d6e22d3"
   integrity sha1-SWaheV7lrOZecGxLe+txJX1uItM=
@@ -1168,26 +1155,21 @@ http-cache-semantics@^4.0.0:
   resolved "https://registry.npm.taobao.org/http-cache-semantics/download/http-cache-semantics-4.1.0.tgz#49e91c5cbf36c9b94bcfcd71c23d5249ec74e390"
   integrity sha1-SekcXL82yblLz81xwj1SSex045A=
 
-human-signals@^1.1.1:
-  version "1.1.1"
-  resolved "https://registry.npm.taobao.org/human-signals/download/human-signals-1.1.1.tgz#c5b1cd14f50aeae09ab6c59fe63ba3395fe4dfa3"
-  integrity sha1-xbHNFPUK6uCatsWf5jujOV/k36M=
-
 humanize-duration@^3.22.0:
   version "3.25.1"
   resolved "https://registry.npm.taobao.org/humanize-duration/download/humanize-duration-3.25.1.tgz#50e12bf4b3f515ec91106107ee981e8cfe955d6f"
   integrity sha1-UOEr9LP1FeyREGEH7pgejP6VXW8=
 
-i18n@^0.13.3:
-  version "0.13.3"
-  resolved "https://registry.nlark.com/i18n/download/i18n-0.13.3.tgz#5820f48d87a77cf14e064719bee9bc682ed550eb"
-  integrity sha1-WCD0jYenfPFOBkcZvum8aC7VUOs=
+i18n@^0.13.4:
+  version "0.13.4"
+  resolved "https://repo.huaweicloud.com/repository/npm/i18n/-/i18n-0.13.4.tgz#8a434688efd04b8f3e4bcb49bbaf8a2828c57329"
+  integrity sha512-GZnXWeA15jTi9gc1jfgrJcSrNYDg7qbJXSYMuibqPYb1ThORmGCeM+gL6LrDagYRHh87/q/D0jRSOhAfv6wAow==
   dependencies:
-    debug "^4.1.1"
-    make-plural "^6.2.2"
+    debug "^4.3.3"
+    make-plural "^7.0.0"
     math-interval-parser "^2.0.1"
     messageformat "^2.3.0"
-    mustache "^4.0.1"
+    mustache "^4.2.0"
     sprintf-js "^1.1.2"
 
 iconv-corefoundation@^1.1.6:
@@ -1294,11 +1276,6 @@ is-path-inside@^3.0.2:
   version "3.0.3"
   resolved "https://registry.npm.taobao.org/is-path-inside/download/is-path-inside-3.0.3.tgz?cache=0&sync_timestamp=1615183730200&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fis-path-inside%2Fdownload%2Fis-path-inside-3.0.3.tgz#d231362e53a07ff2b0e0ea7fed049161ffd16283"
   integrity sha1-0jE2LlOgf/Kw4Op/7QSRYf/RYoM=
-
-is-stream@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/is-stream/download/is-stream-2.0.0.tgz#bde9c32680d6fae04129d6ac9d921ce7815f78e3"
-  integrity sha1-venDJoDW+uBBKdasnZIc54FfeOM=
 
 is-typedarray@^1.0.0:
   version "1.0.0"
@@ -1485,10 +1462,10 @@ make-plural@^4.3.0:
   optionalDependencies:
     minimist "^1.2.0"
 
-make-plural@^6.2.2:
-  version "6.2.2"
-  resolved "https://registry.npm.taobao.org/make-plural/download/make-plural-6.2.2.tgz#beb5fd751355e72660eeb2218bb98eec92853c6c"
-  integrity sha1-vrX9dRNV5yZg7rIhi7mO7JKFPGw=
+make-plural@^7.0.0:
+  version "7.0.0"
+  resolved "https://repo.huaweicloud.com/repository/npm/make-plural/-/make-plural-7.0.0.tgz#f4c9c5c3334b935788f10815ffbaa55c9b2e8393"
+  integrity sha512-OTuzMnuhrc7G3LJU5upkhKy7EIAq/dRqANqTUh0B8au7jM5mXq9kVdla3sn3g2GCRIxgooCDQtSJ3s1fAjasbQ==
 
 matcher@^3.0.0:
   version "3.0.0"
@@ -1501,11 +1478,6 @@ math-interval-parser@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/math-interval-parser/download/math-interval-parser-2.0.1.tgz#e22cd6d15a0a7f4c03aec560db76513da615bed4"
   integrity sha1-4izW0VoKf0wDrsVg23ZRPaYVvtQ=
-
-merge-stream@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/merge-stream/download/merge-stream-2.0.0.tgz#52823629a14dd00c9770fb6ad47dc6310f2c1f60"
-  integrity sha1-UoI2KaFN0AyXcPtq1H3GMQ8sH2A=
 
 messageformat-formatters@^2.0.1:
   version "2.0.1"
@@ -1575,10 +1547,10 @@ ms@2.1.2:
   resolved "https://registry.npm.taobao.org/ms/download/ms-2.1.2.tgz?cache=0&sync_timestamp=1607433899126&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fms%2Fdownload%2Fms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha1-0J0fNXtEP0kzgqjrPM0YOHKuYAk=
 
-mustache@^4.0.1:
+mustache@^4.2.0:
   version "4.2.0"
-  resolved "https://registry.npm.taobao.org/mustache/download/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
-  integrity sha1-5YkjJNYKEuycKnM1ntylKXK/b2Q=
+  resolved "https://repo.huaweicloud.com/repository/npm/mustache/-/mustache-4.2.0.tgz#e5892324d60a12ec9c2a73359edca52972bf6f64"
+  integrity sha512-71ippSywq5Yb7/tVYyGbkBggbU8H3u5Rz56fH60jGFgr8uHwxs+aSKeqmluIVzM0m0kB7xQjKS6qPfd0b2ZoqQ==
 
 node-addon-api@^1.6.3:
   version "1.7.2"
@@ -1627,13 +1599,6 @@ npm-conf@^1.1.3:
     config-chain "^1.1.11"
     pify "^3.0.0"
 
-npm-run-path@^4.0.0:
-  version "4.0.1"
-  resolved "https://registry.npm.taobao.org/npm-run-path/download/npm-run-path-4.0.1.tgz#b7ecd1e5ed53da8e37a55e1c2269e0b97ed748ea"
-  integrity sha1-t+zR5e1T2o43pV4cImnguX7XSOo=
-  dependencies:
-    path-key "^3.0.0"
-
 object-keys@^1.0.12:
   version "1.1.1"
   resolved "https://registry.npm.taobao.org/object-keys/download/object-keys-1.1.1.tgz#1c47f272df277f3b1daf061677d9c82e2322c60e"
@@ -1646,7 +1611,7 @@ once@^1.3.0, once@^1.3.1, once@^1.4.0:
   dependencies:
     wrappy "1"
 
-onetime@^5.1.0, onetime@^5.1.2:
+onetime@^5.1.2:
   version "5.1.2"
   resolved "https://registry.npm.taobao.org/onetime/download/onetime-5.1.2.tgz?cache=0&sync_timestamp=1597003951681&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fonetime%2Fdownload%2Fonetime-5.1.2.tgz#d0e96ebb56b07476df1dd9c4806e5237985ca45e"
   integrity sha1-0Oluu1awdHbfHdnEgG5SN5hcpF4=
@@ -1697,7 +1662,7 @@ path-is-absolute@^1.0.0:
   resolved "https://registry.npm.taobao.org/path-is-absolute/download/path-is-absolute-1.0.1.tgz#174b9268735534ffbc7ace6bf53a5a9e1b5c5f5f"
   integrity sha1-F0uSaHNVNP+8es5r9TpanhtcX18=
 
-path-key@^3.0.0, path-key@^3.1.0:
+path-key@^3.1.0:
   version "3.1.1"
   resolved "https://registry.npm.taobao.org/path-key/download/path-key-3.1.1.tgz#581f6ade658cbba65a0d3380de7753295054f375"
   integrity sha1-WB9q3mWMu6ZaDTOA3ndTKVBU83U=
@@ -2070,11 +2035,6 @@ strip-ansi@^6.0.0:
   dependencies:
     ansi-regex "^5.0.0"
 
-strip-final-newline@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.npm.taobao.org/strip-final-newline/download/strip-final-newline-2.0.0.tgz#89b852fb2fcbe936f6f4b3187afb0a12c1ab58ad"
-  integrity sha1-ibhS+y/L6Tb29LMYevsKEsGrWK0=
-
 strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.npm.taobao.org/strip-json-comments/download/strip-json-comments-2.0.1.tgz?cache=0&sync_timestamp=1594571796132&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fstrip-json-comments%2Fdownload%2Fstrip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
@@ -2284,14 +2244,12 @@ widest-line@^3.1.0:
   dependencies:
     string-width "^4.0.0"
 
-windows-release@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npm.taobao.org/windows-release/download/windows-release-4.0.0.tgz#4725ec70217d1bf6e02c7772413b29cdde9ec377"
-  integrity sha1-RyXscCF9G/bgLHdyQTspzd6ew3c=
-  dependencies:
-    execa "^4.0.2"
+win-release-id@^1.0.6:
+  version "1.0.6"
+  resolved "https://repo.huaweicloud.com/repository/npm/win-release-id/-/win-release-id-1.0.6.tgz#402b8594777ca4accbcd87e80cf6a97c9b57e674"
+  integrity sha512-QX6k0lEK9PuKi7X0BT7HEBxv0r1AzrHWoh5FWalQdH3UtBsfck3wdvoBwx+Xz/9ja3UA0c6CRdOTvRQgD4wg8Q==
 
-winreg@1.2.4, winreg@^1.2.4:
+winreg@1.2.4:
   version "1.2.4"
   resolved "https://registry.npm.taobao.org/winreg/download/winreg-1.2.4.tgz#ba065629b7a925130e15779108cf540990e98d1b"
   integrity sha1-ugZWKbepJRMOFXeRCM9UCZDpjRs=
