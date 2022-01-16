@@ -40,7 +40,7 @@
 	"skipper": "提前跳過當前的時間",
 	"not-enough": "請合法輸入工作時間、休息時間和循環次數。暫時不支持 5 秒以下的時間。",
 	"too-long": "長度超過一天的計劃暫時不能添加。",
-	"back": "返回首頁",
+	"back": "返回",
 	"ended": "已完成",
 	"version": "版本",
 	"feedback-tip-part-4": "！",
@@ -249,6 +249,7 @@
 	"focus-notify-body": "時開啓全屏專心模式，到時將無法退出",
 	"recover": "退出 MINI 模式",
 	"mini-mode": "MINI 模式",
+	"mini-mode-msg": "MINI 模式：展現一個分立小窗口，快捷提示還剩多少時間，且始終置於頂層",
 	"min-left": "剩餘",
 	"statistics": "使用統計",
 	"statistics-work-time": "工作時間",
@@ -308,5 +309,6 @@
 	"already-paused": "暫停",
 	"external-title": "將標題在專門窗口中顯示，用於提示",
 	"title-edit-msg": "點擊以編輯標題",
-	"notes-edit-msg": "點擊以編輯筆記"
+	"notes-edit-msg": "點擊以編輯筆記",
+	"skip": "跳過"
 }

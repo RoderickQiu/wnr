@@ -237,9 +237,21 @@ li input:nth-last-child(4)::after {
     margin: 5px;
 }
 
+.xx-small {
+    font-size: xx-small;
+    line-break: loose;
+    line-height: 100%;
+}
+
 .display-1 {
     font-size: 7.5rem !important;
     font-weight: 200;
+}
+
+.controller-msg {
+    padding: 0;
+    margin: 0 3px 0 3px;
+    transform: translateY(-2px);
 }
 
 .hotkeyset {

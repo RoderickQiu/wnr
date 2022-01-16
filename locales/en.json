@@ -253,6 +253,7 @@
 	"focus-notify-body": "focus mode will be on",
 	"recover": "Exit the mini mode",
 	"mini-mode": "Mini mode",
+	"mini-mode-msg": "Mini mode: a separated, small floating window showing you the time left",
 	"min-left": "left",
 	"statistics": "Statistics",
 	"statistics-work-time": "Work time",
@@ -312,5 +313,6 @@
 	"already-paused": "paused",
 	"external-title": "Show title in a seperate window to remind you",
 	"title-edit-msg": "Click to edit title",
-	"notes-edit-msg": "Click to edit notes"
+	"notes-edit-msg": "Click to edit notes",
+	"skip": "Skip"
 }

@@ -29,20 +29,21 @@
         <div id="controller">
             <a href="javascript:getHelp('guide/1-basic-usage')" class="small work"><i class="iconfont icon-info"
                                                                                       id="helper"></i></a>&nbsp;&nbsp;
-            <a href="javascript:floatingOpener()" class="small work"><i class="iconfont icon-suoxiao"
-                                                                        id="mini-mode"></i></a>&nbsp;&nbsp;
+            <a href="javascript:floatingOpener()" class="small work" id="mini-mode"><i class="iconfont icon-suoxiao"
+            ></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
                 id="no-use-space">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-minimize')" class="small work"><i class="iconfont icon-minus"
-                                                                               id="window-minimize"></i></a><span
+            <a href="javascript:call('window-minimize')" class="small work" id="window-minimize"><i
+                    class="iconfont icon-minus"
+            ></i></a><span
                 class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small work should-lock"><i
-                    class="iconfont icon-close"
-                    id="exit"></i></a>
+            <a href="javascript:call('window-close-chk')" class="small work should-lock"
+               id="exit"><i
+                    class="iconfont icon-close"></i></a>
             <script>
                 $('#helper').attr('title', i18n.__('helper'));
-                $('#mini-mode').attr('title', i18n.__('mini-mode'));
+                $('#mini-mode').attr('title', i18n.__('mini-mode-msg'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
@@ -138,11 +139,17 @@
                     class="iconfont icon-pause"></i></a></div>
             <br />
             <div class="text-center text-muted" id="more-options">
-                <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
-                                                                       id="back-index"></i></a>
+                <a href="javascript:backcheck()" class="text-muted" id="back-index"><i class="iconfont icon-previous"
+                ></i><span
+                        class="focuser extreme-small controller-msg">
+                    <script>document.write(i18n.__('back'));</script>
+                </span></a>
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <a href="javascript:skipper()" class="text-muted" id="skipper-container">
-                    <i class="iconfont icon-fastforward" id="skipper"></i>
+                    <span
+                            class="focuser extreme-small controller-msg">
+                    <script>document.write(i18n.__('skip'));</script>
+                </span><i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
                 <br />
             </div>
@@ -150,8 +157,8 @@
                    onkeydown="if(event.keyCode === 13) recheck($('#passcode-rechecker').val());" />
             <br />
             <div class="text-center lead" id="backer">
-                <a href="javascript:backcheck()" class="text-muted"><i class="iconfont icon-previous"
-                                                                       id="backindex2"></i></a>
+                <a href="javascript:backcheck()" class="text-muted" id="backindex2"><i class="iconfont icon-previous"
+                ></i></a>
             </div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
@@ -174,7 +181,7 @@
                 $('#backindex2').attr('title', i18n.__('back-index'));
                 $('#stopper').attr('title', i18n.__('start-or-stop'))
                 $('#backer').css('display', 'none');
-                $('#skipper').attr('title', i18n.__('skipper'));
+                $('#skipper-container').attr('title', i18n.__('skipper'));
                 if (process.platform === "darwin") $("#controller").css("display", "none");
             </script>
         </div>
@@ -207,10 +214,6 @@
         if (process.platform === "darwin") {
             $("#win-hider").css("display", "none");
             $("#no-use-space").css("display", "none");
-        }
-        if (store.get('localtime') === false) {
-            $("#time-bar").remove();
-            $("#time-bar-macos").remove();
         }
         $("#only-one").css("display", "none");
         $("#passcode-rechecker").css("display", "none");
