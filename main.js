@@ -42,10 +42,10 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 function createWindow() {
     //create the main window
     win = new BrowserWindow({
-        width: 376,
+        width: 350,
         height: 444,
-        minWidth: 376,
-        minHeight: 420,
+        minWidth: 349,
+        minHeight: 444,
         frame: false,
         backgroundColor: "#fefefe",
         resizable: true,
@@ -138,7 +138,7 @@ function createWindow() {
 }
 
 function alarmSet() {
-    resetAlarm = setInterval(function () {
+    resetAlarm = setTimeout(function () {
         if (store.get('alarmtip') !== false && isAlarmDialogClosed && isAlarmTipOn) {
             if (win != null) {
                 win.flashFrame(true);
@@ -159,6 +159,7 @@ function alarmSet() {
                     win.show();
                     win.moveTop();
                 }
+                alarmSet();
             });
         }
     }, 600000)//alarm you for using wnr
@@ -1425,7 +1426,6 @@ ipcMain.on('warning-giver-all-task-end', function () {
                     }
                 })
             }, 1000);
-        alarmSet()
     }
 })
 
@@ -2009,6 +2009,8 @@ ipcMain.on("timer-win", function (event, message) {
         statisticsWriter();
 
         if (dockHide) app.dock.hide();
+        if (resetAlarm)
+            clearTimeout(resetAlarm);
         alarmSet();
         isAlarmTipOn = true;
         if (powerSaveBlockerId)
