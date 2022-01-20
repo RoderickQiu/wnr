@@ -222,7 +222,11 @@ li input:nth-last-child(4)::after {
     color: #5490eac2;
 }
 
-.text-grey, .positive, .positive::-webkit-input-placeholder, .positive:hover {
+.text-grey {
+    color: #6c757d;
+}
+
+.positive, .positive::-webkit-input-placeholder, .positive:hover {
     color: #17a2b8;
 }
 
@@ -252,6 +256,19 @@ li input:nth-last-child(4)::after {
     padding: 0;
     margin: 0 3px 0 3px;
     transform: translateY(-2px);
+}
+
+.controller-msg-big {
+    padding: 0;
+    margin: 0 3px 0 3px;
+    transform: translateY(-3px);
+}
+
+.controller-msg-spacing {
+    margin-left: 8px;
+    margin-right: 10px;
+    transform: translateY(-3px) !important;
+    display: inline-block;
 }
 
 .hotkeyset {
@@ -344,7 +361,7 @@ li input:nth-last-child(4)::after {
 }
 
 #set {
-    transform: translateY(-15px);
+    transform: translate(5px, -20px);
 }
 
 #set .dropdown-menu {
@@ -353,7 +370,7 @@ li input:nth-last-child(4)::after {
 }
 
 #set #dropdown-menu-extend {
-    transform: translate3d(-233px, -14px, 0px) !important;
+    transform: translate(-233px, -14px) !important;
 }
 
 #dropdown-button-extend {
@@ -369,7 +386,7 @@ li input:nth-last-child(4)::after {
     padding-top: 8px;
     padding-left: 4px;
     padding-bottom: 0 !important;
-    max-height: 180px;
+    max-height: 200px;
     overflow: auto;
 }
 
@@ -410,6 +427,7 @@ li input:nth-last-child(4)::after {
 
 #timer {
     line-height: 90%;
+    transform: translateY(-10px);
 }
 
 #timer-error {
@@ -564,7 +582,6 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-
 #logo-bar .dropdown-menu {
     margin-top: 6px;
     transform: translate(4px, 36px) !important;
@@ -581,7 +598,7 @@ li input:nth-last-child(4)::after {
 
 #all-sum {
     position: absolute;
-    bottom: 60px;
+    bottom: 65px;
     z-index: -9999;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -589,11 +606,10 @@ li input:nth-last-child(4)::after {
 }
 
 #bottom-btn {
-    opacity: 0.75;
-    width: 110%;
-    height: 50px;
+    height: 40px;
+    width: 256px;
     position: absolute;
-    bottom: 0px;
+    bottom: 15px;
     z-index: 999;
     -webkit-app-region: no-drag;
     /* let it clickable */
