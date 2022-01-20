@@ -309,10 +309,6 @@ li input:nth-last-child(4)::after {
     line-height: 200%;
 }
 
-.dropdown-toggle::after {
-    vertical-align: .055em;
-}
-
 .time-bar-focus {
     left: auto !important;
     right: auto !important;
@@ -366,7 +362,7 @@ li input:nth-last-child(4)::after {
 
 #set .dropdown-menu {
     margin-top: 6px;
-    transform: translateY(39px) !important;
+    transform: translateY(50px) !important;
 }
 
 #set #dropdown-menu-extend {
@@ -573,8 +569,8 @@ li input:nth-last-child(4)::after {
 
 #logo-bar {
     position: absolute;
-    top: 2px;
-    left: 8px;
+    top: 4px;
+    left: 10px;
     display: none;
     background-clip: padding-box;
     -webkit-app-region: no-drag;
@@ -609,7 +605,7 @@ li input:nth-last-child(4)::after {
     height: 40px;
     width: 256px;
     position: absolute;
-    bottom: 15px;
+    bottom: 18px;
     z-index: 999;
     -webkit-app-region: no-drag;
     /* let it clickable */

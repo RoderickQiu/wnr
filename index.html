@@ -115,30 +115,9 @@
 
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
-            <div class="dropdown dropdown-default">
-                <a class="dropdown-toggle rest" href="#" role="button" id="controller-dropdown"
-                   data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                    <img src="res/icons/wnrIcon.png" width="18px" />
-                </a>
-                <div class="dropdown-menu" aria-labelledby="controller-dropdown">
-                    <div class="dropdown-header extreme-small">
-                        <script>document.write(i18n.__('menu'));</script>
-                    </div>
-                    <a href="javascript:statistics()" class="small dropdown-item">
-                        <script>document.write(i18n.__('statistics'));</script>
-                    </a>
-                    <a href="javascript:call('locker')" class="small dropdown-item">
-                        <script>document.write(i18n.__('locker'));</script>
-                    </a>
-                    <a href="javascript:getHelp('guide/1-basic-usage')" class="small dropdown-item">
-                        <script>document.write(i18n.__('help-page'));</script>
-                    </a>
-                    <a href="javascript:call('about')" class="small dropdown-item">
-                        <script>document.write(i18n.__('info'));</script>
-                    </a>
-                </div>
-            </div>
+            <a class="rest" href="javascript:call('about')" role="button">
+                <img src="res/icons/wnrIcon.png" width="16.8px" />
+            </a>
         </div>
         <div id="statistics-back">
             <a href="javascript:onlyRest('out')" class="work"><i class="iconfont icon-angle-left"></i></a>
@@ -147,9 +126,13 @@
             </script>
         </div>
         <div id="controller">
-            <a href="javascript:call('settings')" class="small rest" id="settings"><i
-                    class="iconfont icon-cog should-lock"></i></a>&nbsp;<span
-                class="controller-msg-spacing xx-small rest font-weight-bold should-lock">|</span>
+            <a href="javascript:statistics()" class="small rest" id="statistics"><i
+                    class="iconfont icon-statistics"></i></a>&nbsp;&nbsp;
+            <a href="javascript:call('locker')" class="small rest" id="locker" style="display: none"><i
+                    class="iconfont icon-lock"></i></a><a href="javascript:call('settings')"
+                                                          class="small rest" id="settings"><i
+                class="iconfont icon-cog should-lock"></i></a>&nbsp;<span
+                class="controller-msg-spacing xx-small rest font-weight-bold">|</span>
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
                 id="no-use-space">&nbsp;&nbsp;</span>
@@ -160,13 +143,16 @@
                     class="iconfont icon-close"
                     id="exit"></i></a>
             <script>
-                $('#controller-dropdown').attr('title', i18n.__('menu'));
+                $('#logo-bar').attr('title', i18n.__('info'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
                 $('#back-onlyrest').attr('title', i18n.__('back'));
                 $('#settings').attr('title', i18n.__('settings'));
+                $('#locker').attr('title', i18n.__('locker'));
+                $('#statistics').attr('title', i18n.__('statistics'));
                 if (process.platform === "darwin") $("#controller").css("display", "none");
+                if (store.get("islocked")) $("#locker").css("display", "inline-block");
             </script>
         </div>
         <div id="new-feature" class="container-fluid">

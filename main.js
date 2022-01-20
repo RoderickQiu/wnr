@@ -42,8 +42,8 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 function createWindow() {
     //create the main window
     win = new BrowserWindow({
-        width: 350,
-        height: 444,
+        width: 360,
+        height: 459,
         minWidth: 349,
         minHeight: 444,
         frame: false,
@@ -236,7 +236,6 @@ function multiScreenSolution(mode) {
         let winBounds = win.getBounds();
         //get the screen that contains the window
         let distScreen = screen.getDisplayNearestPoint({ x: winBounds.x, y: winBounds.y });
-        console.log(distScreen)
         for (i in displays) {
             if (displays[i].id !== distScreen.id) {
                 if (mode === "on") {
