@@ -1,7 +1,7 @@
 const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, nativeTheme, screen, TouchBar
+    powerMonitor, nativeTheme, screen, TouchBar, Notification
 }
     = require('electron');
 const Store = require('electron-store');
@@ -39,6 +39,9 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to 
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this meaningless alert
 
+//use native notification, declare package.json/build/appId beforehand
+app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr'));
+
 function createWindow() {
     //create the main window
     win = new BrowserWindow({
@@ -61,7 +64,7 @@ function createWindow() {
         },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png"
-    });//optimize for cross platform
+    });//optimize for cross-platform
 
     //load index.html
     win.loadFile('index.html');
@@ -404,7 +407,6 @@ app.on('ready', () => {
     hasMultiDisplays = screen.getAllDisplays().length > 1;
 
     if (process.platform === "win32") {
-        app.setAppUserModelId("com.scrisstudio.wnr");//set the appUserModelId to use notification in Windows
         if (winReleaseId() === -1 && win != null) {
             let isNotified = store.has("windows-7-notification");
             if (isNotified === false) {
@@ -714,22 +716,29 @@ function showOrHide() {
 
 // possible funcs: normal, hide-or-show
 function notificationSolution(title, body, func) {
-    notifier.notify({
-            sound: true,
-            timeout: 5,
-            title: title,
-            message: body,
-            silent: false,
-            icon: path.join(__dirname, app.isPackaged ? (process.platform === "darwin" ? '../app.asar.unpacked/res/icons/iconMac.png' : '../app.asar.unpacked/res/icons/wnrIcon.png') : "/res/icons/wnrIcon.png")
-        },
-        function () {
-            if (func === "hide-or-show") {
-                if (win != null) {
-                    win.show();
-                }
+    if (process.env.NODE_ENV === "portable" || !Notification.isSupported()) {
+        notifier.notify({
+                sound: true,
+                timeout: 5,
+                title: title,
+                message: body,
+                silent: false,
+                icon: path.join(__dirname, app.isPackaged ? (process.platform === "darwin" ? '../app.asar.unpacked/res/icons/iconMac.png' : '../app.asar.unpacked/res/icons/wnrIcon.png') : "/res/icons/wnrIcon.png")
+            },
+            function () {
+                if (func === "hide-or-show" && win != null) win.show();
             }
-        }
-    );
+        );
+    } else {//use native notification api
+        let notification = new Notification({ title: title, body: body });
+        notification.once("failed", (event, error) => {
+            console.log(event + error);
+        });
+        notification.once("click", (event) => {
+            if (func === "hide-or-show" && win != null) win.show();
+        });
+        notification.show();
+    }
 }
 
 function traySolution(isFullScreen) {
@@ -1577,7 +1586,7 @@ function about() {
             aboutWin = new BrowserWindow({
                 parent: win,
                 width: 720,
-                height: 450,
+                height: 520,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
