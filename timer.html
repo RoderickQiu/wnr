@@ -626,14 +626,15 @@
                         $("#skipper-space").css("display", "none");
                     } else {
                         $("#skipper").css("display", "inline");
-                        $("#skipper-space").css("display", "block");
+                        $("#skipper-space").css("display", "inline-block");
                     }
                     if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "rest" || store.get("disable-backing-special") === "all")) {
                         $("#back-index").css("display", "none");
                         $("#skipper-space").css("display", "none");
                     } else {
-                        $("#back-index").css("display", "block");
-                        $("#skipper-space").css("display", "block");
+                        $("#back-index").css("display", "inline-block");
+                        $("#skipper-space").css("display", "inline-" +
+                                "block");
                     }
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
@@ -685,14 +686,14 @@
                         $("#skipper-space").css("display", "none");
                     } else {
                         $("#skipper").css("display", "inline");
-                        $("#skipper-space").css("display", "block");
+                        $("#skipper-space").css("display", "inline-block");
                     }
                     if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all")) {
                         $("#back-index").css("display", "none");
                         $("#skipper-space").css("display", "none");
                     } else {
-                        $("#back-index").css("display", "block");
-                        $("#skipper-space").css("display", "block");
+                        $("#back-index").css("display", "inline-block");
+                        $("#skipper-space").css("display", "inline-block");
                     }
                     $("#only-one").css("display", "none");
                     $(".rest").addClass("work");
