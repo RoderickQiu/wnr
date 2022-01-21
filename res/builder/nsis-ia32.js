@@ -26,7 +26,9 @@ const config = {
             //! to exclude
             "!res/icons/*Mac*",
             "!res/icons/*.psd",
-            "!designs/**"
+            "!designs/**",
+            "!./node_modules/node-notifier/vendor/snoreToast/**",
+            "!./node_modules/node-notifier/vendor/mac.noindex/**"
         ]
     },
     "nsis": {

@@ -24,7 +24,8 @@ const config = {
             //! to exclude
             "!res/icons/*Mac*",
             "!res/icons/*.psd",
-            "!designs/**"
+            "!designs/**",
+            "!./node_modules/node-notifier/vendor/mac.noindex/**"
         ],
         "artifactName": "${productName}-${version}-Win-32.${ext}"
     },

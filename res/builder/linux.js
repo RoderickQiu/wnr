@@ -21,7 +21,9 @@ const config = {
             "!res/icons/*Mac*",
             "!res/icons/*Win*",
             "!res/icons/*.psd",
-            "!./node_modules/node-notifier/vendor/snoreToast/**"
+            "!./node_modules/node-notifier/vendor/snoreToast/**",
+            "!./node_modules/node-notifier/vendor/notifu/**",
+            "!./node_modules/node-notifier/vendor/mac.noindex/**"
         ],
         "category": "Utility"
     },

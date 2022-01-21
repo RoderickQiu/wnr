@@ -22,7 +22,9 @@ const config = {
             //! to exclude
             "!res/icons/*Win*",
             "!res/icons/*.psd",
-            "!./node_modules/node-notifier/vendor/snoreToast/**"
+            "!./node_modules/node-notifier/vendor/snoreToast/**",
+            "!./node_modules/node-notifier/vendor/notifu/**",
+            "!./node_modules/node-notifier/vendor/mac.noindex/**"
         ]
     },
     "dmg": {
