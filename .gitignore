@@ -6,6 +6,7 @@ dist/*
 designs/*
 output/*
 packaged/*
+.idea/*
 
 ### Linux ###
 *~
