@@ -65,35 +65,12 @@
     <script>
         var isMiniMode = true;
 
-        if (process.platform === "darwin") {
-            $("#floating-recover").css("display", "none");
-            $("#floating-close").css("display", "none");
-        } else {
-            $("#stopper-spacing").css("display", "none");
-        }
-        if (store.get('disable-pausing') === true) {
-            $("#stopper").remove();
-        }
-        if (store.get('disable-skipping') === true) {
-            $("#floating-skipper").remove();
-        }
-        if (store.get('disable-backing') === true) {
-            $("#floating-back").remove();
-        }
-
         function hover() {
             $("#floating-unhover").css("opacity", "0");
         }
 
         function unhover() {
             $("#floating-unhover").css("opacity", "1");
-        }
-
-        function semihover() {
-            $("#floating-unhover").css("opacity", "0");
-            setTimeout(function () {
-                $("#floating-unhover").css("opacity", "1");
-            }, 500);
         }
 
         let isWorking = true;
@@ -121,7 +98,7 @@
             $("#floating-back").css("display", "none");
         }
 
-        let timeLeft = $("#time-left");
+        let timeLeft = $("#time-left"), floatingBottomBar = $('#floating-bottom-bar');
         let lastTimeHasHours = null;
         let h = " " + i18n.__("h"), min = " " + i18n.__("min");
 
@@ -158,8 +135,8 @@
             if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
             else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
 
-            $("#time-left").text(getStyledTimeLeft(message.minute));
-            $('#floating-bottom-bar').css("width", message.percentage + "%");
+            timeLeft.text(getStyledTimeLeft(message.minute));
+            floatingBottomBar.css("width", message.percentage + "%");
 
             if (message.method === 2 && method === 1) {
                 $(".work").addClass("rest");
@@ -188,7 +165,33 @@
                 if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                 else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
             });
+
+            if (store.get('disable-pausing') === true) {
+                if (!((store.get('disable-pausing-special') === "work" && method !== 1) ||
+                        (store.get('disable-pausing-special') === "rest" && method !== 2)))
+                    $("#stopper").css("display", "none");
+                else $("#stopper").css("display", "inline-block");
+            } else $("#stopper").css("display", "inline-block");
+            if (store.get('disable-skipping') === true) {
+                if (!((store.get('disable-skipping-special') === "work" && method !== 1) ||
+                        (store.get('disable-skipping-special') === "rest" && method !== 2)))
+                    $("#floating-skipper").css("display", "none");
+                else $("#floating-skipper").css("display", "inline-block");
+            } else $("#floating-skipper").css("display", "inline-block");
+            if (store.get('disable-backing') === true) {
+                if (!((store.get('disable-backing-special') === "work" && method !== 1) ||
+                        (store.get('disable-backing-special') === "rest" && method !== 2)))
+                    $("#floating-back").css("display", "none");
+                else $("#floating-back").css("display", "inline-block");
+            } else $("#floating-back").css("display", "inline-block");
         });
+
+        if (process.platform === "darwin") {
+            $("#floating-recover").css("display", "none");
+            $("#floating-close").css("display", "none");
+        } else {
+            $("#stopper-spacing").css("display", "none");
+        }
     </script>
     <script src="renderer.js"></script>
 </body>

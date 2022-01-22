@@ -377,7 +377,7 @@
             $("#stopper").css("display", "none");
         }
         if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
-            $("#skipper").css("display", "none");
+            $("#skipper-container").css("display", "none");
             $("#skipper-space").css("display", "none");
         }
         // special dealing for enabling back for infinity mode and liberal timing
@@ -429,10 +429,6 @@
                 if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                 ipc.once('warning-closed', function () {
                     stopper();
-                    if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
-                        $("#skipper-container").css("display", "inline");
-                        if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
-                    }
                 });
                 if (store.get("fullscreen-experience") !== true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
@@ -467,7 +463,8 @@
                     napInterval = 0,
                     lastNapSecond = 0,
                     canStop = true,
-                    stopCounter = 0;
+                    stopCounter = 0,
+                    isBothSkipperAndBackerEnabled = true;
 
             if (store.get("nap") || methodFromStart === 3) {
                 shouldNap = true;
@@ -526,7 +523,7 @@
             function stopAndCount() {
                 stopper();
                 if (!wasCounting) stopCounter++;
-                if (stopCounter) $("#stop-count").text(" | " + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
+                if (stopCounter) $("#stop-count").text(((loop === 0 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
             }
 
             function stopper() {
@@ -574,15 +571,19 @@
                     player.loop = true;
                     player.play();
                     if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
-                        $("#skipper").css("display", "none");
+                        $("#skipper-container").css("display", "none");
+                        $("#skipper-space").css("display", "none");
                         setTimeout(function () {
                             player.loop = false;
-                            $("#skipper").css("display", "inline");
+                            if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
+                                $("#skipper-container").css("display", "inline");
+                                if ((!store.get("islocked")) && (!(store.get('disable-backing') === true && ((method === 2 ? store.get("disable-backing-special") === "rest" : store.get("disable-backing-special") === "work") || store.get("disable-backing-special") === "all")))) $("#skipper-space").css("display", "inline");
+                                else $("#skipper-space").css("display", "none");
+                            } else {
+                                $("#skipper-container").css("display", "none");
+                                $("#skipper-space").css("display", "none");
+                            }
                         }, 3000);
-                        if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
-                            $("#skipper-container").css("display", "inline");
-                            if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
-                        }
                         canStop = true;
                     } else {
                         setTimeout(function () {
@@ -603,11 +604,14 @@
                         player.loop = false;
                         player.pause();
 
-
                         if (!isClockWorking) stopper();
                         if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
                             $("#skipper-container").css("display", "inline");
-                            if (!store.get("islocked")) $("#skipper-space").css("display", "inline");
+                            if ((!store.get("islocked")) && (!(store.get('disable-backing') === true && ((method === 2 ? store.get("disable-backing-special") === "rest" : store.get("disable-backing-special") === "work") || store.get("disable-backing-special") === "all")))) $("#skipper-space").css("display", "inline");
+                            else $("#skipper-space").css("display", "none");
+                        } else {
+                            $("#skipper-container").css("display", "none");
+                            $("#skipper-space").css("display", "none");
                         }
                         canStop = true;
                     });
@@ -616,24 +620,25 @@
 
             function themeChanger() {
                 if (method === 1) {
+                    isBothSkipperAndBackerEnabled = true;
                     if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "rest" || store.get("disable-pausing-special") === "all")) {
                         $("#stopper").css("display", "none");
                     } else $("#stopper").css("display", "block");
                     if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "rest" || store.get("disable-skipping-special") === "all")) {
-                        $("#skipper").css("display", "none");
-                        $("#skipper-space").css("display", "none");
+                        $("#skipper-container").css("display", "none");
+                        isBothSkipperAndBackerEnabled = false;
                     } else {
-                        $("#skipper").css("display", "inline");
-                        $("#skipper-space").css("display", "inline-block");
+                        $("#skipper-container").css("display", "inline");
                     }
                     if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "rest" || store.get("disable-backing-special") === "all")) {
                         $("#back-index").css("display", "none");
-                        $("#skipper-space").css("display", "none");
+                        isBothSkipperAndBackerEnabled = false;
                     } else {
                         $("#back-index").css("display", "inline-block");
-                        $("#skipper-space").css("display", "inline-" +
-                                "block");
                     }
+                    if (isBothSkipperAndBackerEnabled) $("#skipper-space").css("display", "inline");
+                    else $("#skipper-space").css("display", "none");
+                    //TODO the skipper-space should be dealt in this way, that only when both skipping and backing are enabled, the space is shown, otherwise it doesn't, need to change both warningGiver() and themeChanger()
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
@@ -680,18 +685,14 @@
                         $("#stopper").css("display", "none");
                     } else $("#stopper").css("display", "block");
                     if (store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")) {
-                        $("#skipper").css("display", "none");
-                        $("#skipper-space").css("display", "none");
+                        $("#skipper-container").css("display", "none");
                     } else {
-                        $("#skipper").css("display", "inline");
-                        $("#skipper-space").css("display", "inline-block");
+                        $("#skipper-container").css("display", "inline");
                     }
                     if (store.get('disable-backing') === true && (store.get("disable-backing-special") === "work" || store.get("disable-backing-special") === "all")) {
                         $("#back-index").css("display", "none");
-                        $("#skipper-space").css("display", "none");
                     } else {
                         $("#back-index").css("display", "inline-block");
-                        $("#skipper-space").css("display", "inline-block");
                     }
                     $("#only-one").css("display", "none");
                     $(".rest").addClass("work");
