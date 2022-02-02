@@ -7,6 +7,7 @@ designs/*
 output/*
 packaged/*
 .idea/*
+yarn.lock
 
 ### Linux ###
 *~
