@@ -573,38 +573,37 @@
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);
                 timingData.set("last-recorded-hours-left", -1);
-                if (store.get("sound") !== false) {
-                    if (isend !== 0) {
-                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
-                    } else {
-                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
-                    }
-                    player.loop = true;
-                    player.play();
-                    if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
-                        $("#skipper-container").css("display", "none");
-                        $("#skipper-space").css("display", "none");
-                        setTimeout(function () {
-                            player.loop = false;
-                            if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
-                                $("#skipper-container").css("display", "inline");
-                                if ((!store.get("islocked")) && (!(store.get('disable-backing') === true && ((method === 2 ? store.get("disable-backing-special") === "rest" : store.get("disable-backing-special") === "work") || store.get("disable-backing-special") === "all")))) $("#skipper-space").css("display", "inline");
-                                else $("#skipper-space").css("display", "none");
-                            } else {
-                                $("#skipper-container").css("display", "none");
-                                $("#skipper-space").css("display", "none");
-                            }
-                        }, 3000);
-                        canStop = true;
-                    } else {
-                        setTimeout(function () {
-                            if (isClockWorking) stopper();
-                        }, 1500);
-                        setTimeout(function () {
-                            player.loop = false;
-                        }, 20000);
-                    }
-                }//different sound for different circumstances
+                if (isend !== 0) {
+                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                } else {
+                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
+                }
+                player.loop = true;
+                if (store.get("sound") === false) player.muted = true;
+                player.play();
+                if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
+                    $("#skipper-container").css("display", "none");
+                    $("#skipper-space").css("display", "none");
+                    setTimeout(function () {
+                        player.loop = false;
+                        if (!(store.get('disable-skipping') === true && ((method === 2 ? store.get("disable-skipping-special") === "rest" : store.get("disable-skipping-special") === "work") || store.get("disable-skipping-special") === "all"))) {
+                            $("#skipper-container").css("display", "inline");
+                            if ((!store.get("islocked")) && (!(store.get('disable-backing') === true && ((method === 2 ? store.get("disable-backing-special") === "rest" : store.get("disable-backing-special") === "work") || store.get("disable-backing-special") === "all")))) $("#skipper-space").css("display", "inline");
+                            else $("#skipper-space").css("display", "none");
+                        } else {
+                            $("#skipper-container").css("display", "none");
+                            $("#skipper-space").css("display", "none");
+                        }
+                    }, 1500);
+                    canStop = true;
+                } else {
+                    setTimeout(function () {
+                        if (isClockWorking) stopper();
+                    }, 1000);
+                    setTimeout(function () {
+                        player.loop = false;
+                    }, 20000);
+                }
                 if (isend === 0) ipc.send('warning-giver-all-task-end');
                 else {
                     if (isend === 1) ipc.send('warning-giver-workend');
