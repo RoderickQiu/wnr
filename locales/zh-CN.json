@@ -86,6 +86,7 @@
 	"edit": "编辑",
 	"working": "工作",
 	"resting": "休息",
+	"longresting": "长休息",
 	"looping": "循环",
 	"time-left": "% 剩余",
 	"add": "添加",
@@ -299,5 +300,13 @@
 	"top": "使窗口始终处于最上层",
 	"manually-check-for-update": "手动检测更新",
 	"manually-check-for-update-tip-1": "（现在你正在使用",
-	"manually-check-for-update-tip-2": "）"
+	"manually-check-for-update-tip-2": "）",
+	"long-break": "长休息",
+	"long-break-tip": "在每次时间计划的最后一个休息加上一段时间的补时，使之成为一个长休息（循环次数少于3次或无限模式时不会进行长休息）。",
+	"dropdown-plus3min": "+3 分钟",
+	"dropdown-plus5min": "+5 分钟",
+	"dropdown-plus7min": "+7 分钟",
+	"dropdown-plus10min": "+10 分钟",
+	"dropdown-plus15min": "+15 分钟",
+	"dropdown-plus20min": "+20 分钟"
 }

@@ -309,6 +309,13 @@
             if (e.keyCode === 13) backer();
         }
 
+        function longBreakGetter() {
+            if (store.has("long-break")) {
+                let choices = [0, 3, 5, 7, 10, 15, 20];
+                return choices[store.get("long-break")];
+            } else return 0;
+        }
+
         let $_GET = (function () {
             let url = window.document.location.href.toString();
             let u = url.split("?");
@@ -325,7 +332,8 @@
             }
         })();
 
-        var title = decodeURI($_GET['title']),
+        var
+                title = decodeURI($_GET['title']),
                 note = decodeURI($_GET['note']),
                 workTime = decodeURI($_GET['work-time']) * 60000,
                 restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
@@ -341,7 +349,8 @@
                 s = i18n.__('s'),
                 player = document.createElement("audio"),//alert player
                 stopperTimeout = null,
-                pausingTimeout = null;
+                pausingTimeout = null,
+                isLongRest = false;
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -640,11 +649,11 @@
                     }
                     if (isBothSkipperAndBackerEnabled) $("#skipper-space").css("display", "inline");
                     else $("#skipper-space").css("display", "none");
-                    //TODO the skipper-space should be dealt in this way, that only when both skipping and backing are enabled, the space is shown, otherwise it doesn't, need to change both warningGiver() and themeChanger()
                     $("#only-one").css("display", "none");
                     $(".work").addClass("rest");
                     $(".work").removeClass("work");
                     if (continueLoop) $("#work-rest").text(i18n.__('onlyrest'));
+                    else if (isLongRest) $("#work-rest").html(i18n.__('longresting'));
                     else $("#work-rest").html(i18n.__('resting'));
                     $bottomBar.css("background-color", "#5490ea99");
                     method = 2;
@@ -789,6 +798,11 @@
                         startTime = new Date().getTime();
                     } else if (times < loop * 2 || loop === 0) {
                         startTime = new Date().getTime();
+                        if (times === loop * 2 - 1 && loop > 2) {//long break
+                            let long = longBreakGetter();
+                            restTime = restTime + long * 60000;
+                            isLongRest = true;
+                        }
                         themeChanger();
                     } else if (times === loop * 2) {
                         ender();
