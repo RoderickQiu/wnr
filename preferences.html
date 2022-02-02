@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Settings</title>
+    <meta charset="UTF-8" />
+    <meta content="text/html" http-equiv="Content-Type" />
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" name="viewport" />
+    <link as="style" href="loader.css" onload="this.rel='stylesheet'" rel="preload">
+    <!-- loader style preload -->
+    <script>
+        window.$ = require("jquery/dist/jquery.slim.min.js");
+        require("popper.js");
+        require("bootstrap/dist/js/bootstrap.min.js");
+    </script>
+    <link href="node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="res/fonts/iconfont.css" rel="stylesheet" type="text/css" />
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+    <!-- loader -->
+    <div id="loader-wrapper">
+        <div id="loader"></div>
+        <div class="loader-section section-left"></div>
+        <div class="loader-section section-right"></div>
+    </div>
+    <script>
+        window.onload = function () {
+            $("body").addClass("loaded");
+            setTimeout(function () {
+                $('#loader-wrapper').remove()
+            }, 1000);
+        }
+    </script>
+
+    <script src="supporter.js"></script>
+    <div id="controller">
+        <a class="small rest" href="javascript:window.close()">
+            <i class="iconfont icon-close" id="exit-and-save"></i>
+        </a>
+        <script>
+            $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
+            if (process.platform === "darwin") $("#controller").css("display", "none");
+        </script>
+    </div>
+    <div class="d-flex h3 rest" id="settings-title">
+        <script>document.write(i18n.__('settings'));</script>
+    </div>
+    <div id="settings-title-hr"></div>
+    <div class="d-flex" id="settings-container">
+    </div>
+    <script src="preferences-renderer.js"></script>
+    <script src="preferences-items.js"></script>
+    <!-- right click context menu methods -->
+    <script>
+        $(".get-help").attr('title', i18n.__('helper'));
+
+        window.addEventListener('contextmenu', function (e) {
+            e.preventDefault();
+            ipc.send("settings-win-context-menu");
+        }, false);//right-click menu
+
+        let isLong = false;
+        let touch, x, y;
+        $("#settings-container").on({
+            touchstart: function (e) {
+                isLong = false;
+                touch = e.touches[0];
+                x = Number(touch.pageX);
+                y = Number(touch.pageY);//get axis
+
+                timeOutEvent = setTimeout(function () {
+                    isLong = true;
+                    ipc.send("settings-win-context-menu", { x: x, y: y });
+                }, 500);
+            },
+            touchmove: function () {
+                clearTimeout(timeOutEvent);
+                timeOutEvent = 0;
+            },
+            touchend: function () {
+                clearTimeout(timeOutEvent);
+            }
+        });//long-touch menu
+    </script>
+    <script>
+        if (store.get("i18n").indexOf("zh") === -1) {
+            $('body').append(`
+                <style>
+                    #settings-container .btn {
+                        font-size: smaller !important;
+                    }
+                </style>
+            `);
+        }
+    </script>
+    <script src="updater.js"></script>
+    <script src="renderer.js"></script>
+</body>
+
+</html>

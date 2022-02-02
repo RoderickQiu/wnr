@@ -437,21 +437,80 @@ app.on('ready', () => {
 
     hotkeyInit();
 
+    //initializers and compatibility database solutions
     if (store.get('islocked') && win != null) {//locked mode
         win.closable = false;
+    }
+
+    if (store.has("default-page")) {
+        if (typeof store.get("default-page") === "string")
+            store.set("default-page", Number(store.get("default-page")) - 1);
+    }
+
+    if (store.has("nap-time")) {
+        let napTime = store.get("nap-time"),
+            nap = store.get("nap");
+        if (napTime <= 10) {
+            store.set("nap-time", 10);
+            store.set("nap-in-timing", nap ? 1 : 0);
+        } else if (napTime > 10 && napTime <= 15) {
+            store.set("nap-time", 15);
+            store.set("nap-in-timing", nap ? 2 : 0);
+        } else if (napTime > 15) {
+            store.set("nap-time", 20);
+            store.set("nap-in-timing", nap ? 3 : 0);
+        }
     }
 
     if (!store.has("reserved-record")) store.set("reserved-record", 0);
     if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
 
     if (!store.has("disable-pausing-special")) store.set("disable-pausing-special", "all");
+    else {
+        let d = store.get("disable-pausing"),
+            ds = store.get("disable-pausing-special");
+        if (!d) store.set("disable-pause", 3);
+        else if (ds === "all") store.set("disable-pause", 0);
+        else if (ds === "work") store.set("disable-pause", 1);
+        else store.set("disable-pause", 2);
+    }
     if (!store.has("disable-skipping-special")) store.set("disable-skipping-special", "all");
+    else {
+        let d = store.get("disable-skipping"),
+            ds = store.get("disable-skipping-special");
+        if (!d) store.set("disable-skip", 3);
+        else if (ds === "all") store.set("disable-skip", 0);
+        else if (ds === "work") store.set("disable-skip", 1);
+        else store.set("disable-skip", 2);
+    }
     if (!store.has("disable-backing-special")) store.set("disable-backing-special", "all");
+    else {
+        let d = store.get("disable-backing"),
+            ds = store.get("disable-backing-special");
+        if (!d) store.set("disable-back", 3);
+        else if (ds === "all") store.set("disable-back", 0);
+        else if (ds === "work") store.set("disable-back", 1);
+        else store.set("disable-back", 2);
+    }
 
     if (store.has("no-check-time-end")) {
         store.set("no-check-work-time-end", store.get("no-check-time-end"));
         store.set("no-check-rest-time-end", store.get("no-check-time-end"));
         store.delete("no-check-time-end");
+    }
+
+    if (store.has("should-stop-locked"))
+        store.set("timing-after-locked", store.get("should-stop-locked"));
+
+    if (store.has("no-check-work-time-end")) {
+        if (store.get("no-check-work-time-end"))
+            store.set("when-work-time-end", 1);
+        else store.set("when-work-time-end", 0);
+    }
+    if (store.has("no-check-rest-time-end")) {
+        if (store.get("no-check-rest-time-end"))
+            store.set("when-work-rest-end", 1);
+        else store.set("when-work-rest-end", 0);
     }
 
     store.set("just-launched", true);
@@ -772,7 +831,7 @@ function traySolution(isFullScreen) {
                 type: 'separator'
             }, {
                 enabled: !isTimerWin,
-                label: i18n.__('locker'),
+                label: i18n.__('locker-mode'),
                 click: function () {
                     if (process.platform === "darwin" && win != null) win.show();
                     locker();
@@ -1050,6 +1109,45 @@ function settingsWinContextMenuSolution() {
         settingsWinContextMenu = Menu.buildFromTemplate(template)
     }
 }
+
+function getWindowsReleaseVersion() {
+    const os = require('os');
+    const release = os.release();
+    if (release.startsWith('10.0.2')) {
+        return 11;
+    } else if (release.startsWith('10.0.1')) {
+        return 10;
+    } else if (release.startsWith('6.2') || release.startsWith('6.3')) {
+        return 8;
+    } else if (release.startsWith('6.1')) {
+        return 7;
+    } else return 0;
+}
+
+ipcMain.on("open-notification-settings", function (event, msg) {
+    switch (process.platform) {
+        case "win32":
+            if (getWindowsReleaseVersion() >= 10) shell.openExternal('ms-settings:notifications');
+            else dialog.showMessageBox(win, {
+                title: " wnr",
+                type: "info",
+                message: (getWindowsReleaseVersion() === 8) ?
+                    i18n.__("open-notification-settings-windows-8-tip") :
+                    i18n.__("open-notification-settings-windows-7-tip")
+            });
+            break;
+        case "darwin":
+            shell.openExternal("x-apple.systempreferences:com.apple.preference.notifications");
+            break;
+        case "linux":
+            dialog.showMessageBox(win, {
+                title: " wnr",
+                type: "info",
+                message: i18n.__("open-notification-settings-linux-tip")
+            });
+            break;
+    }
+})
 
 ipcMain.on("settings-win-context-menu", function (event, message) {
     if (settingsWin != null) {
@@ -1639,8 +1737,8 @@ function settings(mode) {
         if (win != null && settingsWin == null) {
             settingsWin = new BrowserWindow({
                 parent: win,
-                width: isChinese ? 780 : 888,
-                height: 453,
+                width: isChinese ? 420 : 472,
+                height: 636,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1660,7 +1758,7 @@ function settings(mode) {
             if (mode === 'locker') store.set("settings-goto", "locker");
             else if (mode === 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
-            settingsWin.loadFile("settings.html");
+            settingsWin.loadFile("preferences.html");
             if (process.env.NODE_ENV !== "development") {
                 win.setAlwaysOnTop(true, "floating");
                 settingsWin.setAlwaysOnTop(true, "floating");
@@ -1770,8 +1868,6 @@ ipcMain.on('locker', locker);
 ipcMain.on('locker-passcode', function (event, message) {
     let lockerMessage = null;
     if (message === "wrong-passcode") lockerMessage = i18n.__('locker-settings-input-tip-wrong-password');
-    if (message === "lock-mode-on") lockerMessage = i18n.__('locker-settings-status') + i18n.__('on') + i18n.__('period-symbol');
-    if (message === "lock-mode-off") lockerMessage = i18n.__('locker-settings-status') + i18n.__('off') + i18n.__('period-symbol');
     if (message === "not-same-password") lockerMessage = i18n.__('locker-settings-not-same-password');
     if (message === "empty") lockerMessage = i18n.__('locker-settings-empty-password');
     if (settingsWin != null)
@@ -1780,13 +1876,24 @@ ipcMain.on('locker-passcode', function (event, message) {
             message: i18n.__('locker'),
             type: "warning",
             detail: lockerMessage
-        }).then(function () {
-            if (message === "lock-mode-on" || message === "lock-mode-off") {
-                if (settingsWin != null) settingsWin.close();
-                settingsWin = null;
-                relaunchSolution()
-            }
         })
+})
+
+ipcMain.on("relaunch-dialog", function (event, message) {
+    dialog.showMessageBox(win, {
+        title: " wnr",
+        type: "warning",
+        message: i18n.__("relaunch-tip"),
+        buttons: [i18n.__('ok')],
+        noLink: true
+    }).then(function (index) {
+        try {
+            store.set('just-relaunched', true);
+        } catch (e) {
+            console.log(e);
+        }
+        relaunchSolution();
+    });
 })
 
 ipcMain.on("open-external-title-win", function (event, message) {

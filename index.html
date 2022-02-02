@@ -155,23 +155,7 @@
                 if (store.get("islocked")) $("#locker").css("display", "inline-block");
             </script>
         </div>
-        <div id="new-feature" class="container-fluid">
-            <div class="align-content-center small text-center">
-                <br />
-                <h4 id="new-feature-title" class="rest">Introduce Liberal Timing</h4>
-                <hr />
-                <p id="new-feature-description">How to start: Top Bar -> Operations -> Liberal Timing.</p>
-                <p id="new-feature-description-universal">Even more liberal timing experience brought to you, with
-                    integrated nap-taking notifications.
-                </p>
-                <hr />
-                <img id="new-feature-image" width="72%" />
-                <br />
-                <button type="button" class="btn btn-primary" width="233px" onclick="newFeatureClose()">
-                    <script>document.write(i18n.__('ok'));</script>
-                </button>
-            </div>
-        </div>
+        <div id="new-feature" class="container-fluid"></div>
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
@@ -379,12 +363,12 @@
         //switch default page to other pages
         if (!store.get("just-back"))
             switch (store.get("default-page")) {
-                case "1":
+                case 0:
                     break;
-                case "2":
+                case 1:
                     liberalTiming();
                     break;
-                case "3":
+                case 2:
                     onlyRest('in');
                     break;
                 default:

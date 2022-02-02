@@ -1,15 +1,5 @@
-@font-face {
-    font-family: SourceHanSansCNLight;
-    src: url('res/fonts/SourceHanSansSC-Light.ttf');
-}
-
-@font-face {
-    font-family: SourceHanSansCN;
-    src: url('res/fonts/SourceHanSansSC-Regular.ttf');
-}
-
 html, body {
-    font-family: SourceHanSansCN, "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-family: -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
     width: 100%;
     height: 100%;
     display: -webkit-flex;
@@ -163,15 +153,17 @@ li input:nth-last-child(4)::after {
 
 ::-webkit-scrollbar-track {
     background-color: #fefefe;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar {
-    width: 4px;
-    background-color: #33333333;
+    width: 2px;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #6c757d8f;
+    background-color: #6c757d66;
+    border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:active {
@@ -183,23 +175,11 @@ li input:nth-last-child(4)::after {
 }
 
 .display-1 {
-    font-family: SourceHanSansCNLight, "Source Han Sans CN", -apple-system, "Microsoft YaHei UI", "微软雅黑", sans-serif;
+    font-weight: lighter;
 }
 
-.settings-sidebar-block {
-    position: relative;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    max-height: 100px;
-    width: 100%;
-    color: #6c757d;
-    background-color: #fefefe;
-    cursor: pointer;
-}
-
-.settings-sidebar-block-highlighted {
-    color: #fefefe !important;
-    background-color: #5490eac2 !important;
+.lead {
+    font-weight: inherit;
 }
 
 .underlined {
@@ -352,6 +332,57 @@ li input:nth-last-child(4)::after {
     right: 0;
 }
 
+.settings-msg {
+    font-size: x-small;
+    color: #6c757d !important;
+    line-height: 1.5;
+    padding-top: 5px;
+}
+
+.settings-check {
+    margin: -4px 6px 2px 2px !important;
+}
+
+.switch-slide {
+    margin: 0 2px 1px 0;
+}
+
+.switch-slide-label {
+    display: block;
+    width: 50px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 30px;
+    cursor: pointer;
+    position: relative;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.switch-slide-label:after {
+    content: '';
+    display: block;
+    width: 21px;
+    height: 21px;
+    border-radius: 100%;
+    background: #fff;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+    position: absolute;
+    left: 2px;
+    top: 1.5px;
+    -webkit-transition: 0.3s ease;
+    transition: 0.3s ease;
+}
+
+.switch-slide input:checked + label {
+    background: #5490ea;
+    transition: 0.3s ease;
+}
+
+.switch-slide input:checked + label:after {
+    left: 27px;
+}
+
 #controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
     color: #5490ea;
 }
@@ -453,25 +484,19 @@ li input:nth-last-child(4)::after {
     position: absolute;
     top: 24px;
     left: 20px;
-    width: 100%;
-    border-bottom: #33333322 solid 1px;
-    padding-bottom: 17.3px;
     z-index: -9999;
+}
+
+#settings-title-hr {
+    position: absolute;
+    top: 75px;
+    left: 20px;
+    right: 20px;
+    border-bottom: #33333322 solid 1px;
 }
 
 #predefined-tasks-sidebar {
     border-top: #33333322 solid 1px;
-}
-
-#settings-sidebar {
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: none;
-    position: absolute;
-    top: 75px;
-    height: 408px;
-    width: 30%;
-    border-right: 1px solid #0000001a;
 }
 
 #settings-container {
@@ -479,13 +504,32 @@ li input:nth-last-child(4)::after {
     /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    top: 96px;
-    left: 32%;
+    flex-direction: column;
+    top: 70px;
+    margin: 24px 0 0 18px;
+    width: 89%;
     overflow-y: auto;
-    height: 336px;
-    width: 63%;
-    padding-right: 18px;
+    overflow-x: hidden;
+    height: 525px;
     word-break: normal;
+    font-size: 14px;
+}
+
+#settings-container::-webkit-scrollbar-track {
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+#settings-container p {
+    margin-bottom: 0;
+}
+
+#settings-container a {
+    border: 0;
+}
+
+#settings-container .btn {
+    border: 1px solid #007bff;
 }
 
 #settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #passcode-rechecker, #extend-form input {
@@ -500,10 +544,31 @@ li input:nth-last-child(4)::after {
     border-bottom-color: #33333325;
 }
 
+#settings-container ul {
+    padding-inline-start: 1.5rem;
+    padding-inline-end: 1rem;
+}
+
+#settings-container .personalization-notification {
+    width: 150px;
+    margin-bottom: 6px;
+}
+
+#settings-container .hotkey-set-input {
+    width: 125px;
+    margin-bottom: 6px;
+}
+
+#settings-container .dropdown-reserved-button {
+    font-size: inherit !important;
+}
+
 #settings-container .dropdown .btn, #dropdown-menu-button {
     border-color: transparent;
-    border-radius: 0%;
+    border-radius: 0;
     border-bottom-width: 3px;
+    padding: .375rem .375rem;
+    font-size: .875rem;
     color: #6c757d;
     transition: all .08s;
     border-bottom-color: #33333315;
@@ -524,16 +589,18 @@ li input:nth-last-child(4)::after {
     outline: none;
 }
 
-#settings-container .dropdown-menu, #settings-container .dropdown-toggle {
-    width: 192px;
+#settings-container .dropdown .btn:after {
+    vertical-align: 0;
 }
 
-#settings-container .dropdown-toggle {
-    margin-top: 5px;
-    margin-bottom: 5px;
-    margin-left: 3px;
-    margin-right: 3px;
-    display: inline-block;
+#settings-container .card-body {
+    padding: 1.8rem .65rem 0 .75rem;
+    margin-top: 3px;
+}
+
+#settings-container .row {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
 }
 
 #settings-helper {
@@ -822,7 +889,7 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved, #disable-pausing-set-button, #disable-skipping-set-button, #disable-backing-set-button {
+.reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved {
     width: 96px !important;
     font-size: small;
 }
