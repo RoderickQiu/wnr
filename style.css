@@ -661,7 +661,8 @@ li input:nth-last-child(4)::after {
 
 #all-sum {
     position: absolute;
-    bottom: 65px;
+    bottom: 60px;
+    line-height: 1.6;
     z-index: -9999;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -854,8 +855,9 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
-#top-bar a {
-    color: #6c757d;
+#top-bar a, #index-topbar a {
+    color: #6c757d !important;
+    line-height: 2;
 }
 
 #statistics-no-chart, #statistics-with-chart {

@@ -48,10 +48,12 @@
             </script>
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
+            &nbsp;&nbsp;
             <input type="text" id="title" class="text-center h4" maxlength="14"
-                   style="transform: translateX(5px); font-size: 0.4rem" oninput="modifyExternalTitleWin()" />
-            <a href="javascript:openExternalTitleWin()" id="external" class="work"><i
-                    class="iconfont icon-external-link"></i></a><br />
+                   style="transform: translateX(5px); font-size: 0.4rem"
+                   oninput="modifyExternalTitleWin()" /><a href="javascript:openExternalTitleWin()"
+                                                           id="external" class="work"><i
+                class="iconfont icon-external-link"></i></a><br />
             <input type="text" id="notes" class="text-center small text-muted" maxlength="39"
                    style="font-size: 0.4rem" oninput="modifyExternalTitleWin()" /><br id="notes-space" />
             <script>
@@ -94,7 +96,7 @@
                         $("#title").css("font-size", "0.4rem");
                     } else {
                         $("#external").css("display", "inline-block");
-                        $("#title").css("font-size", "1.5rem");
+                        $("#title").css("font-size", "1rem");
                     }
                     titleNode.parentNode.removeChild(n);
                     titleNode.style.width = spanW + 'px'
@@ -117,7 +119,7 @@
                         $("#notes").css("font-size", "0.4rem");
                     } else {
                         $("#notes-space").css("display", "block");
-                        $("#notes").css("font-size", "inherit");
+                        $("#notes").css("font-size", "0.7rem");
                     }
                     notesNode.parentNode.removeChild(n);
                     notesNode.style.width = spanW + 'px'

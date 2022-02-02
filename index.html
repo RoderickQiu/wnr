@@ -120,7 +120,7 @@
             </a>
         </div>
         <div id="statistics-back">
-            <a href="javascript:onlyRest('out')" class="work"><i class="iconfont icon-angle-left"></i></a>
+            <a href="javascript:onlyRest('out')" class="rest"><i class="iconfont icon-angle-left"></i></a>
             <script>
                 $('#statistics-back i').attr('title', i18n.__('back'));
             </script>
@@ -184,6 +184,17 @@
             </script>
         </div>
         <div id="set" class="container-fluid">
+            <div class="extreme-small text-grey text-center" id="index-topbar">
+                <b>
+                    <script>document.write(i18n.__('dropdown-normal-timing'));</script>
+                </b>&nbsp;|
+                <a href="javascript:liberalTiming()">
+                    <script>document.write(i18n.__('dropdown-stopwatch-mode'));</script>
+                </a>&nbsp;|
+                <a href="javascript:onlyRest('in')">
+                    <script>document.write(i18n.__('dropdown-simple-countdown'));</script>
+                </a>
+            </div>
             <div class="dropdown dropdown-default" id="dropdown-tasks">
                 <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
                    data-toggle="dropdown"
@@ -263,7 +274,7 @@
                 $("#continueloop").attr('title', i18n.__('continueloop-tip'));
             </script>
         </div>
-        <div id="all-sum" class="small font-weight-bold text-muted text-center">
+        <div id="all-sum" class="extreme-small font-weight-bold text-muted text-center">
             <script>document.write(i18n.__('all-sum-part-1'));</script>
             <span id="all-sum-num">---</span>
             <script>document.write(i18n.__('all-sum-part-2'));</script>
