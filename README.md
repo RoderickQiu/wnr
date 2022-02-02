@@ -4,11 +4,7 @@
 <h2 align="center">wnr</h2>
 
 <p align="center">
-    <b>The name is an abbr of "Work & Rest". It's a timer app with strong expansibility for computers.</b>
-</p>
-
-<p align="center">
-    As a timer app, wnr is simple but useful. | <a href="https://getwnr.com/">中文网站</a>
+    <b>A timer app with strong expansibility for computers</b> | <a href="https://getwnr.com/">Website</a> | <a href="https://getwnr.com/zh/">网站中文页面</a>
 </p>
 
 <p align="center">
@@ -18,91 +14,10 @@
 </p>
 
 <p align="center">
-    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a>
+    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">Development Guide</a> | <a href="mailto:scrisqiu@hotmail.com">Contact Me</a>
 </p>
-
-<p align="center">
-    <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">Development Guide</a>
-</p>
-
-<table border="0" align="center">
-    <tr>
-        <td align="right"><img src="https://i.loli.net/2020/10/01/D72AIFTGQ49OpYd.png" ></td>
-        <td align="left"><img src="https://i.loli.net/2020/10/01/XMiGmRJNwtyf1SY.png" ></td>
-    </tr>
-</table>
 
 ---
-
-## Features
-
-- modern design
-
-- multi-platforms support *(currently Windows & macOS)*
-
-- multi-languages support *(you can help
-  to [contribute](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md)!)*
-
-- multi-monitor support
-
-- multi-virtual-desktops support
-
-- portable software available *(currently Windows)*
-
-- semantic time input
-
-- work time / rest time settings
-
-- automatic loops
-
-- predefined tasks / defaults
-
-- clear tips for time
-
-- optional taskname and task notes
-
-- tray menu
-
-- alerts for time end
-
-- full-screen focus mode
-
-- lock mode / parent control
-
-- strict rules to prevent users from hacking
-
-- always-on-top mode
-
-- auto-start with system
-
-- auto start task
-
-- progress bar support
-
-- hi-dpi support
-
-- good touchscreen usability
-
-- dark mode support
-
-- user-friendly tourguide
-
-- user-friendly updater
-
-- infinity mode
-
-- ...
-
-This application is being frequently updated, so does this list.
-
-## Contact
-
-- Homepage: [getwnr.com](https://getwnr.com/).
-
-- Downloads: [Releases](https://github.com/RoderickQiu/wnr/releases/).
-
-- Need Help: [Go to Help Page](https://getwnr.com/guide/1-basic-usage.html) or [Contact Me](mailto:scrisqiu@hotmail.com)
-  .
 
 ## Contributing
 
@@ -115,10 +30,6 @@ I appreciate it if you can help contribute.
 
 - If you want to add a new language to
   wnr, [see this guide first](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md).
-
-## To-do List
-
-Please go and see the [GitHub Project](https://github.com/RoderickQiu/wnr/projects/1).
 
 ## How to Build
 
@@ -144,16 +55,12 @@ yarn linux # linux
 yarn appimage # linux AppImage
 ```
 
-Please note that:
-
-- Linux version hasn't been tested *(If you are using Linux, you can fix things up yourself and contribute)*.
-
-For more info about development, go to [**
-DEVELOPMENT_GUIDE**](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md).
+For more info about development, go
+to **[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md)**.
 
 ## Copyright & Credit
 
-Copyright (c) 2019-2021 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
+Copyright (c) 2019-2022 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
 Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
@@ -180,21 +87,12 @@ is also included in every copy of wnr.
 - bootstrap, twbs, MIT License.
 - iconfont, ALIMAMA MUX, for license go to [the site](https://www.iconfont.cn/).
 - dotenv, motdotla, BSD-2-Clause License.
-- windows-release, sindresorhus, MIT License.
-- leancloud-storage, leancloud, MIT License.
 - electron-debug, sindresorhus, MIT License.
 - node-fetch, node-fetch, MIT License.
 - node-notifier, mikaelbr, MIT License.
 - popper.js, popperjs, MIT License.
 - schart.js, lin-xin, MIT License.
 - cross-env, kentcdodds, MIT License.
-
-#### Website / Documents *([wnr-guide](https://github.com/RoderickQiu/wnr-guide), provided
-with [[CC-BY-4.0](https://spdx.org/licenses/CC-BY-4.0.html)] license)*
-
-- **vuepress, vuejs, MIT License**.
-- vuepress-plugin-sitemap, ekoeryanto, MIT License.
-- vuepress-theme-api, sqrthree, MIT License.
 
 ### Environment Using
 

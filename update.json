@@ -1,21 +1,24 @@
 {
-	"version": "1.23.3",
+	"version": "1.24.0",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"测试提供 Linux 版本，使用 AppImage 封裝，感谢 @NKID00 参与。注意，它仍然存在一些 BUG。",
-			"修复了当 wnr 不位于主显示器时，不能正常覆盖所有显示器的问题。",
-			"修复了一些和 UI 相关的 BUG，如修复了有时计时界面按钮错位的问题，并优化了一些交互。"
+			"由于作者将参加高考（高中生）， 6 月前将不再更新（除非特大 BUG 出现），一些之前想加的功能，因没时间先不加了。",
+			"带来重新设计的首页、设置页面体验，更加直观。",
+			"新增长休息功能（需前往设置页面来手动开启）。",
+			"修复了和计时、提醒、报错相关的几个 BUG，优化了数个页面的 UI 体验。"
 		],
 		"zh-TW": [
-			"測試提供 Linux 版本，使用 AppImage 封裝，感謝 @NKID00 參與。注意，它仍然存在一些 BUG。",
-			"修復了當 wnr 不位於主顯示器時，不能正常覆蓋所有顯示器的問題。",
-			"修復了一些和 UI 相關的 BUG，如修復了有時計時界面按鈕錯位的問題，並優化了一些交互。"
+			"由於作者將參加高考（高中生）， 6 月前將不再更新（除非特大 BUG 出現），一些之前想加的功能，因沒時間先不加了。",
+			"帶來重新設計的首頁、設置頁面體驗，更加直觀。",
+			"新增長休息功能（需前往設置頁面來手動開啓）。",
+			"修復了和計時、提醒、報錯相關的幾個 BUG，優化了數個頁面的 UI 體驗。"
 		],
 		"en": [
-			"Start to provide Linux package in .AppImage (BETA), thanks to @NKID00.",
-			"Fixed multi-screen bug that it didn't work when wnr is not on the primary screen. ",
-			"Enhanced UI and some other things."
+			"BUSY PREPARING FOR GAOKAO, I WILL PAUSE UPDATING THIS SOFTWARE BEFORE THIS JUNE IF THERE ARE NO BIG BUGS.",
+			"The newly designed index page and preferences panel.",
+			"Long break feature (need manual configuration in the preferences panel).",
+			"Several annoying bugs fixed & UI optimized."
 		]
 	},
 	"introduce": {
