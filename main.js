@@ -1031,15 +1031,9 @@ function macOSFullscreenSolution(isFullScreen) {
                         }
                     }, {
                         enabled: !isTimerWin,
-                        label: i18n.__('locker'),
+                        label: i18n.__('locker-mode'),
                         click: function () {
                             locker();
-                        }
-                    }, {
-                        label: i18n.__('tourguide'),
-                        enabled: !isTimerWin,
-                        click: function () {
-                            tourguide();
                         }
                     }, {
                         type: 'separator'
@@ -1073,10 +1067,7 @@ function macOSFullscreenSolution(isFullScreen) {
                         label: i18n.__('settings'),
                         enabled: false
                     }, {
-                        label: i18n.__('locker'),
-                        enabled: false
-                    }, {
-                        label: i18n.__('tourguide'),
+                        label: i18n.__('locker-mode'),
                         enabled: false
                     }, {
                         type: 'separator'

@@ -131,7 +131,7 @@
             <a href="javascript:call('locker')" class="small rest" id="locker" style="display: none"><i
                     class="iconfont icon-lock"></i></a><a href="javascript:call('settings')"
                                                           class="small rest" id="settings"><i
-                class="iconfont icon-cog should-lock"></i></a>&nbsp;<span
+                class="iconfont icon-cog should-lock"></i></a><span id="mac-out">&nbsp;<span
                 class="controller-msg-spacing xx-small rest font-weight-bold">|</span>
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
@@ -141,7 +141,7 @@
                 class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i
                     class="iconfont icon-close"
-                    id="exit"></i></a>
+                    id="exit"></i></a></span>
             <script>
                 $('#logo-bar').attr('title', i18n.__('info'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
@@ -151,7 +151,9 @@
                 $('#settings').attr('title', i18n.__('settings'));
                 $('#locker').attr('title', i18n.__('locker'));
                 $('#statistics').attr('title', i18n.__('statistics'));
-                if (process.platform === "darwin") $("#controller").css("display", "none");
+                if (process.platform === "darwin") {
+                    $("#mac-out").css("display", "none");
+                }
                 if (store.get("islocked")) $("#locker").css("display", "inline-block");
             </script>
         </div>

@@ -156,7 +156,8 @@ if (store.get("islocked") !== true) {
         }, {
             type: "selection",
             id: "dock-hide",
-            tipped: false
+            tipped: false,
+            relaunch: true
         }, {
             type: "selection",
             id: "top",
