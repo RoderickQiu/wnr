@@ -308,5 +308,7 @@
 	"dropdown-plus7min": "+7 分钟",
 	"dropdown-plus10min": "+10 分钟",
 	"dropdown-plus15min": "+15 分钟",
-	"dropdown-plus20min": "+20 分钟"
+	"dropdown-plus20min": "+20 分钟",
+	"should-nap-now": "现在小憩几秒钟吧！",
+	"should-nap-now-msg": "然后再继续努力工作！"
 }

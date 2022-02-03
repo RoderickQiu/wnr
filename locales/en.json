@@ -313,5 +313,7 @@
 	"dropdown-plus7min": "+7 min",
 	"dropdown-plus10min": "+10 min",
 	"dropdown-plus15min": "+15 min",
-	"dropdown-plus20min": "+20 min"
+	"dropdown-plus20min": "+20 min",
+	"should-nap-now": "Rest for a few seconds now!",
+	"should-nap-now-msg": "Then keep on working!"
 }

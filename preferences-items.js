@@ -152,7 +152,8 @@ if (store.get("islocked") !== true) {
         }, {
             type: "selection",
             id: "autostart",
-            tipped: false
+            tipped: false,
+            after: autostartAfter
         }, {
             type: "selection",
             id: "dock-hide",
@@ -161,7 +162,8 @@ if (store.get("islocked") !== true) {
         }, {
             type: "selection",
             id: "top",
-            tipped: false
+            tipped: false,
+            relaunch: true
         }, {
             type: "dropdown",
             id: "default-page",
@@ -305,5 +307,35 @@ function disableBackAfter(val) {
         case 3:
             store.set('disable-backing', false);
             break;
+    }
+}
+
+let AutoLaunch = require('auto-launch');
+let wnrLauncher = new AutoLaunch({ name: 'wnr' });
+
+function autostartAfter(val) {
+    if (val === true) {
+        wnrLauncher.isEnabled()
+            .then(function (isEnabled) {
+                if (isEnabled) {
+                    return;
+                }
+                wnrLauncher.enable();
+            }).catch(function (error) {
+            store.set('autostart', false);
+            $('#selection-autostart').prop('checked', false);
+            ipc.send('alert', i18n.__('without-permission-part-1') + ((process.platform === 'darwin') ? i18n.__('without-permission-part-2') : ''));
+        })
+    } else {
+        wnrLauncher.isEnabled()
+            .then(function (isEnabled) {
+                if (isEnabled) {
+                    wnrLauncher.disable();
+                }
+            }).catch(function (error) {
+            store.set('autostart', true);
+            $('#selection-autostart').prop('checked', true);
+            ipc.send('alert', i18n.__('without-permission-part-1') + ((process.platform === 'darwin') ? i18n.__('without-permission-part-2') : ''));
+        })
     }
 }
