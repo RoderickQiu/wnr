@@ -438,6 +438,18 @@ app.on('ready', () => {
     hotkeyInit();
 
     //initializers and compatibility database solutions
+    switch (store.get("dark-or-white")) {
+        case "auto-switch":
+            store.set("dark-or-white", 0);
+            break;
+        case "dark":
+            store.set("dark-or-white", 2);
+            break;
+        case "light":
+            store.set("dark-or-white", 1);
+            break;
+    }
+
     if (store.get('islocked') && win != null) {//locked mode
         win.closable = false;
     }
