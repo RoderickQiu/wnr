@@ -426,6 +426,7 @@ app.on('ready', () => {
     if (store.get("dock-hide") && process.platform === "darwin") dockHide = true;
 
     if (store.get("loose-mode")) isLoose = true;
+    if (store.get("force-screen-lock-mode")) isForceScreenLock = true;
 
     if (win != null) {
         if (store.get("top") === true) win.setAlwaysOnTop(true, "floating");
