@@ -652,6 +652,8 @@ app.on('ready', () => {
         isShadowless = true;
         styleCache.set("is-shadowless", true);
     }//backport when shadow disabled
+
+    console.log('lockScreenSolution() === %s', lockScreenSolution());
 })
 
 function hotkeyInit() {
@@ -1095,6 +1097,22 @@ function macOSFullscreenSolution(isFullScreen) {
             Menu.setApplicationMenu(osxMenu)
         }
     }
+}
+
+function lockScreenSolution() {
+    try {
+        if (process.platform === 'win32') {
+            require('child_process').execSync('rundll32 user32.dll,LockWorkStation');
+        } else if (process.platform === 'linux') {
+            // for distros with systemd
+            require('child_process').execSync('loginctl lock-session $(cat /proc/self/sessionid) --no-ask-password');
+        } else {
+            return false;
+        }
+    } catch (e) {
+        return false;
+    }
+    return true;
 }
 
 function settingsWinContextMenuSolution() {
