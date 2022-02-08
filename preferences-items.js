@@ -29,6 +29,9 @@ if (store.get("islocked") !== true) {
             type: "selection",
             id: "loose-mode"
         }, {
+            type: "selection",
+            id: "force-screen-lock-mode"
+        }, {
             type: "collapse",
             id: "timing-strength",
             inner: [{

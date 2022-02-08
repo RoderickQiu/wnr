@@ -25,7 +25,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
-    isLoose = false, isScreenLocked = false,
+    isLoose = false, isForceScreenLock = false, isScreenLocked = false,
     isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false,
     hasFloating = false, hasExternalTitle = false,
     kioskInterval = null,
@@ -186,6 +186,7 @@ function setFullScreenMode(flag) {
             if (flag) {
                 kioskInterval = setInterval(function () {
                     if (fullScreenProtection && win != null) {
+                        if (isForceScreenLock) forceScreenLockSolution();
                         win.show();
                         win.moveTop();
                         win.setKiosk(true);
@@ -652,8 +653,6 @@ app.on('ready', () => {
         isShadowless = true;
         styleCache.set("is-shadowless", true);
     }//backport when shadow disabled
-
-    console.log('lockScreenSolution() === %s', lockScreenSolution());
 })
 
 function hotkeyInit() {
@@ -1099,20 +1098,21 @@ function macOSFullscreenSolution(isFullScreen) {
     }
 }
 
-function lockScreenSolution() {
+function forceScreenLockSolution() {
     try {
         if (process.platform === 'win32') {
             require('child_process').execSync('rundll32 user32.dll,LockWorkStation');
+            return true;
         } else if (process.platform === 'linux') {
             // for distros with systemd
             require('child_process').execSync('loginctl lock-session $(cat /proc/self/sessionid) --no-ask-password');
+            return true;
         } else {
             return false;
         }
     } catch (e) {
         return false;
     }
-    return true;
 }
 
 function settingsWinContextMenuSolution() {
@@ -1809,6 +1809,7 @@ function settings(mode) {
                 }
                 settingsWin = null;
                 isLoose = !!store.get("loose-mode");
+                isForceScreenLock = !!store.get("force-screen-lock-mode");
             })
             if (!store.get("settings-experience")) {
                 store.set("settings-experience", true);
