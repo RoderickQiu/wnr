@@ -232,7 +232,7 @@
 	"loose-mode": "Loose fullscreen mode",
 	"loose-mode-tip": "In this mode, the window will not be stuck on top.",
 	"force-screen-lock-mode": "Force screen lock fullscreen mode",
-	"force-screen-lock-mode-tip": "In this mode, the system will be locked. (Only works with Windows and Linux distros with systemd)",
+	"force-screen-lock-mode-tip": "In this mode, the system will be locked. (Takes effect after turning off \"Loose fullscreen mode\" option and turning on \"Continue timing after computer locked\" option, only works with Windows and Linux distros with systemd)",
 	"timing-strength": "Timing flexibility",
 	"timing-strength-tip": "Set about whether pause/skip/cancel timing is acceptable.",
 	"dropdown-always": "Always",

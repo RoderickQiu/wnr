@@ -188,7 +188,7 @@
 	"loose-mode": "宽松的全屏专心模式",
 	"loose-mode-tip": "降低全屏专心模式的强制程度，将不会强制使计时窗口在最上层。",
 	"force-screen-lock-mode": "全屏专心模式强制锁屏",
-	"force-screen-lock-mode-tip": "提高全屏专心模式的强制程度，将会强制进行系统锁屏。（仅适用于 Windows 和带有 systemd 的 Linux 发行版）",
+	"force-screen-lock-mode-tip": "提高全屏专心模式的强制程度，将会强制进行系统锁屏。（关闭“宽松的全屏专心模式”选项并打开“系统锁定后计时不暂停”选项后才有效，仅适用于 Windows 和带有 systemd 的 Linux 发行版）",
 	"timing-strength": "计时强制程度调节",
 	"timing-strength-tip": "设置是否禁止跳过/休息/取消计时。",
 	"dropdown-always": "总是",
