@@ -25,7 +25,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     progress = -1, timeLeftOnBar = null,
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
-    isLoose = false, isScreenLocked = false,
+    isLoose = false, isForceScreenLock = false, isScreenLocked = false,
     isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false,
     hasFloating = false, hasExternalTitle = false,
     kioskInterval = null,
@@ -186,6 +186,7 @@ function setFullScreenMode(flag) {
             if (flag) {
                 kioskInterval = setInterval(function () {
                     if (fullScreenProtection && win != null) {
+                        forceScreenLockSolution();
                         win.show();
                         win.moveTop();
                         win.setKiosk(true);
@@ -425,6 +426,7 @@ app.on('ready', () => {
     if (store.get("dock-hide") && process.platform === "darwin") dockHide = true;
 
     if (store.get("loose-mode")) isLoose = true;
+    if (store.get("force-screen-lock-mode")) isForceScreenLock = true;
 
     if (win != null) {
         if (store.get("top") === true) win.setAlwaysOnTop(true, "floating");
@@ -639,6 +641,7 @@ app.on('ready', () => {
             if (store.get("should-stop-locked") !== true) {
                 if (win != null) win.webContents.send('alter-start-stop', 'start');
             }
+            forceScreenLockSolution();
         }
         isScreenLocked = false;
     });
@@ -1094,6 +1097,30 @@ function macOSFullscreenSolution(isFullScreen) {
             let osxMenu = Menu.buildFromTemplate(template);
             Menu.setApplicationMenu(osxMenu)
         }
+    }
+}
+
+function forceScreenLockSolution() {
+    if (isLoose || !fullScreenProtection || !isForceScreenLock || store.get("should-stop-locked") !== true) {
+        return false;
+    }
+    try {
+        if (process.platform === 'win32') {
+            require('child_process').execSync('rundll32 user32.dll,LockWorkStation');
+            return true;
+        } else if (process.platform === 'darwin') {
+            // to be implemented
+            return false;
+        } else if (process.platform === 'linux') {
+            // for distros with systemd
+            require('child_process').execSync('loginctl lock-session $(cat /proc/self/sessionid) --no-ask-password');
+            return true;
+        } else {
+            return false;
+        }
+    } catch (e) {
+        console.log(e);
+        return false;
     }
 }
 
@@ -1791,6 +1818,7 @@ function settings(mode) {
                 }
                 settingsWin = null;
                 isLoose = !!store.get("loose-mode");
+                isForceScreenLock = !!store.get("force-screen-lock-mode");
             })
             if (!store.get("settings-experience")) {
                 store.set("settings-experience", true);
