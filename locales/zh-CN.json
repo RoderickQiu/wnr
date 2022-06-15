@@ -93,8 +93,6 @@
 	"delete": "删除",
 	"predefined-tasks-settings": "预设设置",
 	"window-close-dialog-box-title": "是否要退出 wnr？",
-	"window-close-dialog-box-content": "如果确实要退出则勾选选框。",
-	"window-close-dialog-box-chk": "确定要退出",
 	"copied": "已经复制。",
 	"settings-backup-msg": "备份 wnr 设置项：",
 	"settings-backup-tip": "点击“复制”，可以复制并备份 wnr 设置项的口令。将口令粘贴到 wnr 的“导入设置”中，就可以实现设置的快捷导入。",

@@ -94,8 +94,6 @@
 	"delete": "Delete",
 	"predefined-tasks-settings": "Predefined Plans",
 	"window-close-dialog-box-title": "Are you sure you want to quit",
-	"window-close-dialog-box-content": "If you really need to quit wnr, check that checkbox.",
-	"window-close-dialog-box-chk": "Yes, quit",
 	"copied": "Copied to clipboard! ",
 	"settings-backup-msg": "Back wnr preferences up: ",
 	"settings-backup-tip": "Click \"Copy\" to copy the preferences token to clipboard.",

@@ -93,13 +93,9 @@ function createWindow() {
             event.preventDefault();
             if (win != null)
                 notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
-        } else if ((process.platform === "darwin") && (process.env.NODE_ENV !== "development")) {
+        } else if ((process.platform === "darwin")) {
             event.preventDefault();
-            if (!store.has("close-tip-darwin")) {
-                notificationSolution(i18n.__('close-tip-darwin'), i18n.__('close-tip-darwin-tip'), "normal");
-                store.set("close-tip-darwin", true);
-            }
-            win.hide();
+            windowCloseChk()
         }
     });
 
@@ -154,11 +150,12 @@ function alarmSet() {
                 type: "warning",
                 message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
                 detail: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                buttons: [i18n.__('cancel'), i18n.__('ok')],
-                cancelId: 0
+                buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
+                cancelId: (process.platform !== "darwin") ? 0 : 1, //buttons map different from darwin to other OSs
+                noLink: true
             }).then(function (response) {
                 isAlarmDialogClosed = true;
-                if (response.response !== 0) {
+                if (response.response !== ((process.platform !== "darwin") ? 1 : 0)) {
                     win.show();
                     win.moveTop();
                 }
@@ -529,7 +526,7 @@ app.on('ready', () => {
 
     store.set("just-launched", true);
 
-    if (process.platform === "darwin") {
+    if (process.platform === "darwin" && process.env.NODE_ENV !== "development") {
         if (!app.isInApplicationsFolder()) {
             notificationSolution(i18n.__('wrong-folder-notification-title'), i18n.__('wrong-folder-notification-content'), "normal");
         }
@@ -1294,11 +1291,11 @@ ipcMain.on('force-long-focus-request', function () {
             type: "warning",
             message: i18n.__("force-long-focus-request"),
             detail: i18n.__("force-long-focus-request-tip"),
-            buttons: [i18n.__('cancel'), i18n.__('ok')],
-            cancelId: 0,
+            buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
+            cancelId: (process.platform !== "darwin") ? 0 : 1,//buttons map different from darwin to other OSs
             noLink: true
         }).then(function (index) {
-            if (index.response === 1) {
+            if (index.response === ((process.platform !== "darwin") ? 1 : 0)) {
                 win.webContents.send("force-long-focus-granted");
             }
         });
@@ -1639,17 +1636,17 @@ ipcMain.on('delete-all-data', function () {
 })
 
 function windowCloseChk() {
-    if ((process.env.NODE_ENV !== "development") && win != null) {
+    if (true && win != null) {
         win.show();
         dialog.showMessageBox(win, {
             title: " wnr",
             message: i18n.__('window-close-dialog-box-title'),
             type: "warning",
-            detail: i18n.__('window-close-dialog-box-content'),
-            checkboxLabel: i18n.__('window-close-dialog-box-chk'),
-            checkboxChecked: false
+            buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
+            cancelId: (process.platform !== "darwin") ? 0 : 1, //buttons map different from darwin to other OSs
+            noLink: true
         }).then(function (msger) {
-            if (msger.checkboxChecked) {
+            if (msger.response === ((process.platform !== "darwin") ? 1 : 0)) {
                 statisticsWriter();
                 multiScreenSolution("off");
 
@@ -1659,7 +1656,12 @@ function windowCloseChk() {
             }
         })
     } else {
-        app.quit()
+        statisticsWriter();
+        multiScreenSolution("off");
+
+        setTimeout(function () {
+            app.exit(0);
+        }, 500);
     }
 }
 
