@@ -163,7 +163,7 @@
 	"ok": "OK",
 	"positive": "Stopwatch",
 	"positive-msg": "A free timer, or a stopwatch.",
-	"min-already": "min already",
+	"min-already": "has begun",
 	"what-can-be-here-index": "You can input things like \"1 hour\", \"2 minutes\" and \"30 seconds\". ",
 	"what-can-be-here-predefined-tasks": "You can input things like \"320\", \"16\" and \"0.8\" on behalf of minutes. ",
 	"close-tip-darwin": "Window is now hidden.",
