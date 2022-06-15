@@ -1328,6 +1328,10 @@ function focusSolution() {
     }
 }
 
+ipcMain.on("only-rest-fullscreen", function () {
+    focusSolution()
+})
+
 function nonFocusSolution() {
     if (win != null) {
         multiScreenSolution("off");
@@ -1636,7 +1640,7 @@ ipcMain.on('delete-all-data', function () {
 })
 
 function windowCloseChk() {
-    if (true && win != null) {
+    if ((process.env.NODE_ENV !== "development") && win != null) {
         win.show();
         dialog.showMessageBox(win, {
             title: " wnr",

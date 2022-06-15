@@ -350,7 +350,9 @@
                 player = document.createElement("audio"),//alert player
                 stopperTimeout = null,
                 pausingTimeout = null,
-                isLongRest = false;
+                isLongRest = false,
+                isFirstTimeOnlyRest = decodeURI($_GET['work-time']) === "0.7777",
+                isOnlyRest = isFirstTimeOnlyRest;
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -463,7 +465,7 @@
                     hours,
                     method = 1,
                     isClockWorking = 1,
-                    moreThanOneMin = (method === 1 && workTime > 60000) ? 1 : 0,
+                    moreThanOneMin = ((method === 1 && workTime > 60000) || isOnlyRest && restTime > 60000) ? 1 : 0,
                     lastRecordedMinutesLeft = -1,
                     lastRecordedHoursLeft = -1,
                     systemName = process.platform,
@@ -567,6 +569,11 @@
             }
 
             function warningGiver(isend) {
+                if (isFirstTimeOnlyRest) {
+                    isFirstTimeOnlyRest = false;
+                    if (restTimeFocused) ipc.send("only-rest-fullscreen");
+                    return;
+                }
                 if ((method === 1 && workTime > 60000) || (method === 2 && restTime > 60000)) moreThanOneMin = 1;
                 else moreThanOneMin = 0;//if less than 1 min, prevent less than 1min warning
                 lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
@@ -649,17 +656,17 @@
                     if (isBothSkipperAndBackerEnabled) $("#skipper-space").css("display", "inline");
                     else $("#skipper-space").css("display", "none");
                     $("#only-one").css("display", "none");
-                    $(".work").addClass("rest");
+                    $(".work").addClass(isOnlyRest ? "onlyRest" : "rest");//onlyRest mode now has specific color
                     $(".work").removeClass("work");
-                    if (continueLoop) $("#work-rest").text(i18n.__('onlyrest'));
+                    if (isOnlyRest) $("#work-rest").text(i18n.__('onlyrest'));
                     else if (isLongRest) $("#work-rest").html(i18n.__('longresting'));
                     else $("#work-rest").html(i18n.__('resting'));
-                    $bottomBar.css("background-color", "#5490ea99");
+                    $bottomBar.css("background-color", isOnlyRest ? "#a26ae599" : "#5490ea99");
                     method = 2;
                     timingData.set("last-recorded-state.method", 2);
                     if (restTimeFocused === true) {
                         if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
-                        $bottomBar.css("background-color", "#5490ea19");
+                        $bottomBar.css("background-color", isOnlyRest ? "#a26ae519" : "#5490ea19");
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");

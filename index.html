@@ -58,7 +58,7 @@
         function keyDownSubmitter() {
             if (onlyrest)
                 window.location.href =
-                        "timer.html?title=&work-time=2&rest-time="
+                        "timer.html?title=&work-time=0.7777&rest-time="
                         + shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true })
                         + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
                         + document.getElementById("focus-rest-set-onlyrest").checked
@@ -135,10 +135,10 @@
                 class="controller-msg-spacing xx-small rest font-weight-bold">|</span>
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
-                id="no-use-space">&nbsp;&nbsp;</span>
+                    id="no-use-space">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
                                                                                id="window-minimize"></i></a><span
-                class="should-lock">&nbsp;&nbsp;</span>
+                    class="should-lock">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i
                     class="iconfont icon-close"
                     id="exit"></i></a></span>
@@ -161,25 +161,25 @@
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
-                       class="rest lead text-center" required />
+                       class="onlyRest lead text-center" required />
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
-                    <span class="focuser extreme-small rest text-left" id="focuser-onlyrest">
+                    <span class="focuser extreme-small onlyRest text-left" id="focuser-onlyrest">
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
                     &nbsp;
                     <input id="focus-continueloop-set-onlyrest" type="checkbox"
                            onchange="onlyRestEdgeCaseSolution()" />
-                    <span id="continueloop" class="focuser extreme-small rest text-left">
+                    <span id="continueloop" class="focuser extreme-small onlyRest text-left">
                         <script>document.write(i18n.__('continueloop-part-1') + "<br />" + i18n.__('continueloop-part-2'))</script>
                     </span>
                 </center>
             </div>
             <br />
             <script>
-                $('#rest-time-onlyrest').attr('placeholder', i18n.__('rest-time'));
-                $('#rest-time-onlyrest').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
+                $('#rest-time-onlyrest').attr('placeholder', i18n.__('only-rest-time'));
+                $('#rest-time-onlyrest').attr('title', i18n.__('only-rest-time') + i18n.__('what-can-be-here-index'));
                 $("#focus-rest-set-onlyrest").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#focus-continueloop-set-onlyrest").attr('title', i18n.__('continueloop-tip'));
                 $('#back-onlyrest').attr('title', i18n.__('back'));
@@ -294,6 +294,9 @@
                 <span id="rest-notify">
                     <script>document.write(i18n.__('focus-notify-resting'));</script>
                 </span>
+                <span id="only-rest-notify">
+                    <script>document.write(i18n.__('onlyrest'));</script>
+                </span>
                 <span id="notify-body">
                     <script>document.write(i18n.__('focus-notify-body'));</script>
                 </span>
@@ -351,6 +354,9 @@
                 onlyrest = true;
                 allSet();
                 $("#rest-time-onlyrest").focus();
+                $(".work").addClass("onlyRest");//onlyRest mode now has specific color
+                $(".rest").addClass("onlyRest");
+                $("#bottom-btn").addClass("btn-onlyRest")
             } else {
                 store.set("just-back", true);
                 if (onlyrest) window.location.reload();
@@ -460,12 +466,15 @@
 
         function focusNotifier() {
             let workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
-            let restFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : document.getElementById("focus-rest-set").checked;
-            if ((workFocus || restFocus) && (workFocus !== restFocus)) {
+            let restFocus = onlyrest ? false : document.getElementById("focus-rest-set").checked;
+            let onlyRestFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : false;
+            if ((workFocus || restFocus || onlyRestFocus) && ((workFocus !== restFocus) || onlyRestFocus)) {
                 if (workFocus) $("#work-notify").css("display", "inline");
                 else $("#work-notify").css("display", "none");
                 if (restFocus) $("#rest-notify").css("display", "inline");
                 else $("#rest-notify").css("display", "none");
+                if (onlyRestFocus) $("#only-rest-notify").css("display", "inline");
+                else $("#only-rest-notify").css("display", "none");
                 $("#focus-notify-box").css("display", "inline");
             } else {
                 $("#focus-notify-box").css("display", "none");
@@ -479,7 +488,8 @@
 
                 let s = document.createElement('style');
                 if (flag) s.innerText = "#focus-rest-set-onlyrest::after {color: #6c757d;}";
-                else s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
+                else if (!onlyrest) s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
+                else s.innerText = "#focus-rest-set-onlyrest::after {color: #a26ae5;}";
                 document.body.appendChild(s);
             }//to disable the focus button
 
@@ -490,7 +500,7 @@
                 $("#focuser-onlyrest").css("color", "#6c757d");
                 disableOnlyRestFocusButton(true);
             } else {
-                $("#focuser-onlyrest").css("color", "#5490ea");
+                $("#focuser-onlyrest").css("color", (!onlyrest) ? "#5490ea" : "#a26ae5");
                 disableOnlyRestFocusButton(false);
             }
         }

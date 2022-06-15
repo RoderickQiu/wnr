@@ -202,6 +202,14 @@ li input:nth-last-child(4)::after {
     color: #5490eac2;
 }
 
+.onlyRest, .onlyRest::-webkit-input-placeholder, .onlyRest:hover {
+    color: #a26ae5;
+}
+
+.onlyRest:focus::-webkit-input-placeholder, .onlyRest:hover::-webkit-input-placeholder {
+    color: #a26ae5c2;
+}
+
 .text-grey {
     color: #6c757d;
 }
@@ -383,6 +391,17 @@ li input:nth-last-child(4)::after {
     left: 27px;
 }
 
+.btn-onlyRest {
+    color: #a26ae5;
+    border-color: #a26ae5;
+}
+
+.btn-onlyRest:hover {
+    color: #fff;
+    background-color: #a26ae5;
+    border-color: #a26ae5;
+}
+
 #controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
     color: #5490ea;
 }
@@ -450,6 +469,11 @@ li input:nth-last-child(4)::after {
 
 #focus-work-set::after, #focus-work-set:checked::after {
     color: #ea5454;
+}
+
+#focus-rest-set-onlyrest::after, #focus-rest-set-onlyrest:checked::after,
+#focus-continueloop-set-onlyrest::after, #focus-continueloop-set-onlyrest:checked::after {
+    color: #a26ae5;
 }
 
 #timer {
