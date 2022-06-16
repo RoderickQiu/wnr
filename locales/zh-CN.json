@@ -311,5 +311,12 @@
 	"dropdown-plus15min": "+15 分钟",
 	"dropdown-plus20min": "+20 分钟",
 	"should-nap-now": "现在小憩几秒钟吧！",
-	"should-nap-now-msg": "然后再继续努力工作！"
+	"should-nap-now-msg": "然后再继续努力工作！",
+	"zoom-ratio": "缩放比例",
+	"zoom-ratio-tip": "将 wnr 的界面缩放，使其适合你的显示器实况。",
+	"dropdown-zoom-0.75": "75%",
+	"dropdown-zoom-0.9": "90%",
+	"dropdown-zoom-1": "默认比例",
+	"dropdown-zoom-1.1": "110%",
+	"dropdown-zoom-1.25": "125%"
 }

@@ -147,6 +147,12 @@ if (store.get("islocked") !== true) {
             type: "i18n"
         }, {
             type: "dropdown",
+            id: "zoom-ratio",
+            choices: ['zoom-0.75', 'zoom-0.9', 'zoom-1', 'zoom-1.1', 'zoom-1.25'],
+            def: 2,
+            after: zoomRatioAfter
+        }, {
+            type: "dropdown",
             id: "dark-or-white",
             tipped: false,
             relaunch: true,
@@ -341,4 +347,9 @@ function autostartAfter(val) {
             ipc.send('alert', i18n.__('without-permission-part-1') + ((process.platform === 'darwin') ? i18n.__('without-permission-part-2') : ''));
         })
     }
+}
+
+function zoomRatioAfter(val) {
+    ipc.send('zoom-ratio-change', val);
+    location.reload()
 }

@@ -316,5 +316,12 @@
 	"dropdown-plus15min": "+15 min",
 	"dropdown-plus20min": "+20 min",
 	"should-nap-now": "Rest for a few seconds now!",
-	"should-nap-now-msg": "Then keep on working!"
+	"should-nap-now-msg": "Then keep on working!",
+	"zoom-ratio": "Zoom ratio",
+	"zoom-ratio-tip": "Zoom wnr's windows to fit your screen.",
+	"dropdown-zoom-0.75": "75%",
+	"dropdown-zoom-0.9": "90%",
+	"dropdown-zoom-1": "Default",
+	"dropdown-zoom-1.1": "110%",
+	"dropdown-zoom-1.25": "125%"
 }

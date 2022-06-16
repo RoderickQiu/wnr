@@ -62,6 +62,20 @@ $(function () {
         if (!isMiniMode)
             titleAlternative.init();
     } catch (e) {
-        titleAlternative.init()
+        titleAlternative.init();
     }
 })//title attr alternative
+
+let ratioList = [0.75, 0.9, 1, 1.1, 1.25];//zoom ratio
+function zoomRatioChange() {
+    if (store.has("zoom-ratio")) {//zoom page
+        const { webFrame } = require('electron');
+        webFrame.setZoomFactor(ratioList[store.get("zoom-ratio")]);
+    }
+}
+
+$(function () {
+    zoomRatioChange()
+})
+
+ipc.on('zoom-ratio-feedback', () => zoomRatioChange());

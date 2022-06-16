@@ -34,6 +34,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW'], i//locale code
+let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
@@ -435,6 +436,8 @@ app.on('ready', () => {
     statisticsInitializer();
 
     hotkeyInit();
+
+    ratio = ratioList[store.get("zoom-ratio")];
 
     //initializers and compatibility database solutions
     switch (store.get("dark-or-white")) {
@@ -1719,8 +1722,8 @@ function about() {
         if (win != null) {
             aboutWin = new BrowserWindow({
                 parent: win,
-                width: 720,
-                height: 520,
+                width: 720 * ratio,
+                height: 520 * ratio,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1773,8 +1776,8 @@ function settings(mode) {
         if (win != null && settingsWin == null) {
             settingsWin = new BrowserWindow({
                 parent: win,
-                width: isChinese ? 420 : 472,
-                height: 636,
+                width: (isChinese ? 420 : 472) * ratio,
+                height: 636 * ratio,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1843,8 +1846,8 @@ function tourguide() {
         if (win != null && tourWin == null) {
             tourWin = new BrowserWindow({
                 parent: win,
-                width: 400,
-                height: 720,
+                width: 400 * ratio,
+                height: 720 * ratio,
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1974,8 +1977,8 @@ function externalTitle(title, notes) {
             if (!hasExternalTitle || externalTitleWin == null) {
                 hasExternalTitle = true;
                 externalTitleWin = new BrowserWindow({
-                    width: 160,
-                    height: 84,
+                    width: 160 * ratio,
+                    height: 84 * ratio,
                     x: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").x : 33,
                     y: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
@@ -2024,8 +2027,8 @@ function floating() {
             if (!hasFloating || floatingWin == null) {
                 hasFloating = true;
                 floatingWin = new BrowserWindow({
-                    width: 84,
-                    height: 84,
+                    width: 84 * ratio,
+                    height: 84 * ratio,
                     x: styleCache.has("floating-axis") ? styleCache.get("floating-axis").x : 33,
                     y: styleCache.has("floating-axis") ? styleCache.get("floating-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
@@ -2208,4 +2211,12 @@ ipcMain.on("floating-conversation", function (event, message) {
     } else if (message.topic === "stop-sync") {
         if (floatingWin != null) floatingWin.webContents.send("floating-stop-sync", message.val);
     }
+})
+
+ipcMain.on("zoom-ratio-change", function (event, message) {
+    ratio = ratioList[message];
+    win.setMinimumSize(Math.floor(349 * ratio), Math.floor(444 * ratio));
+    win.setSize(Math.floor(360 * ratio), Math.floor(459 * ratio), true);
+    settingsWin.setSize(Math.floor((isChinese ? 420 : 472) * ratio), Math.floor(636 * ratio), true);
+    win.webContents.send('zoom-ratio-feedback');
 })
