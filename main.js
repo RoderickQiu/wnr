@@ -30,11 +30,13 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     hasFloating = false, hasExternalTitle = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
-    store = null, styleCache = null, statistics = null, timingData = null;
+    store = null, styleCache = null, statistics = null, timingData = null,
+    personalizationNotificationList = [[], [], [], [], [], []];
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW'], i//locale code
 let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
+let notificationNamesList = ['work-time-end', 'work-time-end-msg', 'rest-time-end', 'rest-time-end-msg', 'all-task-end', 'all-task-end-msg'];
 
 app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to play sounds
 
@@ -528,6 +530,23 @@ app.on('ready', () => {
     }
 
     store.set("just-launched", true);
+
+    if (store.has("personalization-notification")) {
+        let tempString = "", tempInt = 0;
+        for (i in notificationNamesList) {
+            tempInt = 0;
+            if (store.has("personalization-notification." + notificationNamesList[i])) {
+                tempString = store.get("personalization-notification." + notificationNamesList[i]);
+                for (let j = 0; j < tempString.length - 1; j++) {
+                    if (tempString[j] === "/" && tempString[j + 1] === "/") {
+                        personalizationNotificationList[i].push(tempString.slice(tempInt, j));
+                        tempInt = j + 2;
+                    }
+                }
+                personalizationNotificationList[i].push(tempString.slice(tempInt, tempString.length));
+            }
+        }
+    }
 
     if (process.platform === "darwin" && process.env.NODE_ENV !== "development") {
         if (!app.isInApplicationsFolder()) {
@@ -1380,6 +1399,26 @@ function timeEndDialogDispose(mode) {
     win.webContents.send('warning-closed');
 }
 
+function personliazationNotificationSolution(i) {
+    let title = i18n.__(notificationNamesList[i]), msg = i18n.__(notificationNamesList[i + 1]), random = 0;
+    if (personalizationNotificationList[i].length > 0) {
+        random = Math.floor(Math.random() * personalizationNotificationList[i].length);
+        title = personalizationNotificationList[i][random];
+        if (personalizationNotificationList[i + 1].at(random) !== undefined) {
+            msg = personalizationNotificationList[i + 1][random];
+        } else if (personalizationNotificationList[i + 1].length > 0) {
+            random = Math.floor(Math.random() * personalizationNotificationList[i + 1].length);
+            msg = personalizationNotificationList[i + 1][random];
+        }
+    } else {
+        if (personalizationNotificationList[i + 1].length > 0) {
+            random = Math.floor(Math.random() * personalizationNotificationList[i + 1].length);
+            msg = personalizationNotificationList[i + 1][random];
+        }
+    }
+    return [title, msg];
+}
+
 ipcMain.on('warning-giver-workend', function () {
     statisticsWriter();
 
@@ -1392,11 +1431,10 @@ ipcMain.on('warning-giver-workend', function () {
         } else {
             nonFocusSolution();
         }
+        let personal = personliazationNotificationSolution(0);
         if (isScreenLocked) {
-            notificationSolution((store.has("personalization-notification.work-time-end") ?
-                    store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
-                (store.has("personalization-notification.work-time-end-msg") ?
-                    store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg')), "normal");
+            notificationSolution(personal[0],
+                personal[1], "normal");
         }
 
         if (store.get("no-check-work-time-end")) {
@@ -1407,11 +1445,9 @@ ipcMain.on('warning-giver-workend', function () {
                 if (process.platform !== "darwin" || (process.platform === "darwin" && restTimeFocused))
                     dialog.showMessageBox(win, {
                         title: " wnr",
-                        message: (store.has("personalization-notification.work-time-end") ?
-                            store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                        message: personal[0],
                         type: "info",
-                        detail: (store.has("personalization-notification.work-time-end-msg") ?
-                                store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                        detail: personal[1]
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("work");
@@ -1419,11 +1455,9 @@ ipcMain.on('warning-giver-workend', function () {
                     });
                 else dialog.showMessageBox({
                     title: " wnr",
-                    message: (store.has("personalization-notification.work-time-end") ?
-                        store.get("personalization-notification.work-time-end") : i18n.__('work-time-end')),
+                    message: personal[0],
                     type: "info",
-                    detail: (store.has("personalization-notification.work-time-end-msg") ?
-                            store.get("personalization-notification.work-time-end-msg") : i18n.__('work-time-end-msg'))
+                    detail: personal[1]
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("work");
@@ -1447,11 +1481,10 @@ ipcMain.on('warning-giver-restend', function () {
         } else {
             nonFocusSolution();
         }
+        let personal = personliazationNotificationSolution(2);
         if (isScreenLocked) {
-            notificationSolution((store.has("personalization-notification.rest-time-end") ?
-                    store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
-                (store.has("personalization-notification.rest-time-end-msg") ?
-                    store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg')), "normal");
+            notificationSolution(personal[0],
+                personal[1], "normal");
         }
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
@@ -1461,11 +1494,9 @@ ipcMain.on('warning-giver-restend', function () {
                 if (process.platform !== "darwin" || (process.platform === "darwin" && workTimeFocused))
                     dialog.showMessageBox(win, {
                         title: " wnr",
-                        message: (store.has("personalization-notification.rest-time-end") ?
-                            store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                        message: personal[0],
                         type: "info",
-                        detail: (store.has("personalization-notification.rest-time-end-msg") ?
-                                store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                        detail: personal[1]
                             + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                     }).then(function () {
                         timeEndDialogDispose("rest");
@@ -1473,11 +1504,9 @@ ipcMain.on('warning-giver-restend', function () {
                     })
                 else dialog.showMessageBox({
                     title: " wnr",
-                    message: (store.has("personalization-notification.rest-time-end") ?
-                        store.get("personalization-notification.rest-time-end") : i18n.__('rest-time-end')),
+                    message: personal[0],
                     type: "info",
-                    detail: (store.has("personalization-notification.rest-time-end-msg") ?
-                            store.get("personalization-notification.rest-time-end-msg") : i18n.__('rest-time-end-msg'))
+                    detail: personal[1]
                         + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
                 }).then(function () {
                     timeEndDialogDispose("rest");
@@ -1510,11 +1539,10 @@ ipcMain.on('warning-giver-all-task-end', function () {
             traySolution(false);
             win.setFocusable(true);
         }
+        let personal = personliazationNotificationSolution(4);
         if (isScreenLocked) {
-            notificationSolution((store.has("personalization-notification.all-task-end") ?
-                    store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
-                (store.has("personalization-notification.all-task-end-msg") ?
-                    store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')), "normal");
+            notificationSolution(personal[0],
+                personal[1], "normal");
         }
         if (store.get("no-check-time-end")) {
             win.maximizable = false;
@@ -1531,11 +1559,9 @@ ipcMain.on('warning-giver-all-task-end', function () {
             setTimeout(function () {
                 dialog.showMessageBox(win, {
                     title: " wnr",
-                    message: (store.has("personalization-notification.all-task-end") ?
-                        store.get("personalization-notification.all-task-end") : i18n.__('all-task-end')),
+                    message: personal[0],
                     type: "info",
-                    detail: (store.has("personalization-notification.all-task-end-msg") ?
-                        store.get("personalization-notification.all-task-end-msg") : i18n.__('all-task-end-msg')),
+                    detail: personal[1],
                 }).then(function () {
                     win.loadFile('index.html');//automatically back
                     setFullScreenMode(false);

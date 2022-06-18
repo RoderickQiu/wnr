@@ -211,7 +211,7 @@
 	"alarmtip": "Notify when you are not using wnr",
 	"alarmtip-tip": "After you've paused / stopped using wnr for more than 10 min, we will notify you.",
 	"personalization-notification": "Custom notifications",
-	"personalization-notification-tip": "Define the words shown at notifications to motivate yourself. Clear textboxes to remove personalized text.",
+	"personalization-notification-tip": "Define the words shown at notifications to motivate yourself. Clear textboxes to remove personalized text. Use \"//\" as to separate different sentences and each time you will be given a random choice.",
 	"personalization-notification-label-begin": "\"",
 	"personalization-notification-label-end": "\":",
 	"personalization-notify-sound": "Custom notify sound",

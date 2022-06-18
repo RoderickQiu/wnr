@@ -242,7 +242,7 @@
 	"alarmtip": "未使用 wnr 时发出提醒",
 	"alarmtip-tip": "在连续不使用或连续暂停 wnr 达 10 分钟后提醒你立刻开始下一段计划。",
 	"personalization-notification": "通知文本个性化",
-	"personalization-notification-tip": "自定义这些通知文本，让它们更加能激励你前行！清空以复位。",
+	"personalization-notification-tip": "自定义这些通知文本，让它们更加能激励你前行！清空以复位。输入\"//\"来分割数条语句，每次随机出现。",
 	"personalization-notification-label-begin": "“",
 	"personalization-notification-label-end": "”：",
 	"personalization-notify-sound": "通知铃声个性化",
