@@ -17,7 +17,7 @@ const winReleaseId = require('win-release-id');
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
     tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
-    isTimerWin = null, isWorkMode = null, isChinese = null,
+    isTimerWin = null, isWorkMode = null, isChinese = null, isFocused = true,
     timeLeftTip = null, trayTimeMsg = null, predefinedTasks = null,
     trayH = null, trayMin = null,
     workTimeFocused = false, restTimeFocused = false,
@@ -88,6 +88,14 @@ function createWindow() {
 
     win.on('session-end', () => {
         app.exit(0);
+    });
+
+    win.on('blur', () => {
+        isFocused = false;
+    });
+
+    win.on('focus', () => {
+        isFocused = true;
     });
 
     //triggers for macos lock
@@ -800,7 +808,7 @@ function showOrHide() {
         }
     if (win != null)
         if (floatingWin == null)
-            if (win.isVisible()) {
+            if (win.isVisible() && isFocused) {
                 win.hide();
             } else {
                 win.show()
