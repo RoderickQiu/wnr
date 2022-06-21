@@ -231,7 +231,8 @@
 	"dropdown-dialog": "确认框",
 	"dropdown-only-sound": "仅铃声",
 	"when-rest-time-end": "休息时间结束后",
-	"sound": "在一段时间后播放提示音",
+	"sound": "调节提示音音量或静音",
+	"sound-tip": "选择在一段时间结束后是否静音，或发出哪一档的声音。",
 	"onemintip": "还剩一分钟时发出提示",
 	"onemintip-tip": "在每段时间还剩 1 分钟时发出提示，提醒你暂时收尾这段工作。",
 	"nap-in-timing": "计时中途提醒（小憩设置）",
@@ -318,5 +319,12 @@
 	"dropdown-zoom-0.9": "90%",
 	"dropdown-zoom-1": "默认比例",
 	"dropdown-zoom-1.1": "110%",
-	"dropdown-zoom-1.25": "125%"
+	"dropdown-zoom-1.25": "125%",
+	"dropdown-no-sound": "完全静音",
+	"dropdown-very-low": "音量很低",
+	"dropdown-low": "音量低",
+	"dropdown-medium": "音量中",
+	"dropdown-high": "音量高",
+	"dropdown-very-high": "音量很高",
+	"dropdown-extreme": "音量非常高"
 }

@@ -95,11 +95,6 @@ if (store.get("islocked") !== true) {
                     def: 0,
                     tipped: false,
                     after: whenRestTimeEndAfter
-                }, {
-                    type: "selection",
-                    id: "sound",
-                    def: true,
-                    tipped: false
                 }
             ]
         }, {
@@ -117,17 +112,11 @@ if (store.get("islocked") !== true) {
             id: "alarmtip",
             def: true
         }, {
-            type: "collapse",
-            id: "personalization-notification",
-            tipped: false,
-            inner: [
-                {
-                    type: "personalization-notification"
-                }, {
-                    type: "title",
-                    id: "personalization-notification-tip"
-                }
-            ]
+            type: "dropdown",
+            id: "sound",
+            choices: ['no-sound', 'very-low', 'low', 'medium', 'high', 'very-high', 'extreme'],
+            def: 3,
+            after: soundAfter
         }, {
             type: "collapse",
             id: "personalization-notify-sound",
@@ -138,6 +127,18 @@ if (store.get("islocked") !== true) {
                 }, {
                     type: "title",
                     id: "personalization-notify-sound-tip"
+                }
+            ]
+        }, {
+            type: "collapse",
+            id: "personalization-notification",
+            tipped: false,
+            inner: [
+                {
+                    type: "personalization-notification"
+                }, {
+                    type: "title",
+                    id: "personalization-notification-tip"
                 }
             ]
         }, {
@@ -352,4 +353,12 @@ function autostartAfter(val) {
 function zoomRatioAfter(val) {
     ipc.send('zoom-ratio-change', val);
     location.reload()
+}
+
+function soundAfter(val) {
+    let player = document.createElement('audio');
+    amplifyMedia(player, amplifierList[val]);
+    player.src = path.join(__dirname, '\\res\\sound\\' + (store.has('time-end-sound') ? store.get('time-end-sound') : 'tick') + '.mp3');
+    player.loop = false;
+    player.play();
 }

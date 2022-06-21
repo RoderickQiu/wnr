@@ -347,7 +347,6 @@
                 h = i18n.__('h'),
                 min = i18n.__('min'),
                 s = i18n.__('s'),
-                player = document.createElement("audio"),//alert player
                 stopperTimeout = null,
                 pausingTimeout = null,
                 isLongRest = false,
@@ -580,13 +579,14 @@
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);
                 timingData.set("last-recorded-hours-left", -1);
+                let player = document.createElement('audio');
+                amplifyMedia(player, amplifierList[store.get("sound")]);
                 if (isend !== 0) {
                     player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
                 } else {
                     player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
                 }
                 player.loop = true;
-                if (store.get("sound") === false) player.muted = true;
                 player.play();
                 if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
                     $("#skipper-container").css("display", "none");
@@ -788,6 +788,8 @@
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
                 if (continueLoop && method === 2) {
                     //if continueloop then only play once and no other thing
+                    let player = document.createElement('audio');
+                    amplifyMedia(player, amplifierList[store.get("sound")]);
                     player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
                     player.loop = false;
                     player.play();
@@ -932,11 +934,11 @@
                             if ((method === 1 && workTimeFocused === false) || (method === 2 && restTimeFocused === false))
                                 ipc.send("only-one-min-left");
                             else {
-                                if (store.get("sound") !== false) {
-                                    player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
-                                    player.loop = false;
-                                    player.play();
-                                }
+                                let player = document.createElement('audio');
+                                amplifyMedia(player, amplifierList[store.get("sound") * 1.4]);
+                                player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
+                                player.loop = false;
+                                player.play();
                                 $("#only-one").css("display", "block");
                             }
                         }

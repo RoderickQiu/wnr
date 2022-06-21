@@ -537,6 +537,11 @@ app.on('ready', () => {
         else store.set("when-work-rest-end", 0);
     }
 
+    if (store.has("sound")) {
+        if (store.get("sound") === true) store.set("sound", 4);
+        else if (store.get("sound") === false) store.set("sound", 0);
+    } else store.set("sound", 4);
+
     store.set("just-launched", true);
 
     if (store.has("personalization-notification")) {
@@ -1756,8 +1761,8 @@ function about() {
         if (win != null) {
             aboutWin = new BrowserWindow({
                 parent: win,
-                width: 720 * ratio,
-                height: 520 * ratio,
+                width: Math.floor(720 * ratio),
+                height: Math.floor(520 * ratio),
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -1810,10 +1815,9 @@ function settings(mode) {
         if (win != null && settingsWin == null) {
             settingsWin = new BrowserWindow({
                 parent: win,
-                width: (isChinese ? 420 : 472) * ratio,
-                height: 636 * ratio,
+                width: Math.floor((isChinese ? 420 : 472) * ratio),
+                height: Math.floor(636 * ratio),
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
-                resizable: false,
                 maximizable: false,
                 minimizable: false,
                 frame: false,
@@ -1880,8 +1884,8 @@ function tourguide() {
         if (win != null && tourWin == null) {
             tourWin = new BrowserWindow({
                 parent: win,
-                width: 400 * ratio,
-                height: 720 * ratio,
+                width: Math.floor(400 * ratio),
+                height: Math.floor(720 * ratio),
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 resizable: false,
                 maximizable: false,
@@ -2011,8 +2015,8 @@ function externalTitle(title, notes) {
             if (!hasExternalTitle || externalTitleWin == null) {
                 hasExternalTitle = true;
                 externalTitleWin = new BrowserWindow({
-                    width: 160 * ratio,
-                    height: 84 * ratio,
+                    width: Math.floor(160 * ratio),
+                    height: Math.floor(84 * ratio),
                     x: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").x : 33,
                     y: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
@@ -2061,8 +2065,8 @@ function floating() {
             if (!hasFloating || floatingWin == null) {
                 hasFloating = true;
                 floatingWin = new BrowserWindow({
-                    width: 84 * ratio,
-                    height: 84 * ratio,
+                    width: Math.floor(84 * ratio),
+                    height: Math.floor(84 * ratio),
                     x: styleCache.has("floating-axis") ? styleCache.get("floating-axis").x : 33,
                     y: styleCache.has("floating-axis") ? styleCache.get("floating-axis").y : 33,
                     backgroundColor: isDarkMode() ? "#191919" : "#fefefe",

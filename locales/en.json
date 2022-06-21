@@ -200,7 +200,8 @@
 	"dropdown-dialog": "Dialog",
 	"dropdown-only-sound": "Only Sound",
 	"when-rest-time-end": "When rest time end",
-	"sound": "Play the notify sound",
+	"sound": "Volume of notify sound / Mute",
+	"sound-tip": "Change the notify sound when a period of time ends, or simply mute it.",
 	"onemintip": "Notify when less than 1 min left",
 	"onemintip-tip": "When a period of time will end in a minute we will send you a notification, so that you can pause your work comfortably.",
 	"nap-in-timing": "Nap setting",
@@ -323,5 +324,12 @@
 	"dropdown-zoom-0.9": "90%",
 	"dropdown-zoom-1": "Default",
 	"dropdown-zoom-1.1": "110%",
-	"dropdown-zoom-1.25": "125%"
+	"dropdown-zoom-1.25": "125%",
+	"dropdown-no-sound": "Muted",
+	"dropdown-very-low": "Very Low",
+	"dropdown-low": "Low",
+	"dropdown-medium": "Medium",
+	"dropdown-high": "High",
+	"dropdown-very-high": "Very High",
+	"dropdown-extreme": "Extreme"
 }
