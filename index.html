@@ -631,14 +631,14 @@
         setTimeout(function () {
             focusNotifier();
             if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
-                if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 2)
-                    timingData.set("last-recorded-minutes-left", 2);
+                if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 1)
+                    timingData.set("last-recorded-minutes-left", 1);
                 if (timingData.get("last-recorded-state").method === 1) {
                     window.location.href =
                             "timer.html?title=" + timingData.get("last-recorded-state").title
                             + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                             + "&rest-time=" + timingData.get("last-recorded-state").restTime
-                            + "&loop=" + (store.get("infinity") ? 0 : timingData.get("last-recorded-state").loop)
+                            + "&loop=" + 1
                             + "&note=" + timingData.get("last-recorded-state").note
                             + "&method=1"
                             + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
@@ -651,7 +651,7 @@
                             "timer.html?title=" + timingData.get("last-recorded-state").title
                             + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                             + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
-                            + "&loop=" + (store.get("infinity") ? 0 : timingData.get("last-recorded-state").loop)
+                            + "&loop=" + 1
                             + "&note=" + timingData.get("last-recorded-state").note
                             + "&method=2"
                             + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
