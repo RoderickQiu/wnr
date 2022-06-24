@@ -331,5 +331,9 @@
 	"dropdown-medium": "Medium",
 	"dropdown-high": "High",
 	"dropdown-very-high": "Very High",
-	"dropdown-extreme": "Extreme"
+	"dropdown-extreme": "Extreme",
+	"start-from-which-day": "In which day your week starts",
+	"can-be-modified-in-settings-later": "This setting can be set in the preferences panel at any time. ",
+	"dropdown-from-monday": "From Monday",
+	"dropdown-from-sunday": "From Sunday"
 }

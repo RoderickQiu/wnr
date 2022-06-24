@@ -336,6 +336,7 @@ app.on('ready', () => {
     require('@electron/remote/main').initialize();
 
     createWindow();
+    require("@electron/remote/main").enable(win.webContents);
 
     if (process.env.NODE_ENV === "portable") {
         store = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-config' });//accept portable
@@ -1779,6 +1780,7 @@ function about() {
                     spellcheck: false
                 },
             });
+            require("@electron/remote/main").enable(aboutWin.webContents);
             aboutWin.loadFile("about.html");
             win.setAlwaysOnTop(true, "floating");
             aboutWin.setAlwaysOnTop(true, "floating");
@@ -1832,6 +1834,7 @@ function settings(mode) {
                 },
                 titleBarStyle: "hidden"
             });
+            require("@electron/remote/main").enable(settingsWin.webContents);
             if (mode === 'locker') store.set("settings-goto", "locker");
             else if (mode === 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
@@ -1902,6 +1905,7 @@ function tourguide() {
                     spellcheck: false
                 },
             });
+            require("@electron/remote/main").enable(tourWin.webContents);
             tourWin.loadFile("tourguide.html");
             win.setAlwaysOnTop(true, "floating");
             tourWin.setAlwaysOnTop(true, "floating");

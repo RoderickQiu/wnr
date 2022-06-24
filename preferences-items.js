@@ -154,6 +154,13 @@ if (store.get("islocked") !== true) {
             after: zoomRatioAfter
         }, {
             type: "dropdown",
+            id: "start-from-which-day",
+            choices: ['from-monday', 'from-sunday'],
+            tipped: false,
+            def: 1,
+            after: startFromWhichDayAfter
+        }, {
+            type: "dropdown",
             id: "dark-or-white",
             tipped: false,
             relaunch: true,
@@ -318,6 +325,11 @@ function disableBackAfter(val) {
             store.set('disable-backing', false);
             break;
     }
+}
+
+function startFromWhichDayAfter(val) {
+    if (val === 0) store.set('start-from-monday', true);
+    else store.set('start-from-monday', false);
 }
 
 let AutoLaunch = require('auto-launch');

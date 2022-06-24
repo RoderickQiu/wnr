@@ -326,5 +326,9 @@
 	"dropdown-medium": "音量中",
 	"dropdown-high": "音量高",
 	"dropdown-very-high": "音量很高",
-	"dropdown-extreme": "音量非常高"
+	"dropdown-extreme": "音量非常高",
+	"start-from-which-day": "选择每周从星期几开始",
+	"can-be-modified-in-settings-later": "你可以随时在设置中更改这一项。",
+	"dropdown-from-monday": "星期一开始",
+	"dropdown-from-sunday": "星期日开始"
 }

@@ -162,6 +162,22 @@
             statistics = new Store({ name: 'statistics' });
         }
 
+        if (!store.has("start-from-monday")) {
+            const { dialog } = require('@electron/remote');
+            dialog.showMessageBox({
+                title: " wnr",
+                type: "warning",
+                message: i18n.__("start-from-which-day"),
+                detail: i18n.__("can-be-modified-in-settings-later"),
+                buttons: [i18n.__('dropdown-from-monday'), i18n.__('dropdown-from-sunday'), i18n.__('cancel')],
+                cancelId: 2,//buttons map different from darwin to other OSs
+                noLink: true
+            }).then(function (index) {
+                store.set("start-from-monday", index.response === 0);
+                location.reload();
+            });
+        }
+
         let nowDate = new Date();//get date and have preparations
         let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
         statistics.set("year", nowDate.getFullYear().toString());
@@ -174,8 +190,16 @@
         yesterdayDate.setDate(yesterdayDate.getDate() - 1);
         let yesterdayYearMonDay = yesterdayDate.getFullYear().toString() + months[yesterdayDate.getMonth()] + yesterdayDate.getDate().toString();
 
+        function getDayCustomizable(date) {
+            if (!store.get("start-from-monday")) return date.getDay();
+            else {
+                if (date.getDay() === 0) return 6;
+                else return date.getDay() - 1;
+            }
+        }
+
         let thisWeekDate = new Date();//get info about this week
-        thisWeekDate.setDate(thisWeekDate.getDate() - thisWeekDate.getDay());
+        thisWeekDate.setDate(thisWeekDate.getDate() - getDayCustomizable(thisWeekDate));
         let thisWeekWorkTimeSum = 0, thisWeekRestTimeSum = 0, thisWeekTimeSum = 0;
         let weekDayYearMonDay;
         let thisWeekWorkTimes = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimes = [0, 0, 0, 0, 0, 0, 0];
@@ -184,10 +208,10 @@
             weekDayYearMonDay = thisWeekDate.getFullYear().toString() + months[thisWeekDate.getMonth()] + thisWeekDate.getDate().toString();
             thisWeekWorkTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
             thisWeekWorkTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
-            thisWeekWorkTimesInHour[weekDay] = Math.floor(thisWeekWorkTimes[weekDay] / 60);
+            thisWeekWorkTimesInHour[weekDay] = Math.round((thisWeekWorkTimes[weekDay] / 60) * 10) / 10;
             thisWeekRestTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
             thisWeekRestTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
-            thisWeekRestTimesInHour[weekDay] = Math.floor(thisWeekRestTimes[weekDay] / 60);
+            thisWeekRestTimesInHour[weekDay] = Math.round((thisWeekRestTimes[weekDay] / 60) * 10) / 10;
             thisWeekTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).sum : 0;
 
             thisWeekDate.setDate(thisWeekDate.getDate() + 1);
@@ -278,7 +302,9 @@
                         display: false
                     },
                     bgColor: isDarkMode ? '#191919' : '#ffffff',
-                    labels: ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
+                    labels: store.get("start-from-monday")
+                            ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+                            : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
                     topPadding: 19,
                     bottomPadding: 49,
                     showGrid: false,
