@@ -335,5 +335,7 @@
 	"start-from-which-day": "In which day your week starts",
 	"can-be-modified-in-settings-later": "This setting can be set in the preferences panel at any time. ",
 	"dropdown-from-monday": "From Monday",
-	"dropdown-from-sunday": "From Sunday"
+	"dropdown-from-sunday": "From Sunday",
+	"statistics-onlyrest-time": "Simple Ctdn.",
+	"statistics-positive-time": "Stopwatch"
 }

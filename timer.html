@@ -353,6 +353,8 @@
                 isFirstTimeOnlyRest = decodeURI($_GET['work-time']) === "0.7777",
                 isOnlyRest = isFirstTimeOnlyRest;
 
+        if (isOnlyRest) ipc.send("enter-only-rest");
+
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
         if (restored && methodFromStart === 2) times--;//workaround: method = 2 causes an extra skipper()
@@ -383,6 +385,8 @@
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
             timingData.set("last-recorded-times-left", 0);
+
+            ipc.send("enter-positive-timing");
         }
 
         if (store.get('disable-pausing') === true && (store.get("disable-pausing-special") === "work" || store.get("disable-pausing-special") === "all")) {

@@ -330,5 +330,7 @@
 	"start-from-which-day": "选择每周从星期几开始",
 	"can-be-modified-in-settings-later": "你可以随时在设置中更改这一项。",
 	"dropdown-from-monday": "星期一开始",
-	"dropdown-from-sunday": "星期日开始"
+	"dropdown-from-sunday": "星期日开始",
+	"statistics-onlyrest-time": "单纯计时",
+	"statistics-positive-time": "正计时"
 }

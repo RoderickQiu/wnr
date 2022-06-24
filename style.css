@@ -899,7 +899,7 @@ li input:nth-last-child(4)::after {
 }
 
 #statistics-graph {
-    height: 180px;
+    height: 240px;
 }
 
 #statistics-back {

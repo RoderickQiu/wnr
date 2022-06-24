@@ -83,47 +83,93 @@
         </div>
         <div id="statistics-no-chart">
             <br />
-            <span class="small">
+            <table width="100%" style="line-height: 2.5">
+                <tbody>
+                    <tr>
+                        <td>
+                            <span class="small">
                 <script>document.write(i18n.__('statistics-work-time'));</script>
             </span><br />
-            <h1 class="rest">
-                <span id="work-time">--</span>
-            </h1>
-            <span class="small">
+                            <h3 class="rest">
+                                <span id="work-time">--</span>
+                            </h3>
+                        </td>
+                        <td>
+                            <span class="small">
                 <script>document.write(i18n.__('statistics-rest-time'));</script>
             </span><br />
-            <h1 class="work">
-                <span id="rest-time">--</span>
-            </h1>
+                            <h3 class="work">
+                                <span id="rest-time">--</span>
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>&nbsp;</tr>
+                    <tr>
+                        <td>
+                            <span class="small">
+                <script>document.write(i18n.__('statistics-onlyrest-time'));</script>
+            </span><br />
+                            <h3 class="onlyRest">
+                                <span id="onlyrest-time">--</span>
+                            </h3>
+                        </td>
+                        <td>
+                            <span class="small">
+                <script>document.write(i18n.__('statistics-positive-time'));</script>
+            </span><br />
+                            <h3 class="positive">
+                                <span id="positive-time">--</span>
+                            </h3>
+                        </td>
+                    </tr>
+                    <tr>&nbsp;</tr>
+                </tbody>
+            </table>
             <span class="small">
                 <script>document.write(i18n.__('statistics-time-sum'));</script>
             </span><br />
-            <h1 class="text-muted">
+            <h2 class="text-muted">
                 <span id="sum">--</span>
-            </h1>
+            </h2>
         </div>
         <div id="statistics-with-chart">
             <br />
-            <div class="container" style="padding: 0">
+            <div class="container small" style="padding: 0">
                 <div class="row">
-                    <div class="col">
-                        <span class="small">
+                    <div class="col" style="padding: 0">
+                        <span class="xx-small">
                             <script>document.write(i18n.__('statistics-work-time'));</script>
                         </span><br />
                         <b class="rest">
                             <span id="work-time-with-chart">--</span>
                         </b>
                     </div>
-                    <div class="col">
-                        <span class="small">
+                    <div class="col" style="padding: 0">
+                        <span class="xx-small">
                             <script>document.write(i18n.__('statistics-rest-time'));</script>
                         </span><br />
                         <b class="work">
                             <span id="rest-time-with-chart">--</span>
                         </b>
                     </div>
-                    <div class="col">
-                        <span class="small">
+                    <div class="col" style="padding: 0">
+                        <span class="xx-small">
+                            <script>document.write(i18n.__('statistics-onlyrest-time'));</script>
+                        </span><br />
+                        <b class="onlyRest">
+                            <span id="only-rest-time-with-chart">--</span>
+                        </b>
+                    </div>
+                    <div class="col" style="padding: 0">
+                        <span class="xx-small">
+                            <script>document.write(i18n.__('statistics-positive-time'));</script>
+                        </span><br />
+                        <b class="positive">
+                            <span id="positive-time-with-chart">--</span>
+                        </b>
+                    </div>
+                    <div class="col" style="padding: 0">
+                        <span class="xx-small">
                             <script>document.write(i18n.__('statistics-time-sum'));</script>
                         </span><br />
                         <b class="text-muted">
@@ -198,12 +244,23 @@
             }
         }
 
+        function num(val) {
+            if (val === undefined) return 0;
+            else if (isNaN(Number(val))) return 0;
+            else return val;
+        }
+
         let thisWeekDate = new Date();//get info about this week
         thisWeekDate.setDate(thisWeekDate.getDate() - getDayCustomizable(thisWeekDate));
-        let thisWeekWorkTimeSum = 0, thisWeekRestTimeSum = 0, thisWeekTimeSum = 0;
+        let thisWeekWorkTimeSum = 0, thisWeekRestTimeSum = 0, thisWeekTimeSum = 0, thisWeekOnlyRestTimeSum = 0,
+                thisWeekPositiveTimeSum = 0;
         let weekDayYearMonDay;
         let thisWeekWorkTimes = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimes = [0, 0, 0, 0, 0, 0, 0];
         let thisWeekWorkTimesInHour = [0, 0, 0, 0, 0, 0, 0], thisWeekRestTimesInHour = [0, 0, 0, 0, 0, 0, 0];
+        let thisWeekOnlyRestTimes = [0, 0, 0, 0, 0, 0, 0],
+                thisWeekOnlyRestTimesInHour = [0, 0, 0, 0, 0, 0, 0];
+        let thisWeekPositiveTimes = [0, 0, 0, 0, 0, 0, 0],
+                thisWeekPositiveTimesInHour = [0, 0, 0, 0, 0, 0, 0];
         for (let weekDay = 0; weekDay < 7; weekDay++) {
             weekDayYearMonDay = thisWeekDate.getFullYear().toString() + months[thisWeekDate.getMonth()] + thisWeekDate.getDate().toString();
             thisWeekWorkTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).workTime : 0;
@@ -212,6 +269,12 @@
             thisWeekRestTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
             thisWeekRestTimes[weekDay] = statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).restTime : 0;
             thisWeekRestTimesInHour[weekDay] = Math.round((thisWeekRestTimes[weekDay] / 60) * 10) / 10;
+            thisWeekOnlyRestTimes[weekDay] = statistics.has(weekDayYearMonDay) ? num(statistics.get(weekDayYearMonDay).onlyRest) : 0;
+            thisWeekOnlyRestTimesInHour[weekDay] = Math.round((thisWeekOnlyRestTimes[weekDay] / 60) * 10) / 10;
+            thisWeekOnlyRestTimeSum += statistics.has(weekDayYearMonDay) ? num(statistics.get(weekDayYearMonDay).onlyRest) : 0;
+            thisWeekPositiveTimes[weekDay] = statistics.has(weekDayYearMonDay) ? num(statistics.get(weekDayYearMonDay).positive) : 0;
+            thisWeekPositiveTimesInHour[weekDay] = Math.round((thisWeekPositiveTimes[weekDay] / 60) * 10) / 10;
+            thisWeekPositiveTimeSum += statistics.has(weekDayYearMonDay) ? num(statistics.get(weekDayYearMonDay).positive) : 0;
             thisWeekTimeSum += statistics.has(weekDayYearMonDay) ? statistics.get(weekDayYearMonDay).sum : 0;
 
             thisWeekDate.setDate(thisWeekDate.getDate() + 1);
@@ -222,20 +285,32 @@
                 thisYearRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         let thisYearWorkTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
                 thisYearRestTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let thisYearOnlyRestTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                thisYearOnlyRestTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
+        let thisYearPositiveTimes = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                thisYearPositiveTimesInHour = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
         for (let monthVar = 0; monthVar < 12; monthVar++) {
             monthYearAndMon = statistics.get("year") + months[monthVar];
             thisYearWorkTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).workTime : 0;
             thisYearWorkTimesInHour[monthVar] = Math.floor(thisYearWorkTimes[monthVar] / 60);
             thisYearRestTimes[monthVar] = statistics.has(monthYearAndMon) ? statistics.get(monthYearAndMon).restTime : 0;
             thisYearRestTimesInHour[monthVar] = Math.floor(thisYearRestTimes[monthVar] / 60);
+            thisYearOnlyRestTimes[monthVar] = statistics.has(monthYearAndMon) ? num(statistics.get(monthYearAndMon).onlyRest) : 0;
+            thisYearOnlyRestTimesInHour[monthVar] = Math.floor(thisYearOnlyRestTimes[monthVar] / 60);
+            thisYearPositiveTimes[monthVar] = statistics.has(monthYearAndMon) ? num(statistics.get(monthYearAndMon).positive) : 0;
+            thisYearPositiveTimesInHour[monthVar] = Math.floor(thisYearPositiveTimes[monthVar] / 60);
         }
 
-        let allTimeWorkTimeSum = 0, allTimeRestTimeSum = 0, allTimeTimeSum = 0;//get info about all time
+        let allTimeWorkTimeSum = 0, allTimeRestTimeSum = 0,
+                allTimeOnlyRestTimeSum = 0, allTimePositiveTimeSum = 0,
+                allTimeTimeSum = 0;//get info about all time
         let yearVar = Number(statistics.get("year"));
         while (yearVar) {
             if (statistics.has(yearVar.toString())) {
                 allTimeWorkTimeSum += statistics.get(yearVar.toString()).workTime;
                 allTimeRestTimeSum += statistics.get(yearVar.toString()).restTime;
+                allTimeOnlyRestTimeSum += num(statistics.get(yearVar.toString()).onlyRest);
+                allTimePositiveTimeSum += num(statistics.get(yearVar.toString()).positive);
                 allTimeTimeSum += statistics.get(yearVar.toString()).sum;
                 yearVar--;
             } else break;
@@ -268,6 +343,8 @@
 
                 $("#work-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0"));
                 $("#rest-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0"));
+                $("#onlyrest-time").text(getStyledTime(statistics.has(yearMonDay) ? num(statistics.get(yearMonDay).onlyRest) : "0"));
+                $("#positive-time").text(getStyledTime(statistics.has(yearMonDay) ? num(statistics.get(yearMonDay).positive) : "0"));
                 $("#sum").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0"));
             } else if (statisticsMode === "yesterday") {
                 $("#today").css("font-weight", "normal");
@@ -281,6 +358,8 @@
 
                 $("#work-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0"));
                 $("#rest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0"));
+                $("#onlyrest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? num(statistics.get(yesterdayYearMonDay).onlyRest) : "0"));
+                $("#positive-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? num(statistics.get(yesterdayYearMonDay).positive) : "0"));
                 $("#sum").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0"));
             } else if (statisticsMode === "this-week") {
                 $("#today").css("font-weight", "normal");
@@ -294,10 +373,12 @@
 
                 $("#work-time-with-chart").text(getStyledTime(thisWeekWorkTimeSum));
                 $("#rest-time-with-chart").text(getStyledTime(thisWeekRestTimeSum));
+                $("#only-rest-time-with-chart").text(getStyledTime(num(thisWeekOnlyRestTimeSum)));
+                $("#positive-time-with-chart").text(getStyledTime(num(thisWeekPositiveTimeSum)));
                 $("#sum-with-chart").text(getStyledTime(thisWeekTimeSum));
 
                 let options = {
-                    type: 'bar',
+                    type: 'line',
                     legend: {
                         display: false
                     },
@@ -306,14 +387,19 @@
                             ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
                             : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
                     topPadding: 19,
-                    bottomPadding: 49,
-                    showGrid: false,
+                    bottomPadding: 39,
                     datasets: [{
                         fillColor: '#5490eacc',
                         data: thisWeekWorkTimesInHour
                     }, {
                         fillColor: '#ea5454cc',
                         data: thisWeekRestTimesInHour
+                    }, {
+                        fillColor: '#a26ae5cc',
+                        data: thisWeekOnlyRestTimesInHour
+                    }, {
+                        fillColor: '#17a2b8cc',
+                        data: thisWeekPositiveTimesInHour
                     }]
                 }
                 new schart('graph', options);//statistics graph
@@ -328,8 +414,15 @@
                 $("#statistics-no-chart").css("display", "none");
 
                 $("#work-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0"));
+                if ($("#work-time-with-chart").text().length >= 10) $("#work-time-with-chart").addClass("xx-small");
                 $("#rest-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).restTime : "0"));
+                if ($("#rest-time-with-chart").text().length >= 10) $("#rest-time-with-chart").addClass("xx-small");
+                $("#only-rest-time-with-chart").text(getStyledTime((statistics.has(statistics.get("year")) ? num(statistics.get(statistics.get("year")).onlyRest) : "0")));
+                if ($("#only-rest-time-with-chart").text().length >= 10) $("#only-rest-time-with-chart").addClass("xx-small");
+                $("#positive-time-with-chart").text(getStyledTime((statistics.has(statistics.get("year")) ? num(statistics.get(statistics.get("year")).positive) : "0")));
+                if ($("#positive-time-with-chart").text().length >= 10) $("#positive-time-with-chart").addClass("xx-small");
                 $("#sum-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).sum : "0"));
+                if ($("#sum-with-chart").text().length >= 10) $("#sum-with-chart").addClass("xx-small");
 
                 let options = {
                     type: 'line',
@@ -341,8 +434,7 @@
                     xRorate: 45,
                     yEqual: 3,
                     topPadding: 19,
-                    bottomPadding: 69,
-                    showGrid: false,
+                    bottomPadding: 59,
                     showValue: false,
                     datasets: [{
                         fillColor: '#5490eacc',
@@ -350,6 +442,12 @@
                     }, {
                         fillColor: '#ea5454cc',
                         data: thisYearRestTimesInHour
+                    }, {
+                        fillColor: '#a26ae5cc',
+                        data: thisYearOnlyRestTimesInHour
+                    }, {
+                        fillColor: '#17a2b8cc',
+                        data: thisYearPositiveTimesInHour
                     }]
                 }
                 new schart('graph', options);//statistics graph
@@ -365,6 +463,8 @@
 
                 $("#work-time").text(getStyledTime(allTimeWorkTimeSum));
                 $("#rest-time").text(getStyledTime(allTimeRestTimeSum));
+                $("#onlyrest-time").text(getStyledTime(allTimeOnlyRestTimeSum));
+                $("#positive-time").text(getStyledTime(allTimePositiveTimeSum));
                 $("#sum").text(getStyledTime(allTimeTimeSum));
             }
         }//to show the stuffs
