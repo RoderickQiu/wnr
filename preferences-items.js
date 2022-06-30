@@ -84,14 +84,14 @@ if (store.get("islocked") !== true) {
                 }, {
                     type: "dropdown",
                     id: "when-work-time-end",
-                    choices: ['dialog', 'only-sound'],
+                    choices: ['dialog', 'only-sound', 'notification-no-popup'],
                     def: 0,
                     tipped: false,
                     after: whenWorkTimeEndAfter
                 }, {
                     type: "dropdown",
                     id: "when-rest-time-end",
-                    choices: ['dialog', 'only-sound'],
+                    choices: ['dialog', 'only-sound', 'notification-no-popup'],
                     def: 0,
                     tipped: false,
                     after: whenRestTimeEndAfter

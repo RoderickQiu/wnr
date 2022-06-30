@@ -529,15 +529,15 @@ app.on('ready', () => {
     if (store.has("should-stop-locked"))
         store.set("timing-after-locked", store.get("should-stop-locked"));
 
-    if (store.has("no-check-work-time-end")) {
+    if (store.has("no-check-work-time-end") && store.get("when-work-time-end") !== 2) {
         if (store.get("no-check-work-time-end"))
             store.set("when-work-time-end", 1);
         else store.set("when-work-time-end", 0);
     }
-    if (store.has("no-check-rest-time-end")) {
+    if (store.has("no-check-rest-time-end") && store.get("when-rest-time-end") !== 2) {
         if (store.get("no-check-rest-time-end"))
-            store.set("when-work-rest-end", 1);
-        else store.set("when-work-rest-end", 0);
+            store.set("when-work-time-end", 1);
+        else store.set("when-work-time-end", 0);
     }
 
     if (store.has("sound")) {
@@ -602,7 +602,7 @@ app.on('ready', () => {
     settingsWinContextMenuSolution();
 
     if (store.get("tray-time") !== false && process.platform === "darwin")
-        tray.setTitle(' ' + i18n.__('not-timing'));
+        tray.setTitle(' ' + i18n.__('not-timing-tray'));
 
     if (!store.has("predefined-tasks-created")) {
         store.set("predefined-tasks-created", true);
@@ -1430,7 +1430,7 @@ ipcMain.on("only-rest-fullscreen", function () {
     focusSolution()
 })
 
-function nonFocusSolution() {
+function nonFocusSolution(mode) {
     if (win != null) {
         multiScreenSolution("off");
         setFullScreenMode(false);
@@ -1447,6 +1447,7 @@ function nonFocusSolution() {
                 floating();
             }
             win.hide();
+        } else if ((mode === "work" && store.get("when-work-time-end") === 2) || (mode === "rest" && store.get("when-rest-time-end") === 2)) {
         } else {
             win.show();
             win.center();
@@ -1463,7 +1464,8 @@ function noCheckTimeSolution(mode) {
     } else {
         if (store.get("top") !== true) {
             win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-            if (!hasFloating) win.moveTop();
+            if ((mode === "work" && store.get("when-work-time-end") === 2) || (mode === "resdt" && store.get("when-rest-time-end") !== 2)) {
+            } else if (!hasFloating) win.moveTop();
         }
         if (dockHide) app.dock.hide();
     }
@@ -1505,10 +1507,10 @@ ipcMain.on('warning-giver-workend', function () {
         if (restTimeFocused === true) {
             focusSolution();
         } else {
-            nonFocusSolution();
+            nonFocusSolution("work");
         }
         let personal = personliazationNotificationSolution(0);
-        if (isScreenLocked) {
+        if (isScreenLocked || store.get("when-work-time-end") === 2) {
             notificationSolution(personal[0],
                 personal[1], "normal");
         }
@@ -1555,10 +1557,10 @@ ipcMain.on('warning-giver-restend', function () {
         if (workTimeFocused === true) {
             focusSolution();
         } else {
-            nonFocusSolution();
+            nonFocusSolution("rest");
         }
         let personal = personliazationNotificationSolution(2);
-        if (isScreenLocked) {
+        if (isScreenLocked || store.get("when-rest-time-end") === 2) {
             notificationSolution(personal[0],
                 personal[1], "normal");
         }
@@ -2293,7 +2295,7 @@ ipcMain.on("timer-win", function (event, message) {
         multiScreenSolution("off");
 
         if (store.get("tray-time") !== false && process.platform === "darwin")
-            tray.setTitle(' ' + i18n.__('not-timing'));
+            tray.setTitle(' ' + i18n.__('not-timing-tray'));
         else tray.setTitle("");
 
         isOnlyRest = false;
