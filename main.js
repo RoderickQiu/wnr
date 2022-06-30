@@ -28,7 +28,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     newWindows = [], displays = null, hasMultiDisplays = null,
     isLoose = false, isForceScreenLock = false, isScreenLocked = false,
     isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false,
-    hasFloating = false, hasExternalTitle = false,
+    hasFloating = false, hasExternalTitle = false, hasGotSingleInstanceLock = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
     store = null, styleCache = null, statistics = null, timingData = null,
@@ -101,14 +101,15 @@ function createWindow() {
 
     //triggers for macos lock
     win.on('close', (event) => {
-        if ((store.get("islocked") || (fullScreenProtection && isTimerWin)) && (process.env.NODE_ENV !== "development")) {
-            event.preventDefault();
-            if (win != null)
-                notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
-        } else if ((process.platform === "darwin")) {
-            event.preventDefault();
-            windowCloseChk()
-        }
+        if (hasGotSingleInstanceLock)
+            if (((store.get("islocked") || (fullScreenProtection && isTimerWin)) && (process.env.NODE_ENV !== "development"))) {
+                event.preventDefault();
+                if (win != null)
+                    notificationSolution("wnr", i18n.__('prevent-stop'), "non-important");
+            } else if ((process.platform === "darwin")) {
+                event.preventDefault();
+                windowCloseChk()
+            }
     });
 
     win.on('show', () => {
@@ -392,8 +393,8 @@ app.on('ready', () => {
 
     timeLeftTip = i18n.__("time-left");//this will be used in this file frequently
 
-    const gotTheLock = app.requestSingleInstanceLock();
-    if (!gotTheLock) {
+    hasGotSingleInstanceLock = app.requestSingleInstanceLock();
+    if (!hasGotSingleInstanceLock) {
         console.log('Didn\'t get the lock, quitting');
         app.quit();
     } else {
