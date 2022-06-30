@@ -14,7 +14,8 @@ const config = {
         ],
         "target": [
             {
-                "target": "nsis"
+                "target": "nsis",
+                "arch": ["x64", "ia32"]
             }
         ],
         "icon": "res/icons/iconWin.ico",
@@ -38,7 +39,7 @@ const config = {
         "license": "LICENSE",
         "oneClick": false,
         "installerSidebar": "res/builder/nsisResources/installerSidebar.bmp",
-        "artifactName": "${productName}-${version}-Setup-64.${ext}",
+        "artifactName": "${productName}-${version}-Setup-${arch}.${ext}",
         "allowToChangeInstallationDirectory": true
     },
     "publish": null

@@ -1,24 +1,24 @@
 {
-	"version": "1.24.0",
+	"version": "1.25.0",
 	"feature-introduction": false,
 	"content": {
 		"zh-CN": [
-			"由于作者将参加高考（高中生）， 6 月前将不再更新（除非特大 BUG 出现），一些之前想加的功能，因没时间先不加了。",
-			"带来重新设计的首页、设置页面体验，更加直观。",
-			"新增长休息功能（需前往设置页面来手动开启）。",
-			"修复了和计时、提醒、报错相关的几个 BUG，优化了数个页面的 UI 体验。"
+			"此版本主要解决了此前几个月由于准备考试未能解决的诸 issues 中提出的问题和功能，以及一些新发现的 bugs，并开始提供 arm64 版本的 macOS 包裹。",
+			"优化以下功能：统计模块、单纯计时功能、核心计时组件。",
+			"添加一些设置项：时间段结束后提醒的通知但不弹出模式、调节提示音音量、界面缩放、设置星期的第一天。",
+			"修复了以下 bugs：家长控制模式下多进程屏蔽失效、强制退出后再进入剩余时间不正确、菜单中显示或隐藏按钮在macOS上功能不正常等。"
 		],
 		"zh-TW": [
-			"由於作者將參加高考（高中生）， 6 月前將不再更新（除非特大 BUG 出現），一些之前想加的功能，因沒時間先不加了。",
-			"帶來重新設計的首頁、設置頁面體驗，更加直觀。",
-			"新增長休息功能（需前往設置頁面來手動開啓）。",
-			"修復了和計時、提醒、報錯相關的幾個 BUG，優化了數個頁面的 UI 體驗。"
+			"此版本主要解決了此前幾個月由於準備考試未能解決的諸 issues 中提出的問題和功能，以及一些新發現的 bugs，並開始提供 arm64 版本的 macOS 包裹。",
+			"優化以下功能：統計模塊、單純計時功能、核心計時組件。",
+			"添加一些設置項：時間段結束後提醒的通知但不彈出模式、調節提示音音量、界面縮放、設置星期的第一天。",
+			"修復了以下 bugs：家長控制模式下多進程屏蔽失效、強制退出後再進入剩餘時間不正確、菜單中顯示或隱藏按鈕在macOS上功能不正常等。"
 		],
 		"en": [
-			"BUSY PREPARING FOR GAOKAO, I WILL PAUSE UPDATING THIS SOFTWARE BEFORE THIS JUNE IF THERE ARE NO BIG BUGS.",
-			"The newly designed index page and preferences panel.",
-			"Long break feature (need manual configuration in the preferences panel).",
-			"Several annoying bugs fixed & UI optimized."
+			"This version mainly solved the issues that wasn't fixed during the last semester when I was busily preparing for my exams. Also, arm64 (M1) arch of macOS is now natively supported.",
+			"Optimized: statistics, simple countdown mode and core timing component.",
+			"Updated settings panel: no pop-up mode for notifying when a period of time finishes, notify sound volume control, window zoom ratio control and changing the first day of a week.",
+			"Fixed several bugs related to timing, parent-control mode and macOS experience."
 		]
 	},
 	"introduce": {

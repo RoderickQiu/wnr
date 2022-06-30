@@ -12,9 +12,10 @@ const config = {
             "./node_modules/node-notifier/vendor/**",
             "./res/icons/**"
         ],
-        "target": [
-            "dmg"
-        ],
+        "target": {
+            "arch": ['arm64', 'x64'],
+            "target": 'dmg'
+        },
         "icon": "res/icons/iconMac.icns",
         "darkModeSupport": true,
         "files": [
@@ -29,8 +30,12 @@ const config = {
     },
     "dmg": {
         "icon": "res/icons/iconMac.icns",
-        "backgroundColor": "#fefefe",
-        "artifactName": "${productName}-${version}-MacOS.${ext}"
+        "background": "res/builder/dmgResources/background.tiff",
+        "artifactName": "${productName}-${version}-MacOS-${arch}.${ext}",
+        "format": "UDBZ",
+        "sign": "false",
+        "contents": [{ "x": 350, "y": 170, "type": "link", "path": "/Applications" },
+            { "x": 150, "y": 170, "type": "file" }]
     },
     "publish": null
 }

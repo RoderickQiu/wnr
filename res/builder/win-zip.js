@@ -13,7 +13,10 @@ const config = {
             "./res/icons/**"
         ],
         "target": [
-            "7z"
+            {
+                "target": "7z",
+                "arch": ["x64", "ia32"]
+            }
         ],
         "icon": "res/icons/iconWin.ico",
         "files": [
@@ -24,7 +27,7 @@ const config = {
             "!designs/**",
             "!./node_modules/node-notifier/vendor/mac.noindex/**"
         ],
-        "artifactName": "${productName}-${version}-Win-64.${ext}"
+        "artifactName": "${productName}-${version}-Win-${arch}.${ext}"
     },
     "publish": null
 }
