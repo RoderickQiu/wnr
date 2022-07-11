@@ -1,6 +1,6 @@
 {
 	"name": "wnr",
-	"version": "1.25.0",
+	"version": "1.25.1",
 	"description": "Work and rest, with wnr now!",
 	"main": "main.js",
 	"scripts": {
@@ -48,7 +48,7 @@
 	},
 	"devDependencies": {
 		"cross-env": "7.0.3",
-		"electron": "18.3.0",
+		"electron": "18.3.5",
 		"electron-builder": "23.0.3"
 	}
 }
