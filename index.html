@@ -644,7 +644,7 @@
                             + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                             + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true"
-                            + "&times=" + Number(timingData.get("last-recorded-times-left"))
+                            + "&times=0"
                             + "&continueloop=false";
                 } else {
                     window.location.href =
@@ -657,7 +657,7 @@
                             + "&work-time-focused=" + timingData.get("last-recorded-state").isWorkTimeFocused
                             + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true"
-                            + "&times=" + Number(timingData.get("last-recorded-times-left"))
+                            + "&times=1"
                             + "&continueloop=false";
                 }
             }

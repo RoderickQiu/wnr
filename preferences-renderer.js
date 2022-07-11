@@ -145,6 +145,7 @@ function selectionSoluion(obj, parent, inner) {
         after = (typeof (obj.after) === "undefined") ? (function () {
         }) : obj.after;
     if (process.platform !== "darwin" && id === "dock-hide") return;//for Win and Linux, don't show this section
+    if (process.platform === "darwin" && id === "force-screen-lock-mode") return;//for macOS, don't show this section
     parent.append(`
         <div class="row w-100 align-items-center">
             <div class="col-${ inner ? 8 : 9 } text-left">
@@ -175,7 +176,6 @@ function selectionSoluion(obj, parent, inner) {
         if (relaunch) ipc.send("relaunch-dialog");
     });
 }
-
 
 function customSolution(type, parent) {
     let appendDOMString = ``;

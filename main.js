@@ -450,7 +450,8 @@ app.on('ready', () => {
 
     hotkeyInit();
 
-    ratio = ratioList[store.get("zoom-ratio")];
+    if (store.has("zoom-ratio"))
+        ratio = ratioList[store.get("zoom-ratio")];
 
     //initializers and compatibility database solutions
     switch (store.get("dark-or-white")) {

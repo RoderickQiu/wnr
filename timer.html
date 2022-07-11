@@ -370,8 +370,6 @@
             method: methodFromStart
         });
 
-        timingData.set("last-recorded-times-left", times);
-
         let $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"),
                 $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
@@ -382,7 +380,6 @@
 
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
-            timingData.set("last-recorded-times-left", 0);
 
             ipc.send("enter-positive-timing");
         }
@@ -403,7 +400,6 @@
         if ((loop !== Math.floor(loop)) || (loop < 1 && loop !== 0) || (workTime < 5000) || (restTime < 5000) || isNaN(workTime) || isNaN(restTime) || isNaN(loop)) {//use ms for 1s
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
-            timingData.set("last-recorded-times-left", 0);
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('not-enough') + "<br/><a href='javascript:backer()' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -411,7 +407,6 @@
         } else if (workTime > 86400000 || restTime > 86400000 || (workTime + restTime) * loop > 86400000) {
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
-            timingData.set("last-recorded-times-left", 0);
             $("#timer").html("<p class='text-center text-muted lead' id='timer-error'>" + i18n.__('too-long') + "<br/><a href='javascript:backer()' class='work'>" + i18n.__('back') + "</a></p>");
             $("#timer").css("width", "75%");
             isTimerWindow(false);
@@ -800,7 +795,6 @@
                     $("#skipper-space").css("display", "none");
                     $("#passcode-rechecker").css("display", "none");
                     times++;
-                    timingData.set("last-recorded-times-left", times);
                     $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
                 }
                 if (isClockWorking) {
