@@ -155,8 +155,8 @@
             if (message.method === 3 && method !== 3) {
                 $(".work").addClass("positive");
                 $('#floating-bottom-bar').css("display", "none");
-                $('#floating-skipper').css("display", "none");
                 $("#time-left-msg").text(i18n.__('min-already'));
+                method = 3;
             }
 
             ipc.removeAllListeners('floating-stop-sync');
@@ -166,24 +166,26 @@
                 else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
             });
 
-            if (store.get('disable-pausing') === true) {
-                if (!((store.get('disable-pausing-special') === "work" && method !== 1) ||
-                        (store.get('disable-pausing-special') === "rest" && method !== 2)))
-                    $("#stopper").css("display", "none");
-                else $("#stopper").css("display", "inline-block");
-            } else $("#stopper").css("display", "inline-block");
-            if (store.get('disable-skipping') === true) {
-                if (!((store.get('disable-skipping-special') === "work" && method !== 1) ||
-                        (store.get('disable-skipping-special') === "rest" && method !== 2)))
-                    $("#floating-skipper").css("display", "none");
-                else $("#floating-skipper").css("display", "inline-block");
-            } else $("#floating-skipper").css("display", "inline-block");
-            if (store.get('disable-backing') === true) {
-                if (!((store.get('disable-backing-special') === "work" && method !== 1) ||
-                        (store.get('disable-backing-special') === "rest" && method !== 2)))
-                    $("#floating-back").css("display", "none");
-                else $("#floating-back").css("display", "inline-block");
-            } else $("#floating-back").css("display", "inline-block");
+            if (method !== 3) {
+                if (store.get('disable-pausing') === true) {
+                    if (!((store.get('disable-pausing-special') === "work" && method !== 1) ||
+                            (store.get('disable-pausing-special') === "rest" && method !== 2)))
+                        $("#stopper").css("display", "none");
+                    else $("#stopper").css("display", "inline-block");
+                } else $("#stopper").css("display", "inline-block");
+                if (store.get('disable-skipping') === true) {
+                    if (!((store.get('disable-skipping-special') === "work" && method !== 1) ||
+                            (store.get('disable-skipping-special') === "rest" && method !== 2)))
+                        $("#floating-skipper").css("display", "none");
+                    else $("#floating-skipper").css("display", "inline-block");
+                } else $("#floating-skipper").css("display", "inline-block");
+                if (store.get('disable-backing') === true) {
+                    if (!((store.get('disable-backing-special') === "work" && method !== 1) ||
+                            (store.get('disable-backing-special') === "rest" && method !== 2)))
+                        $("#floating-back").css("display", "none");
+                    else $("#floating-back").css("display", "inline-block");
+                } else $("#floating-back").css("display", "inline-block");
+            }
         });
 
         if (process.platform === "darwin") {
