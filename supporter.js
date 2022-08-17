@@ -5,6 +5,7 @@ const path = require("path");
 const cmdOrCtrl = require("cmd-or-ctrl");
 
 let isDarkMode = false;
+let store = null
 
 if (process.env.NODE_ENV === "portable") {
     try {
@@ -53,7 +54,12 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    isDarkMode = (store.get("dark-or-white") === 2) || (styleCache.get('isdark') && store.get("dark-or-white") !== 1);
+    let isDarkMode = false
+    if (store.get("dark-or-white") === 0) {
+        isDarkMode = styleCache.get('isdark')
+    } else {
+        isDarkMode = (store.get("dark-or-white") === 2) || (styleCache.get('isdark') && store.get("dark-or-white") !== 1);
+    }
     if (isDarkMode) {
         $('.whitemode-jetplane').remove();
         $('body').append(
@@ -65,6 +71,7 @@ function isInDark() {
     }
 }
 
+// Execution was not observed
 ipc.on('darkModeChanges', function () {
     isInDark();
 });//dark mode settings

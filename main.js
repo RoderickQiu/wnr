@@ -350,6 +350,20 @@ app.on('ready', () => {
     styleCache = new Store({ name: 'style-cache' });
     timingData = new Store({ name: 'timing-data' });
 
+    if (nativeTheme.shouldUseDarkColors) {
+        styleCache.set('isdark', true);
+        if (win != null) {
+            win.setBackgroundColor('#191919');
+            win.webContents.send('darkModeChanges');
+        }
+    } else {
+        styleCache.set('isdark', false);
+        if (win != null) {
+            win.setBackgroundColor('#fefefe');
+            win.webContents.send('darkModeChanges');
+        }
+    }
+
     if (process.env.NODE_ENV === "development") {
         const debug = require('electron-debug');
         debug({ showDevTools: false });
