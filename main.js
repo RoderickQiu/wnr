@@ -572,7 +572,7 @@ app.on('ready', () => {
     }
 
     nativeTheme.on('updated', function theThemeHasChanged() {
-        if (!store.has("dark-or-white")) {
+        if (!store.has("dark-or-white") || store.get("dark-or-white") === 0) {
             if (nativeTheme.shouldUseDarkColors) {
                 styleCache.set('isdark', true);
                 if (win != null) {
