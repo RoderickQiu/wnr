@@ -61,6 +61,11 @@ if (store.get("islocked") !== true) {
             id: "infinity"
         }, {
             type: "dropdown",
+            id: "percentage-break-mode",
+            choices: ['never', '5%', '7%', '10%', '15%', '20%', '25%', '30%'],
+            def: 0
+        }, {
+            type: "dropdown",
             id: "long-break",
             choices: ['never', 'plus3min', 'plus5min', 'plus7min', 'plus10min', 'plus15min', 'plus20min'],
             def: 0

@@ -415,7 +415,24 @@
             }
         }
 
+        function getBreakPercentage() {
+            let value = store.get("percentage-break-mode");
+            let percentage = [0, 0.05, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3];
+            return percentage[value];
+        }
+
         function allSet() {
+            function removeRedundantEnd(number) {
+                let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
+                if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
+                return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
+                    lang: store.get("i18n").toString().replace("-", "_"),
+                    as: "m",
+                    to: "m",
+                    ignoreError: true
+                });
+            }
+
             try {
                 if (onlyrest) {
                     let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
@@ -435,11 +452,16 @@
                         to: "m",
                         ignoreError: true
                     });
-                    let restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
+                    let restTimeGet = 0;
+                    if (getBreakPercentage() !== 0) {
+                        restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
+                        $("#rest-time").val(restTimeGet);
+                    } else
+                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
+                            as: "m",
+                            to: "m",
+                            ignoreError: true
+                        });
                     let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
                     if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
                         sumGet((workTimeGet + restTimeGet) * loopGet);

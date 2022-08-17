@@ -334,5 +334,14 @@
 	"dropdown-from-monday": "星期一開始",
 	"dropdown-from-sunday": "星期日開始",
 	"statistics-onlyrest-time": "單純計時",
-	"statistics-positive-time": "正計時"
+	"statistics-positive-time": "正計時",
+	"percentage-break-mode": "按比例休息",
+	"percentage-break-mode-tip": "開啓後，將自動將工作時間乘上一定係數從而得到浮動的休息時間。注：若開啓了默認預設自動啓用，則此選項將覆蓋其設置。",
+	"dropdown-5%": "5%",
+	"dropdown-7%": "7%",
+	"dropdown-10%": "10%",
+	"dropdown-15%": "15%",
+	"dropdown-20%": "20%",
+	"dropdown-25%": "25%",
+	"dropdown-30%": "30%"
 }

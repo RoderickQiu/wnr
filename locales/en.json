@@ -339,5 +339,14 @@
 	"dropdown-from-monday": "From Monday",
 	"dropdown-from-sunday": "From Sunday",
 	"statistics-onlyrest-time": "Simple Ctdn.",
-	"statistics-positive-time": "Stopwatch"
+	"statistics-positive-time": "Stopwatch",
+	"percentage-break-mode": "Flow timer with percentage break",
+	"percentage-break-mode-tip": "When enabled, each timer's break time will be calculated based on the percentage you selected. However, if you have a default predefined task, this setting will manipulate the task.",
+	"dropdown-5%": "5%",
+	"dropdown-7%": "7%",
+	"dropdown-10%": "10%",
+	"dropdown-15%": "15%",
+	"dropdown-20%": "20%",
+	"dropdown-25%": "25%",
+	"dropdown-30%": "30%"
 }
