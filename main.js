@@ -356,11 +356,19 @@ app.on('ready', () => {
             win.setBackgroundColor('#191919');
             win.webContents.send('darkModeChanges');
         }
+        if (settingsWin != null) {
+            settingsWin.setBackgroundColor('#191919');
+            settingsWin.webContents.send('darkModeChanges-settings');
+        }
     } else {
         styleCache.set('isdark', false);
         if (win != null) {
             win.setBackgroundColor('#fefefe');
             win.webContents.send('darkModeChanges');
+        }
+        if (settingsWin != null) {
+            settingsWin.setBackgroundColor('#191919');
+            settingsWin.webContents.send('darkModeChanges-settings');
         }
     }
 
@@ -593,11 +601,19 @@ app.on('ready', () => {
                     win.setBackgroundColor('#191919');
                     win.webContents.send('darkModeChanges');
                 }
+                if (settingsWin != null) {
+                    settingsWin.setBackgroundColor('#191919');
+                    settingsWin.webContents.send('darkModeChanges-settings');
+                }
             } else {
                 styleCache.set('isdark', false);
                 if (win != null) {
-                    win.setBackgroundColor('#fefefe');
+                    win.setBackgroundColor('#191919');
                     win.webContents.send('darkModeChanges');
+                }
+                if (settingsWin != null) {
+                    settingsWin.setBackgroundColor('#191919');
+                    settingsWin.webContents.send('darkModeChanges-settings');
                 }
             }
         }
@@ -1276,6 +1292,10 @@ function darkModeSettingsFinder() {
         if (win != null) {
             win.setBackgroundColor('#191919');
             win.webContents.send('darkModeChanges');
+        }
+        if (settingsWin != null) {
+            settingsWin.setBackgroundColor('#191919');
+            settingsWin.webContents.send('darkModeChanges-settings');
         }
     }
 }
