@@ -100,3 +100,20 @@ function amplifyMedia(mediaElem, multiplier) {//freely amplify audio's volume
 }
 
 let amplifierList = [0, 0.15, 0.33, 0.67, 1, 1.5, 3];
+
+function autostartAfter(val) {
+    if (process.platform !== "linux") {
+        if (val === true) {
+            require('@electron/remote').app.setLoginItemSettings({
+                openAtLogin: true
+            });
+        } else {
+            require('@electron/remote').app.setLoginItemSettings({
+                openAtLogin: false
+            });
+        }
+    } else {
+        ipc.send("alert", i18n.__('do-not-support-linux'));
+        store.set("autostart", !val);
+    }
+}

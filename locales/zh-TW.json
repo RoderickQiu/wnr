@@ -343,5 +343,7 @@
 	"dropdown-15%": "15%",
 	"dropdown-20%": "20%",
 	"dropdown-25%": "25%",
-	"dropdown-30%": "30%"
+	"dropdown-30%": "30%",
+	"autostart-tip": "在一些系統上，可能需要獲取一些權限才能實現開機自啓的設置。它們將不會被用於其它用途。",
+	"do-not-support-linux": "此功能不支持 Linux 系統進行設置。"
 }
