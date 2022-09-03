@@ -54,15 +54,16 @@
                    oninput="modifyExternalTitleWin()" /><a href="javascript:openExternalTitleWin()"
                                                            id="external" class="work"><i
                 class="iconfont icon-external-link"></i></a><br />
-            <input type="text" id="notes" class="text-center small text-muted" maxlength="39"
-                   style="font-size: 0.4rem" oninput="modifyExternalTitleWin()" /><br id="notes-space" />
+            <div contenteditable="true" id="notes" class="text-center small text-muted" style="font-size: 0.4rem"
+                 oninput="modifyExternalTitleWin()"></div>
+            <br id="notes-space" />
             <script>
                 function openExternalTitleWin() {
-                    ipc.send("open-external-title-win", { title: $("#title").val(), notes: $("#notes").val() });
+                    ipc.send("open-external-title-win", { title: $("#title").val(), notes: $("#notes").text() });
                 }
 
                 function modifyExternalTitleWin() {
-                    ipc.send("modify-external-title-win", { title: $("#title").val(), notes: $("#notes").val() });
+                    ipc.send("modify-external-title-win", { title: $("#title").val(), notes: $("#notes").text() });
                 }
 
                 ipc.on("sync-title", function (event, message) {
@@ -86,7 +87,7 @@
                     let n = document.createElement('h4');
                     n.style.display = "inline-block"
                     n.style.whiteSpace = "pre"
-                    n.style.maxWidth = "100%"
+                    n.style.maxWidth = "90%"
                     n.innerHTML = titleNode.value;
                     titleNode.parentNode.insertBefore(n, titleNode.nextSibling);
                     let spanW = n.getBoundingClientRect().width;
@@ -103,14 +104,20 @@
                 }
 
                 let notesNode = document.getElementById("notes");
-                notesNode.addEventListener('input', notesNodeResizer);
+                notesNode.addEventListener('keydown', function (e) {
+                    // limit content-editable div (used for multi-lines notes) length
+                    if (e.which !== 8 && notesNode.innerText.length > 30) {
+                        e.preventDefault();
+                    }
+                    notesNodeResizer();
+                });
 
                 function notesNodeResizer() {
                     let n = document.createElement('span');
                     n.style.display = "inline-block"
                     n.style.whiteSpace = "pre"
-                    n.style.maxWidth = "100%"
-                    n.innerHTML = notesNode.value;
+                    n.style.maxWidth = "90%"
+                    n.innerHTML = notesNode.innerText;
                     notesNode.parentNode.insertBefore(n, notesNode.nextSibling);
                     let spanW = n.getBoundingClientRect().width;
                     if (spanW < 5) {

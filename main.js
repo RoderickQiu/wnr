@@ -198,7 +198,7 @@ function setFullScreenMode(flag) {
                     if (fullScreenProtection && win != null) {
                         forceScreenLockSolution();
                         win.show();
-                        win.moveTop();
+                        app.focus({ steal: true });
                         win.setKiosk(true);
                     }
                 }, 5000);

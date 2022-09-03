@@ -32,7 +32,7 @@ input, .focuser, .dropdown-default {
     border-width: 0;
 }
 
-input, .focuser, .dropdown, .settings-sidebar-block-highlighted, .dropdown-item:hover, .dropdown-item:focus {
+input, .focuser, .dropdown, .settings-sidebar-block-highlighted, .dropdown-item:hover, .dropdown-item:focus, #notes {
     transition: all .08s;
 }
 
@@ -704,11 +704,24 @@ li input:nth-last-child(4)::after {
 }
 
 #notes {
+    padding: 0;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: solid 3px #ffffff00;
     display: inline-block;
     width: 300px;
     word-wrap: break-word;
     line-height: 180%;
     vertical-align: middle;
+}
+
+#notes:hover {
+    border-bottom: solid 3px #33333333;
+}
+
+#notes::-webkit-scrollbar {
+    display: none;
 }
 
 #about {
