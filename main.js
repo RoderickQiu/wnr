@@ -493,6 +493,8 @@ app.on('ready', () => {
         }
     }
 
+    if (!store.has("percentage-break-mode")) store.set("percentage-break-mode", 0);
+
     if (!store.has("reserved-record")) store.set("reserved-record", 0);
     if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
 

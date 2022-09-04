@@ -3,16 +3,16 @@
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"新增了\"按比例休息（需在设置中开启）\"、\"多行计时任务注释\"、\"清除默认计时预设\"等一些小功能。",
+			"新增了\"按比例休息（需在设置中开启）\"、\"多行计时任务笔记\"、\"清除默认计时预设\"等一些小功能。",
 			"修复了关于暗黑模式自动切换、设置导入导出等的几个问题，感谢 @YangFong 参与开发。"
 		],
 		"zh-TW" : [
-			"新增了\"按比例休息（需在設置中開啓）\"、\"多行計時任務註釋\"、\"清除默認計時預設\"等一些小功能。",
+			"新增了\"按比例休息（需在設置中開啓）\"、\"多行計時任務筆記\"、\"清除默認計時預設\"等一些小功能。",
 			"修復了關於暗黑模式自動切換、設置導入導出等的幾個問題，感謝 @YangFong 參與開發。"
 		],
 		"en" : [
 			"New features: percentage break (need to be manually turned on in settings), multi-lines timing notes and default task setting removal.",
-			"Bugs fixed about: dark mode auto switch, settings import, etc."
+			"Bugs fixed about: dark mode auto switch, settings import, etc. Thanks @YangFong for participating."
 		]
 	},
 	"introduce" : {
