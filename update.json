@@ -1,44 +1,44 @@
 {
-	"version": "1.25.1",
-	"feature-introduction": false,
-	"content": {
-		"zh-CN": [
-			"修复了一些关于计时和操作的 Bugs。",
-			"改善了 macOS 平台上的使用体验。"
+	"version" : "1.26.0",
+	"feature-introduction" : false,
+	"content" : {
+		"zh-CN" : [
+			"新增了\"按比例休息（需在设置中开启）\"、\"多行计时任务注释\"、\"清除默认计时预设\"等一些小功能。",
+			"修复了关于暗黑模式自动切换、设置导入导出等的几个问题，感谢 @YangFong 参与开发。"
 		],
-		"zh-TW": [
-			"修復了一些關於計時和操作的 Bugs。",
-			"改善了 macOS 平臺上的使用體驗。"
+		"zh-TW" : [
+			"新增了\"按比例休息（需在設置中開啓）\"、\"多行計時任務註釋\"、\"清除默認計時預設\"等一些小功能。",
+			"修復了關於暗黑模式自動切換、設置導入導出等的幾個問題，感謝 @YangFong 參與開發。"
 		],
-		"en": [
-			"Fixed several bugs.",
-			"Enhanced for macOS."
+		"en" : [
+			"New features: percentage break (need to be manually turned on in settings), multi-lines timing notes and default task setting removal.",
+			"Bugs fixed about: dark mode auto switch, settings import, etc."
 		]
 	},
-	"introduce": {
-		"id": "introduced-1.21.0",
-		"zh-CN": {
-			"title": "不少新功能。",
-			"description": {
-				"darwin": "我们有了新的快捷键系统。访问操作->设置->个性化设置见识一下它们。",
-				"win32": "我们有了新的快捷键系统。点击wnr徽标，选择“设置->个性化设置”来见识一下它们。",
-				"universal": "\n此外，新的“单纯计时”模式等更新，大概也会让你耳目一新吧。"
+	"introduce" : {
+		"id" : "introduced-1.21.0",
+		"zh-CN" : {
+			"title" : "不少新功能。",
+			"description" : {
+				"darwin" : "我们有了新的快捷键系统。访问操作->设置->个性化设置见识一下它们。",
+				"win32" : "我们有了新的快捷键系统。点击wnr徽标，选择“设置->个性化设置”来见识一下它们。",
+				"universal" : "\n此外，新的“单纯计时”模式等更新，大概也会让你耳目一新吧。"
 			}
 		},
-		"zh-TW": {
-			"title": "不少新功能。",
-			"description": {
-				"darwin": "我們有了新的快捷鍵系統。訪問操作->設置->個性化設置見識一下它們。",
-				"win32": "我們有了新的快捷鍵系統。點擊wnr徽標，選擇“設置->個性化設置”來見識一下它們。",
-				"universal": "\n此外，新的“單純計時”模式等更新，大概也會讓你耳目一新吧。"
+		"zh-TW" : {
+			"title" : "不少新功能。",
+			"description" : {
+				"darwin" : "我們有了新的快捷鍵系統。訪問操作->設置->個性化設置見識一下它們。",
+				"win32" : "我們有了新的快捷鍵系統。點擊wnr徽標，選擇“設置->個性化設置”來見識一下它們。",
+				"universal" : "\n此外，新的“單純計時”模式等更新，大概也會讓你耳目一新吧。"
 			}
 		},
-		"en": {
-			"title": "Many new features",
-			"description": {
-				"darwin": "We now have a new hotkey system. Go to Top Bar -> Operations -> Settings -> Personalization to see it.",
-				"win32": "We now have a new hotkey system. Click Logo icon -> Settings -> Personalization to see it.",
-				"universal": "\n Moreover, other new features like the new \"Just Timing\" mode may also attract you!"
+		"en" : {
+			"title" : "Many new features",
+			"description" : {
+				"darwin" : "We now have a new hotkey system. Go to Top Bar -> Operations -> Settings -> Personalization to see it.",
+				"win32" : "We now have a new hotkey system. Click Logo icon -> Settings -> Personalization to see it.",
+				"universal" : "\n Moreover, other new features like the new \"Just Timing\" mode may also attract you!"
 			}
 		}
 	}
