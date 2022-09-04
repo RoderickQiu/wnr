@@ -174,7 +174,6 @@ if (store.get("islocked") !== true) {
         }, {
             type: "selection",
             id: "autostart",
-            tipped: false,
             after: autostartAfter
         }, {
             type: "selection",
@@ -335,36 +334,6 @@ function disableBackAfter(val) {
 function startFromWhichDayAfter(val) {
     if (val === 0) store.set('start-from-monday', true);
     else store.set('start-from-monday', false);
-}
-
-let AutoLaunch = require('auto-launch');
-let wnrLauncher = new AutoLaunch({ name: 'wnr' });
-
-function autostartAfter(val) {
-    if (val === true) {
-        wnrLauncher.isEnabled()
-            .then(function (isEnabled) {
-                if (isEnabled) {
-                    return;
-                }
-                wnrLauncher.enable();
-            }).catch(function (error) {
-            store.set('autostart', false);
-            $('#selection-autostart').prop('checked', false);
-            ipc.send('alert', i18n.__('without-permission-part-1') + ((process.platform === 'darwin') ? i18n.__('without-permission-part-2') : ''));
-        })
-    } else {
-        wnrLauncher.isEnabled()
-            .then(function (isEnabled) {
-                if (isEnabled) {
-                    wnrLauncher.disable();
-                }
-            }).catch(function (error) {
-            store.set('autostart', true);
-            $('#selection-autostart').prop('checked', true);
-            ipc.send('alert', i18n.__('without-permission-part-1') + ((process.platform === 'darwin') ? i18n.__('without-permission-part-2') : ''));
-        })
-    }
 }
 
 function zoomRatioAfter(val) {

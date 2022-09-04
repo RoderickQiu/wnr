@@ -586,8 +586,8 @@ function planAppend(item, index) {
         i18n.__('time(s)') +
         "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />&nbsp;&nbsp;|&nbsp;" +
         i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />\
-                        <br /><span id='set-as-default-task-container" + index + "'><a class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a> | </span>\
-                        <span id='deleter" + index + "'><a href='javascript:planErase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
+                        <br /><span id='set-as-default-task-container" + index + "'><a id='set-as-default" + index + "' class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a></span>\
+                        <span id='deleter" + index + "'>| <a href='javascript:planErase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
                         </div><hr /></li>"
     );
     document.getElementById("focus-when-working" + index).checked = item.focusWhenWorking;
@@ -612,15 +612,23 @@ function planAdd() {
 }
 
 function setAsDefault(index) {
-    $("#deleter" + store.get("default-task")).css("display", "inline");
-    $("#set-as-default-task-container" + store.get("default-task")).css("display", "inline");
-    $('#title' + store.get("default-task")).removeClass("work");
-    $('#title' + store.get("default-task")).addClass("rest");
-    store.set("default-task", index);
-    $("#deleter" + index).css("display", "none");
-    $("#set-as-default-task-container" + index).css("display", "none");
-    $('#title' + index).removeClass("rest");
-    $('#title' + index).addClass("work");
+    if ($('#set-as-default' + index).text() !== i18n.__('cancel-default-task')) {
+        $("#deleter" + store.get("default-task")).css("display", "inline");
+        $('#title' + store.get("default-task")).removeClass("work");
+        $('#set-as-default' + store.get("default-task")).text(i18n.__('set-as-default-task'));
+        $('#title' + store.get("default-task")).addClass("rest");
+        store.set("default-task", index);
+        $('#set-as-default' + index).text(i18n.__('cancel-default-task'));
+        $("#deleter" + index).css("display", "none");
+        $('#title' + index).removeClass("rest");
+        $('#title' + index).addClass("work");
+    } else {
+        store.set("default-task", -1);
+        $('#set-as-default' + index).text(i18n.__('set-as-default-task'));
+        $("#deleter" + index).css("display", "inline");
+        $('#title' + index).removeClass("work");
+        $('#title' + index).addClass("rest");
+    }
 }
 
 //task reserved
@@ -890,10 +898,12 @@ function settingsImport(token, mode) {
             formerData = store.store;
             store.clear();
             store.set(decryptedData);
-            ipc.send("relaunch-dialog");
+            if (process.platform !== "linux")
+                autostartAfter(store.has("autostart") ? store.get("autostart") : false);
+            setTimeout(() => ipc.send("relaunch-dialog"), 1500);
         }
     } catch (error) {
-        ipc.send("alert", i18n.__('settings-import-error'))
+        ipc.send("alert", i18n.__('settings-import-error'));
         isAllRight = false;
         if (mode === "statistics") statistics.set(formerData);
         else store.set(formerData);

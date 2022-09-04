@@ -17,7 +17,7 @@
 <body>
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto text-dark" id="main">
-        <div id="timer" class="justify-content-left align-content-left text-left">
+        <div id="timer" class="justify-content-left align-content-left text-left" style="transform: translateY(3px)">
             <input type="text" id="title" class="h5" maxlength="14" width="100px" /><br />
             <input type="text" id="notes" class="extreme-small text-muted" maxlength="39" width="100px" /><br
                 id="notes-space" />
@@ -51,7 +51,7 @@
             if (spanW < 10) spanW = 100;
             if (spanW > largerSpanW) {
                 largerSpanW = spanW;
-                ipc.send("external-title-resize", largerSpanW + 16);
+                ipc.send("external-title-resize", largerSpanW + 30);
             } else turnSmallerResizer();
             titleNode.parentNode.removeChild(n);
             titleNode.style.width = spanW + 'px';
@@ -74,7 +74,7 @@
             if (spanW < 5) spanW = 100;
             if (spanW > largerSpanW) {
                 largerSpanW = spanW;
-                ipc.send("external-title-resize", largerSpanW + 16);
+                ipc.send("external-title-resize", largerSpanW + 30);
             } else turnSmallerResizer();
             notesNode.parentNode.removeChild(n);
             notesNode.style.width = spanW + 'px';

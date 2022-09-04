@@ -198,7 +198,7 @@ function setFullScreenMode(flag) {
                     if (fullScreenProtection && win != null) {
                         forceScreenLockSolution();
                         win.show();
-                        win.moveTop();
+                        app.focus({ steal: true });
                         win.setKiosk(true);
                     }
                 }, 5000);
@@ -1265,6 +1265,10 @@ function darkModeSettingsFinder() {
         if (win != null) {
             win.setBackgroundColor('#191919');
             win.webContents.send('darkModeChanges');
+        }
+        if (settingsWin != null) {
+            settingsWin.setBackgroundColor('#191919');
+            settingsWin.webContents.send('darkModeChanges-settings');
         }
     }
 }
