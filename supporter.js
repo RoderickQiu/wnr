@@ -4,7 +4,6 @@ const ipc = require('electron').ipcRenderer;
 const path = require("path");
 const cmdOrCtrl = require("cmd-or-ctrl");
 
-let isDarkMode = false;
 let store = null
 
 if (process.env.NODE_ENV === "portable") {
@@ -54,11 +53,11 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    let isDarkMode = false
+    let isDarkMode
     if (store.get("dark-or-white") === 0) {
         isDarkMode = styleCache.get('isdark')
     } else {
-        isDarkMode = (store.get("dark-or-white") === 2) || (styleCache.get('isdark') && store.get("dark-or-white") !== 1);
+        isDarkMode = store.get("dark-or-white") === 2
     }
     if (isDarkMode) {
         $('.whitemode-jetplane').remove();
@@ -71,8 +70,7 @@ function isInDark() {
     }
 }
 
-// Execution was not observed
-ipc.on('darkModeChanges', function () {
+ipc.on('darkModeChanges', () => {
     isInDark();
 });//dark mode settings
 ipc.on('darkModeChanges-settings', function () {

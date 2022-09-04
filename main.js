@@ -350,27 +350,8 @@ app.on('ready', () => {
     styleCache = new Store({ name: 'style-cache' });
     timingData = new Store({ name: 'timing-data' });
 
-    if (nativeTheme.shouldUseDarkColors) {
-        styleCache.set('isdark', true);
-        if (win != null) {
-            win.setBackgroundColor('#191919');
-            win.webContents.send('darkModeChanges');
-        }
-        if (settingsWin != null) {
-            settingsWin.setBackgroundColor('#191919');
-            settingsWin.webContents.send('darkModeChanges-settings');
-        }
-    } else {
-        styleCache.set('isdark', false);
-        if (win != null) {
-            win.setBackgroundColor('#fefefe');
-            win.webContents.send('darkModeChanges');
-        }
-        if (settingsWin != null) {
-            settingsWin.setBackgroundColor('#191919');
-            settingsWin.webContents.send('darkModeChanges-settings');
-        }
-    }
+    theThemeHasChanged();
+    nativeTheme.on('updated', theThemeHasChanged);
 
     if (process.env.NODE_ENV === "development") {
         const debug = require('electron-debug');
@@ -593,32 +574,6 @@ app.on('ready', () => {
         }
     }
 
-    nativeTheme.on('updated', function theThemeHasChanged() {
-        if (!store.has("dark-or-white") || store.get("dark-or-white") === 0) {
-            if (nativeTheme.shouldUseDarkColors) {
-                styleCache.set('isdark', true);
-                if (win != null) {
-                    win.setBackgroundColor('#191919');
-                    win.webContents.send('darkModeChanges');
-                }
-                if (settingsWin != null) {
-                    settingsWin.setBackgroundColor('#191919');
-                    settingsWin.webContents.send('darkModeChanges-settings');
-                }
-            } else {
-                styleCache.set('isdark', false);
-                if (win != null) {
-                    win.setBackgroundColor('#191919');
-                    win.webContents.send('darkModeChanges');
-                }
-                if (settingsWin != null) {
-                    settingsWin.setBackgroundColor('#191919');
-                    settingsWin.webContents.send('darkModeChanges-settings');
-                }
-            }
-        }
-    });
-
     if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
     else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
     else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
@@ -722,6 +677,24 @@ app.on('ready', () => {
         styleCache.set("is-shadowless", true);
     }//backport when shadow disabled
 })
+
+function theThemeHasChanged() {
+    if (store.has("dark-or-white") && store.get("dark-or-white") === 0) {
+        if (nativeTheme.shouldUseDarkColors) {
+            styleCache.set('isdark', true);
+            if (win != null) {
+                win.setBackgroundColor('#191919');
+                win.webContents.send('darkModeChanges');
+            }
+        } else {
+            styleCache.set('isdark', false);
+            if (win != null) {
+                win.setBackgroundColor('#fefefe');
+                win.webContents.send('darkModeChanges');
+            }
+        }
+    }
+}
 
 function hotkeyInit() {
     function isTagNude(tag) {
