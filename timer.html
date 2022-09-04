@@ -15,7 +15,7 @@
     <link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 
-<body>
+<body style="position: fixed">
     <!-- makes the window resizable -->
     <div class="header-resize"></div>
     <div class="left-resize"></div>
@@ -49,14 +49,14 @@
         </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             &nbsp;&nbsp;
-            <input type="text" id="title" class="text-center h4" maxlength="14"
+            <input type="text" id="title" class="text-center h4" maxlength="13"
                    style="transform: translateX(5px); font-size: 0.4rem"
                    oninput="modifyExternalTitleWin()" /><a href="javascript:openExternalTitleWin()"
                                                            id="external" class="work"><i
                 class="iconfont icon-external-link"></i></a><br />
-            <div contenteditable="true" id="notes" class="text-center small text-muted" style="font-size: 0.4rem"
+            <div contenteditable="true" id="notes" class="text-center small text-muted"
+                 style="font-size: 0.4rem; margin-bottom: 4px"
                  oninput="modifyExternalTitleWin()"></div>
-            <br id="notes-space" />
             <script>
                 function openExternalTitleWin() {
                     ipc.send("open-external-title-win", { title: $("#title").val(), notes: $("#notes").text() });
@@ -78,7 +78,7 @@
                 $("#title").attr('title', i18n.__('title-edit-msg'));
                 $("#notes").attr('title', i18n.__('notes-edit-msg'));
 
-                $("#external").css("display", "none");
+                $("#external").css("opacity", "0");
 
                 let titleNode = document.getElementById("title");
                 titleNode.addEventListener('input', titleNodeResizer);
@@ -93,10 +93,10 @@
                     let spanW = n.getBoundingClientRect().width;
                     if (spanW < 10) {
                         spanW = 192;
-                        $("#external").css("display", "none");
+                        $("#external").css("opacity", "0");
                         $("#title").css("font-size", "0.4rem");
                     } else {
-                        $("#external").css("display", "inline-block");
+                        $("#external").css("opacity", "1");
                         $("#title").css("font-size", "1rem");
                     }
                     titleNode.parentNode.removeChild(n);
@@ -104,12 +104,40 @@
                 }
 
                 let notesNode = document.getElementById("notes");
+
+                // limit content-editable div (used for multi-lines notes) length
                 notesNode.addEventListener('keydown', function (e) {
-                    // limit content-editable div (used for multi-lines notes) length
-                    if (e.which !== 8 && notesNode.innerText.length > 30) {
-                        e.preventDefault();
-                    }
-                    notesNodeResizer();
+                    setTimeout(function () {
+                        let allowedKeys = (
+                                e.which === 8 ||  /* BACKSPACE */
+                                e.which === 35 || /* END */
+                                e.which === 36 || /* HOME */
+                                e.which === 37 || /* LEFT */
+                                e.which === 38 || /* UP */
+                                e.which === 39 || /* RIGHT*/
+                                e.which === 40 || /* DOWN */
+                                e.which === 46 || /* DEL*/
+                                e.ctrlKey === true && e.which === 65 || /* CTRL + A */
+                                e.ctrlKey === true && e.which === 88 || /* CTRL + X */
+                                e.ctrlKey === true && e.which === 67 || /* CTRL + C */
+                                e.ctrlKey === true && e.which === 86 || /* CTRL + V */
+                                e.ctrlKey === true && e.which === 90    /* CTRL + Z */
+                        );
+                        console.log($(e.target).text());
+                        if (!allowedKeys && $(e.target).text().length >= 72) {
+                            e.preventDefault();
+                            if ($(e.target).text().length >= 72)
+                                $(e.target).text($(e.target).text().slice(0, 72));
+                        }
+                        notesNodeResizer();
+                    });
+                });
+                notesNode.addEventListener('paste', function (e) {
+                    setTimeout(function () {
+                        $(e.target).text($(e.target).text().slice(0, 72));
+                        notesNodeResizer();
+                    });
+                    if ($(e.target).text().length >= 72) e.preventDefault();
                 });
 
                 function notesNodeResizer() {
@@ -120,7 +148,7 @@
                     n.innerHTML = notesNode.innerText;
                     notesNode.parentNode.insertBefore(n, notesNode.nextSibling);
                     let spanW = n.getBoundingClientRect().width;
-                    if (spanW < 5) {
+                    if (notesNode.innerText.length === 0) {
                         spanW = 300;
                         $("#notes-space").css("display", "none");
                         $("#notes").css("font-size", "0.4rem");
@@ -129,13 +157,16 @@
                         $("#notes").css("font-size", "0.7rem");
                     }
                     notesNode.parentNode.removeChild(n);
-                    notesNode.style.width = spanW + 'px'
+                    notesNode.style.width = spanW > 300 ? 300 : spanW + 'px'
                 }
             </script>
             <br />
             <span id="time-cnt" class="text-center small text-muted"></span>
+            <span id="infinity-label" class="text-center small text-muted">
+                <script>document.write(i18n.__('infinity'));</script>
+            </span>
             <span id="stop-count" class="text-center small text-muted"></span>
-            <br /><br />
+            <span id="time-cnt-blank"><br /><br /></span>
             <div id="work-rest" class="text-center work">
                 <script>document.write(i18n.__('working'));</script>
             </div>
@@ -428,8 +459,16 @@
                 $("#notes").val(note);
                 notesNodeResizer();
             }
-            if (loop === 0 || continueLoop) $("#time-cnt").css("display", "none");
-            else $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
+            if (loop === 0 || method === 3 || continueLoop) {
+                $("#time-cnt").css("display", "none");
+                if (continueLoop || method === 3) {
+                    $("#infinity-label").css("display", "none");
+                    $("#time-cnt-blank").css("display", "none");
+                }
+            } else {
+                $("#infinity-label").css("display", "none");
+                $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
+            }
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
                 if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
@@ -539,7 +578,7 @@
             function stopAndCount() {
                 stopper();
                 if (!wasCounting) stopCounter++;
-                if (stopCounter) $("#stop-count").text(((loop === 0 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
+                if (stopCounter) $("#stop-count").text(((method === 3 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
             }
 
             function stopper() {

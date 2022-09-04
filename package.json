@@ -1,53 +1,53 @@
 {
-	"name": "wnr",
-	"version": "1.25.1",
-	"description": "Work and rest, with wnr now!",
-	"main": "main.js",
-	"scripts": {
-		"dep-update": "yarn",
-		"start": "cross-env NODE_ENV=development electron .",
-		"nsis": "cross-env NODE_ENV=production node ./res/builder/nsis.js",
-		"7zip": "cross-env NODE_ENV=portable node ./res/builder/win-zip.js",
-		"mac": "cross-env NODE_ENV=production node ./res/builder/mac.js",
-		"linux": "cross-env NODE_ENV=production node ./res/builder/linux.js",
-		"appimage": "cross-env NODE_ENV=production node ./res/builder/appimage.js",
-		"dir": "cross-env NODE_ENV=production node ./res/builder/dir_test.js",
-		"ms-store": "cross-env NODE_ENV=msstore node ./res/builder/dir_test.js"
+	"name" : "wnr",
+	"version" : "1.25.1",
+	"description" : "Work and rest, with wnr now!",
+	"main" : "main.js",
+	"scripts" : {
+		"dep-update" : "yarn",
+		"start" : "cross-env NODE_ENV=development electron .",
+		"nsis" : "cross-env NODE_ENV=production node ./res/builder/nsis.js",
+		"7zip" : "cross-env NODE_ENV=portable node ./res/builder/win-zip.js",
+		"mac" : "cross-env NODE_ENV=production node ./res/builder/mac.js",
+		"linux" : "cross-env NODE_ENV=production node ./res/builder/linux.js",
+		"appimage" : "cross-env NODE_ENV=production node ./res/builder/appimage.js",
+		"dir" : "cross-env NODE_ENV=production node ./res/builder/dir_test.js",
+		"ms-store" : "cross-env NODE_ENV=msstore node ./res/builder/dir_test.js"
 	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/RoderickQiu/wnr.git"
+	"repository" : {
+		"type" : "git",
+		"url" : "https://github.com/RoderickQiu/wnr.git"
 	},
-	"author": "RoderickQiu",
-	"license": "MPL-2.0",
-	"homepage": "https://getwnr.com",
-	"appId": "com.scrisstudio.wnr",
-	"build": {
-		"appId": "com.scrisstudio.wnr"
+	"author" : "RoderickQiu",
+	"license" : "MPL-2.0",
+	"homepage" : "https://getwnr.com",
+	"appId" : "com.scrisstudio.wnr",
+	"build" : {
+		"appId" : "com.scrisstudio.wnr"
 	},
-	"copyright": "(c) Roderick Qiu",
-	"productName": "wnr",
-	"dependencies": {
-		"@electron/remote": "2.0.8",
-		"bootstrap": "4.6.1",
-		"cmd-or-ctrl": "0.3.1",
-		"compare-version": "0.1.2",
-		"copy-to-clipboard": "3.3.1",
-		"crypto-js": "4.1.1",
-		"electron-debug": "3.2.0",
-		"electron-store": "8.0.2",
-		"i18n": "0.15.0",
-		"jquery": "3.6.0",
-		"node-fetch": "2.6.7",
-		"node-notifier": "10.0.1",
-		"node-shi": "0.4.2",
-		"popper.js": "1.16.1",
-		"schart.js": "3.0.0",
-		"win-release-id": "1.0.6"
+	"copyright" : "(c) Roderick Qiu",
+	"productName" : "wnr",
+	"dependencies" : {
+		"@electron/remote" : "2.0.8",
+		"bootstrap" : "4.6.1",
+		"cmd-or-ctrl" : "0.3.1",
+		"compare-version" : "0.1.2",
+		"copy-to-clipboard" : "3.3.1",
+		"crypto-js" : "4.1.1",
+		"electron-debug" : "3.2.0",
+		"electron-store" : "8.0.2",
+		"i18n" : "0.15.0",
+		"jquery" : "3.6.0",
+		"node-fetch" : "2.6.7",
+		"node-notifier" : "10.0.1",
+		"node-shi" : "0.4.2",
+		"popper.js" : "1.16.1",
+		"schart.js" : "3.0.0",
+		"win-release-id" : "1.0.6"
 	},
-	"devDependencies": {
-		"cross-env": "7.0.3",
-		"electron": "18.3.5",
-		"electron-builder": "23.0.3"
+	"devDependencies" : {
+		"cross-env" : "7.0.3",
+		"electron" : "18.3.5",
+		"electron-builder" : "23.0.3"
 	}
 }
