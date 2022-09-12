@@ -23,8 +23,8 @@ let timingData = new Store({ name: 'timing-data' });//just contains timing cache
 
 isInDark();
 
-const languageList = ['en', 'zh-CN', 'zh-TW'],//locale code
-    languageNameList = ['English', '简体中文', '正體中文'],//real name
+const languageList = ['en', 'zh-CN', 'zh-TW', 'es'],//locale code
+    languageNameList = ['English', '简体中文', '正體中文', 'Español'],//real name
     isChinese = store.get("i18n").indexOf("zh") !== -1;
 
 i18n.configure({
