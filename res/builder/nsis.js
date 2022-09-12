@@ -33,7 +33,8 @@ const config = {
         "installerLanguages": [
             "en-US",
             "zh-CN",
-            "zh-TW"
+            "zh-TW",
+            "es-MX"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",
