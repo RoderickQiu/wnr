@@ -68,7 +68,7 @@
 
                 ipc.on("sync-title", function (event, message) {
                     $("#title").val(message.title);
-                    $("#notes").val(message.notes);
+                    $("#notes").text(message.notes);
 
                     titleNodeResizer();
                     notesNodeResizer();
@@ -488,7 +488,7 @@
                 titleNodeResizer();
             }
             if (note) {
-                $("#notes").val(note);
+                $("#notes").text(note);
                 notesNodeResizer();
             }
             if (loop === 0 || method === 3 || continueLoop) {
