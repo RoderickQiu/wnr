@@ -15,7 +15,7 @@ const winReleaseId = require('win-release-id');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
-    tray = null, contextMenu = null, settingsWinContextMenu = null,
+    customDialogWin = null, tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null, isFocused = true,
     isOnlyRest = false, isPositiveTiming = false,
@@ -158,22 +158,7 @@ function alarmSet() {
                 app.focus();
                 isAlarmDialogClosed = false;
             }
-            dialog.showMessageBox(win, {
-                title: " wnr",
-                type: "warning",
-                message: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
-                detail: i18n.__('alarm-for-not-using-wnr-dialog-box-content'),
-                buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
-                cancelId: (process.platform !== "darwin") ? 0 : 1, //buttons map different from darwin to other OSs
-                noLink: true
-            }).then(function (response) {
-                isAlarmDialogClosed = true;
-                if (response.response !== ((process.platform !== "darwin") ? 1 : 0)) {
-                    win.show();
-                    win.moveTop();
-                }
-                alarmSet();
-            });
+            customDialog("on", i18n.__('alarm-for-not-using-wnr-dialog-box-title'), i18n.__('alarm-for-not-using-wnr-dialog-box-content'), "isAlarmDialogClosed = true;win.show();win.moveTop();alarmSet();");
         }
     }, 600000)//alarm you for using wnr
 }
@@ -425,14 +410,8 @@ app.on('ready', () => {
         if (winReleaseId() === -1 && win != null) {
             let isNotified = store.has("windows-7-notification");
             if (isNotified === false) {
-                dialog.showMessageBox(win, {
-                    title: " wnr",
-                    message: i18n.__('old-windows-compatibility-notification'),
-                    type: "warning",
-                    detail: i18n.__('old-windows-compatibility-notification-msg'),
-                }).then(function () {
-                    store.set("windows-7-notification", 1);
-                });
+                customDialog("on", i18n.__('old-windows-compatibility-notification'), i18n.__('old-windows-compatibility-notification-msg'),
+                    "store.set(\"windows-7-notification\", 1);");
             }
         }
     }
@@ -491,6 +470,11 @@ app.on('ready', () => {
             store.set("nap-time", 20);
             store.set("nap-in-timing", nap ? 3 : 0);
         }
+    }
+
+    if (!store.has("suggest-star")) {
+        if (!store.has("use-times")) store.set("use-times", 0);
+        else store.set("use-times", store.get("use-times") + 1);
     }
 
     if (!store.has("percentage-break-mode")) store.set("percentage-break-mode", 0);
@@ -678,6 +662,97 @@ app.on('ready', () => {
         isShadowless = true;
         styleCache.set("is-shadowless", true);
     }//backport when shadow disabled
+
+    customDialogWin = new BrowserWindow({
+        //parent: win,
+        width: Math.floor(240 * ratio),
+        height: Math.floor(130 * ratio),
+        backgroundColor: "#fefefe",
+        resizable: false,
+        maximizable: false,
+        minimizable: false,
+        closable: false,
+        frame: false,
+        show: false,
+        center: true,
+        type: 'toolbar',
+        titleBarStyle: "customButtonsOnHover",
+        webPreferences: {
+            nodeIntegration: true,
+            webgl: false,
+            contextIsolation: false,
+            enableRemoteModule: true,
+            spellcheck: false
+        },
+        skipTaskbar: true
+    });
+    require("@electron/remote/main").enable(customDialogWin.webContents);
+    customDialogWin.loadFile("custom-dialog.html");
+
+    if (!store.has("suggest-star")) {
+        if (store.get("use-times") > 8)
+            setTimeout(function () {
+                customDialog("select_on", i18n.__('suggest-star'),
+                    i18n.__('suggest-star-msg'), "shell.openExternal(\"https://github.com/RoderickQiu/wnr\");");
+                store.set("suggest-star", "suggested");
+            }, 1000);
+    }
+})
+
+function getCustomDialogModeType(mode) {
+    switch (mode) {
+        case "on":
+            return 0;
+        case "select_on":
+            return 1;
+        case "update_on":
+            return 2;
+    }
+}
+
+function customDialog(mode, title, msg, executeAfter) {
+    if (executeAfter == null) executeAfter = "";
+    if (mode === "on" || mode === "select_on" || mode === "update_on") {
+        customDialogWin.webContents.send("dialog-init", {
+            title: title,
+            msg: msg,
+            executeAfter: executeAfter,
+            type: getCustomDialogModeType(mode)
+        });
+        customDialogWin.show();
+        customDialogWin.setAlwaysOnTop(true, "pop-up-menu");
+        customDialogWin.focus();
+        if (mode === "update_on") {
+            customDialogWin.setSize(Math.floor(240 * ratio) * 2, customDialogWin.getSize()[1]);
+        } else {
+            customDialogWin.setSize(Math.floor(240 * ratio), customDialogWin.getSize()[1]);
+        }
+        customDialogWin.center();
+    } else if (mode === "off") {
+        customDialogWin.hide();
+        try {
+            eval(executeAfter);
+        } catch (e) {
+            console.log(e);
+        }
+    } else if (mode === "cancel") {
+        customDialogWin.hide();
+    } else if (mode === "button3_update") {
+        shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
+        customDialogWin.hide();
+    }
+}
+
+ipcMain.on("custom-dialog", (event, msg) => {
+    if (msg.mode === "on")
+        customDialog(msg.mode, msg.title, msg.msg, msg.executeAfter);
+    else
+        customDialog(msg.mode, "", "", msg.executeAfter);
+})
+
+ipcMain.on("custom-dialog-fit", (event, msg) => {
+    customDialogWin.setSize(customDialogWin.getSize()[0], Math.floor((115 + msg * 19.25) * ratio));
+    customDialogWin.center();
 })
 
 function theThemeHasChanged() {
@@ -688,12 +763,14 @@ function theThemeHasChanged() {
                 win.setBackgroundColor('#191919');
                 win.webContents.send('darkModeChanges');
             }
+            if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
         } else {
             styleCache.set('isdark', false);
             if (win != null) {
                 win.setBackgroundColor('#fefefe');
                 win.webContents.send('darkModeChanges');
             }
+            if (customDialogWin != null) customDialogWin.setBackgroundColor('#fefefe');
         }
     }
 }
@@ -1212,23 +1289,16 @@ ipcMain.on("open-notification-settings", function (event, msg) {
     switch (process.platform) {
         case "win32":
             if (getWindowsReleaseVersion() >= 10) shell.openExternal('ms-settings:notifications');
-            else dialog.showMessageBox(win, {
-                title: " wnr",
-                type: "info",
-                message: (getWindowsReleaseVersion() === 8) ?
+            else
+                customDialog("on", "wnr", (getWindowsReleaseVersion() === 8) ?
                     i18n.__("open-notification-settings-windows-8-tip") :
-                    i18n.__("open-notification-settings-windows-7-tip")
-            });
+                    i18n.__("open-notification-settings-windows-7-tip"), "");
             break;
         case "darwin":
             shell.openExternal("x-apple.systempreferences:com.apple.preference.notifications");
             break;
         case "linux":
-            dialog.showMessageBox(win, {
-                title: " wnr",
-                type: "info",
-                message: i18n.__("open-notification-settings-linux-tip")
-            });
+            customDialog("on", "wnr", i18n.__("open-notification-settings-linux-tip"), "");
             break;
     }
 })
@@ -1248,9 +1318,10 @@ function isDarkMode() {
         if (store.has("dark-or-white")) {
             if (store.get("dark-or-white") === "light") {
                 if (win != null) win.setBackgroundColor('#fefefe');
+                if (customDialogWin != null) customDialogWin.setBackgroundColor('#fefefe');
                 return false;
             } else {
-                if (win != null) win.setBackgroundColor('#191919');
+                if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
                 return true;
             }
         } else {
@@ -1268,6 +1339,7 @@ function darkModeSettingsFinder() {
             win.setBackgroundColor('#191919');
             win.webContents.send('darkModeChanges');
         }
+        if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
         if (settingsWin != null) {
             settingsWin.setBackgroundColor('#191919');
             settingsWin.webContents.send('darkModeChanges-settings');
@@ -1407,19 +1479,7 @@ app.on('activate', () => {
 
 ipcMain.on('force-long-focus-request', function () {
     if (win != null)
-        dialog.showMessageBox(win, {
-            title: " wnr",
-            type: "warning",
-            message: i18n.__("force-long-focus-request"),
-            detail: i18n.__("force-long-focus-request-tip"),
-            buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
-            cancelId: (process.platform !== "darwin") ? 0 : 1,//buttons map different from darwin to other OSs
-            noLink: true
-        }).then(function (index) {
-            if (index.response === ((process.platform !== "darwin") ? 1 : 0)) {
-                win.webContents.send("force-long-focus-granted");
-            }
-        });
+        customDialog("select_on", i18n.__("force-long-focus-request"), i18n.__("force-long-focus-request-tip"), "win.webContents.send(\"force-long-focus-granted\");");
 })
 
 ipcMain.on('focus-mode-settings', function (event, message) {
@@ -1520,6 +1580,15 @@ function personliazationNotificationSolution(i) {
     return [title, msg];
 }
 
+ipcMain.on('eval', function (event, message) {
+    try {
+        eval(message);
+        console.log("Eval succeeded, code: " + message);
+    } catch (e) {
+        console.log("Eval failed, msg: " + e)
+    }
+})
+
 ipcMain.on('warning-giver-workend', function () {
     statisticsWriter();
 
@@ -1541,29 +1610,17 @@ ipcMain.on('warning-giver-workend', function () {
         if (store.get("no-check-work-time-end")) {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+        } else if (!restTimeFocused) {
+            setTimeout(function () {
+                customDialog("on", personal[0], personal[1]
+                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"work\"); if (hasFloating) win.hide();");
+            }, 1500);
         } else {
             setTimeout(function () {
-                if (process.platform !== "darwin" || (process.platform === "darwin" && restTimeFocused))
-                    dialog.showMessageBox(win, {
-                        title: " wnr",
-                        message: personal[0],
-                        type: "info",
-                        detail: personal[1]
-                            + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    }).then(function () {
-                        timeEndDialogDispose("work");
-                        //win.webContents.send("alter-start-stop", "start");
-                    });
-                else dialog.showMessageBox({
-                    title: " wnr",
-                    message: personal[0],
-                    type: "info",
-                    detail: personal[1]
-                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                }).then(function () {
-                    timeEndDialogDispose("work");
-                    //win.webContents.send("alter-start-stop", "start");
-                    if (hasFloating && (process.platform === "darwin")) win.hide();
+                win.webContents.send("fullscreen-custom-dialog", {
+                    title: personal[0],
+                    message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
+                    executeAfter: "timeEndDialogDispose('work'); if (hasFloating) { win.hide(); }"
                 })
             }, 1500)
         }
@@ -1590,31 +1647,19 @@ ipcMain.on('warning-giver-restend', function () {
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+        } else if (!workTimeFocused) {
+            setTimeout(function () {
+                customDialog("on", personal[0], personal[1]
+                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if (hasFloating) win.hide();");
+            }, 1500)
         } else {
             setTimeout(function () {
-                if (process.platform !== "darwin" || (process.platform === "darwin" && workTimeFocused))
-                    dialog.showMessageBox(win, {
-                        title: " wnr",
-                        message: personal[0],
-                        type: "info",
-                        detail: personal[1]
-                            + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    }).then(function () {
-                        timeEndDialogDispose("rest");
-                        //win.webContents.send("alter-start-stop", "start");
-                    })
-                else dialog.showMessageBox({
-                    title: " wnr",
-                    message: personal[0],
-                    type: "info",
-                    detail: personal[1]
-                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                }).then(function () {
-                    timeEndDialogDispose("rest");
-                    //win.webContents.send("alter-start-stop", "start");
-                    if (hasFloating && (process.platform === "darwin")) win.hide();
+                win.webContents.send("fullscreen-custom-dialog", {
+                    title: personal[0],
+                    message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
+                    executeAfter: "timeEndDialogDispose('rest'); if (hasFloating) { win.hide(); }"
                 })
-            }, 1000)
+            }, 1500)
         }
     }
 })
@@ -1658,45 +1703,22 @@ ipcMain.on('warning-giver-all-task-end', function () {
             }
         } else
             setTimeout(function () {
-                dialog.showMessageBox(win, {
-                    title: " wnr",
-                    message: personal[0],
-                    type: "info",
-                    detail: personal[1],
-                }).then(function () {
-                    win.loadFile('index.html');//automatically back
-                    setFullScreenMode(false);
-                    if (!store.has("suggest-star")) {
-                        dialog.showMessageBox(win, {
-                            title: " wnr",
-                            message: i18n.__('suggest-star'),
-                            type: "info",
-                            detail: i18n.__('suggest-star-msg'),
-                            checkboxLabel: i18n.__('suggest-star-chk'),
-                            checkboxChecked: true
-                        }).then(function (msg) {
-                            if (msg.checkboxChecked) {
-                                shell.openExternal("https://github.com/RoderickQiu/wnr");
-                            }
-                            store.set("suggest-star", "suggested");
-                        });
-                    }
-                    win.maximizable = false;
-                    if (store.get("top") !== true) {
-                        win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
-                        win.moveTop();
-                    }
-                    if (sleepBlockerId) {
-                        if (powerSaveBlocker.isStarted(sleepBlockerId)) {
-                            powerSaveBlocker.stop(sleepBlockerId);
-                        }
-                    }
-                })
+                customDialog("on", personal[0], personal[1],
+                    "win.loadFile('index.html');\n" +
+                    "setFullScreenMode(false);\n" +
+                    "win.maximizable = false;\n" +
+                    "if (store.get(\"top\") !== true) {\n" +
+                    "   win.setAlwaysOnTop(false);//cancel unnecessary always-on-top\n" +
+                    "   win.moveTop(); }\n" +
+                    "if (sleepBlockerId) {\n" +
+                    "   if (powerSaveBlocker.isStarted(sleepBlockerId)) {\n" +
+                    "       powerSaveBlocker.stop(sleepBlockerId); } }");
             }, 1000);
     }
 })
 
 ipcMain.on('update-feedback', function (event, message) {
+    // another button usage: button3_update
     if (message === "update-available") {
         let updateMessage = "";
         fetch('https://gitee.com/roderickqiu/wnr-backup/raw/master/update.json')
@@ -1705,21 +1727,7 @@ ipcMain.on('update-feedback', function (event, message) {
                 for (let updateIterator = 0; updateIterator < json.content[store.get('i18n')].length; updateIterator++) {
                     updateMessage += (updateIterator + 1).toString() + ". " + json.content[store.get('i18n')][updateIterator] + '\r';
                 }
-                dialog.showMessageBox((settingsWin != null) ? settingsWin : ((aboutWin != null) ? aboutWin : win), {
-                    title: " wnr",
-                    type: "warning",
-                    message: i18n.__('update-msg'),
-                    detail: i18n.__('update-content') + "\r" + updateMessage,
-                    buttons: [i18n.__('update-refuse'), i18n.__('update-chk'), i18n.__('update-lanzous')],
-                    cancelId: 0,
-                    noLink: true
-                }).then(function (index) {
-                    if (index.response === 1) {
-                        shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
-                    } else if (index.response === 2) {
-                        shell.openExternal("https://scris.lanzoui.com/b01n0tb4j");
-                    }
-                });
+                customDialog("update_on", i18n.__('update'), i18n.__('update-content') + "\r" + updateMessage, "shell.openExternal(\"https://scris.lanzoui.com/b01n0tb4j\");");
             })
             .catch(() => {
                 notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
@@ -1731,64 +1739,22 @@ ipcMain.on('update-feedback', function (event, message) {
 })
 
 ipcMain.on('alert', function (event, message) {
-    if (settingsWin != null) {
-        dialog.showMessageBox(settingsWin, {
-            title: " wnr",
-            type: "info",
-            message: message
-        }).then(function () {
-            settingsWin.moveTop();
-        });
-    } else {
-        dialog.showMessageBox(win, {
-            title: " wnr",
-            type: "info",
-            message: message
-        })
-    }
+    customDialog("on", "wnr", message, "");
 })
 
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
-        dialog.showMessageBox(settingsWin, {
-            title: " wnr",
-            message: i18n.__('delete-all-data-dialog-box-title'),
-            type: "warning",
-            detail: i18n.__('delete-all-data-dialog-box-content'),
-            checkboxLabel: i18n.__('delete-all-data-dialog-box-chk'),
-            checkboxChecked: false
-        }).then(function (msg) {
-            if (msg.checkboxChecked || msg.response !== 0) {
-                store.clear();
-                statistics.clear();
-                styleCache.clear();
-                timingData.clear();
-                relaunchSolution()
-            }
-        })
+        customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "store.clear();statistics.clear();styleCache.clear();timingData.clear();relaunchSolution()");
     }
 })
 
 function windowCloseChk() {
     if ((process.env.NODE_ENV !== "development") && win != null) {
         win.show();
-        dialog.showMessageBox(win, {
-            title: " wnr",
-            message: i18n.__('window-close-dialog-box-title'),
-            type: "warning",
-            buttons: (process.platform !== "darwin") ? [i18n.__('cancel'), i18n.__('ok')] : [i18n.__('ok'), i18n.__('cancel')],
-            cancelId: (process.platform !== "darwin") ? 0 : 1, //buttons map different from darwin to other OSs
-            noLink: true
-        }).then(function (msger) {
-            if (msger.response === ((process.platform !== "darwin") ? 1 : 0)) {
-                statisticsWriter();
-                multiScreenSolution("off");
-
-                setTimeout(function () {
-                    app.exit(0);
-                }, 500);
-            }
-        })
+        customDialog("select_on", "wnr", i18n.__('window-close-dialog-box-title'),
+            "statisticsWriter();\n" +
+            "multiScreenSolution(\"off\");\n" +
+            "setTimeout(function () { app.exit(0); }, 500);");
     } else {
         statisticsWriter();
         multiScreenSolution("off");
@@ -1934,10 +1900,8 @@ function settings(mode) {
             else if (mode === 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
             settingsWin.loadFile("preferences.html");
-            if (process.env.NODE_ENV !== "development") {
-                win.setAlwaysOnTop(true, "floating");
-                settingsWin.setAlwaysOnTop(true, "floating");
-            }
+            win.setAlwaysOnTop(true, "floating");
+            settingsWin.setAlwaysOnTop(true, "floating");
             settingsWin.focus();
             settingsWin.once('ready-to-show', () => {
                 settingsWin.show();
@@ -2047,30 +2011,14 @@ ipcMain.on('locker-passcode', function (event, message) {
     if (message === "wrong-passcode") lockerMessage = i18n.__('locker-settings-input-tip-wrong-password');
     if (message === "not-same-password") lockerMessage = i18n.__('locker-settings-not-same-password');
     if (message === "empty") lockerMessage = i18n.__('locker-settings-empty-password');
-    if (settingsWin != null)
-        dialog.showMessageBox(settingsWin, {
-            title: " wnr",
-            message: i18n.__('locker'),
-            type: "warning",
-            detail: lockerMessage
-        })
+    if (settingsWin != null) customDialog("on", "wnr", i18n.__('locker'), "");
 })
 
 ipcMain.on("relaunch-dialog", function (event, message) {
-    dialog.showMessageBox(win, {
-        title: " wnr",
-        type: "warning",
-        message: i18n.__("relaunch-tip"),
-        buttons: [i18n.__('ok')],
-        noLink: true
-    }).then(function (index) {
-        try {
-            store.set('just-relaunched', true);
-        } catch (e) {
-            console.log(e);
-        }
-        relaunchSolution();
-    });
+    customDialog("on", "wnr", i18n.__("relaunch-tip"),
+        "try { store.set('just-relaunched', true); }" +
+        "catch (e) { console.log(e); }\n" +
+        "relaunchSolution();");
 })
 
 ipcMain.on("open-external-title-win", function (event, message) {
@@ -2195,9 +2143,10 @@ function floating() {
                 floatingWin.on('closed', () => {
                     floatingWin = null;
                     hasFloating = false;
-                    if (win != null && process.platform === "darwin") {
+                    // no longer need this
+                    /*if (win != null && process.platform === "darwin"){
                         win.show();
-                    }
+                    }*/
                 });
                 floatingWin.on('move', () => {
                     styleCache.set("floating-axis", {

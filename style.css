@@ -814,6 +814,24 @@ li input:nth-last-child(4)::after {
     font-size: smaller;
 }
 
+#fullscreen-custom-dialog {
+    line-height: 90%;
+    transform: translateY(-8px);
+    position: fixed;
+    width: 240px;
+    border: .7px solid rgba(0, 0, 0, .35);
+    box-shadow: 1px 15px 30px rgba(70, 71, 71, 0.55);
+    border-radius: 0.25rem;
+    background-color: #fefefe;
+    line-break: auto;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    padding: 18px 15px 18px 15px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+}
+
 #floating-bottom-bar {
     position: absolute;
     left: 0px;

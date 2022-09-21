@@ -226,6 +226,38 @@
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <div id="bottom-bar">&nbsp;</div>
 
+    <div id="fullscreen-custom-dialog" class="justify-content-left align-content-left text-left d-none">
+        <p class="small text-grey font-weight-bolder" style="margin-left: 0" id="dialog-title">wnr</p>
+        <p id="dialog-msg" class="small" style="line-height: 1.5; width: 210px; line-break: anywhere">Message</p>
+        <div id="dialog-buttons" style="width:210px" class="text-right">
+            <a type="button" id="dialog-ok" class="btn btn-outline-primary btn-sm text-right"
+               style="font-size: 12px"
+               href="javascript:fullscreenCustomDialog('off', '', '', '')">
+                <script>document.write(i18n.__('ok'))</script>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        var executeAfterRecorder = "";
+
+        function fullscreenCustomDialog(mode, title, msg, executeAfter) {
+            if (mode === "on") {
+                $("#fullscreen-custom-dialog").removeClass("d-none");
+                $("#dialog-title").text(title);
+                $("#dialog-msg").text(msg);
+                executeAfterRecorder = executeAfter;
+            } else {
+                $("#fullscreen-custom-dialog").addClass("d-none");
+                ipc.send("eval", executeAfterRecorder);
+            }
+        }
+
+        ipc.on("fullscreen-custom-dialog", function (event, msg) {
+            fullscreenCustomDialog("on", msg.title, msg.message, msg.executeAfter);
+        })
+    </script>
+
     <script>
         function dynamicResizer() {//dynamically resize the countdown text as the window resizes
             let hdWidth = document.body.getBoundingClientRect().width;

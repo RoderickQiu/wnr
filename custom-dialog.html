@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>wnr</title>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
+    <script>
+        window.$ = require("jquery/dist/jquery.slim.min.js");
+    </script>
+    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="res/fonts/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+
+<body>
+    <script src="supporter.js"></script>
+    <div class="d-flex mx-auto text-dark" id="main">
+        <div id="timer" class="justify-content-left align-content-left text-left"
+             style="transform: translateY(2px); width: 210px; -webkit-app-region: drag; -webkit-user-select: none;">
+            <p class="small text-grey font-weight-bolder" style="margin-left: 0" id="dialog-title">wnr</p>
+            <p id="dialog-msg" class="small" style="line-height: 1.5">Message</p>
+            <div id="dialog-buttons" style="width:210px" class="text-right">
+                <a type="button" id="dialog-cancel" class="btn btn-outline-secondary btn-sm text-right d-none"
+                   style="font-size: 12px"
+                   href="javascript:cancel()">
+                    <script>document.write(i18n.__('cancel'))</script>
+                </a>
+                <a type="button" id="dialog-button-3" class="btn btn-outline-primary btn-sm text-right d-none"
+                   style="font-size: 12px"
+                   href="javascript:button3()">
+                    <script>document.write(i18n.__('cancel'))</script>
+                </a>
+                <a type="button" id="dialog-ok" class="btn btn-outline-primary btn-sm text-right"
+                   style="font-size: 12px"
+                   href="javascript:ok()">
+                    <script>document.write(i18n.__('ok'))</script>
+                </a>
+            </div>
+        </div>
+    </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
+    <script>
+        let executeAfter = "";
+        let msgNode = $("#dialog-msg");
+
+        function ok() {
+            ipc.send("custom-dialog", { mode: "off", executeAfter: executeAfter });
+        }
+
+        function button3() {
+            ipc.send("custom-dialog", { mode: "button3_update", executeAfter: executeAfter });
+        }
+
+        function cancel() {
+            ipc.send("custom-dialog", { mode: "cancel" });
+        }
+
+        ipc.on("dialog-init", function (event, message) {
+            $("#dialog-title").text(message.title);
+            $("#dialog-msg").text(message.msg);
+            executeAfter = message.executeAfter;
+            ipc.send("custom-dialog-fit", Math.round(msgNode.height() / parseFloat(msgNode.css('line-height'))));
+            if (message.type === 1 || message.type === 2) $("#dialog-cancel").removeClass("d-none"); //select_on
+            else $("#dialog-cancel").addClass("d-none");
+            if (message.type === 2) { //update_on
+                $("#dialog-cancel").text(i18n.__('update-refuse'));
+                $("#dialog-button-3").removeClass("d-none");
+                $("#dialog-button-3").text(i18n.__('update-chk'));
+                $("#dialog-ok").text(i18n.__('update-lanzous'));
+                $("#timer").css("width", "420px");
+                $("#dialog-buttons").css("width", "420px");
+            } else {
+                $("#dialog-cancel").text(i18n.__('cancel'));
+                $("#dialog-button-3").addClass("d-none");
+                $("#dialog-ok").text(i18n.__('ok'));
+                $("#timer").css("width", "210px");
+                $("#dialog-buttons").css("width", "210px");
+            }
+        })
+    </script>
+    <script src="renderer.js"></script>
+</body>
+
+</html>
