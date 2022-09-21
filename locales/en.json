@@ -347,7 +347,9 @@
 	"dropdown-20%" : "20%",
 	"dropdown-25%" : "25%",
 	"dropdown-30%" : "30%",
-	"autostart-tip" : "On some operating systems, some permissions are required for wnr to enable auto-start.",
+	"autostart-tip" : "On some operating systems, some permissions are required for wnr to enable auto-start. ",
 	"do-not-support-linux" : "This feature doesn't support linux. ",
-	"cancel-default-task" : "Clear defaults"
+	"cancel-default-task" : "Clear defaults",
+	"timer-time" : "Show system time in timing window",
+	"timer-time-tip" : "If disabled, the system time textbox will no longer display in the timing window. "
 }

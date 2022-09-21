@@ -289,6 +289,13 @@
         $("#passcode-rechecker").css("display", "none");
         store.set('just-launched', false);
 
+        if (store.has("timer-time")) {
+            if (!store.get("timer-time")) {
+                $("#time-bar-macos").css("opacity", 0);
+                $("#time-bar").css("opacity", 0);
+            }
+        }
+
         hasFloating = false;
         canOpenFloating = true;
 

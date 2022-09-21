@@ -58,6 +58,10 @@ if (store.get("islocked") !== true) {
             }]
         }, {
             type: "selection",
+            id: "timer-time",
+            def: true
+        }, {
+            type: "selection",
             id: "infinity"
         }, {
             type: "dropdown",
