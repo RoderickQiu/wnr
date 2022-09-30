@@ -416,7 +416,14 @@ li input:nth-last-child(4)::after {
 }
 
 #set #dropdown-menu-extend {
-    transform: translate(-233px, -14px) !important;
+    transform: translate(-235px, -80px) !important;
+    z-index: 1000;
+    width: 220px;
+}
+
+#set #dropdown-menu-extend input {
+    width: 200px;
+    font-size: 11.5px;
 }
 
 #dropdown-button-extend {

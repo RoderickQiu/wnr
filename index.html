@@ -63,7 +63,7 @@
                         + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
                         + document.getElementById("focus-rest-set-onlyrest").checked
                         + "&restored=false"
-                        + "&times=0&continueloop="
+                        + "&times=0&discount=&continueloop="
                         + document.getElementById("focus-continueloop-set-onlyrest").checked;
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
@@ -95,7 +95,7 @@
                         + "&work-time-focused=" + document.getElementById("focus-work-set").checked
                         + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
                         + "&restored=false"
-                        + "&times=0&continueloop=false";
+                        + "&times=0&continueloop=false&discount=" + $("#first-work-discount").val();
         }
 
         ipc.on("force-long-focus-granted", function () {
@@ -250,10 +250,14 @@
                     <div class="dropdown-menu p-1" id="dropdown-menu-extend"
                          aria-labelledby="dropdown-extend-button">
                         <p class="extreme-small">&nbsp;</p>
-                        <div class="form-group px-2" id="extend-form">
+                        <div class="form-group px-1" id="extend-form">
                             <input name="title" id="title" type="text" class="small" maxlength="14" />
                             <br />
                             <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
+                            <br />
+                            <input name="first-work-discount" id="first-work-discount" type="text"
+                                   class="small text-muted"
+                                   maxlength="39" />
                         </div>
                     </div>
                 </div>
@@ -265,6 +269,8 @@
                 $('#rest-time').attr('placeholder', i18n.__('rest-time'));
                 $('#loop').attr('placeholder', i18n.__('loop'));
                 $('#note').attr('placeholder', i18n.__('note'));
+                $('#first-work-discount').attr('placeholder', i18n.__('first-work-discount'));
+                $('#first-work-discount').attr('title', i18n.__('first-work-discount-tip'));
                 $('#work-time').attr('title', i18n.__('work-time') + i18n.__('what-can-be-here-index'));
                 $('#title').attr('title', i18n.__('title'));
                 $('#rest-time').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
@@ -608,7 +614,7 @@
                             + "&note=&method=1"
                             + "&work-time-focused=" + plan.focusWhenWorking
                             + "&rest-time-focused=" + plan.focusWhenResting
-                            + "&restored=true&times=0&continueloop=false";
+                            + "&restored=true&times=0&continueloop=false&discount=";
                 }
             }
         }
@@ -640,7 +646,7 @@
                                 + "&work-time-focused=" + item.focusWhenWorking
                                 + "&rest-time-focused=" + item.focusWhenResting
                                 + "&restored=true"
-                                + "&times=0&continueloop=false";
+                                + "&times=0&continueloop=false&discount=";
                 } else if (store.get("just-relaunched")) {
                     store.set("just-relaunched", false);
                 }
@@ -667,7 +673,7 @@
                             + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true"
                             + "&times=0"
-                            + "&continueloop=false";
+                            + "&continueloop=false&discount=";
                 } else {
                     window.location.href =
                             "timer.html?title=" + timingData.get("last-recorded-state").title
@@ -680,7 +686,7 @@
                             + "&rest-time-focused=" + timingData.get("last-recorded-state").isRestTimeFocused
                             + "&restored=true"
                             + "&times=1"
-                            + "&continueloop=false";
+                            + "&continueloop=false&discount=";
                 }
             }
         }, 500);

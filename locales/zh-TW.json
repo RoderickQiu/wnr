@@ -346,5 +346,7 @@
 	"do-not-support-linux" : "此功能不支持 Linux 系統進行設置。",
 	"cancel-default-task" : "清除默認預設",
 	"timer-time" : "在計時時顯示當前系統時間",
-	"timer-time-tip" : "若開啓，則會在計時界面顯示系統時間；關閉則不會顯示，以提供更專注的體驗。"
+	"timer-time-tip" : "若開啓，則會在計時界面顯示系統時間；關閉則不會顯示，以提供更專注的體驗。",
+	"first-work-discount" : "第一次工作時間減少幾分鐘？",
+	"first-work-discount-tip" : "如果你預計開啓一個時間計劃，但是由於種種原因第一段時間沒能準時開始，則可以開啓此功能，暫時縮短第一次工作時間。"
 }

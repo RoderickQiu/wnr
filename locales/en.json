@@ -351,5 +351,7 @@
 	"do-not-support-linux" : "This feature doesn't support linux. ",
 	"cancel-default-task" : "Clear defaults",
 	"timer-time" : "Show system time in timing window",
-	"timer-time-tip" : "If disabled, the system time textbox will no longer display in the timing window. "
+	"timer-time-tip" : "If disabled, the system time textbox will no longer display in the timing window. ",
+	"first-work-discount-tip" : "if you wish to have a long timer schedule, but was late for the first period, you can now temporarily reduce the length of the first working time period",
+	"first-work-discount" : "first work period discount (minutes)"
 }

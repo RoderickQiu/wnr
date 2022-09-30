@@ -428,7 +428,10 @@
                 pausingTimeout = null,
                 isLongRest = false,
                 isFirstTimeOnlyRest = decodeURI($_GET['work-time']) === "0.7777",
-                isOnlyRest = isFirstTimeOnlyRest;
+                isOnlyRest = isFirstTimeOnlyRest,
+                firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000;
+
+        ipc.send("logger", firstTimeDiscount);
 
         if (isOnlyRest) ipc.send("enter-only-rest");
 
@@ -575,6 +578,7 @@
                 startTime = new Date().getTime();
                 int = setInterval(positive, 250);
                 ipc.send("progress-bar-set", 2);
+                $("#infinity-label").css("display", "none");
             }
 
             if (methodFromStart === 2) skipper();
@@ -951,7 +955,8 @@
             function clock() {
                 nowTime = new Date();
                 tempVariable = nowTime.getTime();
-                if (method === 1) seconds = Math.floor((workTime - tempVariable + startTime) / 1000);
+                if (method === 1) seconds = Math.floor((workTime - tempVariable + startTime -
+                        (times === 0 ? firstTimeDiscount : 0)) / 1000);
                 else seconds = Math.floor((restTime - tempVariable + startTime) / 1000);
                 if (seconds > 0) {
                     if (method === 1) {
