@@ -112,6 +112,11 @@ if (store.get("islocked") !== true) {
             def: true
         }, {
             type: "dropdown",
+            id: "soon-finish-tip",
+            choices: ['never', '5s', '7s', '10s', '15s', '20s'],
+            def: 0
+        }, {
+            type: "dropdown",
             id: "nap-in-timing",
             choices: ['never', '10min', '15min', '20min'],
             def: 0,

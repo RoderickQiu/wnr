@@ -353,5 +353,15 @@
 	"timer-time" : "Show system time in timing window",
 	"timer-time-tip" : "If disabled, the system time textbox will no longer display in the timing window. ",
 	"first-work-discount-tip" : "if you wish to have a long timer schedule, but was late for the first period, you can now temporarily reduce the length of the first working time period",
-	"first-work-discount" : "first work period discount (minutes)"
+	"first-work-discount" : "first work period discount (minutes)",
+	"soon-finish-tip" : "Notify when a period will end soon",
+	"soon-finish-tip-tip" : "When a period of time will just end in seconds, we will send you a notification so that you can do some quick adjustments, e.g. save your file or pause a video. However, after the notification, you cannot pause or exit the timer anymore. ",
+	"soon-finish-tip-notification-title-1" : "Only after ",
+	"soon-finish-tip-notification-title-2" : "s will this period ends.",
+	"soon-finish-tip-notification-msg" : "Do some last-seconds preparations. ",
+	"dropdown-5s" : "5s",
+	"dropdown-7s" : "7s",
+	"dropdown-10s" : "10s",
+	"dropdown-15s" : "15s",
+	"dropdown-20s" : "20s"
 }

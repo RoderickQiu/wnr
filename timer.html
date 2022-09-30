@@ -348,6 +348,7 @@
         }
 
         function backcheck() {
+            if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
             if (store.get("islocked")) $("#passcode-rechecker").css("display", "inline");
             else backer();
         }
@@ -561,7 +562,14 @@
                     lastNapSecond = 0,
                     canStop = true,
                     stopCounter = 0,
-                    isBothSkipperAndBackerEnabled = true;
+                    isBothSkipperAndBackerEnabled = true,
+                    soonFinishTipMethod = 0,
+                    hasSoonFinishTipPosted = false;
+
+            if (store.has("soon-finish-tip")) {
+                soonFinishTipMethodList = [0, 5, 7, 10, 15, 20];
+                soonFinishTipMethod = soonFinishTipMethodList[store.get("soon-finish-tip")];
+            }
 
             if (store.get("nap") || methodFromStart === 3) {
                 shouldNap = true;
@@ -584,6 +592,7 @@
             if (methodFromStart === 2) skipper();
 
             ipc.on('start-or-stop', function () {
+                if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
                 if (canStop) {
                     if (store.get("disable-pausing") === true && ((store.get("disable-pausing-special") === "work" && method === 1) || (store.get("disable-pausing-special") === "rest" && method === 2) || store.get("disable-pausing-special") === "all"))
                         ipc.send("alert", i18n.__('pausing-disabled'));
@@ -611,6 +620,8 @@
             });
 
             ipc.on('remote-control-msg', function (event, message) {
+                if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
+
                 if (message === "skipper") skipper();
                 else if (message === "back") backcheck();
                 else if (message === "stop") stopper();
@@ -619,6 +630,8 @@
             });
 
             function stopAndCount() {
+                if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
+
                 stopper();
                 if (!wasCounting) stopCounter++;
                 if (stopCounter) $("#stop-count").text(((method === 3 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
@@ -871,6 +884,7 @@
 
             function skipper() {
                 canOpenFloating = true;
+                hasSoonFinishTipPosted = false;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
                 if (continueLoop && method === 2) {
                     //if continueloop then only play once and no other thing
@@ -1015,20 +1029,29 @@
                         timingData.set("last-recorded-minutes-left", lastRecordedMinutesLeft + 1);
                     }
 
-                    if (minutes === 0 && moreThanOneMin && hours === 0) {
-                        if (store.get("onemintip") !== false) {
-                            if ((method === 1 && workTimeFocused === false) || (method === 2 && restTimeFocused === false))
-                                ipc.send("only-one-min-left");
-                            else {
-                                let player = document.createElement('audio');
-                                amplifyMedia(player, amplifierList[store.get("sound") * 1.4]);
-                                player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
-                                player.loop = false;
-                                player.play();
-                                $("#only-one").css("display", "block");
+                    if (minutes === 0 && hours === 0) {
+                        if (moreThanOneMin) {
+                            if (store.get("onemintip") !== false) {
+                                if ((method === 1 && workTimeFocused === false) || (method === 2 && restTimeFocused === false))
+                                    ipc.send("only-one-min-left");
+                                else {
+                                    let player = document.createElement('audio');
+                                    amplifyMedia(player, amplifierList[store.get("sound") * 1.4]);
+                                    player.src = path.join(__dirname, "\\res\\sound\\only-one.wav");
+                                    player.loop = false;
+                                    player.play();
+                                    $("#only-one").css("display", "block");
+                                }
                             }
+                            moreThanOneMin = 0;
+                        } else if (seconds <= soonFinishTipMethod && !hasSoonFinishTipPosted) {
+                            if (!((method === 1 && workTimeFocused) || (method === 2 && restTimeFocused)))
+                                ipc.send("notify", {
+                                    title: i18n.__('soon-finish-tip-notification-title-1') + soonFinishTipMethod + i18n.__('soon-finish-tip-notification-title-2'),
+                                    msg: i18n.__('soon-finish-tip-notification-msg')
+                                });
+                            hasSoonFinishTipPosted = true;
                         }
-                        moreThanOneMin = 0;
                     }
                 } else {
                     skipper();

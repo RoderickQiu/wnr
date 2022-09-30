@@ -348,5 +348,15 @@
 	"timer-time" : "在计时时显示当前系统时间",
 	"timer-time-tip" : "若开启，则会在计时界面显示系统时间；关闭则不会显示，以提供更专注的体验。",
 	"first-work-discount" : "第一次工作时间减少几分钟？",
-	"first-work-discount-tip" : "如果你预计开启一个时间计划，但是由于种种原因第一段时间没能准时开始，则可以开启此功能，暂时缩短第一次工作时间。"
+	"first-work-discount-tip" : "如果你预计开启一个时间计划，但是由于种种原因第一段时间没能准时开始，则可以开启此功能，暂时缩短第一次工作时间。",
+	"soon-finish-tip" : "在一段时间将要结束时发出通知",
+	"soon-finish-tip-tip" : "在一段时间（全屏专心模式下除外）还剩几秒的时候发出通知，使你可以做一些准备工作，比如保存文档或暂停视频。此通知发出后将不再允许暂停和退出计时，从而保证 wnr 足够强力。",
+	"soon-finish-tip-notification-title-1" : "这段时间还有 ",
+	"soon-finish-tip-notification-title-2" : " 秒就要结束了",
+	"soon-finish-tip-notification-msg" : "做一些最后的准备工作吧。",
+	"dropdown-5s" : "5 秒",
+	"dropdown-7s" : "7 秒",
+	"dropdown-10s" : "10 秒",
+	"dropdown-15s" : "15 秒",
+	"dropdown-20s" : "20 秒"
 }

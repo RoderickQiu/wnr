@@ -348,5 +348,15 @@
 	"timer-time" : "在計時時顯示當前系統時間",
 	"timer-time-tip" : "若開啓，則會在計時界面顯示系統時間；關閉則不會顯示，以提供更專注的體驗。",
 	"first-work-discount" : "第一次工作時間減少幾分鐘？",
-	"first-work-discount-tip" : "如果你預計開啓一個時間計劃，但是由於種種原因第一段時間沒能準時開始，則可以開啓此功能，暫時縮短第一次工作時間。"
+	"first-work-discount-tip" : "如果你預計開啓一個時間計劃，但是由於種種原因第一段時間沒能準時開始，則可以開啓此功能，暫時縮短第一次工作時間。",
+	"soon-finish-tip" : "在一段時間將要結束時發出通知",
+	"soon-finish-tip-tip" : "在一段時間（全屏專心模式下除外）還剩幾秒的時候發出通知，使你可以做一些準備工作，比如保存文檔或暫停視頻。此通知發出後將不再允許暫停和退出計時，從而保證 wnr 足夠強力。",
+	"soon-finish-tip-notification-title-1" : "這段時間還有 ",
+	"soon-finish-tip-notification-title-2" : " 秒就要結束了",
+	"soon-finish-tip-notification-msg" : "做一些最後的準備工作吧。",
+	"dropdown-5s" : "5 秒",
+	"dropdown-7s" : "7 秒",
+	"dropdown-10s" : "10 秒",
+	"dropdown-15s" : "15 秒",
+	"dropdown-20s" : "20 秒"
 }
