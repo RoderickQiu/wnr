@@ -19,7 +19,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
     isTimerWin = null, isWorkMode = null, isChinese = null, isFocused = true,
     isOnlyRest = false, isPositiveTiming = false,
-    timeLeftTip = null, trayTimeMsg = null, predefinedTasks = null,
+    timeLeftTip = null, positiveTimingTip = null, trayTimeMsg = null, predefinedTasks = null,
     trayH = null, trayMin = null,
     workTimeFocused = false, restTimeFocused = false,
     fullScreenProtection = false,
@@ -379,7 +379,8 @@ app.on('ready', () => {
     }
     i18n.setLocale(store.get("i18n"));//set the locale
 
-    timeLeftTip = i18n.__("time-left");//this will be used in this file frequently
+    timeLeftTip = i18n.__("time-left");
+    positiveTimingTip = i18n.__("positive-timing");//this will be used in this file frequently
 
     hasGotSingleInstanceLock = app.requestSingleInstanceLock();
     if (!hasGotSingleInstanceLock) {
@@ -2204,7 +2205,11 @@ ipcMain.on("tray-time-set", function (event, message) {
     if (store.get("tray-time") !== false || process.platform !== "darwin") {
         trayH = message.h;
         trayMin = message.min;
-        trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + Math.floor(100 - progress * 100) + timeLeftTip;
+        if (message.positive === false)
+            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + Math.floor(100 - progress * 100) + timeLeftTip;
+        else {
+            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip;
+        }
 
         if (tray != null) tray.setToolTip(trayTimeMsg);
         if (process.platform === "darwin") {

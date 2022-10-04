@@ -161,6 +161,7 @@
 	"cancel" : "Cancel",
 	"ok" : "OK",
 	"positive" : "Stopwatch",
+	"positive-timing" : "Stopwatch On",
 	"positive-msg" : "A free timer, or a stopwatch.",
 	"min-already" : "has begun",
 	"what-can-be-here-index" : "You can input things like \"1 hour\", \"2 minutes\" and \"30 seconds\". ",

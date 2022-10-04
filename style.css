@@ -839,6 +839,12 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: none;
 }
 
+#dialog-buttons {
+    z-index: 900;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
 #floating-bottom-bar {
     position: absolute;
     left: 0px;

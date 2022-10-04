@@ -160,6 +160,7 @@
 	"cancel" : "取消",
 	"ok" : "确认",
 	"positive" : "正计时",
+	"positive-timing" : "正计时中",
 	"positive-msg" : "不设时长，自由计时，只有小憩提醒。",
 	"min-already" : "已经开始",
 	"what-can-be-here-index" : "你可以输入如“一小时”“30分钟”“12秒”。",

@@ -564,7 +564,8 @@
                     stopCounter = 0,
                     isBothSkipperAndBackerEnabled = true,
                     soonFinishTipMethod = 0,
-                    hasSoonFinishTipPosted = false;
+                    hasSoonFinishTipPosted = false,
+                    lastTimePositiveMinutes = -1;
 
             if (store.has("soon-finish-tip")) {
                 soonFinishTipMethodList = [0, 5, 7, 10, 15, 20];
@@ -894,9 +895,11 @@
                     player.loop = false;
                     player.play();
                 } else {
-                    $("#skipper-container").css("display", "none");
-                    $("#skipper-space").css("display", "none");
-                    $("#passcode-rechecker").css("display", "none");
+                    if (methodFromStart !== 3) {
+                        $("#skipper-container").css("display", "none");
+                        $("#skipper-space").css("display", "none");
+                        $("#passcode-rechecker").css("display", "none");
+                    }
                     times++;
                     $("#time-cnt").text(Math.ceil((times + 1) / 2) + ' / ' + loop + ' ' + i18n.__('times'));
                 }
@@ -910,9 +913,14 @@
                             restTime = restTime + long * 60000;
                             isLongRest = true;
                         }
-                        themeChanger();
+                        if (methodFromStart !== 3) themeChanger();
                     } else if (times === loop * 2) {
                         ender();
+                    }
+                    if (methodFromStart === 3 && hasFloating) {
+                        floatingOpener();
+                        if (!(store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")))
+                            $("#skipper-container").css("display", "inline");
                     }
                 } else {
                     stopper();
@@ -921,9 +929,14 @@
                             startTime = new Date().getTime();
                         } else if (times < loop * 2 || loop === 0) {
                             startTime = new Date().getTime();
-                            themeChanger();
+                            if (methodFromStart !== 3) themeChanger();
                         } else if (times === loop * 2) {
                             ender();
+                        }
+                        if (methodFromStart === 3 && hasFloating) {
+                            floatingOpener();
+                            if (!(store.get('disable-skipping') === true && (store.get("disable-skipping-special") === "work" || store.get("disable-skipping-special") === "all")))
+                                $("#skipper-container").css("display", "inline");
                         }
                     }, 250);
                 }
@@ -956,6 +969,15 @@
                     method: 3,
                     isWorking: isClockWorking
                 });
+
+                if (lastTimePositiveMinutes !== minutes) {
+                    lastTimePositiveMinutes = minutes;
+                    ipc.send("tray-time-set", {
+                        h: hours,
+                        min: minutes,
+                        positive: true
+                    });
+                }
 
                 seconds -= hours * 3600 + minutes * 60;
                 $nowTiming.text(hours + h + minutes + min + seconds + s);
@@ -1007,7 +1029,8 @@
 
                         ipc.send("tray-time-set", {
                             h: hours,
-                            min: minutes
+                            min: minutes,
+                            positive: false
                         });
                     }
 
