@@ -74,6 +74,11 @@ if (store.get("islocked") !== true) {
             choices: ['never', 'plus3min', 'plus5min', 'plus7min', 'plus10min', 'plus15min', 'plus20min'],
             def: 0
         }, {
+            type: "dropdown",
+            id: "long-break-mode-alter",
+            choices: ['last', 'every2', 'every3', 'every4', 'every5', 'every6'],
+            def: 0
+        }, {
             type: "selection",
             id: "timing-after-locked",
             tipped: false,

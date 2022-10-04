@@ -364,5 +364,13 @@
 	"dropdown-7s" : "7s",
 	"dropdown-10s" : "10s",
 	"dropdown-15s" : "15s",
-	"dropdown-20s" : "20s"
+	"dropdown-20s" : "20s",
+	"long-break-mode-alter" : "More adjustable long break",
+	"long-break-mode-alter-tip" : "This setting is an optimization of the long break setting. Via this setting, you can now have a long break not only for the last period, but for every few work-rest circle. It also works for infinity mode. ",
+	"dropdown-last" : "Only last",
+	"dropdown-every2" : "Every 2",
+	"dropdown-every3" : "Every 3",
+	"dropdown-every4" : "Every 4",
+	"dropdown-every5" : "Every 5",
+	"dropdown-every6" : "Every 6"
 }

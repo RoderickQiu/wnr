@@ -359,5 +359,13 @@
 	"dropdown-7s" : "7 秒",
 	"dropdown-10s" : "10 秒",
 	"dropdown-15s" : "15 秒",
-	"dropdown-20s" : "20 秒"
+	"dropdown-20s" : "20 秒",
+	"long-break-mode-alter" : "每多少組時間進行一次長休息",
+	"long-break-mode-alter-tip" : "這一設定是對長休息設定的優化，使得用戶可以不止在最後一次休息時才應用長休息，而是可以每幾個工作-休息週期後都執行一次長休息。另外，這一設置也支持無限循環模式。",
+	"dropdown-last" : "只最後一次",
+	"dropdown-every2" : "每兩次",
+	"dropdown-every3" : "每三次",
+	"dropdown-every4" : "每四次",
+	"dropdown-every5" : "每五次",
+	"dropdown-every6" : "每六次"
 }

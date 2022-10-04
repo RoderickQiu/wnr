@@ -123,7 +123,6 @@
                                 e.ctrlKey === true && e.which === 86 || /* CTRL + V */
                                 e.ctrlKey === true && e.which === 90    /* CTRL + Z */
                         );
-                        console.log($(e.target).text());
                         if (!allowedKeys && $(e.target).text().length >= 72) {
                             e.preventDefault();
                             if ($(e.target).text().length >= 72)
@@ -415,6 +414,7 @@
                 note = decodeURI($_GET['note']),
                 workTime = decodeURI($_GET['work-time']) * 60000,
                 restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
+                originalRestTime = restTime,
                 loop = Number(decodeURI($_GET['loop'])),
                 workTimeFocused = (decodeURI($_GET['work-time-focused']) !== "false"),
                 restTimeFocused = (decodeURI($_GET['rest-time-focused']) !== "false"),
@@ -430,11 +430,15 @@
                 isLongRest = false,
                 isFirstTimeOnlyRest = decodeURI($_GET['work-time']) === "0.7777",
                 isOnlyRest = isFirstTimeOnlyRest,
-                firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000;
-
-        ipc.send("logger", firstTimeDiscount);
+                firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000,
+                longBreakFrequence = -1;
 
         if (isOnlyRest) ipc.send("enter-only-rest");
+
+        if (store.has("long-break-mode-alter")) {
+            let frequenceList = [-1, 2, 3, 4, 5, 6];
+            longBreakFrequence = frequenceList[store.get("long-break-mode-alter")];
+        }
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });
 
@@ -883,6 +887,11 @@
                 warningGiver(0);
             }
 
+            function shouldLongBreak() {
+                if (longBreakFrequence === -1) return times === loop * 2 - 1 && loop > 2;
+                else return ((times + 1) % (longBreakFrequence * 2)) === 0; // new long break optimization
+            }
+
             function skipper() {
                 canOpenFloating = true;
                 hasSoonFinishTipPosted = false;
@@ -908,10 +917,13 @@
                         startTime = new Date().getTime();
                     } else if (times < loop * 2 || loop === 0) {
                         startTime = new Date().getTime();
-                        if (times === loop * 2 - 1 && loop > 2) {//long break
+                        if (shouldLongBreak()) {//long break
                             let long = longBreakGetter();
-                            restTime = restTime + long * 60000;
+                            restTime = originalRestTime + long * 60000;
                             isLongRest = true;
+                        } else {
+                            restTime = originalRestTime;
+                            isLongRest = false;
                         }
                         if (methodFromStart !== 3) themeChanger();
                     } else if (times === loop * 2) {
@@ -929,6 +941,14 @@
                             startTime = new Date().getTime();
                         } else if (times < loop * 2 || loop === 0) {
                             startTime = new Date().getTime();
+                            if (shouldLongBreak()) {//long break
+                                let long = longBreakGetter();
+                                restTime = restTime + long * 60000;
+                                isLongRest = true;
+                            } else {
+                                restTime = originalRestTime;
+                                isLongRest = false;
+                            }
                             if (methodFromStart !== 3) themeChanger();
                         } else if (times === loop * 2) {
                             ender();
