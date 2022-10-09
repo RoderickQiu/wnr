@@ -1,44 +1,52 @@
 {
-	"version" : "1.26.0",
-	"feature-introduction" : false,
+	"version" : "1.27.0",
+	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
-			"新增了\"按比例休息（需在设置中开启）\"、\"多行计时任务笔记\"、\"清除默认计时预设\"等一些小功能。",
-			"修复了关于暗黑模式自动切换、设置导入导出等的几个问题，感谢 @YangFong 参与开发。"
+			"新增了每几轮计时进行一次长休息、在计时结束前几秒弹出通知提示的功能，可以在设置面板中打开。",
+			"新增了第一轮工作计时缩短一定时间的功能，使计时更加灵活，可以在计时主界面“更多设置”菜单中打开。",
+			"使用自制提示框替换系统提示框，减少看不到提示窗口的情况。",
+			"修复了外置标题窗口中笔记无法同步、正计时时托盘菜单中计时信息显示错误的问题。",
+			"我们收到了关于 wnr 的 MINI 模式窗口在 Windows 10/11 系统上部分播放器全屏后无法显示的问题，但暂未解决，欢迎 Pull Request。"
 		],
 		"zh-TW" : [
-			"新增了\"按比例休息（需在設置中開啓）\"、\"多行計時任務筆記\"、\"清除默認計時預設\"等一些小功能。",
-			"修復了關於暗黑模式自動切換、設置導入導出等的幾個問題，感謝 @YangFong 參與開發。"
+			"新增了每幾輪計時進行一次長休息、在計時結束前幾秒彈出通知提示的功能，可以在設置面板中打開。",
+			"新增了第一輪工作計時縮短一定時間的功能，使計時更加靈活，可以在計時主界面“更多設置”菜單中打開。",
+			"使用自制提示框替換系統提示框，減少看不到提示窗口的情況。",
+			"修復了外置標題窗口中筆記無法同步、正計時時托盤菜單中計時信息顯示錯誤的問題。",
+			"我們收到了關於 wnr 的 MINI 模式窗口在 Windows 10/11 系統上部分播放器全屏後無法顯示的問題，但暫未解決，歡迎 Pull Request。"
 		],
 		"en" : [
-			"New features: percentage break (need to be manually turned on in settings), multi-lines timing notes and default task setting removal.",
-			"Bugs fixed about: dark mode auto switch, settings import, etc. Thanks @YangFong for participating."
+			"New features: 1. Optimized long break, 2. Notification before a time period will end in seconds, 3.First work period discount, 4. A new dialog box style that can prevent being hidden.",
+			"Bugs fixed about: 1. Note sync in eternal title window, 2. Tray message malfunction in stopwatch mode.",
+			"Help wanted: Some users said that MINI mode fails to show when some video players are fullscreened, but I couldn't solve it. Pull Requests are welcomed."
+
 		]
 	},
 	"introduce" : {
-		"id" : "introduced-1.21.0",
+		"id" : "introduced-1.27.0",
 		"zh-CN" : {
-			"title" : "不少新功能。",
+			"title" : "<b>欢迎升级至 1.27.0：</b>新功能概览",
 			"description" : {
-				"darwin" : "我们有了新的快捷键系统。访问操作->设置->个性化设置见识一下它们。",
-				"win32" : "我们有了新的快捷键系统。点击wnr徽标，选择“设置->个性化设置”来见识一下它们。",
-				"universal" : "\n此外，新的“单纯计时”模式等更新，大概也会让你耳目一新吧。"
+				"universal" : "<p>1. 新增了每几轮计时进行一次长休息、在计时结束前几秒弹出通知提示的功能，可以在设置面板中打开。</p><p>2. 还新增了第一轮工作计时缩短一定时间的功能，使计时更加灵活，可以在计时主界面“更多设置”菜单中打开。</p>",
+				"darwin" : "",
+				"win32" : ""
 			}
 		},
 		"zh-TW" : {
-			"title" : "不少新功能。",
+			"title" : "<b>歡迎升級至 1.27.0：</b>新功能概覽",
 			"description" : {
-				"darwin" : "我們有了新的快捷鍵系統。訪問操作->設置->個性化設置見識一下它們。",
-				"win32" : "我們有了新的快捷鍵系統。點擊wnr徽標，選擇“設置->個性化設置”來見識一下它們。",
-				"universal" : "\n此外，新的“單純計時”模式等更新，大概也會讓你耳目一新吧。"
+				"universal" : "<p>1. 新增了每幾輪計時進行一次長休息、在計時結束前幾秒彈出通知提示的功能，可以在設置面板中打開。</p><p>2. 還新增了第一輪工作計時縮短一定時間的功能，使計時更加靈活，可以在計時主界面“更多設置”菜單中打開。</p>",
+				"darwin" : "",
+				"win32" : ""
 			}
 		},
 		"en" : {
-			"title" : "Many new features",
+			"title" : "<b>Welcome to v1.27.0!</b>",
 			"description" : {
-				"darwin" : "We now have a new hotkey system. Go to Top Bar -> Operations -> Settings -> Personalization to see it.",
-				"win32" : "We now have a new hotkey system. Click Logo icon -> Settings -> Personalization to see it.",
-				"universal" : "\n Moreover, other new features like the new \"Just Timing\" mode may also attract you!"
+				"universal" : "<p>New features: 1. Optimized long break (toggle in preferences panel), 2. Notification before a time period will end in seconds (toggle in preferences panel), 3.First work period discount (toggle in more items in index page), 4. A new dialog box style that can prevent being hidden.</p>",
+				"darwin" : "",
+				"win32" : ""
 			}
 		}
 	}
