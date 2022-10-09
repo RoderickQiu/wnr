@@ -183,10 +183,11 @@ function setFullScreenMode(flag) {
                     if (fullScreenProtection && win != null) {
                         forceScreenLockSolution();
                         win.show();
+                        win.setAlwaysOnTop(true, "screen-saver");
                         app.focus({ steal: true });
                         win.setKiosk(true);
                     }
-                }, 5000);
+                }, 2500);
             } else clearInterval(kioskInterval);
         } else win.setFullScreen(flag);
 
@@ -225,7 +226,7 @@ function addScreenSolution(windowNumber, display) {
     if (process.env.NODE_ENV !== "development") newWindows[windowNumber].setFocusable(false);
     newWindows[windowNumber].setFullScreen(true);
     newWindows[windowNumber].moveTop();
-    newWindows[windowNumber].setAlwaysOnTop(true, "floating");
+    newWindows[windowNumber].setAlwaysOnTop(true, "screen-saver");
 }
 
 function multiScreenSolution(mode) {
@@ -1495,7 +1496,7 @@ function focusSolution() {
     win.show();
     win.center();
     win.flashFrame(true);
-    if (!isLoose) win.setAlwaysOnTop(true, "floating");
+    if (!isLoose) win.setAlwaysOnTop(true, "screen-saver");
     win.moveTop();
     if (dockHide) app.dock.show();//prevent kiosk error, show in dock
     if (!isLoose) multiScreenSolution("on");
@@ -1536,7 +1537,7 @@ function nonFocusSolution(mode) {
             win.show();
             win.center();
             win.flashFrame(true);
-            if (!isLoose) win.setAlwaysOnTop(true, "floating");
+            if (!isLoose) win.setAlwaysOnTop(true, "screen-saver");
             win.moveTop();
         }
     }
@@ -1612,9 +1613,10 @@ ipcMain.on('warning-giver-workend', function () {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
         } else if (!restTimeFocused) {
+            win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1]
-                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"work\"); if (hasFloating) win.hide();");
+                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"work\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) win.hide();");
             }, 1500);
         } else {
             setTimeout(function () {
@@ -1649,9 +1651,10 @@ ipcMain.on('warning-giver-restend', function () {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
         } else if (!workTimeFocused) {
+            win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1]
-                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if (hasFloating) win.hide();");
+                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) { win.hide(); }");
             }, 1500)
         } else {
             setTimeout(function () {
@@ -1675,7 +1678,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         win.show();
         win.center();
         win.flashFrame(true);
-        win.setAlwaysOnTop(true, "floating");
+        win.setAlwaysOnTop(true, "screen-saver");
         win.moveTop();
         win.setProgressBar(-1);
         if (restTimeFocused === true) {
@@ -1702,7 +1705,8 @@ ipcMain.on('warning-giver-all-task-end', function () {
                     powerSaveBlocker.stop(sleepBlockerId);
                 }
             }
-        } else
+        } else {
+            win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1],
                     "win.loadFile('index.html');\n" +
@@ -1711,10 +1715,12 @@ ipcMain.on('warning-giver-all-task-end', function () {
                     "if (store.get(\"top\") !== true) {\n" +
                     "   win.setAlwaysOnTop(false);//cancel unnecessary always-on-top\n" +
                     "   win.moveTop(); }\n" +
+                    "else win.setAlwaysOnTop(true,'floating');\n" +
                     "if (sleepBlockerId) {\n" +
                     "   if (powerSaveBlocker.isStarted(sleepBlockerId)) {\n" +
                     "       powerSaveBlocker.stop(sleepBlockerId); } }");
             }, 1000);
+        }
     }
 })
 

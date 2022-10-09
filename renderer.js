@@ -79,3 +79,7 @@ $(function () {
 })
 
 ipc.on('zoom-ratio-feedback', () => zoomRatioChange());
+
+ipc.on('alert', (event, message) => {
+    alert(message);
+})

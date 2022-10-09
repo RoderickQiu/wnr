@@ -224,7 +224,7 @@
 	"task-reservation-follow-plan" : "依照預設：",
 	"task-reservation-start-tip" : "開始預設，從",
 	"to" : "到",
-	"when-time-end" : "時間段即將結束時發出提醒",
+	"when-time-end" : "一段工作或休息結束時發出提醒",
 	"when-time-end-tip" : "調整在工作或休息後發出怎樣的提醒。",
 	"when-work-or-rest-end-tip" : "若選擇“確認框”則將在確認之前不會開啓下一段時間；若選擇“僅鈴聲”則將自動開始下一段時間，但 wnr 窗口仍會彈出到頁面最前端；若選擇“通知且不彈出”，則將只收到一條通知，而 wnr 窗口將不會重新跳出。",
 	"dropdown-notification-no-popup" : "通知且不彈出",
