@@ -912,6 +912,21 @@ li input:nth-last-child(4)::after {
     -webkit-app-region: no-drag;
 }
 
+#new-feature {
+    text-align: left;
+    line-height: 2.2;
+    transform: translateY(10px);
+}
+
+#new-feature-description, #new-feature-description-universal {
+    padding-top: 5px;
+    padding-bottom: 0;
+}
+
+#new-feature-btn-container {
+    transform: translateY(-9px);
+}
+
 #top-bar {
     position: absolute;
     right: 50%;

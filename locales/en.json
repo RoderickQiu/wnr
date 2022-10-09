@@ -137,7 +137,7 @@
 	"predefined-task-wnr-recommended" : "wnr recommended",
 	"predefined-task-pomodoro" : "pomodoro",
 	"predefined-task-class-time" : "class time",
-	"focus-notify-pre" : "When",
+	"focus-notify-pre" : "when",
 	"focus-notify-working" : "working",
 	"focus-notify-resting" : "resting",
 	"focus-notify-body" : "focus mode will be on",

@@ -157,7 +157,18 @@
                 if (store.get("islocked")) $("#locker").css("display", "inline-block");
             </script>
         </div>
-        <div id="new-feature" class="container-fluid"></div>
+        <div id="new-feature" class="container-fluid p-5">
+            <div class="align-content-center small text-left">
+                <h6 id="new-feature-title" class="rest"></h6>
+                <div id="new-feature-description" class="small text-grey"></div>
+                <div id="new-feature-description-universal" class="small text-grey"></div>
+                <div id="new-feature-btn-container" class="w-100 text-right">
+                    <button type="button" class="btn-sm btn btn-outline-primary" onclick="newFeatureClose()">
+                        <script>document.write(i18n.__('ok'));</script>
+                    </button>
+                </div>
+            </div>
+        </div>
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
@@ -329,10 +340,10 @@
 
         //new feature message
         if (require("./update.json")["feature-introduction"] && !store.has("introduced-" + require("./update.json").version)) {
-            $("#new-feature-title").text(require("./update.json")["introduce"][store.get("i18n")]["title"]);
-            $("#new-feature-description").text(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
-            $("#new-feature-description-universal").text(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
-            $("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
+            $("#new-feature-title").html(require("./update.json")["introduce"][store.get("i18n")]["title"]);
+            $("#new-feature-description").html(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
+            $("#new-feature-description-universal").html(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
+            //$("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
             $("#new-feature").show();
             $("#bottom-btn").hide();
             $("#set").hide();
