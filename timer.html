@@ -310,7 +310,8 @@
                         setTimeout(function () {
                             ipc.send("floating-conversation", {
                                 topic: "time-left",
-                                val: Math.floor((((method === 1) ? workTime : restTime) - new Date().getTime() + startTime) / 60000),
+                                val: Math.floor((((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                        (times === 0 ? firstTimeDiscount : 0)) / 60000),
                                 percentage: Math.round(lastRecordedProgress * 100),
                                 method: method,
                                 isWorking: isClockWorking
