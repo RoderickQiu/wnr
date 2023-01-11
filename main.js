@@ -120,21 +120,13 @@ function createWindow() {
         }
     });
 
-    win.on('maximize', () => {
-        isMaximized = true;
-    });
-
     win.on('enter-full-screen', () => {
-        isMaximized = true;
+        if (process.platform == "darwin") isMaximized = true;
     })
 
     win.on('leave-full-screen', () => {
-        isMaximized = false;
+        if (process.platform == "darwin") isMaximized = false;
     })
-
-    win.on('unmaximize', () => {
-        isMaximized = false;
-    });
 
     //prevent app-killers for lock mode / focus mode
     win.webContents.on('crashed', () => {
@@ -1857,8 +1849,13 @@ ipcMain.on('window-minimize', function () {
 
 ipcMain.on('window-maximize', function () {
     if (win != null) {
-        if (isMaximized) win.unmaximize();
-        else win.maximize();
+        if (isMaximized) {
+            win.unmaximize();
+            if (process.platform != "darwin") isMaximized = false;
+        } else {
+            win.maximize();
+            if (process.platform != "darwin") isMaximized = true;
+        }
     }
 })
 
