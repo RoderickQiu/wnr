@@ -136,6 +136,9 @@
             <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
                     id="no-use-space">&nbsp;&nbsp;</span>
+             <a href="javascript:call('window-maximize')" class="small rest" id="win-max"><i
+                     class="iconfont icon-maximize" id="window-max"></i></a><span
+                    id="no-use-space-2">&nbsp;&nbsp;</span>
             <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
                                                                                id="window-minimize"></i></a><span
                     class="should-lock">&nbsp;&nbsp;</span>
@@ -145,6 +148,7 @@
             <script>
                 $('#logo-bar').attr('title', i18n.__('info'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
+                $('#window-max').attr('title', i18n.__('window-max'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
                 $('#back-onlyrest').attr('title', i18n.__('back'));
@@ -703,6 +707,7 @@
         }, 500);
     </script>
     <script src="renderer.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

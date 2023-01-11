@@ -230,6 +230,13 @@ if (store.get("islocked") !== true) {
             inner: [{
                 type: "locker"
             }]
+        }, {
+            type: "collapse",
+            id: "theme-color",
+            tipped: false,
+            inner: [{
+                type: "theme-color"
+            }]
         }
     ], $("#settings-container"), false);
 } else {

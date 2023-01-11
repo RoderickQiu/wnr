@@ -115,3 +115,8 @@ function autostartAfter(val) {
         store.set("autostart", !val);
     }
 }
+
+let newRestColor = store.get("theme-color")[0];
+let newWorkColor = store.get("theme-color")[1];
+let newPositiveColor = store.get("theme-color")[2];
+let newOnlyRestColor = store.get("theme-color")[3];

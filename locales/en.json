@@ -29,6 +29,7 @@
 	"settings" : "Settings",
 	"info" : "About wnr",
 	"window-hide" : "Hide the window to system tray",
+	"window-max" : "Maximize this window",
 	"window-minimize" : "Minimize to taskbar",
 	"title" : "please enter a title",
 	"work-time" : "work for ...",
@@ -372,5 +373,10 @@
 	"dropdown-every3" : "Every 3",
 	"dropdown-every4" : "Every 4",
 	"dropdown-every5" : "Every 5",
-	"dropdown-every6" : "Every 6"
+	"dropdown-every6" : "Every 6",
+	"theme-color" : "Custom theme colors",
+	"theme-color-work" : "Working (default red): ",
+	"theme-color-rest" : "Resting (default blue): ",
+	"theme-color-onlyrest" : "Simple Ctdn. (default purple): ",
+	"theme-color-positive" : "Stopwatch (default green): "
 }

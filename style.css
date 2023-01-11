@@ -303,9 +303,15 @@ li input:nth-last-child(4)::after {
     text-align: center;
 }
 
-.btn-primary:hover {
+.btn-outline-primary {
+    color: #5490ea;
+    border-color: #5490ea;
+}
+
+.btn-primary:hover, .btn-outline-primary:hover {
     background-color: #5490ea;
     border-color: #5490ea;
+    color: #fff;
 }
 
 .header-resize {
@@ -1019,4 +1025,8 @@ li input:nth-last-child(4)::after {
     padding: 5px 8px 4px 8px;
     text-align: center;
     border-radius: 3px;
+}
+
+.hotkey-set-label {
+    padding-top: 0 !important;
 }

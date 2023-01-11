@@ -32,6 +32,8 @@
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
                     class="iconfont icon-dockpanel" id="window-hide"></i></a><span
                 id="no-use-space">&nbsp;&nbsp;</span>
+            <a href="javascript:call('window-maximize')" class="small work" id="win-max"><i
+                    class="iconfont icon-maximize" id="window-max"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-minimize')" class="small work" id="window-minimize"><i
                     class="iconfont icon-minus"
             ></i></a><span
@@ -42,7 +44,8 @@
             <script>
                 $('#helper').attr('title', i18n.__('helper'));
                 $('#mini-mode').attr('title', i18n.__('mini-mode-msg'));
-                $('#window-hide').attr('title', i18n.__('window-hide'));
+                $('#window-hide').attr('title', i18n.__('window-hide'))
+                $('#window-max').attr('title', i18n.__('window-max'));
                 $('#window-minimize').attr('title', i18n.__('window-minimize'));
                 $('#exit').attr('title', i18n.__('exit'));
             </script>
@@ -499,6 +502,7 @@
             document.onkeydown = keydownOnError;
         } else {
             isTimerWindow(true);
+            $bottomBar.css("background-color", newWorkColor + "99");
             if (title) {
                 $("#title").val(title);
                 titleNodeResizer();
@@ -520,7 +524,7 @@
             $("#fullscreen-too-long-tip").css("display", "none");
             if (workTimeFocused) {
                 if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
-                $bottomBar.css("background-color", "#ea545419");
+                $bottomBar.css("background-color", newWorkColor + "19");
                 $bottomBar.css("height", "100%");
                 ipc.send('warning-giver-restend');
                 $("#controller").css("display", "none");
@@ -766,12 +770,12 @@
                     if (isOnlyRest) $("#work-rest").text(i18n.__('onlyrest'));
                     else if (isLongRest) $("#work-rest").html(i18n.__('longresting'));
                     else $("#work-rest").html(i18n.__('resting'));
-                    $bottomBar.css("background-color", isOnlyRest ? "#a26ae599" : "#5490ea99");
+                    $bottomBar.css("background-color", isOnlyRest ? newOnlyRestColor + "99" : newRestColor + "99");
                     method = 2;
                     timingData.set("last-recorded-state.method", 2);
                     if (restTimeFocused === true) {
                         if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
-                        $bottomBar.css("background-color", isOnlyRest ? "#a26ae519" : "#5490ea19");
+                        $bottomBar.css("background-color", isOnlyRest ? newOnlyRestColor + "19" : newRestColor + "19");
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
@@ -820,13 +824,13 @@
                     $(".rest").addClass("work");
                     $(".rest").removeClass("rest");
                     $("#work-rest").html(i18n.__('working'));
-                    $bottomBar.css("background-color", "rgba(234,84,84,0.6)");
+                    $bottomBar.css("background-color", newWorkColor + "99");
                     method = 1;
                     timingData.set("last-recorded-state.method", 1);
                     if (systemName !== "darwin") $("#controller").css("display", "block");
                     if (workTimeFocused === true) {
                         if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
-                        $bottomBar.css("background-color", "#ea545419");
+                        $bottomBar.css("background-color", newWorkColor + "19");
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
@@ -1104,6 +1108,7 @@
         }
     </script>
     <script src="renderer.js"></script>
+    <script src="theme.js"></script>
 </body>
 
 </html>

@@ -15,6 +15,11 @@
     ajv "^6.12.0"
     ajv-keywords "^3.4.1"
 
+"@eastdesire/jscolor@^2.5.1":
+  version "2.5.1"
+  resolved "https://registry.npmmirror.com/@eastdesire/jscolor/-/jscolor-2.5.1.tgz#3c3d3a9c0d8e5803abc49d02defd1ac8dfa57896"
+  integrity sha512-+D7Xz2f1Zxpc438q0s7wwKHwWal596dcAGcWp+pxfHlYtt0LVdynMFrf0PYdmwHt8idKfeglyU2h2LdkATFcbQ==
+
 "@electron/get@^1.13.0":
   version "1.13.1"
   resolved "https://repo.huaweicloud.com/repository/npm/@electron/get/-/get-1.13.1.tgz#42a0aa62fd1189638bd966e23effaebb16108368"

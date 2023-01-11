@@ -178,8 +178,43 @@ function selectionSoluion(obj, parent, inner) {
 }
 
 function customSolution(type, parent) {
+    parent.append(domString(type));
+    switch (type) {//after-append
+        case "autocheck":
+            autoCheckInitializer();
+            break;
+        case "predefined":
+            predefinedInitializer();
+            break;
+        case "task-reservation":
+            reservedInitializer();
+            break;
+        case "personalization-notify-sound":
+            personalizationSoundInitializer();
+            break;
+        case "i18n":
+            languageInitializer();
+            break;
+        case "hotkey":
+            hotkeyInitializer();
+            break;
+        case "locker":
+            lockerInitializer();
+            break;
+        case "theme-color":
+            colorInitializer();
+            break;
+    }
+}
+
+function domString(type) {
     let appendDOMString = ``;
     switch (type) {
+        case "theme-color":
+            appendDOMString = `
+            <div id="color-box" class="row w-100"></div>
+            <br/>`;
+            break;
         case "open-notification-settings":
             appendDOMString = `
         <div class="row w-100">
@@ -478,30 +513,7 @@ function customSolution(type, parent) {
             ;
             break;
     }//pre-append
-    parent.append(appendDOMString);
-    switch (type) {//after-append
-        case "autocheck":
-            autoCheckInitializer();
-            break;
-        case "predefined":
-            predefinedInitializer();
-            break;
-        case "task-reservation":
-            reservedInitializer();
-            break;
-        case "personalization-notify-sound":
-            personalizationSoundInitializer();
-            break;
-        case "i18n":
-            languageInitializer();
-            break;
-        case "hotkey":
-            hotkeyInitializer();
-            break;
-        case "locker":
-            lockerInitializer();
-            break;
-    }
+    return appendDOMString;
 }
 
 /*
@@ -793,7 +805,7 @@ function allTimeEndSoundSetting(val) {
 
 //language settings
 function languageInitializer() {
-    for (i in languageList) {
+    for (let i in languageList) {
         $("#i18n").append("\
                     <a class='dropdown-item' href='javascript:languageSetting(\"" + languageList[i] + "\")'>"
             + languageNameList[i] + "</a>");
@@ -810,7 +822,30 @@ function languageSetting(val) {
     ipc.send("relaunch-dialog");
 }
 
-//hotkey
+// theme color
+let themeColorList = store.get("theme-color");
+let colorNameList = [i18n.__("theme-color-rest"), i18n.__("theme-color-work"), i18n.__("theme-color-positive"), i18n.__("theme-color-onlyrest")];
+let JSColor = require("@eastdesire/jscolor");
+
+function colorSet(id) {
+    ipc.send("logger", $("#color-" + id).val());
+    themeColorList[id] = $("#color-" + id).val();
+    store.set("theme-color", themeColorList);
+}
+
+function colorInitializer() {
+    for (let i in themeColorList) {
+        $("#color-box").append("\
+                <div class=\"col-6\">\
+                <label id = \"color-label-" + i + "\" class= \"hotkey-set-label text-muted settings-msg\" ></label>\
+                </div><div class=\"col-6\">\
+            <input id=\"color-" + i + "\" class=\"hotkey-set-input extreme-small\" data-jscolor=\"\" onchange=\"colorSet(" + i + ")\" /></div><br />");
+        $("#color-label-" + i).text(colorNameList[i]);
+        $("#color-" + i).val(themeColorList[i]);
+    }
+}
+
+// hotkey
 let hotkeyTo = "", keyDownGet = "";
 let hotkeyList = store.get("hotkey");
 

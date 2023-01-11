@@ -27,7 +27,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     dockHide = false,
     newWindows = [], displays = null, hasMultiDisplays = null,
     isLoose = false, isForceScreenLock = false, isScreenLocked = false,
-    isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false,
+    isAlarmDialogClosed = true, isShadowless = false, isAlarmTipOn = false, isMaximized = false,
     hasFloating = false, hasExternalTitle = false, hasGotSingleInstanceLock = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
@@ -56,7 +56,7 @@ function createWindow() {
         frame: false,
         backgroundColor: "#fefefe",
         resizable: true,
-        maximizable: false,
+        maximizable: true,
         show: false,
         hasShadow: true,
         webPreferences: {
@@ -118,6 +118,22 @@ function createWindow() {
                 win.setProgressBar(progress);
             }
         }
+    });
+
+    win.on('maximize', () => {
+        isMaximized = true;
+    });
+
+    win.on('enter-full-screen', () => {
+        isMaximized = true;
+    })
+
+    win.on('leave-full-screen', () => {
+        isMaximized = false;
+    })
+
+    win.on('unmaximize', () => {
+        isMaximized = false;
     });
 
     //prevent app-killers for lock mode / focus mode
@@ -399,7 +415,8 @@ app.on('ready', () => {
 
     if (win != null) {
         if (styleCache.has("win-size")) {
-            win.setSize(styleCache.get("win-size").width, styleCache.get("win-size").height);
+            if (styleCache.get("win-size").width < 1000 && styleCache.get("win-size").height < 900)
+                win.setSize(styleCache.get("win-size").width, styleCache.get("win-size").height);
         }
         win.on('resized', () => {
             styleCache.set("win-size", { "width": win.getSize()[0], "height": win.getSize()[1] });
@@ -433,6 +450,7 @@ app.on('ready', () => {
     statisticsInitializer();
 
     hotkeyInit();
+    themeColorInit();
 
     if (store.has("zoom-ratio"))
         ratio = ratioList[store.get("zoom-ratio")];
@@ -713,6 +731,14 @@ function getCustomDialogModeType(mode) {
 }
 
 function customDialog(mode, title, msg, executeAfter) {
+    if (isMaximized) {
+        win.webContents.send("fullscreen-custom-dialog", {
+            title: title,
+            message: msg,
+            executeAfter: executeAfter
+        })
+        return;
+    }
     if (executeAfter == null) executeAfter = "";
     if (mode === "on" || mode === "select_on" || mode === "update_on") {
         customDialogWin.webContents.send("dialog-init", {
@@ -774,6 +800,18 @@ function theThemeHasChanged() {
             }
             if (customDialogWin != null) customDialogWin.setBackgroundColor('#fefefe');
         }
+    }
+}
+
+function themeColorInit() {
+    const defaultColors = [
+        "#5490ea",
+        "#ea5454",
+        "#17a2b8",
+        "#a26ae5"
+    ];
+    if (!store.has("theme-color")) {
+        store.set("theme-color", defaultColors);
     }
 }
 
@@ -1554,7 +1592,7 @@ function noCheckTimeSolution(mode) {
         }
         if (dockHide) app.dock.hide();
     }
-    win.maximizable = false;
+    //win.maximizable = false;
 }
 
 function timeEndDialogDispose(mode) {
@@ -1596,7 +1634,7 @@ ipcMain.on('warning-giver-workend', function () {
 
     fullScreenProtection = false;
     if (win != null) {
-        win.maximizable = false;
+        //win.maximizable = false;
         isWorkMode = false;
         if (restTimeFocused === true) {
             focusSolution();
@@ -1612,7 +1650,7 @@ ipcMain.on('warning-giver-workend', function () {
         if (store.get("no-check-work-time-end")) {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
-        } else if (!restTimeFocused) {
+        } else if (!restTimeFocused && !isMaximized) {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1]
@@ -1635,7 +1673,7 @@ ipcMain.on('warning-giver-restend', function () {
 
     fullScreenProtection = false;
     if (win != null) {
-        win.maximizable = false;
+        //win.maximizable = false;
         isWorkMode = true;
         if (workTimeFocused === true) {
             focusSolution();
@@ -1650,7 +1688,7 @@ ipcMain.on('warning-giver-restend', function () {
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
-        } else if (!workTimeFocused) {
+        } else if (!workTimeFocused && !isMaximized) {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1]
@@ -1673,7 +1711,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
 
     fullScreenProtection = false;
     if (win != null) {
-        win.maximizable = false;
+        //win.maximizable = false;
         isWorkMode = false;
         win.show();
         win.center();
@@ -1695,7 +1733,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
                 personal[1], "normal");
         }
         if (store.get("no-check-time-end")) {
-            win.maximizable = false;
+            //win.maximizable = false;
             if (store.get("top") !== true) {
                 win.setAlwaysOnTop(false);//cancel unnecessary always-on-top
                 win.moveTop();
@@ -1711,7 +1749,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
                 customDialog("on", personal[0], personal[1],
                     "win.loadFile('index.html');\n" +
                     "setFullScreenMode(false);\n" +
-                    "win.maximizable = false;\n" +
+                    //"win.maximizable = false;\n" +
                     "if (store.get(\"top\") !== true) {\n" +
                     "   win.setAlwaysOnTop(false);//cancel unnecessary always-on-top\n" +
                     "   win.moveTop(); }\n" +
@@ -1815,6 +1853,13 @@ ipcMain.on('window-hide', function () {
 
 ipcMain.on('window-minimize', function () {
     if (win != null) win.minimize()
+})
+
+ipcMain.on('window-maximize', function () {
+    if (win != null) {
+        if (isMaximized) win.unmaximize();
+        else win.maximize();
+    }
 })
 
 ipcMain.on('enter-only-rest', function () {
@@ -2221,7 +2266,7 @@ ipcMain.on("tray-time-set", function (event, message) {
         if (process.platform === "darwin") {
             if (timeLeftOnBar != null) timeLeftOnBar.label = trayTimeMsg;
             if (tray != null) tray.setTitle(" " + trayTimeMsg);
-            if (win != null) win.maximizable = false;
+            //if (win != null) win.maximizable = false;
         }
     } else tray.setTitle("");
 });
@@ -2239,7 +2284,7 @@ ipcMain.on("logger", function (event, message) {
 })
 
 ipcMain.on("timer-win", function (event, message) {
-    if (win != null) win.maximizable = false;
+    //if (win != null) win.maximizable = false;
 
     if (message) {
         isDarkMode();

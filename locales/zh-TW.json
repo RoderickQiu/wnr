@@ -29,6 +29,7 @@
 	"settings" : "設置",
 	"info" : "關於 wnr",
 	"window-hide" : "隱藏至托盤菜單",
+	"window-max" : "最大化窗口",
 	"window-minimize" : "最小化至任務欄",
 	"title" : "任務名稱是什麼？",
 	"work-time" : "先工作多少時間？",
@@ -367,5 +368,10 @@
 	"dropdown-every3" : "每三次",
 	"dropdown-every4" : "每四次",
 	"dropdown-every5" : "每五次",
-	"dropdown-every6" : "每六次"
+	"dropdown-every6" : "每六次",
+	"theme-color" : "自定義主題顏色",
+	"theme-color-work" : "工作（默認紅色）：",
+	"theme-color-rest" : "休息（默認藍色）：",
+	"theme-color-onlyrest" : "單純計時（默認紫色）：",
+	"theme-color-positive" : "正計時（默認綠色）："
 }
