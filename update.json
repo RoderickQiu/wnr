@@ -1,21 +1,18 @@
 {
-	"version" : "1.28.0",
+	"version" : "1.28.1",
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"新增了对窗口最大化的支持，这种介于全屏专心与普通计时之间的模式将带来更大的方便。",
-			"新增了在设置中自定义工作、休息等的主题颜色的功能。",
-			"修复了几个小问题。"
+			"对 Windows 系统，增加了任务栏图标上直接显示剩余时间的功能，并优化了任务栏显示。",
+			"修复了几个小问题，并升级软件依赖项到最新版本。"
 		],
 		"zh-TW" : [
-			"新增了對窗口最大化的支持，這種介於全屏專心與普通計時之間的模式將帶來更大的方便。",
-			"新增了在設置中自定義工作、休息等的主題顏色的功能。",
-			"修復了幾個小問題。"
+			"對 Windows 系統，增加了任務欄圖標上直接顯示剩余時間的功能，並優化了任務欄顯示。",
+			"修復了幾個小問題，並升級軟件依賴項到最新版本。"
 		],
 		"en" : [
-			"New feature: maximizable window.",
-			"New feature: new setting about customizing theme colors. ",
-			"Several bugs fixed."
+			"New feature: show remaining time directly on the taskbar icon for Windows.",
+			"Fixed several bugs, and updated the dependencies."
 		]
 	},
 	"introduce" : {
