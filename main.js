@@ -1,7 +1,7 @@
 const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, nativeTheme, screen, TouchBar, Notification
+    powerMonitor, nativeTheme, screen, TouchBar, Notification, nativeImage
 }
     = require('electron');
 const Store = require('electron-store');
@@ -2249,8 +2249,22 @@ ipcMain.on('tray-image-change', function (event, message) {
 })
 
 ipcMain.on("progress-bar-set", function (event, message) {
-    progress = 1 - message;
-    if (win != null) win.setProgressBar(progress);
+    progress = 1 - message.progress;
+    if (win != null) {
+        if (isWorkMode)
+            win.setProgressBar(1 - progress, { mode: "error" });
+        else
+            win.setProgressBar(1 - progress);
+
+        if (process.platform === "win32") {
+            win.setOverlayIcon(nativeImage.createFromPath(path.join(__dirname, '\\res\\icons\\overlay\\'
+                + (message.remain <= 60 ? message.remain : 61) + '.png')), progress.toString());
+            if (message.positive)
+                win.setTitle("wnr | " + i18n.__('min-already') + " " + message.remain + " " + i18n.__('min'));
+            else
+                win.setTitle("wnr | " + i18n.__('min-left') + " " + message.remain + " " + i18n.__('min'));
+        }
+    }
 })
 
 ipcMain.on("tray-time-set", function (event, message) {
@@ -2304,6 +2318,10 @@ ipcMain.on("timer-win", function (event, message) {
         if (win != null) {
             win.focus();
             win.setProgressBar(-1);
+        }
+        if (process.platform === "win32" && win != null) {
+            win.setOverlayIcon(null, "");
+            win.setTitle("wnr");
         }
         if (externalTitleWin != null) externalTitleWin.close();
 

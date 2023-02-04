@@ -12,6 +12,7 @@
 		"linux" : "cross-env NODE_ENV=production node ./res/builder/linux.js",
 		"appimage" : "cross-env NODE_ENV=production node ./res/builder/appimage.js",
 		"dir" : "cross-env NODE_ENV=production node ./res/builder/dir_test.js",
+		"win-dir" : "cross-env NODE_ENV=production node ./res/builder/win_dir.js",
 		"ms-store" : "cross-env NODE_ENV=msstore node ./res/builder/dir_test.js"
 	},
 	"repository" : {

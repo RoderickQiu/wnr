@@ -564,6 +564,8 @@
                     lastRecordedHoursLeft = -1,
                     systemName = process.platform,
                     progress = 0.00,
+                    remainMinutes = 0,
+                    lastRecordedRemain = 0,
                     lastRecordedProgress = 0.00,
                     wasCounting = true,
                     shouldNap,
@@ -595,7 +597,6 @@
             } else {
                 startTime = new Date().getTime();
                 int = setInterval(positive, 250);
-                ipc.send("progress-bar-set", 2);
                 $("#infinity-label").css("display", "none");
             }
 
@@ -879,7 +880,11 @@
                 isClockWorking = 0;
                 $("#stopper").text("");
                 $bottomBar.css("width", "0%");
-                ipc.send("progress-bar-set", 2);//the progress-bar-set is using (1-message), so when message is 2, the answer is -1
+                ipc.send("progress-bar-set", {
+                    progress: -1,
+                    remain: 0,
+                    positive: false
+                });
                 if (systemName !== "darwin") $("#controller").css("display", "block");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
@@ -1002,6 +1007,11 @@
                         min: minutes,
                         positive: true
                     });
+                    ipc.send("progress-bar-set", {
+                        progress: -1,
+                        remain: hours * 60 + minutes,
+                        positive: true
+                    });
                 }
 
                 seconds -= hours * 3600 + minutes * 60;
@@ -1038,11 +1048,30 @@
 
                     hours = Math.floor(seconds / 3600);
                     minutes = Math.floor((seconds - hours * 3600) / 60);
+                    remainMinutes = hours * 60 + minutes;
+
+                    if (remainMinutes !== lastRecordedRemain) {
+                        lastRecordedRemain = remainMinutes;
+                        ipc.send("progress-bar-set", {
+                            progress: progress,
+                            remain: minutes + hours * 60,
+                            positive: false
+                        });
+                        ipc.send("tray-time-set", {
+                            h: hours,
+                            min: minutes,
+                            positive: false
+                        });
+                    }
 
                     if (progress !== lastRecordedProgress) {
                         lastRecordedProgress = progress;
                         naturalProgress = Math.round(lastRecordedProgress * 100);
-                        ipc.send("progress-bar-set", progress);
+                        ipc.send("progress-bar-set", {
+                            progress: progress,
+                            remain: minutes + hours * 60,
+                            positive: false
+                        });
                         if (hasFloating) ipc.send("floating-conversation", {
                             topic: "time-left",
                             val: Math.floor(seconds / 60),
@@ -1051,12 +1080,6 @@
                             isWorking: isClockWorking
                         });
                         $bottomBar.css("width", naturalProgress + "%");
-
-                        ipc.send("tray-time-set", {
-                            h: hours,
-                            min: minutes,
-                            positive: false
-                        });
                     }
 
                     seconds -= hours * 3600 + minutes * 60;
