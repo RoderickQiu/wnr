@@ -30,16 +30,16 @@
 	"productName" : "wnr",
 	"dependencies" : {
 		"@eastdesire/jscolor" : "2.5.1",
-		"@electron/remote" : "2.0.8",
+		"@electron/remote" : "2.0.9",
 		"bootstrap" : "4.6.1",
 		"cmd-or-ctrl" : "0.3.1",
 		"compare-version" : "0.1.2",
-		"copy-to-clipboard" : "3.3.1",
+		"copy-to-clipboard" : "3.3.3",
 		"crypto-js" : "4.1.1",
 		"electron-debug" : "3.2.0",
-		"electron-store" : "8.0.2",
-		"i18n" : "0.15.0",
-		"jquery" : "3.6.0",
+		"electron-store" : "8.1.0",
+		"i18n" : "0.15.1",
+		"jquery" : "3.6.3",
 		"node-fetch" : "2.6.7",
 		"node-notifier" : "10.0.1",
 		"node-shi" : "0.4.2",
@@ -49,7 +49,7 @@
 	},
 	"devDependencies" : {
 		"cross-env" : "7.0.3",
-		"electron" : "18.3.5",
+		"electron" : "22.2.0",
 		"electron-builder" : "23.0.3"
 	}
 }
