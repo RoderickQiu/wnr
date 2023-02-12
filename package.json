@@ -1,6 +1,6 @@
 {
-	"name" : "wnr",
-	"version" : "1.28.1",
+	"name" : "wnr-2nd",
+	"version" : "1.28.1-2nd",
 	"description" : "Work and rest, with wnr now!",
 	"main" : "main.js",
 	"scripts" : {
@@ -22,12 +22,12 @@
 	"author" : "RoderickQiu",
 	"license" : "MPL-2.0",
 	"homepage" : "https://getwnr.com",
-	"appId" : "com.scrisstudio.wnr",
+	"appId" : "com.scrisstudio.wnr2nd",
 	"build" : {
-		"appId" : "com.scrisstudio.wnr"
+		"appId" : "com.scrisstudio.wnr2nd"
 	},
 	"copyright" : "(c) Roderick Qiu",
-	"productName" : "wnr",
+	"productName" : "wnr-2nd",
 	"dependencies" : {
 		"@eastdesire/jscolor" : "2.5.1",
 		"@electron/remote" : "2.0.9",

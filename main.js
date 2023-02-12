@@ -44,7 +44,7 @@ app.commandLine.appendSwitch('autoplay-policy', 'no-user-gesture-required')//to 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this meaningless alert
 
 //use native notification, declare package.json/build/appId beforehand
-app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr'));
+app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr2nd'));
 
 function createWindow() {
     //create the main window
