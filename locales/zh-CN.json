@@ -373,5 +373,7 @@
 	"theme-color-work" : "工作（默认红色）：",
 	"theme-color-rest" : "休息（默认蓝色）：",
 	"theme-color-onlyrest" : "单纯计时（默认紫色）：",
-	"theme-color-positive" : "正计时（默认绿色）："
+	"theme-color-positive" : "正计时（默认绿色）：",
+	"autostarttask" : "自动开始默认预设",
+	"autostarttask-tip" : "当设置了默认预设且开启了此选项后，将在每次打开 wnr 软件时自动开始默认预设的计时，以提升强力水平。"
 }

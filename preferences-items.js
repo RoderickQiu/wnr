@@ -15,13 +15,13 @@ if (store.get("islocked") !== true) {
                 }
             ],
         }, {
+            type: "selection",
+            id: "autostarttask"
+        }, {
             type: "collapse",
             id: "task-reservation",
             inner: [
                 {
-                    type: "title",
-                    id: "task-reservation-not-stable"
-                }, {
                     type: "task-reservation"
                 }
             ]
