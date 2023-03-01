@@ -1065,7 +1065,13 @@ function traySolution(isFullScreen) {
                 label: i18n.__('mini-mode'),
                 enabled: isTimerWin,
                 click: function () {
-                    if (win != null) win.webContents.send("remote-control-msg", "enter");
+                    if (win != null) win.webContents.send("remote-control-msg", "enter")
+                }
+            }, {
+                label: i18n.__('withdraw-timing'),
+                enabled: isTimerWin,
+                click: function () {
+                    if (win != null) win.webContents.send('remote-control-msg', 'back')
                 }
             }, {
                 type: 'separator'

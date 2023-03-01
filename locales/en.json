@@ -380,5 +380,7 @@
 	"theme-color-onlyrest" : "Simple Ctdn. (default purple): ",
 	"theme-color-positive" : "Stopwatch (default green): ",
 	"autostarttask" : "Auto start default task",
-	"autostarttask-tip" : "When a default task is set and this setting is on, wnr will automatically start the default task every time this app is opened. "
+	"autostarttask-tip" : "When a default task is set and this setting is on, wnr will automatically start the default task every time this app is opened. ",
+	"withdraw-timing": "Withdraw timing",
+	"fail-to-withdraw": "You cannot withdraw timing currently. "
 }
