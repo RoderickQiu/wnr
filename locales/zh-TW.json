@@ -89,7 +89,7 @@
 	"resting" : "休息",
 	"longresting" : "長休息",
 	"looping" : "循環",
-	"time-left" : "% 剩餘",
+	"time-left" : "剩",
 	"add" : "添加",
 	"delete" : "刪除",
 	"predefined-tasks-settings" : "預設設置",
@@ -377,5 +377,6 @@
 	"autostarttask" : "自動開始默認預設",
 	"autostarttask-tip" : "當設置了默認預設且開啟了此選項後，將在每次打開 wnr 軟件時自動開始默認預設的計時，以提升強力水平。",
 	"withdraw-timing": "提前退出計時",
-	"fail-to-withdraw": "當前不能提前退出。"
+	"fail-to-withdraw": "當前不能提前退出。",
+	"today-total": "今日 "
 }

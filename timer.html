@@ -1006,14 +1006,14 @@
 
                 if (lastTimePositiveMinutes !== minutes) {
                     lastTimePositiveMinutes = minutes;
-                    ipc.send("tray-time-set", {
-                        h: hours,
-                        min: minutes,
-                        positive: true
-                    });
                     ipc.send("progress-bar-set", {
                         progress: -1,
                         remain: hours * 60 + minutes,
+                        positive: true
+                    });
+                    ipc.send("tray-time-set", {
+                        h: hours,
+                        min: minutes,
                         positive: true
                     });
                 }

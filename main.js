@@ -31,6 +31,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     hasFloating = false, hasExternalTitle = false, hasGotSingleInstanceLock = false,
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
+    estimCurrent = 0, todaySum = 0,
     store = null, styleCache = null, statistics = null, timingData = null,
     personalizationNotificationList = [[], [], [], [], [], []];
 
@@ -1502,6 +1503,8 @@ function statisticsWriter() {
             });
         }
     }
+
+    todaySum = statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0;
 }
 
 function statisticsPauseDealer(startOrStop) {
@@ -2246,10 +2249,14 @@ ipcMain.on('tray-image-change', function (event, message) {
     if (tray != null) {
         if (message === "stop") {
             if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
-            else tray.setTitle(" " + i18n.__('stopped'));
+            tray.setTitle(" " + i18n.__('stopped'));
         } else {
             if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-            else tray.setTitle(" " + (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + (100 - progress * 100) + timeLeftTip);
+            if (!isPositiveTiming)
+                tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + timeLeftTip + " " + Math.floor(100 - progress * 100) + "% | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
+            else {
+                tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
+            }
         }
     }
 })
@@ -2262,13 +2269,18 @@ ipcMain.on("progress-bar-set", function (event, message) {
         else
             win.setProgressBar(1 - progress);
 
+        estimCurrent =
+            progress !== -1 ? Math.round(message.remain / (1 - progress)) - message.remain : message.remain;
+        todaySum = statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0;
+
+
         if (process.platform === "win32") {
             win.setOverlayIcon(nativeImage.createFromPath(path.join(__dirname, '\\res\\icons\\overlay\\'
                 + (message.remain <= 60 ? message.remain : 61) + '.png')), progress.toString());
             if (message.positive)
-                win.setTitle("wnr | " + i18n.__('min-already') + " " + message.remain + " " + i18n.__('min'));
+                win.setTitle("wnr | " + i18n.__('min-already') + " " + message.remain + " " + i18n.__('min') + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
             else
-                win.setTitle("wnr | " + i18n.__('min-left') + " " + message.remain + " " + i18n.__('min'));
+                win.setTitle("wnr | " + i18n.__('min-left') + " " + message.remain + " " + i18n.__('min') + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
         }
     }
 })
@@ -2278,9 +2290,9 @@ ipcMain.on("tray-time-set", function (event, message) {
         trayH = message.h;
         trayMin = message.min;
         if (message.positive === false)
-            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + Math.floor(100 - progress * 100) + timeLeftTip;
+            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + timeLeftTip + " " + Math.floor(100 - progress * 100) + "% | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min');
         else {
-            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip;
+            trayTimeMsg = (trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min');
         }
 
         if (tray != null) tray.setToolTip(trayTimeMsg);

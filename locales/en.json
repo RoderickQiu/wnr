@@ -90,7 +90,7 @@
 	"resting" : "REST FOR",
 	"longresting" : "LONG BREAK FOR",
 	"looping" : "LOOP FOR",
-	"time-left" : "% Left",
+	"time-left" : "Left",
 	"add" : "Add",
 	"delete" : "Delete",
 	"predefined-tasks-settings" : "Predefined Plans",
@@ -382,5 +382,6 @@
 	"autostarttask" : "Auto start default task",
 	"autostarttask-tip" : "When a default task is set and this setting is on, wnr will automatically start the default task every time this app is opened. ",
 	"withdraw-timing": "Withdraw timing",
-	"fail-to-withdraw": "You cannot withdraw timing currently. "
+	"fail-to-withdraw": "You cannot withdraw timing currently. ",
+	"today-total": "today "
 }
