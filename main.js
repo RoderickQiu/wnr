@@ -17,7 +17,7 @@ const winReleaseId = require('win-release-id');
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
     customDialogWin = null, tray = null, contextMenu = null, settingsWinContextMenu = null,
     resetAlarm = null, powerSaveBlockerId = null, sleepBlockerId = null,
-    isTimerWin = null, isWorkMode = null, isChinese = null, isFocused = true,
+    isTimerWin = null, isWorkMode = null, isChinese = null, isFocused = true, isFullscreenMode = false,
     isOnlyRest = false, isPositiveTiming = false,
     timeLeftTip = null, positiveTimingTip = null, trayTimeMsg = null, predefinedTasks = null,
     trayH = null, trayMin = null,
@@ -586,6 +586,7 @@ app.on('ready', () => {
         console.log(e);
     }
     traySolution(false);
+    isFullscreenMode = false;
     macOSFullscreenSolution(false);
     isDarkMode();
     settingsWinContextMenuSolution();
@@ -1000,18 +1001,39 @@ function traySolution(isFullScreen) {
             }, {
                 type: 'separator'
             }, {
+                label: i18n.__('statistics'),
+                type: 'submenu',
+                submenu: [{
+                    enabled: !isTimerWin,
+                    label: i18n.__('statistics-enter'),
+                    click: function () {
+                        if (win != null) win.loadFile('statistics.html');
+                        if (process.platform === "darwin" && win != null) win.show();
+                    }
+                }, {
+                    label: i18n.__('statistics-work-time') + " " + statistics.get(yearMonDay).workTime + " " + i18n.__('min'),
+                    visible: statistics.get(yearMonDay).workTime > 0
+                }, {
+                    label: i18n.__('statistics-rest-time') + " " + statistics.get(yearMonDay).restTime + " " + i18n.__('min'),
+                    visible: statistics.get(yearMonDay).restTime > 0,
+                }, {
+                    label: i18n.__('onlyrest') + " " + statistics.get(yearMonDay).onlyRest + " " + i18n.__('min'),
+                    visible: statistics.get(yearMonDay).onlyRest > 0,
+                }, {
+                    label: i18n.__('positive') + " " + statistics.get(yearMonDay).positive + " " + i18n.__('min'),
+                    visible: statistics.get(yearMonDay).positive > 0
+                }, {
+                    label: i18n.__('statistics-time-sum') + " " + statistics.get(yearMonDay).sum + " " + i18n.__('min'),
+                    visible: statistics.get(yearMonDay).sum > 0,
+                }],
+            }, {
+                type: 'separator'
+            }, {
                 enabled: !isTimerWin,
                 label: i18n.__('locker-mode'),
                 click: function () {
                     if (process.platform === "darwin" && win != null) win.show();
                     locker();
-                }
-            }, {
-                enabled: !isTimerWin,
-                label: i18n.__('statistics'),
-                click: function () {
-                    if (win != null) win.loadFile('statistics.html');
-                    if (process.platform === "darwin" && win != null) win.show();
                 }
             }, {
                 enabled: (!store.get('islocked')) && (!isTimerWin),
@@ -1399,6 +1421,13 @@ function statisticsInitializer() {
     statistics.set("year", year);
     statistics.set("mon", months[tempDate.getMonth()]);
     statistics.set("day", tempDate.getDate().toString());
+    statistics.set(yearMonDay, {
+        "workTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : 0,
+        "restTime": statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : 0,
+        "positive": statistics.has(yearMonDay) ? statistics.get(yearMonDay).positive : 0,
+        "onlyRest": statistics.has(yearMonDay) ? statistics.get(yearMonDay).onlyRest : 0,
+        "sum": statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0
+    });
 }
 
 function statisticsWriter() {
@@ -1513,6 +1542,7 @@ function statisticsPauseDealer(startOrStop) {
         recorderDate = tempDate;
     } else {
         statisticsWriter();
+        traySolution(isFullscreenMode);
     }
 }
 
@@ -1546,6 +1576,7 @@ function focusSolution() {
     setFullScreenMode(true);
     macOSFullscreenSolution(true);
     traySolution(true);
+    isFullscreenMode = true;
     if ((process.env.NODE_ENV !== "development") && (!isLoose)) win.setFocusable(false);
     if (sleepBlockerId) {
         if (!powerSaveBlocker.isStarted(sleepBlockerId)) {
@@ -1564,6 +1595,7 @@ function nonFocusSolution(mode) {
         setFullScreenMode(false);
         macOSFullscreenSolution(false);
         traySolution(false);
+        isFullscreenMode = false;
         win.setFocusable(true);
         if (sleepBlockerId) {
             if (powerSaveBlocker.isStarted(sleepBlockerId)) {
@@ -1671,6 +1703,8 @@ ipcMain.on('warning-giver-workend', function () {
             }, 1500)
         }
     }
+
+    traySolution(isFullscreenMode);
 })
 
 ipcMain.on('warning-giver-restend', function () {
@@ -1709,6 +1743,8 @@ ipcMain.on('warning-giver-restend', function () {
             }, 1500)
         }
     }
+
+    traySolution(isFullscreenMode);
 })
 
 ipcMain.on('warning-giver-all-task-end', function () {
@@ -1730,6 +1766,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
             setFullScreenMode(false);
             macOSFullscreenSolution(false);
             traySolution(false);
+            isFullscreenMode = false;
             win.setFocusable(true);
         }
         let personal = personliazationNotificationSolution(4);
@@ -1765,6 +1802,8 @@ ipcMain.on('warning-giver-all-task-end', function () {
             }, 1000);
         }
     }
+
+    traySolution(isFullscreenMode);
 })
 
 ipcMain.on('update-feedback', function (event, message) {

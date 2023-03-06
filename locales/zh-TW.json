@@ -378,5 +378,6 @@
 	"autostarttask-tip" : "當設置了默認預設且開啟了此選項後，將在每次打開 wnr 軟件時自動開始默認預設的計時，以提升強力水平。",
 	"withdraw-timing": "提前退出計時",
 	"fail-to-withdraw": "當前不能提前退出。",
+	"statistics-enter": "進入統計界面",
 	"today-total": "今日 "
 }
