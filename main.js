@@ -1011,20 +1011,16 @@ function traySolution(isFullScreen) {
                         if (process.platform === "darwin" && win != null) win.show();
                     }
                 }, {
-                    label: i18n.__('statistics-work-time') + " " + statistics.get(yearMonDay).workTime + " " + i18n.__('min'),
-                    visible: statistics.get(yearMonDay).workTime > 0
+                    label: i18n.__('statistics-work-time') + " " + statistics.get(yearMonDay).workTime + " " + i18n.__('min')
                 }, {
-                    label: i18n.__('statistics-rest-time') + " " + statistics.get(yearMonDay).restTime + " " + i18n.__('min'),
-                    visible: statistics.get(yearMonDay).restTime > 0,
+                    label: i18n.__('statistics-rest-time') + " " + statistics.get(yearMonDay).restTime + " " + i18n.__('min')
                 }, {
-                    label: i18n.__('onlyrest') + " " + statistics.get(yearMonDay).onlyRest + " " + i18n.__('min'),
-                    visible: statistics.get(yearMonDay).onlyRest > 0,
+                    label: i18n.__('onlyrest') + " " + statistics.get(yearMonDay).onlyRest + " " + i18n.__('min')
                 }, {
-                    label: i18n.__('positive') + " " + statistics.get(yearMonDay).positive + " " + i18n.__('min'),
-                    visible: statistics.get(yearMonDay).positive > 0
+                    label: i18n.__('positive') + " " + statistics.get(yearMonDay).positive + " " + i18n.__('min')
                 }, {
-                    label: i18n.__('statistics-time-sum') + " " + statistics.get(yearMonDay).sum + " " + i18n.__('min'),
-                    visible: statistics.get(yearMonDay).sum > 0,
+                    label: i18n.__('statistics-time-sum') + " " + statistics.get(yearMonDay).sum + " "
+                        + i18n.__('min')
                 }],
             }, {
                 type: 'separator'

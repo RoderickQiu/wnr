@@ -1,18 +1,18 @@
 {
-	"version" : "1.28.1",
+	"version" : "1.29.0",
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"对 Windows 系统，增加了任务栏图标上直接显示剩余时间的功能，并优化了任务栏显示。",
-			"修复了几个小问题，并升级软件依赖项到最新版本。"
+			"新增了开启软件时自动开启默认任务的功能。",
+			"优化了托盘菜单的功能，允许直接在其中查看当天计时和直接取消计时。"
 		],
 		"zh-TW" : [
-			"對 Windows 系統，增加了任務欄圖標上直接顯示剩余時間的功能，並優化了任務欄顯示。",
-			"修復了幾個小問題，並升級軟件依賴項到最新版本。"
+			"新增了開啟軟件時自動開啟默認任務的功能。",
+			"優化了托盤菜單的功能，允許直接在其中查看當天計時和直接取消計時。"
 		],
 		"en" : [
-			"New feature: show remaining time directly on the taskbar icon for Windows.",
-			"Fixed several bugs, and updated the dependencies."
+			"New feature: auto start default task when starting wnr.",
+			"New feature: better tray menu, allowing directly see today's statistics and cancel timing."
 		]
 	},
 	"introduce" : {
