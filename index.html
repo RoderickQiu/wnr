@@ -639,7 +639,7 @@
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
                 if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
-                        (!store.get("just-relaunched")) && (store.get("reserved-cnt") === 0)) {//auto-send the form is autostarttask is on
+                        (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on
                     if (item.focusWhenWorking && item.focusWhenResting)
                         ipc.send("alert", i18n.__('all-focus-mode-warn'));
                     else
