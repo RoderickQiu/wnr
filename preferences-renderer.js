@@ -25,7 +25,7 @@ function titleSolution(obj, parent) {
     parent.append(`
     <div class="row w-100 align-items-center">
         <div class="col-12">
-            <small class="text-grey">${ i18n.__(id) }</small>
+            <small class="text-grey settings-title">${ i18n.__(id) }</small>
         </div>
     </div>
     <br />
