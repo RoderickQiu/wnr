@@ -313,8 +313,8 @@
                         setTimeout(function () {
                             ipc.send("floating-conversation", {
                                 topic: "time-left",
-                                val: Math.floor((((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
-                                        (times === 0 ? firstTimeDiscount : 0)) / 60000),
+                                val: (((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                        (times === 0 ? firstTimeDiscount : 0)) / 60000,
                                 percentage: Math.round(lastRecordedProgress * 100),
                                 method: method,
                                 isWorking: isClockWorking
@@ -325,7 +325,7 @@
                         setTimeout(function () {
                             ipc.send("floating-conversation", {
                                 topic: "time-left",
-                                val: Math.floor(seconds / 60),
+                                val: seconds / 60,
                                 percentage: 0,
                                 method: 3,
                                 isWorking: isClockWorking
@@ -566,6 +566,7 @@
                     progress = 0.00,
                     remainMinutes = 0,
                     lastRecordedRemain = 0,
+                    lastRecordedSecond = 0,
                     lastRecordedProgress = 0.00,
                     wasCounting = true,
                     shouldNap,
@@ -998,7 +999,7 @@
 
                 if (hasFloating) ipc.send("floating-conversation", {
                     topic: "time-left",
-                    val: Math.floor(seconds / 60),
+                    val: seconds / 60,
                     percentage: 0,
                     method: 3,
                     isWorking: isClockWorking
@@ -1054,6 +1055,17 @@
                     minutes = Math.floor((seconds - hours * 3600) / 60);
                     remainMinutes = hours * 60 + minutes;
 
+                    if (hours === 0 && minutes === 0 && (lastRecordedSecond !== seconds)) {
+                        lastRecordedSecond = seconds;
+                        if (hasFloating) ipc.send("floating-conversation", {
+                            topic: "time-left",
+                            val: seconds / 60,
+                            percentage: naturalProgress,
+                            method: method,
+                            isWorking: isClockWorking
+                        });
+                    }
+
                     if (remainMinutes !== lastRecordedRemain) {
                         lastRecordedRemain = remainMinutes;
                         ipc.send("progress-bar-set", {
@@ -1078,7 +1090,7 @@
                         });
                         if (hasFloating) ipc.send("floating-conversation", {
                             topic: "time-left",
-                            val: Math.floor(seconds / 60),
+                            val: seconds / 60,
                             percentage: naturalProgress,
                             method: method,
                             isWorking: isClockWorking

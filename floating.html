@@ -100,7 +100,7 @@
 
         let timeLeft = $("#time-left"), floatingBottomBar = $('#floating-bottom-bar');
         let lastTimeHasHours = null;
-        let h = " " + i18n.__("h"), min = " " + i18n.__("min");
+        let h = " " + i18n.__("h"), min = " " + i18n.__("min"), s = " " + i18n.__("s");
 
         function getStyledTimeLeft(minute) {
             if (lastTimeHasHours == null) {
@@ -124,8 +124,8 @@
                     timeLeft.addClass("h4");
                     lastTimeHasHours = false;
                 }
-                if (minute === 0) return "<1" + min;
-                return minute + min;
+                if (Math.floor(minute) === 0) return Math.floor(minute * 60) + s;
+                return Math.floor(minute) + min;
             }
         }
 
