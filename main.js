@@ -971,6 +971,15 @@ function notificationSolution(title, body, func) {
     }
 }
 
+function getStyledTimeForTray(minute) {
+    minute = Number(minute);
+    if (minute <= 60)
+        return minute + " " + i18n.__("min");
+    else
+        return Math.floor(minute / 60) + " " + i18n.__("h") +
+            (minute - Math.floor(minute / 60) * 60) + i18n.__("min");
+}
+
 function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (tray != null) {
@@ -1011,16 +1020,20 @@ function traySolution(isFullScreen) {
                         if (process.platform === "darwin" && win != null) win.show();
                     }
                 }, {
-                    label: i18n.__('statistics-work-time') + " " + statistics.get(yearMonDay).workTime + " " + i18n.__('min')
+                    label: i18n.__('statistics-work-time') + " "
+                        + getStyledTimeForTray(statistics.get(yearMonDay).workTime)
                 }, {
-                    label: i18n.__('statistics-rest-time') + " " + statistics.get(yearMonDay).restTime + " " + i18n.__('min')
+                    label: i18n.__('statistics-rest-time') + " "
+                        + getStyledTimeForTray(statistics.get(yearMonDay).restTime)
                 }, {
-                    label: i18n.__('onlyrest') + " " + statistics.get(yearMonDay).onlyRest + " " + i18n.__('min')
+                    label: i18n.__('onlyrest') + " "
+                        + getStyledTimeForTray(statistics.get(yearMonDay).onlyRest)
                 }, {
-                    label: i18n.__('positive') + " " + statistics.get(yearMonDay).positive + " " + i18n.__('min')
+                    label: i18n.__('positive') + " "
+                        + getStyledTimeForTray(statistics.get(yearMonDay).positive)
                 }, {
-                    label: i18n.__('statistics-time-sum') + " " + statistics.get(yearMonDay).sum + " "
-                        + i18n.__('min')
+                    label: i18n.__('statistics-time-sum') + " "
+                        + getStyledTimeForTray(statistics.get(yearMonDay).sum)
                 }],
             }, {
                 type: 'separator'
@@ -2304,9 +2317,14 @@ ipcMain.on("progress-bar-set", function (event, message) {
         else
             win.setProgressBar(1 - progress);
 
-        estimCurrent =
-            progress !== -1 ? Math.round(message.remain / (1 - progress)) - message.remain : message.remain;
+        if (!message.positive)
+            estimCurrent = progress !== -1 ?
+                Math.round(message.remain / (1 - progress)) - message.remain : message.remain;
+        else
+            estimCurrent = message.remain;
         todaySum = statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0;
+        console.log(message.remain)
+        console.log(estimCurrent)
 
 
         if (process.platform === "win32") {
