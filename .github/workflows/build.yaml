@@ -20,11 +20,9 @@ jobs :
         run : npm run 7zip
       - uses : actions/upload-artifact@v2
         with :
+          name: windows
           path : |
-            packaged/wnr-*-Setup-x64.exe
-            packaged/wnr-*-Setup-ia32.exe
-            packaged/wnr-*-Win-x64.7z
-            packaged/wnr-*-Win-ia32.7z
+            packaged/wnr*
 
   build-macos :
     runs-on : macos-latest
@@ -40,9 +38,9 @@ jobs :
         run : npm run mac
       - uses : actions/upload-artifact@v2
         with :
+          name: macos
           path : |
-            packaged/wnr-*-MacOS-x64.dmg
-            packaged/wnr-*-MacOS-arm64.dmg
+            packaged/wnr*
 
   build-linux :
     runs-on : ubuntu-latest
@@ -58,4 +56,5 @@ jobs :
         run : npm run appimage
       - uses : actions/upload-artifact@v2
         with :
-          path : packaged/wnr-*-Linux.AppImage
+          name: linux
+          path : packaged/wnr*
