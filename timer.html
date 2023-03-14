@@ -551,6 +551,7 @@
             //method: 1-work / 2-rest, moreThanOneMin: more than 1 min left
             var startTime,
                     int,
+                    pauseInt = null,
                     tempVariable,
                     nowTime,
                     timeGot,
@@ -653,10 +654,23 @@
                 if (stopCounter) $("#stop-count").text(((method === 3 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
             }
 
+            ipc.on("can-redo-exec", function () {
+                window.clearInterval(int);
+                startTime = new Date().getTime();
+                int = setInterval(clock, 250);
+                $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+                isClockWorking = 1;//to restart
+                ipc.send("tray-image-change", "start");
+                if (pausingTimeout) window.clearInterval(pausingTimeout);
+            });
+
             function stopper() {
                 wasCounting = !wasCounting;
                 if (isClockWorking) {
                     window.clearInterval(int);
+                    pauseInt = setTimeout(function () {
+                        ipc.send("can-redo-alert");
+                    }, 1000 * 10);
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
@@ -667,6 +681,8 @@
                         });
                     }, 600000);
                 } else {
+                    if (pauseInt != null)
+                        window.clearTimeout(pauseInt);
                     if (methodFromStart !== 3) {
                         if (method === 1) startTime = new Date().getTime() - (workTime - hours * 3600000 - minutes * 60000 - seconds * 1000);
                         else startTime = new Date().getTime() - (restTime - hours * 3600000 - minutes * 60000 - seconds * 1000);

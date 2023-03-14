@@ -384,5 +384,7 @@
 	"withdraw-timing": "Withdraw timing",
 	"fail-to-withdraw": "You cannot withdraw timing currently. ",
 	"statistics-enter": "Enter statistics",
-	"today-total": "Today "
+	"today-total": "Today ",
+	"can-redo-title": "You've been pausing long",
+	"can-redo-msg": "Does that mean you want to restart this period of timing? "
 }

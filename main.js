@@ -1840,6 +1840,12 @@ ipcMain.on('alert', function (event, message) {
     customDialog("on", "wnr", message, "");
 })
 
+ipcMain.on('can-redo-alert', function () {
+    customDialog("off", "", "", "");
+    customDialog("select_on", i18n.__("can-redo-title"), i18n.__("can-redo-msg"),
+        "win.webContents.send('can-redo-exec');");
+})
+
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
         customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "store.clear();statistics.clear();styleCache.clear();timingData.clear();relaunchSolution()");
@@ -2323,8 +2329,6 @@ ipcMain.on("progress-bar-set", function (event, message) {
         else
             estimCurrent = message.remain;
         todaySum = statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0;
-        console.log(message.remain)
-        console.log(estimCurrent)
 
 
         if (process.platform === "win32") {

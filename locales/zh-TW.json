@@ -379,5 +379,7 @@
 	"withdraw-timing": "提前退出計時",
 	"fail-to-withdraw": "當前不能提前退出。",
 	"statistics-enter": "進入統計界面",
-	"today-total": "今日 "
+	"today-total": "今日 ",
+	"can-redo-title": "你已經暫停了很久",
+	"can-redo-msg": "是否需要對當前段時間進行重新計時？"
 }
