@@ -15,7 +15,7 @@ const config = {
         "target": [
             {
                 "target": "7z",
-                "arch": ["x64", "ia32"]
+                "arch": ["x64", "ia32", "arm64"]
             }
         ],
         "icon": "res/icons/iconWin.ico",
