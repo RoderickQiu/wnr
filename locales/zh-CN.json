@@ -376,10 +376,13 @@
 	"theme-color-positive" : "正计时（默认绿色）：",
 	"autostarttask" : "自动开始默认预设",
 	"autostarttask-tip" : "当设置了默认预设且开启了此选项后，将在每次打开 wnr 软件时自动开始默认预设的计时，以提升强力水平。",
-	"withdraw-timing": "提前退出计时",
-	"fail-to-withdraw": "当前不能提前退出。",
-	"statistics-enter": "进入统计界面",
-	"today-total": "今日 ",
-	"can-redo-title": "你已经暂停了很久",
-	"can-redo-msg": "是否需要对当前段时间进行重新计时？"
+	"withdraw-timing" : "提前退出计时",
+	"fail-to-withdraw" : "当前不能提前退出。",
+	"statistics-enter" : "进入统计界面",
+	"today-total" : "今日 ",
+	"can-redo-title" : "你已经暂停了很久",
+	"can-redo-msg" : "是否需要对当前段时间进行重新计时？",
+	"custom" : "自定义",
+	"custom-notify-sound" : "自定义提示音",
+	"input-url" : "输入路径"
 }

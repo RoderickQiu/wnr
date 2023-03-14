@@ -713,9 +713,21 @@
                 let player = document.createElement('audio');
                 amplifyMedia(player, amplifierList[store.get("sound")]);
                 if (isend !== 0) {
-                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                    if (store.get("time-end-sound") !== i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                    else if ((!store.has("custom-work-time-end-sound") || store.get("custom-work-time-end-sound") === "")
+                            && store.get("time-end-sound") === i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\tick.mp3");
+                    else
+                        player.src = store.get("custom-work-time-end-sound");
                 } else {
-                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
+                    if (store.get("all-end-sound") !== i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");
+                    else if ((!store.has("custom-all-time-end-sound") || store.get("custom-all-time-end-sound") === "")
+                            && store.get("all-end-sound") === i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\piano.mp3");
+                    else
+                        player.src = store.get("custom-all-time-end-sound");
                 }
                 player.loop = true;
                 player.play();
@@ -931,7 +943,13 @@
                     //if continueloop then only play once and no other thing
                     let player = document.createElement('audio');
                     amplifyMedia(player, amplifierList[store.get("sound")]);
-                    player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                    if (store.get("time-end-sound") !== i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
+                    else if ((!store.has("custom-work-time-end-sound") || store.get("custom-work-time-end-sound") === "")
+                            && store.get("time-end-sound") === i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\tick.mp3");
+                    else
+                        player.src = store.get("custom-work-time-end-sound");
                     player.loop = false;
                     player.play();
                 } else {

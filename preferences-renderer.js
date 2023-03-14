@@ -384,6 +384,17 @@ function domString(type) {
                 </div>
             </div><br/>
             </div>
+            <div class="col-5 custom-notify-sound-work-time-end">
+            <label>
+                ${ i18n.__("custom-notify-sound") }
+            </label>
+            </div>
+            <div class="col-7 text-right custom-notify-sound-work-time-end">
+            <input id="custom-notify-sound-work-time-end" name="custom-notify-sound-work-time-end"
+                       type="text" class="hotkey-set-input extreme-small text-right" 
+                       placeholder="${ i18n.__('input-url') }"
+                       onkeyup="store.set('custom-work-time-end-sound',$('#custom-notify-sound-work-time-end').val());" />
+            </div><br/>
             <div class="col-7">
             <label>
                 ${ i18n.__("personalization-notify-sound-msg-all-end") }
@@ -400,6 +411,17 @@ function domString(type) {
                 </div>
             </div><br/>
             </div>
+            <div class="col-5 custom-notify-sound-all-time-end">
+            <label>
+                ${ i18n.__("custom-notify-sound") }
+            </label>
+            </div>
+            <div class="col-7 text-right custom-notify-sound-all-time-end">
+            <input id="custom-notify-sound-all-time-end" name="custom-notify-sound-all-time-end" type="text" 
+                       class="hotkey-set-input extreme-small text-right" 
+                       placeholder="${ i18n.__('input-url') }"
+                        onkeyup="store.set('custom-all-time-end-sound',$('#custom-notify-sound-all-time-end').val());"/>
+            </div><br/>
             </div><br/>`;
             break;
         case "i18n":
@@ -760,14 +782,22 @@ function personalizedNotification() {
 
 //personalization sound
 function personalizationSoundInitializer() {
+    if (store.has("custom-work-time-end-sound"))
+        $("#custom-notify-sound-work-time-end").val(store.get("custom-work-time-end-sound"));
+    if (store.has("custom-all-time-end-sound"))
+        $("#custom-notify-sound-all-time-end").val(store.get("custom-work-all-end-sound"));
     let player = document.createElement("audio");//alert player
-    let soundList = ['alarming', 'beep', 'clock', 'tick', 'trumpet', 'whistle', 'horns', 'magic', 'piano'];
+    let soundList = ['alarming', 'beep', 'clock', 'tick', 'trumpet', 'whistle', 'horns', 'magic', 'piano', i18n.__('custom')];
     for (let i in soundList) {
         $("#work-time-end-sound-select").append("\
                     <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
             + soundList[i] + "</a>");
     }
     $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
+    if (store.get("time-end-sound") === i18n.__('custom'))
+        $(".custom-notify-sound-work-time-end").css("display", "inline-block");
+    else
+        $(".custom-notify-sound-work-time-end").css("display", "none");
 
     for (let i in soundList) {
         $("#all-time-end-sound-select").append("\
@@ -775,32 +805,44 @@ function personalizationSoundInitializer() {
             + soundList[i] + "</a>");
     }
     $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "piano");
+    if (store.get("all-end-sound") === i18n.__('custom'))
+        $(".custom-notify-sound-all-time-end").css("display", "inline-block");
+    else
+        $(".custom-notify-sound-all-time-end").css("display", "none");
 }
 
 function workTimeEndSoundSetting(val) {
-    try {
-        let player = document.createElement("audio");//alert player
-        store.set("time-end-sound", val);
-        $("#work-time-end-sound-dropdown-button").text(val);
-        player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
-        player.loop = false;
-        player.play();
-    } catch (e) {
-        console.log(e);
-    }
+    store.set("time-end-sound", val);
+    $("#work-time-end-sound-dropdown-button").text(val);
+    if (val !== i18n.__('custom'))
+        try {
+            $(".custom-notify-sound-work-time-end").css("display", "none");
+            let player = document.createElement("audio");//alert player
+            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.loop = false;
+            player.play();
+        } catch (e) {
+            console.log(e);
+        }
+    else
+        $(".custom-notify-sound-work-time-end").css("display", "inline-block");
 }
 
 function allTimeEndSoundSetting(val) {
-    try {
-        let player = document.createElement("audio");//alert player
-        store.set("all-end-sound", val);
-        $("#all-time-end-sound-dropdown-button").text(val);
-        player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
-        player.loop = false;
-        player.play();
-    } catch (e) {
-        console.log(e);
-    }
+    store.set("all-end-sound", val);
+    $("#all-time-end-sound-dropdown-button").text(val);
+    if (val !== i18n.__('custom'))
+        try {
+            $(".custom-notify-sound-all-time-end").css("display", "none");
+            let player = document.createElement("audio");//alert player
+            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.loop = false;
+            player.play();
+        } catch (e) {
+            console.log(e);
+        }
+    else
+        $(".custom-notify-sound-all-time-end").css("display", "inline-block");
 }
 
 //language settings
