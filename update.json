@@ -1,18 +1,28 @@
 {
-	"version" : "1.29.0",
+	"version" : "1.30.0",
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"新增了开启软件时自动开启默认任务的功能。",
-			"优化了托盘菜单的功能，允许直接在其中查看当天计时和直接取消计时。"
+			"修复了几个令人烦扰的 bugs，并做了一定优化。",
+			"允许在长时间暂停后，重新开始当前计时。",
+			"增加了使用本地提示音频的功能。",
+			"为 Windows 平台开始提供原生 arm64 版本，感谢 @HYH! 参与。",
+			"由于个人时间原因，个人规划可能不会再对此软件添加更多新功能，即可能不再会有v1.31版本，但小优化和问题修复不受影响，感谢大家一直以来的支持。"
 		],
 		"zh-TW" : [
-			"新增了開啟軟件時自動開啟默認任務的功能。",
-			"優化了托盤菜單的功能，允許直接在其中查看當天計時和直接取消計時。"
+			"修復了幾個令人煩擾的 bugs，並做了一定優化。",
+			"允許在長時間暫停後，重新開始當前計時。",
+			"增加了使用本地提示音頻的功能。",
+			"為 Windows 平臺開始提供原生 arm64 版本，感謝 @HYH! 參與。",
+			"由於個人時間原因，個人規劃可能不會再對此軟件添加更多新功能，即可能不再會有v1.31版本，但小優化和問題修復不受影響，感謝大家一直以來的支持。"
 		],
 		"en" : [
-			"New feature: auto start default task when starting wnr.",
-			"New feature: better tray menu, allowing directly see today's statistics and cancel timing."
+			"Several important bug fixes and optimizations.",
+			"Allow to restart current period after pausing long.",
+			"Allow to use local audio as the notify sound.",
+			"Start to provide native Arm64 version for Windows.",
+			"Because of personal time shortage, I am planning to pause on adding more new features, which means there might not be a v1.31 anymore, but optimizations and bugfixs will continue. Thanks for your support. "
+
 		]
 	},
 	"introduce" : {
