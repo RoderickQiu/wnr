@@ -27,7 +27,8 @@
 
 - 如果你做了些不错的改进，那么请 [提交 Pull Request](https://github.com/RoderickQiu/wnr/pulls) 。
 
-- 如果你想为 wnr 添加一种语言的支持， [请先阅读这份指南](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md) 。
+- 如果你想为 wnr
+  添加一种语言的支持， [请先阅读这份指南](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md) 。
 
 ## 如何构建
 
@@ -40,11 +41,7 @@ yarn dir # 仅仅打包基础可执行文件
 
 yarn nsis # Windows平台NSIS安装包打包
 
-yarn nsis-ia32 # Windows平台NSIS安装包打包（32位）
-
 yarn 7zip # Windows平台7z便携版打包
-
-yarn 7zip-ia32 # Windows平台7z便携版打包（32位）
 
 yarn mac # macOS版本打包
 
@@ -53,11 +50,12 @@ yarn linux # Linux版本打包
 yarn appimage # linux AppImage打包
 ```
 
-更多有关 wnr 的技术细节和开发建议，请查看 **[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md)** 。
+更多有关 wnr 的技术细节和开发建议，请查看 *
+*[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md)** 。
 
 ## 版权和鸣谢
 
-版权所有 (c) 2019-2022 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
+版权所有 (c) 2019-2023 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
 
 使用 **[MPL 2.0 许可证](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)** 进行许可。
 

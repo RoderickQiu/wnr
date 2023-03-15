@@ -42,11 +42,7 @@ yarn dir # build executable only
 
 yarn nsis # windows nsis installer
 
-yarn nsis-ia32 # windows nsis installer (x86/ia32)
-
 yarn 7zip # windows 7zip protable version
-
-yarn 7zip-ia32 # windows 7zip portable version (x86/ia32)
 
 yarn mac # macos
 
@@ -60,7 +56,7 @@ to **[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPM
 
 ## Copyright & Credit
 
-Copyright (c) 2019-2022 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
+Copyright (c) 2019-2023 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
 Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
