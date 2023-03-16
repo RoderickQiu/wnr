@@ -515,7 +515,7 @@
                 $("#time-cnt").css("display", "none");
                 if (continueLoop || method === 3) {
                     $("#infinity-label").css("display", "none");
-                    $("#time-cnt-blank").css("display", "none");
+                    if (!continueLoop) $("#time-cnt-blank").css("display", "none");
                 }
             } else {
                 $("#infinity-label").css("display", "none");
@@ -586,6 +586,7 @@
             }
 
             if (store.get("nap") || methodFromStart === 3) {
+                method = 3;
                 shouldNap = true;
                 napInterval = (store.has("nap-time") ? store.get("nap-time") : 10) * 60;
                 if (isNaN(napInterval)) napInterval = 600;
@@ -651,13 +652,18 @@
 
                 stopper();
                 if (!wasCounting) stopCounter++;
-                if (stopCounter) $("#stop-count").text(((method === 3 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
+                if (stopCounter) $("#stop-count").text(((methodFromStart === 3 || continueLoop) ? "" : " | ") + i18n.__("already-paused") + " " + stopCounter.toString() + " " + i18n.__("time(s)"));
             }
 
             ipc.on("can-redo-exec", function () {
                 window.clearInterval(int);
                 startTime = new Date().getTime();
-                int = setInterval(clock, 250);
+                if (methodFromStart !== 3)
+                    int = setInterval(clock, 250);
+                else {
+                    $("#infinity-label").css("display", "none");
+                    int = setInterval(positive, 250);
+                }
                 $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
                 isClockWorking = 1;//to restart
                 ipc.send("tray-image-change", "start");
@@ -670,7 +676,7 @@
                     window.clearInterval(int);
                     pauseInt = setTimeout(function () {
                         ipc.send("can-redo-alert");
-                    }, 1000 * 10);
+                    }, 1000 * 60 * 7);
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
