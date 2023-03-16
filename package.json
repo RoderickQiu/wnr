@@ -1,6 +1,6 @@
 {
 	"name" : "wnr",
-	"version" : "1.30.0",
+	"version" : "1.30.0-patch",
 	"description" : "Work and rest, with wnr now!",
 	"main" : "main.js",
 	"scripts" : {
