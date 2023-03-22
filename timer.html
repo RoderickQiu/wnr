@@ -586,7 +586,7 @@
             }
 
             if (store.get("nap") || methodFromStart === 3) {
-                method = 3;
+                if (methodFromStart === 3) method = 3;
                 shouldNap = true;
                 napInterval = (store.has("nap-time") ? store.get("nap-time") : 10) * 60;
                 if (isNaN(napInterval)) napInterval = 600;
