@@ -422,16 +422,6 @@ app.on('ready', () => {
 
     hasMultiDisplays = screen.getAllDisplays().length > 1;
 
-    if (process.platform === "win32") {
-        if (winReleaseId() === -1 && win != null) {
-            let isNotified = store.has("windows-7-notification");
-            if (isNotified === false) {
-                customDialog("on", i18n.__('old-windows-compatibility-notification'), i18n.__('old-windows-compatibility-notification-msg'),
-                    "store.set(\"windows-7-notification\", 1);");
-            }
-        }
-    }
-
     if (store.get("dock-hide") && process.platform === "darwin") dockHide = true;
 
     if (store.get("loose-mode")) isLoose = true;
@@ -714,6 +704,16 @@ app.on('ready', () => {
                     i18n.__('suggest-star-msg'), "shell.openExternal(\"https://github.com/RoderickQiu/wnr\");");
                 store.set("suggest-star", "suggested");
             }, 1000);
+    }
+    
+    if (process.platform === "win32") {
+        if (winReleaseId() === -1 && win != null) {
+            let isNotified = store.has("windows-7-notification");
+            if (isNotified === false) {
+                customDialog("on", i18n.__('old-windows-compatibility-notification'), i18n.__('old-windows-compatibility-notification-msg'),
+                    "store.set(\"windows-7-notification\", 1);");
+            }
+        }
     }
 })
 
