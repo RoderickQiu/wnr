@@ -423,10 +423,10 @@ boolean@^3.1.4:
   resolved "https://mirrors.huaweicloud.com/repository/npm/boolean/-/boolean-3.2.0.tgz#9e5294af4e98314494cbb17979fa54ca159f116b"
   integrity sha512-d0II/GO9uf9lfUHH2BQsjxzRJZBdsjgsBiW4BvhWk/3qoKwQFjIDVN19PfX8F2D/r9PCMTtLWjYVCFrpeYUzsw==
 
-bootstrap@4.6.1:
-  version "4.6.1"
-  resolved "https://mirrors.huaweicloud.com/repository/npm/bootstrap/-/bootstrap-4.6.1.tgz#bc25380c2c14192374e8dec07cf01b2742d222a2"
-  integrity sha512-0dj+VgI9Ecom+rvvpNZ4MUZJz8dcX7WCX+eTID9+/8HgOkv3dsRzi8BGeZJCQU6flWQVYxwTQnEZFrmJSEO7og==
+bootstrap@4.6.2:
+  version "4.6.2"
+  resolved "https://registry.npmmirror.com/bootstrap/-/bootstrap-4.6.2.tgz#8e0cd61611728a5bf65a3a2b8d6ff6c77d5d7479"
+  integrity sha512-51Bbp/Uxr9aTuy6ca/8FbFloBUJZLHwnhTcnjIeRn2suQWsWzcuJhGjKDB5eppVte/8oCdOL3VuwxvZDUggwGQ==
 
 boxen@^5.0.0:
   version "5.1.2"
@@ -989,10 +989,10 @@ electron-store@8.1.0:
     conf "^10.2.0"
     type-fest "^2.17.0"
 
-electron@22.2.0:
-  version "22.2.0"
-  resolved "https://registry.npmmirror.com/electron/-/electron-22.2.0.tgz#1aa321415d8b8021a4b0807641f0ad56028feaf5"
-  integrity sha512-puRZSF2vWJ4pz3oetL5Td8LcuivTWz3MoAk/gjImHSN1B/2VJNEQlw1jGdkte+ppid2craOswE2lmCOZ7SwF1g==
+electron@22.3.18:
+  version "22.3.18"
+  resolved "https://registry.npmmirror.com/electron/-/electron-22.3.18.tgz#5ee55633b3912fec9df6d8f039acf2c016274cfc"
+  integrity sha512-JgjB966ghTBszAX/GgVgDY/2CktWCjTZWGJI0WISRHDudBZ8/WPkI/hIjsMiLQLe0wSTk6S+WHOYbIqyw0I/sg==
   dependencies:
     "@electron/get" "^2.0.0"
     "@types/node" "^16.11.26"
@@ -1460,10 +1460,10 @@ jake@^10.6.1:
     filelist "^1.0.1"
     minimatch "^3.0.4"
 
-jquery@3.6.4:
-  version "3.6.4"
-  resolved "https://registry.npmmirror.com/jquery/-/jquery-3.6.4.tgz#ba065c188142100be4833699852bf7c24dc0252f"
-  integrity sha512-v28EW9DWDFpzcD9O5iyJXg3R3+q+mET5JhnjJzQUZMHOv67bpSIHq81GEYpPNZHG+XXHsfSme3nxp/hndKEcsQ==
+jquery@3.7.0:
+  version "3.7.0"
+  resolved "https://registry.npmmirror.com/jquery/-/jquery-3.7.0.tgz#fe2c01a05da500709006d8790fe21c8a39d75612"
+  integrity sha512-umpJ0/k8X0MvD1ds0P9SfowREz2LenHsQaxSohMZ5OMNEU2r0tf8pdeEFTHMFxWVxKNyU9rTtK3CWzUCTKJUeQ==
 
 js-pinyin@^0.1.9:
   version "0.1.9"
@@ -1694,10 +1694,10 @@ node-addon-api@^1.6.3:
   resolved "https://repo.huaweicloud.com/repository/npm/node-addon-api/-/node-addon-api-1.7.2.tgz#3df30b95720b53c24e59948b49532b662444f54d"
   integrity sha512-ibPK3iA+vaY1eEjESkQkM0BbCqFOaZMiXRTtdB0u7b4djtY6JnsjvPdUHVMg6xQt3B8fpTTWHI9A+ADjM9frzg==
 
-node-fetch@2.6.7:
-  version "2.6.7"
-  resolved "https://repo.huaweicloud.com/repository/npm/node-fetch/-/node-fetch-2.6.7.tgz#24de9fba827e3b4ae44dc8b20256a379160052ad"
-  integrity sha512-ZjMPFEfVx5j+y2yF35Kzx5sF7kDzxuDj6ziH4FFbOp87zKDZNx8yExJIb05OGF4Nlt9IHFIMBkRl41VdvcNdbQ==
+node-fetch@2.6.12:
+  version "2.6.12"
+  resolved "https://registry.npmmirror.com/node-fetch/-/node-fetch-2.6.12.tgz#02eb8e22074018e3d5a83016649d04df0e348fba"
+  integrity sha512-C/fGU2E8ToujUivIO0H+tpQ6HWo4eEmchoPIoXtxCrVghxdKq+QOHqEZW7tuP3KlV3bC8FRMO5nMCC7Zm1VP6g==
   dependencies:
     whatwg-url "^5.0.0"
 
@@ -1971,10 +1971,10 @@ sax@^1.2.4:
   resolved "https://repo.huaweicloud.com/repository/npm/sax/-/sax-1.2.4.tgz#2816234e2378bddc4e5354fab5caa895df7100d9"
   integrity sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==
 
-schart.js@3.0.0:
-  version "3.0.0"
-  resolved "https://repo.huaweicloud.com/repository/npm/schart.js/-/schart.js-3.0.0.tgz#45bdb6b112a603fae0c3aad5d2fdbb9b80f86d57"
-  integrity sha512-TaEBroDGyaHwPad4UXwsGgMd0xz0s/TpcwiMPVkpqE5Haz4hTk293m1F0f6a8MKscssKNhlyKz48ZMPI8wYqHg==
+schart.js@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.npmmirror.com/schart.js/-/schart.js-3.0.4.tgz#3bfb3e1ebbc63b4f5ce84606ee03fe575355defc"
+  integrity sha512-uylb2u9rrHX1jyAuSAJUQON8XTfyDKI9kWj1J3fUlCQCkLVZ4HG4+IiV8qm//Z71dqvLI78QZ/fCBw0reB22Zw==
 
 semver-compare@^1.0.0:
   version "1.0.0"

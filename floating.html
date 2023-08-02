@@ -117,15 +117,15 @@
                     timeLeft.addClass("h6");
                     lastTimeHasHours = true;
                 }
-                return hour + h + (minute - hour * 60) + min;
+                return hour + Math.floor(h) + Math.ceil(Math.floor(minute - hour * 60)) + min;
             } else {
                 if (lastTimeHasHours) {
                     timeLeft.removeClass("h6");
                     timeLeft.addClass("h4");
                     lastTimeHasHours = false;
                 }
-                if (Math.floor(minute) === 0) return Math.floor(minute * 60) + s;
-                return Math.floor(minute) + min;
+                if (Math.floor(minute) === 0) return Math.ceil(Math.floor(minute * 60)) + s;
+                return Math.ceil(Math.floor(minute)) + min;
             }
         }
 

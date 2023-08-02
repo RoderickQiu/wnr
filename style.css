@@ -790,9 +790,9 @@ li input:nth-last-child(4)::after {
 
 #bottom-bar {
     position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 0%;
+    bottom: 0;
+    left: 0;
+    width: 0;
     height: 2.5%;
     background-color: #ea545499;
     z-index: -9999;
