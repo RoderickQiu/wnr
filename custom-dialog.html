@@ -61,8 +61,11 @@
             $("#dialog-msg").text(message.msg);
             executeAfter = message.executeAfter;
             ipc.send("custom-dialog-fit", Math.round(msgNode.height() / parseFloat(msgNode.css('line-height'))));
-            if (message.type === 1 || message.type === 2) $("#dialog-cancel").removeClass("d-none"); //select_on
+            document.onkeydown = function () {
+            };
+            if (message.type === 1 || message.type === 2) $("#dialog-cancel").removeClass("d-none");
             else $("#dialog-cancel").addClass("d-none");
+
             if (message.type === 2) { //update_on
                 $("#dialog-cancel").text(i18n.__('update-refuse'));
                 $("#dialog-button-3").removeClass("d-none");
@@ -76,6 +79,15 @@
                 $("#dialog-ok").text(i18n.__('ok'));
                 $("#timer").css("width", "210px");
                 $("#dialog-buttons").css("width", "210px");
+            }
+
+            if (message.type === 0) {//on
+                document.onkeydown = function (event1) {
+                    let ev = document.all ? window.event : event1;
+                    if ((ev.keyCode || ev.which) === 13) {
+                        ok();
+                    }
+                }
             }
         })
     </script>
