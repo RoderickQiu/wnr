@@ -1180,7 +1180,7 @@ function macOSFullscreenSolution(isFullScreen) {
                         type: 'separator'
                     }, {
                         label: i18n.__('quit'),
-                        accelerator: 'CmdOrCtrl+Q',
+                        //accelerator: 'CmdOrCtrl+Q',
                         enabled: !store.get('islocked'),
                         click: function () {
                             windowCloseChk();
