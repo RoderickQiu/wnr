@@ -705,7 +705,7 @@ app.on('ready', () => {
                 store.set("suggest-star", "suggested");
             }, 1000);
     }
-    
+
     if (process.platform === "win32") {
         if (winReleaseId() === -1 && win != null) {
             let isNotified = store.has("windows-7-notification");
@@ -715,6 +715,8 @@ app.on('ready', () => {
             }
         }
     }
+
+    globalShortcut.unregister('CommandOrControl+Q');
 })
 
 function getCustomDialogModeType(mode) {
