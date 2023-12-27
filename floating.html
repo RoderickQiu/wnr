@@ -103,6 +103,7 @@
         let h = " " + i18n.__("h"), min = " " + i18n.__("min"), s = " " + i18n.__("s");
 
         function getStyledTimeLeft(minute) {
+            minute = Number(minute);
             if (lastTimeHasHours == null) {
                 lastTimeHasHours = Math.floor(minute / 60) > 0;
                 if (!lastTimeHasHours) {
@@ -117,7 +118,7 @@
                     timeLeft.addClass("h6");
                     lastTimeHasHours = true;
                 }
-                return hour + Math.floor(h) + Math.ceil(Math.floor(minute - hour * 60)) + min;
+                return Math.floor(hour) + h + Math.ceil(Math.floor(minute - hour * 60)) + min;
             } else {
                 if (lastTimeHasHours) {
                     timeLeft.removeClass("h6");
