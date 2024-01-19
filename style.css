@@ -261,7 +261,7 @@ li input:nth-last-child(4)::after {
 
 .hotkeyset {
     color: #6c757d;
-    width: 24px;
+    width: 30px;
     height: 20px;
     text-align: center;
 }

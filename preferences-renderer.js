@@ -610,10 +610,10 @@ function planAppend(item, index) {
         "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='rest' maxlength='15' value='" +
         item.name + "' onchange='planEdit(" + index + ")' /> <br /><div class='text-muted small'>" +
         i18n.__('predefined-tasks-settings-tip-part-1') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.workTime + "' onchange='planEdit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
+        item.workTime + "' onchange='planEdit(" + index + ")' oninput='if (Number(value) > 1000) value = 1000' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-2') + " <input id='rest-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.restTime + "' onchange='planEdit(" + index + ")' oninput='if (value.length > 3) value = value.slice(0, 3)' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
+        item.restTime + "' onchange='planEdit(" + index + ")' oninput='if (Number(value) > 1000) value = 1000' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
         i18n.__('min') +
         i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
         item.loops + "' onchange='planEdit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
