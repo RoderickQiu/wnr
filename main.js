@@ -705,7 +705,7 @@ app.on('ready', () => {
                 store.set("suggest-star", "suggested");
             }, 1000);
     }
-    
+
     if (process.platform === "win32") {
         if (winReleaseId() === -1 && win != null) {
             let isNotified = store.has("windows-7-notification");
@@ -2226,6 +2226,21 @@ function externalTitle(title, notes) {
 }
 
 function floating() {
+    if (styleCache.has("floating-axis")) {
+        // fix that floating window may be out of screen after changing screen resolution
+        let isOnScreen = false;
+        const displays = screen.getAllDisplays();
+        for (let i = 0; i < displays.length; i++) {
+            if (displays[i].bounds.x <= styleCache.get("floating-axis").x
+                && displays[i].bounds.x + displays[i].bounds.width >= styleCache.get("floating-axis").x
+                && displays[i].bounds.y <= styleCache.get("floating-axis").y
+                && displays[i].bounds.y + displays[i].bounds.height >= styleCache.get("floating-axis").y) {
+                isOnScreen = true;
+                break;
+            }
+        }
+        if (!isOnScreen) styleCache.delete("floating-axis");
+    }
     if (app.isReady()) {
         if (win != null) {
             if (!hasFloating || floatingWin == null) {
