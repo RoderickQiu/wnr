@@ -1,18 +1,18 @@
 {
-	"version" : "1.30.1",
+	"version" : "1.30.2",
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"修复了一些 Bugs，并且做了一些优化；例如对旧系统、MINI 模式、计时中途提醒等的支持变得更好。",
-			"一段时间结束后的对话框现在支持按 Enter 键快速关闭。"
+			"修复了一些 Bugs，包括对 MINI Mode 大于一小时任务的正确处理，以及更换显示器后可能出现在显示器之外的问题。",
+			"预设任务中现在支持无限多位小数，以实现精确到秒的控制。"
 		],
 		"zh-TW" : [
-			"修復了一些 Bugs，並且做了一些優化；例如對舊系統、MINI 模式、計時中途提醒等的支持變得更好。",
-			"一段時間結束後的對話框現在支持按 Enter 鍵快速關閉。"
+			"修復了一些 Bugs，包括對 MINI Mode 大於一小時任務的正確處理，以及更換顯示器後可能出現在顯示器之外的問題。",
+			"預設任務中現在支持無限多位小數，以實現精確到秒的控製。"
 		],
 		"en" : [
-			"Bugs fixed and several features optimized. ",
-			"The dialogs now support pressing Enter button to close. "
+			"Bugs fixed for MINI mode for tasks longer than 1 hour, and that it may be positioned out of the screen after changing displays. ",
+			"Predefined tasks now support infinite decimal places to achieve precise control of seconds."
 		]
 	},
 	"introduce" : {
