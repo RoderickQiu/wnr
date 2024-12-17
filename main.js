@@ -162,7 +162,7 @@ function alarmSet() {
     resetAlarm = setTimeout(function () {
         if (store.get('alarmtip') !== false && isAlarmDialogClosed && isAlarmTipOn) {
             if (win != null) {
-                win.flashFrame(true);
+                // win.flashFrame(true);
                 win.show();
                 app.focus();
                 isAlarmDialogClosed = false;
@@ -1580,7 +1580,7 @@ function focusSolution() {
     if (hasFloating) floatingDestroyer("property-stay");
     win.show();
     win.center();
-    win.flashFrame(true);
+    // win.flashFrame(true);
     if (!isLoose) win.setAlwaysOnTop(true, "screen-saver");
     win.moveTop();
     if (dockHide) app.dock.show();//prevent kiosk error, show in dock
@@ -1623,7 +1623,7 @@ function nonFocusSolution(mode) {
         } else {
             win.show();
             win.center();
-            win.flashFrame(true);
+            // win.flashFrame(true);
             if (!isLoose) win.setAlwaysOnTop(true, "screen-saver");
             win.moveTop();
         }
@@ -1768,7 +1768,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         isWorkMode = false;
         win.show();
         win.center();
-        win.flashFrame(true);
+        // win.flashFrame(true);
         win.setAlwaysOnTop(true, "screen-saver");
         win.moveTop();
         win.setProgressBar(-1);
