@@ -18,7 +18,7 @@ jobs :
         run : npm run nsis
       - name : Build windows 7zip protable version
         run : npm run 7zip
-      - uses : actions/upload-artifact@v2
+      - uses : actions/upload-artifact@v4
         with :
           name: windows
           path : |
@@ -36,7 +36,7 @@ jobs :
         run : yarn
       - name : Build macos version
         run : npm run mac
-      - uses : actions/upload-artifact@v2
+      - uses : actions/upload-artifact@v4
         with :
           name: macos
           path : |
@@ -54,7 +54,7 @@ jobs :
         run : yarn
       - name : Build AppImage
         run : npm run appimage
-      - uses : actions/upload-artifact@v2
+      - uses : actions/upload-artifact@v4
         with :
           name: linux
           path : packaged/wnr*
