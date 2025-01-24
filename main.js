@@ -1390,15 +1390,42 @@ ipcMain.on("settings-win-context-menu", function (event, message) {
     }
 })
 
+nativeTheme.on('updated', () => {
+    isDarkMode(); // also toggle for dark mode
+});
+
 function isDarkMode() {
     if (app.isReady()) {
-        if (store.has("dark-or-white")) {
-            if (store.get("dark-or-white") === "light") {
-                if (win != null) win.setBackgroundColor('#fefefe');
-                if (customDialogWin != null) customDialogWin.setBackgroundColor('#fefefe');
+        if (store.has("dark-or-white") && store.get("dark-or-white") !== 0) {
+            if (store.get("dark-or-white") === 1) {
+                if (win != null) {
+                    win.setBackgroundColor('#fefefe');
+                    win.webContents.send('darkModeChanges');
+                }
+                if (customDialogWin != null) {
+                    customDialogWin.setBackgroundColor('#fefefe');
+                    customDialogWin.webContents.send('darkModeChanges');
+                }
+                if (settingsWin != null) {
+                    settingsWin.setBackgroundColor('#fefefe');
+                    settingsWin.webContents.send('darkModeChanges-settings');
+                }
+                styleCache.set('isdark', false);
                 return false;
             } else {
-                if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
+                if (win != null) {
+                    win.setBackgroundColor('#191919');
+                    win.webContents.send('darkModeChanges');
+                }
+                if (customDialogWin != null) {
+                    customDialogWin.setBackgroundColor('#191919');
+                    customDialogWin.webContents.send('darkModeChanges');
+                }
+                if (settingsWin != null) {
+                    settingsWin.setBackgroundColor('#191919');
+                    settingsWin.webContents.send('darkModeChanges-settings');
+                }
+                styleCache.set('isdark', true);
                 return true;
             }
         } else {
@@ -1410,15 +1437,32 @@ function isDarkMode() {
 }
 
 function darkModeSettingsFinder() {
-    if (nativeTheme.shouldUseDarkColors && store.get("dark-or-white") !== "light") {
+    if (nativeTheme.shouldUseDarkColors && store.get("dark-or-white") !== 1) {
         styleCache.set('isdark', true);
         if (win != null) {
             win.setBackgroundColor('#191919');
             win.webContents.send('darkModeChanges');
         }
-        if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
+        if (customDialogWin != null) {
+            customDialogWin.setBackgroundColor('#191919');
+            customDialogWin.webContents.send('darkModeChanges');
+        }
         if (settingsWin != null) {
             settingsWin.setBackgroundColor('#191919');
+            settingsWin.webContents.send('darkModeChanges-settings');
+        }
+    } else {
+        styleCache.set('isdark', false);
+        if (win != null) {
+            win.setBackgroundColor('#fefefe');
+            win.webContents.send('darkModeChanges');
+        }
+        if (customDialogWin != null) {
+            customDialogWin.setBackgroundColor('#fefefe');
+            customDialogWin.webContents.send('darkModeChanges');
+        }
+        if (settingsWin != null) {
+            settingsWin.setBackgroundColor('#fefefe');
             settingsWin.webContents.send('darkModeChanges-settings');
         }
     }

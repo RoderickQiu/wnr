@@ -54,7 +54,7 @@ function getHelp(idCode) {
 }
 
 function isInDark() {
-    if (store.get("dark-or-white") === 0) {
+    if (store.get("dark-or-white") === 0 || !store.has("dark-or-white")) {
         isDarkMode = styleCache.get('isdark');
     } else {
         isDarkMode = store.get("dark-or-white") === 2;
