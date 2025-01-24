@@ -77,7 +77,7 @@ function isInDark() {
             '#settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #settings-container input[type="text"], #extend-form input, #settings-container .dropdown .btn, #dropdown-menu-button {border-bottom-color: #cccccc23 !important; color: #aaaaaa;} ' +
             '.work {color: #ea5454 !important;} ' +
             '.rest {color: #5490ea !important;}' +
-            '.text-info {color: #17a2b8 !important;} ' +
+            '.text-info, .work.positive {color: #17a2b8 !important;} ' +
             'input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus, #settings-container input[type="text"]:focus, #settings-container input[type="number"]:focus, #settings-container .dropdown .btn:focus, #dropdown-menu-button:focus {border-bottom-color: #cccccc33 !important;} ' +
             'input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover, #settings-container input[type="text"]:hover, #settings-container input[type="number"]:hover, #settings-container .dropdown .btn:hover, #dropdown-menu-button:hover {border-bottom-color: #cccccc28 !important;} ' +
             '.hotkey-setting {color: #aaaaaa;} ' +

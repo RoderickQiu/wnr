@@ -401,7 +401,7 @@
         });
 
         //switch default page to other pages
-        if (!store.get("just-back"))
+        if (!store.get("just-back")) {
             switch (store.get("default-page")) {
                 case 0:
                     break;
@@ -414,6 +414,9 @@
                 default:
                     break;
             }
+        } else {
+            store.set("just-back", false);
+        }
 
         function sumGet(timeCount) {
             // the unit of timeCount is minute
