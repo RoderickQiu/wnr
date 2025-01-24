@@ -55,7 +55,7 @@ yarn appimage # linux AppImage打包
 
 ## 版權和鳴謝
 
-版權所有 (c) 2019-2023 **[Roderick Qiu](https://r-q.name)** 和其他貢獻者。保留所有權利。
+版權所有 (c) 2019-2025 **[Roderick Qiu](https://r-q.name)** 和其他貢獻者。保留所有權利。
 
 使用 **[MPL 2.0 許可證](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)** 進行許可。
 

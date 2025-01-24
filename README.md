@@ -56,7 +56,7 @@ to **[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPM
 
 ## Copyright & Credit
 
-Copyright (c) 2019-2023 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
+Copyright (c) 2019-2025 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
 Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
