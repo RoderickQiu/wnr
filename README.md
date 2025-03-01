@@ -51,8 +51,17 @@ yarn linux # linux
 yarn appimage # linux AppImage
 ```
 
-For more info about development, go
-to **[DEVELOPMENT_GUIDE](https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md)**.
+## Star History
+
+<p align="center">
+    <a href="https://star-history.com/#RoderickQiu/wnr&Date">
+     <picture>
+       <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date&theme=dark" />
+       <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date" />
+       <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date" />
+     </picture>
+    </a>
+</p>
 
 ## Copyright & Credit
 
