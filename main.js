@@ -399,7 +399,7 @@ app.on('ready', () => {
     hasGotSingleInstanceLock = app.requestSingleInstanceLock();
     if (!hasGotSingleInstanceLock) {
         console.log('Didn\'t get the lock, quitting');
-        app.quit();
+        app.exit();
     } else {
         app.on('second-instance', () => {
             if (win != null) {
@@ -567,19 +567,21 @@ app.on('ready', () => {
         }
     }
 
-    if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-    else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
-    else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
-    try {
-        tray.setToolTip('wnr');
-    } catch (e) {
-        console.log(e);
+    if (app.requestSingleInstanceLock()) {
+        if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+        else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
+        else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
+        try {
+            tray.setToolTip('wnr');
+        } catch (e) {
+            console.log(e);
+        }
+        traySolution(false);
+        isFullscreenMode = false;
+        macOSFullscreenSolution(false);
+        isDarkMode();
+        settingsWinContextMenuSolution();
     }
-    traySolution(false);
-    isFullscreenMode = false;
-    macOSFullscreenSolution(false);
-    isDarkMode();
-    settingsWinContextMenuSolution();
 
     if (store.get("tray-time") !== false && process.platform === "darwin")
         tray.setTitle(' ' + i18n.__('not-timing-tray'));
