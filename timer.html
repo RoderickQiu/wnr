@@ -27,6 +27,7 @@
         <div id="time-bar" class="text-muted"></div>
         <div id="time-bar-macos" class="text-muted"></div><!-- time-bar for systems -->
         <div id="controller">
+            
             <a href="javascript:floatingOpener()" class="small work" id="mini-mode"><i class="iconfont icon-suoxiao"
             ></i></a>&nbsp;&nbsp;
             <a href="javascript:call('window-hide')" class="small work" id="win-hider"><i
@@ -43,6 +44,7 @@
                     class="iconfont icon-close"></i></a>
             <script>
                 $('#helper').attr('title', i18n.__('helper'));
+              //  $('#add-time').attr('title', i18n.__('minus-mode'));
                 $('#mini-mode').attr('title', i18n.__('mini-mode-msg'));
                 $('#window-hide').attr('title', i18n.__('window-hide'))
                 $('#window-max').attr('title', i18n.__('window-max'));
@@ -210,6 +212,49 @@
                         '<br /><a href="javascript:mistakeResolver()" class="rest">' +
                         i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
+            <!-- 下拉菜单容器 -->
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    调整时间
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <!-- 减少5分钟 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(-5)" title="减少5分钟">
+                        <i class="iconfont icon-previous"></i> 5min
+                    </a>
+                    <!-- 增加5分钟 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(5)" title="增加5分钟">
+                        <i class="iconfont icon-fastforward"></i> 5min
+                    </a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- 减少1分钟 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(-1)" title="减少1分钟">
+                        <i class="iconfont icon-previous"></i> 1min
+                    </a>
+                    <!-- 增加1分钟 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(1)" title="增加1分钟">
+                        <i class="iconfont icon-fastforward"></i> 1min
+                    </a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- 减少15秒 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(-0.25)" title="减少15秒">
+                        <i class="iconfont icon-previous"></i> 15s
+                    </a>
+                    <!-- 增加15秒 -->
+                    <a class="dropdown-item" href="javascript:adjustTime(0.25)" title="增加15秒">
+                        <i class="iconfont icon-fastforward"></i> 15s
+                    </a>
+                    <div class="dropdown-divider"></div>
+
+                    <!-- 全屏提示 -->
+                    <a class="dropdown-item" href="javascript:mistake()" title="错误处理">
+                        <script>document.write(i18n.__('fullscreen-experience-tip-mistake'));</script>
+                    </a>
+                </div>
+            </div>
+
             <div id="fullscreen-too-long-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-too-long-tip') +
                         '<br /><a href="javascript:mistakeResolver()" class="rest">' +
@@ -339,6 +384,9 @@
             if (store.get("islocked")) $("#passcode-rechecker").css("display", "inline");
             else backRelauncher();
         }
+        function mistake(){
+            return
+        }
 
         $("#fullscreen-experience-tip").css("display", "none");
 
@@ -419,6 +467,7 @@
                 workTime = decodeURI($_GET['work-time']) * 60000,
                 restTime = decodeURI($_GET['rest-time']) * 60000,//use ms
                 originalRestTime = restTime,
+                originalWorkTime = workTime,
                 loop = Number(decodeURI($_GET['loop'])),
                 workTimeFocused = (decodeURI($_GET['work-time-focused']) !== "false"),
                 restTimeFocused = (decodeURI($_GET['rest-time-focused']) !== "false"),
@@ -935,6 +984,20 @@
                 }
                 warningGiver(0);
             }
+            function adjustTime(minutes){
+                if (!window.isClockWorking) return;
+                const ms = minutes * 60 * 1000;                
+                // 根据当前模式调整时间
+                if (method === 1) {
+                    // 工作模式：调整工作时间（保持最小10秒）
+                    
+                    workTime = Math.max(10000, workTime + ms);
+                } else {
+                    // 休息模式：调整休息时间
+                    restTime = Math.max(10000, restTime + ms);
+                }
+                lastRecordedProgress = -1;
+            }
 
             function shouldLongBreak() {
                 if (longBreakFrequence === -1) return times === loop * 2 - 1 && loop > 2;
@@ -942,6 +1005,7 @@
             }
 
             function skipper() {
+                workTime= originalWorkTime;
                 canOpenFloating = true;
                 hasSoonFinishTipPosted = false;
                 if (pausingTimeout) window.clearInterval(pausingTimeout);
@@ -1002,6 +1066,7 @@
                                 isLongRest = true;
                             } else {
                                 restTime = originalRestTime;
+                                
                                 isLongRest = false;
                             }
                             if (methodFromStart !== 3) themeChanger();
