@@ -212,51 +212,56 @@
                         '<br /><a href="javascript:mistakeResolver()" class="rest">' +
                         i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
-            <!-- 下拉菜单容器 -->
+            <!-- container -->
             <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="time-adjust-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <script>document.write(i18n.__('time_adjustment'));</script>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <!-- 减少5分钟 -->
+                    <!-- decrease5minutes -->
                     <a class="dropdown-item" href="javascript:adjustTime(-5)">
                         <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-5-minutes'));</script>
                       </a>
-                    <!-- 增加5分钟 -->
+                    <!-- increase5minutes -->
                     <a class="dropdown-item" href="javascript:adjustTime(5)" >
                         <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-5-minutes'));</script>
                       </a>
                     <div class="dropdown-divider"></div>
 
-                    <!-- 减少1分钟 -->
+                    <!-- decrease1minutes -->
                     <a class="dropdown-item" href="javascript:adjustTime(-1)" >
                         <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-1-minute'));</script>
                     </a>
-                    <!-- 增加1分钟 -->
+                    <!-- increase1minutes -->
                     <a class="dropdown-item" href="javascript:adjustTime(1)" >
                         <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-1-minute'));</script>
                     </a>
                     <div class="dropdown-divider"></div>
 
-                    <!-- 减少15秒 -->
+                    <!-- decrease15seconds -->
                     <a class="dropdown-item" href="javascript:adjustTime(-0.25)" >
                         <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-15-seconds'));</script>
                     </a>
-                    <!-- 增加15秒 -->
+                    <!-- increase15seconds -->
                     <a class="dropdown-item" href="javascript:adjustTime(0.25)">
                         <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-15-seconds'));</script>
                     </a>
                     <div class="dropdown-divider"></div>
 
-                    <!-- 全屏提示 -->
+          
                     <a class="dropdown-item" href="javascript:mistake()" >
                         <script>document.write(i18n.__('fullscreen-experience-tip-mistake'));</script>
                     </a>
-                    <a class="dropdown-item" href="javascript:mistake()" >
-                        <script>document.write(i18n.__('not_for_stopwatch'));</script>
-                    </a>
                 </div>
             </div>
+            <script>       
+                $(document).ready(function() {
+                    if (methodFromStart === 3) {
+                        // hide the menu
+                        $("#time-adjust-dropdown").hide();
+                    }
+                });
+            </script>
 
             <div id="fullscreen-too-long-tip" class="small font-weight-bold text-muted text-center">
                 <script>document.write(i18n.__('fullscreen-too-long-tip') +
@@ -990,13 +995,13 @@
             function adjustTime(minutes){
                 if (!window.isClockWorking) return;
                 const ms = minutes * 60 * 1000;                
-                // 根据当前模式调整时间
+                // adjust time according to mode
                 if (method === 1) {
-                    // 工作模式：调整工作时间（保持最小10秒）
+                    // working mode: adjust work time
                     
                     workTime = Math.max(10000, workTime + ms);
                 } else {
-                    // 休息模式：调整休息时间
+                    // rest mode: adjust rest time
                     restTime = Math.max(10000, restTime + ms);
                 }
                 lastRecordedProgress = -1;
