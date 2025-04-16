@@ -10,7 +10,9 @@
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
+.icon-plus:before {
+    content: "\e123"; /* 具体编码可能不同 */
+  }
 .icon-maximize:before {
     content: "\e73c";
 }
