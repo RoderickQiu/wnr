@@ -23,6 +23,7 @@
 	"update-refuse" : "Cancel",
 	"update-lanzous" : "Update via Chinese server",
 	"time_adjustment": "Time adjustment",
+	"not_for_stopwatch": "Not available in stopwatch mode.",
 	"no-update" : "No update available.",
 	"no-update-msg" : "No update is here currently. Thanks for using wnr!",
 	"update-web-problem" : "Unable check for update right now. ",

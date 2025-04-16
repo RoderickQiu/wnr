@@ -291,6 +291,7 @@
 	"locker-tip": "打开锁定模式后，将无法修改设置，无法随意退出程序。如果自控力较弱，不妨让别人输入密码。",
 	"locker-now-status": "目前的状态：",
 	"time_adjustment": "时间调整",
+	"not_for_stopwatch": "不适用于正计时",
 	"on": "开",
 	"off": "关",
 	"period-symbol": "。",
