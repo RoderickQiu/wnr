@@ -215,41 +215,41 @@
             <!-- 下拉菜单容器 -->
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    调整时间
+                    <script>document.write(i18n.__('time_adjustment'));</script>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <!-- 减少5分钟 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-5)" title="减少5分钟">
-                        <i class="iconfont icon-previous"></i> 5min
-                    </a>
+                    <a class="dropdown-item" href="javascript:adjustTime(-5)">
+                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-5-minutes'));</script>
+                      </a>
                     <!-- 增加5分钟 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(5)" title="增加5分钟">
-                        <i class="iconfont icon-fastforward"></i> 5min
-                    </a>
+                    <a class="dropdown-item" href="javascript:adjustTime(5)" >
+                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-5-minutes'));</script>
+                      </a>
                     <div class="dropdown-divider"></div>
 
                     <!-- 减少1分钟 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-1)" title="减少1分钟">
-                        <i class="iconfont icon-previous"></i> 1min
+                    <a class="dropdown-item" href="javascript:adjustTime(-1)" >
+                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-1-minute'));</script>
                     </a>
                     <!-- 增加1分钟 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(1)" title="增加1分钟">
-                        <i class="iconfont icon-fastforward"></i> 1min
+                    <a class="dropdown-item" href="javascript:adjustTime(1)" >
+                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-1-minute'));</script>
                     </a>
                     <div class="dropdown-divider"></div>
 
                     <!-- 减少15秒 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-0.25)" title="减少15秒">
-                        <i class="iconfont icon-previous"></i> 15s
+                    <a class="dropdown-item" href="javascript:adjustTime(-0.25)" >
+                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-15-seconds'));</script>
                     </a>
                     <!-- 增加15秒 -->
-                    <a class="dropdown-item" href="javascript:adjustTime(0.25)" title="增加15秒">
-                        <i class="iconfont icon-fastforward"></i> 15s
+                    <a class="dropdown-item" href="javascript:adjustTime(0.25)">
+                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-15-seconds'));</script>
                     </a>
                     <div class="dropdown-divider"></div>
 
                     <!-- 全屏提示 -->
-                    <a class="dropdown-item" href="javascript:mistake()" title="错误处理">
+                    <a class="dropdown-item" href="javascript:mistake()" >
                         <script>document.write(i18n.__('fullscreen-experience-tip-mistake'));</script>
                     </a>
                 </div>

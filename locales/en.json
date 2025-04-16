@@ -22,6 +22,7 @@
 	"update-chk" : "Update via GitHub",
 	"update-refuse" : "Cancel",
 	"update-lanzous" : "Update via Chinese server",
+	"time_adjustment": "Time adjustment",
 	"no-update" : "No update available.",
 	"no-update-msg" : "No update is here currently. Thanks for using wnr!",
 	"update-web-problem" : "Unable check for update right now. ",
@@ -391,5 +392,11 @@
 	"can-redo-msg" : "Does that mean you want to restart this period of timing? ",
 	"custom" : "custom",
 	"custom-notify-sound" : "Custom notify sound: ",
-	"input-url" : "Input file url"
+	"input-url" : "Input file url",
+	"decrease-5-minutes": "Decrease 5 minutes",
+	"increase-5-minutes": "Increase 5 minutes",
+	"decrease-1-minute": "Decrease 1 minute", 
+	"increase-1-minute": "Increase 1 minute",
+	"decrease-15-seconds": "Decrease 15 seconds",
+	"increase-15-seconds": "Increase 15 seconds"
 }
