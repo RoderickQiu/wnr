@@ -183,12 +183,12 @@
                         <i class="iconfont icon-caret-down onlyRest"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rest-time-onlyrest-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 3)">3 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 5)">5 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 10)">10 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 15)">15 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 20)">20 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 30)">30 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 3, '3分钟')">3分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 5, '5分钟')">5分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 10, '10分钟')">10分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 15, '15分钟')">15分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 20, '20分钟')">20分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 30, '30分钟')">30分钟</a>
                     </div>
                 </div>
                 <br /><br />
@@ -254,17 +254,17 @@
                        required />
                 <div class="dropdown d-inline time-preset-dropdown">
                     <a class="dropdown-toggle" href="#" role="button" id="work-time-presets-dropdown"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="iconfont icon-caret-down work"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="work-time-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 10)">10 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 20)">20 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 30)">30 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 45)">45 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 60)">60 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 90)">90 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 120)">120 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 10, '10分钟')">10分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 20, '20分钟')">20分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 30, '30分钟')">30分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 45, '45分钟')">45分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 60, '60分钟')">60分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 90, '90分钟')">90分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 120, '120分钟')">120分钟</a>
                     </div>
                 </div>
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
@@ -277,16 +277,16 @@
                 <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
                 <div class="dropdown d-inline time-preset-dropdown">
                     <a class="dropdown-toggle" href="#" role="button" id="rest-time-presets-dropdown"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="iconfont icon-caret-down rest"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rest-time-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 3)">3 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 5)">5 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 10)">10 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 15)">15 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 20)">20 <script>document.write(i18n.__('min'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 30)">30 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 3, '3分钟')">3分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 5, '5分钟')">5分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 10, '10分钟')">10分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 15, '15分钟')">15分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 20, '20分钟')">20分钟</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 30, '30分钟')">30分钟</a>
                     </div>
                 </div>
                 <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
@@ -299,15 +299,15 @@
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                 <div class="dropdown d-inline time-preset-dropdown">
                     <a class="dropdown-toggle" href="#" role="button" id="loop-presets-dropdown"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                         <i class="iconfont icon-caret-down text-muted"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="loop-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 1)">1 <script>document.write(i18n.__('time(s)'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 2)">2 <script>document.write(i18n.__('time(s)'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 3)">3 <script>document.write(i18n.__('time(s)'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 4)">4 <script>document.write(i18n.__('time(s)'))</script></a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 5)">5 <script>document.write(i18n.__('time(s)'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 1, '1次')">1次</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 2, '2次')">2次</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 3, '3次')">3次</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 4, '4次')">4次</a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 5, '5次')">5次</a>
                     </div>
                 </div>
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
@@ -532,8 +532,8 @@
             }
         }
 
-        function setPresetTime(fieldId, value) {
-            $(`#${fieldId}`).val(value);
+        function setPresetTime(fieldId, value, displayValue) {
+            $(`#${fieldId}`).val(displayValue || value);
             allSet();
         }
 
