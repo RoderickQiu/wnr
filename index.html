@@ -177,6 +177,20 @@
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
                        class="onlyRest lead text-center" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="rest-time-onlyrest-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="iconfont icon-caret-down onlyRest"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rest-time-onlyrest-presets-dropdown">
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 3)">3 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 5)">5 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 10)">10 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 15)">15 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 20)">20 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 30)">30 <script>document.write(i18n.__('min'))</script></a>
+                    </div>
+                </div>
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
@@ -238,6 +252,21 @@
             <div class="align-content-center">
                 <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
                        required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="work-time-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="iconfont icon-caret-down work"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="work-time-presets-dropdown">
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 10)">10 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 20)">20 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 30)">30 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 45)">45 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 60)">60 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 90)">90 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 120)">120 <script>document.write(i18n.__('min'))</script></a>
+                    </div>
+                </div>
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small work">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -246,6 +275,20 @@
             <br />
             <div class="align-content-center">
                 <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="rest-time-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="iconfont icon-caret-down rest"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rest-time-presets-dropdown">
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 3)">3 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 5)">5 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 10)">10 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 15)">15 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 20)">20 <script>document.write(i18n.__('min'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 30)">30 <script>document.write(i18n.__('min'))</script></a>
+                    </div>
+                </div>
                 <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small rest">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -254,6 +297,19 @@
             <br />
             <div class="align-content-center">
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="loop-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <i class="iconfont icon-caret-down text-muted"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="loop-presets-dropdown">
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 1)">1 <script>document.write(i18n.__('time(s)'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 2)">2 <script>document.write(i18n.__('time(s)'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 3)">3 <script>document.write(i18n.__('time(s)'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 4)">4 <script>document.write(i18n.__('time(s)'))</script></a>
+                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 5)">5 <script>document.write(i18n.__('time(s)'))</script></a>
+                    </div>
+                </div>
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
                        data-toggle="dropdown"
@@ -432,9 +488,7 @@
                 myDate.setSeconds(myDate.getSeconds() + Number(timeCount * 60));
                 $("#to-num-h").html(myDate.getHours());
                 let minuteString = myDate.getMinutes().toString();
-                if (minuteString.length < 2) {
-                    minuteString = "0" + minuteString;
-                }
+                if (minuteString.length < 2) minuteString = "0" + minuteString;
                 $("#to-num-min").html(minuteString);
             }
         }
@@ -446,57 +500,50 @@
         }
 
         function allSet() {
-            function removeRedundantEnd(number) {
-                let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
-                if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
-                return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
-                    lang: store.get("i18n").toString().replace("-", "_"),
-                    as: "m",
-                    to: "m",
-                    ignoreError: true
-                });
+            let
+                workTime,
+                restTime,
+                loopCount;
+            if (onlyrest) {
+                restTime = $("#rest-time-onlyrest").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
+                workTime = 0;
+                loopCount = 1;
+            } else {
+                workTime = $("#work-time").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
+                restTime = $("#rest-time").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
+                loopCount = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "");
             }
+            if (isNaN(Number(workTime)) || isNaN(Number(restTime)) || isNaN(Number(loopCount)) || (Number(workTime) === 0 && !onlyrest)) {
+                if (!onlyrest)
+                    sumGet((store.get("infinity") || loopCount === "") ? NaN :
+                        Number(workTime) * Number(loopCount) + Number(restTime) * Number(loopCount ? loopCount : 0));
+                else
+                    sumGet(Number(restTime));
+                $("#bottom-btn").attr("disabled", true);
+                $("#next-timer-button").attr("disabled", true);
+            } else {
+                if (!onlyrest)
+                    sumGet((store.get("infinity") || loopCount === "") ? NaN :
+                        Number(workTime) * Number(loopCount) + Number(restTime) * Number(loopCount ? loopCount : 0));
+                else
+                    sumGet(Number(restTime));
+                $("#bottom-btn").attr("disabled", false);
+                $("#next-timer-button").attr("disabled", false);
+            }
+        }
 
-            try {
-                if (onlyrest) {
-                    let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
-                    if (!isNaN(restTimeGet))
-                        if (restTimeGet > 0 && restTimeGet <= 1440)
-                            sumGet(restTimeGet);
-                        else allClear();
-                    else allClear();
-                } else {
-                    let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-                    let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
-                    let restTimeGet = 0;
-                    if (getBreakPercentage() !== 0) {
-                        restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
-                        $("#rest-time").val(restTimeGet);
-                    } else
-                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
-                            as: "m",
-                            to: "m",
-                            ignoreError: true
-                        });
-                    let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
-                        sumGet((workTimeGet + restTimeGet) * loopGet);
-                    } else {
-                        allClear();
-                    }
-                    if (store.get("infinity")) infinityMode();
-                }
-            } catch {
-                allClear();
+        function setPresetTime(fieldId, value) {
+            $(`#${fieldId}`).val(value);
+            allSet();
+        }
+
+        function keyDownSubmitter(e) {
+            if (e) {
+                if (e.keyCode !== 13) return;
             }
+            if (store.get("need-confirm")) {
+                if (confirm(i18n.__('submitter-confirm'))) submitter();
+            } else submitter();
         }
 
         function allClear() {
