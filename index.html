@@ -43,6 +43,54 @@
     <div class="bottom-resize"></div>
 
     <script src="supporter.js"></script><!-- support wnr running -->
+
+    <!-- Add minutes translation fallback after i18n is initialized in supporter.js -->
+    <script>
+        // Make sure 'minutes' translation key exists, or fallback to appropriate full words
+        if (!i18n.__('minutes')) {
+            // Define a mapping for full words based on language
+            const minutesMapping = {
+                'zh-CN': '分钟',   // Simplified Chinese
+                'zh-TW': '分鐘',   // Traditional Chinese
+                'en': 'minutes',  // English
+                'ja': '分',       // Japanese
+                'ko': '분',       // Korean
+                'fr': 'minutes',  // French
+                'de': 'Minuten',  // German
+                'it': 'minuti',   // Italian
+                'es': 'minutos',  // Spanish
+                'pt': 'minutos',  // Portuguese
+                'ru': 'минут',    // Russian
+            };
+            
+            // Get current language
+            const currentLang = store.get('i18n') || 'en';
+            
+            // Create a temporary i18n function that handles minutes specially
+            const originalFn = i18n.__;
+            i18n.__ = function(key) {
+                let result;
+                
+                if (key === 'minutes') {
+                    // Get base language (e.g., 'en' from 'en-US')
+                    const baseLang = currentLang.split('-')[0];
+                    
+                    // Try to get translation for the specific language first, then fallback to base language
+                    result = minutesMapping[currentLang] || minutesMapping[baseLang] || originalFn('min');
+                } else {
+                    result = originalFn(key);
+                }
+                
+                // Remove any language code suffix like "-[zh-CN]" that might be added
+                if (typeof result === 'string') {
+                    result = result.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                }
+                
+                return result;
+            };
+        }
+    </script>
+
     <script src="updater.js"></script><!-- check for updates -->
     <script>
         if (!store.get('tour')) {
@@ -183,12 +231,31 @@
                         <i class="iconfont icon-caret-down onlyRest"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rest-time-onlyrest-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 3, '3分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">3分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 5, '5分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">5分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 10, '10分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">10分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 15, '15分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">15分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 20, '20分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">20分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', 30, '30分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">30分钟</a>
+                        <script>
+                            // Populate rest-time-onlyrest preset dropdown items
+                            const restOnlyrestPresets = [3, 5, 10, 15, 20, 30];
+                            restOnlyrestPresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
                     </div>
                 </div>
                 <br /><br />
@@ -258,13 +325,31 @@
                         <i class="iconfont icon-caret-down work"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="work-time-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 10, '10分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">10分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 20, '20分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">20分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 30, '30分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">30分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 45, '45分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">45分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 60, '60分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">60分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 90, '90分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">90分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('work-time', 120, '120分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">120分钟</a>
+                        <script>
+                            // Populate work-time preset dropdown items
+                            const workTimePresets = [10, 20, 30, 45, 60, 90, 120];
+                            workTimePresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('work-time', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
                     </div>
                 </div>
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
@@ -281,12 +366,31 @@
                         <i class="iconfont icon-caret-down rest"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rest-time-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 3, '3分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">3分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 5, '5分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">5分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 10, '10分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">10分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 15, '15分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">15分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 20, '20分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">20分钟</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('rest-time', 30, '30分钟')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">30分钟</a>
+                        <script>
+                            // Populate rest-time preset dropdown items
+                            const restTimePresets = [3, 5, 10, 15, 20, 30];
+                            restTimePresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('rest-time', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
                     </div>
                 </div>
                 <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
@@ -303,11 +407,21 @@
                         <i class="iconfont icon-caret-down text-muted"></i>
                     </a>
                     <div class="dropdown-menu" aria-labelledby="loop-presets-dropdown">
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 1, '1次')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">1次</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 2, '2次')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">2次</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 3, '3次')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">3次</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 4, '4次')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">4次</a>
-                        <a class="dropdown-item" href="javascript:setPresetTime('loop', 5, '5次')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">5次</a>
+                        <script>
+                            // Populate loop preset dropdown items
+                            const loopPresets = [1, 2, 3, 4, 5];
+                            loopPresets.forEach(function(preset) {
+                                // Clean up time text to remove any language code
+                                let timesText = preset > 1 ? i18n.__('times') : i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                                timesText = timesText.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + timesText;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('loop', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
                     </div>
                 </div>
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
@@ -505,13 +619,24 @@
                 restTime,
                 loopCount;
             if (onlyrest) {
-                restTime = $("#rest-time-onlyrest").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
+                // Use both 'min' and 'minutes' for replacement to handle both abbreviations and full words
+                restTime = $("#rest-time-onlyrest").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
                 workTime = 0;
                 loopCount = 1;
             } else {
-                workTime = $("#work-time").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
-                restTime = $("#rest-time").val().replace(new RegExp('[' + i18n.__('min') + ']', "g"), "");
-                loopCount = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "");
+                // Use both 'min' and 'minutes' for replacement to handle both abbreviations and full words
+                workTime = $("#work-time").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
+                restTime = $("#rest-time").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
+                loopCount = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "").trim();
             }
             if (isNaN(Number(workTime)) || isNaN(Number(restTime)) || isNaN(Number(loopCount)) || (Number(workTime) === 0 && !onlyrest)) {
                 if (!onlyrest)
@@ -532,8 +657,37 @@
             }
         }
 
-        function setPresetTime(fieldId, value, displayValue) {
-            $(`#${fieldId}`).val(displayValue || value);
+        function setPresetTime(fieldId, value) {
+            // Generate internationalized display value
+            let displayValue = '';
+            
+            if (fieldId === 'loop') {
+                // For loop values (1 time, 2 times, etc.)
+                let timesText = value > 1 ? i18n.__('times') : i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                
+                // Remove any language code that might be in the translation (e.g., "-[zh-CN]")
+                timesText = timesText.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                
+                displayValue = value + ' ' + timesText;
+            } else {
+                // For time values using the full word 'minutes' instead of the abbreviation 'min'
+                let minutes = i18n.__('minutes');
+                
+                // For Chinese languages, use specific characters
+                const currentLang = store.get('i18n') || 'en';
+                if (currentLang === 'zh-CN') {
+                    minutes = '分钟';
+                } else if (currentLang === 'zh-TW') {
+                    minutes = '分鐘';
+                }
+                
+                // Remove any language code that might be in the translation (e.g., "-[zh-CN]")
+                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                
+                displayValue = value + ' ' + minutes;
+            }
+            
+            $(`#${fieldId}`).val(displayValue);
             allSet();
         }
 

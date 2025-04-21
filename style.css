@@ -1206,3 +1206,98 @@ li input:nth-last-child(4)::after {
     background-color: white !important;
     opacity: 1 !important;
 }
+
+/* Dark mode support for dropdowns */
+.dark-theme .dropdown-menu {
+    background-color: #2a2a2a !important;
+    border-color: #444444 !important;
+}
+
+.dark-theme .dropdown-item {
+    background-color: #2a2a2a !important;
+}
+
+.dark-theme .dropdown-item:hover,
+.dark-theme .dropdown-item:focus {
+    background-color: #3a3a3a !important;
+}
+
+/* Specific dropdown overrides for dark mode */
+.dark-theme #work-time-presets-dropdown + .dropdown-menu,
+.dark-theme #rest-time-presets-dropdown + .dropdown-menu,
+.dark-theme #rest-time-onlyrest-presets-dropdown + .dropdown-menu,
+.dark-theme #loop-presets-dropdown + .dropdown-menu {
+    background-color: #2a2a2a !important;
+    border: 1px solid #444444 !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+}
+
+.dark-theme .dropdown-menu * {
+    background-color: #2a2a2a !important;
+}
+
+.dark-theme .time-preset-dropdown .dropdown-menu {
+    background-color: #2a2a2a !important;
+}
+
+.dark-theme .time-preset-dropdown .dropdown-menu .dropdown-item {
+    background-color: #2a2a2a !important;
+    color: #e0e0e0 !important;
+}
+
+.dark-theme #work-time-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #rest-time-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #rest-time-onlyrest-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #loop-presets-dropdown + .dropdown-menu .dropdown-item {
+    background-color: #2a2a2a !important;
+}
+
+.dark-theme #work-time-presets-dropdown + .dropdown-menu .dropdown-item:hover,
+.dark-theme #work-time-presets-dropdown + .dropdown-menu .dropdown-item:focus,
+.dark-theme #rest-time-presets-dropdown + .dropdown-menu .dropdown-item:hover,
+.dark-theme #rest-time-presets-dropdown + .dropdown-menu .dropdown-item:focus,
+.dark-theme #rest-time-onlyrest-presets-dropdown + .dropdown-menu .dropdown-item:hover,
+.dark-theme #rest-time-onlyrest-presets-dropdown + .dropdown-menu .dropdown-item:focus,
+.dark-theme #loop-presets-dropdown + .dropdown-menu .dropdown-item:hover,
+.dark-theme #loop-presets-dropdown + .dropdown-menu .dropdown-item:focus {
+    background-color: #3a3a3a !important;
+}
+
+/* No need to specify text colors for specific dropdown items in dark mode
+   as they will use the dynamic colors from theme.js */
+
+/* Make scrollbar more visible in dark mode */
+.dark-theme ::-webkit-scrollbar-track {
+    background-color: #2a2a2a;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb {
+    background-color: #555555;
+}
+
+.dark-theme ::-webkit-scrollbar-thumb:active {
+    background-color: #777777;
+}
+
+/* Additional dark mode fixes for dropdown items */
+.dark-theme .dropdown-menu,
+.dark-theme .dropdown-menu .dropdown-item,
+.dark-theme .dropdown-menu a,
+.dark-theme .dropdown-menu div {
+    background-color: #2a2a2a !important;
+}
+
+.dark-theme #work-time-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #rest-time-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #rest-time-onlyrest-presets-dropdown + .dropdown-menu .dropdown-item,
+.dark-theme #loop-presets-dropdown + .dropdown-menu .dropdown-item {
+    background-color: #2a2a2a !important;
+}
+
+/* Override any inline styles */
+.dark-theme .dropdown-menu a[style*="background-color"],
+.dark-theme .dropdown-menu .dropdown-item[style*="background-color"] {
+    background-color: #2a2a2a !important;
+}
+
+/* Make scrollbar more visible in dark mode */
