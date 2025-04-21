@@ -394,5 +394,6 @@
 	"can-redo-msg": "是否需要对当前段时间进行重新计时？",
 	"custom": "自定义",
 	"custom-notify-sound": "自定义提示音",
-	"input-url": "输入路径"
+	"input-url": "输入路径",
+	"minutes": "minutes-[zh-CN]"
 }

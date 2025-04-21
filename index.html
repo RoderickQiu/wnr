@@ -43,6 +43,54 @@
     <div class="bottom-resize"></div>
 
     <script src="supporter.js"></script><!-- support wnr running -->
+
+    <!-- Add minutes translation fallback after i18n is initialized in supporter.js -->
+    <script>
+        // Make sure 'minutes' translation key exists, or fallback to appropriate full words
+        if (!i18n.__('minutes')) {
+            // Define a mapping for full words based on language
+            const minutesMapping = {
+                'zh-CN': '分钟',   // Simplified Chinese
+                'zh-TW': '分鐘',   // Traditional Chinese
+                'en': 'minutes',  // English
+                'ja': '分',       // Japanese
+                'ko': '분',       // Korean
+                'fr': 'minutes',  // French
+                'de': 'Minuten',  // German
+                'it': 'minuti',   // Italian
+                'es': 'minutos',  // Spanish
+                'pt': 'minutos',  // Portuguese
+                'ru': 'минут',    // Russian
+            };
+            
+            // Get current language
+            const currentLang = store.get('i18n') || 'en';
+            
+            // Create a temporary i18n function that handles minutes specially
+            const originalFn = i18n.__;
+            i18n.__ = function(key) {
+                let result;
+                
+                if (key === 'minutes') {
+                    // Get base language (e.g., 'en' from 'en-US')
+                    const baseLang = currentLang.split('-')[0];
+                    
+                    // Try to get translation for the specific language first, then fallback to base language
+                    result = minutesMapping[currentLang] || minutesMapping[baseLang] || originalFn('min');
+                } else {
+                    result = originalFn(key);
+                }
+                
+                // Remove any language code suffix like "-[zh-CN]" that might be added
+                if (typeof result === 'string') {
+                    result = result.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                }
+                
+                return result;
+            };
+        }
+    </script>
+
     <script src="updater.js"></script><!-- check for updates -->
     <script>
         if (!store.get('tour')) {
@@ -177,6 +225,39 @@
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
                        class="onlyRest lead text-center" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="rest-time-onlyrest-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
+                        <i class="iconfont icon-caret-down onlyRest"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rest-time-onlyrest-presets-dropdown">
+                        <script>
+                            // Populate rest-time-onlyrest preset dropdown items
+                            const restOnlyrestPresets = [3, 5, 10, 15, 20, 30];
+                            restOnlyrestPresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('rest-time-onlyrest', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
+                    </div>
+                </div>
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
@@ -215,7 +296,7 @@
             <div class="dropdown dropdown-default" id="dropdown-tasks">
                 <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
                    data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+                   aria-haspopup="true" aria-expanded="false" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
                     <span id="expand-left">
                         <script>document.write(i18n.__('default'));</script>
                     </span>
@@ -227,7 +308,7 @@
                     </div>
                     <div class="dropdown-divider" id="predefined-tasks-divider"></div>
                     <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
-                       href="javascript:call('predefined-tasks')">
+                       href="javascript:call('predefined-tasks')" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
                         <span class="text-info underlined">
                             <script>document.write(i18n.__('edit'));</script>
                         </span>
@@ -238,6 +319,39 @@
             <div class="align-content-center">
                 <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
                        required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="work-time-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
+                        <i class="iconfont icon-caret-down work"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="work-time-presets-dropdown">
+                        <script>
+                            // Populate work-time preset dropdown items
+                            const workTimePresets = [10, 20, 30, 45, 60, 90, 120];
+                            workTimePresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('work-time', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
+                    </div>
+                </div>
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small work">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -246,6 +360,39 @@
             <br />
             <div class="align-content-center">
                 <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="rest-time-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
+                        <i class="iconfont icon-caret-down rest"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="rest-time-presets-dropdown">
+                        <script>
+                            // Populate rest-time preset dropdown items
+                            const restTimePresets = [3, 5, 10, 15, 20, 30];
+                            restTimePresets.forEach(function(preset) {
+                                // Get the correct localized minutes text
+                                let minutes = i18n.__('minutes');
+                                
+                                // For Chinese languages, use specific characters
+                                const currentLang = store.get('i18n') || 'en';
+                                if (currentLang === 'zh-CN') {
+                                    minutes = '分钟';
+                                } else if (currentLang === 'zh-TW') {
+                                    minutes = '分鐘';
+                                }
+                                
+                                // Clean up any remaining language code
+                                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + minutes;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('rest-time', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
+                    </div>
+                </div>
                 <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small rest">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -254,10 +401,33 @@
             <br />
             <div class="align-content-center">
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
+                <div class="dropdown d-inline time-preset-dropdown">
+                    <a class="dropdown-toggle" href="#" role="button" id="loop-presets-dropdown"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
+                        <i class="iconfont icon-caret-down text-muted"></i>
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="loop-presets-dropdown">
+                        <script>
+                            // Populate loop preset dropdown items
+                            const loopPresets = [1, 2, 3, 4, 5];
+                            loopPresets.forEach(function(preset) {
+                                // Clean up time text to remove any language code
+                                let timesText = preset > 1 ? i18n.__('times') : i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                                timesText = timesText.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                                
+                                const displayText = preset + ' ' + timesText;
+                                document.write(
+                                    `<a class="dropdown-item" href="javascript:setPresetTime('loop', ${preset})" 
+                                        onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">${displayText}</a>`
+                                );
+                            });
+                        </script>
+                    </div>
+                </div>
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
                        data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                       aria-haspopup="true" aria-expanded="false" data-offset="0, 21" onKeyDown="this.click()" onKeyPress="this.click()" onKeyUp="return false;">
                         <span class="dropdown-default extreme-small">
                             <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
                         </span>
@@ -432,9 +602,7 @@
                 myDate.setSeconds(myDate.getSeconds() + Number(timeCount * 60));
                 $("#to-num-h").html(myDate.getHours());
                 let minuteString = myDate.getMinutes().toString();
-                if (minuteString.length < 2) {
-                    minuteString = "0" + minuteString;
-                }
+                if (minuteString.length < 2) minuteString = "0" + minuteString;
                 $("#to-num-min").html(minuteString);
             }
         }
@@ -446,57 +614,90 @@
         }
 
         function allSet() {
-            function removeRedundantEnd(number) {
-                let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
-                if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
-                return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
-                    lang: store.get("i18n").toString().replace("-", "_"),
-                    as: "m",
-                    to: "m",
-                    ignoreError: true
-                });
+            let
+                workTime,
+                restTime,
+                loopCount;
+            if (onlyrest) {
+                // Use both 'min' and 'minutes' for replacement to handle both abbreviations and full words
+                restTime = $("#rest-time-onlyrest").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
+                workTime = 0;
+                loopCount = 1;
+            } else {
+                // Use both 'min' and 'minutes' for replacement to handle both abbreviations and full words
+                workTime = $("#work-time").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
+                restTime = $("#rest-time").val()
+                          .replace(new RegExp('[' + i18n.__('min') + ']', "g"), "")
+                          .replace(new RegExp('[' + i18n.__('minutes') + ']', "g"), "")
+                          .trim();
+                loopCount = $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), "").trim();
             }
+            if (isNaN(Number(workTime)) || isNaN(Number(restTime)) || isNaN(Number(loopCount)) || (Number(workTime) === 0 && !onlyrest)) {
+                if (!onlyrest)
+                    sumGet((store.get("infinity") || loopCount === "") ? NaN :
+                        Number(workTime) * Number(loopCount) + Number(restTime) * Number(loopCount ? loopCount : 0));
+                else
+                    sumGet(Number(restTime));
+                $("#bottom-btn").attr("disabled", true);
+                $("#next-timer-button").attr("disabled", true);
+            } else {
+                if (!onlyrest)
+                    sumGet((store.get("infinity") || loopCount === "") ? NaN :
+                        Number(workTime) * Number(loopCount) + Number(restTime) * Number(loopCount ? loopCount : 0));
+                else
+                    sumGet(Number(restTime));
+                $("#bottom-btn").attr("disabled", false);
+                $("#next-timer-button").attr("disabled", false);
+            }
+        }
 
-            try {
-                if (onlyrest) {
-                    let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
-                    if (!isNaN(restTimeGet))
-                        if (restTimeGet > 0 && restTimeGet <= 1440)
-                            sumGet(restTimeGet);
-                        else allClear();
-                    else allClear();
-                } else {
-                    let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-                    let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
-                    let restTimeGet = 0;
-                    if (getBreakPercentage() !== 0) {
-                        restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
-                        $("#rest-time").val(restTimeGet);
-                    } else
-                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
-                            as: "m",
-                            to: "m",
-                            ignoreError: true
-                        });
-                    let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
-                        sumGet((workTimeGet + restTimeGet) * loopGet);
-                    } else {
-                        allClear();
-                    }
-                    if (store.get("infinity")) infinityMode();
+        function setPresetTime(fieldId, value) {
+            // Generate internationalized display value
+            let displayValue = '';
+            
+            if (fieldId === 'loop') {
+                // For loop values (1 time, 2 times, etc.)
+                let timesText = value > 1 ? i18n.__('times') : i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                
+                // Remove any language code that might be in the translation (e.g., "-[zh-CN]")
+                timesText = timesText.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                
+                displayValue = value + ' ' + timesText;
+            } else {
+                // For time values using the full word 'minutes' instead of the abbreviation 'min'
+                let minutes = i18n.__('minutes');
+                
+                // For Chinese languages, use specific characters
+                const currentLang = store.get('i18n') || 'en';
+                if (currentLang === 'zh-CN') {
+                    minutes = '分钟';
+                } else if (currentLang === 'zh-TW') {
+                    minutes = '分鐘';
                 }
-            } catch {
-                allClear();
+                
+                // Remove any language code that might be in the translation (e.g., "-[zh-CN]")
+                minutes = minutes.replace(/-\[[a-zA-Z\-]+\]$/, '');
+                
+                displayValue = value + ' ' + minutes;
             }
+            
+            $(`#${fieldId}`).val(displayValue);
+            allSet();
+        }
+
+        function keyDownSubmitter(e) {
+            if (e) {
+                if (e.keyCode !== 13) return;
+            }
+            if (store.get("need-confirm")) {
+                if (confirm(i18n.__('submitter-confirm'))) submitter();
+            } else submitter();
         }
 
         function allClear() {
