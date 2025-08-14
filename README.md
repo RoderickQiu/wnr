@@ -1,106 +1,25 @@
-<p align="center"><img src="https://i.loli.net/2020/01/27/bOvLlYmT7dQFRjr.png"
-        width="64px" /></p>
+ <h1 align="center">wnr_with_music</h1>
 
-<h2 align="center">wnr</h2>
-
-<p align="center">
-    <b>A timer app with strong expansibility for computers</b> | <a href="https://getwnr.com/">Website</a> | <a href="https://getwnr.com/zh/">网站中文页面</a>
-</p>
-
-<p align="center">
-    Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
-        href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
-</p>
-
-<p align="center">
-    <a href="https://github.com/RoderickQiu/wnr/blob/master/README.md">English README</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-CN.md">简体中文简介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/README.zh-TW.md">正體中文簡介</a> | <a href="https://github.com/RoderickQiu/wnr/blob/master/DEVELOPMENT_GUIDE.md">Development Guide</a> | <a href="mailto:scrisqiu@hotmail.com">Contact Me</a>
-</p>
+wnr 是一个非常好用的番茄钟程序，这是 [wnr官网](https://getwnr.com/zh/)
 
 ---
 
-## Contributing
+## Fork 说明
+本项目基于 [[RoderickQiu/wnr](https://github.com/RoderickQiu/wnr)]，并在原有桌面番茄钟基础上增加了“自定义本地音乐播放”功能。
 
-I appreciate it if you can help contribute.
+### 新增功能
 
-- If you have any feature requests / bugs to report, feel free
-  to [have a issue](https://github.com/RoderickQiu/wnr/issues/new).
+- 支持在主界面选择本地音乐文件（mp3/wav 等），可播放/暂停，作为专注或休息时的背景音乐。
+- 正在完善播放相关功能
+### 展示
+![alt text](res/readme/image.png)
 
-- If you have done something brilliant, then [go for a pull request](https://github.com/RoderickQiu/wnr/pulls).
+## 许可证
 
-- If you want to add a new language to
-  wnr, [see this guide first](https://github.com/RoderickQiu/wnr/blob/master/locales/README.md).
+本项目遵循 [Mozilla Public License 2.0 (MPL 2.0)](./LICENSE)。
 
-## How to Build
+本项目为个人学习与功能扩展用途，原作者及原项目地址：[[RoderickQiu/wnr](https://github.com/RoderickQiu/wnr)]
 
-```shell
-yarn # install deps
+---
 
-yarn start # launch the app
-
-yarn dir # build executable only
-
-yarn nsis # windows nsis installer
-
-yarn 7zip # windows 7zip protable version
-
-yarn mac # macos
-
-yarn linux # linux
-
-yarn appimage # linux AppImage
-```
-
-## Star History
-
-<p align="center">
-    <a href="https://star-history.com/#RoderickQiu/wnr&Date">
-     <picture>
-       <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date&theme=dark" />
-       <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date" />
-       <img alt="Star History Chart" src="https://api.star-history.com/svg?repos=RoderickQiu/wnr&type=Date" />
-     </picture>
-    </a>
-</p>
-
-## Copyright & Credit
-
-Copyright (c) 2019-2025 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
-
-Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
-
-### Packages Using
-
-#### Main Program
-
-For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which
-is also included in every copy of wnr.
-
-- node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
-- cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
-- node-auto-launch, Teamwork, MIT License.
-- compare-version, kevva, MIT License.
-- electron-store, sindresorhus, MIT License.
-- i18n-node, mashpie, MIT License.
-- crypto-js, brix, MIT License.
-- copy-to-clipboard, sudodoki, MIT License.
-- request, request, Apache-2.0 License.
-- winreg, fresc81, BSD 2-Clause License.
-- **electron, electron, MIT License**.
-- electron-builder, electron-userland, MIT License.
-- jquery, jquery, MIT License.
-- bootstrap, twbs, MIT License.
-- iconfont, ALIMAMA MUX, for license go to [the site](https://www.iconfont.cn/).
-- dotenv, motdotla, BSD-2-Clause License.
-- electron-debug, sindresorhus, MIT License.
-- node-fetch, node-fetch, MIT License.
-- node-notifier, mikaelbr, MIT License.
-- popper.js, popperjs, MIT License.
-- schart.js, lin-xin, MIT License.
-- cross-env, kentcdodds, MIT License.
-
-### Environment Using
-
-- **node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE)**.
-- NSIS, Nullsoft, zlib/libpng License.
-- WebStorm, JetBrains, [License](https://www.jetbrains.com/legal/#licensing).
+For English users: This is a fork of[[RoderickQiu/wnr](https://github.com/RoderickQiu/wnr)] with a new feature: you can select and play your own local music file as background music in the Pomodoro timer main interface. All code is released under MPL 2.0.

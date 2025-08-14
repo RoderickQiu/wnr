@@ -58,13 +58,13 @@
         function keyDownSubmitter() {
             if (onlyrest)
                 window.location.href =
-                        "timer.html?title=&work-time=0.7777&rest-time="
-                        + shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true })
-                        + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
-                        + document.getElementById("focus-rest-set-onlyrest").checked
-                        + "&restored=false"
-                        + "&times=0&discount=&continueloop="
-                        + document.getElementById("focus-continueloop-set-onlyrest").checked;
+                    "timer.html?title=&work-time=0.7777&rest-time="
+                    + shi.humanTimeParser($("#rest-time-onlyrest").val(), { as: "m", to: "m", ignoreError: true })
+                    + "&loop=1&note=&method=2&work-time-focused=false&rest-time-focused="
+                    + document.getElementById("focus-rest-set-onlyrest").checked
+                    + "&restored=false"
+                    + "&times=0&discount=&continueloop="
+                    + document.getElementById("focus-continueloop-set-onlyrest").checked;
             else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
                 ipc.send("alert", i18n.__('all-focus-mode-warn'));
             else if (((document.getElementById("focus-work-set").checked && shi.humanTimeParser($("#work-time").val(), {
@@ -79,23 +79,23 @@
                 ipc.send("force-long-focus-request");
             else
                 window.location.href = "timer.html?title=" + $("#title").val()
-                        + "&work-time=" + shi.humanTimeParser($("#work-time").val(), {
-                            as: "m",
-                            to: "m",
-                            ignoreError: true
-                        })
-                        + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), {
-                            as: "m",
-                            to: "m",
-                            ignoreError: true
-                        })
-                        + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
-                        + "&note=" + $("#note").val()
-                        + "&method=1"
-                        + "&work-time-focused=" + document.getElementById("focus-work-set").checked
-                        + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
-                        + "&restored=false"
-                        + "&times=0&continueloop=false&discount=" + $("#first-work-discount").val();
+                    + "&work-time=" + shi.humanTimeParser($("#work-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    })
+                    + "&rest-time=" + shi.humanTimeParser($("#rest-time").val(), {
+                        as: "m",
+                        to: "m",
+                        ignoreError: true
+                    })
+                    + "&loop=" + (store.get("infinity") ? 0 : $("#loop").val().replace(new RegExp('[' + i18n.__('times') + ']', "g"), ""))
+                    + "&note=" + $("#note").val()
+                    + "&method=1"
+                    + "&work-time-focused=" + document.getElementById("focus-work-set").checked
+                    + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
+                    + "&restored=false"
+                    + "&times=0&continueloop=false&discount=" + $("#first-work-discount").val();
         }
 
         ipc.on("force-long-focus-granted", function () {
@@ -129,22 +129,19 @@
             <a href="javascript:statistics()" class="small rest" id="statistics"><i
                     class="iconfont icon-statistics"></i></a>&nbsp;&nbsp;
             <a href="javascript:call('locker')" class="small rest" id="locker" style="display: none"><i
-                    class="iconfont icon-lock"></i></a><a href="javascript:call('settings')"
-                                                          class="small rest" id="settings"><i
-                class="iconfont icon-cog should-lock"></i></a><span id="mac-out">&nbsp;<span
-                class="controller-msg-spacing xx-small rest font-weight-bold">|</span>
-            <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
-                    class="iconfont icon-dockpanel" id="window-hide"></i></a><span
+                    class="iconfont icon-lock"></i></a><a href="javascript:call('settings')" class="small rest"
+                id="settings"><i class="iconfont icon-cog should-lock"></i></a><span id="mac-out">&nbsp;<span
+                    class="controller-msg-spacing xx-small rest font-weight-bold">|</span>
+                <a href="javascript:call('window-hide')" class="small rest" id="win-hider"><i
+                        class="iconfont icon-dockpanel" id="window-hide"></i></a><span
                     id="no-use-space">&nbsp;&nbsp;</span>
-             <a href="javascript:call('window-maximize')" class="small rest" id="win-max"><i
-                     class="iconfont icon-maximize" id="window-max"></i></a><span
+                <a href="javascript:call('window-maximize')" class="small rest" id="win-max"><i
+                        class="iconfont icon-maximize" id="window-max"></i></a><span
                     id="no-use-space-2">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
-                                                                               id="window-minimize"></i></a><span
-                    class="should-lock">&nbsp;&nbsp;</span>
-            <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i
-                    class="iconfont icon-close"
-                    id="exit"></i></a></span>
+                <a href="javascript:call('window-minimize')" class="small rest"><i class="iconfont icon-minus"
+                        id="window-minimize"></i></a><span class="should-lock">&nbsp;&nbsp;</span>
+                <a href="javascript:call('window-close-chk')" class="small rest should-lock"><i
+                        class="iconfont icon-close" id="exit"></i></a></span>
             <script>
                 $('#logo-bar').attr('title', i18n.__('info'));
                 $('#window-hide').attr('title', i18n.__('window-hide'));
@@ -176,7 +173,7 @@
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
                 <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
-                       class="onlyRest lead text-center" required />
+                    class="onlyRest lead text-center" required />
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
@@ -184,8 +181,7 @@
                         <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
                     </span>
                     &nbsp;
-                    <input id="focus-continueloop-set-onlyrest" type="checkbox"
-                           onchange="onlyRestEdgeCaseSolution()" />
+                    <input id="focus-continueloop-set-onlyrest" type="checkbox" onchange="onlyRestEdgeCaseSolution()" />
                     <span id="continueloop" class="focuser extreme-small onlyRest text-left">
                         <script>document.write(i18n.__('continueloop-part-1') + "<br />" + i18n.__('continueloop-part-2'))</script>
                     </span>
@@ -213,9 +209,8 @@
                 </a>
             </div>
             <div class="dropdown dropdown-default" id="dropdown-tasks">
-                <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
-                   data-toggle="dropdown"
-                   aria-haspopup="true" aria-expanded="false">
+                <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
                     <span id="expand-left">
                         <script>document.write(i18n.__('default'));</script>
                     </span>
@@ -227,7 +222,7 @@
                     </div>
                     <div class="dropdown-divider" id="predefined-tasks-divider"></div>
                     <a class="dropdown-item font-weight-bold" id="predefined-tasks-edit"
-                       href="javascript:call('predefined-tasks')">
+                        href="javascript:call('predefined-tasks')">
                         <span class="text-info underlined">
                             <script>document.write(i18n.__('edit'));</script>
                         </span>
@@ -237,7 +232,7 @@
             <br /><br />
             <div class="align-content-center">
                 <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
-                       required />
+                    required />
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small work">
                     <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
@@ -255,15 +250,13 @@
             <div class="align-content-center">
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
-                    <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
-                       data-toggle="dropdown"
-                       aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
+                    <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
                         <span class="dropdown-default extreme-small">
                             <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
                         </span>
                     </a>
-                    <div class="dropdown-menu p-1" id="dropdown-menu-extend"
-                         aria-labelledby="dropdown-extend-button">
+                    <div class="dropdown-menu p-1" id="dropdown-menu-extend" aria-labelledby="dropdown-extend-button">
                         <p class="extreme-small">&nbsp;</p>
                         <div class="form-group px-1" id="extend-form">
                             <input name="title" id="title" type="text" class="small" maxlength="14" />
@@ -271,8 +264,7 @@
                             <input name="note" id="note" type="text" class="small text-muted" maxlength="39" />
                             <br />
                             <input name="first-work-discount" id="first-work-discount" type="text"
-                                   class="small text-muted"
-                                   maxlength="39" />
+                                class="small text-muted" maxlength="39" />
                         </div>
                     </div>
                 </div>
@@ -301,8 +293,7 @@
             <script>document.write(i18n.__('all-sum-part-1'));</script>
             <span id="all-sum-num">---</span>
             <script>document.write(i18n.__('all-sum-part-2'));</script>
-            <span id="to-num-h">--</span>:<span
-                id="to-num-min">--</span>
+            <span id="to-num-h">--</span>:<span id="to-num-min">--</span>
             <div class="extreme-small font-weight-normal" id="focus-notify-box">
                 <br />
                 &nbsp;
@@ -323,309 +314,329 @@
                 </span>
             </div>
         </div>
+        <!-- 分隔线与自定义音乐播放控件（修正重复按钮，调整分隔线高度） -->
+        <div class="d-flex align-items-center justify-content-center mb-3" style="margin-top:24px;">
+            <div
+                style="height:170px;width:3px;background:#e7e7e7;margin:0 32px 0 0;display:inline-block;border-radius:2px;">
+            </div>
+            <div id="music-player" class="text-center" style="flex:1;">
+                <div id="music-file-name" class="small text-muted mb-1"
+                    style="display:block;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
+                </div>
+                <input type="file" id="music-file-input" accept="audio/*" style="display:none" />
+                <button id="select-music-btn" class="btn btn-sm btn-outline-secondary mb-2">选择音乐文件</button>
+                <div id="music-btn-row" class="d-flex justify-content-center flex-row" style="gap:8px;">
+                    <button id="play-music-btn" class="btn btn-sm btn-outline-primary"
+                        style="min-width:64px;max-width:100px;" disabled>播放</button>
+                    <button id="pause-music-btn" class="btn btn-sm btn-outline-danger"
+                        style="min-width:64px;max-width:100px;" disabled>暂停</button>
+                </div>
+                <audio id="custom-audio" preload="auto"></audio>
+            </div>
+        </div>
         <button id="bottom-btn" type="button" class="btn btn-outline-primary" onclick="keyDownSubmitter()">
-            <i class="iconfont icon-start-timer"></i>&nbsp;<script>document.write(i18n.__('submitter'));</script>
+            <i class="iconfont icon-start-timer"></i>&nbsp;
+            <script>document.write(i18n.__('submitter'));</script>
         </button>
-    </div>
 
-    <script>
-        isTimerWindow(false);
-        if (process.platform === "darwin") {
-            $("#win-hider").css("display", "none");
-            $("#no-use-space").css("display", "none");
-        } else {
-            $("#logo-bar").css("display", "inline-block");
-        }
-
-        let onlyrest = false;
-        $("#set-onlyrest").hide();
-        $("#statistics-back").hide();
-        $("#new-feature").hide();
-
-        //new feature message
-        if (require("./update.json")["feature-introduction"] && !store.has("introduced-" + require("./update.json").version)) {
-            $("#new-feature-title").html(require("./update.json")["introduce"][store.get("i18n")]["title"]);
-            $("#new-feature-description").html(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
-            $("#new-feature-description-universal").html(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
-            //$("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
-            $("#new-feature").show();
-            $("#bottom-btn").hide();
-            $("#set").hide();
-            $("#all-sum").hide();
-            store.set("introduced-" + require("./update.json").version, true);
-        }
-
-        function newFeatureClose() {
-            $("#new-feature").hide();
-            $("#bottom-btn").show();
-            $("#set").show();
-            $("#all-sum").show();
-        }
-
-        function statistics() {
-            window.location.href = "statistics.html";
-        }
-
-        function onlyRest(mode) {
-            if (mode === 'in') {
-                $("#set").hide();
-                $("#set-onlyrest").show();
-                $("#statistics-back").show();
-                $("#logo-bar").hide();
-                onlyrest = true;
-                allSet();
-                $("#rest-time-onlyrest").focus();
-                $(".work").addClass("onlyRest");//onlyRest mode now has specific color
-                $(".rest").addClass("onlyRest");
-                $("#bottom-btn").addClass("btn-onlyRest")
+        <script>
+            isTimerWindow(false);
+            if (process.platform === "darwin") {
+                $("#win-hider").css("display", "none");
+                $("#no-use-space").css("display", "none");
             } else {
-                store.set("just-back", true);
-                if (onlyrest) window.location.reload();
+                $("#logo-bar").css("display", "inline-block");
             }
-        }
 
-        ipc.on('onlyrest', function () {
-            onlyRest("in");
-        });
+            let onlyrest = false;
+            $("#set-onlyrest").hide();
+            $("#statistics-back").hide();
+            $("#new-feature").hide();
 
-        function liberalTiming() {
-            window.location.href =
+            //new feature message
+            if (require("./update.json")["feature-introduction"] && !store.has("introduced-" + require("./update.json").version)) {
+                $("#new-feature-title").html(require("./update.json")["introduce"][store.get("i18n")]["title"]);
+                $("#new-feature-description").html(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
+                $("#new-feature-description-universal").html(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
+                //$("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
+                $("#new-feature").show();
+                $("#bottom-btn").hide();
+                $("#set").hide();
+                $("#all-sum").hide();
+                store.set("introduced-" + require("./update.json").version, true);
+            }
+
+            function newFeatureClose() {
+                $("#new-feature").hide();
+                $("#bottom-btn").show();
+                $("#set").show();
+                $("#all-sum").show();
+            }
+
+            function statistics() {
+                window.location.href = "statistics.html";
+            }
+
+            function onlyRest(mode) {
+                if (mode === 'in') {
+                    $("#set").hide();
+                    $("#set-onlyrest").show();
+                    $("#statistics-back").show();
+                    $("#logo-bar").hide();
+                    onlyrest = true;
+                    allSet();
+                    $("#rest-time-onlyrest").focus();
+                    $(".work").addClass("onlyRest");//onlyRest mode now has specific color
+                    $(".rest").addClass("onlyRest");
+                    $("#bottom-btn").addClass("btn-onlyRest")
+                } else {
+                    store.set("just-back", true);
+                    if (onlyrest) window.location.reload();
+                }
+            }
+
+            ipc.on('onlyrest', function () {
+                onlyRest("in");
+            });
+
+            function liberalTiming() {
+                window.location.href =
                     "timer.html?title=" + i18n.__('positive')
                     + "&work-time=3&rest-time=3&loop=0"
                     + "&note=" + i18n.__('positive-msg')
                     + "&method=3&work-time-focused=false&rest-time-focused=false&restored=false&times=0&continueloop=false";
-        }
-
-        ipc.on('positive', function () {
-            liberalTiming();
-        });
-
-        //switch default page to other pages
-        if (!store.get("just-back")) {
-            switch (store.get("default-page")) {
-                case 0:
-                    break;
-                case 1:
-                    liberalTiming();
-                    break;
-                case 2:
-                    onlyRest('in');
-                    break;
-                default:
-                    break;
             }
-        } else {
-            store.set("just-back", false);
-        }
 
-        function sumGet(timeCount) {
-            // the unit of timeCount is minute
-            if (!isNaN(timeCount)) {
-                let timeCountString = timeCount.toFixed(1);
-                // strip ".0"
-                if (timeCountString[timeCountString.length - 1] === "0") {
-                    timeCountString = timeCountString.slice(0, timeCountString.length - 2)
+            ipc.on('positive', function () {
+                liberalTiming();
+            });
+
+            //switch default page to other pages
+            if (!store.get("just-back")) {
+                switch (store.get("default-page")) {
+                    case 0:
+                        break;
+                    case 1:
+                        liberalTiming();
+                        break;
+                    case 2:
+                        onlyRest('in');
+                        break;
+                    default:
+                        break;
                 }
-                $("#all-sum-num").html(timeCountString);
-                let myDate = new Date();
-                // hours and minutes increase automatically
-                myDate.setSeconds(myDate.getSeconds() + Number(timeCount * 60));
-                $("#to-num-h").html(myDate.getHours());
-                let minuteString = myDate.getMinutes().toString();
-                if (minuteString.length < 2) {
-                    minuteString = "0" + minuteString;
+            } else {
+                store.set("just-back", false);
+            }
+
+            function sumGet(timeCount) {
+                // the unit of timeCount is minute
+                if (!isNaN(timeCount)) {
+                    let timeCountString = timeCount.toFixed(1);
+                    // strip ".0"
+                    if (timeCountString[timeCountString.length - 1] === "0") {
+                        timeCountString = timeCountString.slice(0, timeCountString.length - 2)
+                    }
+                    $("#all-sum-num").html(timeCountString);
+                    let myDate = new Date();
+                    // hours and minutes increase automatically
+                    myDate.setSeconds(myDate.getSeconds() + Number(timeCount * 60));
+                    $("#to-num-h").html(myDate.getHours());
+                    let minuteString = myDate.getMinutes().toString();
+                    if (minuteString.length < 2) {
+                        minuteString = "0" + minuteString;
+                    }
+                    $("#to-num-min").html(minuteString);
                 }
-                $("#to-num-min").html(minuteString);
-            }
-        }
-
-        function getBreakPercentage() {
-            let value = store.get("percentage-break-mode");
-            let percentage = [0, 0.05, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3];
-            return percentage[value];
-        }
-
-        function allSet() {
-            function removeRedundantEnd(number) {
-                let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
-                if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
-                return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
-                    lang: store.get("i18n").toString().replace("-", "_"),
-                    as: "m",
-                    to: "m",
-                    ignoreError: true
-                });
             }
 
-            try {
-                if (onlyrest) {
-                    let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
+            function getBreakPercentage() {
+                let value = store.get("percentage-break-mode");
+                let percentage = [0, 0.05, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3];
+                return percentage[value];
+            }
+
+            function allSet() {
+                function removeRedundantEnd(number) {
+                    let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
+                    if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
+                    return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
+                        lang: store.get("i18n").toString().replace("-", "_"),
                         as: "m",
                         to: "m",
                         ignoreError: true
                     });
-                    if (!isNaN(restTimeGet))
-                        if (restTimeGet > 0 && restTimeGet <= 1440)
-                            sumGet(restTimeGet);
-                        else allClear();
-                    else allClear();
-                } else {
-                    let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-                    let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
-                        as: "m",
-                        to: "m",
-                        ignoreError: true
-                    });
-                    let restTimeGet = 0;
-                    if (getBreakPercentage() !== 0) {
-                        restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
-                        $("#rest-time").val(restTimeGet);
-                    } else
-                        restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
+                }
+
+                try {
+                    if (onlyrest) {
+                        let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
                             as: "m",
                             to: "m",
                             ignoreError: true
                         });
-                    let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
-                        sumGet((workTimeGet + restTimeGet) * loopGet);
+                        if (!isNaN(restTimeGet))
+                            if (restTimeGet > 0 && restTimeGet <= 1440)
+                                sumGet(restTimeGet);
+                            else allClear();
+                        else allClear();
                     } else {
-                        allClear();
+                        let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+                        let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
+                            as: "m",
+                            to: "m",
+                            ignoreError: true
+                        });
+                        let restTimeGet = 0;
+                        if (getBreakPercentage() !== 0) {
+                            restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
+                            $("#rest-time").val(restTimeGet);
+                        } else
+                            restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
+                                as: "m",
+                                to: "m",
+                                ignoreError: true
+                            });
+                        let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
+                        if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
+                            sumGet((workTimeGet + restTimeGet) * loopGet);
+                        } else {
+                            allClear();
+                        }
+                        if (store.get("infinity")) infinityMode();
                     }
-                    if (store.get("infinity")) infinityMode();
+                } catch {
+                    allClear();
                 }
-            } catch {
+            }
+
+            function allClear() {
+                $("#all-sum-num").html("---");
+                $("#to-num-h").html("--");
+                $("#to-num-min").html("--");
+            }
+
+            function infinityMode() {
+                $("#loop").val(i18n.__('infinity'));
                 allClear();
             }
-        }
 
-        function allClear() {
-            $("#all-sum-num").html("---");
-            $("#to-num-h").html("--");
-            $("#to-num-min").html("--");
-        }
-
-        function infinityMode() {
-            $("#loop").val(i18n.__('infinity'));
-            allClear();
-        }
-
-        function focusNotifier() {
-            let workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
-            let restFocus = onlyrest ? false : document.getElementById("focus-rest-set").checked;
-            let onlyRestFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : false;
-            if ((workFocus || restFocus || onlyRestFocus) && ((workFocus !== restFocus) || onlyRestFocus)) {
-                if (workFocus) $("#work-notify").css("display", "inline");
-                else $("#work-notify").css("display", "none");
-                if (restFocus) $("#rest-notify").css("display", "inline");
-                else $("#rest-notify").css("display", "none");
-                if (onlyRestFocus) $("#only-rest-notify").css("display", "inline");
-                else $("#only-rest-notify").css("display", "none");
-                $("#focus-notify-box").css("display", "inline");
-            } else {
-                $("#focus-notify-box").css("display", "none");
+            function focusNotifier() {
+                let workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
+                let restFocus = onlyrest ? false : document.getElementById("focus-rest-set").checked;
+                let onlyRestFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : false;
+                if ((workFocus || restFocus || onlyRestFocus) && ((workFocus !== restFocus) || onlyRestFocus)) {
+                    if (workFocus) $("#work-notify").css("display", "inline");
+                    else $("#work-notify").css("display", "none");
+                    if (restFocus) $("#rest-notify").css("display", "inline");
+                    else $("#rest-notify").css("display", "none");
+                    if (onlyRestFocus) $("#only-rest-notify").css("display", "inline");
+                    else $("#only-rest-notify").css("display", "none");
+                    $("#focus-notify-box").css("display", "inline");
+                } else {
+                    $("#focus-notify-box").css("display", "none");
+                }
             }
-        }
 
-        function onlyRestEdgeCaseSolution() {
-            function disableOnlyRestFocusButton(flag) {
-                if (flag) $("#focus-rest-set-onlyrest").attr("disabled", "disabled");
-                else $("#focus-rest-set-onlyrest").removeAttr("disabled");
+            function onlyRestEdgeCaseSolution() {
+                function disableOnlyRestFocusButton(flag) {
+                    if (flag) $("#focus-rest-set-onlyrest").attr("disabled", "disabled");
+                    else $("#focus-rest-set-onlyrest").removeAttr("disabled");
 
-                let s = document.createElement('style');
-                if (flag) s.innerText = "#focus-rest-set-onlyrest::after {color: #6c757d;}";
-                else if (!onlyrest) s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
-                else s.innerText = "#focus-rest-set-onlyrest::after {color: #a26ae5;}";
-                document.body.appendChild(s);
-            }//to disable the focus button
+                    let s = document.createElement('style');
+                    if (flag) s.innerText = "#focus-rest-set-onlyrest::after {color: #6c757d;}";
+                    else if (!onlyrest) s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
+                    else s.innerText = "#focus-rest-set-onlyrest::after {color: #a26ae5;}";
+                    document.body.appendChild(s);
+                }//to disable the focus button
 
-            if (document.getElementById("focus-continueloop-set-onlyrest").checked) {
-                document.getElementById("focus-rest-set-onlyrest").checked = false;
-                focusNotifier();
+                if (document.getElementById("focus-continueloop-set-onlyrest").checked) {
+                    document.getElementById("focus-rest-set-onlyrest").checked = false;
+                    focusNotifier();
 
-                $("#focuser-onlyrest").css("color", "#6c757d");
-                disableOnlyRestFocusButton(true);
-            } else {
-                $("#focuser-onlyrest").css("color", (!onlyrest) ? "#5490ea" : "#a26ae5");
-                disableOnlyRestFocusButton(false);
+                    $("#focuser-onlyrest").css("color", "#6c757d");
+                    disableOnlyRestFocusButton(true);
+                } else {
+                    $("#focuser-onlyrest").css("color", (!onlyrest) ? "#5490ea" : "#a26ae5");
+                    disableOnlyRestFocusButton(false);
+                }
             }
-        }
 
-        function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
-            $("#expand-left").html(name);
-            $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
-            $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
-            if (loops > 1) $("#loop").val(loops + ' ' + i18n.__('times'));
-            else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
-            document.getElementById("focus-work-set").checked = focusWhenWorking;
-            document.getElementById("focus-rest-set").checked = focusWhenResting;
+            function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
+                $("#expand-left").html(name);
+                $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
+                    as: 'm',
+                    lang: store.get("i18n").replace(/-/g, '_'),
+                    ignoreError: true
+                }));
+                $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, {
+                    as: 'm',
+                    lang: store.get("i18n").replace(/-/g, '_'),
+                    ignoreError: true
+                }));
+                if (loops > 1) $("#loop").val(loops + ' ' + i18n.__('times'));
+                else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
+                document.getElementById("focus-work-set").checked = focusWhenWorking;
+                document.getElementById("focus-rest-set").checked = focusWhenResting;
 
-            $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
-            document.getElementById("focus-rest-set-onlyrest").checked = focusWhenResting;
+                $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, {
+                    as: 'm',
+                    lang: store.get("i18n").replace(/-/g, '_'),
+                    ignoreError: true
+                }));
+                document.getElementById("focus-rest-set-onlyrest").checked = focusWhenResting;
 
-            allSet();
-        }
+                allSet();
+            }
 
 
-        let currentTime = new Date();
-        if (currentTime.getDay() !== store.get("last-time-day-in-week")) {
-            store.set("last-time-day-in-week", currentTime.getDay());
-            store.set("reserved-today-done", []);
-        }
-        setInterval(reservedTimerInterval, 30000);
-        reservedTimerInterval();
+            let currentTime = new Date();
+            if (currentTime.getDay() !== store.get("last-time-day-in-week")) {
+                store.set("last-time-day-in-week", currentTime.getDay());
+                store.set("reserved-today-done", []);
+            }
+            setInterval(reservedTimerInterval, 30000);
+            reservedTimerInterval();
 
-        function reservedTimerInterval() {
-            let currentTodoTask = null;
+            function reservedTimerInterval() {
+                let currentTodoTask = null;
 
-            if (store.has("reserved")) {
-                currentTime = new Date();
-                let reservedArray = store.get("reserved");
-                if (reservedArray.length > 0) {
-                    for (let i = 0; i < reservedArray.length; i++) {
-                        if (reservedArray[i].cycle.indexOf(String(currentTime.getDay() + 1)) !== -1 || reservedArray[i].cycle.indexOf("0") !== -1) {
-                            if ((reservedArray[i].time.slice(0, 2) < currentTime.getHours() || (reservedArray[i].time.slice(3, 5) <= currentTime.getMinutes() && Number(reservedArray[i].time.slice(0, 2)) === currentTime.getHours())) && (reservedArray[i].endTime.slice(0, 2) > currentTime.getHours() || (reservedArray[i].endTime.slice(3, 5) >= currentTime.getMinutes() && Number(reservedArray[i].endTime.slice(0, 2)) === currentTime.getHours()))) {
-                                if (!store.get("reserved-today-done").includes(reservedArray[i].id)) {
-                                    if (currentTodoTask == null) {
-                                        currentTodoTask = reservedArray[i];
-                                    }
+                if (store.has("reserved")) {
+                    currentTime = new Date();
+                    let reservedArray = store.get("reserved");
+                    if (reservedArray.length > 0) {
+                        for (let i = 0; i < reservedArray.length; i++) {
+                            if (reservedArray[i].cycle.indexOf(String(currentTime.getDay() + 1)) !== -1 || reservedArray[i].cycle.indexOf("0") !== -1) {
+                                if ((reservedArray[i].time.slice(0, 2) < currentTime.getHours() || (reservedArray[i].time.slice(3, 5) <= currentTime.getMinutes() && Number(reservedArray[i].time.slice(0, 2)) === currentTime.getHours())) && (reservedArray[i].endTime.slice(0, 2) > currentTime.getHours() || (reservedArray[i].endTime.slice(3, 5) >= currentTime.getMinutes() && Number(reservedArray[i].endTime.slice(0, 2)) === currentTime.getHours()))) {
+                                    if (!store.get("reserved-today-done").includes(reservedArray[i].id)) {
+                                        if (currentTodoTask == null) {
+                                            currentTodoTask = reservedArray[i];
+                                        }
 
-                                    let doneArray = store.get("reserved-today-done");
-                                    doneArray.push(reservedArray[i].id);
-                                    store.set("reserved-today-done", doneArray);
+                                        let doneArray = store.get("reserved-today-done");
+                                        doneArray.push(reservedArray[i].id);
+                                        store.set("reserved-today-done", doneArray);
 
-                                    if (reservedArray[i].cycle.indexOf("0") !== -1) {
-                                        reservedArray.splice(i, 1);//no longer using
-                                        store.set("reserved", reservedArray);
-                                        store.set("reserved-cnt", store.get("reserved-cnt") - 1);
-                                        i--;
+                                        if (reservedArray[i].cycle.indexOf("0") !== -1) {
+                                            reservedArray.splice(i, 1);//no longer using
+                                            store.set("reserved", reservedArray);
+                                            store.set("reserved-cnt", store.get("reserved-cnt") - 1);
+                                            i--;
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
-            }
 
-            if (currentTodoTask != null) {
-                let plan = store.get("predefined-tasks")[(Number)(currentTodoTask.plan)];
-                if (plan.focusWhenWorking && plan.focusWhenResting)
-                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
-                else {
-                    ipc.send("alert", i18n.__('task-reservation-start-tip') + currentTodoTask.time + i18n.__('to') + currentTodoTask.endTime);
-                    window.location.href =
+                if (currentTodoTask != null) {
+                    let plan = store.get("predefined-tasks")[(Number)(currentTodoTask.plan)];
+                    if (plan.focusWhenWorking && plan.focusWhenResting)
+                        ipc.send("alert", i18n.__('all-focus-mode-warn'));
+                    else {
+                        ipc.send("alert", i18n.__('task-reservation-start-tip') + currentTodoTask.time + i18n.__('to') + currentTodoTask.endTime);
+                        window.location.href =
                             "timer.html?title=&work-time=" + plan.workTime
                             + "&rest-time=" + plan.restTime
                             + "&loop=" + plan.loops
@@ -633,20 +644,20 @@
                             + "&work-time-focused=" + plan.focusWhenWorking
                             + "&rest-time-focused=" + plan.focusWhenResting
                             + "&restored=true&times=0&continueloop=false&discount=";
+                    }
                 }
             }
-        }
 
-        store.get("predefined-tasks").forEach(function (item, index, array) {
-            if (store.get("default-task") === index) {
-                defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
-                if (store.get("infinity")) infinityMode();
-                if (store.get("autostarttask") && store.get("just-launched") &&
+            store.get("predefined-tasks").forEach(function (item, index, array) {
+                if (store.get("default-task") === index) {
+                    defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
+                    if (store.get("infinity")) infinityMode();
+                    if (store.get("autostarttask") && store.get("just-launched") &&
                         (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on
-                    if (item.focusWhenWorking && item.focusWhenResting)
-                        ipc.send("alert", i18n.__('all-focus-mode-warn'));
-                    else
-                        window.location.href =
+                        if (item.focusWhenWorking && item.focusWhenResting)
+                            ipc.send("alert", i18n.__('all-focus-mode-warn'));
+                        else
+                            window.location.href =
                                 "timer.html?title=" + $("#title").val()
                                 + "&work-time=" + shi.humanTimeParser($("#work-time").val(), {
                                     as: "m",
@@ -665,22 +676,22 @@
                                 + "&rest-time-focused=" + item.focusWhenResting
                                 + "&restored=true"
                                 + "&times=0&continueloop=false&discount=";
-                } else if (store.get("just-relaunched")) {
-                    store.set("just-relaunched", false);
+                    } else if (store.get("just-relaunched")) {
+                        store.set("just-relaunched", false);
+                    }
                 }
-            }
-            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(\"" +
+                $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(\"" +
                     item.name + "\", " + item.workTime + ", " + item.restTime + ", " + item.loops + "," +
                     item.focusWhenWorking + "," + item.focusWhenResting + ")'>" + item.name + "</a>");
-        });
+            });
 
-        setTimeout(function () {
-            focusNotifier();
-            if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
-                if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 1)
-                    timingData.set("last-recorded-minutes-left", 1);
-                if (timingData.get("last-recorded-state").method === 1) {
-                    window.location.href =
+            setTimeout(function () {
+                focusNotifier();
+                if ((timingData.get("last-recorded-hours-left") > 0 || timingData.get("last-recorded-minutes-left") > 0)) {
+                    if (timingData.get('last-recorded-hours-left') <= 0 && timingData.get("last-recorded-minutes-left") < 1)
+                        timingData.set("last-recorded-minutes-left", 1);
+                    if (timingData.get("last-recorded-state").method === 1) {
+                        window.location.href =
                             "timer.html?title=" + timingData.get("last-recorded-state").title
                             + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                             + "&rest-time=" + timingData.get("last-recorded-state").restTime
@@ -692,8 +703,8 @@
                             + "&restored=true"
                             + "&times=0"
                             + "&continueloop=false&discount=";
-                } else {
-                    window.location.href =
+                    } else {
+                        window.location.href =
                             "timer.html?title=" + timingData.get("last-recorded-state").title
                             + "&work-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
                             + "&rest-time=" + Number(timingData.get("last-recorded-hours-left") * 60 + timingData.get("last-recorded-minutes-left"))
@@ -705,12 +716,63 @@
                             + "&restored=true"
                             + "&times=1"
                             + "&continueloop=false&discount=";
+                    }
                 }
-            }
-        }, 500);
-    </script>
-    <script src="renderer.js"></script>
-    <script src="theme.js"></script>
+            }, 500);
+        </script>
+        <script src="renderer.js"></script>
+        <script>
+            // 自定义音乐播放功能
+            const musicFileInput = document.getElementById('music-file-input');
+            const selectMusicBtn = document.getElementById('select-music-btn');
+            const playMusicBtn = document.getElementById('play-music-btn');
+            const pauseMusicBtn = document.getElementById('pause-music-btn');
+            const musicFileName = document.getElementById('music-file-name');
+            const customAudio = document.getElementById('custom-audio');
+
+            let musicLoaded = false;
+
+            selectMusicBtn.addEventListener('click', function () {
+                musicFileInput.click();
+            });
+
+            musicFileInput.addEventListener('change', function (e) {
+                const file = e.target.files[0];
+                if (file) {
+                    let name = file.name;
+                    if (name.length > 12) {
+                        name = name.slice(0, 12) + '...';
+                    }
+                    const url = URL.createObjectURL(file);
+                    customAudio.src = url;
+                    musicFileName.textContent = name;
+                    musicFileName.style.display = 'block';
+                    playMusicBtn.disabled = false;
+                    pauseMusicBtn.disabled = false;
+                    musicLoaded = true;
+                } else {
+                    customAudio.src = '';
+                    musicFileName.textContent = '';
+                    musicFileName.style.display = 'none';
+                    playMusicBtn.disabled = true;
+                    pauseMusicBtn.disabled = true;
+                    musicLoaded = false;
+                }
+            });
+
+            playMusicBtn.addEventListener('click', function () {
+                if (musicLoaded) {
+                    customAudio.play();
+                }
+            });
+
+            pauseMusicBtn.addEventListener('click', function () {
+                if (musicLoaded) {
+                    customAudio.pause();
+                }
+            });
+        </script>
+        <script src="theme.js"></script>
 </body>
 
 </html>

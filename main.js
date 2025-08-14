@@ -47,10 +47,11 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 //use native notification, declare package.json/build/appId beforehand
 app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr'));
 
+// create the main window
 function createWindow() {
     //create the main window
     win = new BrowserWindow({
-        width: 360,
+    width: 720,
         height: 459,
         minWidth: 349,
         minHeight: 444,
