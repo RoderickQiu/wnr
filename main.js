@@ -489,34 +489,6 @@ app.on('ready', () => {
     if (!store.has("reserved-record")) store.set("reserved-record", 0);
     if (!store.has("reserved-cnt")) store.set("reserved-cnt", 0);//reserved tasks init
 
-    if (!store.has("disable-pausing-special")) store.set("disable-pausing-special", "all");
-    else {
-        let d = store.get("disable-pausing"),
-            ds = store.get("disable-pausing-special");
-        if (!d) store.set("disable-pause", 3);
-        else if (ds === "all") store.set("disable-pause", 0);
-        else if (ds === "work") store.set("disable-pause", 1);
-        else store.set("disable-pause", 2);
-    }
-    if (!store.has("disable-skipping-special")) store.set("disable-skipping-special", "all");
-    else {
-        let d = store.get("disable-skipping"),
-            ds = store.get("disable-skipping-special");
-        if (!d) store.set("disable-skip", 3);
-        else if (ds === "all") store.set("disable-skip", 0);
-        else if (ds === "work") store.set("disable-skip", 1);
-        else store.set("disable-skip", 2);
-    }
-    if (!store.has("disable-backing-special")) store.set("disable-backing-special", "all");
-    else {
-        let d = store.get("disable-backing"),
-            ds = store.get("disable-backing-special");
-        if (!d) store.set("disable-back", 3);
-        else if (ds === "all") store.set("disable-back", 0);
-        else if (ds === "work") store.set("disable-back", 1);
-        else store.set("disable-back", 2);
-    }
-
     if (store.has("no-check-time-end")) {
         store.set("no-check-work-time-end", store.get("no-check-time-end"));
         store.set("no-check-rest-time-end", store.get("no-check-time-end"));

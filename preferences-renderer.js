@@ -119,11 +119,15 @@ function dropdownSolution(obj, parent) {
         `);
     }
     if (!store.has(id)) $('#dropdown-button-' + id).html(i18n.__('dropdown-' + choices[def]));
-    else $('#dropdown-button-' + id).html(i18n.__('dropdown-' + choices[store.get(id)]));
+    else {
+        $('#dropdown-button-' + id).html(i18n.__('dropdown-' + choices[store.get(id)]));
+        console.log(i18n.__('dropdown-' + choices[store.get(id)]), "CHOICE", id, store.get(id));
+    }
 }
 
 function dropdownTrigger(id, choiceId, choiceMsg, relaunch, after) {
     $('#dropdown-button-' + id).html(choiceMsg);
+    console.log(id, choiceId, choiceMsg, relaunch, after);
     store.set(id, choiceId);
     after(choiceId);//do after execution jobs
     if (relaunch) ipc.send("relaunch-dialog");

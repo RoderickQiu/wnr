@@ -55,6 +55,13 @@ if (store.get("islocked") !== true) {
                 def: 3,
                 tipped: false,
                 after: disableBackAfter
+            }, {
+                type: "dropdown",
+                id: "disable-time-adjust",
+                choices: ['always', 'work', 'rest', 'never'],
+                def: 3,
+                tipped: false,
+                after: disableTimeAdjustAfter
             }]
         }, {
             type: "selection",
@@ -293,63 +300,19 @@ function whenRestTimeEndAfter(val) {
 }
 
 function disableSkipAfter(val) {
-    switch (val) {
-        case 0:
-            store.set('disable-skipping', true);
-            store.set('disable-skipping-special', 'all');
-            break;
-        case 1:
-            store.set('disable-skipping', true);
-            store.set('disable-skipping-special', 'work');
-            break;
-        case 2:
-            store.set('disable-skipping', true);
-            store.set('disable-skipping-special', 'rest');
-            break;
-        case 3:
-            store.set('disable-skipping', false);
-            break;
-    }
+    store.set('disable-skipping', val);
 }
 
 function disablePauseAfter(val) {
-    switch (val) {
-        case 0:
-            store.set('disable-pausing', true);
-            store.set('disable-pausing-special', 'all');
-            break;
-        case 1:
-            store.set('disable-pausing', true);
-            store.set('disable-pausing-special', 'work');
-            break;
-        case 2:
-            store.set('disable-pausing', true);
-            store.set('disable-pausing-special', 'rest');
-            break;
-        case 3:
-            store.set('disable-pausing', false);
-            break;
-    }
+    store.set('disable-pausing', val);
 }
 
 function disableBackAfter(val) {
-    switch (val) {
-        case 0:
-            store.set('disable-backing', true);
-            store.set('disable-backing-special', 'all');
-            break;
-        case 1:
-            store.set('disable-backing', true);
-            store.set('disable-backing-special', 'work');
-            break;
-        case 2:
-            store.set('disable-backing', true);
-            store.set('disable-backing-special', 'rest');
-            break;
-        case 3:
-            store.set('disable-backing', false);
-            break;
-    }
+    store.set('disable-backing', val);
+}
+
+function disableTimeAdjustAfter(val) {
+    store.set('disable-time-adjust', val);
 }
 
 function startFromWhichDayAfter(val) {
