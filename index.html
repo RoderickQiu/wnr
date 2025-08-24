@@ -449,12 +449,8 @@
             function removeRedundantEnd(number) {
                 let result = number.toFixed(2).replaceAll("0", " ").trimEnd().replaceAll(" ", "0");
                 if (result.lastIndexOf(".") === result.length) result = result.replaceAll(".", "");
-                return shi.ArabicNumberTimeParser(isNaN(Number(result)) ? "" : Number(result), {
-                    lang: store.get("i18n").toString().replace("-", "_"),
-                    as: "m",
-                    to: "m",
-                    ignoreError: true
-                });
+                // Return the cleaned number for calculations, not the formatted string
+                return Number(result);
             }
 
             try {
@@ -478,8 +474,15 @@
                     });
                     let restTimeGet = 0;
                     if (getBreakPercentage() !== 0) {
-                        restTimeGet = removeRedundantEnd(workTimeGet * getBreakPercentage());
-                        $("#rest-time").val(restTimeGet);
+                        let calculatedRestTime = workTimeGet * getBreakPercentage();
+                        restTimeGet = removeRedundantEnd(calculatedRestTime);
+                        // Format the display value for the input field
+                        $("#rest-time").val(shi.ArabicNumberTimeParser(restTimeGet, {
+                            lang: store.get("i18n").toString().replace("-", "_"),
+                            as: "m",
+                            to: "m",
+                            ignoreError: true
+                        }));
                     } else
                         restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
                             as: "m",
