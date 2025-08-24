@@ -189,6 +189,8 @@
 	"timing-setting": "1. 計時設置",
 	"loose-mode": "寬鬆的全屏專心模式",
 	"loose-mode-tip": "降低全屏專心模式的強制程度，將不會強制使計時窗口在最上層。",
+	"multi-monitor-loose-mode": "多顯示器寬鬆全屏專心模式",
+	"multi-monitor-loose-mode-tip": "啟用多顯示器支援的寬鬆全屏專心模式。這將覆蓋所有顯示器，同時保持寬鬆模式的放鬆限制。",
 	"force-screen-lock-mode": "全屏專心模式強制鎖屏",
 	"force-screen-lock-mode-tip": "提高全屏專心模式的強制程度，將會強制進行系統鎖屏。（關閉“寬鬆的全屏專心模式”選項並打開“系統鎖定後計時不暫停”選項後纔有效，僅適用於 Windows 和帶有 systemd 的 Linux 發行版）",
 	"timing-strength": "計時強制程度調節",
@@ -298,7 +300,8 @@
 	"locker-settings-empty-password": "密碼爲空，無效。",
 	"fullscreen-experience-tip": "你可能是第一次使用全屏專心模式。（如果你不需要強力體驗，可以在設置中開啓寬鬆全屏模式。）",
 	"fullscreen-too-long-tip": "這次你似乎將開啓一段很長的專心時間。",
-	"": "誤點？這次你可以撤銷",
+	"fullscreen-experience-tip-mistake": "誤點？這次你可以撤銷",
+
 	"quit-from-timer-in-lock-mode-msg": "鎖定模式下退出需輸入密碼",
 	"focus-mode": "專心模式進行中",
 	"has-multi-displays": "爲確保服務正常運行，請不要在專心模式運行時插、拔顯示器。",

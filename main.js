@@ -33,7 +33,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
     estimCurrent = 0, todaySum = 0,
     store = null, styleCache = null, statistics = null, timingData = null,
-    personalizationNotificationList = [[], [], [], [], [], []];
+    personalizationNotificationList = [[], [], [], [], [], []],
+    isMultiMonitorLoose = false;
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW'], i//locale code
@@ -238,6 +239,48 @@ function addScreenSolution(windowNumber, display) {
     newWindows[windowNumber].setAlwaysOnTop(true, "screen-saver");
 }
 
+function addLooseMultiScreenSolution(windowNumber, display) {
+    newWindows[windowNumber] = new BrowserWindow({
+        width: 364,
+        height: 396,
+        x: display.bounds.x,
+        y: display.bounds.y,
+        frame: false,
+        backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+        show: true,
+        hasShadow: true,
+        webPreferences: {
+            nodeIntegration: true,
+            webgl: false,
+            contextIsolation: false,
+            enableRemoteModule: true,
+            spellcheck: false
+        },
+        titleBarStyle: "hiddenInset",
+        icon: "./res/icons/wnrIcon.png",
+        skipTaskbar: false, // Allow taskbar access in loose mode
+        alwaysOnTop: false, // Don't force always on top in loose mode
+        focusable: true, // Allow focus in loose mode
+        resizable: true, // Allow resizing in loose mode
+        minimizable: true, // Allow minimizing in loose mode
+        maximizable: true, // Allow maximizing in loose mode
+        closable: true // Allow closing in loose mode
+    });
+
+    newWindows[windowNumber].loadFile('placeholder.html');
+    
+    // Use regular fullscreen instead of kiosk mode for loose multi-monitor
+    newWindows[windowNumber].setFullScreen(true);
+    newWindows[windowNumber].moveTop();
+    
+    // Add a close button or escape functionality for loose mode
+    newWindows[windowNumber].webContents.on('before-input-event', (event, input) => {
+        if (input.key === 'Escape') {
+            newWindows[windowNumber].setFullScreen(false);
+        }
+    });
+}
+
 function multiScreenSolution(mode) {
     if (app.isReady()) {
         displays = screen.getAllDisplays();
@@ -249,7 +292,12 @@ function multiScreenSolution(mode) {
             for (i in displays) {
                 if (displays[i].id !== distScreen.id) {
                     if (mode === "on") {
-                        addScreenSolution(i, displays[i]);
+                        // For loose mode with multi-monitor support, create less restrictive windows
+                        if (isLoose && isMultiMonitorLoose) {
+                            addLooseMultiScreenSolution(i, displays[i]);
+                        } else {
+                            addScreenSolution(i, displays[i]);
+                        }
                     } else {
                         if (newWindows[i] != null) {
                             try {
@@ -266,6 +314,8 @@ function multiScreenSolution(mode) {
         }
     }
 }
+
+
 
 function touchBarSolution(mode) {
     if (app.isReady()) {
@@ -426,6 +476,7 @@ app.on('ready', () => {
 
     if (store.get("loose-mode")) isLoose = true;
     if (store.get("force-screen-lock-mode")) isForceScreenLock = true;
+    if (store.get("multi-monitor-loose-mode")) isMultiMonitorLoose = true;
 
     if (win != null) {
         if (store.get("top") === true) win.setAlwaysOnTop(true, "floating");
@@ -1595,14 +1646,14 @@ ipcMain.on('focus-mode-settings', function (event, message) {
 })
 
 function focusSolution() {
-    if (hasFloating) floatingDestroyer("property-stay");
-    win.show();
     win.center();
     win.flashFrame(true);
     if (!isLoose) win.setAlwaysOnTop(true, "screen-saver");
     win.moveTop();
     if (dockHide) app.dock.show();//prevent kiosk error, show in dock
     if (!isLoose) multiScreenSolution("on");
+    // Enable multi-monitor support for loose mode if setting is enabled
+    if (isLoose && isMultiMonitorLoose) multiScreenSolution("on");
     setFullScreenMode(true);
     macOSFullscreenSolution(true);
     traySolution(true);
@@ -1613,6 +1664,8 @@ function focusSolution() {
             sleepBlockerId = powerSaveBlocker.start('prevent-display-sleep');
         }
     }
+    
+
 }
 
 ipcMain.on("only-rest-fullscreen", function () {
@@ -1632,6 +1685,7 @@ function nonFocusSolution(mode) {
                 powerSaveBlocker.stop(sleepBlockerId);
             }
         }
+        
         if (hasFloating) {
             if (floatingWin == null) {
                 floating();
@@ -2065,6 +2119,7 @@ function settings(mode) {
                 settingsWin = null;
                 isLoose = !!store.get("loose-mode");
                 isForceScreenLock = !!store.get("force-screen-lock-mode");
+                isMultiMonitorLoose = !!store.get("multi-monitor-loose-mode");
             })
             if (!store.get("settings-experience")) {
                 store.set("settings-experience", true);

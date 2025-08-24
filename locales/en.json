@@ -238,6 +238,8 @@
 	"timing-setting" : "1. Timing Preferences",
 	"loose-mode" : "Loose fullscreen mode",
 	"loose-mode-tip" : "In this mode, the window will not be stuck on top.",
+	"multi-monitor-loose-mode" : "Multi-monitor loose fullscreen mode",
+	"multi-monitor-loose-mode-tip" : "Enable multi-monitor support for loose fullscreen mode. This will cover all monitors while maintaining the relaxed restrictions of loose mode.",
 	"force-screen-lock-mode" : "Force screen lock fullscreen mode",
 	"force-screen-lock-mode-tip" : "In this mode, the system will be locked. (Takes effect after turning off \"Loose fullscreen mode\" option and turning on \"Continue timing after computer locked\" option, only works with Windows and Linux distros with systemd)",
 	"timing-strength" : "Timing flexibility",
@@ -310,6 +312,7 @@
 	"fullscreen-experience-tip" : "It seems it's the first time that you enabled fullscreen focus mode (IN CASE YOU DON'T LIKE ITS ULTIMATE STRENGTH, GO TO PREFERENCES AND ENABLE LOOSE FULLSCREEN MODE). ",
 	"fullscreen-too-long-tip" : "It seems that you are going to start a long period of fullscreen focusing.",
 	"fullscreen-experience-tip-mistake" : "Cancel (only for this time)",
+
 	"quit-from-timer-in-lock-mode-msg" : "need passcode to quit",
 	"focus-mode" : "Focus Mode",
 	"has-multi-displays" : "In order to have the best experience, DON'T UNPLUG displays when fullscreen focus mode is on.",

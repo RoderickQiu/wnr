@@ -30,6 +30,9 @@ if (store.get("islocked") !== true) {
             id: "loose-mode"
         }, {
             type: "selection",
+            id: "multi-monitor-loose-mode"
+        }, {
+            type: "selection",
             id: "force-screen-lock-mode"
         }, {
             type: "collapse",
