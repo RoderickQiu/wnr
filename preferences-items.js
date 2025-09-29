@@ -26,11 +26,11 @@ if (store.get("islocked") !== true) {
                 }
             ]
         }, {
-            type: "selection",
-            id: "loose-mode"
-        }, {
-            type: "selection",
-            id: "multi-monitor-loose-mode"
+            type: "dropdown",
+            id: "loose-mode-dropdown",
+            choices: ['off', 'loose', 'multi-monitor-loose'],
+            def: 0,
+            after: looseModeAfter
         }, {
             type: "selection",
             id: "force-screen-lock-mode"
@@ -265,6 +265,7 @@ if (store.get("islocked") !== true) {
  */
 
 // use '' to prevent "" errors as it is translated to string
+// the after functions cannot contain any comments, otherwise it will cause error
 function napAfter(val) {
     switch (val) {
         case 0:
@@ -281,6 +282,23 @@ function napAfter(val) {
         case 3:
             store.set('nap', true);
             store.set('nap-time', 20);
+    }
+}
+
+function looseModeAfter(val) {
+    switch (val) {
+        case 0:
+            store.set('loose-mode', false);
+            store.set('multi-monitor-loose-mode', false);
+            break;
+        case 1:
+            store.set('loose-mode', true);
+            store.set('multi-monitor-loose-mode', false);
+            break;
+        case 2:
+            store.set('loose-mode', true);
+            store.set('multi-monitor-loose-mode', true);
+            break;
     }
 }
 
