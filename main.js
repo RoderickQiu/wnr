@@ -176,7 +176,11 @@ function alarmSet() {
 function relaunchSolution() {
     fullScreenProtection = false;
     if (win != null) {
-        win.setKiosk(false);
+        if (!isLoose) {
+            win.setKiosk(false);
+        } else {
+            setFullScreenMode(false);
+        }
         win.hide();
     }
 
@@ -2382,6 +2386,10 @@ function floatingDestroyer(message) {
 
 ipcMain.on('floating-destroy', function (event, message) {
     floatingDestroyer(message ? message : "");
+});
+
+ipcMain.on('exit-fullscreen', function (event, message) {
+    setFullScreenMode(false);
 });
 
 ipcMain.on('only-one-min-left', function () {

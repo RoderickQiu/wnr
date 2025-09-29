@@ -89,6 +89,7 @@ function isInDark() {
             '#dialog-msg {color: #ccc;}' +
             '.dropdown-default {color: #aaa;}' +
             '.dropdown-toggle::before {color: #aaa;}' +
+            '#fullscreen-custom-dialog {background-color: #191919;}' +
             '</style>'
         );
     } else {

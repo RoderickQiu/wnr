@@ -459,6 +459,7 @@
 
         function backer() {
             call('floating-destroy');
+            call('exit-fullscreen');
             store.set("just-back", true);
             timingData.set("last-recorded-minutes-left", -1);
             timingData.set("last-recorded-hours-left", -1);
@@ -594,9 +595,12 @@
             $("#mistake-button").addClass("disabled").css("pointer-events", "none").css("opacity", "0.5");
         }
         
-        // Set initial state for time adjustment dropdown based on preferences
+        // Set initial state for time adjustment dropdown based on preferences and focused mode
         const disableTimeAdjustValue = store.get('disable-time-adjust');
-        if (isFeatureDisabled(disableTimeAdjustValue, methodFromStart)) {
+        const isFocusedMode = (methodFromStart === 1 && workTimeFocused) || (methodFromStart === 2 && restTimeFocused);
+        const isLooseMode = methodFromStart === 3;
+        
+        if (isFeatureDisabled(disableTimeAdjustValue, methodFromStart) || (isFocusedMode && !isLooseMode)) {
             $("#time-adjust-dropdown").hide();
         }
 
@@ -920,7 +924,10 @@
                     }
                     
                     // Handle time adjustment dropdown visibility for rest mode
-                    if (isFeatureDisabled(store.get('disable-time-adjust'), 2)) {
+                    const isRestFocusedMode = restTimeFocused;
+                    const isLooseMode = methodFromStart === 3;
+                    
+                    if (isFeatureDisabled(store.get('disable-time-adjust'), 2) || (isRestFocusedMode && !isLooseMode)) {
                         $("#time-adjust-dropdown").hide();
                     } else {
                         $("#time-adjust-dropdown").show();
@@ -988,7 +995,10 @@
                     }
                     
                     // Handle time adjustment dropdown visibility for work mode
-                    if (isFeatureDisabled(store.get('disable-time-adjust'), 1)) {
+                    const isWorkFocusedMode = workTimeFocused;
+                    const isLooseMode = methodFromStart === 3;
+                    
+                    if (isFeatureDisabled(store.get('disable-time-adjust'), 1) || (isWorkFocusedMode && !isLooseMode)) {
                         $("#time-adjust-dropdown").hide();
                     } else {
                         $("#time-adjust-dropdown").show();
@@ -1075,13 +1085,25 @@
                 // adjust time according to mode
                 if (method === 1) {
                     // working mode: adjust work time
-                    
-                    workTime = Math.max(10000, workTime + ms);
+                    workTime = workTime + ms;
                 } else {
                     // rest mode: adjust rest time
-                    restTime = Math.max(10000, restTime + ms);
+                    restTime = restTime + ms;
                 }
                 lastRecordedProgress = -1;
+                
+                // Check if timer should end immediately after adjustment
+                if (workTime <= 0 || restTime <= 0) {
+                    // End the timer immediately
+                    ender();
+                } else {
+                    // Ensure minimum time is 10 seconds if not ending
+                    if (method === 1) {
+                        workTime = Math.max(10000, workTime);
+                    } else {
+                        restTime = Math.max(10000, restTime);
+                    }
+                }
             }
 
             function shouldLongBreak() {
