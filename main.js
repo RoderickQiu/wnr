@@ -131,7 +131,7 @@ function createWindow() {
     })
 
     //prevent app-killers for lock mode / focus mode
-    win.webContents.on('crashed', () => {
+    win.webContents.on('render-process-gone', () => {
         if (store.get('islocked') || (fullScreenProtection && isTimerWin && (process.env.NODE_ENV !== "development") && (!isLoose))) relaunchSolution();
     });
 
