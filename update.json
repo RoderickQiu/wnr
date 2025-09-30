@@ -1,18 +1,24 @@
 {
-	"version" : "1.30.3",
+	"version" : "1.31.0",
 	"feature-introduction" : false,
 	"content" : {
 		"zh-CN" : [
-			"修复了一些 Bugs，包括不能正确跟随自动切换暗黑模式和浅色模式，和切换首页功能设置不起作用等。",
-			"庆祝，这一应用已经来到了它的六岁生日！"
+			"新增了对剩余时间进行微调的功能，在非全屏专心模式时生效（@Tonyyang0606）。",
+			"对于宽松的全屏专心模式，新增了是否覆盖所有显示器的选项。",
+			"修复按比例休息导致预计时间计算出错的问题。",
+			"修复系统托盘图标可能重复出现的问题。"
 		],
 		"zh-TW" : [
-			"修復了一些 Bugs，包括不能正確跟隨自動切換暗黑模式和淺色模式，和切換首頁設置不起作用等。",
-			"慶祝，這一應用已經來到了它的六歲生日！"
+			"新增了對剩餘時間進行微調的功能，在非全屏專心模式時生效（@Tonyyang0606）。",
+			"對於寬鬆的全屏專心模式，新增了是否覆蓋所有顯示器的選項。",
+			"修復按比例休息導致預計時間計算出錯的問題。",
+			"修復系統托盤圖標可能重複出現的問題。"
 		],
 		"en" : [
-			"Fixed some bugs, including that the dark mode auto switch not working, and that changing homepage function is not effective. ",
-			"Celebrate! this application has come to its sixth birthday!"
+			"Added a feature to adjust the remaining time, which takes effect when not in full-screen focus mode (by @Tonyyang0606).",
+			"For loose full-screen focus mode, added an option to cover all displays.",
+			"Fixed the issue of incorrect calculation of expected time due to flow timer with percentage break.",
+			"Fixed the issue of duplicate system tray icon appearing in some cases."
 		]
 	},
 	"introduce" : {

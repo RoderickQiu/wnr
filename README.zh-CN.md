@@ -61,8 +61,6 @@ yarn appimage # linux AppImage打包
 
 ### 使用的软件包
 
-#### 主程序
-
 完整的许可证文本参见 [这个文件](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md) ，同时也包含在每一份 wnr 的副本中。
 
 - node-shi，[**我自己的项目**](https://www.npmjs.com/package/node-shi) 使用 MIT 许可证。
@@ -88,9 +86,4 @@ yarn appimage # linux AppImage打包
 - popper.js，popperjs，MIT 许可证。
 - schart.js，lin-xin，MIT 许可证。
 - cross-env，kentcdodds，MIT 许可证。
-
-### 开发环境
-
 - **node，nodejs，**[**许可证**](https://github.com/nodejs/node/blob/master/LICENSE) 。
-- NSIS，Nullsoft，zlib/libpng 许可证。
-- WebStorm，JetBrains，[许可证](https://www.jetbrains.com/legal/#licensing) 。

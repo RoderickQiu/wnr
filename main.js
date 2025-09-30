@@ -480,7 +480,6 @@ app.on('ready', () => {
 
     if (store.get("loose-mode")) isLoose = true;
     if (store.get("multi-monitor-loose-mode")) isMultiMonitorLoose = true;
-    console.log("Is loose:", isLoose, "Is multi-monitor-loose:", isMultiMonitorLoose);
     if (store.get("force-screen-lock-mode")) isForceScreenLock = true;
 
     if (win != null) {

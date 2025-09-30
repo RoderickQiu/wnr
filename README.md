@@ -71,8 +71,6 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 
 ### Packages Using
 
-#### Main Program
-
 For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which
 is also included in every copy of wnr.
 
@@ -98,9 +96,4 @@ is also included in every copy of wnr.
 - popper.js, popperjs, MIT License.
 - schart.js, lin-xin, MIT License.
 - cross-env, kentcdodds, MIT License.
-
-### Environment Using
-
 - **node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE)**.
-- NSIS, Nullsoft, zlib/libpng License.
-- WebStorm, JetBrains, [License](https://www.jetbrains.com/legal/#licensing).
