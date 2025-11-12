@@ -1,6 +1,6 @@
 {
 	"name": "wnr",
-	"version": "1.31.0",
+	"version": "1.31.1",
 	"description": "Work and rest, with wnr now!",
 	"main": "main.js",
 	"scripts": {
@@ -37,8 +37,8 @@
 		"copy-to-clipboard": "3.3.3",
 		"crypto-js": "4.2.0",
 		"electron-debug": "3.2.0",
-		"electron-store": "8.1.0",
-		"i18n": "0.15.2",
+		"electron-store": "8.2.0",
+		"i18n": "0.15.3",
 		"jquery": "3.7.1",
 		"node-fetch": "2.7.0",
 		"node-notifier": "10.0.1",
@@ -48,7 +48,7 @@
 		"win-release-id": "1.0.6"
 	},
 	"devDependencies": {
-		"cross-env": "7.0.3",
+		"cross-env": "10.1.0",
 		"electron": "37.6.0",
 		"electron-builder": "26.0.12"
 	}

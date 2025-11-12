@@ -184,6 +184,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@epic-web/invariant@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@epic-web/invariant@npm:1.0.0"
+  checksum: 58e2029bd3362751f5afac2b3bdb6b4f6e38f888af7ee93a0d76e18c879586b130bf3b14588364fcf04a1423b5b917eacad5717d61224daac64350c7ae5fc95e
+  languageName: node
+  linkType: hard
+
 "@gar/promisify@npm:^1.1.3":
   version: 1.1.3
   resolution: "@gar/promisify@npm:1.1.3"
@@ -1126,15 +1133,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cross-env@npm:7.0.3":
-  version: 7.0.3
-  resolution: "cross-env@npm:7.0.3"
+"cross-env@npm:10.1.0":
+  version: 10.1.0
+  resolution: "cross-env@npm:10.1.0"
   dependencies:
-    cross-spawn: ^7.0.1
+    "@epic-web/invariant": ^1.0.0
+    cross-spawn: ^7.0.6
   bin:
-    cross-env: src/bin/cross-env.js
-    cross-env-shell: src/bin/cross-env-shell.js
-  checksum: 26f2f3ea2ab32617f57effb70d329c2070d2f5630adc800985d8b30b56e8bf7f5f439dd3a0358b79cee6f930afc23cf8e23515f17ccfb30092c6b62c6b630a79
+    cross-env: dist/bin/cross-env.js
+    cross-env-shell: dist/bin/cross-env-shell.js
+  checksum: bd7e013603df8dc3a5a2d259a84f43a62114486e141395668ea46e9c5d154b312ebf26486f30699ffe7ff8f275331e00e61d7a720d1593185fce685b0f1c3d9f
   languageName: node
   linkType: hard
 
@@ -1442,13 +1450,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"electron-store@npm:8.1.0":
-  version: 8.1.0
-  resolution: "electron-store@npm:8.1.0"
+"electron-store@npm:8.2.0":
+  version: 8.2.0
+  resolution: "electron-store@npm:8.2.0"
   dependencies:
     conf: ^10.2.0
     type-fest: ^2.17.0
-  checksum: 7036f6d91cdcf6e08b10e24df9b144b9a04fe6cb1d7a7cc009277c1f6ad206d96cfbc3ada8ead47206fc5dadec0d34ff1beb8345bb3696e200f071f66b0abd8e
+  checksum: ee2484ff9b7f7e34609dfb17d9049386451730e8607422f9efb7e7c96c966f6a2b6d59a7982d555fc23bebd9e9dac245690b74be9411ad1e6d5c5192f78b2eab
   languageName: node
   linkType: hard
 
@@ -2053,9 +2061,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n@npm:0.15.2":
-  version: 0.15.2
-  resolution: "i18n@npm:0.15.2"
+"i18n@npm:0.15.3":
+  version: 0.15.3
+  resolution: "i18n@npm:0.15.3"
   dependencies:
     "@messageformat/core": ^3.4.0
     debug: ^4.4.3
@@ -2063,7 +2071,7 @@ __metadata:
     make-plural: ^7.4.0
     math-interval-parser: ^2.0.1
     mustache: ^4.2.0
-  checksum: 4515d032cbc6576021d360764946ad8b9b8886ddd9cdd57a1f8af6fee03034e6fe5c6ea2e39dd78b74abf1d1e3454ec7c305c92a9126c3119ab5a1e6558b73a6
+  checksum: 09089fee6b506e683ccb9d3754258519f968ada3d8f2fb898b1c3d675b70acc4b143373a692888cc76790219c9c1dcfd68eacbc45cbe9cfdfe95d6babcee58b8
   languageName: node
   linkType: hard
 
@@ -3904,13 +3912,13 @@ __metadata:
     cmd-or-ctrl: 0.3.1
     compare-version: 0.1.2
     copy-to-clipboard: 3.3.3
-    cross-env: 7.0.3
+    cross-env: 10.1.0
     crypto-js: 4.2.0
     electron: 37.6.0
     electron-builder: 26.0.12
     electron-debug: 3.2.0
-    electron-store: 8.1.0
-    i18n: 0.15.2
+    electron-store: 8.2.0
+    i18n: 0.15.3
     jquery: 3.7.1
     node-fetch: 2.7.0
     node-notifier: 10.0.1
