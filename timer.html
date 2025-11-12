@@ -869,7 +869,7 @@
                     else
                         player.src = store.get("custom-all-time-end-sound");
                 }
-                player.loop = true;
+                player.loop = !store.get("sound-play-once");
                 player.play();
                 if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
                     $("#skipper-container").css("display", "none");

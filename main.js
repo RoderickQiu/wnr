@@ -2211,7 +2211,32 @@ ipcMain.on('locker-passcode', function (event, message) {
 })
 
 ipcMain.on("relaunch-dialog", function (event, message) {
-    customDialog("on", "wnr", i18n.__("relaunch-tip"),
+    let previousLang = store.get("previous-language");
+    let currentLang = store.get("i18n");
+    let messageText = i18n.__("relaunch-tip");
+    
+    if (previousLang && previousLang !== currentLang) {
+        try {
+            const fs = require('fs');
+            let previousLangFile = path.join(__dirname, 'locales', previousLang + '.json');
+            let currentLangFile = path.join(__dirname, 'locales', currentLang + '.json');
+            
+            if (fs.existsSync(previousLangFile) && fs.existsSync(currentLangFile)) {
+                let previousLangData = JSON.parse(fs.readFileSync(previousLangFile, 'utf8'));
+                let currentLangData = JSON.parse(fs.readFileSync(currentLangFile, 'utf8'));
+                
+                let previousText = previousLangData["relaunch-tip"] || i18n.__("relaunch-tip");
+                let currentText = currentLangData["relaunch-tip"] || i18n.__("relaunch-tip");
+                
+                messageText = previousText + "\n" + currentText;
+            }
+        } catch (e) {
+            console.log(e);
+        }
+        store.delete("previous-language");
+    }
+    
+    customDialog("on", "wnr", messageText,
         "try { store.set('just-relaunched', true); }" +
         "catch (e) { console.log(e); }\n" +
         "relaunchSolution();");

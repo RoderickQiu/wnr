@@ -147,6 +147,9 @@ if (store.get("islocked") !== true) {
             def: 3,
             after: soundAfter
         }, {
+            type: "selection",
+            id: "sound-play-once"
+        }, {
             type: "collapse",
             id: "personalization-notify-sound",
             tipped: false,

@@ -209,6 +209,8 @@
 	"when-rest-time-end": "When rest time end",
 	"sound": "Volume of notify sound / Mute",
 	"sound-tip": "Change the notify sound when a period of time ends, or simply mute it.",
+	"sound-play-once": "Play sound only once",
+	"sound-play-once-tip": "When enabled, all notification sounds will play only once instead of looping.",
 	"onemintip": "Notify when less than 1 min left",
 	"onemintip-tip": "When a period of time will end in a minute we will send you a notification, so that you can pause your work comfortably.",
 	"nap-in-timing": "Nap setting",
