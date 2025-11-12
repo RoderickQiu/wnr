@@ -836,14 +836,30 @@
                 timingData.set("last-recorded-hours-left", -1);
                 let player = document.createElement('audio');
                 amplifyMedia(player, amplifierList[store.get("sound")]);
-                if (isend !== 0) {
-                    if (store.get("time-end-sound") !== i18n.__("custom"))
-                        player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("time-end-sound") ? store.get("time-end-sound") : "tick") + ".mp3");
-                    else if ((!store.has("custom-work-time-end-sound") || store.get("custom-work-time-end-sound") === "")
-                            && store.get("time-end-sound") === i18n.__("custom"))
-                        player.src = path.join(__dirname, "\\res\\sound\\tick.mp3");
-                    else
-                        player.src = store.get("custom-work-time-end-sound");
+                if (isend === 1) {
+                    let workSelection = store.has("work-time-end-sound") ? store.get("work-time-end-sound")
+                        : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
+                    if (workSelection !== i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\" + workSelection + ".mp3");
+                    else {
+                        let customWork = store.get("custom-work-time-end-sound");
+                        if (!customWork || customWork === "")
+                            customWork = path.join(__dirname, "\\res\\sound\\tick.mp3");
+                        player.src = customWork;
+                    }
+                } else if (isend === 2) {
+                    let restSelection = store.has("rest-time-end-sound") ? store.get("rest-time-end-sound")
+                        : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
+                    if (restSelection !== i18n.__("custom"))
+                        player.src = path.join(__dirname, "\\res\\sound\\" + restSelection + ".mp3");
+                    else {
+                        let customRest = store.get("custom-rest-time-end-sound");
+                        if (!customRest || customRest === "")
+                            customRest = store.get("custom-work-time-end-sound");
+                        if (!customRest || customRest === "")
+                            customRest = path.join(__dirname, "\\res\\sound\\tick.mp3");
+                        player.src = customRest;
+                    }
                 } else {
                     if (store.get("all-end-sound") !== i18n.__("custom"))
                         player.src = path.join(__dirname, "\\res\\sound\\" + (store.has("all-end-sound") ? store.get("all-end-sound") : "piano") + ".mp3");

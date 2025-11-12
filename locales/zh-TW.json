@@ -257,6 +257,8 @@
 	"personalization-notify-sound": "通知鈴聲個性化",
 	"personalization-notify-sound-tip": "自定義鈴聲，讓它合你心意。將會自動播放以供測試。當提示音關閉時，此選項將被忽略。",
 	"personalization-notify-sound-msg-time-end": "一段時間結束",
+	"personalization-notify-sound-msg-work-end": "工作結束",
+	"personalization-notify-sound-msg-rest-end": "休息結束",
 	"personalization-notify-sound-msg-all-end": "整個計劃結束",
 	"global-settings": "3. 全局設置",
 	"languages": "語言/Languages",

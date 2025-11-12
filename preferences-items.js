@@ -349,7 +349,16 @@ function zoomRatioAfter(val) {
 function soundAfter(val) {
     let player = document.createElement('audio');
     amplifyMedia(player, amplifierList[val]);
-    player.src = path.join(__dirname, '\\res\\sound\\' + (store.has('time-end-sound') ? store.get('time-end-sound') : 'tick') + '.mp3');
+    let workSelection = store.has('work-time-end-sound') ? store.get('work-time-end-sound')
+        : (store.has('time-end-sound') ? store.get('time-end-sound') : 'tick');
+    if (workSelection !== i18n.__('custom'))
+        player.src = path.join(__dirname, '\\res\\sound\\' + workSelection + '.mp3');
+    else {
+        let customWork = store.get('custom-work-time-end-sound');
+        if (!customWork || customWork === '')
+            customWork = path.join(__dirname, '\\res\\sound\\tick.mp3');
+        player.src = customWork;
+    }
     player.loop = false;
     player.play();
 }

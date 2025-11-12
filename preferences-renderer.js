@@ -373,7 +373,7 @@ function domString(type) {
             <div class="w-100 row align-items-center">
             <div class="col-7">
             <label>
-                ${ i18n.__("personalization-notify-sound-msg-time-end") }
+                ${ i18n.__("personalization-notify-sound-msg-work-end") }
             </label>
             </div>
             <div class="col-5 text-right">
@@ -398,6 +398,34 @@ function domString(type) {
                        type="text" class="hotkey-set-input extreme-small text-right" 
                        placeholder="${ i18n.__('input-url') }"
                        onkeyup="store.set('custom-work-time-end-sound',$('#custom-notify-sound-work-time-end').val());" />
+            </div><br/>
+            <div class="col-7">
+            <label>
+                ${ i18n.__("personalization-notify-sound-msg-rest-end") }
+            </label>
+            </div>
+            <div class="col-5 text-right">
+            <div class="dropdown">
+                <a aria-expanded="false"
+                   aria-haspopup="true" class="btn btn-outline-secondary dropdown-toggle"
+                   data-toggle="dropdown"
+                   id="rest-time-end-sound-dropdown-button">
+                </a>
+                <div aria-labelledby="rest-time-end-sound-dropdown-button" class="dropdown-menu"
+                     id="rest-time-end-sound-select">
+                </div>
+            </div><br/>
+            </div>
+            <div class="col-5 custom-notify-sound-rest-time-end">
+            <label>
+                ${ i18n.__("custom-notify-sound") }
+            </label>
+            </div>
+            <div class="col-7 text-right custom-notify-sound-rest-time-end">
+            <input id="custom-notify-sound-rest-time-end" name="custom-notify-sound-rest-time-end"
+                       type="text" class="hotkey-set-input extreme-small text-right" 
+                       placeholder="${ i18n.__('input-url') }"
+                       onkeyup="store.set('custom-rest-time-end-sound',$('#custom-notify-sound-rest-time-end').val());" />
             </div><br/>
             <div class="col-7">
             <label>
@@ -788,8 +816,10 @@ function personalizedNotification() {
 function personalizationSoundInitializer() {
     if (store.has("custom-work-time-end-sound"))
         $("#custom-notify-sound-work-time-end").val(store.get("custom-work-time-end-sound"));
+    if (store.has("custom-rest-time-end-sound"))
+        $("#custom-notify-sound-rest-time-end").val(store.get("custom-rest-time-end-sound"));
     if (store.has("custom-all-time-end-sound"))
-        $("#custom-notify-sound-all-time-end").val(store.get("custom-work-all-end-sound"));
+        $("#custom-notify-sound-all-time-end").val(store.get("custom-all-time-end-sound"));
     let player = document.createElement("audio");//alert player
     let soundList = ['alarming', 'beep', 'clock', 'tick', 'trumpet', 'whistle', 'horns', 'magic', 'piano', i18n.__('custom')];
     for (let i in soundList) {
@@ -797,25 +827,43 @@ function personalizationSoundInitializer() {
                     <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
             + soundList[i] + "</a>");
     }
-    $("#work-time-end-sound-dropdown-button").text(store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
-    if (store.get("time-end-sound") === i18n.__('custom'))
-        $(".custom-notify-sound-work-time-end").css("display", "inline-block");
-    else
-        $(".custom-notify-sound-work-time-end").css("display", "none");
-
+    for (let i in soundList) {
+        $("#rest-time-end-sound-select").append("\
+                    <a class='dropdown-item' href='javascript:restTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
+            + soundList[i] + "</a>");
+    }
     for (let i in soundList) {
         $("#all-time-end-sound-select").append("\
                     <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
             + soundList[i] + "</a>");
     }
-    $("#all-time-end-sound-dropdown-button").text(store.has("all-end-sound") ? store.get("all-end-sound") : "piano");
-    if (store.get("all-end-sound") === i18n.__('custom'))
+
+    let workSelection = store.has("work-time-end-sound") ? store.get("work-time-end-sound")
+        : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
+    $("#work-time-end-sound-dropdown-button").text(workSelection);
+    if (workSelection === i18n.__('custom'))
+        $(".custom-notify-sound-work-time-end").css("display", "inline-block");
+    else
+        $(".custom-notify-sound-work-time-end").css("display", "none");
+
+    let restSelection = store.has("rest-time-end-sound") ? store.get("rest-time-end-sound")
+        : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
+    $("#rest-time-end-sound-dropdown-button").text(restSelection);
+    if (restSelection === i18n.__('custom'))
+        $(".custom-notify-sound-rest-time-end").css("display", "inline-block");
+    else
+        $(".custom-notify-sound-rest-time-end").css("display", "none");
+
+    let allSelection = store.has("all-end-sound") ? store.get("all-end-sound") : "piano";
+    $("#all-time-end-sound-dropdown-button").text(allSelection);
+    if (allSelection === i18n.__('custom'))
         $(".custom-notify-sound-all-time-end").css("display", "inline-block");
     else
         $(".custom-notify-sound-all-time-end").css("display", "none");
 }
 
 function workTimeEndSoundSetting(val) {
+    store.set("work-time-end-sound", val);
     store.set("time-end-sound", val);
     $("#work-time-end-sound-dropdown-button").text(val);
     if (val !== i18n.__('custom'))
@@ -830,6 +878,23 @@ function workTimeEndSoundSetting(val) {
         }
     else
         $(".custom-notify-sound-work-time-end").css("display", "inline-block");
+}
+
+function restTimeEndSoundSetting(val) {
+    store.set("rest-time-end-sound", val);
+    $("#rest-time-end-sound-dropdown-button").text(val);
+    if (val !== i18n.__('custom'))
+        try {
+            $(".custom-notify-sound-rest-time-end").css("display", "none");
+            let player = document.createElement("audio");//alert player
+            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.loop = false;
+            player.play();
+        } catch (e) {
+            console.log(e);
+        }
+    else
+        $(".custom-notify-sound-rest-time-end").css("display", "inline-block");
 }
 
 function allTimeEndSoundSetting(val) {

@@ -225,6 +225,8 @@
 	"personalization-notify-sound": "Custom notify sound",
 	"personalization-notify-sound-tip": "Define the notify sounds played. The sound you select will be played automatically for test.",
 	"personalization-notify-sound-msg-time-end": "Time end: ",
+	"personalization-notify-sound-msg-work-end": "Work end: ",
+	"personalization-notify-sound-msg-rest-end": "Rest end: ",
 	"personalization-notify-sound-msg-all-end": "All tasks end: ",
 	"dark-or-white": "Appearance",
 	"dropdown-auto-switch": "Auto switch",

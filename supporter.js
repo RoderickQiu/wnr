@@ -85,7 +85,7 @@ function isInDark() {
             '.switch-slide-label {background: #333;} ' +
             '.switch-slide-label:after {background: #ccc !important;}' +
             '.card {background-color: #191919; border: 1px solid rgba(255,255,255,.125);} ' +
-            '.settings-title {color: #ddd; text-transform: uppercase;}' +
+            '.settings-title {color: #ddd;}' +
             '#dialog-msg {color: #ccc;}' +
             '.dropdown-default {color: #aaa;}' +
             '.dropdown-toggle::before {color: #aaa;}' +
