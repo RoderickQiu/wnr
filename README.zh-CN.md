@@ -10,7 +10,7 @@
 <p align="center">
     下载地址 <i>(Win/Mac/Linux)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1s0nYJIcjfbFrY_ScYjLnmw?pwd=i4ad">百度网盘</a>（i4ad） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
 </p>
 
 <p align="center">
@@ -55,7 +55,7 @@ yarn appimage # linux AppImage打包
 
 ## 版权和鸣谢
 
-版权所有 (c) 2019-2025 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
+版权所有 (c) 2019-2026 **[Roderick Qiu](https://r-q.name)** 和其他贡献者。保留所有权利。
 
 使用 **[MPL 2.0 许可证](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)** 进行许可。
 
@@ -63,8 +63,8 @@ yarn appimage # linux AppImage打包
 
 完整的许可证文本参见 [这个文件](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md) ，同时也包含在每一份 wnr 的副本中。
 
-- node-shi，[**我自己的项目**](https://www.npmjs.com/package/node-shi) 使用 MIT 许可证。
-- cmd-or-ctrl，[**另一个我自己的项目**](https://www.npmjs.com/package/cmd-or-ctrl) 使用 MIT 许可证。
+- node-shi，[我自己的项目](https://www.npmjs.com/package/node-shi) 使用 MIT 许可证。
+- cmd-or-ctrl，[另一个我自己的项目](https://www.npmjs.com/package/cmd-or-ctrl) 使用 MIT 许可证。
 - node-auto-launch，Teamwork，MIT 许可证。
 - compare-version，kevva，MIT 许可证。
 - electron-store，sindresorhus，MIT 许可证。

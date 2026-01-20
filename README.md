@@ -10,7 +10,7 @@
 <p align="center">
     Download <i>(Windows & macOS)</i>: <a href="https://github.com/RoderickQiu/wnr/releases">GitHub Release</a> | <a
         href="https://www.softpedia.com/get/Desktop-Enhancements/Clocks-Time-Management/wnr.shtml">Softpedia
-        (Windows)</a> | <a href="https://pan.baidu.com/s/1PDpnEkf-zKQKQIhUTO0ubQ">百度网盘</a>（swh3） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
+        (Windows)</a> | <a href="https://pan.baidu.com/s/1s0nYJIcjfbFrY_ScYjLnmw?pwd=i4ad">百度网盘</a>（i4ad） | <a href="https://scris.lanzoui.com/b01n0tb4j">蓝奏云高速下载</a>
 </p>
 
 <p align="center">
@@ -65,7 +65,7 @@ yarn appimage # linux AppImage
 
 ## Copyright & Credit
 
-Copyright (c) 2019-2025 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
+Copyright (c) 2019-2026 **[Roderick Qiu](https://r-q.name)** and other contributors. All rights reserved.
 
 Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/master/LICENSE)**.
 
@@ -74,8 +74,8 @@ Licensed under the **[MPL 2.0 License](https://github.com/RoderickQiu/wnr/blob/m
 For the full text of licenses, go and see [this file](https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md), which
 is also included in every copy of wnr.
 
-- node-shi, [**my own project**](https://www.npmjs.com/package/node-shi) following MIT License.
-- cmd-or-ctrl, [**another project of mine**](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
+- node-shi, [my own project](https://www.npmjs.com/package/node-shi) following MIT License.
+- cmd-or-ctrl, [another project of mine](https://www.npmjs.com/package/cmd-or-ctrl) following MIT License.
 - node-auto-launch, Teamwork, MIT License.
 - compare-version, kevva, MIT License.
 - electron-store, sindresorhus, MIT License.
