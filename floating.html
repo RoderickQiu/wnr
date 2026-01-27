@@ -81,9 +81,6 @@
 
         function stopper() {
             ipc.send("floating-conversation", { topic: "stop" });
-            isWorking = !isWorking;
-            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
-            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
         }
 
         function skipper() {

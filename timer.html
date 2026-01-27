@@ -761,7 +761,10 @@
                         backcheck();
                     else
                         ipc.send("alert", i18n.__("fail-to-withdraw"));
-                } else if (message === "stop") stopper();
+                } else if (message === "stop") {
+                    stopper();
+                    ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                }
                 else if (message === "enter") floatingOpener();
                 else if (message === "closed") hasFloating = false;
             });
