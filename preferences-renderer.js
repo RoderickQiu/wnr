@@ -217,6 +217,14 @@ function domString(type) {
         case "theme-color":
             appendDOMString = `
             <div id="color-box" class="row w-100"></div>
+            <br/>
+            <div class="row w-100">
+                <div class="col-12 text-right">
+                    <a class="btn btn-sm btn-outline-primary" href="javascript:resetThemeColors()">
+                        ${ i18n.__("reset-theme-colors") }
+                    </a>
+                </div>
+            </div>
             <br/>`;
             break;
         case "open-notification-settings":
@@ -989,10 +997,34 @@ function colorInitializer() {
                 <div class=\"col-6\">\
                 <label id = \"color-label-" + i + "\" class= \"hotkey-set-label text-muted settings-msg\" ></label>\
                 </div><div class=\"col-6\">\
-            <input id=\"color-" + i + "\" class=\"hotkey-set-input extreme-small\" data-jscolor=\"\" onchange=\"colorSet(" + i + ")\" /></div><br />");
+            <input id=\"color-" + i + "\" class=\"hotkey-set-input extreme-small\" data-jscolor=\"\" value=\"" + themeColorList[i] + "\" onchange=\"colorSet(" + i + ")\" /></div><br />");
         $("#color-label-" + i).text(colorNameList[i]);
-        $("#color-" + i).val(themeColorList[i]);
     }
+
+    if (JSColor && typeof JSColor.install === "function") {
+        JSColor.install();
+    }
+
+    for (let i in themeColorList) {
+        let element = document.getElementById("color-" + i);
+        if (element && element.jscolor) {
+            element.jscolor.fromString(themeColorList[i]);
+        }
+    }
+}
+
+function resetThemeColors() {
+    const defaultColors = [
+        "#5490ea",
+        "#ea5454",
+        "#17a2b8",
+        "#a26ae5"
+    ];
+    themeColorList = defaultColors;
+    store.set("theme-color", themeColorList);
+    $("#color-box").empty();
+    colorInitializer();
+    ipc.send("theme-color-changed");
 }
 
 // hotkey

@@ -392,6 +392,7 @@
 	"theme-color-rest": "Resting (default blue): ",
 	"theme-color-onlyrest": "Simple Ctdn. (default purple): ",
 	"theme-color-positive": "Stopwatch (default green): ",
+	"reset-theme-colors": "Reset to defaults",
 	"autostarttask": "Auto start default task",
 	"autostarttask-tip": "When a default task is set and this setting is on, wnr will automatically start the default task every time this app is opened. ",
 	"simple-countdown-settings": "Simple countdown settings",

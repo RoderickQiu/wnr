@@ -2558,7 +2558,8 @@ ipcMain.on("floating-conversation", function (event, message) {
             minute: message.val,
             percentage: message.percentage,
             method: message.method,
-            isWorking: message.isWorking
+            isWorking: message.isWorking,
+            isOnlyRest: message.isOnlyRest
         });
     } else if (message.topic === "stop") {
         if (win != null) win.webContents.send('remote-control-msg', 'stop');
@@ -2585,4 +2586,10 @@ ipcMain.on("zoom-ratio-change", function (event, message) {
     win.setSize(Math.floor(360 * ratio), Math.floor(459 * ratio), true);
     settingsWin.setSize(Math.floor((isChinese ? 420 : 472) * ratio), Math.floor(636 * ratio), true);
     win.webContents.send('zoom-ratio-feedback');
+})
+
+ipcMain.on("theme-color-changed", function () {
+    if (win != null) win.webContents.send('theme-color-changed');
+    if (floatingWin != null) floatingWin.webContents.send('theme-color-changed');
+    if (externalTitleWin != null) externalTitleWin.webContents.send('theme-color-changed');
 })

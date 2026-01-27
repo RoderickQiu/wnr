@@ -143,6 +143,11 @@
             timeLeft.text(getStyledTimeLeft(message.minute));
             floatingBottomBar.css("width", message.percentage + "%");
 
+            if (message.method === 1 && method === 1) {
+                $('#floating-bottom-bar').css("background-color", newWorkColor + "19");
+                $('#floating-bottom-bar').css("display", "block");
+            }
+
             if (message.method === 2 && method === 1) {
                 $(".work").addClass("rest");
                 $(".work").removeClass("work");
@@ -158,12 +163,15 @@
             if (message.method === 1 && method === 2) {
                 $(".rest").addClass("work");
                 $(".rest").removeClass("rest");
+                $(".rest").removeClass("onlyRest");
                 $('#floating-bottom-bar').css("background-color", newWorkColor + "19");
                 method = 1;
             }
 
             if (message.method === 3 && method !== 3) {
                 $(".work").addClass("positive");
+                $(".work").removeClass("rest");
+                $(".work").removeClass("onlyRest");
                 $('#floating-bottom-bar').css("display", "none");
                 $("#time-left-msg").text(i18n.__('min-already'));
                 method = 3;
@@ -171,6 +179,7 @@
 
             if (message.isOnlyRest && method === 2) {
                 $(".rest").addClass("onlyRest");
+                $(".rest").removeClass("work");
                 $('#floating-bottom-bar').css("background-color", newOnlyRestColor + "19");
             }
 
