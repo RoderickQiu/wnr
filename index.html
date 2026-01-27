@@ -373,6 +373,14 @@
                 $("#statistics-back").show();
                 $("#logo-bar").hide();
                 onlyrest = true;
+                let countdownTime = store.has("simple-countdown-time") ? store.get("simple-countdown-time") : 2;
+                let countdownFocus = store.has("simple-countdown-focus") ? store.get("simple-countdown-focus") : false;
+                $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(countdownTime, {
+                    as: 'm',
+                    lang: store.get("i18n").replace(/-/g, '_'),
+                    ignoreError: true
+                }));
+                document.getElementById("focus-rest-set-onlyrest").checked = countdownFocus;
                 allSet();
                 $("#rest-time-onlyrest").focus();
                 $(".work").addClass("onlyRest");//onlyRest mode now has specific color
@@ -571,12 +579,6 @@
             document.getElementById("focus-work-set").checked = focusWhenWorking;
             document.getElementById("focus-rest-set").checked = focusWhenResting;
 
-            $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(restTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
-            document.getElementById("focus-rest-set-onlyrest").checked = focusWhenResting;
 
             allSet();
         }

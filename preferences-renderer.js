@@ -368,6 +368,44 @@ function domString(type) {
             </script>
             </div><br/>`;
             break;
+        case "simple-countdown-settings":
+            let defaultCountdownTime = store.has("simple-countdown-time") ? store.get("simple-countdown-time") : 2;
+            let defaultCountdownFocus = store.has("simple-countdown-focus") ? store.get("simple-countdown-focus") : false;
+            appendDOMString = `
+            <div class="w-100 row align-items-center">
+                <div class="col-8 text-left">
+                    <label>
+                        ${ i18n.__("simple-countdown-time") }
+                    </label>
+                </div>
+                <div class="col-4 text-right">
+                    <input id="simple-countdown-time-input" type="number" class="hotkeyset" 
+                           value="${ defaultCountdownTime }" 
+                           onchange="store.set('simple-countdown-time', Number($('#simple-countdown-time-input').val()))"
+                           oninput="if (Number(value) > 1440) value = 1440; if (Number(value) < 0.1) value = 0.1"
+                           style="ime-mode:Disabled" 
+                           title="${ i18n.__('what-can-be-here-predefined-tasks') }" />
+                    <span class="text-muted small"> ${ i18n.__('min') }</span>
+                </div>
+            </div>
+            <br/>
+            <div class="w-100 row align-items-center">
+                <div class="col-9 text-left">
+                    <label>
+                        ${ i18n.__("simple-countdown-focus") }
+                    </label>
+                </div>
+                <div class="col-3 text-right">
+                    <label class="switch-slide">
+                        <input type="checkbox" id="simple-countdown-focus-checkbox" hidden
+                               ${ defaultCountdownFocus ? 'checked' : '' }
+                               onclick="store.set('simple-countdown-focus', $('#simple-countdown-focus-checkbox').prop('checked'))">
+                        <label for="simple-countdown-focus-checkbox" class="switch-slide-label"></label>
+                    </label>
+                </div>
+            </div>
+            <br/>`;
+            break;
         case "personalization-notify-sound":
             appendDOMString = `
             <div class="w-100 row align-items-center">

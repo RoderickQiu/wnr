@@ -19,6 +19,17 @@ if (store.get("islocked") !== true) {
             id: "autostarttask"
         }, {
             type: "collapse",
+            id: "simple-countdown-settings",
+            inner: [
+                {
+                    type: "title",
+                    id: "simple-countdown-settings-tip"
+                }, {
+                    type: "simple-countdown-settings"
+                }
+            ],
+        }, {
+            type: "collapse",
             id: "task-reservation",
             inner: [
                 {

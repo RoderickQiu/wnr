@@ -73,6 +73,10 @@
             $("#floating-unhover").css("opacity", "1");
         }
 
+        function semihover() {
+            hover();
+        }
+
         let isWorking = true;
 
         function stopper() {
@@ -142,14 +146,19 @@
             if (message.method === 2 && method === 1) {
                 $(".work").addClass("rest");
                 $(".work").removeClass("work");
-                $('#floating-bottom-bar').css("background-color", "#5490ea19");
+                if (message.isOnlyRest) {
+                    $(".rest").addClass("onlyRest");
+                    $('#floating-bottom-bar').css("background-color", newOnlyRestColor + "19");
+                } else {
+                    $('#floating-bottom-bar').css("background-color", newRestColor + "19");
+                }
                 method = 2;
             }
 
             if (message.method === 1 && method === 2) {
                 $(".rest").addClass("work");
                 $(".rest").removeClass("rest");
-                $('#floating-bottom-bar').css("background-color", "#ea545419");
+                $('#floating-bottom-bar').css("background-color", newWorkColor + "19");
                 method = 1;
             }
 
@@ -158,6 +167,11 @@
                 $('#floating-bottom-bar').css("display", "none");
                 $("#time-left-msg").text(i18n.__('min-already'));
                 method = 3;
+            }
+
+            if (message.isOnlyRest && method === 2) {
+                $(".rest").addClass("onlyRest");
+                $('#floating-bottom-bar').css("background-color", newOnlyRestColor + "19");
             }
 
             ipc.removeAllListeners('floating-stop-sync');

@@ -210,6 +210,10 @@ li input:nth-last-child(4)::after {
     color: #a26ae5c2;
 }
 
+#rest-time-onlyrest {
+    min-width: 225px;
+}
+
 .text-grey {
     color: #6c757d;
 }

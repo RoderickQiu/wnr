@@ -388,7 +388,8 @@
                                         (times === 0 ? firstTimeDiscount : 0)) / 60000,
                                 percentage: Math.round(lastRecordedProgress * 100),
                                 method: method,
-                                isWorking: isClockWorking
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
                             });
                         }, 500 * floatingRepeater);
                 else
@@ -792,9 +793,11 @@
                 wasCounting = !wasCounting;
                 if (isClockWorking) {
                     window.clearInterval(int);
-                    pauseInt = setTimeout(function () {
-                        ipc.send("can-redo-alert");
-                    }, 1000 * 60 * 7);
+                    if (store.get("alarmtip") !== false) {
+                        pauseInt = setTimeout(function () {
+                            ipc.send("can-redo-alert");
+                        }, 1000 * 60 * 7);
+                    }
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
@@ -1323,7 +1326,8 @@
                             val: seconds / 60,
                             percentage: naturalProgress,
                             method: method,
-                            isWorking: isClockWorking
+                            isWorking: isClockWorking,
+                            isOnlyRest: isOnlyRest
                         });
                         $bottomBar.css("width", naturalProgress + "%");
                     }
