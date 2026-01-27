@@ -940,27 +940,55 @@ li input:nth-last-child(4)::after {
 #top-bar {
     position: absolute;
     right: 50%;
-    top: 18%;
-    width: 80%;
-    transform: translate(50%, -39%);
+    top: 10%;
+    width: 90%;
+    transform: translate(50%, -50%);
     text-align: center;
     -webkit-app-region: no-drag;
     -webkit-user-select: none;
+    font-weight: bold;
+}
+
+#time-statistics-sub-bar {
+    position: absolute;
+    right: 50%;
+    top: 16%;
+    width: 90%;
+    transform: translate(50%, -50%);
+    text-align: center;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    min-height: 30px;
 }
 
 #top-bar a, #index-topbar a {
     color: #6c757d !important;
     line-height: 2;
+    font-weight: 500 !important;
 }
 
-#statistics-no-chart, #statistics-with-chart {
+#time-statistics-sub-bar a {
+    color: #6c757d !important;
+    line-height: 2;
+    display: inline-block;
+    padding: 6px 2px;
+    vertical-align: middle;
+    min-height: 24px;
+    white-space: nowrap;
+}
+
+#statistics-no-chart, #statistics-with-chart, #statistics-recap {
     position: absolute;
     text-align: center;
     vertical-align: top;
-    top: 20%;
-    width: 80%;
+    top: 19%;
+    width: 90%;
     -webkit-app-region: no-drag;
     -webkit-user-select: text;
+}
+
+#statistics-recap {
+    top: 14%;
 }
 
 #statistics-no-chart h1 {
@@ -973,7 +1001,7 @@ li input:nth-last-child(4)::after {
 
 #statistics-back {
     position: absolute;
-    bottom: 50%;
+    bottom: 15px;
     left: 10px;
     font-size: 24px;
     display: inline-block;
@@ -1007,7 +1035,7 @@ li input:nth-last-child(4)::after {
     width: 0;
     height: 0;
     line-height: 0;
-    border: 6px dashed #000;
+    border-color: transparent;
     top: 0;
     left: 25%;
     margin-left: -5px;
@@ -1019,6 +1047,22 @@ li input:nth-last-child(4)::after {
 
 .tipsy-arrow-n {
     border-bottom-color: #6c757dc2;
+    border-bottom-style: dashed;
+    border-top-style: solid;
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+    margin-bottom: -5px;
+}
+
+.tipsy-arrow-s {
+    border-top-color: #6c757dc2;
+    border-bottom-style: dashed;
+    border-top-style: solid;
+    top: auto;
+    bottom: 0;
+    margin-top: 0;
+    margin-bottom: -5px;
 }
 
 .tipsy-inner {

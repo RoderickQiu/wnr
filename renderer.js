@@ -24,8 +24,32 @@ let titleAlternative = {
     y: 20,
     tipElements: "a, i, span, img, div, input",
     noTitle: false,
+    bottomTooltipSelectors: ['#statistics-back', '#back-index', '#statistics-back i'],
+    bottomTooltipMargin: 80,
+    isBottomTooltipElement: function(element) {
+        let $element = $(element);
+        for (let i = 0; i < this.bottomTooltipSelectors.length; i++) {
+            let selector = this.bottomTooltipSelectors[i];
+            if ($element.is(selector)) {
+                return true;
+            }
+            let $container = $(selector);
+            if ($container.length > 0 && $container[0].contains && $container[0].contains(element)) {
+                return true;
+            }
+            if ($element.closest(selector).length > 0) {
+                return true;
+            }
+        }
+        return false;
+    },
+    isNearBottomEdge: function(pageY) {
+        if (!window || !window.innerHeight) return false;
+        return pageY > (window.innerHeight - this.bottomTooltipMargin);
+    },
     init: function () {
         let b = this.noTitle, isTitle;
+        let self = this;
         $(this.tipElements).each(function () {
             $(this).mouseover(function (e) {
                 if (b) {
@@ -36,12 +60,21 @@ let titleAlternative = {
                 if (isTitle) {
                     this.myTitle = this.title;
                     this.title = "";
-                    let a = "<div class='tipsy'><div class='tipsy-arrow tipsy-arrow-n'></div><div class='tipsy-inner'>" + this.myTitle + "</div></div>";
+                    let isBottomTooltip = self.isBottomTooltipElement(this) || self.isNearBottomEdge(e.pageY);
+                    let arrowClass = isBottomTooltip ? 'tipsy-arrow-s' : 'tipsy-arrow-n';
+                    let a = "<div class='tipsy'><div class='tipsy-arrow " + arrowClass + "'></div><div class='tipsy-inner'>" + this.myTitle + "</div></div>";
                     $('body').append(a);
-                    $('.tipsy').css({
-                        "top": (e.pageY + 24) + "px",
-                        "left": (e.pageX - 24) + "px"
-                    }).show('fast');
+                    if (isBottomTooltip) {
+                        $('.tipsy').css({
+                            "top": (e.pageY - 40) + "px",
+                            "left": (e.pageX - 24) + "px"
+                        }).show('fast');
+                    } else {
+                        $('.tipsy').css({
+                            "top": (e.pageY + 24) + "px",
+                            "left": (e.pageX - 24) + "px"
+                        }).show('fast');
+                    }
                 }
             }).mouseout(function () {
                 if (this.myTitle != null) {
@@ -49,10 +82,18 @@ let titleAlternative = {
                     $('.tipsy').remove()
                 }
             }).mousemove(function (e) {
-                $('.tipsy').css({
-                    "top": (e.pageY + 24) + "px",
-                    "left": (e.pageX - 24) + "px"
-                }).show('fast');
+                let isBottomTooltip = self.isBottomTooltipElement(this) || self.isNearBottomEdge(e.pageY);
+                if (isBottomTooltip) {
+                    $('.tipsy').css({
+                        "top": (e.pageY - 40) + "px",
+                        "left": (e.pageX - 24) + "px"
+                    }).show('fast');
+                } else {
+                    $('.tipsy').css({
+                        "top": (e.pageY + 24) + "px",
+                        "left": (e.pageX - 24) + "px"
+                    }).show('fast');
+                }
             })
         })
     }

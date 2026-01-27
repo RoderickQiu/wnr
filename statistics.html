@@ -67,6 +67,13 @@
             </script>
         </div>
         <div id="top-bar" class="extreme-small">
+            <a id="recap-main" href="javascript:switchMainMode('recap')">
+                <script>document.write(i18n.__('recap'));</script>
+            </a> | <a id="time-statistics-main" href="javascript:switchMainMode('time-statistics')">
+                <script>document.write(i18n.__('time-statistics'));</script>
+            </a>
+        </div>
+        <div id="time-statistics-sub-bar" class="extreme-small" style="display: none;">
             <a id="today" href="javascript:switchMode('today')">
                 <script>document.write(i18n.__('today'));</script>
             </a> | <a id="yesterday" href="javascript:switchMode('yesterday')">
@@ -79,7 +86,6 @@
             | <a id="all-time" href="javascript:switchMode('all-time')">
             <script>document.write(i18n.__('all-time'));</script>
         </a>
-            <hr />
         </div>
         <div id="statistics-no-chart">
             <br />
@@ -183,6 +189,11 @@
                 <canvas id="graph"></canvas>
             </div>
         </div>
+        <div id="statistics-recap" style="height: 70%;">
+            <br />
+            <div id="recap-list" style="text-align: left; max-height: 100%; overflow-y: auto">
+            </div>
+        </div>
     </div>
 
     <script>
@@ -198,14 +209,20 @@
 
         const schart = require("schart.js");
         let statistics = null;
+        let recapStore = null;
 
         if (process.env.NODE_ENV === "portable") {
             statistics = new Store({
                 cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""),
                 name: 'wnr-statistics'
             });
+            recapStore = new Store({
+                cwd: require('@electron/remote').app.getPath('exe').replace("wnr.exe", ""),
+                name: 'wnr-recap'
+            });
         } else {
             statistics = new Store({ name: 'statistics' });
+            recapStore = new Store({ name: 'recap' });
         }
 
         if (!store.has("start-from-monday")) {
@@ -316,10 +333,79 @@
             } else break;
         }
 
+        let mainMode = "time-statistics";
         let statisticsMode = "today";
         $(function () {
-            switchMode(statisticsMode);
+            switchMainMode(mainMode);
         });
+        
+        function switchMainMode(mode) {
+            mainMode = mode;
+            if (mainMode === "recap") {
+                $("#recap-main").css("font-weight", "bold");
+                $("#time-statistics-main").css("font-weight", "normal");
+                $("#time-statistics-sub-bar").css("display", "none");
+                $("#statistics-with-chart").css("display", "none");
+                $("#statistics-no-chart").css("display", "none");
+                $("#statistics-recap").css("display", "block");
+                
+                let entries = recapStore.has('entries') ? recapStore.get('entries') : [];
+                entries.sort((a, b) => b.timestamp - a.timestamp);
+                
+                let recapListHtml = "";
+                if (entries.length === 0) {
+                    recapListHtml = "<p class='text-muted text-center' style='padding: 20px; margin-top: 10px'>" + i18n.__('recap-empty') + "</p>";
+                } else {
+                    let currentDate = "";
+                    let dateEntries = {};
+                    entries.forEach(function(entry) {
+                        let entryDate = new Date(entry.timestamp).toLocaleDateString();
+                        if (!dateEntries[entryDate]) {
+                            dateEntries[entryDate] = [];
+                        }
+                        dateEntries[entryDate].push(entry);
+                    });
+                    
+                    Object.keys(dateEntries).sort().reverse().forEach(function(entryDate) {
+                        recapListHtml += "<div style='margin-bottom: 10px; margin-left: 30px'>";
+                        recapListHtml += "<strong class='text-muted'>" + entryDate + "</strong>";
+                        recapListHtml += " <a href='javascript:deleteRecapByDate(\"" + entryDate + "\")' class='text-muted extreme-small' style='margin-left: 8px; cursor: pointer;' title='" + i18n.__('recap-delete-date') + "'>×</a>";
+                        recapListHtml += "</div>";
+                        
+                        dateEntries[entryDate].forEach(function(entry) {
+                            let timeStr = new Date(entry.timestamp).toLocaleTimeString();
+                            let method = entry.method !== undefined ? entry.method : 1;
+                            let borderColor = "#5490ea";
+                            let titleClass = "rest";
+                            if (method === 3) {
+                                borderColor = "#17a2b8";
+                                titleClass = "positive";
+                            } else if (entry.isOnlyRest !== undefined && entry.isOnlyRest) {
+                                borderColor = "#a26ae5";
+                                titleClass = "onlyRest";
+                            }
+                            recapListHtml += "<div style='margin-left: 30px; margin-top: 8px; padding: 8px; border-left: 3px solid " + borderColor + "; position: relative;'>";
+                            recapListHtml += "<a href='javascript:deleteRecapEntry(" + entry.timestamp + ")' class='text-muted extreme-small' style='position: absolute; right: 8px; top: 8px; cursor: pointer;' title='" + i18n.__('recap-delete-entry') + "'>×</a>";
+                            if (entry.title) {
+                                recapListHtml += "<div class='" + titleClass + "' style='font-weight: bold; padding-right: 20px;'>" + entry.title + "</div>";
+                            }
+                            if (entry.note) {
+                                recapListHtml += "<div class='text-muted small' style='margin-top: 4px; padding-right: 20px;'>" + entry.note + "</div>";
+                            }
+                            recapListHtml += "<div class='text-grey extreme-small' style='margin-top: 4px;'>" + timeStr + "</div>";
+                            recapListHtml += "</div>";
+                        });
+                    });
+                }
+                $("#recap-list").html(recapListHtml);
+            } else if (mainMode === "time-statistics") {
+                $("#recap-main").css("font-weight", "normal");
+                $("#time-statistics-main").css("font-weight", "bold");
+                $("#time-statistics-sub-bar").css("display", "block");
+                $("#statistics-recap").css("display", "none");
+                switchMode(statisticsMode);
+            }
+        }
 
         let h = i18n.__("h"), min = i18n.__("min");
 
@@ -340,6 +426,7 @@
 
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
+                $("#statistics-recap").css("display", "none");
 
                 $("#work-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0"));
                 $("#rest-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0"));
@@ -355,6 +442,7 @@
 
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
+                $("#statistics-recap").css("display", "none");
 
                 $("#work-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0"));
                 $("#rest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0"));
@@ -370,6 +458,7 @@
 
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
+                $("#statistics-recap").css("display", "none");
 
                 $("#work-time-with-chart").text(getStyledTime(thisWeekWorkTimeSum));
                 $("#rest-time-with-chart").text(getStyledTime(thisWeekRestTimeSum));
@@ -412,6 +501,7 @@
 
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
+                $("#statistics-recap").css("display", "none");
 
                 $("#work-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0"));
                 if ($("#work-time-with-chart").text().length >= 10) $("#work-time-with-chart").addClass("xx-small");
@@ -460,6 +550,7 @@
 
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
+                $("#statistics-recap").css("display", "none");
 
                 $("#work-time").text(getStyledTime(allTimeWorkTimeSum));
                 $("#rest-time").text(getStyledTime(allTimeRestTimeSum));
@@ -468,7 +559,30 @@
                 $("#sum").text(getStyledTime(allTimeTimeSum));
             }
         }//to show the stuffs
-
+        
+        function deleteRecapEntry(timestamp) {
+            ipc.send('recap-delete-confirm', { type: 'entry', timestamp: timestamp });
+        }
+        
+        function deleteRecapByDate(date) {
+            ipc.send('recap-delete-confirm', { type: 'date', date: date });
+        }
+        
+        ipc.on('recap-delete-execute', function(event, data) {
+            let entries = recapStore.has('entries') ? recapStore.get('entries') : [];
+            if (data.type === 'entry') {
+                entries = entries.filter(function(entry) {
+                    return entry.timestamp !== data.timestamp;
+                });
+            } else if (data.type === 'date') {
+                entries = entries.filter(function(entry) {
+                    let entryDate = new Date(entry.timestamp).toLocaleDateString();
+                    return entryDate !== data.date;
+                });
+            }
+            recapStore.set('entries', entries);
+            switchMainMode('recap');
+        });
 
     </script>
     <script src="renderer.js"></script>

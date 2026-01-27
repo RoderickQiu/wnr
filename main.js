@@ -32,7 +32,7 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     kioskInterval = null,
     recorderDate = null, tempDate = null, yearAndMon = null, yearMonDay = null, year = null,
     estimCurrent = 0, todaySum = 0,
-    store = null, styleCache = null, statistics = null, timingData = null,
+    store = null, styleCache = null, statistics = null, timingData = null, recapStore = null,
     personalizationNotificationList = [[], [], [], [], [], []],
     isMultiMonitorLoose = false;
 
@@ -396,9 +396,11 @@ app.on('ready', () => {
     if (process.env.NODE_ENV === "portable") {
         store = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-config' });//accept portable
         statistics = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-statistics' });
+        recapStore = new Store({ cwd: app.getPath('exe').replace("wnr.exe", ""), name: 'wnr-recap' });
     } else {
         store = new Store();
         statistics = new Store({ name: 'statistics' });
+        recapStore = new Store({ name: 'recap' });
     }
     styleCache = new Store({ name: 'style-cache' });
     timingData = new Store({ name: 'timing-data' });
@@ -1894,6 +1896,34 @@ ipcMain.on('warning-giver-all-task-end', function () {
     traySolution(isFullscreenMode);
 })
 
+ipcMain.on('save-recap-entry', function (event, data) {
+    if (!recapStore.has('entries')) {
+        recapStore.set('entries', []);
+    }
+    let entries = recapStore.get('entries');
+    entries.push({
+        title: data.title,
+        note: data.note,
+        sessionId: data.sessionId,
+        timestamp: data.timestamp,
+        date: new Date(data.timestamp).toISOString().split('T')[0],
+        method: data.method,
+        isOnlyRest: data.isOnlyRest
+    });
+    recapStore.set('entries', entries);
+})
+
+ipcMain.on('recap-delete-confirm', function (event, data) {
+    let confirmMsg = "";
+    if (data.type === 'entry') {
+        confirmMsg = i18n.__('recap-delete-entry-confirm');
+    } else if (data.type === 'date') {
+        confirmMsg = i18n.__('recap-delete-date-confirm') + " " + data.date + "?";
+    }
+    customDialog("select_on", i18n.__('recap-delete-title'), confirmMsg, 
+        "win.webContents.send('recap-delete-execute', " + JSON.stringify(data) + ");");
+})
+
 ipcMain.on('update-feedback', function (event, message) {
     // another button usage: button3_update
     if (message === "update-available") {
@@ -1927,7 +1957,7 @@ ipcMain.on('can-redo-alert', function () {
 
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
-        customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "store.clear();statistics.clear();styleCache.clear();timingData.clear();relaunchSolution()");
+        customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "store.clear();statistics.clear();styleCache.clear();timingData.clear();recapStore.clear();relaunchSolution()");
     }
 })
 

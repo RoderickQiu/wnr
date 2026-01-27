@@ -459,6 +459,35 @@
         }
 
         function backer() {
+            let currentTitle = $("#title").val() || title || "";
+            let currentNote = $("#notes").text() || note || "";
+            let trimmedTitle = currentTitle.trim();
+            let trimmedNote = currentNote.trim();
+            
+            let defaultTitlePlaceholders = [i18n.__('positive'), i18n.__('positive-timing')];
+            let defaultNotePlaceholders = [i18n.__('positive-msg')];
+            
+            if (defaultTitlePlaceholders.includes(trimmedTitle)) {
+                trimmedTitle = "";
+            }
+            if (defaultNotePlaceholders.includes(trimmedNote)) {
+                trimmedNote = "";
+            }
+            
+            let recapKey = trimmedTitle + "|" + trimmedNote;
+            
+            if ((trimmedTitle || trimmedNote) && !recordedRecaps.has(recapKey)) {
+                recordedRecaps.add(recapKey);
+                ipc.send('save-recap-entry', {
+                    title: trimmedTitle,
+                    note: trimmedNote,
+                    sessionId: sessionId,
+                    timestamp: new Date().getTime(),
+                    method: methodFromStart,
+                    isOnlyRest: isOnlyRest
+                });
+            }
+            
             call('floating-destroy');
             call('exit-fullscreen');
             store.set("just-back", true);
@@ -525,7 +554,9 @@
                 isFirstTimeOnlyRest = decodeURI($_GET['work-time']) === "0.7777",
                 isOnlyRest = isFirstTimeOnlyRest,
                 firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000,
-                longBreakFrequence = -1;
+                longBreakFrequence = -1,
+                sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9),
+                recordedRecaps = new Set();
 
         if (isOnlyRest) ipc.send("enter-only-rest");
 
@@ -900,6 +931,35 @@
                         player.loop = false;
                     }, 20000);
                 }
+                let currentTitle = $("#title").val() || title || "";
+                let currentNote = $("#notes").text() || note || "";
+                let trimmedTitle = currentTitle.trim();
+                let trimmedNote = currentNote.trim();
+                
+                let defaultTitlePlaceholders = [i18n.__('positive'), i18n.__('positive-timing')];
+                let defaultNotePlaceholders = [i18n.__('positive-msg')];
+                
+                if (defaultTitlePlaceholders.includes(trimmedTitle)) {
+                    trimmedTitle = "";
+                }
+                if (defaultNotePlaceholders.includes(trimmedNote)) {
+                    trimmedNote = "";
+                }
+                
+                let recapKey = trimmedTitle + "|" + trimmedNote;
+                
+                if ((trimmedTitle || trimmedNote) && !recordedRecaps.has(recapKey)) {
+                    recordedRecaps.add(recapKey);
+                    ipc.send('save-recap-entry', {
+                        title: trimmedTitle,
+                        note: trimmedNote,
+                        sessionId: sessionId,
+                        timestamp: new Date().getTime(),
+                        method: methodFromStart,
+                        isOnlyRest: isOnlyRest
+                    });
+                }
+                
                 if (isend === 0) ipc.send('warning-giver-all-task-end');
                 else {
                     if (isend === 1) ipc.send('warning-giver-workend');
