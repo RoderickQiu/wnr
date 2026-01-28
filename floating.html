@@ -180,13 +180,6 @@
                 $('#floating-bottom-bar').css("background-color", newOnlyRestColor + "19");
             }
 
-            ipc.removeAllListeners('floating-stop-sync');
-            ipc.on("floating-stop-sync", function (event, message) {
-                isWorking = message;
-                if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
-                else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
-            });
-
             if (method !== 3) {
                 if (store.get('disable-pausing') === true) {
                     if (!((store.get('disable-pausing-special') === "work" && method !== 1) ||
@@ -207,6 +200,12 @@
                     else $("#floating-back").css("display", "inline-block");
                 } else $("#floating-back").css("display", "inline-block");
             }
+        });
+
+        ipc.on("floating-stop-sync", function (event, message) {
+            isWorking = message;
+            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
         });
 
         if (process.platform === "darwin") {

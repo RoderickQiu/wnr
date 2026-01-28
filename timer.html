@@ -867,7 +867,7 @@
                 }
                 if ((method === 1 && workTime > 60000) || (method === 2 && restTime > 60000)) moreThanOneMin = 1;
                 else moreThanOneMin = 0;//if less than 1 min, prevent less than 1min warning
-                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00;
+                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00, lastRecordedSecond = -1;
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);
                 timingData.set("last-recorded-hours-left", -1);
@@ -1351,6 +1351,27 @@
                     minutes = Math.floor((seconds - hours * 3600) / 60);
                     remainMinutes = hours * 60 + minutes;
 
+                    if (progress !== lastRecordedProgress) {
+                        lastRecordedProgress = progress;
+                        naturalProgress = Math.round(lastRecordedProgress * 100);
+                        $bottomBar.css("width", naturalProgress + "%");
+                        ipc.send("progress-bar-set", {
+                            progress: progress,
+                            remain: minutes + hours * 60,
+                            positive: false
+                        });
+                        if (hasFloating && !(hours === 0 && minutes === 0)) {
+                            ipc.send("floating-conversation", {
+                                topic: "time-left",
+                                val: seconds / 60,
+                                percentage: naturalProgress,
+                                method: method,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
+                        }
+                    }
+
                     if (hours === 0 && minutes === 0 && (lastRecordedSecond !== seconds)) {
                         lastRecordedSecond = seconds;
                         if (hasFloating) ipc.send("floating-conversation", {
@@ -1358,7 +1379,8 @@
                             val: seconds / 60,
                             percentage: naturalProgress,
                             method: method,
-                            isWorking: isClockWorking
+                            isWorking: isClockWorking,
+                            isOnlyRest: isOnlyRest
                         });
                     }
 
@@ -1374,25 +1396,6 @@
                             min: minutes,
                             positive: false
                         });
-                    }
-
-                    if (progress !== lastRecordedProgress) {
-                        lastRecordedProgress = progress;
-                        naturalProgress = Math.round(lastRecordedProgress * 100);
-                        ipc.send("progress-bar-set", {
-                            progress: progress,
-                            remain: minutes + hours * 60,
-                            positive: false
-                        });
-                        if (hasFloating) ipc.send("floating-conversation", {
-                            topic: "time-left",
-                            val: seconds / 60,
-                            percentage: naturalProgress,
-                            method: method,
-                            isWorking: isClockWorking,
-                            isOnlyRest: isOnlyRest
-                        });
-                        $bottomBar.css("width", naturalProgress + "%");
                     }
 
                     seconds -= hours * 3600 + minutes * 60;
