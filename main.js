@@ -35,6 +35,8 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     store = null, styleCache = null, statistics = null, timingData = null, recapStore = null,
     personalizationNotificationList = [[], [], [], [], [], []],
     isMultiMonitorLoose = false;
+let floatingHeartbeat = null;
+let floatingHeartbeatInterval = null;
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW'], i//locale code
@@ -2357,6 +2359,33 @@ function externalTitle(title, notes) {
     }
 }
 
+function startFloatingHeartbeat() {
+    if (floatingHeartbeatInterval != null) return;
+    floatingHeartbeatInterval = setInterval(function () {
+        if (floatingWin == null || floatingHeartbeat == null) return;
+        let elapsedSeconds = (Date.now() - floatingHeartbeat.timestamp) / 1000;
+        let remainingSeconds = floatingHeartbeat.remainingSeconds - elapsedSeconds;
+        if (remainingSeconds < 0) remainingSeconds = 0;
+        let percentage = 0;
+        if (floatingHeartbeat.totalMs > 0) {
+            percentage = Math.round((remainingSeconds * 1000 / floatingHeartbeat.totalMs) * 100);
+        }
+        floatingWin.webContents.send('floating-time-left', {
+            minute: remainingSeconds / 60,
+            percentage: percentage,
+            method: floatingHeartbeat.method,
+            isWorking: floatingHeartbeat.isWorking,
+            isOnlyRest: floatingHeartbeat.isOnlyRest
+        });
+    }, 250);
+}
+
+function stopFloatingHeartbeat() {
+    if (floatingHeartbeatInterval == null) return;
+    clearInterval(floatingHeartbeatInterval);
+    floatingHeartbeatInterval = null;
+}
+
 function floating() {
     if (styleCache.has("floating-axis")) {
         // fix that floating window may be out of screen after changing screen resolution
@@ -2405,10 +2434,12 @@ function floating() {
                     floatingWin.show();
                     floatingWin.setAlwaysOnTop(true, "pop-up-menu");
                     floatingWin.focus();
+                    startFloatingHeartbeat();
                 });
                 floatingWin.on('closed', () => {
                     floatingWin = null;
                     hasFloating = false;
+                    stopFloatingHeartbeat();
                     // no longer need this
                     /*if (win != null && process.platform === "darwin"){
                         win.show();
@@ -2581,6 +2612,22 @@ ipcMain.on("timer-win", function (event, message) {
         isPositiveTiming = false;
     }
 })
+
+ipcMain.on("floating-heartbeat", function (event, message) {
+    if (message == null) return;
+    let remainingSeconds = Number(message.remainingSeconds);
+    let totalMs = Number(message.totalMs);
+    if (!Number.isFinite(remainingSeconds)) return;
+    if (!Number.isFinite(totalMs)) totalMs = 0;
+    floatingHeartbeat = {
+        remainingSeconds: remainingSeconds,
+        totalMs: totalMs,
+        method: message.method,
+        isWorking: message.isWorking,
+        isOnlyRest: message.isOnlyRest,
+        timestamp: Date.now()
+    };
+});
 
 ipcMain.on("floating-conversation", function (event, message) {
     if (message.topic === "time-left") {

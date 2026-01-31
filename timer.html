@@ -382,11 +382,12 @@
                 if (methodFromStart !== 3)
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
                         setTimeout(function () {
-                            ipc.send("floating-conversation", {
-                                topic: "time-left",
-                                val: (((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
-                                        (times === 0 ? firstTimeDiscount : 0)) / 60000,
-                                percentage: Math.round(lastRecordedProgress * 100),
+                            let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                    (times === 0 ? firstTimeDiscount : 0);
+                            if (remainingMs < 0) remainingMs = 0;
+                            ipc.send("floating-heartbeat", {
+                                remainingSeconds: Math.floor(remainingMs / 1000),
+                                totalMs: (method === 1) ? workTime : restTime,
                                 method: method,
                                 isWorking: isClockWorking,
                                 isOnlyRest: isOnlyRest
@@ -395,12 +396,12 @@
                 else
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
                         setTimeout(function () {
-                            ipc.send("floating-conversation", {
-                                topic: "time-left",
-                                val: seconds / 60,
-                                percentage: 0,
+                            ipc.send("floating-heartbeat", {
+                                remainingSeconds: seconds,
+                                totalMs: 0,
                                 method: 3,
-                                isWorking: isClockWorking
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
                             })
                         }, 500 * floatingRepeater);
             }
@@ -719,6 +720,8 @@
                     lastRecordedRemain = -1,
                     lastRecordedSecond = -1,
                     lastRecordedProgress = 0.00,
+                    naturalProgress = 0.00,
+                    lastFloatingSecond = -1,
                     wasCounting = true,
                     shouldNap,
                     napInterval = 0,
@@ -867,7 +870,7 @@
                 }
                 if ((method === 1 && workTime > 60000) || (method === 2 && restTime > 60000)) moreThanOneMin = 1;
                 else moreThanOneMin = 0;//if less than 1 min, prevent less than 1min warning
-                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00, lastRecordedSecond = -1;
+                lastRecordedMinutesLeft = -1, lastRecordedHoursLeft = -1, lastRecordedProgress = 0.00, lastRecordedSecond = -1, lastFloatingSecond = -1;
                 canStop = false;
                 timingData.set("last-recorded-minutes-left", -1);
                 timingData.set("last-recorded-hours-left", -1);
@@ -1042,9 +1045,9 @@
                     } else {
                         if (hasFloating) {
                             floatingOpener();
-                                                    if (!isFeatureDisabled(store.get('disable-skipping'), 2)) {
-                            $("#skipper-container").css("display", "inline");
-                        }
+                            if (!isFeatureDisabled(store.get('disable-skipping'), 2)) {
+                                $("#skipper-container").css("display", "inline");
+                            }
                         }
 
                         if (workTimeFocused === true) {
@@ -1294,12 +1297,12 @@
                 hours = Math.floor(seconds / 3600);
                 minutes = Math.floor((seconds - hours * 3600) / 60);
 
-                if (hasFloating) ipc.send("floating-conversation", {
-                    topic: "time-left",
-                    val: seconds / 60,
-                    percentage: 0,
+                if (hasFloating) ipc.send("floating-heartbeat", {
+                    remainingSeconds: seconds,
+                    totalMs: 0,
                     method: 3,
-                    isWorking: isClockWorking
+                    isWorking: isClockWorking,
+                    isOnlyRest: isOnlyRest
                 });
 
                 if (lastTimePositiveMinutes !== minutes) {
@@ -1352,37 +1355,28 @@
                     minutes = Math.floor((seconds - hours * 3600) / 60);
                     remainMinutes = hours * 60 + minutes;
 
+                    naturalProgress = Math.round(Number(progress) * 100);
                     if (progress !== lastRecordedProgress) {
                         lastRecordedProgress = progress;
-                        naturalProgress = Math.round(lastRecordedProgress * 100);
-                        $bottomBar.css("width", naturalProgress + "%");
                         ipc.send("progress-bar-set", {
                             progress: progress,
                             remain: minutes + hours * 60,
                             positive: false
                         });
-                        if (hasFloating && !(hours === 0 && minutes === 0)) {
-                            ipc.send("floating-conversation", {
-                                topic: "time-left",
-                                val: seconds / 60,
-                                percentage: naturalProgress,
-                                method: method,
-                                isWorking: isClockWorking,
-                                isOnlyRest: isOnlyRest
-                            });
-                        }
                     }
-
-                    if (hours === 0 && minutes === 0 && (lastRecordedSecond !== seconds)) {
-                        lastRecordedSecond = seconds;
-                        if (hasFloating) ipc.send("floating-conversation", {
-                            topic: "time-left",
-                            val: seconds / 60,
-                            percentage: naturalProgress,
+                    if (hasFloating && seconds !== lastFloatingSecond) {
+                        lastFloatingSecond = seconds;
+                        $bottomBar.css("width", naturalProgress + "%");
+                        ipc.send("floating-heartbeat", {
+                            remainingSeconds: seconds,
+                            totalMs: (method === 1) ? workTime : restTime,
                             method: method,
                             isWorking: isClockWorking,
                             isOnlyRest: isOnlyRest
                         });
+                        if (seconds <= 0) {
+                            skipper();
+                        }
                     }
 
                     if (remainMinutes !== lastRecordedRemain) {
@@ -1442,6 +1436,15 @@
                         }
                     }
                 } else {
+                    if (hasFloating) {
+                        ipc.send("floating-heartbeat", {
+                            remainingSeconds: 0,
+                            totalMs: (method === 1) ? workTime : restTime,
+                            method: method,
+                            isWorking: isClockWorking,
+                            isOnlyRest: isOnlyRest
+                        });
+                    }
                     skipper();
                 }
             }
