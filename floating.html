@@ -165,6 +165,16 @@
                 method = 1;
             }
 
+            if (message.method === 1 && method === 3) {
+                $("#floating-container .positive, #floating-container .rest, #floating-container .onlyRest")
+                    .addClass("work")
+                    .removeClass("positive rest onlyRest");
+                $("#time-left-msg").text(i18n.__('min-left'));
+                $('#floating-bottom-bar').css("background-color", newWorkColor + "19");
+                $('#floating-bottom-bar').css("display", "block");
+                method = 1;
+            }
+
             if (message.method === 3 && method !== 3) {
                 $(".work").addClass("positive");
                 $(".work").removeClass("rest");
