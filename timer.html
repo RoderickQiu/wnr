@@ -378,7 +378,29 @@
                 call("floating");
                 hasFloating = true;
 
-                //repeat so always able to be sent
+                // Send immediate heartbeat first to prevent freeze at zero
+                if (methodFromStart !== 3) {
+                    let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                            (times === 0 ? firstTimeDiscount : 0);
+                    if (remainingMs < 0) remainingMs = 0;
+                    ipc.send("floating-heartbeat", {
+                        remainingSeconds: Math.floor(remainingMs / 1000),
+                        totalMs: (method === 1) ? workTime : restTime,
+                        method: method,
+                        isWorking: isClockWorking,
+                        isOnlyRest: isOnlyRest
+                    });
+                } else {
+                    ipc.send("floating-heartbeat", {
+                        remainingSeconds: seconds,
+                        totalMs: 0,
+                        method: 3,
+                        isWorking: isClockWorking,
+                        isOnlyRest: isOnlyRest
+                    });
+                }
+
+                // Repeat so always able to be sent (backup heartbeats)
                 if (methodFromStart !== 3)
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
                         setTimeout(function () {
@@ -1247,6 +1269,19 @@
                             $("#skipper-container").css("display", "inline");
                         }
                     }
+                    // Send immediate heartbeat after state change to prevent freeze at zero
+                    if (hasFloating && times !== loop * 2) {
+                        let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                (times === 0 ? firstTimeDiscount : 0);
+                        if (remainingMs < 0) remainingMs = 0;
+                        ipc.send("floating-heartbeat", {
+                            remainingSeconds: Math.floor(remainingMs / 1000),
+                            totalMs: (method === 1) ? workTime : restTime,
+                            method: methodFromStart === 3 ? 3 : method,
+                            isWorking: isClockWorking,
+                            isOnlyRest: isOnlyRest
+                        });
+                    }
                 } else {
                     stopper();
                     setTimeout(function () {
@@ -1272,6 +1307,19 @@
                             if (!isFeatureDisabled(store.get('disable-skipping'), 1)) {
                                 $("#skipper-container").css("display", "inline");
                             }
+                        }
+                        // Send immediate heartbeat after state change to prevent freeze at zero
+                        if (hasFloating && times !== loop * 2) {
+                            let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                    (times === 0 ? firstTimeDiscount : 0);
+                            if (remainingMs < 0) remainingMs = 0;
+                            ipc.send("floating-heartbeat", {
+                                remainingSeconds: Math.floor(remainingMs / 1000),
+                                totalMs: (method === 1) ? workTime : restTime,
+                                method: methodFromStart === 3 ? 3 : method,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
                         }
                     }, 250);
                 }

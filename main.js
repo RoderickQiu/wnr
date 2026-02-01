@@ -68,7 +68,8 @@ function createWindow() {
             webgl: false,
             contextIsolation: false,
             enableRemoteModule: true,
-            spellcheck: false
+            spellcheck: false,
+            backgroundThrottling: false
         },
         titleBarStyle: "hiddenInset",
         icon: "./res/icons/wnrIcon.png"
