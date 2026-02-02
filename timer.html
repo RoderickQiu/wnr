@@ -533,7 +533,7 @@
 
         function longBreakGetter() {
             if (store.has("long-break")) {
-                let choices = [0, 3, 5, 7, 10, 15, 20];
+                let choices = [0, 1, 2, 3, 5, 7, 10, 15];
                 return choices[store.get("long-break")];
             } else return 0;
         }
@@ -578,13 +578,14 @@
                 isOnlyRest = isFirstTimeOnlyRest,
                 firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000,
                 longBreakFrequence = -1,
+                longBreakLoopThreshold = (store.has("long-break-threshold") ? store.get("long-break-threshold") : 1) + 2,
                 sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 recordedRecaps = new Set();
 
         if (isOnlyRest) ipc.send("enter-only-rest");
 
         if (store.has("long-break-mode-alter")) {
-            let frequenceList = [-1, 2, 3, 4, 5, 6];
+            let frequenceList = [-1, 2, 3, 4, 5];
             longBreakFrequence = frequenceList[store.get("long-break-mode-alter")];
         }
 
@@ -1215,7 +1216,7 @@
             }
 
             function shouldLongBreak() {
-                if (longBreakFrequence === -1) return times === loop * 2 - 1 && loop > 2;
+                if (longBreakFrequence === -1) return times === loop * 2 - 1 && loop >= longBreakLoopThreshold;
                 else return ((times + 1) % (longBreakFrequence * 2)) === 0; // new long break optimization
             }
 

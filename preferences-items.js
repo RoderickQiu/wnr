@@ -90,15 +90,29 @@ if (store.get("islocked") !== true) {
             choices: ['never', '5%', '7%', '10%', '15%', '20%', '25%', '30%'],
             def: 0
         }, {
-            type: "dropdown",
-            id: "long-break",
-            choices: ['never', 'plus3min', 'plus5min', 'plus7min', 'plus10min', 'plus15min', 'plus20min'],
-            def: 0
-        }, {
-            type: "dropdown",
-            id: "long-break-mode-alter",
-            choices: ['last', 'every2', 'every3', 'every4', 'every5', 'every6'],
-            def: 0
+            type: "collapse",
+            id: "long-break-settings",
+            inner: [
+                {
+                    type: "title",
+                    id: "long-break-settings-tip"
+                }, {
+                    type: "dropdown",
+                    id: "long-break",
+                    choices: ['never', 'plus1min', 'plus2min', 'plus3min', 'plus5min', 'plus7min', 'plus10min', 'plus15min'],
+                    def: 0
+                }, {
+                    type: "dropdown",
+                    id: "long-break-threshold",
+                    choices: ['2-loops', '3-loops', '4-loops'],
+                    def: 1
+                }, {
+                    type: "dropdown",
+                    id: "long-break-mode-alter",
+                    choices: ['last', 'every2', 'every3', 'every4', 'every5'],
+                    def: 0
+                }
+            ]
         }, {
             type: "selection",
             id: "timing-after-locked",
