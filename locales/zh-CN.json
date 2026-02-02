@@ -334,11 +334,6 @@
 	"manually-check-for-update-tip-2": "）",
 	"long-break-settings": "长休息设置",
 	"long-break-settings-tip": "在此自定义您的长休息体验。",
-	"long-break-threshold": "长休息触发门槛...",
-	"long-break-threshold-tip": "当循环次数达到此设定值时，将触发长休息。",
-	"dropdown-2-loops": "2 次循环",
-	"dropdown-3-loops": "3 次循环",
-	"dropdown-4-loops": "4 次循环",
 	"long-break": "长休息",
 	"long-break-tip": "在每次时间计划的最后一个休息加上一段时间的补时，使之成为一个长休息。",
 	"dropdown-plus1min": "+1 分钟",
@@ -397,7 +392,7 @@
 	"dropdown-15s": "15 秒",
 	"dropdown-20s": "20 秒",
 	"long-break-mode-alter": "每多少组时间进行一次长休息",
-	"long-break-mode-alter-tip": "这一设定是对长休息设定的优化，使得用户可以不止在最后一次休息时才应用长休息，而是可以每几个工作-休息周期后都执行一次长休息。另外，这一设置也支持无限循环模式。",
+	"long-break-mode-alter-tip": "设置长休息的触发频率。选择\"只最后一次\"时，仅在最后一次休息时触发长休息；选择\"每N次\"时，每N个工作-休息周期后都会执行一次长休息。此设置也支持无限循环模式。",
 	"dropdown-last": "只最后一次",
 	"dropdown-every2": "每两次",
 	"dropdown-every3": "每三次",
@@ -423,6 +418,5 @@
 	"can-redo-msg": "是否需要对当前段时间进行重新计时？",
 	"custom": "自定义",
 	"custom-notify-sound": "自定义提示音",
-	"input-url": "输入路径",
-	"long-break-threshold-tip": "long-break-threshold-tip-[zh-CN]"
+	"input-url": "输入路径"
 }

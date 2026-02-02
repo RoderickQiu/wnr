@@ -578,15 +578,51 @@
                 isOnlyRest = isFirstTimeOnlyRest,
                 firstTimeDiscount = isNaN(decodeURI($_GET['discount'])) ? 0 : decodeURI($_GET['discount']) * 60000,
                 longBreakFrequence = -1,
-                longBreakLoopThreshold = (store.has("long-break-threshold") ? store.get("long-break-threshold") : 1) + 2,
+                longBreakLoopThreshold = 2,
                 sessionId = Date.now().toString() + Math.random().toString(36).substr(2, 9),
                 recordedRecaps = new Set();
 
         if (isOnlyRest) ipc.send("enter-only-rest");
 
+        // Migrate old settings if needed
+        if (store.has("long-break-threshold") && store.has("long-break-mode-alter")) {
+            let oldModeAlter = store.get("long-break-mode-alter"); // 0=last, 1=every2, 2=every3, 3=every4, 4=every5
+            if (oldModeAlter === 0) {
+                // Migrate "last" mode to new format (always 0)
+                store.set("long-break-mode-alter", 0);
+            } else {
+                // Migrate "everyN" mode: oldModeAlter 1-4 -> newModeAlter 1-4 (same)
+                store.set("long-break-mode-alter", oldModeAlter);
+            }
+            store.delete("long-break-threshold");
+        } else if (store.has("long-break-threshold")) {
+            // Only threshold exists, assume "last" mode
+            store.set("long-break-mode-alter", 0);
+            store.delete("long-break-threshold");
+        } else if (store.has("long-break-mode-alter")) {
+            // Migrate old format with last-2, last-3, last-4 to simple "last"
+            let oldModeAlter = store.get("long-break-mode-alter");
+            if (oldModeAlter < 3) {
+                // Old "last-N" modes -> simple "last"
+                store.set("long-break-mode-alter", 0);
+            } else if (oldModeAlter >= 3) {
+                // Old "everyN" mode: 3-6 -> 1-4
+                store.set("long-break-mode-alter", oldModeAlter - 2);
+            }
+        }
+
         if (store.has("long-break-mode-alter")) {
-            let frequenceList = [-1, 2, 3, 4, 5];
-            longBreakFrequence = frequenceList[store.get("long-break-mode-alter")];
+            let modeAlter = store.get("long-break-mode-alter");
+            // Mode: 0=last, 1=every2, 2=every3, 3=every4, 4=every5
+            if (modeAlter === 0) {
+                // "只最后一次"模式
+                longBreakFrequence = -1;
+                longBreakLoopThreshold = 2; // 默认从2次循环开始
+            } else {
+                // "每N次"模式
+                let frequenceList = [2, 3, 4, 5];
+                longBreakFrequence = frequenceList[modeAlter - 1];
+            }
         }
 
         ipc.send('focus-mode-settings', { workTimeFocused: workTimeFocused, restTimeFocused: restTimeFocused });

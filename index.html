@@ -295,6 +295,7 @@
                 $("#focus-rest-set").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $(".focuser").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#continueloop").attr('title', i18n.__('continueloop-tip'));
+                $("#work-time, #rest-time, #rest-time-onlyrest, #loop").on("focus click", function () { this.select(); });
             </script>
         </div>
         <div id="all-sum" class="extreme-small font-weight-bold text-muted text-center">
@@ -305,7 +306,6 @@
                 id="to-num-min">--</span>
             <div class="extreme-small font-weight-normal" id="focus-notify-box">
                 <br />
-                &nbsp;
                 <span id="notify-pre">
                     <script>document.write(i18n.__('focus-notify-pre'));</script>
                 </span>

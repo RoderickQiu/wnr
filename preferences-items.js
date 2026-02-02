@@ -103,11 +103,6 @@ if (store.get("islocked") !== true) {
                     def: 0
                 }, {
                     type: "dropdown",
-                    id: "long-break-threshold",
-                    choices: ['2-loops', '3-loops', '4-loops'],
-                    def: 1
-                }, {
-                    type: "dropdown",
                     id: "long-break-mode-alter",
                     choices: ['last', 'every2', 'every3', 'every4', 'every5'],
                     def: 0
