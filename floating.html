@@ -18,14 +18,14 @@
     <script src="supporter.js"></script>
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="floating-container" class="justify-content-center align-content-center text-center">
-            <div id="floating-unhover">
+            <div id="floating-unhover" style="pointer-events: none;">
                 <div id="time-left" class="text-center h6 work">--</div>
                 <div id="time-left-msg" class="text-center small work">
                     <script>document.write(i18n.__('min-left'));</script>
                 </div>
             </div>
             <div id="floating-hover" onmouseover="hover()" onmouseleave="unhover()" ontouchstart="semihover()">
-                <div class="small" id="floating-stopper">
+                <div class="small" id="floating-stopper" style="margin-top: 8px;">
                     <a id="stopper" href="javascript:stopper()" class="text-muted" draggable="false">
                         <i class="iconfont icon-pause"></i>
                     </a>
@@ -77,10 +77,33 @@
             hover();
         }
 
-        let isWorking = true;
+        let isWorking = null;
+        let stopSyncPending = false;
+        let desiredWorking = null;
+        let lastMessageWorking = null;
+        let lastActionAt = 0;
+
+        function renderStopperIcon(working) {
+            if (working) {
+                $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
+            } else {
+                $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
+            }
+        }
 
         function stopper() {
-            ipc.send("floating-conversation", { topic: "stop" });
+            let baseWorking = lastMessageWorking;
+            if (baseWorking === null) baseWorking = isWorking;
+            if (baseWorking === null) {
+                return;
+            }
+
+            desiredWorking = !baseWorking;
+            isWorking = desiredWorking;
+            lastActionAt = Date.now();
+            stopSyncPending = true;
+            renderStopperIcon(isWorking);
+            ipc.send("floating-conversation", { topic: "stop-set", desiredWorking: desiredWorking });
         }
 
         function skipper() {
@@ -133,9 +156,23 @@
 
         let method = 1;
         ipc.on("floating-time-left", function (event, message) {
-            isWorking = message.isWorking;
-            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
-            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
+            let messageWorking = !!message.isWorking;
+            lastMessageWorking = messageWorking;
+            let now = Date.now();
+            if (stopSyncPending) {
+                if (messageWorking === desiredWorking) {
+                    stopSyncPending = false;
+                    isWorking = messageWorking;
+                    renderStopperIcon(isWorking);
+                } else if (now - lastActionAt > 800) {
+                    stopSyncPending = false;
+                    isWorking = messageWorking;
+                    renderStopperIcon(isWorking);
+                }
+            } else if (now - lastActionAt > 200) {
+                isWorking = messageWorking;
+                renderStopperIcon(isWorking);
+            }
 
             timeLeft.text(getStyledTimeLeft(message.minute));
             floatingBottomBar.css("width", message.percentage + "%");
@@ -213,9 +250,10 @@
         });
 
         ipc.on("floating-stop-sync", function (event, message) {
-            isWorking = message;
-            if (isWorking) $("#stopper").html("<i class='iconfont icon-pause' aria-hidden='true'></i>");
-            else $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
+            stopSyncPending = false;
+            desiredWorking = !!message;
+            isWorking = desiredWorking;
+            renderStopperIcon(isWorking);
         });
 
         if (process.platform === "darwin") {

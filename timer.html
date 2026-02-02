@@ -380,8 +380,14 @@
 
                 // Send immediate heartbeat first to prevent freeze at zero
                 if (methodFromStart !== 3) {
-                    let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
-                            (times === 0 ? firstTimeDiscount : 0);
+                    let remainingMs;
+                    if (!isClockWorking) {
+                        // When paused, use the stored time values to avoid time drift
+                        remainingMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+                    } else {
+                        remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                (times === 0 ? firstTimeDiscount : 0);
+                    }
                     if (remainingMs < 0) remainingMs = 0;
                     ipc.send("floating-heartbeat", {
                         remainingSeconds: Math.floor(remainingMs / 1000),
@@ -404,8 +410,14 @@
                 if (methodFromStart !== 3)
                     for (let floatingRepeater = 1; floatingRepeater < 5; floatingRepeater++)
                         setTimeout(function () {
-                            let remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
-                                    (times === 0 ? firstTimeDiscount : 0);
+                            let remainingMs;
+                            if (!isClockWorking) {
+                                // When paused, use the stored time values to avoid time drift
+                                remainingMs = (hours * 3600 + minutes * 60 + seconds) * 1000;
+                            } else {
+                                remainingMs = ((method === 1) ? workTime : restTime) - new Date().getTime() + startTime -
+                                        (times === 0 ? firstTimeDiscount : 0);
+                            }
                             if (remainingMs < 0) remainingMs = 0;
                             ipc.send("floating-heartbeat", {
                                 remainingSeconds: Math.floor(remainingMs / 1000),
@@ -848,6 +860,15 @@
             ipc.on('remote-control-msg', function (event, message) {
                 if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
 
+                if (message && typeof message === "object" && message.type === "stop-set") {
+                    let desiredWorking = !!message.desiredWorking;
+                    if ((desiredWorking && !isClockWorking) || (!desiredWorking && isClockWorking)) {
+                        stopper();
+                    }
+                    ipc.send("floating-conversation", { topic: "stop-sync", val: isClockWorking });
+                    return;
+                }
+
                 if (message === "skipper") skipper();
                 else if (message === "back") {
                     if (methodFromStart === 3 || ((!store.get("islocked")) && (!isFeatureDisabled(store.get('disable-backing'), method))))
@@ -903,6 +924,25 @@
                             msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content')
                         });
                     }, 600000);
+                    if (hasFloating) {
+                        if (methodFromStart === 3) {
+                             ipc.send("floating-heartbeat", {
+                                remainingSeconds: hours * 3600 + minutes * 60 + seconds,
+                                totalMs: 0,
+                                method: 3,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
+                        } else {
+                             ipc.send("floating-heartbeat", {
+                                remainingSeconds: hours * 3600 + minutes * 60 + seconds,
+                                totalMs: (method === 1) ? workTime : restTime,
+                                method: method,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
+                        }
+                    }
                 } else {
                     if (pauseInt != null)
                         window.clearTimeout(pauseInt);
@@ -918,6 +958,25 @@
                     isClockWorking = 1;//to restart
                     ipc.send("tray-image-change", "start");
                     if (pausingTimeout) window.clearInterval(pausingTimeout);
+                    if (hasFloating) {
+                        if (methodFromStart === 3) {
+                             ipc.send("floating-heartbeat", {
+                                remainingSeconds: hours * 3600 + minutes * 60 + seconds,
+                                totalMs: 0,
+                                method: 3,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
+                        } else {
+                             ipc.send("floating-heartbeat", {
+                                remainingSeconds: hours * 3600 + minutes * 60 + seconds,
+                                totalMs: (method === 1) ? workTime : restTime,
+                                method: method,
+                                isWorking: isClockWorking,
+                                isOnlyRest: isOnlyRest
+                            });
+                        }
+                    }
                 }
             }
 

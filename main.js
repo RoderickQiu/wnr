@@ -2364,7 +2364,10 @@ function startFloatingHeartbeat() {
     if (floatingHeartbeatInterval != null) return;
     floatingHeartbeatInterval = setInterval(function () {
         if (floatingWin == null || floatingHeartbeat == null) return;
-        let elapsedSeconds = (Date.now() - floatingHeartbeat.timestamp) / 1000;
+        let elapsedSeconds = 0;
+        if (floatingHeartbeat.isWorking) {
+            elapsedSeconds = (Date.now() - floatingHeartbeat.timestamp) / 1000;
+        }
         let remainingSeconds = floatingHeartbeat.remainingSeconds - elapsedSeconds;
         if (remainingSeconds < 0) remainingSeconds = 0;
         let percentage = 0;
@@ -2641,6 +2644,13 @@ ipcMain.on("floating-conversation", function (event, message) {
         });
     } else if (message.topic === "stop") {
         if (win != null) win.webContents.send('remote-control-msg', 'stop');
+    } else if (message.topic === "stop-set") {
+        if (win != null) {
+            win.webContents.send('remote-control-msg', {
+                type: "stop-set",
+                desiredWorking: message.desiredWorking
+            });
+        }
     } else if (message.topic === "skip") {
         if (win != null) win.webContents.send('remote-control-msg', 'skipper');
     } else if (message.topic === "recover") {
