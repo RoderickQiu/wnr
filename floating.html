@@ -26,7 +26,7 @@
             </div>
             <div id="floating-hover" onmouseover="hover()" onmouseleave="unhover()" ontouchstart="semihover()">
                 <div class="small" id="floating-stopper" style="margin-top: 8px;">
-                    <a id="stopper" href="javascript:stopper()" class="text-muted" draggable="false">
+                    <a id="stopper" href="#" role="button" class="text-muted" draggable="false">
                         <i class="iconfont icon-pause"></i>
                     </a>
                     <div id="stopper-spacing"><br /><br /></div>
@@ -58,6 +58,17 @@
                 $('#skipper').attr('title', i18n.__('skipper'));
                 $('#recover').attr('title', i18n.__('recover'));
                 $('#exit').attr('title', i18n.__('exit'));
+                (function () {
+                    var el = document.getElementById('stopper');
+                    function handleStopper(e) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        stopper(e);
+                        return false;
+                    }
+                    el.addEventListener('mousedown', handleStopper, true);
+                    el.addEventListener('click', handleStopper, true);
+                })();
             </script>
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
@@ -91,19 +102,23 @@
             }
         }
 
-        function stopper() {
+        const STOPPER_DEBOUNCE_MS = 320;
+        function stopper(ev) {
+            if (ev && ev.preventDefault) ev.preventDefault();
+            var now = Date.now();
+            if (lastActionAt && now - lastActionAt < STOPPER_DEBOUNCE_MS) return false;
+
             let baseWorking = lastMessageWorking;
             if (baseWorking === null) baseWorking = isWorking;
-            if (baseWorking === null) {
-                return;
-            }
+            if (baseWorking === null) baseWorking = true;
 
             desiredWorking = !baseWorking;
             isWorking = desiredWorking;
-            lastActionAt = Date.now();
+            lastActionAt = now;
             stopSyncPending = true;
             renderStopperIcon(isWorking);
             ipc.send("floating-conversation", { topic: "stop-set", desiredWorking: desiredWorking });
+            return false;
         }
 
         function skipper() {
