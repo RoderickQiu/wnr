@@ -1780,6 +1780,9 @@ ipcMain.on('warning-giver-workend', function () {
         if (store.get("no-check-work-time-end")) {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+            if (hasFloating && win != null) {
+                setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 2000);
+            }
         } else if (!restTimeFocused && !isMaximized) {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
@@ -1820,6 +1823,9 @@ ipcMain.on('warning-giver-restend', function () {
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+            if (hasFloating && win != null) {
+                setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 2000);
+            }
         } else if (!workTimeFocused && !isMaximized) {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
