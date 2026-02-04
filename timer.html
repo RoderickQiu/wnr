@@ -612,13 +612,9 @@
             store.set("long-break-mode-alter", 0);
             store.delete("long-break-threshold");
         } else if (store.has("long-break-mode-alter")) {
-            // Migrate old format with last-2, last-3, last-4 to simple "last"
+            // One-time migrate old format indices 5–6 (old every4, every5) to new 3–4; do not touch 0–4
             let oldModeAlter = store.get("long-break-mode-alter");
-            if (oldModeAlter < 3) {
-                // Old "last-N" modes -> simple "last"
-                store.set("long-break-mode-alter", 0);
-            } else if (oldModeAlter >= 3) {
-                // Old "everyN" mode: 3-6 -> 1-4
+            if (oldModeAlter === 5 || oldModeAlter === 6) {
                 store.set("long-break-mode-alter", oldModeAlter - 2);
             }
         }
