@@ -1780,7 +1780,7 @@ ipcMain.on('warning-giver-workend', function () {
         if (store.get("no-check-work-time-end")) {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
-            if (hasFloating && win != null) {
+            if (hasFloating && win != null && !restTimeFocused) {
                 setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 1200);
             }
         } else if (!restTimeFocused && !isMaximized) {
@@ -1794,7 +1794,7 @@ ipcMain.on('warning-giver-workend', function () {
                 win.webContents.send("fullscreen-custom-dialog", {
                     title: personal[0],
                     message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    executeAfter: "timeEndDialogDispose('work'); if (hasFloating) { win.hide(); }"
+                    executeAfter: "timeEndDialogDispose('work'); if (hasFloating && !restTimeFocused) { win.hide(); }"
                 })
             }, 1500)
         }
@@ -1823,7 +1823,7 @@ ipcMain.on('warning-giver-restend', function () {
         if (store.get("no-check-rest-time-end")) {
             noCheckTimeSolution("rest");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
-            if (hasFloating && win != null) {
+            if (hasFloating && win != null && !workTimeFocused) {
                 setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 1200);
             }
         } else if (!workTimeFocused && !isMaximized) {
@@ -1837,7 +1837,7 @@ ipcMain.on('warning-giver-restend', function () {
                 win.webContents.send("fullscreen-custom-dialog", {
                     title: personal[0],
                     message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    executeAfter: "timeEndDialogDispose('rest'); if (hasFloating) { win.hide(); }"
+                    executeAfter: "timeEndDialogDispose('rest'); if (hasFloating && !workTimeFocused) { win.hide(); }"
                 })
             }, 1500)
         }
