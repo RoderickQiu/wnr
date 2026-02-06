@@ -744,17 +744,19 @@
                 if (styleCache.get("is-shadowless") !== true) $("html").css("border", "none");
                 $bottomBar.css("background-color", newWorkColor + "19");
                 $bottomBar.css("height", "100%");
-                ipc.send('warning-giver-restend');
+                ipc.send('warning-giver-restend', times === 0);
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
                 $timeBar.addClass("time-bar-focus");
                 $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
-                if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
-                ipc.once('warning-closed', function () {
-                    stopper();
-                });
+                if (times > 0) {
+                    if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
+                    ipc.once('warning-closed', function () {
+                        stopper();
+                    });
+                }
                 if (store.get("fullscreen-experience") !== true) {
                     $("#fullscreen-experience-tip").css("display", "inline-block");
                     store.set("fullscreen-experience", true);

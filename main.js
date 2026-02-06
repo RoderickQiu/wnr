@@ -1803,7 +1803,7 @@ ipcMain.on('warning-giver-workend', function () {
     traySolution(isFullscreenMode);
 })
 
-ipcMain.on('warning-giver-restend', function () {
+ipcMain.on('warning-giver-restend', function (event, isFirstCycle) {
     statisticsWriter();
 
     fullScreenProtection = false;
@@ -1815,31 +1815,33 @@ ipcMain.on('warning-giver-restend', function () {
         } else {
             nonFocusSolution("rest");
         }
-        let personal = personliazationNotificationSolution(2);
-        if (isScreenLocked || store.get("when-rest-time-end") === 2) {
-            notificationSolution(personal[0],
-                personal[1], "normal");
-        }
-        if (store.get("no-check-rest-time-end")) {
-            noCheckTimeSolution("rest");
-            setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
-            if (hasFloating && win != null && !workTimeFocused) {
-                setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 1200);
+        if (!isFirstCycle) {
+            let personal = personliazationNotificationSolution(2);
+            if (isScreenLocked || store.get("when-rest-time-end") === 2) {
+                notificationSolution(personal[0],
+                    personal[1], "normal");
             }
-        } else if (!workTimeFocused && !isMaximized) {
-            win.setAlwaysOnTop(false);
-            setTimeout(function () {
-                customDialog("on", personal[0], personal[1]
-                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) { win.hide(); }");
-            }, 1500)
-        } else {
-            setTimeout(function () {
-                win.webContents.send("fullscreen-custom-dialog", {
-                    title: personal[0],
-                    message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    executeAfter: "timeEndDialogDispose('rest'); if (hasFloating && !workTimeFocused) { win.hide(); }"
-                })
-            }, 1500)
+            if (store.get("no-check-rest-time-end")) {
+                noCheckTimeSolution("rest");
+                setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
+                if (hasFloating && win != null && !workTimeFocused) {
+                    setTimeout(() => { if (win != null && !win.isDestroyed()) win.hide(); }, 1200);
+                }
+            } else if (!workTimeFocused && !isMaximized) {
+                win.setAlwaysOnTop(false);
+                setTimeout(function () {
+                    customDialog("on", personal[0], personal[1]
+                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) { win.hide(); }");
+                }, 1500)
+            } else {
+                setTimeout(function () {
+                    win.webContents.send("fullscreen-custom-dialog", {
+                        title: personal[0],
+                        message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
+                        executeAfter: "timeEndDialogDispose('rest'); if (hasFloating && !workTimeFocused) { win.hide(); }"
+                    })
+                }, 1500)
+            }
         }
     }
 
