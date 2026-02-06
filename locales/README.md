@@ -20,7 +20,7 @@ Until now, wnr has get these languages:
 2. Change these sections:
     - The `languageList[]` array and `LanguageNameList[]` array in `supporter.js`.
     - The `languageCodeList[]` array in `main.js`.
-    - The `nsis.installerLanguages[]` array in `res/builder/nsis.js` and `nsis-ia32.js`.
+    - The `nsis.installerLanguages[]` array in `res/builder/nsis.js`.
 
 3. Now, start to translate wnr to your language! After finished, please do not forget to make a pull request. I appreciate it.
 
@@ -52,7 +52,7 @@ Until now, wnr has get these languages:
 2. 添加翻译文件后请更改这些内容：
     - `supporter.js` 里的数组 `languageList[]` 和数组 `LanguageNameList[]`。
     - `main.js` 里的数组 `languageCodeList[]`。
-    - `res/builder/nsis.js` 和 `nsis-ia32.js` 里的数组 `nsis.installerLanguages[]`。
+    - `res/builder/nsis.js` 里的数组 `nsis.installerLanguages[]`。
 
 3. 现在可以开始将 wnr 翻译成你的语言了！完成后，请别忘了提交拉取请求（Pull Request）。非常感谢你的贡献。
 
@@ -84,7 +84,7 @@ Until now, wnr has get these languages:
 2. 添加翻譯文件後請更改這些內容：
     - `supporter.js` 裏的數組 `languageList[]` 和數組 `LanguageNameList[]`。
     - `main.js` 裏的數組 `languageCodeList[]`。
-    - `res/builder/nsis.js` 和 `nsis-ia32.js` 裏的數組 `nsis.installerLanguages[]`。
+    - `res/builder/nsis.js` 裏的數組 `nsis.installerLanguages[]`。
 
 3. 現在可以開始將 wnr 翻譯成你的語言了！完成後，請別忘了提交拉取請求（Pull Request）。非常感謝你的貢獻。
 

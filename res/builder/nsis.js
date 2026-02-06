@@ -15,7 +15,7 @@ const config = {
         "target": [
             {
                 "target": "nsis",
-                "arch": ["x64", "ia32", "arm64"]
+                "arch": ["x64", "arm64"]
             }
         ],
         "icon": "res/icons/iconWin.ico",
