@@ -1,42 +1,48 @@
 {
-	"version" : "1.31.1",
-	"feature-introduction" : false,
+	"version" : "1.32.0",
+	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
-			"新增了通知声音只播放一次的选项，并支持为工作和休息设置不同的通知声音。",
-			"修复了在\"通知且不弹出\"模式下依然有时会弹出窗口的问题。"
+			"修复了许多 bug：MINI 模式下倒计时在剩余约一分钟时可能卡住或无法正常结束，MINI 模式下单纯计时与正计时颜色显示错误，首次工作时间全屏导致多余弹窗，以及关闭「未使用 wnr 时发出提醒」后仍显示「你已经暂停了很久」的弹窗。",
+			"新增「单纯计时设置」折叠面板，可自定义默认倒计时时长，独立于预设任务。",
+			"长休息设置更细化：新增「每两次」及 +1 分钟、+2 分钟选项。",
+			"统计页新增「完成回顾」选项卡，自动记录已完成任务（标题、备注等），按日期分组展示。"
 		],
 		"zh-TW" : [
-			"新增了通知聲音只播放一次的選項，並支援為工作和休息設置不同的通知聲音。",
-			"修復了在\"通知且不彈出\"模式下依然有時會彈出窗口的問題。"
+			"修復多項 bug：MINI 模式下倒計時在剩餘約一分鐘時可能卡住或無法正常結束，MINI 模式下單純計時與正計時顏色顯示錯誤，首次工作時間全屏導致多餘彈窗，以及關閉「未使用 wnr 時發出提醒」後仍顯示「你已經暫停了很久」的彈窗。",
+			"新增「單純計時設置」摺疊面板，可自定義默認倒計時時長，獨立於預設任務。",
+			"長休息設定更細化：新增「每兩次」及 +1 分鐘、+2 分鐘選項。",
+			"統計頁新增「完成回顧」選項卡，自動記錄已完成任務（標題、備註等），按日期分組展示。"
 		],
 		"en" : [
-			"Added an option for notification sound to play only once, and added support for different notification sounds for work and rest periods.",
-			"Fixed the issue where the window would still pop up sometimes in \"No Pop-Up\" mode."
+			"Fixed multiple bugs: countdown in mini mode could freeze or fail to finish in the last minute, wrong colors for simple countdown and stopwatch in mini mode, extra dialog on first work period in fullscreen, and \"You've been pausing long\" still showing when \"Notify when you are not using wnr\" is off.",
+			"Added \"Simple countdown settings\" collapse panel to customise default countdown duration, independent of predefined tasks.",
+			"Finer long break options: added \"Every 2\" and +1 min / +2 min.",
+			"Statistics: new \"Recap\" tab that records completed tasks (title, note, etc.), grouped by date."
 		]
 	},
 	"introduce" : {
-		"id" : "introduced-1.27.0",
+		"id" : "introduced-1.32.0",
 		"zh-CN" : {
-			"title" : "<b>欢迎升级至 1.27.0：</b>新功能概览",
+			"title" : "<b>欢迎升级至 1.32.0：</b>新功能概览",
 			"description" : {
-				"universal" : "<p>1. 新增了每几轮计时进行一次长休息、在计时结束前几秒弹出通知提示的功能，可以在设置面板中打开。</p><p>2. 还新增了第一轮工作计时缩短一定时间的功能，使计时更加灵活，可以在计时主界面“更多设置”菜单中打开。</p>",
+				"universal" : "<p>1. 修复多项 bug：MINI 模式倒计时卡住、MINI 模式下单纯计时与正计时颜色显示错误、首次工作时间全屏致多余弹窗、关闭「未使用 wnr 时发出提醒」后仍显示「你已经暂停了很久」等。</p><p>2. 统计页新增「完成回顾」选项卡，自动记录已完成任务，按日期分组。</p><p>3. 新增「单纯计时设置」折叠面板，可自定义默认倒计时时长，独立于预设任务。</p><p>4. 长休息设置更细化：新增「每两次」及 +1 分钟、+2 分钟选项。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"zh-TW" : {
-			"title" : "<b>歡迎升級至 1.27.0：</b>新功能概覽",
+			"title" : "<b>歡迎升級至 1.32.0：</b>新功能概覽",
 			"description" : {
-				"universal" : "<p>1. 新增了每幾輪計時進行一次長休息、在計時結束前幾秒彈出通知提示的功能，可以在設置面板中打開。</p><p>2. 還新增了第一輪工作計時縮短一定時間的功能，使計時更加靈活，可以在計時主界面“更多設置”菜單中打開。</p>",
+				"universal" : "<p>1. 修復多項 bug：MINI 模式倒計時卡住、MINI 模式下單純計時與正計時顏色顯示錯誤、首次工作時間全屏致多餘彈窗、關閉「未使用 wnr 時發出提醒」後仍顯示「你已經暫停了很久」等。</p><p>2. 統計頁新增「完成回顧」選項卡，自動記錄已完成任務，按日期分組。</p><p>3. 新增「單純計時設置」摺疊面板，可自定義默認倒計時時長，獨立於預設任務。</p><p>4. 長休息設定更細化：新增「每兩次」及 +1 分鐘、+2 分鐘選項。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"en" : {
-			"title" : "<b>Welcome to v1.27.0!</b>",
+			"title" : "<b>Welcome to v1.32.0!</b>",
 			"description" : {
-				"universal" : "<p>New features: 1. Optimized long break (toggle in preferences panel), 2. Notification before a time period will end in seconds (toggle in preferences panel), 3.First work period discount (toggle in more items in index page), 4. A new dialog box style that can prevent being hidden.</p>",
+				"universal" : "<p>1. Bug fixes: mini mode countdown freeze, simple countdown and stopwatch wrong colors, extra fullscreen dialog on first work period, and \"You've been pausing long\" still showing when \"Notify when not using wnr\" is off.</p><p>2. Statistics: new \"Recap\" tab records completed tasks, grouped by date.</p><p>3. \"Simple countdown settings\" collapse panel: customise default countdown duration, independent of predefined tasks.</p><p>4. Finer long break options: \"Every 2\" and +1 min / +2 min.</p>",
 				"darwin" : "",
 				"win32" : ""
 			}

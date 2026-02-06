@@ -926,6 +926,20 @@ li input:nth-last-child(4)::after {
     text-align: left;
     line-height: 2.2;
     transform: translateY(10px);
+    display: flex;
+    flex-direction: column;
+    max-height: 85vh;
+}
+
+#new-feature-title {
+    flex: 0 0 auto;
+}
+
+#new-feature-content {
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    padding-right: 4px;
 }
 
 #new-feature-description, #new-feature-description-universal {
@@ -934,6 +948,7 @@ li input:nth-last-child(4)::after {
 }
 
 #new-feature-btn-container {
+    flex: 0 0 auto;
     transform: translateY(-9px);
 }
 

@@ -162,15 +162,15 @@
             </script>
         </div>
         <div id="new-feature" class="container-fluid p-5">
-            <div class="align-content-center small text-left">
-                <h6 id="new-feature-title" class="rest"></h6>
+            <h6 id="new-feature-title" class="rest align-content-center small text-left"></h6>
+            <div id="new-feature-content" class="align-content-center small text-left">
                 <div id="new-feature-description" class="small text-grey"></div>
                 <div id="new-feature-description-universal" class="small text-grey"></div>
-                <div id="new-feature-btn-container" class="w-100 text-right">
+            </div>
+            <div id="new-feature-btn-container" class="w-100 text-right">
                     <button type="button" class="btn-sm btn btn-outline-primary" onclick="newFeatureClose()">
                         <script>document.write(i18n.__('ok'));</script>
                     </button>
-                </div>
             </div>
         </div>
         <div id="set-onlyrest" class="container-fluid">
@@ -352,6 +352,8 @@
             $("#bottom-btn").hide();
             $("#set").hide();
             $("#all-sum").hide();
+            $("#statistics").hide();
+            $("#settings").hide();
             store.set("introduced-" + require("./update.json").version, true);
         }
 
@@ -360,6 +362,8 @@
             $("#bottom-btn").show();
             $("#set").show();
             $("#all-sum").show();
+            $("#statistics").show();
+            $("#settings").show();
         }
 
         function statistics() {
