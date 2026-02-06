@@ -613,10 +613,9 @@ app.on('ready', () => {
         macOSFullscreenSolution(false);
         isDarkMode();
         settingsWinContextMenuSolution();
+        if (store.get("tray-time") !== false && process.platform === "darwin")
+            tray.setTitle(' ' + i18n.__('not-timing-tray'));
     }
-
-    if (store.get("tray-time") !== false && process.platform === "darwin")
-        tray.setTitle(' ' + i18n.__('not-timing-tray'));
 
     if (!store.has("predefined-tasks-created")) {
         store.set("predefined-tasks-created", true);
