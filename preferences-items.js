@@ -157,9 +157,22 @@ if (store.get("islocked") !== true) {
             def: 0,
             after: napAfter
         }, {
-            type: "selection",
-            id: "alarmtip",
-            def: true
+            type: "collapse",
+            id: "alarmtip-settings",
+            inner: [
+                {
+                    type: "selection",
+                    id: "alarmtip",
+                    def: true,
+                    tipped: false
+                }, {
+                    type: "dropdown",
+                    id: "alarmtip-duration",
+                    choices: ['3min', '5min', '10min', '15min', '20min', '30min', '60min'],
+                    def: 2,
+                    after: alarmtipDurationAfter
+                }
+            ]
         }, {
             type: "dropdown",
             id: "sound",
@@ -307,6 +320,10 @@ function napAfter(val) {
             store.set('nap-time', 20);
     }
 }
+
+function alarmtipDurationAfter(val) {
+}
+
 
 function looseModeAfter(val) {
     switch (val) {

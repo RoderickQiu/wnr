@@ -111,17 +111,21 @@ function dropdownSolution(obj, parent) {
         </div>
         <br/>
     `);
+    let choiceLabel = function (key) {
+        return (id === 'alarmtip-duration') ? i18n.__('alarmtip-duration-' + key) : i18n.__('dropdown-' + key);
+    };
     for (let i in choices) {
+        let label = choiceLabel(choices[i]);
         $('#dropdown-' + id).append(`
-            <a class='dropdown-item' href="javascript:dropdownTrigger('${ id }',${ i }, '${ i18n.__('dropdown-' + choices[i]) }',${ relaunch },${ after })">
-                ${ i18n.__('dropdown-' + choices[i]) }
+            <a class='dropdown-item' href="javascript:dropdownTrigger('${ id }',${ i }, '${ label.replace(/'/g, "\\'") }',${ relaunch },${ after })">
+                ${ label }
             </a>
         `);
     }
-    if (!store.has(id)) $('#dropdown-button-' + id).html(i18n.__('dropdown-' + choices[def]));
+    if (!store.has(id)) $('#dropdown-button-' + id).html(choiceLabel(choices[def]));
     else {
-        $('#dropdown-button-' + id).html(i18n.__('dropdown-' + choices[store.get(id)]));
-        console.log(i18n.__('dropdown-' + choices[store.get(id)]), "CHOICE", id, store.get(id));
+        $('#dropdown-button-' + id).html(choiceLabel(choices[store.get(id)]));
+        console.log(choiceLabel(choices[store.get(id)]), "CHOICE", id, store.get(id));
     }
 }
 

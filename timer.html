@@ -916,12 +916,17 @@
                     $("#stopper").html("<i class='iconfont icon-play' aria-hidden='true'></i>");
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
-                    if (store.get("alarmtip") !== false) pausingTimeout = setInterval(function () {
-                        ipc.send("notify", {
-                            title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
-                            msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content')
-                        });
-                    }, 600000);
+                    if (store.get("alarmtip") !== false) {
+                        var alarmtipMinutes = [3, 5, 10, 15, 20, 30, 60];
+                        var alarmtipIdx = store.get("alarmtip-duration");
+                        var alarmtipMs = ((alarmtipIdx >= 0 && alarmtipIdx < alarmtipMinutes.length) ? alarmtipMinutes[alarmtipIdx] : 10) * 60 * 1000;
+                        pausingTimeout = setInterval(function () {
+                            ipc.send("notify", {
+                                title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),
+                                msg: i18n.__('alarm-for-not-using-wnr-dialog-box-content')
+                            });
+                        }, alarmtipMs);
+                    }
                     if (hasFloating) {
                         if (methodFromStart === 3) {
                              ipc.send("floating-heartbeat", {
