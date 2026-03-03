@@ -281,6 +281,7 @@
 	"alarmtip-duration-20min": "20 分钟",
 	"alarmtip-duration-30min": "30 分钟",
 	"alarmtip-duration-60min": "60 分钟",
+	"alarmtip-duration-custom": "自定义",
 	"personalization-notification": "通知文本个性化",
 	"personalization-notification-tip": "自定义这些通知文本，让它们更加能激励你前行！清空以复位。输入\"//\"来分割数条语句，每次随机出现。",
 	"personalization-notification-label-begin": "“",

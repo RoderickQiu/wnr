@@ -242,6 +242,7 @@
 	"alarmtip-duration-20min": "20 min",
 	"alarmtip-duration-30min": "30 min",
 	"alarmtip-duration-60min": "60 min",
+	"alarmtip-duration-custom": "Custom",
 	"personalization-notification": "Custom notifications",
 	"personalization-notification-tip": "Define the words shown at notifications to motivate yourself. Clear textboxes to remove personalized text. Use \"//\" as to separate different sentences and each time you will be given a random choice.",
 	"personalization-notification-label-begin": "\"",

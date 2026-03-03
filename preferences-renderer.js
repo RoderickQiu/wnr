@@ -127,6 +127,25 @@ function dropdownSolution(obj, parent) {
         $('#dropdown-button-' + id).html(choiceLabel(choices[store.get(id)]));
         console.log(choiceLabel(choices[store.get(id)]), "CHOICE", id, store.get(id));
     }
+    if (id === 'alarmtip-duration') {
+        const customVal = store.get('alarmtip-duration-custom') || 45;
+        parent.append(`
+            <div id="alarmtip-custom-row" class="row w-100 align-items-center" style="display:none">
+                <div class="col-8 text-left">
+                    <label>${i18n.__('alarmtip-duration-custom')}</label>
+                </div>
+                <div class="col-4 text-right">
+                    <input type="number" id="alarmtip-custom-input" class="hotkeyset"
+                           value="${customVal}" min="1" max="1440"
+                           onchange="store.set('alarmtip-duration-custom', Number(this.value))"
+                           oninput="if(Number(value)<1)value=1;if(Number(value)>1440)value=1440"/>
+                    <span class="small text-muted">${i18n.__('min')}</span>
+                </div>
+            </div>
+            <br/>
+        `);
+        after(store.has(id) ? store.get(id) : def);
+    }
 }
 
 function dropdownTrigger(id, choiceId, choiceMsg, relaunch, after) {

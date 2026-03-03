@@ -168,7 +168,7 @@ if (store.get("islocked") !== true) {
                 }, {
                     type: "dropdown",
                     id: "alarmtip-duration",
-                    choices: ['3min', '5min', '10min', '15min', '20min', '30min', '60min'],
+                    choices: ['3min', '5min', '10min', '15min', '20min', '30min', '60min', 'custom'],
                     def: 2,
                     after: alarmtipDurationAfter
                 }
@@ -322,6 +322,11 @@ function napAfter(val) {
 }
 
 function alarmtipDurationAfter(val) {
+    if (val == 7) {
+        $('#alarmtip-custom-row').show();
+    } else {
+        $('#alarmtip-custom-row').hide();
+    }
 }
 
 

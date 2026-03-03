@@ -165,6 +165,10 @@ function createWindow() {
 function getAlarmtipDurationMs() {
     const idx = store.get('alarmtip-duration');
     const minutes = [3, 5, 10, 15, 20, 30, 60];
+    if (idx === 7) {
+        const custom = store.get('alarmtip-duration-custom');
+        return (custom && custom > 0 ? custom : 45) * 60 * 1000;
+    }
     const n = (idx >= 0 && idx < minutes.length) ? minutes[idx] : 10;
     return n * 60 * 1000;
 }
