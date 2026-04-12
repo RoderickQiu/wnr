@@ -1,10 +1,11 @@
-const {
+﻿const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
     powerMonitor, nativeTheme, screen, TouchBar, Notification, nativeImage
 }
     = require('electron');
 const Store = require('electron-store');
+const fs = require("fs");
 const path = require("path");
 let i18n = require("i18n");
 let cmdOrCtrl = require('cmd-or-ctrl');
@@ -12,6 +13,7 @@ const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
 const winReleaseId = require('win-release-id');
+const { createWebDavSyncService } = require('./webdav-sync');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
@@ -37,6 +39,10 @@ let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin
     isMultiMonitorLoose = false;
 let floatingHeartbeat = null;
 let floatingHeartbeatInterval = null;
+let startupSyncPending = true;
+let startupWindowReady = false;
+let webDavSyncService = null;
+let localExitFallbackInProgress = false;
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW'], i//locale code
@@ -50,7 +56,15 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 //use native notification, declare package.json/build/appId beforehand
 app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr'));
 
-function createWindow() {
+function completeStartupSyncPhase() {
+    startupSyncPending = false;
+    if (startupWindowReady && win != null) {
+        win.show();
+        win.moveTop();
+    }
+}
+
+function createWindow(loadMainPage = true) {
     //create the main window
     win = new BrowserWindow({
         width: 360,
@@ -75,13 +89,15 @@ function createWindow() {
         icon: "./res/icons/wnrIcon.png"
     });//optimize for cross-platform
 
-    //load index.html
-    win.loadFile('index.html');
+    if (loadMainPage) win.loadFile('index.html');
 
     //to load without sparking
     win.once('ready-to-show', () => {
-        win.show();
-        win.moveTop();
+        startupWindowReady = true;
+        if (!startupSyncPending) {
+            win.show();
+            win.moveTop();
+        }
     });
 
     //triggers when the main windows is closed
@@ -92,8 +108,16 @@ function createWindow() {
         aboutWin = null;
     });
 
-    win.on('session-end', () => {
-        app.exit(0);
+    win.on('query-session-end', (event) => {
+        event.preventDefault();
+        requestAppExitWithGuard({
+            source: 'query-session-end',
+            interactive: false,
+            mayMutateLocal: true,
+            beforeExitMutation: function () {
+                statisticsWriter();
+            }
+        });
     });
 
     win.on('blur', () => {
@@ -188,18 +212,23 @@ function alarmSet() {
 }
 
 function relaunchSolution() {
-    fullScreenProtection = false;
-    if (win != null) {
-        if (!isLoose) {
-            win.setKiosk(false);
-        } else {
-            setFullScreenMode(false);
+    requestAppExitWithGuard({
+        source: 'relaunch',
+        interactive: true,
+        mayMutateLocal: true,
+        relaunch: true,
+        beforeFinalize: function () {
+            fullScreenProtection = false;
+            if (win != null) {
+                if (!isLoose) {
+                    win.setKiosk(false);
+                } else {
+                    setFullScreenMode(false);
+                }
+                win.hide();
+            }
         }
-        win.hide();
-    }
-
-    app.relaunch();
-    app.exit();
+    });
 }
 
 function setFullScreenMode(flag) {
@@ -387,8 +416,19 @@ function touchBarSolution(mode) {
 }
 
 //before quit
+app.on('before-quit', async (event) => {
+    event.preventDefault();
+    if (webDavSyncService != null && webDavSyncService.isExitFinalizing()) return;
+    await requestAppExitWithGuard({
+        source: 'before-quit',
+        interactive: false,
+        mayMutateLocal: true
+    });
+});
+
 app.on('will-quit', () => {
     store.set("just-back", false);
+    if (webDavSyncService != null) webDavSyncService.clearWatchers();
     globalShortcut.unregisterAll();
     if (tray != null) {
         tray.destroy();
@@ -401,10 +441,24 @@ app.on('will-quit', () => {
 
 //when created the app, triggers
 //some apis can be only used inside ready
-app.on('ready', () => {
+app.on('ready', async () => {
     require('@electron/remote/main').initialize();
 
-    createWindow();
+    hasGotSingleInstanceLock = app.requestSingleInstanceLock();
+    if (!hasGotSingleInstanceLock) {
+        console.log('Didn\'t get the lock, quitting');
+        app.exit();
+        return;
+    }
+    app.on('second-instance', () => {
+        if (win != null) {
+            if (win.isMinimized()) win.restore();
+            if (!win.isVisible()) win.show();
+            win.focus();
+        }
+    });
+
+    createWindow(false);
     require("@electron/remote/main").enable(win.webContents);
 
     if (process.env.NODE_ENV === "portable") {
@@ -418,6 +472,30 @@ app.on('ready', () => {
     }
     styleCache = new Store({ name: 'style-cache' });
     timingData = new Store({ name: 'timing-data' });
+    webDavSyncService = createWebDavSyncService({
+        app: app,
+        fs: fs,
+        path: path,
+        fetch: fetch,
+        ipcMain: ipcMain,
+        i18n: i18n,
+        notifyWarning: function (message) {
+            if (win != null) notificationSolution("wnr", message, "normal");
+        },
+        getStore: function () {
+            return store;
+        },
+        getStatisticsStore: function () {
+            return statistics;
+        },
+        getRecapStore: function () {
+            return recapStore;
+        },
+        showExitDialog: showWebDavExitDialog,
+        hideExitDialog: hideWebDavExitDialog
+    });
+    webDavSyncService.initialize();
+    webDavSyncService.registerIpcHandlers();
 
     theThemeHasChanged();
     nativeTheme.on('updated', theThemeHasChanged);
@@ -463,22 +541,14 @@ app.on('ready', () => {
     }
     i18n.setLocale(store.get("i18n"));//set the locale
 
+    //prevent wnr from running more than one instance
+
+    await webDavSyncService.performStartupSync();
+    isChinese = store.get("i18n").indexOf("zh") !== -1;
+    i18n.setLocale(store.get("i18n"));
+
     timeLeftTip = i18n.__("time-left");
     positiveTimingTip = i18n.__("positive-timing");//this will be used in this file frequently
-
-    hasGotSingleInstanceLock = app.requestSingleInstanceLock();
-    if (!hasGotSingleInstanceLock) {
-        console.log('Didn\'t get the lock, quitting');
-        app.exit();
-    } else {
-        app.on('second-instance', () => {
-            if (win != null) {
-                if (win.isMinimized()) win.restore();
-                if (!win.isVisible()) win.show();
-                win.focus();
-            }
-        });
-    }//prevent wnr from running more than one instance
 
     if (win != null) {
         if (styleCache.has("win-size")) {
@@ -610,7 +680,7 @@ app.on('ready', () => {
         }
     }
 
-    if (app.requestSingleInstanceLock()) {
+    if (hasGotSingleInstanceLock) {
         if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
         else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
         else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
@@ -705,9 +775,17 @@ app.on('ready', () => {
         isScreenLocked = false;
     });
 
-    powerMonitor.on('shutdown', () => {
+    powerMonitor.on('shutdown', (event) => {
+        event.preventDefault();
         win.closable = true;
-        app.exit(0);
+        requestAppExitWithGuard({
+            source: 'shutdown',
+            interactive: false,
+            mayMutateLocal: true,
+            beforeExitMutation: function () {
+                statisticsWriter();
+            }
+        });
     });
 
     if (process.platform === "win32") {
@@ -740,6 +818,9 @@ app.on('ready', () => {
     });
     require("@electron/remote/main").enable(customDialogWin.webContents);
     customDialogWin.loadFile("custom-dialog.html");
+    customDialogWin.on('closed', () => {
+        customDialogWin = null;
+    });
 
     if (!store.has("suggest-star")) {
         if (store.get("use-times") > 8)
@@ -759,6 +840,11 @@ app.on('ready', () => {
             }
         }
     }
+
+    await loadMainWindowAfterStartupInit();
+
+    webDavSyncService.finalizeStartup();
+    completeStartupSyncPhase();
 })
 
 function getCustomDialogModeType(mode) {
@@ -772,6 +858,13 @@ function getCustomDialogModeType(mode) {
     }
 }
 
+function hasLiveCustomDialogWindow() {
+    return customDialogWin != null
+        && !customDialogWin.isDestroyed()
+        && customDialogWin.webContents != null
+        && !customDialogWin.webContents.isDestroyed();
+}
+
 function customDialog(mode, title, msg, executeAfter) {
     if (isMaximized) {
         win.webContents.send("fullscreen-custom-dialog", {
@@ -783,7 +876,7 @@ function customDialog(mode, title, msg, executeAfter) {
     }
     if (executeAfter == null) executeAfter = "";
     if (mode === "on" || mode === "select_on" || mode === "update_on") {
-        if (customDialogWin != null) {
+        if (hasLiveCustomDialogWindow()) {
             customDialogWin.webContents.send("dialog-init", {
                 title: title,
                 msg: msg,
@@ -801,18 +894,18 @@ function customDialog(mode, title, msg, executeAfter) {
             customDialogWin.center();
         }
     } else if (mode === "off") {
-        if (customDialogWin != null) customDialogWin.hide();
+        if (hasLiveCustomDialogWindow()) customDialogWin.hide();
         try {
             eval(executeAfter);
         } catch (e) {
             console.log(e);
         }
     } else if (mode === "cancel") {
-        if (customDialogWin != null) customDialogWin.hide();
+        if (hasLiveCustomDialogWindow()) customDialogWin.hide();
     } else if (mode === "button3_update") {
         shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
 
-        if (customDialogWin != null) customDialogWin.hide();
+        if (hasLiveCustomDialogWindow()) customDialogWin.hide();
     }
 }
 
@@ -823,7 +916,12 @@ ipcMain.on("custom-dialog", (event, msg) => {
         customDialog(msg.mode, "", "", msg.executeAfter);
 })
 
+ipcMain.on("custom-dialog-action", (event, message) => {
+    if (webDavSyncService != null) webDavSyncService.handleCustomDialogAction(message);
+});
+
 ipcMain.on("custom-dialog-fit", (event, msg) => {
+    if (!hasLiveCustomDialogWindow()) return;
     customDialogWin.setSize(customDialogWin.getSize()[0], Math.floor((115 + msg * 19.25) * ratio));
     customDialogWin.center();
 })
@@ -1032,7 +1130,7 @@ function traySolution(isFullScreen) {
         if (tray != null) {
             if (!isTimerWin) {
                 if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-                else tray.setTitle("");
+                else if (tray != null) tray.setTitle("");
             }
         }
         if (!isFullScreen) {
@@ -1531,6 +1629,7 @@ function statisticsInitializer() {
 }
 
 function statisticsWriter() {
+    appendWebDavSyncLog('statistics-writer-begin', 'isTimerWin=' + isTimerWin + ', isPositiveTiming=' + isPositiveTiming + ', isOnlyRest=' + isOnlyRest + ', isWorkMode=' + isWorkMode);
     statisticsInitializer();
 
     if (isTimerWin) {
@@ -1634,6 +1733,7 @@ function statisticsWriter() {
     }
 
     todaySum = statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : 0;
+    appendWebDavSyncLog('statistics-writer-end', 'todaySum=' + todaySum);
 }
 
 function statisticsPauseDealer(startOrStop) {
@@ -1918,6 +2018,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
 })
 
 ipcMain.on('save-recap-entry', function (event, data) {
+    appendWebDavSyncLog('recap-entry-save', 'timestamp=' + data.timestamp);
     if (!recapStore.has('entries')) {
         recapStore.set('entries', []);
     }
@@ -1986,16 +2087,19 @@ function windowCloseChk() {
     if ((process.env.NODE_ENV !== "development") && win != null) {
         win.show();
         customDialog("select_on", "wnr", i18n.__('window-close-dialog-box-title'),
-            "statisticsWriter();\n" +
-            "multiScreenSolution(\"off\");\n" +
-            "setTimeout(function () { app.exit(0); }, 500);");
+            "requestAppExitWithGuard({ source: 'window-close', interactive: true, mayMutateLocal: true, beforeExitMutation: function () { statisticsWriter(); }, beforeFinalize: function () { multiScreenSolution(\"off\"); } });");
     } else {
-        statisticsWriter();
-        multiScreenSolution("off");
-
-        setTimeout(function () {
-            app.exit(0);
-        }, 500);
+        requestAppExitWithGuard({
+            source: 'window-close',
+            interactive: true,
+            mayMutateLocal: true,
+            beforeExitMutation: function () {
+                statisticsWriter();
+            },
+            beforeFinalize: function () {
+                multiScreenSolution("off");
+            }
+        });
     }
 }
 
@@ -2238,6 +2342,76 @@ function tourguide() {
             notificationSolution(i18n.__('welcome-part-1'), i18n.__('welcome-part-2'), "normal");
         }
     }
+
+}
+
+async function loadMainWindowAfterStartupInit() {
+    if (win == null) return;
+    await win.loadFile('index.html');
+    startupWindowReady = true;
+}
+
+function appendWebDavSyncLog(event, detail) {
+    if (webDavSyncService != null) webDavSyncService.appendSyncLog(event, detail);
+}
+
+function showWebDavExitDialog(payload) {
+    if (!hasLiveCustomDialogWindow()) return false;
+    customDialogWin.webContents.send('dialog-init', payload);
+    customDialogWin.show();
+    customDialogWin.setAlwaysOnTop(true, "pop-up-menu");
+    customDialogWin.focus();
+    customDialogWin.center();
+    return true;
+}
+
+function hideWebDavExitDialog() {
+    if (hasLiveCustomDialogWindow()) customDialogWin.hide();
+}
+
+async function requestAppExitWithoutWebDavGuard(context) {
+    if (localExitFallbackInProgress) return;
+    localExitFallbackInProgress = true;
+    let options = Object.assign({
+        source: 'unknown-exit',
+        relaunch: false,
+        beforeExitMutation: null,
+        beforeFinalize: null
+    }, context || {});
+
+    try {
+        if (options.beforeExitMutation != null) {
+            try {
+                await options.beforeExitMutation();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        try {
+            if (store != null) store.set('just-back', false);
+        } catch (e) {
+            console.log(e);
+        }
+
+        if (options.beforeFinalize != null) {
+            try {
+                options.beforeFinalize();
+            } catch (e) {
+                console.log(e);
+            }
+        }
+
+        if (options.relaunch) app.relaunch();
+        app.exit(0);
+    } finally {
+        localExitFallbackInProgress = false;
+    }
+}
+
+function requestAppExitWithGuard(context) {
+    if (webDavSyncService == null) return requestAppExitWithoutWebDavGuard(context);
+    return webDavSyncService.requestAppExitWithGuard(context);
 }
 
 ipcMain.on('tourguide', tourguide);
@@ -2510,13 +2684,13 @@ ipcMain.on('tray-image-change', function (event, message) {
     if (tray != null) {
         if (message === "stop") {
             if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
-            tray.setTitle(" " + i18n.__('stopped'));
+            if (tray != null) tray.setTitle(" " + i18n.__('stopped'));
         } else {
             if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
             if (!isPositiveTiming)
-                tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + timeLeftTip + " " + Math.floor(100 - progress * 100) + "% | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
+                if (tray != null) tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + timeLeftTip + " " + Math.floor(100 - progress * 100) + "% | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
             else {
-                tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
+                if (tray != null) tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + positiveTimingTip + " | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
             }
         }
     }
@@ -2565,7 +2739,7 @@ ipcMain.on("tray-time-set", function (event, message) {
             if (tray != null) tray.setTitle(" " + trayTimeMsg);
             //if (win != null) win.maximizable = false;
         }
-    } else tray.setTitle("");
+    } else if (tray != null) tray.setTitle("");
 });
 
 ipcMain.on("notify", function (event, message) {
@@ -2626,9 +2800,11 @@ ipcMain.on("timer-win", function (event, message) {
         touchBarSolution("index");
         multiScreenSolution("off");
 
-        if (store.get("tray-time") !== false && process.platform === "darwin")
-            tray.setTitle(' ' + i18n.__('not-timing-tray'));
-        else tray.setTitle("");
+        if (tray != null) {
+            if (store.get("tray-time") !== false && process.platform === "darwin")
+                tray.setTitle(' ' + i18n.__('not-timing-tray'));
+            else tray.setTitle("");
+        }
 
         isOnlyRest = false;
         isPositiveTiming = false;
@@ -2699,3 +2875,4 @@ ipcMain.on("theme-color-changed", function () {
     if (floatingWin != null) floatingWin.webContents.send('theme-color-changed');
     if (externalTitleWin != null) externalTitleWin.webContents.send('theme-color-changed');
 })
+
