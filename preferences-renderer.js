@@ -646,7 +646,16 @@ function domString(type) {
                         ${ i18n.__('webdav-sync-download') + i18n.__('period-symbol') }
                     </a>
                 </div>
+                <p class="small text-muted" id="webdav-sync-auto-status"></p>
+                <p class="small text-muted" id="webdav-sync-startup-status"></p>
+                <p class="small text-muted" id="webdav-sync-push-status"></p>
                 <p class="small text-muted" id="webdav-sync-status"></p>
+                <p class="small text-muted d-none" id="webdav-sync-detail-toggle-container">
+                    <a class="underlined" href="javascript:toggleWebDavSyncDetails()" id="webdav-sync-detail-toggle">
+                        ${ i18n.__('webdav-sync-show-details') }
+                    </a>
+                </p>
+                <pre class="small text-muted d-none" id="webdav-sync-detail"></pre>
             </li>
             </ul><br/>`;
             break;
@@ -1203,27 +1212,95 @@ function setWebDavSyncStatus(message, isError) {
         .toggleClass("rest", !isError && !!message);
 }
 
+function setWebDavSyncDetail(detail) {
+    const toggleContainer = $("#webdav-sync-detail-toggle-container");
+    const detailBox = $("#webdav-sync-detail");
+    const toggle = $("#webdav-sync-detail-toggle");
+    const text = detail || '';
+
+    if (text === '') {
+        toggleContainer.addClass("d-none");
+        detailBox.addClass("d-none").text('');
+        toggle.text(i18n.__('webdav-sync-show-details'));
+        return;
+    }
+
+    toggleContainer.removeClass("d-none");
+    detailBox.text(text).addClass("d-none");
+    toggle.text(i18n.__('webdav-sync-show-details'));
+}
+
+function toggleWebDavSyncDetails() {
+    const detailBox = $("#webdav-sync-detail");
+    const toggle = $("#webdav-sync-detail-toggle");
+    const hidden = detailBox.hasClass("d-none");
+    detailBox.toggleClass("d-none", !hidden);
+    toggle.text(i18n.__(hidden ? 'webdav-sync-hide-details' : 'webdav-sync-show-details'));
+}
+
+function setWebDavSyncRuntimeStatus(data) {
+    if (!data || !data.configured) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-auto-disabled'));
+        $("#webdav-sync-startup-status").text('');
+        $("#webdav-sync-push-status").text('');
+        setWebDavSyncDetail('');
+        return;
+    }
+
+    $("#webdav-sync-auto-status").text(
+        data.autoReady
+            ? i18n.__('webdav-sync-auto-enabled')
+            : i18n.__('webdav-sync-auto-awaiting-initial-sync')
+    );
+    $("#webdav-sync-startup-status").text(
+        data.startupPull && data.startupPull.message
+            ? i18n.__('webdav-sync-startup-status') + data.startupPull.message
+            : ''
+    );
+    $("#webdav-sync-push-status").text(
+        data.lastPush && data.lastPush.message
+            ? i18n.__('webdav-sync-last-push-status') + data.lastPush.message
+            : ''
+    );
+    setWebDavSyncDetail(data.latestFailureDetail || '');
+}
+
+async function refreshWebDavSyncRuntimeStatus() {
+    let status = await ipc.invoke('webdav-sync-status');
+    setWebDavSyncRuntimeStatus(status);
+}
+
+function handleWebDavConfigInput(storeKey, value) {
+    store.set('webdav-sync.autoSyncReady', false);
+    store.set(storeKey, value);
+    refreshWebDavSyncRuntimeStatus();
+}
+
 function webDavSyncInitializer() {
     let config = getWebDavSyncConfigFromStore();
     $("#webdav-sync-url").val(config.url).on("input", function () {
-        store.set('webdav-sync.url', $(this).val());
+        handleWebDavConfigInput('webdav-sync.url', $(this).val());
     });
     $("#webdav-sync-username").val(config.username).on("input", function () {
-        store.set('webdav-sync.username', $(this).val());
+        handleWebDavConfigInput('webdav-sync.username', $(this).val());
     });
     $("#webdav-sync-password").val(config.password).on("input", function () {
-        store.set('webdav-sync.password', $(this).val());
+        handleWebDavConfigInput('webdav-sync.password', $(this).val());
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
-        store.set('webdav-sync.remotePath', $(this).val());
+        handleWebDavConfigInput('webdav-sync.remotePath', $(this).val());
     });
     setWebDavSyncStatus('');
+    setWebDavSyncDetail('');
+    refreshWebDavSyncRuntimeStatus();
 }
 
 async function webDavSyncTest() {
     setWebDavSyncStatus(i18n.__('webdav-sync-testing'), false);
     let result = await ipc.invoke('webdav-sync-test');
     setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
+    await refreshWebDavSyncRuntimeStatus();
     if (!result.ok) ipc.send("alert", result.message);
     else ipc.send("notify", result.message);
 }
@@ -1237,12 +1314,16 @@ async function webDavSyncUpload() {
             overwriteMessage += '\n' + result.existingFiles.join(', ');
         }
         if (!window.confirm(overwriteMessage)) {
+            await ipc.invoke('webdav-sync-cancel-overwrite-confirm');
             setWebDavSyncStatus('', false);
+            await refreshWebDavSyncRuntimeStatus();
             return;
         }
         result = await ipc.invoke('webdav-sync-upload', { confirmOverwrite: true });
     }
     setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
+    await refreshWebDavSyncRuntimeStatus();
     if (!result.ok) ipc.send("alert", result.message);
     else ipc.send("notify", result.message);
 }
@@ -1253,11 +1334,13 @@ async function webDavSyncDownload() {
     setWebDavSyncStatus(i18n.__('webdav-sync-downloading'), false);
     let result = await ipc.invoke('webdav-sync-download');
     setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
     if (!result.ok) {
         ipc.send("alert", result.message);
         return;
     }
     ipc.send("notify", result.message);
+    await refreshWebDavSyncRuntimeStatus();
     ipc.send("relaunch-dialog");
 }
 
