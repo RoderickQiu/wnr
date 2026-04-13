@@ -12,7 +12,12 @@ let cmdOrCtrl = require('cmd-or-ctrl');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
-const keytar = require('keytar');
+let keytar = null;
+try {
+    keytar = require('keytar');
+} catch (error) {
+    keytar = null;
+}
 const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
 
