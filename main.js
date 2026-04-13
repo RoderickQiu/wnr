@@ -1,4 +1,4 @@
-﻿const {
+const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
     powerMonitor, nativeTheme, screen, TouchBar, Notification, nativeImage
@@ -417,8 +417,8 @@ function touchBarSolution(mode) {
 
 //before quit
 app.on('before-quit', async (event) => {
-    event.preventDefault();
     if (webDavSyncService != null && webDavSyncService.isExitFinalizing()) return;
+    event.preventDefault();
     await requestAppExitWithGuard({
         source: 'before-quit',
         interactive: false,

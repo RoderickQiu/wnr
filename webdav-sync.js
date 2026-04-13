@@ -29,7 +29,7 @@ function createWebDavError(userMessage, detail) {
 }
 
 function toWebDavErrorPayload(error, fallbackMessage) {
-    const message = (error && error.userMessage) || fallbackMessage;
+    const message = (error && (error.userMessage || error.message)) || fallbackMessage;
     const detail = (error && error.detail) || '';
     return {
         ok: false,
@@ -967,7 +967,7 @@ function createWebDavSyncService(deps) {
     function validateWebDavSyncConfig() {
         let config = getWebDavSyncConfig();
         if (config.url === '' || config.username === '' || config.password === '' || config.remotePath === '') {
-            throw new Error(i18n.__('webdav-sync-missing-config'));
+            throw createWebDavError(i18n.__('webdav-sync-missing-config'));
         }
         return config;
     }
@@ -1389,11 +1389,13 @@ function createWebDavSyncService(deps) {
         if (webDavAutoPushTimer) clearTimeout(webDavAutoPushTimer);
         appendWebDavSyncLog('auto-push-scheduled', reason || 'unknown');
         webDavAutoPushTimer = setTimeout(async function () {
-            await runWebDavSyncTestHook('watcher-delay', reason || 'unknown');
-            performAutoWebDavPush(reason).catch(function (e) {
+            try {
+                await runWebDavSyncTestHook('watcher-delay', reason || 'unknown');
+                await performAutoWebDavPush(reason);
+            } catch (e) {
                 console.log(e);
                 appendWebDavSyncLog('auto-push-timer-failed', e.detail || e.message || '');
-            });
+            }
         }, 1500);
     }
 
