@@ -1358,6 +1358,20 @@ function createWebDavSyncService(deps) {
         }
 
         try {
+            let remoteHasExistingData = await hasExistingRemoteWebDavData();
+            if (!remoteHasExistingData) {
+                setWebDavAutoSyncReady(false, 'startup-empty-remote');
+                setWebDavSyncStatus('startupPull', 'idle', i18n.__('webdav-sync-auto-awaiting-initial-sync'), '', 'startupPull');
+                lastSyncedCoreSignature = null;
+                synchronizeWebDavObservedState('startup-empty-remote');
+                appendWebDavSyncLog('startup-sync-skip', 'remote empty');
+                return {
+                    ok: true,
+                    skipped: true,
+                    message: i18n.__('webdav-sync-auto-awaiting-initial-sync')
+                };
+            }
+
             await runWithWebDavSyncSuppressed(async function () {
                 await downloadWebDavSync();
             }, 'startup-internal-mutation', 'startupPull', operation.operationId);

@@ -1270,22 +1270,38 @@ function setWebDavPasswordPlaceholder(hasPassword) {
 }
 
 async function handleWebDavConfigInput() {
-    await ipc.invoke('webdav-config:setNonSensitive', {
-        url: $("#webdav-sync-url").val(),
-        username: $("#webdav-sync-username").val(),
-        remotePath: $("#webdav-sync-remote-path").val()
-    });
-    await refreshWebDavSyncRuntimeStatus();
+    try {
+        await ipc.invoke('webdav-config:setNonSensitive', {
+            url: $("#webdav-sync-url").val(),
+            username: $("#webdav-sync-username").val(),
+            remotePath: $("#webdav-sync-remote-path").val()
+        });
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to save WebDAV configuration', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
 }
 
 async function handleWebDavPasswordInput() {
-    let password = String($("#webdav-sync-password").val() || '');
-    if (password === '') await ipc.invoke('webdav-config:clearPassword');
-    else await ipc.invoke('webdav-config:setPassword', {
-        password: password
-    });
-    setWebDavPasswordPlaceholder(password !== '');
-    await refreshWebDavSyncRuntimeStatus();
+    try {
+        let passwordInput = $("#webdav-sync-password");
+        let password = String(passwordInput.val() || '');
+        if (password === '') {
+            await ipc.invoke('webdav-config:clearPassword');
+            setWebDavPasswordPlaceholder(false);
+        } else {
+            await ipc.invoke('webdav-config:setPassword', {
+                password: password
+            });
+            passwordInput.val('');
+            setWebDavPasswordPlaceholder(true);
+        }
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to save WebDAV password', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
 }
 
 async function webDavSyncInitializer() {
@@ -1296,7 +1312,7 @@ async function webDavSyncInitializer() {
     $("#webdav-sync-username").val(config.username).on("input", function () {
         handleWebDavConfigInput();
     });
-    $("#webdav-sync-password").val('').on("input", function () {
+    $("#webdav-sync-password").val('').on("blur", function () {
         handleWebDavPasswordInput();
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
