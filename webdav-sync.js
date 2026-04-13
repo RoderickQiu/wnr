@@ -6,6 +6,7 @@ const WEBDAV_SYNC_FILES = [
 const WEBDAV_SYNC_CONFIG_KEY = 'webdav-sync';
 const WEBDAV_AUTO_SYNC_READY_KEY = 'webdav-sync.autoSyncReady';
 const WEBDAV_UNSYNCED_EXIT_MARKER_KEY = 'webdav-sync-unsynced-exit';
+const WEBDAV_CREDENTIAL_SERVICE = 'wnr.webdav-sync';
 const WEBDAV_EXCLUDED_CONFIG_KEYS = ['webdav-sync', 'version', 'previous-language', 'just-back', 'just-launched', 'just-relaunched', 'settings-goto', WEBDAV_UNSYNCED_EXIT_MARKER_KEY];
 const WEBDAV_REQUEST_TIMEOUT_MS = 8000;
 const WEBDAV_SYNC_LOG_FILE = 'webdav-sync.log';
@@ -157,6 +158,7 @@ function createWebDavSyncService(deps) {
         fetch,
         ipcMain,
         i18n,
+        keytar,
         notifyWarning,
         getStore,
         getStatisticsStore,
@@ -180,6 +182,8 @@ function createWebDavSyncService(deps) {
     let webDavStartupMutationSuppressionToken = null;
     let exitAuthority = null;
     let ipcHandlersRegistered = false;
+    let cachedWebDavPassword = '';
+    let cachedWebDavCredentialError = '';
 
     function getStores() {
         return {
@@ -191,6 +195,138 @@ function createWebDavSyncService(deps) {
 
     function getStoreOrNull() {
         return getStores().store;
+    }
+
+    function getStoredWebDavConfigSnapshot() {
+        let store = getStoreOrNull();
+        let config = cloneStoreData(store != null ? store.get(WEBDAV_SYNC_CONFIG_KEY, {}) : {});
+        return {
+            url: String(config.url || '').trim(),
+            username: String(config.username || ''),
+            remotePath: String(config.remotePath || '').trim()
+        };
+    }
+
+    function normalizeWebDavRemotePath(remotePath) {
+        let normalized = String(remotePath || '').trim().replace(/\\/g, '/');
+        normalized = normalized.replace(/\/+/g, '/');
+        normalized = normalized.replace(/^\/+|\/+$/g, '');
+        return normalized;
+    }
+
+    function buildWebDavCredentialAccount(config) {
+        let username = String(config.username || '').trim();
+        let remotePath = normalizeWebDavRemotePath(config.remotePath);
+
+        try {
+            let parsed = new URL(String(config.url || '').trim());
+            let hostname = parsed.hostname.toLowerCase();
+            let port = parsed.port;
+            let protocol = parsed.protocol.toLowerCase();
+            if (port === '443' && protocol === 'https:') port = '';
+            let hostWithPort = port ? `${ hostname }:${ port }` : hostname;
+            return `${ username }@${ hostWithPort }:${ remotePath }`;
+        } catch (e) {
+            return `${ username }@${ String(config.url || '').trim() }:${ remotePath }`;
+        }
+    }
+
+    async function getCredentialPassword(config) {
+        if (keytar == null) return '';
+        return await keytar.getPassword(WEBDAV_CREDENTIAL_SERVICE, buildWebDavCredentialAccount(config)) || '';
+    }
+
+    async function setCredentialPassword(config, password) {
+        if (keytar == null) throw new Error('keytar unavailable');
+        await keytar.setPassword(WEBDAV_CREDENTIAL_SERVICE, buildWebDavCredentialAccount(config), String(password || ''));
+    }
+
+    async function deleteCredentialPassword(config) {
+        if (keytar == null) return false;
+        return await keytar.deletePassword(WEBDAV_CREDENTIAL_SERVICE, buildWebDavCredentialAccount(config));
+    }
+
+    async function refreshCachedWebDavPassword(configOverride) {
+        let config = configOverride || getStoredWebDavConfigSnapshot();
+        try {
+            cachedWebDavPassword = await getCredentialPassword(config);
+            cachedWebDavCredentialError = '';
+        } catch (e) {
+            cachedWebDavPassword = '';
+            cachedWebDavCredentialError = e && e.message ? e.message : String(e);
+        }
+        return cachedWebDavPassword;
+    }
+
+    async function migrateLegacyWebDavPasswordIfNeeded(configOverride) {
+        let store = getStoreOrNull();
+        if (store == null || !store.has('webdav-sync.password')) return false;
+
+        let legacyPassword = String(store.get('webdav-sync.password') || '');
+        if (legacyPassword === '') {
+            store.delete('webdav-sync.password');
+            return false;
+        }
+
+        let config = configOverride || getStoredWebDavConfigSnapshot();
+        await setCredentialPassword(config, legacyPassword);
+        store.delete('webdav-sync.password');
+        cachedWebDavPassword = legacyPassword;
+        cachedWebDavCredentialError = '';
+        return true;
+    }
+
+    async function persistNonSensitiveWebDavConfig(nextConfig) {
+        let store = getStoreOrNull();
+        if (store == null) return getStoredWebDavConfigSnapshot();
+
+        let currentConfig = cloneStoreData(store.get(WEBDAV_SYNC_CONFIG_KEY, {}));
+        let mergedConfig = Object.assign({}, currentConfig, {
+            url: String(nextConfig.url || '').trim(),
+            username: String(nextConfig.username || ''),
+            remotePath: String(nextConfig.remotePath || '').trim()
+        });
+        delete mergedConfig.password;
+        store.set(WEBDAV_SYNC_CONFIG_KEY, mergedConfig);
+        store.delete('webdav-sync.password');
+        setWebDavAutoSyncReady(false, 'settings-updated');
+        await refreshCachedWebDavPassword(mergedConfig);
+        return getStoredWebDavConfigSnapshot();
+    }
+
+    async function setWebDavPassword(password) {
+        let normalizedPassword = String(password || '');
+        let config = getStoredWebDavConfigSnapshot();
+        await setCredentialPassword(config, normalizedPassword);
+        let store = getStoreOrNull();
+        if (store != null && store.has('webdav-sync.password')) store.delete('webdav-sync.password');
+        cachedWebDavPassword = normalizedPassword;
+        cachedWebDavCredentialError = '';
+        setWebDavAutoSyncReady(false, 'password-updated');
+        return {
+            hasPassword: normalizedPassword !== ''
+        };
+    }
+
+    async function clearWebDavPassword() {
+        let config = getStoredWebDavConfigSnapshot();
+        await deleteCredentialPassword(config);
+        let store = getStoreOrNull();
+        if (store != null && store.has('webdav-sync.password')) store.delete('webdav-sync.password');
+        cachedWebDavPassword = '';
+        cachedWebDavCredentialError = '';
+        setWebDavAutoSyncReady(false, 'password-cleared');
+        return {
+            hasPassword: false
+        };
+    }
+
+    async function getWebDavConfigUiState() {
+        let config = getStoredWebDavConfigSnapshot();
+        await refreshCachedWebDavPassword(config);
+        return Object.assign({}, config, {
+            hasPassword: cachedWebDavPassword !== ''
+        });
     }
 
     function appendWebDavSyncLog(event, detail) {
@@ -226,13 +362,12 @@ function createWebDavSyncService(deps) {
     }
 
     function getWebDavSyncConfig() {
-        let store = getStoreOrNull();
-        let config = cloneStoreData(store != null ? store.get(WEBDAV_SYNC_CONFIG_KEY, {}) : {});
+        let config = getStoredWebDavConfigSnapshot();
         return {
-            url: String(config.url || '').trim(),
-            username: String(config.username || ''),
-            password: String(config.password || ''),
-            remotePath: String(config.remotePath || '').trim()
+            url: config.url,
+            username: config.username,
+            password: cachedWebDavPassword,
+            remotePath: config.remotePath
         };
     }
 
@@ -969,6 +1104,15 @@ function createWebDavSyncService(deps) {
         if (config.url === '' || config.username === '' || config.password === '' || config.remotePath === '') {
             throw createWebDavError(i18n.__('webdav-sync-missing-config'));
         }
+        let parsedUrl = null;
+        try {
+            parsedUrl = new URL(config.url);
+        } catch (e) {
+            throw createWebDavError(i18n.__('webdav-sync-invalid-url'));
+        }
+        if (parsedUrl.protocol.toLowerCase() !== 'https:') {
+            throw createWebDavError(i18n.__('webdav-sync-https-required'));
+        }
         return config;
     }
 
@@ -1436,8 +1580,15 @@ function createWebDavSyncService(deps) {
         authority.pendingDecisionResolver(decision);
     }
 
-    function initialize() {
+    async function initialize() {
         ensureWebDavSyncCoordinator();
+        try {
+            await migrateLegacyWebDavPasswordIfNeeded();
+        } catch (e) {
+            console.log(e);
+            cachedWebDavCredentialError = e && e.message ? e.message : String(e);
+        }
+        await refreshCachedWebDavPassword();
         webDavCoordinator.lastObservedSignature = computeCoreSyncSignature();
     }
 
@@ -1475,6 +1626,22 @@ function createWebDavSyncService(deps) {
             return Object.assign({
                 configured: isWebDavConfigured()
             }, getWebDavSyncStatus());
+        });
+
+        ipcMain.handle('webdav-config:getUiState', async function () {
+            return await getWebDavConfigUiState();
+        });
+
+        ipcMain.handle('webdav-config:setNonSensitive', async function (event, payload) {
+            return await persistNonSensitiveWebDavConfig(payload || {});
+        });
+
+        ipcMain.handle('webdav-config:setPassword', async function (event, payload) {
+            return await setWebDavPassword(payload && payload.password);
+        });
+
+        ipcMain.handle('webdav-config:clearPassword', async function () {
+            return await clearWebDavPassword();
         });
 
         ipcMain.handle('webdav-sync-cancel-overwrite-confirm', function () {

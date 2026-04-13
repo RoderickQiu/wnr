@@ -1196,13 +1196,8 @@ function settingsImport(token, mode) {
     }
 }
 
-function getWebDavSyncConfigFromStore() {
-    return {
-        url: store.get('webdav-sync.url') || '',
-        username: store.get('webdav-sync.username') || '',
-        password: store.get('webdav-sync.password') || '',
-        remotePath: store.get('webdav-sync.remotePath') || ''
-    };
+async function getWebDavSyncConfigUiState() {
+    return await ipc.invoke('webdav-config:getUiState');
 }
 
 function setWebDavSyncStatus(message, isError) {
@@ -1270,29 +1265,47 @@ async function refreshWebDavSyncRuntimeStatus() {
     setWebDavSyncRuntimeStatus(status);
 }
 
-function handleWebDavConfigInput(storeKey, value) {
-    store.set('webdav-sync.autoSyncReady', false);
-    store.set(storeKey, value);
-    refreshWebDavSyncRuntimeStatus();
+function setWebDavPasswordPlaceholder(hasPassword) {
+    $("#webdav-sync-password").attr('placeholder', i18n.__(hasPassword ? 'webdav-sync-password-saved' : 'webdav-sync-password-not-saved'));
 }
 
-function webDavSyncInitializer() {
-    let config = getWebDavSyncConfigFromStore();
+async function handleWebDavConfigInput() {
+    await ipc.invoke('webdav-config:setNonSensitive', {
+        url: $("#webdav-sync-url").val(),
+        username: $("#webdav-sync-username").val(),
+        remotePath: $("#webdav-sync-remote-path").val()
+    });
+    await refreshWebDavSyncRuntimeStatus();
+}
+
+async function handleWebDavPasswordInput() {
+    let password = String($("#webdav-sync-password").val() || '');
+    if (password === '') await ipc.invoke('webdav-config:clearPassword');
+    else await ipc.invoke('webdav-config:setPassword', {
+        password: password
+    });
+    setWebDavPasswordPlaceholder(password !== '');
+    await refreshWebDavSyncRuntimeStatus();
+}
+
+async function webDavSyncInitializer() {
+    let config = await getWebDavSyncConfigUiState();
     $("#webdav-sync-url").val(config.url).on("input", function () {
-        handleWebDavConfigInput('webdav-sync.url', $(this).val());
+        handleWebDavConfigInput();
     });
     $("#webdav-sync-username").val(config.username).on("input", function () {
-        handleWebDavConfigInput('webdav-sync.username', $(this).val());
+        handleWebDavConfigInput();
     });
-    $("#webdav-sync-password").val(config.password).on("input", function () {
-        handleWebDavConfigInput('webdav-sync.password', $(this).val());
+    $("#webdav-sync-password").val('').on("input", function () {
+        handleWebDavPasswordInput();
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
-        handleWebDavConfigInput('webdav-sync.remotePath', $(this).val());
+        handleWebDavConfigInput();
     });
+    setWebDavPasswordPlaceholder(config.hasPassword === true);
     setWebDavSyncStatus('');
     setWebDavSyncDetail('');
-    refreshWebDavSyncRuntimeStatus();
+    await refreshWebDavSyncRuntimeStatus();
 }
 
 async function webDavSyncTest() {

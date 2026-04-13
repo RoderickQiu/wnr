@@ -12,6 +12,7 @@ let cmdOrCtrl = require('cmd-or-ctrl');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
+const keytar = require('keytar');
 const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
 
@@ -479,6 +480,7 @@ app.on('ready', async () => {
         fetch: fetch,
         ipcMain: ipcMain,
         i18n: i18n,
+        keytar: keytar,
         notifyWarning: function (message) {
             if (win != null) notificationSolution("wnr", message, "normal");
         },
@@ -494,7 +496,7 @@ app.on('ready', async () => {
         showExitDialog: showWebDavExitDialog,
         hideExitDialog: hideWebDavExitDialog
     });
-    webDavSyncService.initialize();
+    await webDavSyncService.initialize();
     webDavSyncService.registerIpcHandlers();
 
     theThemeHasChanged();
@@ -2348,7 +2350,6 @@ function tourguide() {
 async function loadMainWindowAfterStartupInit() {
     if (win == null) return;
     await win.loadFile('index.html');
-    startupWindowReady = true;
 }
 
 function appendWebDavSyncLog(event, detail) {

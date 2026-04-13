@@ -40,6 +40,7 @@
 		"electron-store": "8.2.0",
 		"i18n": "0.15.3",
 		"jquery": "3.7.1",
+		"keytar": "^7.9.0",
 		"node-fetch": "2.7.0",
 		"node-notifier": "10.0.1",
 		"node-shi": "0.4.2",
