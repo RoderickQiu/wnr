@@ -401,6 +401,11 @@ li input:nth-last-child(4)::after {
     left: 27px;
 }
 
+.switch-slide input:disabled + label {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
 .btn-onlyRest {
     color: #a26ae5;
     border-color: #a26ae5;

@@ -1267,16 +1267,20 @@ function toggleWebDavSyncDetails() {
 }
 
 function setWebDavSyncRuntimeStatus(data) {
-    if (!data || data.enabled !== true) {
-        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-user-disabled'));
+    const enabledToggle = $("#selection-webdav-sync-enabled");
+    enabledToggle.prop('disabled', !data || data.configured !== true);
+    enabledToggle.prop('checked', !!(data && data.configured === true && data.enabled === true));
+
+    if (!data || data.configured !== true) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-auto-disabled'));
         $("#webdav-sync-startup-status").text('');
         $("#webdav-sync-push-status").text('');
         setWebDavSyncDetail('');
         return;
     }
 
-    if (!data.configured) {
-        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-auto-disabled'));
+    if (data.enabled !== true) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-user-disabled'));
         $("#webdav-sync-startup-status").text('');
         $("#webdav-sync-push-status").text('');
         setWebDavSyncDetail('');
@@ -1306,33 +1310,45 @@ async function refreshWebDavSyncRuntimeStatus() {
     setWebDavSyncRuntimeStatus(status);
 }
 
-function setWebDavPasswordPlaceholder(hasPassword) {
-    $("#webdav-sync-password").attr('placeholder', i18n.__(hasPassword ? 'webdav-sync-password-saved' : 'webdav-sync-password-not-saved'));
+let webDavPasswordPersistPromise = Promise.resolve();
+let webDavPasswordPersistTimer = null;
+let webDavPasswordDirty = false;
+
+function scheduleWebDavPasswordPersist() {
+    webDavPasswordDirty = true;
+    if (webDavPasswordPersistTimer != null) clearTimeout(webDavPasswordPersistTimer);
+    webDavPasswordPersistTimer = setTimeout(function () {
+        flushPendingWebDavPasswordInput().catch(function (error) {
+            console.error('Failed to persist pending WebDAV password', error);
+        });
+    }, 250);
 }
 
-let webDavPasswordPersistPromise = null;
-
-async function persistPendingWebDavPasswordInputIfNeeded() {
+async function flushPendingWebDavPasswordInput() {
     let passwordInput = $("#webdav-sync-password");
     if (passwordInput.length === 0) return;
 
-    if (webDavPasswordPersistPromise != null) {
+    if (webDavPasswordPersistTimer != null) {
+        clearTimeout(webDavPasswordPersistTimer);
+        webDavPasswordPersistTimer = null;
+    }
+
+    if (!webDavPasswordDirty) {
         await webDavPasswordPersistPromise;
         return;
     }
 
-    if (String(passwordInput.val() || '') === '') return;
+    const persist = async function () {
+        await handleWebDavPasswordInput();
+        webDavPasswordDirty = false;
+    };
 
-    webDavPasswordPersistPromise = handleWebDavPasswordInput()
-        .finally(function () {
-            webDavPasswordPersistPromise = null;
-        });
-
+    webDavPasswordPersistPromise = webDavPasswordPersistPromise.then(persist, persist);
     await webDavPasswordPersistPromise;
 }
 
 async function ensureWebDavConfigComplete() {
-    await persistPendingWebDavPasswordInputIfNeeded();
+    await flushPendingWebDavPasswordInput();
 
     let config = await getWebDavSyncConfigUiState();
     let isComplete = String(config.url || '').trim() !== ''
@@ -1365,6 +1381,11 @@ async function handleWebDavConfigInput() {
 
 async function handleWebDavEnabledToggle() {
     try {
+        if (!(await ensureWebDavConfigComplete())) {
+            $("#selection-webdav-sync-enabled").prop('checked', false);
+            return;
+        }
+
         await ipc.invoke('webdav-config:setEnabled', {
             enabled: $("#selection-webdav-sync-enabled").prop('checked')
         });
@@ -1381,13 +1402,10 @@ async function handleWebDavPasswordInput() {
         let password = String(passwordInput.val() || '');
         if (password === '') {
             await ipc.invoke('webdav-config:clearPassword');
-            setWebDavPasswordPlaceholder(false);
         } else {
             await ipc.invoke('webdav-config:setPassword', {
                 password: password
             });
-            passwordInput.val('');
-            setWebDavPasswordPlaceholder(true);
         }
         await refreshWebDavSyncRuntimeStatus();
     } catch (error) {
@@ -1404,8 +1422,8 @@ async function webDavSyncInitializer() {
     $("#webdav-sync-username").val(config.username).on("input", function () {
         handleWebDavConfigInput();
     });
-    $("#webdav-sync-password").val('').on("blur", function () {
-        persistPendingWebDavPasswordInputIfNeeded();
+    $("#webdav-sync-password").val(config.password || '').on("input", function () {
+        scheduleWebDavPasswordPersist();
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
         handleWebDavConfigInput();
@@ -1415,13 +1433,13 @@ async function webDavSyncInitializer() {
         .on("click", function () {
             handleWebDavEnabledToggle();
         });
-    setWebDavPasswordPlaceholder(config.hasPassword === true);
     setWebDavSyncStatus('');
     setWebDavSyncDetail('');
     await refreshWebDavSyncRuntimeStatus();
 }
 
 async function webDavSyncTest() {
+    await flushPendingWebDavPasswordInput();
     setWebDavSyncStatus(i18n.__('webdav-sync-testing'), false);
     let result = await ipc.invoke('webdav-sync-test');
     setWebDavSyncStatus(result.message, !result.ok);

@@ -288,6 +288,9 @@ function createWebDavSyncService(deps) {
             username: String(nextConfig.username || ''),
             remotePath: String(nextConfig.remotePath || '').trim()
         });
+        if (mergedConfig.url === '' || mergedConfig.username === '' || mergedConfig.remotePath === '') {
+            mergedConfig.enabled = false;
+        }
         delete mergedConfig.password;
         store.set(WEBDAV_SYNC_CONFIG_KEY, mergedConfig);
         store.delete('webdav-sync.password');
@@ -314,7 +317,12 @@ function createWebDavSyncService(deps) {
         let config = getStoredWebDavConfigSnapshot();
         await deleteCredentialPassword(config);
         let store = getStoreOrNull();
-        if (store != null && store.has('webdav-sync.password')) store.delete('webdav-sync.password');
+        if (store != null) {
+            if (store.has('webdav-sync.password')) store.delete('webdav-sync.password');
+            let currentConfig = cloneStoreData(store.get(WEBDAV_SYNC_CONFIG_KEY, {}));
+            currentConfig.enabled = false;
+            store.set(WEBDAV_SYNC_CONFIG_KEY, currentConfig);
+        }
         cachedWebDavPassword = '';
         cachedWebDavCredentialError = '';
         setWebDavAutoSyncReady(false, 'password-cleared');
@@ -326,8 +334,14 @@ function createWebDavSyncService(deps) {
     async function getWebDavConfigUiState() {
         let config = getStoredWebDavConfigSnapshot();
         await refreshCachedWebDavPassword(config);
+        let isConfigured = String(config.url || '').trim() !== ''
+            && String(config.username || '').trim() !== ''
+            && cachedWebDavPassword !== ''
+            && String(config.remotePath || '').trim() !== '';
         return Object.assign({}, config, {
-            hasPassword: cachedWebDavPassword !== ''
+            enabled: config.enabled === true && isConfigured,
+            hasPassword: cachedWebDavPassword !== '',
+            password: cachedWebDavPassword
         });
     }
 
@@ -376,7 +390,7 @@ function createWebDavSyncService(deps) {
     }
 
     function isWebDavSyncEnabled() {
-        return getStoredWebDavConfigSnapshot().enabled === true;
+        return getStoredWebDavConfigSnapshot().enabled === true && isWebDavConfigured();
     }
 
     function isWebDavConfigured() {
@@ -408,6 +422,7 @@ function createWebDavSyncService(deps) {
 
         let currentConfig = cloneStoreData(store.get(WEBDAV_SYNC_CONFIG_KEY, {}));
         let normalizedEnabled = enabled === true;
+        if (normalizedEnabled && !isWebDavConfigured()) normalizedEnabled = false;
         currentConfig.enabled = normalizedEnabled;
         store.set(WEBDAV_SYNC_CONFIG_KEY, currentConfig);
 
