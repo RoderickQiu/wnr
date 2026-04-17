@@ -615,25 +615,58 @@ function domString(type) {
                 </p>
             </li>
             <li>
-                <strong>${ i18n.__('webdav-sync') }</strong>
+                ${ i18n.__('webdav-sync-msg') }
                 <p class="small text-muted">
                     ${ i18n.__('webdav-sync-tip') }
                 </p>
-                <div class="small text-muted">
-                    <label for="webdav-sync-url">${ i18n.__('webdav-sync-url') }</label><br />
-                    <input id="webdav-sync-url" name="webdav-sync-url" type="text" />
-                    <br /><br />
-                    <label for="webdav-sync-username">${ i18n.__('webdav-sync-username') }</label><br />
-                    <input id="webdav-sync-username" name="webdav-sync-username" type="text" />
-                    <br /><br />
-                    <label for="webdav-sync-password">${ i18n.__('webdav-sync-password') }</label><br />
-                    <input id="webdav-sync-password" name="webdav-sync-password" type="password" />
-                    <br /><br />
-                    <label for="webdav-sync-remote-path">${ i18n.__('webdav-sync-remote-path') }</label><br />
-                    <input id="webdav-sync-remote-path" name="webdav-sync-remote-path" type="text" />
+                <div class="small text-muted webdav-sync-form">
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-url">${ i18n.__('webdav-sync-url') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-url" name="webdav-sync-url" type="text" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-username">${ i18n.__('webdav-sync-username') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-username" name="webdav-sync-username" type="text" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-password">${ i18n.__('webdav-sync-password') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-password" name="webdav-sync-password" type="password" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-remote-path">${ i18n.__('webdav-sync-remote-path') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-remote-path" name="webdav-sync-remote-path" type="text"
+                                   placeholder="${ i18n.__('webdav-sync-remote-path-placeholder') }" />
+                        </div>
+                    </div>
                 </div>
-                <br />
-                <div class="small text-muted">
+                <div class="row w-100 align-items-center webdav-sync-toggle-row">
+                    <div class="col-9 text-left">
+                        <label>${ i18n.__('webdav-sync-enabled') }</label><br />
+                        <p class="settings-msg">${ i18n.__('webdav-sync-enabled-tip') }</p>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="switch-slide">
+                            <input type="checkbox" id="selection-webdav-sync-enabled" hidden>
+                            <label for="selection-webdav-sync-enabled" class="switch-slide-label"></label>
+                        </label>
+                    </div>
+                </div>
+                <div class="small text-muted webdav-sync-actions">
                     <a class="rest underlined" href="javascript:webDavSyncTest()">
                         ${ i18n.__('webdav-sync-test') + i18n.__('period-symbol') }
                     </a>
@@ -1234,7 +1267,15 @@ function toggleWebDavSyncDetails() {
 }
 
 function setWebDavSyncRuntimeStatus(data) {
-    if (!data || !data.configured) {
+    if (!data || data.enabled !== true) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-user-disabled'));
+        $("#webdav-sync-startup-status").text('');
+        $("#webdav-sync-push-status").text('');
+        setWebDavSyncDetail('');
+        return;
+    }
+
+    if (!data.configured) {
         $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-auto-disabled'));
         $("#webdav-sync-startup-status").text('');
         $("#webdav-sync-push-status").text('');
@@ -1269,6 +1310,45 @@ function setWebDavPasswordPlaceholder(hasPassword) {
     $("#webdav-sync-password").attr('placeholder', i18n.__(hasPassword ? 'webdav-sync-password-saved' : 'webdav-sync-password-not-saved'));
 }
 
+let webDavPasswordPersistPromise = null;
+
+async function persistPendingWebDavPasswordInputIfNeeded() {
+    let passwordInput = $("#webdav-sync-password");
+    if (passwordInput.length === 0) return;
+
+    if (webDavPasswordPersistPromise != null) {
+        await webDavPasswordPersistPromise;
+        return;
+    }
+
+    if (String(passwordInput.val() || '') === '') return;
+
+    webDavPasswordPersistPromise = handleWebDavPasswordInput()
+        .finally(function () {
+            webDavPasswordPersistPromise = null;
+        });
+
+    await webDavPasswordPersistPromise;
+}
+
+async function ensureWebDavConfigComplete() {
+    await persistPendingWebDavPasswordInputIfNeeded();
+
+    let config = await getWebDavSyncConfigUiState();
+    let isComplete = String(config.url || '').trim() !== ''
+        && String(config.username || '').trim() !== ''
+        && config.hasPassword === true
+        && String(config.remotePath || '').trim() !== '';
+
+    if (isComplete) return true;
+
+    let message = i18n.__('webdav-sync-missing-config');
+    setWebDavSyncStatus(message, true);
+    setWebDavSyncDetail('');
+    ipc.send("alert", message);
+    return false;
+}
+
 async function handleWebDavConfigInput() {
     try {
         await ipc.invoke('webdav-config:setNonSensitive', {
@@ -1279,6 +1359,18 @@ async function handleWebDavConfigInput() {
         await refreshWebDavSyncRuntimeStatus();
     } catch (error) {
         console.error('Failed to save WebDAV configuration', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
+}
+
+async function handleWebDavEnabledToggle() {
+    try {
+        await ipc.invoke('webdav-config:setEnabled', {
+            enabled: $("#selection-webdav-sync-enabled").prop('checked')
+        });
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to toggle WebDAV sync', error);
         setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
     }
 }
@@ -1313,11 +1405,16 @@ async function webDavSyncInitializer() {
         handleWebDavConfigInput();
     });
     $("#webdav-sync-password").val('').on("blur", function () {
-        handleWebDavPasswordInput();
+        persistPendingWebDavPasswordInputIfNeeded();
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
         handleWebDavConfigInput();
     });
+    $("#selection-webdav-sync-enabled")
+        .prop('checked', config.enabled === true)
+        .on("click", function () {
+            handleWebDavEnabledToggle();
+        });
     setWebDavPasswordPlaceholder(config.hasPassword === true);
     setWebDavSyncStatus('');
     setWebDavSyncDetail('');
@@ -1335,6 +1432,8 @@ async function webDavSyncTest() {
 }
 
 async function webDavSyncUpload() {
+    if (!(await ensureWebDavConfigComplete())) return;
+
     setWebDavSyncStatus(i18n.__('webdav-sync-uploading'), false);
     let result = await ipc.invoke('webdav-sync-upload', { confirmOverwrite: false });
     if (result.needsConfirm) {
@@ -1358,6 +1457,8 @@ async function webDavSyncUpload() {
 }
 
 async function webDavSyncDownload() {
+    if (!(await ensureWebDavConfigComplete())) return;
+
     if (!window.confirm(i18n.__('webdav-sync-confirm-download'))) return;
 
     setWebDavSyncStatus(i18n.__('webdav-sync-downloading'), false);

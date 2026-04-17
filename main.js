@@ -2363,6 +2363,7 @@ function appendWebDavSyncLog(event, detail) {
 
 function showWebDavExitDialog(payload) {
     if (!hasLiveCustomDialogWindow()) return false;
+    customDialogWin.setSize(Math.floor(440 * ratio), customDialogWin.getSize()[1]);
     customDialogWin.webContents.send('dialog-init', payload);
     customDialogWin.show();
     customDialogWin.setAlwaysOnTop(true, "pop-up-menu");

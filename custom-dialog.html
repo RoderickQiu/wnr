@@ -16,6 +16,30 @@
 
 <body>
     <script src="supporter.js"></script>
+    <style>
+        #main {
+            padding: 10px 12px;
+        }
+
+        #timer {
+            width: 100% !important;
+            max-width: 100%;
+        }
+
+        #dialog-buttons {
+            width: 100% !important;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        #dialog-buttons .btn {
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    </style>
     <div class="d-flex mx-auto text-dark" id="main">
         <div id="timer" class="justify-content-left align-content-left text-left"
              style="transform: translateY(2px); width: 210px; -webkit-app-region: drag; -webkit-user-select: none;">
@@ -60,6 +84,10 @@
         }
 
         function button3() {
+            if (currentDialogKind === "exit-sync") {
+                ipc.send("custom-dialog-action", { action: "tertiary", exitSessionId: currentExitSessionId });
+                return;
+            }
             ipc.send("custom-dialog", { mode: "button3_update", executeAfter: executeAfter });
         }
 
@@ -83,18 +111,24 @@
                 if (message.detail) detailNode.text(message.detail).removeClass("d-none");
                 else detailNode.text("").addClass("d-none");
                 $("#dialog-button-3").addClass("d-none");
-                $("#timer").css("width", "260px");
-                $("#dialog-buttons").css("width", "260px");
+                $("#timer").css("width", "100%");
+                $("#dialog-buttons").css("width", "100%");
 
                 if (message.state === "syncing") {
                     $("#dialog-spinner").removeClass("d-none");
                     $("#dialog-ok").addClass("d-none");
                     $("#dialog-cancel").addClass("d-none");
+                    $("#dialog-button-3").addClass("d-none");
                     document.onkeydown = function () {};
                 } else {
                     $("#dialog-spinner").addClass("d-none");
                     $("#dialog-ok").removeClass("d-none").text(message.primaryLabel || i18n.__('ok'));
                     $("#dialog-cancel").removeClass("d-none").text(message.secondaryLabel || i18n.__('cancel'));
+                    if (message.tertiaryLabel) {
+                        $("#dialog-button-3").removeClass("d-none").text(message.tertiaryLabel);
+                    } else {
+                        $("#dialog-button-3").addClass("d-none");
+                    }
                     document.onkeydown = function (event1) {
                         let ev = document.all ? window.event : event1;
                         if ((ev.keyCode || ev.which) === 13) {

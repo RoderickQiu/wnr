@@ -4,6 +4,7 @@ const WEBDAV_SYNC_FILES = [
     { key: 'recap', fileName: 'recap.json' }
 ];
 const WEBDAV_SYNC_CONFIG_KEY = 'webdav-sync';
+const WEBDAV_SYNC_ENABLED_DEFAULT = true;
 const WEBDAV_AUTO_SYNC_READY_KEY = 'webdav-sync.autoSyncReady';
 const WEBDAV_UNSYNCED_EXIT_MARKER_KEY = 'webdav-sync-unsynced-exit';
 const WEBDAV_CREDENTIAL_SERVICE = 'wnr.webdav-sync';
@@ -203,7 +204,8 @@ function createWebDavSyncService(deps) {
         return {
             url: String(config.url || '').trim(),
             username: String(config.username || ''),
-            remotePath: String(config.remotePath || '').trim()
+            remotePath: String(config.remotePath || '').trim(),
+            enabled: config.enabled !== false
         };
     }
 
@@ -352,6 +354,8 @@ function createWebDavSyncService(deps) {
 
     function getWebDavSyncStatus() {
         return Object.assign(cloneStoreData(webDavSyncStatus), {
+            configured: isWebDavConfigured(),
+            enabled: isWebDavSyncEnabled(),
             latestFailureDetail: getLatestWebDavFailureDetailFromStatus(webDavSyncStatus),
             autoReady: isWebDavAutoSyncReady(),
             suppressed: isWebDavAutoSyncSuppressed(),
@@ -371,6 +375,10 @@ function createWebDavSyncService(deps) {
         };
     }
 
+    function isWebDavSyncEnabled() {
+        return getStoredWebDavConfigSnapshot().enabled === true;
+    }
+
     function isWebDavConfigured() {
         let config = getWebDavSyncConfig();
         return config.url !== '' && config.username !== '' && config.password !== '' && config.remotePath !== '';
@@ -388,6 +396,33 @@ function createWebDavSyncService(deps) {
         if (store.get(WEBDAV_AUTO_SYNC_READY_KEY) === normalizedReady) return;
         store.set(WEBDAV_AUTO_SYNC_READY_KEY, normalizedReady);
         appendWebDavSyncLog('auto-sync-ready', `${ normalizedReady ? 'enabled' : 'disabled' }${ reason ? ' | ' + reason : '' }`);
+    }
+
+    function setWebDavSyncEnabled(enabled, reason) {
+        let store = getStoreOrNull();
+        if (store == null) {
+            return Object.assign(getStoredWebDavConfigSnapshot(), {
+                hasPassword: cachedWebDavPassword !== ''
+            });
+        }
+
+        let currentConfig = cloneStoreData(store.get(WEBDAV_SYNC_CONFIG_KEY, {}));
+        let normalizedEnabled = enabled === true;
+        currentConfig.enabled = normalizedEnabled;
+        store.set(WEBDAV_SYNC_CONFIG_KEY, currentConfig);
+
+        if (!normalizedEnabled) {
+            if (webDavAutoPushTimer) {
+                clearTimeout(webDavAutoPushTimer);
+                webDavAutoPushTimer = null;
+            }
+            clearQueuedAutoPushes('disabled-by-user');
+        }
+
+        appendWebDavSyncLog('auto-sync-toggle', `${ normalizedEnabled ? 'enabled' : 'disabled' }${ reason ? ' | ' + reason : '' }`);
+        return Object.assign(getStoredWebDavConfigSnapshot(), {
+            hasPassword: cachedWebDavPassword !== ''
+        });
     }
 
     function getSyncPayloadMap() {
@@ -625,6 +660,16 @@ function createWebDavSyncService(deps) {
         }
 
         if (type === 'autoPush') {
+            if (!isWebDavSyncEnabled()) {
+                appendWebDavSyncLog('auto-push-skip', `disabled-by-user [${ intentOptions.reason || 'unknown' }]`);
+                return Promise.resolve({
+                    ok: true,
+                    skipped: true,
+                    disabledByUser: true,
+                    message: i18n.__('webdav-sync-user-disabled')
+                });
+            }
+
             if (!isWebDavAutoSyncReady()) {
                 appendWebDavSyncLog('auto-push-skip', `initial-sync-required [${ intentOptions.reason || 'unknown' }]`);
                 return Promise.resolve({
@@ -670,6 +715,26 @@ function createWebDavSyncService(deps) {
             sortWebDavCoordinatorQueue();
             processWebDavCoordinatorQueue();
             return operation.promise;
+        }
+
+        if (type === 'startupPull' && !isWebDavSyncEnabled()) {
+            appendWebDavSyncLog('startup-sync-skip', 'disabled-by-user');
+            return Promise.resolve({
+                ok: true,
+                skipped: true,
+                disabledByUser: true,
+                message: i18n.__('webdav-sync-user-disabled')
+            });
+        }
+
+        if (type === 'beforeQuitFlush' && !isWebDavSyncEnabled()) {
+            appendWebDavSyncLog('quit-flush-skip', `disabled-by-user [${ intentOptions.reason || 'unknown' }]`);
+            return Promise.resolve({
+                ok: true,
+                skipped: true,
+                disabledByUser: true,
+                message: i18n.__('webdav-sync-user-disabled')
+            });
         }
 
         if (type === 'beforeQuitFlush' && !isWebDavAutoSyncReady()) {
@@ -788,7 +853,8 @@ function createWebDavSyncService(deps) {
             detail: detail || '',
             interactive: false,
             primaryLabel: '',
-            secondaryLabel: ''
+            secondaryLabel: '',
+            tertiaryLabel: ''
         };
 
         if (state === 'syncing') {
@@ -800,6 +866,7 @@ function createWebDavSyncService(deps) {
             payload.interactive = true;
             payload.primaryLabel = i18n.__('webdav-sync-exit-upload-local');
             payload.secondaryLabel = i18n.__('webdav-sync-exit-download-cloud');
+            payload.tertiaryLabel = i18n.__('cancel');
         } else if (state === 'timeout') {
             payload.interactive = true;
             payload.primaryLabel = i18n.__('webdav-sync-exit-wait');
@@ -830,9 +897,9 @@ function createWebDavSyncService(deps) {
 
     async function runExitSyncAttempt(source) {
         appendWebDavSyncLog('exit-sync-attempt', source || 'unknown');
-        if (!isWebDavConfigured()) {
+        if (!isWebDavConfigured() || !isWebDavSyncEnabled()) {
             clearWebDavUnsyncedExitMarker();
-            appendWebDavSyncLog('exit-sync-success', `${ source || 'unknown' } | webdav-not-configured`);
+            appendWebDavSyncLog('exit-sync-success', `${ source || 'unknown' } | ${ !isWebDavConfigured() ? 'webdav-not-configured' : 'disabled-by-user' }`);
             return { ok: true, skipped: true };
         }
 
@@ -967,6 +1034,12 @@ function createWebDavSyncService(deps) {
             if (decision === 'retry') {
                 appendWebDavSyncLog('exit-user-retry-sync', authority.source || 'unknown');
                 continue;
+            }
+            if (decision === 'cancel') {
+                clearWebDavUnsyncedExitMarker();
+                hideExitDialog();
+                appendWebDavSyncLog('exit-user-cancelled-exit', authority.source || 'unknown');
+                return { cancelled: true };
             }
 
             setWebDavUnsyncedExitMarker(authority.source, syncResult.reason || 'user-force-quit');
@@ -1344,6 +1417,19 @@ function createWebDavSyncService(deps) {
 
     async function executeStartupPullOperation(operation) {
         appendWebDavSyncLog('startup-sync-begin');
+        if (!isWebDavSyncEnabled()) {
+            setWebDavSyncStatus('startupPull', 'idle', i18n.__('webdav-sync-user-disabled'), '', 'startupPull');
+            lastSyncedCoreSignature = computeCoreSyncSignature();
+            synchronizeWebDavObservedState('startup-disabled-by-user');
+            appendWebDavSyncLog('startup-sync-skip', 'disabled-by-user');
+            return {
+                ok: true,
+                skipped: true,
+                disabledByUser: true,
+                message: i18n.__('webdav-sync-user-disabled')
+            };
+        }
+
         if (!isWebDavConfigured()) {
             setWebDavAutoSyncReady(false, 'startup-not-configured');
             setWebDavSyncStatus('startupPull', 'idle', i18n.__('webdav-sync-auto-idle'), '', 'startupPull');
@@ -1449,6 +1535,16 @@ function createWebDavSyncService(deps) {
             };
         }
 
+        if (operation.type === 'autoPush' && !isWebDavSyncEnabled()) {
+            appendWebDavSyncLog('auto-push-skip', `disabled-by-user [${ reason }]`);
+            return {
+                ok: true,
+                skipped: true,
+                disabledByUser: true,
+                message: i18n.__('webdav-sync-user-disabled')
+            };
+        }
+
         if (coordinator.remoteWriteFrozen && !canOperationBypassWebDavWriteFreeze(operation)) {
             logWebDavWriteBlocked(operation, coordinator.remoteWriteFreezeReason || 'awaiting-confirmation');
             return {
@@ -1542,6 +1638,7 @@ function createWebDavSyncService(deps) {
 
     function scheduleAutoWebDavPush(reason) {
         if (!isWebDavConfigured()) return;
+        if (!isWebDavSyncEnabled()) return;
         if (!isWebDavAutoSyncReady()) return;
         if (isWebDavAutoSyncSuppressed()) return;
         if (webDavAutoPushTimer) clearTimeout(webDavAutoPushTimer);
@@ -1585,7 +1682,9 @@ function createWebDavSyncService(deps) {
         }
         let decision = 'force-quit';
         if (authority.dialogState === 'initial-sync-choice') {
-            decision = message.action === 'primary' ? 'upload-local' : 'download-cloud';
+            if (message.action === 'primary') decision = 'upload-local';
+            else if (message.action === 'secondary') decision = 'download-cloud';
+            else decision = 'cancel';
         } else if (authority.dialogState === 'timeout') {
             decision = message.action === 'primary' ? 'wait' : 'force-quit';
         } else if (authority.dialogState === 'failed') {
@@ -1637,13 +1736,15 @@ function createWebDavSyncService(deps) {
         });
 
         ipcMain.handle('webdav-sync-status', function () {
-            return Object.assign({
-                configured: isWebDavConfigured()
-            }, getWebDavSyncStatus());
+            return getWebDavSyncStatus();
         });
 
         ipcMain.handle('webdav-config:getUiState', async function () {
             return await getWebDavConfigUiState();
+        });
+
+        ipcMain.handle('webdav-config:setEnabled', async function (event, payload) {
+            return setWebDavSyncEnabled(payload && payload.enabled === true, 'settings-toggle');
         });
 
         ipcMain.handle('webdav-config:setNonSensitive', async function (event, payload) {
