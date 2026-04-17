@@ -16,11 +16,39 @@
 
 <body>
     <script src="supporter.js"></script>
+    <style>
+        #main {
+            padding: 10px 12px;
+        }
+
+        #timer {
+            width: 100% !important;
+            max-width: 100%;
+        }
+
+        #dialog-buttons {
+            width: 100% !important;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        #dialog-buttons .btn {
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+    </style>
     <div class="d-flex mx-auto text-dark" id="main">
         <div id="timer" class="justify-content-left align-content-left text-left"
              style="transform: translateY(2px); width: 210px; -webkit-app-region: drag; -webkit-user-select: none;">
             <p class="small text-grey font-weight-bolder" style="margin-left: 0" id="dialog-title">wnr</p>
+            <div id="dialog-spinner" class="d-none mb-2">
+                <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
+            </div>
             <p id="dialog-msg" class="small" style="line-height: 1.5">Message</p>
+            <p id="dialog-detail" class="small text-muted d-none" style="line-height: 1.5"></p>
             <div id="dialog-buttons" style="width:210px" class="text-right">
                 <a type="button" id="dialog-cancel" class="btn btn-outline-secondary btn-sm text-right d-none"
                    style="font-size: 12px"
@@ -43,22 +71,82 @@
     <script>
         let executeAfter = "";
         let msgNode = $("#dialog-msg");
+        let detailNode = $("#dialog-detail");
+        let currentDialogKind = "default";
+        let currentExitSessionId = null;
 
         function ok() {
+            if (currentDialogKind === "exit-sync") {
+                ipc.send("custom-dialog-action", { action: "primary", exitSessionId: currentExitSessionId });
+                return;
+            }
             ipc.send("custom-dialog", { mode: "off", executeAfter: executeAfter });
         }
 
         function button3() {
+            if (currentDialogKind === "exit-sync") {
+                ipc.send("custom-dialog-action", { action: "tertiary", exitSessionId: currentExitSessionId });
+                return;
+            }
             ipc.send("custom-dialog", { mode: "button3_update", executeAfter: executeAfter });
         }
 
         function cancel() {
+            if (currentDialogKind === "exit-sync") {
+                ipc.send("custom-dialog-action", { action: "secondary", exitSessionId: currentExitSessionId });
+                return;
+            }
             ipc.send("custom-dialog", { mode: "cancel" });
         }
 
         ipc.on("dialog-init", function (event, message) {
+            if (message.dialogKind === "exit-sync") {
+                if (currentExitSessionId != null && message.exitSessionId < currentExitSessionId) {
+                    return;
+                }
+                currentDialogKind = "exit-sync";
+                currentExitSessionId = message.exitSessionId;
+                $("#dialog-title").text(message.title);
+                $("#dialog-msg").text(message.msg);
+                if (message.detail) detailNode.text(message.detail).removeClass("d-none");
+                else detailNode.text("").addClass("d-none");
+                $("#dialog-button-3").addClass("d-none");
+                $("#timer").css("width", "100%");
+                $("#dialog-buttons").css("width", "100%");
+
+                if (message.state === "syncing") {
+                    $("#dialog-spinner").removeClass("d-none");
+                    $("#dialog-ok").addClass("d-none");
+                    $("#dialog-cancel").addClass("d-none");
+                    $("#dialog-button-3").addClass("d-none");
+                    document.onkeydown = function () {};
+                } else {
+                    $("#dialog-spinner").addClass("d-none");
+                    $("#dialog-ok").removeClass("d-none").text(message.primaryLabel || i18n.__('ok'));
+                    $("#dialog-cancel").removeClass("d-none").text(message.secondaryLabel || i18n.__('cancel'));
+                    if (message.tertiaryLabel) {
+                        $("#dialog-button-3").removeClass("d-none").text(message.tertiaryLabel);
+                    } else {
+                        $("#dialog-button-3").addClass("d-none");
+                    }
+                    document.onkeydown = function (event1) {
+                        let ev = document.all ? window.event : event1;
+                        if ((ev.keyCode || ev.which) === 13) {
+                            ok();
+                        }
+                    }
+                }
+
+                ipc.send("custom-dialog-fit", Math.round((msgNode.height() + detailNode.height()) / parseFloat(msgNode.css('line-height'))));
+                return;
+            }
+
+            currentDialogKind = "default";
+            currentExitSessionId = null;
             $("#dialog-title").text(message.title);
             $("#dialog-msg").text(message.msg);
+            detailNode.text("").addClass("d-none");
+            $("#dialog-spinner").addClass("d-none");
             executeAfter = message.executeAfter;
             ipc.send("custom-dialog-fit", Math.round(msgNode.height() / parseFloat(msgNode.css('line-height'))));
             document.onkeydown = function () {

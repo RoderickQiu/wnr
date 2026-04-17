@@ -225,6 +225,9 @@ function customSolution(type, parent) {
         case "hotkey":
             hotkeyInitializer();
             break;
+        case "data-management":
+            webDavSyncInitializer();
+            break;
         case "locker":
             lockerInitializer();
             break;
@@ -610,6 +613,82 @@ function domString(type) {
                 <p class="small text-muted">
                     ${ i18n.__('statistics-import-tip') }
                 </p>
+            </li>
+            <li>
+                ${ i18n.__('webdav-sync-msg') }
+                <p class="small text-muted">
+                    ${ i18n.__('webdav-sync-tip') }
+                </p>
+                <div class="small text-muted webdav-sync-form">
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-url">${ i18n.__('webdav-sync-url') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-url" name="webdav-sync-url" type="text" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-username">${ i18n.__('webdav-sync-username') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-username" name="webdav-sync-username" type="text" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-password">${ i18n.__('webdav-sync-password') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-password" name="webdav-sync-password" type="password" />
+                        </div>
+                    </div>
+                    <div class="row align-items-center webdav-sync-form-row">
+                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                            <label for="webdav-sync-remote-path">${ i18n.__('webdav-sync-remote-path') }</label>
+                        </div>
+                        <div class="col-7 col-md-8">
+                            <input id="webdav-sync-remote-path" name="webdav-sync-remote-path" type="text"
+                                   placeholder="${ i18n.__('webdav-sync-remote-path-placeholder') }" />
+                        </div>
+                    </div>
+                </div>
+                <div class="row w-100 align-items-center webdav-sync-toggle-row">
+                    <div class="col-9 text-left">
+                        <label>${ i18n.__('webdav-sync-enabled') }</label><br />
+                        <p class="settings-msg">${ i18n.__('webdav-sync-enabled-tip') }</p>
+                    </div>
+                    <div class="col-3 text-right">
+                        <label class="switch-slide">
+                            <input type="checkbox" id="selection-webdav-sync-enabled" hidden>
+                            <label for="selection-webdav-sync-enabled" class="switch-slide-label"></label>
+                        </label>
+                    </div>
+                </div>
+                <div class="small text-muted webdav-sync-actions">
+                    <a class="rest underlined" href="javascript:webDavSyncTest()">
+                        ${ i18n.__('webdav-sync-test') + i18n.__('period-symbol') }
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a class="rest underlined" href="javascript:webDavSyncUpload()">
+                        ${ i18n.__('webdav-sync-upload') + i18n.__('period-symbol') }
+                    </a>
+                    &nbsp;|&nbsp;
+                    <a class="rest underlined" href="javascript:webDavSyncDownload()">
+                        ${ i18n.__('webdav-sync-download') + i18n.__('period-symbol') }
+                    </a>
+                </div>
+                <p class="small text-muted" id="webdav-sync-auto-status"></p>
+                <p class="small text-muted" id="webdav-sync-startup-status"></p>
+                <p class="small text-muted" id="webdav-sync-push-status"></p>
+                <p class="small text-muted" id="webdav-sync-status"></p>
+                <p class="small text-muted d-none" id="webdav-sync-detail-toggle-container">
+                    <a class="underlined" href="javascript:toggleWebDavSyncDetails()" id="webdav-sync-detail-toggle">
+                        ${ i18n.__('webdav-sync-show-details') }
+                    </a>
+                </p>
+                <pre class="small text-muted d-none" id="webdav-sync-detail"></pre>
             </li>
             </ul><br/>`;
             break;
@@ -1148,6 +1227,269 @@ function settingsImport(token, mode) {
         if (mode === "statistics") statistics.set(formerData);
         else store.set(formerData);
     }
+}
+
+async function getWebDavSyncConfigUiState() {
+    return await ipc.invoke('webdav-config:getUiState');
+}
+
+function setWebDavSyncStatus(message, isError) {
+    $("#webdav-sync-status")
+        .text(message || '')
+        .toggleClass("work", !!isError)
+        .toggleClass("rest", !isError && !!message);
+}
+
+function setWebDavSyncDetail(detail) {
+    const toggleContainer = $("#webdav-sync-detail-toggle-container");
+    const detailBox = $("#webdav-sync-detail");
+    const toggle = $("#webdav-sync-detail-toggle");
+    const text = detail || '';
+
+    if (text === '') {
+        toggleContainer.addClass("d-none");
+        detailBox.addClass("d-none").text('');
+        toggle.text(i18n.__('webdav-sync-show-details'));
+        return;
+    }
+
+    toggleContainer.removeClass("d-none");
+    detailBox.text(text).addClass("d-none");
+    toggle.text(i18n.__('webdav-sync-show-details'));
+}
+
+function toggleWebDavSyncDetails() {
+    const detailBox = $("#webdav-sync-detail");
+    const toggle = $("#webdav-sync-detail-toggle");
+    const hidden = detailBox.hasClass("d-none");
+    detailBox.toggleClass("d-none", !hidden);
+    toggle.text(i18n.__(hidden ? 'webdav-sync-hide-details' : 'webdav-sync-show-details'));
+}
+
+function setWebDavSyncRuntimeStatus(data) {
+    const enabledToggle = $("#selection-webdav-sync-enabled");
+    enabledToggle.prop('disabled', !data || data.configured !== true);
+    enabledToggle.prop('checked', !!(data && data.configured === true && data.enabled === true));
+
+    if (!data || data.configured !== true) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-auto-disabled'));
+        $("#webdav-sync-startup-status").text('');
+        $("#webdav-sync-push-status").text('');
+        setWebDavSyncDetail('');
+        return;
+    }
+
+    if (data.enabled !== true) {
+        $("#webdav-sync-auto-status").text(i18n.__('webdav-sync-user-disabled'));
+        $("#webdav-sync-startup-status").text('');
+        $("#webdav-sync-push-status").text('');
+        setWebDavSyncDetail('');
+        return;
+    }
+
+    $("#webdav-sync-auto-status").text(
+        data.autoReady
+            ? i18n.__('webdav-sync-auto-enabled')
+            : i18n.__('webdav-sync-auto-awaiting-initial-sync')
+    );
+    $("#webdav-sync-startup-status").text(
+        data.startupPull && data.startupPull.message
+            ? i18n.__('webdav-sync-startup-status') + data.startupPull.message
+            : ''
+    );
+    $("#webdav-sync-push-status").text(
+        data.lastPush && data.lastPush.message
+            ? i18n.__('webdav-sync-last-push-status') + data.lastPush.message
+            : ''
+    );
+    setWebDavSyncDetail(data.latestFailureDetail || '');
+}
+
+async function refreshWebDavSyncRuntimeStatus() {
+    let status = await ipc.invoke('webdav-sync-status');
+    setWebDavSyncRuntimeStatus(status);
+}
+
+let webDavPasswordPersistPromise = Promise.resolve();
+let webDavPasswordPersistTimer = null;
+let webDavPasswordDirty = false;
+
+function scheduleWebDavPasswordPersist() {
+    webDavPasswordDirty = true;
+    if (webDavPasswordPersistTimer != null) clearTimeout(webDavPasswordPersistTimer);
+    webDavPasswordPersistTimer = setTimeout(function () {
+        flushPendingWebDavPasswordInput().catch(function (error) {
+            console.error('Failed to persist pending WebDAV password', error);
+        });
+    }, 250);
+}
+
+async function flushPendingWebDavPasswordInput() {
+    let passwordInput = $("#webdav-sync-password");
+    if (passwordInput.length === 0) return;
+
+    if (webDavPasswordPersistTimer != null) {
+        clearTimeout(webDavPasswordPersistTimer);
+        webDavPasswordPersistTimer = null;
+    }
+
+    if (!webDavPasswordDirty) {
+        await webDavPasswordPersistPromise;
+        return;
+    }
+
+    const persist = async function () {
+        await handleWebDavPasswordInput();
+        webDavPasswordDirty = false;
+    };
+
+    webDavPasswordPersistPromise = webDavPasswordPersistPromise.then(persist, persist);
+    await webDavPasswordPersistPromise;
+}
+
+async function ensureWebDavConfigComplete() {
+    await flushPendingWebDavPasswordInput();
+
+    let config = await getWebDavSyncConfigUiState();
+    let isComplete = String(config.url || '').trim() !== ''
+        && String(config.username || '').trim() !== ''
+        && config.hasPassword === true
+        && String(config.remotePath || '').trim() !== '';
+
+    if (isComplete) return true;
+
+    let message = i18n.__('webdav-sync-missing-config');
+    setWebDavSyncStatus(message, true);
+    setWebDavSyncDetail('');
+    ipc.send("alert", message);
+    return false;
+}
+
+async function handleWebDavConfigInput() {
+    try {
+        await ipc.invoke('webdav-config:setNonSensitive', {
+            url: $("#webdav-sync-url").val(),
+            username: $("#webdav-sync-username").val(),
+            remotePath: $("#webdav-sync-remote-path").val()
+        });
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to save WebDAV configuration', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
+}
+
+async function handleWebDavEnabledToggle() {
+    try {
+        if (!(await ensureWebDavConfigComplete())) {
+            $("#selection-webdav-sync-enabled").prop('checked', false);
+            return;
+        }
+
+        await ipc.invoke('webdav-config:setEnabled', {
+            enabled: $("#selection-webdav-sync-enabled").prop('checked')
+        });
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to toggle WebDAV sync', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
+}
+
+async function handleWebDavPasswordInput() {
+    try {
+        let passwordInput = $("#webdav-sync-password");
+        let password = String(passwordInput.val() || '');
+        if (password === '') {
+            await ipc.invoke('webdav-config:clearPassword');
+        } else {
+            await ipc.invoke('webdav-config:setPassword', {
+                password: password
+            });
+        }
+        await refreshWebDavSyncRuntimeStatus();
+    } catch (error) {
+        console.error('Failed to save WebDAV password', error);
+        setWebDavSyncStatus(error && error.message ? error.message : i18n.__('webdav-sync-connection-failed'), true);
+    }
+}
+
+async function webDavSyncInitializer() {
+    let config = await getWebDavSyncConfigUiState();
+    $("#webdav-sync-url").val(config.url).on("input", function () {
+        handleWebDavConfigInput();
+    });
+    $("#webdav-sync-username").val(config.username).on("input", function () {
+        handleWebDavConfigInput();
+    });
+    $("#webdav-sync-password").val(config.password || '').on("input", function () {
+        scheduleWebDavPasswordPersist();
+    });
+    $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {
+        handleWebDavConfigInput();
+    });
+    $("#selection-webdav-sync-enabled")
+        .prop('checked', config.enabled === true)
+        .on("click", function () {
+            handleWebDavEnabledToggle();
+        });
+    setWebDavSyncStatus('');
+    setWebDavSyncDetail('');
+    await refreshWebDavSyncRuntimeStatus();
+}
+
+async function webDavSyncTest() {
+    await flushPendingWebDavPasswordInput();
+    setWebDavSyncStatus(i18n.__('webdav-sync-testing'), false);
+    let result = await ipc.invoke('webdav-sync-test');
+    setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
+    await refreshWebDavSyncRuntimeStatus();
+    if (!result.ok) ipc.send("alert", result.message);
+    else ipc.send("notify", result.message);
+}
+
+async function webDavSyncUpload() {
+    if (!(await ensureWebDavConfigComplete())) return;
+
+    setWebDavSyncStatus(i18n.__('webdav-sync-uploading'), false);
+    let result = await ipc.invoke('webdav-sync-upload', { confirmOverwrite: false });
+    if (result.needsConfirm) {
+        let overwriteMessage = i18n.__('webdav-sync-confirm-upload');
+        if (result.existingFiles && result.existingFiles.length > 0) {
+            overwriteMessage += '\n' + result.existingFiles.join(', ');
+        }
+        if (!window.confirm(overwriteMessage)) {
+            await ipc.invoke('webdav-sync-cancel-overwrite-confirm');
+            setWebDavSyncStatus('', false);
+            await refreshWebDavSyncRuntimeStatus();
+            return;
+        }
+        result = await ipc.invoke('webdav-sync-upload', { confirmOverwrite: true });
+    }
+    setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
+    await refreshWebDavSyncRuntimeStatus();
+    if (!result.ok) ipc.send("alert", result.message);
+    else ipc.send("notify", result.message);
+}
+
+async function webDavSyncDownload() {
+    if (!(await ensureWebDavConfigComplete())) return;
+
+    if (!window.confirm(i18n.__('webdav-sync-confirm-download'))) return;
+
+    setWebDavSyncStatus(i18n.__('webdav-sync-downloading'), false);
+    let result = await ipc.invoke('webdav-sync-download');
+    setWebDavSyncStatus(result.message, !result.ok);
+    setWebDavSyncDetail(result.detail || '');
+    if (!result.ok) {
+        ipc.send("alert", result.message);
+        return;
+    }
+    ipc.send("notify", result.message);
+    await refreshWebDavSyncRuntimeStatus();
+    ipc.send("relaunch-dialog");
 }
 
 //locker
