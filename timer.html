@@ -52,6 +52,12 @@
                 $('#exit').attr('title', i18n.__('exit'));
             </script>
         </div>
+        <a href="javascript:backcheck()" class="work timer-back-home" id="back-index"><i class="iconfont icon-angle-left"
+        ></i></a>
+        <div class="text-center lead work timer-back-home" id="backer">
+            <a href="javascript:backcheck()" class="work" id="backindex2"><i class="iconfont icon-angle-left"
+            ></i></a>
+        </div>
         <div id="timer" class="justify-content-center align-content-center text-center">
             &nbsp;&nbsp;
             <input type="text" id="title" class="text-center h4" maxlength="13"
@@ -181,12 +187,7 @@
                     class="iconfont icon-pause"></i></a></div>
             <br />
             <div class="text-center text-muted" id="more-options">
-                <a href="javascript:backcheck()" class="text-muted" id="back-index"><i class="iconfont icon-previous"
-                ></i><span
-                        class="focuser extreme-small controller-msg">
-                    <script>document.write(i18n.__('back'));</script>
-                </span></a>
-                <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                <span id="skipper-space" class="should-lock"></span>
                 <a href="javascript:skipper()" class="text-muted" id="skipper-container">
                     <span
                             class="focuser extreme-small controller-msg">
@@ -198,10 +199,6 @@
             <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
                    onkeydown="if(event.keyCode === 13) recheck($('#passcode-rechecker').val());" />
             <br />
-            <div class="text-center lead" id="backer">
-                <a href="javascript:backcheck()" class="text-muted" id="backindex2"><i class="iconfont icon-previous"
-                ></i></a>
-            </div>
             <div class="text-center text-muted" id="only-one">
                 <h3>
                     <script>document.write(i18n.__('only-one-min-left'));</script>
@@ -1276,6 +1273,7 @@
                     positive: false
                 });
                 if (systemName !== "darwin") $("#controller").css("display", "block");
+                $("#back-index").css("display", "none");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
                 if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");

@@ -539,6 +539,17 @@ li input:nth-last-child(4)::after {
     line-height: 150%;
 }
 
+.timer-back-home {
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 9999;
+    font-size: 18px;
+    text-align: left;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
 #stopper i::before {
     font-size: 2rem;
 }
@@ -749,7 +760,7 @@ li input:nth-last-child(4)::after {
 }
 
 #time-bar {
-    left: 10px;
+    left: 40px;
     padding: 2px;
 }
 
@@ -1104,6 +1115,12 @@ li input:nth-last-child(4)::after {
     -webkit-app-region: no-drag;
     /* let it clickable */
     -webkit-user-select: none;
+}
+
+.index-page #statistics-back {
+    top: 8px;
+    bottom: auto;
+    font-size: 18px;
 }
 
 .reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved {

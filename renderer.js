@@ -24,7 +24,7 @@ let titleAlternative = {
     y: 20,
     tipElements: "a, i, span, img, div, input",
     noTitle: false,
-    bottomTooltipSelectors: ['#statistics-back', '#back-index', '#statistics-back i'],
+    bottomTooltipSelectors: [],
     bottomTooltipMargin: 80,
     isBottomTooltipElement: function(element) {
         let $element = $(element);
