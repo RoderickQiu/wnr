@@ -190,7 +190,7 @@
                 <span id="skipper-space" class="should-lock"></span>
                 <a href="javascript:skipper()" class="text-muted" id="skipper-container">
                     <span
-                            class="focuser extreme-small controller-msg">
+                            class="focuser extreme-small controller-msg" id="skipper-label">
                     <script>document.write(i18n.__('skip'));</script>
                 </span><i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
@@ -652,6 +652,10 @@
         if (methodFromStart === 3) {
             $(".work").addClass("positive");
             $("#bottom-bar").css("display", "none");
+            $("#skipper-label").text(i18n.__('positive-reset'));
+            $("#skipper-label").addClass("positive-reset-label");
+            $("#skipper-container").attr('title', i18n.__('positive-reset-tip'));
+            $("#skipper").replaceWith('<span class="reset-icon" id="skipper" aria-hidden="true">&#8634;</span>');
 
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);

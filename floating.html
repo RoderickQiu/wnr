@@ -102,6 +102,16 @@
             }
         }
 
+        function renderSkipperIcon(isReset) {
+            if (isReset) {
+                $("#floating-skipper a").html('<span class="reset-icon" id="skipper" aria-hidden="true">&#8634;</span>');
+                $('#skipper').attr('title', i18n.__('positive-reset-tip'));
+            } else {
+                $("#floating-skipper a").html("<i class='iconfont icon-fastforward' id='skipper'></i>");
+                $('#skipper').attr('title', i18n.__('skipper'));
+            }
+        }
+
         const STOPPER_DEBOUNCE_MS = 320;
         function stopper(ev) {
             if (ev && ev.preventDefault) ev.preventDefault();
@@ -222,6 +232,7 @@
                     .addClass("work")
                     .removeClass("positive rest onlyRest");
                 $("#time-left-msg").text(i18n.__('min-left'));
+                renderSkipperIcon(false);
                 $('#floating-bottom-bar').css("background-color", newWorkColor + "19");
                 $('#floating-bottom-bar').css("display", "block");
                 method = 1;
@@ -233,6 +244,7 @@
                 $(".work").removeClass("onlyRest");
                 $('#floating-bottom-bar').css("display", "none");
                 $("#time-left-msg").text(i18n.__('min-already'));
+                renderSkipperIcon(true);
                 method = 3;
             }
 
