@@ -357,6 +357,38 @@ li input:nth-last-child(4)::after {
     padding-top: 5px;
 }
 
+.settings-tip-toggle {
+    width: 18px;
+    height: 18px;
+    margin: 0 0 2px 6px;
+    padding: 0;
+    border: 1px solid #6c757d55;
+    border-radius: 50%;
+    background: transparent;
+    color: #6c757d;
+    font-size: 12px;
+    line-height: 16px;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+}
+
+.settings-tip-toggle:hover, .settings-tip-toggle:focus {
+    color: #5490ea;
+    border-color: #5490ea;
+    outline: none;
+}
+
+.settings-tip-toggle[aria-expanded="true"] {
+    color: #5490ea;
+    border-color: #5490ea;
+    background: #5490ea12;
+}
+
+.settings-tip-content.settings-tip-collapsed {
+    display: none;
+}
+
 .settings-check {
     margin: -4px 6px 2px 2px !important;
 }

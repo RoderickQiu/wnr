@@ -18,6 +18,36 @@ function preferenceCreator(items, container, inner) {
                 break;
         }
     }
+    initializeSettingsTipToggles(container);
+}
+
+function initializeSettingsTipToggles(container) {
+    $(container).find('p.settings-msg').each(function () {
+        let tip = $(this);
+        if (tip.data('settings-tip-ready') || tip.hasClass('d-none')) return;
+        if ($.trim(tip.text()) === '' && tip.find('a').length === 0) return;
+
+        let button = $(`
+            <button type="button" class="settings-tip-toggle" aria-expanded="false" title="${ i18n.__('helper') }">
+                ?
+            </button>
+        `);
+
+        tip.data('settings-tip-ready', true);
+        tip.addClass('settings-tip-content settings-tip-collapsed');
+        tip.attr('aria-hidden', 'true');
+
+        let label = tip.prevAll('label:first');
+        if (label.length > 0) label.after(button);
+        else tip.before(button);
+
+        button.on('click', function () {
+            let expanded = button.attr('aria-expanded') === 'true';
+            button.attr('aria-expanded', expanded ? 'false' : 'true');
+            tip.toggleClass('settings-tip-collapsed', expanded);
+            tip.attr('aria-hidden', expanded ? 'true' : 'false');
+        });
+    });
 }
 
 function titleSolution(obj, parent) {
