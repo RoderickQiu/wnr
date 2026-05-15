@@ -260,6 +260,24 @@ li input:nth-last-child(4)::after {
 
 .positive-reset-label {
     font-size: 0.72rem;
+    margin: 0 3px 0 3px;
+    transform: translateY(-2px);
+}
+
+.positive-reset-button {
+    display: inline;
+}
+
+.positive-reset-button .reset-icon {
+    width: 0.9em;
+    font-size: 1.04rem;
+    font-weight: 700;
+    line-height: 1;
+    display: inline-block;
+    margin-left: 2px;
+    text-align: center;
+    transform: translateY(-3px);
+    vertical-align: baseline;
 }
 
 .controller-msg-big {
@@ -551,17 +569,6 @@ li input:nth-last-child(4)::after {
     line-height: 150%;
 }
 
-.timer-back-home {
-    position: absolute;
-    top: 6px;
-    left: 10px;
-    z-index: 9999;
-    font-size: 20px;
-    text-align: left;
-    -webkit-app-region: no-drag;
-    -webkit-user-select: none;
-}
-
 #stopper i::before {
     font-size: 2rem;
 }
@@ -623,14 +630,6 @@ li input:nth-last-child(4)::after {
 
 #settings-container p {
     margin-bottom: 0;
-}
-
-#settings-container .settings-title {
-    display: block;
-    font-size: 1rem;
-    font-weight: 600;
-    line-height: 1.35;
-    margin-bottom: 2px;
 }
 
 #settings-container a {
@@ -699,6 +698,11 @@ li input:nth-last-child(4)::after {
 
 #settings-container .webdav-sync-actions {
     margin-top: 8px;
+}
+
+#settings-container .webdav-sync-toggle-row > .text-left > label {
+    font-size: inherit;
+    color: inherit;
 }
 
 #settings-container .dropdown-reserved-button {
@@ -772,7 +776,7 @@ li input:nth-last-child(4)::after {
 }
 
 #time-bar {
-    left: 40px;
+    left: 10px;
     padding: 2px;
     top: 10px;
 }

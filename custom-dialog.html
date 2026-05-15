@@ -17,13 +17,28 @@
 <body>
     <script src="supporter.js"></script>
     <style>
+        html, body {
+            width: 100%;
+            margin: 0;
+        }
+
         #main {
+            width: 100%;
+            box-sizing: border-box;
             padding: 10px 12px;
         }
 
         #timer {
+            flex: 1 1 auto;
             width: 100% !important;
             max-width: 100%;
+            min-width: 0;
+        }
+
+        #dialog-msg,
+        #dialog-detail {
+            width: 100%;
+            margin-bottom: 12px;
         }
 
         #dialog-buttons {

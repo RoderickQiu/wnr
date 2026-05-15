@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 9
   cacheKey: 10
 
 "7zip-bin@npm:~5.2.0":
@@ -2429,7 +2429,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"keytar@npm:^7.9.0":
+"keytar@npm:7.9.0":
   version: 7.9.0
   resolution: "keytar@npm:7.9.0"
   dependencies:
@@ -4114,7 +4114,7 @@ __metadata:
     electron-store: "npm:8.2.0"
     i18n: "npm:0.15.3"
     jquery: "npm:3.7.1"
-    keytar: "npm:^7.9.0"
+    keytar: "npm:7.9.0"
     node-fetch: "npm:2.7.0"
     node-notifier: "npm:10.0.1"
     node-shi: "npm:0.4.2"

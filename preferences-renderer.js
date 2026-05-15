@@ -738,9 +738,9 @@ function domString(type) {
             onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());"
             type="password" />
             <br /><br/>
-            <div class="text-muted small">
+            <small class="text-grey settings-title">
             ${ store.get('islocked') ? i18n.__('locker-settings-input-tip-lock-mode-on') : i18n.__('locker-settings-input-tip-lock-mode-off') }
-            </div></div></div>
+            </small></div></div>
             <br/>`
             ;
             break;
