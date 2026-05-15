@@ -1259,8 +1259,10 @@
 
             function ender() {
                 canStop = false;
+                canOpenFloating = false;
                 call('floating-destroy');
                 window.clearInterval(int);
+                $("#mini-mode").css("display", "none");
                 $("#time-cnt").css("display", "none");
                 $("#stop-count").css("display", "none");
                 $("#only-one").css("display", "none");
