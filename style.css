@@ -602,6 +602,14 @@ li input:nth-last-child(4)::after {
     margin-bottom: 0;
 }
 
+#settings-container .settings-title {
+    display: block;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.35;
+    margin-bottom: 2px;
+}
+
 #settings-container a {
     border: 0;
 }
