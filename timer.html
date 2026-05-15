@@ -189,7 +189,7 @@
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
                 <a href="javascript:skipper()" class="text-muted" id="skipper-container">
                     <span
-                            class="focuser extreme-small controller-msg">
+                            class="focuser extreme-small controller-msg" id="skipper-label">
                     <script>document.write(i18n.__('skip'));</script>
                 </span><i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
@@ -655,6 +655,11 @@
         if (methodFromStart === 3) {
             $(".work").addClass("positive");
             $("#bottom-bar").css("display", "none");
+            $("#skipper-label").text(i18n.__('positive-reset'));
+            $("#skipper-label").addClass("positive-reset-label");
+            $("#skipper-container").addClass("positive-reset-button");
+            $("#skipper-container").attr('title', i18n.__('positive-reset-tip'));
+            $("#skipper").replaceWith('<span class="reset-icon" id="skipper" aria-hidden="true">&#8634;</span>');
 
             timingData.set("last-recorded-minutes-left", 0);
             timingData.set("last-recorded-hours-left", 0);
@@ -747,6 +752,7 @@
                 ipc.send('warning-giver-restend', times === 0);
                 $("#controller").css("display", "none");
                 $("#more-options").css("display", "none");
+                $("#back-index").css("display", "none");
                 $timeBar.addClass("time-bar-focus");
                 $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
@@ -1155,6 +1161,7 @@
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
+                        $("#back-index").css("display", "none");
                         $timeBarMacOS.addClass("time-bar-focus");
                         $timeBar.addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
@@ -1223,6 +1230,7 @@
                         $bottomBar.css("height", "100%");
                         $("#controller").css("display", "none");
                         $("#more-options").css("display", "none");
+                        $("#back-index").css("display", "none");
                         $timeBar.addClass("time-bar-focus");
                         $timeBarMacOS.addClass("time-bar-focus");
                         $nowTiming.addClass("display-1");
@@ -1258,8 +1266,10 @@
 
             function ender() {
                 canStop = false;
+                canOpenFloating = false;
                 call('floating-destroy');
                 window.clearInterval(int);
+                $("#mini-mode").css("display", "none");
                 $("#time-cnt").css("display", "none");
                 $("#stop-count").css("display", "none");
                 $("#only-one").css("display", "none");
@@ -1276,6 +1286,7 @@
                     positive: false
                 });
                 if (systemName !== "darwin") $("#controller").css("display", "block");
+                $("#back-index").css("display", "none");
                 $("#backer").css("display", "block");
                 $("#more-options").css("display", "none");
                 if (styleCache.get('isdark')) $('html').css("border", "#ffffff33 1px solid");

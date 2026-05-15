@@ -42,6 +42,8 @@
 	"tip": "Press Enter to submit",
 	"back-index": "Give up the schedule & Back",
 	"skipper": "Skip current timer",
+	"positive-reset": "Reset",
+	"positive-reset-tip": "Reset the current stopwatch to zero and start again; saved statistics will not be cleared.",
 	"not-enough": "Some items weren't set or the time is less than 5s, so the timer cannot start.",
 	"too-long": "The time is too long. Please make it less than a day.",
 	"back": "Back",
