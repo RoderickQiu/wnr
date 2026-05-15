@@ -553,10 +553,10 @@ li input:nth-last-child(4)::after {
 
 .timer-back-home {
     position: absolute;
-    top: 8px;
+    top: 6px;
     left: 10px;
     z-index: 9999;
-    font-size: 18px;
+    font-size: 20px;
     text-align: left;
     -webkit-app-region: no-drag;
     -webkit-user-select: none;
@@ -774,6 +774,7 @@ li input:nth-last-child(4)::after {
 #time-bar {
     left: 40px;
     padding: 2px;
+    top: 10px;
 }
 
 #logo-bar {
@@ -1130,9 +1131,9 @@ li input:nth-last-child(4)::after {
 }
 
 .index-page #statistics-back {
-    top: 8px;
+    top: 6px;
     bottom: auto;
-    font-size: 18px;
+    font-size: 20px;
 }
 
 .reserved-cycle, .dropdown-reserved-button, .dropdown-menu-reserved {
