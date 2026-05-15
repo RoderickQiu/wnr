@@ -100,6 +100,7 @@ function isInDark() {
 
 ipc.on('darkModeChanges', () => {
     isInDark();
+    if (typeof reloadTheme === 'function') reloadTheme();
 });//dark mode settings
 ipc.on('darkModeChanges-settings', function () {
     isInDark();
