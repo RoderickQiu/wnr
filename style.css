@@ -1058,6 +1058,7 @@ li input:nth-last-child(4)::after {
     color: #6c757d !important;
     line-height: 2;
     font-weight: 500 !important;
+    -webkit-app-region: no-drag;
 }
 
 #time-statistics-sub-bar a {
