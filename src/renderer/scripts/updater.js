@@ -1,5 +1,5 @@
 const nowTime = new Date().getTime();
-const version = require("./package.json")["version"];
+const version = require("../../package.json")["version"];
 const fetch = require('node-fetch');
 const compareVersion = require('compare-version');
 

@@ -397,7 +397,7 @@ function soundAfter(val) {
     let workSelection = store.has('work-time-end-sound') ? store.get('work-time-end-sound')
         : (store.has('time-end-sound') ? store.get('time-end-sound') : 'tick');
     if (workSelection !== i18n.__('custom'))
-        player.src = path.join(__dirname, '\\res\\sound\\' + workSelection + '.mp3');
+        player.src = path.join(__dirname, '..\\..\\res\\sound\\' + workSelection + '.mp3');
     else {
         let customWork = store.get('custom-work-time-end-sound');
         if (!customWork || customWork === '')

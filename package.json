@@ -2,7 +2,7 @@
 	"name": "wnr",
 	"version": "1.32.0",
 	"description": "Work and rest, with wnr now!",
-	"main": "main.js",
+	"main": "src/main/main.js",
 	"scripts": {
 		"dep-update": "yarn",
 		"start": "cross-env NODE_ENV=development electron .",

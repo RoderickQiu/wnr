@@ -7,16 +7,16 @@
     <meta http-equiv="Content-Type" content="text/html" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimal-ui" />
     <!-- solve the electron-jquery conflict, style changed due to a vscode problem -->
-    <link rel="preload" as="style" href="loader.css" onload="this.rel='stylesheet'">
+    <link rel="preload" as="style" href="../styles/loader.css" onload="this.rel='stylesheet'">
     <!-- loader style preload -->
     <script>
         window.$ = require("jquery/dist/jquery.slim.min.js");
         require("popper.js");
         require("bootstrap/dist/js/bootstrap.min.js");
     </script>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="res/fonts/iconfont.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../res/fonts/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/style.css" />
 </head>
 
 <body>
@@ -42,8 +42,8 @@
     <div class="right-resize"></div>
     <div class="bottom-resize"></div>
 
-    <script src="supporter.js"></script><!-- support wnr running -->
-    <script src="updater.js"></script><!-- check for updates -->
+    <script src="../scripts/supporter.js"></script><!-- support wnr running -->
+    <script src="../scripts/updater.js"></script><!-- check for updates -->
     <script>
         if (!store.get('tour')) {
             store.set('tour', 'true');
@@ -116,7 +116,7 @@
     <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
         <div id="logo-bar">
             <a class="rest" href="javascript:call('about')" role="button">
-                <img src="res/icons/wnrIcon.png" width="16.8px" />
+                <img src="../../res/icons/wnrIcon.png" width="16.8px" />
             </a>
         </div>
         <div id="statistics-back">
@@ -343,18 +343,18 @@
         $("#new-feature").hide();
 
         //new feature message
-        if (require("./update.json")["feature-introduction"] && !store.has("introduced-" + require("./update.json").version)) {
-            $("#new-feature-title").html(require("./update.json")["introduce"][store.get("i18n")]["title"]);
-            $("#new-feature-description").html(require("./update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
-            $("#new-feature-description-universal").html(require("./update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
-            //$("#new-feature-image").attr("src", require("./update.json")["introduce"][store.get("i18n")]["image"]);
+        if (require("../../update.json")["feature-introduction"] && !store.has("introduced-" + require("../../update.json").version)) {
+            $("#new-feature-title").html(require("../../update.json")["introduce"][store.get("i18n")]["title"]);
+            $("#new-feature-description").html(require("../../update.json")["introduce"][store.get("i18n")]["description"][process.platform]);
+            $("#new-feature-description-universal").html(require("../../update.json")["introduce"][store.get("i18n")]["description"]["universal"]);
+            //$("#new-feature-image").attr("src", require("../../update.json")["introduce"][store.get("i18n")]["image"]);
             $("#new-feature").show();
             $("#bottom-btn").hide();
             $("#set").hide();
             $("#all-sum").hide();
             $("#statistics").hide();
             $("#settings").hide();
-            store.set("introduced-" + require("./update.json").version, true);
+            store.set("introduced-" + require("../../update.json").version, true);
         }
 
         function newFeatureClose() {
@@ -718,8 +718,8 @@
             }
         }, 500);
     </script>
-    <script src="renderer.js"></script>
-    <script src="theme.js"></script>
+    <script src="../scripts/renderer.js"></script>
+    <script src="../scripts/theme.js"></script>
 </body>
 
 </html>

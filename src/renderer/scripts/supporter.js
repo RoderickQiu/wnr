@@ -29,7 +29,7 @@ const languageList = ['en', 'zh-CN', 'zh-TW', 'ko'],//locale code
 
 i18n.configure({
     locales: languageList,
-    directory: __dirname + '/locales',
+    directory: path.join(__dirname, '../../locales'),
     missingKeyFn(locale, value) {
         console.warn(`missing translation of "${ value }" in [${ locale }]!`)
         return `${ value }-[${ locale }]`;

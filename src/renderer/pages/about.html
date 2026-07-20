@@ -10,14 +10,14 @@
     <script>
         window.$ = require("jquery/dist/jquery.slim.min.js");
     </script>
-    <link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="res/fonts/iconfont.css" />
-    <link rel="stylesheet" type="text/css" href="style.css" />
+    <link rel="stylesheet" href="../../node_modules/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../res/fonts/iconfont.css" />
+    <link rel="stylesheet" type="text/css" href="../styles/style.css" />
 </head>
 
 <body>
-    <script src="supporter.js"></script>
-    <script src="updater.js"></script>
+    <script src="../scripts/supporter.js"></script>
+    <script src="../scripts/updater.js"></script>
     <div class="d-flex mx-auto text-dark" id="about">
         <div id="controller">
             <a href="javascript:window.close()" class="small rest"><i class="iconfont icon-close"
@@ -30,12 +30,12 @@
         <div class="container-fluid align-self-center">
             <div class="row justify-content-center">
                 <div class="col-2 align-self-start">
-                    <img src="res/icons/wnrIcon.png" width="100%" />
+                    <img src="../../res/icons/wnrIcon.png" width="100%" />
                 </div>
                 <div class="col-8" id="about-content">
                     <h1>wnr</h1>
                     <p class="small text-muted">
-                        <script>document.write(i18n.__('version') + require("./package.json").version);</script>
+                        <script>document.write(i18n.__('version') + require("../../package.json").version);</script>
                         |
                         <a href="javascript:updateChecker(2)" class="rest underlined">
                             <span id="manually">
@@ -54,7 +54,7 @@
                     </p>
                     <p class="small text-muted">
                         <a class="rest"
-                           href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">
+                           href="javascript:require('electron').shell.openExternal(require('../../package.json').homepage)">
                             <script>document.write(i18n.__('homepage'));</script>
                         </a> |
                         <a class="rest"
@@ -82,7 +82,7 @@
             </div>
         </div>
     </div>
-    <script src="renderer.js"></script>
+    <script src="../scripts/renderer.js"></script>
 </body>
 
 </html>

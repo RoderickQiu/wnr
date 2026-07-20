@@ -9,7 +9,7 @@ const fs = require("fs");
 const path = require("path");
 let i18n = require("i18n");
 let cmdOrCtrl = require('cmd-or-ctrl');
-const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
+const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar || {};
 const notifier = require('node-notifier')
 const fetch = require('node-fetch');
 let keytar = null;
@@ -92,10 +92,10 @@ function createWindow(loadMainPage = true) {
             backgroundThrottling: false
         },
         titleBarStyle: "hiddenInset",
-        icon: "./res/icons/wnrIcon.png"
+        icon: "../../res/icons/wnrIcon.png"
     });//optimize for cross-platform
 
-    if (loadMainPage) win.loadFile('index.html');
+    if (loadMainPage) win.loadFile('../renderer/pages/index.html');
 
     //to load without sparking
     win.once('ready-to-show', () => {
@@ -284,7 +284,7 @@ function addScreenSolution(windowNumber, display) {
         skipTaskbar: true
     });//optimize for cross platfrom
 
-    newWindows[windowNumber].loadFile('placeholder.html');
+    newWindows[windowNumber].loadFile('../renderer/pages/placeholder.html');
 
     if (process.env.NODE_ENV !== "development") newWindows[windowNumber].setFocusable(false);
     newWindows[windowNumber].setFullScreen(true);
@@ -320,7 +320,7 @@ function addLooseMultiScreenSolution(windowNumber, display) {
         closable: true // Allow closing in loose mode
     });
 
-    newWindows[windowNumber].loadFile('placeholder.html');
+    newWindows[windowNumber].loadFile('../renderer/pages/placeholder.html');
     
     // Use regular fullscreen instead of kiosk mode for loose multi-monitor
     newWindows[windowNumber].setFullScreen(true);
@@ -514,7 +514,7 @@ app.on('ready', async () => {
 
     i18n.configure({
         locales: languageCodeList,
-        directory: __dirname + '/locales',
+        directory: path.join(__dirname, '../../locales'),
         register: global,
         missingKeyFn(locale, value) {
             console.warn(`missing translation of "${ value }" in [${ locale }]!`)
@@ -580,7 +580,7 @@ app.on('ready', async () => {
         else win.setAlwaysOnTop(false);
     }
 
-    store.set("version", require("./package.json").version);
+    store.set("version", require("../../package.json").version);
 
     statisticsInitializer();
 
@@ -688,9 +688,9 @@ app.on('ready', async () => {
     }
 
     if (hasGotSingleInstanceLock) {
-        if (process.platform === "win32") tray = new Tray(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
-        else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '/res/icons/trayIconMacTemplate.png'));
-        else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '/res/icons/wnrIcon.png'));
+        if (process.platform === "win32") tray = new Tray(path.join(__dirname, '..\\..\\res\\icons\\iconWin.ico'));
+        else if (process.platform === "darwin") tray = new Tray(path.join(__dirname, '../../res/icons/trayIconMacTemplate.png'));
+        else if (process.platform === "linux") tray = new Tray(path.join(__dirname, '../../res/icons/wnrIcon.png'));
         try {
             tray.setToolTip('wnr');
         } catch (e) {
@@ -824,7 +824,7 @@ app.on('ready', async () => {
         skipTaskbar: true
     });
     require("@electron/remote/main").enable(customDialogWin.webContents);
-    customDialogWin.loadFile("custom-dialog.html");
+    customDialogWin.loadFile("../renderer/pages/custom-dialog.html");
     customDialogWin.on('closed', () => {
         customDialogWin = null;
     });
@@ -1136,7 +1136,7 @@ function traySolution(isFullScreen) {
     if (app.isReady()) {
         if (tray != null) {
             if (!isTimerWin) {
-                if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+                if (process.platform === "win32") tray.setImage(path.join(__dirname, '..\\..\\res\\icons\\iconWin.ico'));
                 else if (tray != null) tray.setTitle("");
             }
         }
@@ -1144,7 +1144,7 @@ function traySolution(isFullScreen) {
             if ((!store.get("islocked")) && win != null) win.closable = true;
             if (process.platform === "win32" && win != null) win.setSkipTaskbar(false);
             contextMenu = Menu.buildFromTemplate([{
-                label: 'wnr' + i18n.__('v') + require("./package.json").version,
+                label: 'wnr' + i18n.__('v') + require("../../package.json").version,
                 click: function () {
                     if (!isTimerWin) {
                         if (process.platform === "darwin" && win != null) win.show();
@@ -1168,7 +1168,7 @@ function traySolution(isFullScreen) {
                     enabled: !isTimerWin,
                     label: i18n.__('statistics-enter'),
                     click: function () {
-                        if (win != null) win.loadFile('statistics.html');
+                        if (win != null) win.loadFile('../renderer/pages/statistics.html');
                         if (process.platform === "darwin" && win != null) win.show();
                     }
                 }, {
@@ -1208,7 +1208,7 @@ function traySolution(isFullScreen) {
                 label: i18n.__('onlyrest'),
                 click: function () {
                     if (win != null) {
-                        win.loadFile('index.html');
+                        win.loadFile('../renderer/pages/index.html');
                         win.webContents.once('did-finish-load', function () {
                             win.webContents.send("onlyrest");
                         });
@@ -1220,7 +1220,7 @@ function traySolution(isFullScreen) {
                 label: i18n.__('positive'),
                 click: function () {
                     if (win != null) {
-                        win.loadFile('index.html');
+                        win.loadFile('../renderer/pages/index.html');
                         win.webContents.once('did-finish-load', function () {
                             win.webContents.send("positive");
                         });
@@ -1282,7 +1282,7 @@ function traySolution(isFullScreen) {
             if (win != null && (!isLoose)) win.closable = false;
             if (process.platform === "win32" && win != null && (!isLoose)) win.setSkipTaskbar(true);
             contextMenu = Menu.buildFromTemplate([{
-                label: 'wnr' + i18n.__('v') + require("./package.json").version
+                label: 'wnr' + i18n.__('v') + require("../../package.json").version
             }, {
                 type: 'separator'
             }, {
@@ -1370,7 +1370,7 @@ function macOSFullscreenSolution(isFullScreen) {
                             label: i18n.__('onlyrest'),
                             click: function () {
                                 if (win != null) {
-                                    win.loadFile('index.html');
+                                    win.loadFile('../renderer/pages/index.html');
                                     win.webContents.once('did-finish-load', function () {
                                         win.webContents.send("onlyrest");
                                     });
@@ -1382,7 +1382,7 @@ function macOSFullscreenSolution(isFullScreen) {
                             label: i18n.__('positive'),
                             click: function () {
                                 if (win != null) {
-                                    win.loadFile('index.html');
+                                    win.loadFile('../renderer/pages/index.html');
                                     win.webContents.once('did-finish-load', function () {
                                         win.webContents.send("positive");
                                     });
@@ -1393,7 +1393,7 @@ function macOSFullscreenSolution(isFullScreen) {
                             enabled: !isTimerWin,
                             label: i18n.__('statistics'),
                             click: function () {
-                                if (win != null) win.loadFile('statistics.html');
+                                if (win != null) win.loadFile('../renderer/pages/statistics.html');
                             }
                         }, {
                             enabled: (!store.get('islocked')) && (!isTimerWin),
@@ -2007,7 +2007,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1],
-                    "win.loadFile('index.html');\n" +
+                    "win.loadFile('../renderer/pages/index.html');\n" +
                     "setFullScreenMode(false);\n" +
                     //"win.maximizable = false;\n" +
                     "if (store.get(\"top\") !== true) {\n" +
@@ -2199,7 +2199,7 @@ function about() {
                 },
             });
             require("@electron/remote/main").enable(aboutWin.webContents);
-            aboutWin.loadFile("about.html");
+            aboutWin.loadFile("../renderer/pages/about.html");
             win.setAlwaysOnTop(true, "floating");
             aboutWin.setAlwaysOnTop(true, "floating");
             aboutWin.focus();
@@ -2208,7 +2208,7 @@ function about() {
                 try {
                     let aboutWinTouchBar = new TouchBar({
                         items: [
-                            new TouchBarLabel({ label: "wnr " + i18n.__('v') + require("./package.json")["version"] })
+                            new TouchBarLabel({ label: "wnr " + i18n.__('v') + require("../../package.json")["version"] })
                         ]
                     });
                     aboutWinTouchBar.escapeItem = new TouchBarButton({
@@ -2256,7 +2256,7 @@ function settings(mode) {
             if (mode === 'locker') store.set("settings-goto", "locker");
             else if (mode === 'predefined-tasks') store.set("settings-goto", "predefined-tasks");
             else store.set("settings-goto", "normal");
-            settingsWin.loadFile("preferences.html");
+            settingsWin.loadFile("../renderer/pages/preferences.html");
             win.setAlwaysOnTop(true, "floating");
             settingsWin.setAlwaysOnTop(true, "floating");
             settingsWin.focus();
@@ -2323,7 +2323,7 @@ function tourguide() {
                 },
             });
             require("@electron/remote/main").enable(tourWin.webContents);
-            tourWin.loadFile("tourguide.html");
+            tourWin.loadFile("../renderer/pages/tourguide.html");
             win.setAlwaysOnTop(true, "floating");
             tourWin.setAlwaysOnTop(true, "floating");
             tourWin.focus();
@@ -2354,7 +2354,7 @@ function tourguide() {
 
 async function loadMainWindowAfterStartupInit() {
     if (win == null) return;
-    await win.loadFile('index.html');
+    await win.loadFile('../renderer/pages/index.html');
 }
 
 function appendWebDavSyncLog(event, detail) {
@@ -2450,8 +2450,8 @@ ipcMain.on("relaunch-dialog", function (event, message) {
     if (previousLang && previousLang !== currentLang) {
         try {
             const fs = require('fs');
-            let previousLangFile = path.join(__dirname, 'locales', previousLang + '.json');
-            let currentLangFile = path.join(__dirname, 'locales', currentLang + '.json');
+            let previousLangFile = path.join(__dirname, '../../locales', previousLang + '.json');
+            let currentLangFile = path.join(__dirname, '../../locales', currentLang + '.json');
             
             if (fs.existsSync(previousLangFile) && fs.existsSync(currentLangFile)) {
                 let previousLangData = JSON.parse(fs.readFileSync(previousLangFile, 'utf8'));
@@ -2536,7 +2536,7 @@ function externalTitle(title, notes) {
                     },
                     skipTaskbar: true
                 });
-                externalTitleWin.loadFile("external-title.html");
+                externalTitleWin.loadFile("../renderer/pages/external-title.html");
                 externalTitleWin.webContents.once('did-finish-load', () => {
                     externalTitleWin.show();
                     externalTitleWin.setAlwaysOnTop(true, "pop-up-menu");
@@ -2632,7 +2632,7 @@ function floating() {
                     },
                     skipTaskbar: true
                 });
-                floatingWin.loadFile("floating.html");
+                floatingWin.loadFile("../renderer/pages/floating.html");
                 floatingWin.webContents.once('did-finish-load', () => {
                     floatingWin.show();
                     floatingWin.setAlwaysOnTop(true, "pop-up-menu");
@@ -2690,10 +2690,10 @@ ipcMain.on('tray-image-change', function (event, message) {
 
     if (tray != null) {
         if (message === "stop") {
-            if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\wnrIconStopped.png'));
+            if (process.platform === "win32") tray.setImage(path.join(__dirname, '..\\..\\res\\icons\\wnrIconStopped.png'));
             if (tray != null) tray.setTitle(" " + i18n.__('stopped'));
         } else {
-            if (process.platform === "win32") tray.setImage(path.join(__dirname, '\\res\\icons\\iconWin.ico'));
+            if (process.platform === "win32") tray.setImage(path.join(__dirname, '..\\..\\res\\icons\\iconWin.ico'));
             if (!isPositiveTiming)
                 if (tray != null) tray.setTitle((trayH ? (trayH + ' ' + i18n.__('h')) : "") + trayMin + ' ' + i18n.__('min') + '| ' + timeLeftTip + " " + Math.floor(100 - progress * 100) + "% | " + i18n.__('today-total') + (estimCurrent + todaySum) + ' ' + i18n.__('min'));
             else {
@@ -2720,7 +2720,7 @@ ipcMain.on("progress-bar-set", function (event, message) {
 
 
         if (process.platform === "win32") {
-            win.setOverlayIcon(nativeImage.createFromPath(path.join(__dirname, '\\res\\icons\\overlay\\'
+            win.setOverlayIcon(nativeImage.createFromPath(path.join(__dirname, '..\\..\\res\\icons\\overlay\\'
                 + (message.remain <= 60 ? message.remain : 61) + '.png')), progress.toString());
             if (message.positive)
                 win.setTitle("wnr | " + i18n.__('min-already') + " " + message.remain + " " + i18n.__('min') + " | " + i18n.__('today-total') + getStyledTimeForTray(estimCurrent + todaySum));

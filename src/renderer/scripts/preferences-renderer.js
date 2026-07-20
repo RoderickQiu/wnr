@@ -310,7 +310,7 @@ function domString(type) {
                         ${ i18n.__('manually-check-for-update') }
                         </span>
                     </a>&nbsp;
-                    ${ i18n.__('manually-check-for-update-tip-1') + i18n.__('v') + require("./package.json").version + i18n.__('manually-check-for-update-tip-2') }
+                    ${ i18n.__('manually-check-for-update-tip-1') + i18n.__('v') + require("../../package.json").version + i18n.__('manually-check-for-update-tip-2') }
                 </p>
             </div>
             <div class="col-3 text-right">
@@ -1048,7 +1048,7 @@ function workTimeEndSoundSetting(val) {
         try {
             $(".custom-notify-sound-work-time-end").css("display", "none");
             let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.src = path.join(__dirname, "..\\..\\res\\sound\\" + val + ".mp3");
             player.loop = false;
             player.play();
         } catch (e) {
@@ -1065,7 +1065,7 @@ function restTimeEndSoundSetting(val) {
         try {
             $(".custom-notify-sound-rest-time-end").css("display", "none");
             let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.src = path.join(__dirname, "..\\..\\res\\sound\\" + val + ".mp3");
             player.loop = false;
             player.play();
         } catch (e) {
@@ -1082,7 +1082,7 @@ function allTimeEndSoundSetting(val) {
         try {
             $(".custom-notify-sound-all-time-end").css("display", "none");
             let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
+            player.src = path.join(__dirname, "..\\..\\res\\sound\\" + val + ".mp3");
             player.loop = false;
             player.play();
         } catch (e) {
