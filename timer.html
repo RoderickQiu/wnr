@@ -1478,7 +1478,17 @@
                 }
 
                 seconds -= hours * 3600 + minutes * 60;
-                $nowTiming.text(hours + h + minutes + min + seconds + s);
+                if (store.get("i18n").startsWith("ar")) {
+    $nowTiming.addClass('rtl-timer').html(
+        '\u2068' + h.trim() + ' ' + hours + '\u2069' +
+        ' ' +
+        '\u2068' + min.trim() + ' ' + minutes + '\u2069' +
+        ' ' +
+        '\u2068' + s.trim() + ' ' + seconds + '\u2069'
+    );
+} else {
+    $nowTiming.removeClass('rtl-timer').text(hours + h + minutes + min + seconds + s);
+}
 
                 timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                 if (systemName !== "darwin") $timeBar.html(timeGot);
@@ -1552,7 +1562,17 @@
                     }
 
                     seconds -= hours * 3600 + minutes * 60;
-                    $nowTiming.text(hours + h + minutes + min + seconds + s);
+                    if (store.get("i18n").startsWith("ar")) {
+    $nowTiming.addClass('rtl-timer').html(
+        '\u2068' + h.trim() + ' ' + hours + '\u2069' +
+        ' ' +
+        '\u2068' + min.trim() + ' ' + minutes + '\u2069' +
+        ' ' +
+        '\u2068' + s.trim() + ' ' + seconds + '\u2069'
+    );
+} else {
+    $nowTiming.removeClass('rtl-timer').text(hours + h + minutes + min + seconds + s);
+}
 
                     if (hours === 0 && minutes === 0 && seconds < 10) canOpenFloating = false;
 

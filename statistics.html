@@ -411,12 +411,23 @@
 
         function getStyledTime(minute) {
             let hour = Math.floor(minute / 60);
-            if (hour > 0) return hour + h + (minute - hour * 60) + min;
-            else return minute + min;
+            if (store.get("i18n").startsWith("ar")) {
+                if (hour > 0) return '\u2068' + h.trim() + ' ' + hour + '\u2069' + ' ' + '\u2068' + min.trim() + ' ' + (minute - hour * 60) + '\u2069';
+                else return '\u2068' + min.trim() + ' ' + minute + '\u2069';
+            } else {
+                if (hour > 0) return hour + h + (minute - hour * 60) + min;
+                else return minute + min;
+            }
         }
 
         function switchMode(mode) {
             statisticsMode = mode;
+            var rtlTimerEls = $('#work-time, #rest-time, #onlyrest-time, #positive-time, #sum, #work-time-with-chart, #rest-time-with-chart, #only-rest-time-with-chart, #positive-time-with-chart, #sum-with-chart');
+            if (store.get("i18n").startsWith("ar")) {
+                rtlTimerEls.addClass('rtl-timer');
+            } else {
+                rtlTimerEls.removeClass('rtl-timer');
+            }
             if (statisticsMode === "today") {
                 $("#today").css("font-weight", "bold");
                 $("#yesterday").css("font-weight", "normal");

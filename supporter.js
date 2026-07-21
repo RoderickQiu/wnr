@@ -23,8 +23,8 @@ let timingData = new Store({ name: 'timing-data' });//just contains timing cache
 
 isInDark();
 
-const languageList = ['en', 'zh-CN', 'zh-TW', 'ko'],//locale code
-    languageNameList = ['English', '简体中文', '正體中文', '한국어'],//real name
+const languageList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar'],//locale code
+    languageNameList = ['English', '简体中文', '正體中文', '한국어', 'العربية'],//real name
     isChinese = store.get("i18n").indexOf("zh") !== -1;
 
 i18n.configure({
@@ -36,6 +36,21 @@ i18n.configure({
     }
 });
 i18n.setLocale(store.get("i18n"));//set locale
+
+// Auto-isolate Arabic i18n output so Latin runs render correctly
+const _original__ = i18n.__.bind(i18n);
+i18n.__ = function (...args) {
+    const result = _original__(...args);
+    if (store.get("i18n") === 'ar' && typeof result === 'string') {
+        return '\u2068' + result + '\u2069';
+    }
+    return result;
+};
+
+// RTL for settings page only
+if (store.get("i18n") === 'ar' && window.location.href.includes('preferences.html')) {
+    document.documentElement.setAttribute('dir', 'rtl');
+}
 
 function isTimerWindow(isTimer) {
     if (isTimer) {

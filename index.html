@@ -379,11 +379,12 @@
                 onlyrest = true;
                 let countdownTime = store.has("simple-countdown-time") ? store.get("simple-countdown-time") : 2;
                 let countdownFocus = store.has("simple-countdown-focus") ? store.get("simple-countdown-focus") : false;
-                $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(countdownTime, {
-                    as: 'm',
-                    lang: store.get("i18n").replace(/-/g, '_'),
-                    ignoreError: true
-                }));
+                // $("#rest-time-onlyrest").val(shi.ArabicNumberTimeParser(countdownTime, {
+                //     as: 'm',
+                //     lang: store.get("i18n").replace(/-/g, '_'),
+                //     ignoreError: true
+                // }));
+                $("#rest-time-onlyrest").val(countdownTime);
                 document.getElementById("focus-rest-set-onlyrest").checked = countdownFocus;
                 allSet();
                 $("#rest-time-onlyrest").focus();
@@ -489,12 +490,13 @@
                         let calculatedRestTime = workTimeGet * getBreakPercentage();
                         restTimeGet = removeRedundantEnd(calculatedRestTime);
                         // Format the display value for the input field
-                        $("#rest-time").val(shi.ArabicNumberTimeParser(restTimeGet, {
-                            lang: store.get("i18n").toString().replace("-", "_"),
-                            as: "m",
-                            to: "m",
-                            ignoreError: true
-                        }));
+                        // $("#rest-time").val(shi.ArabicNumberTimeParser(restTimeGet, {
+                        //     lang: store.get("i18n").toString().replace("-", "_"),
+                        //     as: "m",
+                        //     to: "m",
+                        //     ignoreError: true
+                        // }));
+                        $("#rest-time").val(restTimeGet);
                     } else
                         restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
                             as: "m",
@@ -568,16 +570,18 @@
 
         function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
             $("#expand-left").html(name);
-            $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
-            $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, {
-                as: 'm',
-                lang: store.get("i18n").replace(/-/g, '_'),
-                ignoreError: true
-            }));
+            // $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
+            //     as: 'm',
+            //     lang: store.get("i18n").replace(/-/g, '_'),
+            //     ignoreError: true
+            // }));
+            // $("#rest-time").val(shi.ArabicNumberTimeParser(restTime, {
+            //     as: 'm',
+            //     lang: store.get("i18n").replace(/-/g, '_'),
+            //     ignoreError: true
+            // }));
+            $("#work-time").val(workTime);
+            $("#rest-time").val(restTime);
             if (loops > 1) $("#loop").val(loops + ' ' + i18n.__('times'));
             else $("#loop").val(loops + ' ' + i18n.__('times').replace(new RegExp('s(?!\w)', "g"), ""));
             document.getElementById("focus-work-set").checked = focusWhenWorking;

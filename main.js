@@ -51,7 +51,7 @@ let webDavSyncService = null;
 let localExitFallbackInProgress = false;
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko'], i//locale code
+let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar'], i//locale code
 let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
 let notificationNamesList = ['work-time-end', 'work-time-end-msg', 'rest-time-end', 'rest-time-end-msg', 'all-task-end', 'all-task-end-msg'];
 
@@ -553,6 +553,18 @@ app.on('ready', async () => {
     await webDavSyncService.performStartupSync();
     isChinese = store.get("i18n").indexOf("zh") !== -1;
     i18n.setLocale(store.get("i18n"));
+
+    // Auto-isolate Arabic i18n output so Latin runs render correctly
+    const _original__ = i18n.__.bind(i18n);
+    i18n.__ = function (...args) {
+        const result = _original__(...args);
+        if (store.get("i18n") === 'ar' && typeof result === 'string') {
+            return '\u2068' + result + '\u2069';
+        }
+        return result;
+    };
+    // register: global was used above, so update the global reference too
+    global.__ = i18n.__;
 
     timeLeftTip = i18n.__("time-left");
     positiveTimingTip = i18n.__("positive-timing");//this will be used in this file frequently
