@@ -614,8 +614,10 @@ li input:nth-last-child(4)::after {
     position: absolute;
     flex-direction: column;
     top: 70px;
-    margin: 24px 0 0 18px;
-    width: 89%;
+    left: 18px;
+    right: 18px;
+    width: auto;
+    margin: 24px 0 0;
     overflow-y: auto;
     overflow-x: hidden;
     height: 525px;
@@ -1205,4 +1207,54 @@ li input:nth-last-child(4)::after {
 
 .hotkey-set-label {
     padding-top: 0 !important;
+}
+
+#now-timing.rtl-timer,
+.rtl-timer {
+    direction: rtl;
+    unicode-bidi: isolate;
+}
+
+/*  RTL: Bootstrap text alignment swap  */
+[dir="rtl"] .text-left {
+    text-align: right !important;
+}
+[dir="rtl"] .text-right {
+    text-align: left !important;
+}
+
+/*  RTL: Absolute-positioned elements  */
+[dir="rtl"] #settings-title {
+    left: auto;
+    right: 20px;
+}
+[dir="rtl"] #settings-helper {
+    right: auto;
+    left: 14px;
+}
+[dir="rtl"] #controller,
+[dir="rtl"] #time-bar-macos {
+    right: auto;
+    left: 10px;
+}
+[dir="rtl"] #time-bar {
+    left: auto;
+    right: 10px;
+}
+[dir="rtl"] #logo-bar {
+    left: auto;
+    right: 10px;
+}
+[dir="rtl"] .switch-slide-label:after {
+    left: auto;
+    right: 2px;
+}
+[dir="rtl"] .switch-slide input:checked + label:after {
+    left: auto;
+    right: 27px;
+}
+[dir="rtl"] #settings-container .settings-title {
+    text-align: right !important;
+    width: 100%;
+    display: block;
 }

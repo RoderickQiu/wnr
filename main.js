@@ -20,6 +20,8 @@ try {
 }
 const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
+const { getLanguageValue } = require('./update-language');
+const { getSettingsWindowWidth } = require('./settings-window');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
@@ -51,7 +53,7 @@ let webDavSyncService = null;
 let localExitFallbackInProgress = false;
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko'], i//locale code
+let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'], i//locale code
 let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
 let notificationNamesList = ['work-time-end', 'work-time-end-msg', 'rest-time-end', 'rest-time-end-msg', 'all-task-end', 'all-task-end-msg'];
 
@@ -553,6 +555,18 @@ app.on('ready', async () => {
     await webDavSyncService.performStartupSync();
     isChinese = store.get("i18n").indexOf("zh") !== -1;
     i18n.setLocale(store.get("i18n"));
+
+    // Auto-isolate Arabic i18n output so Latin runs render correctly
+    const _original__ = i18n.__.bind(i18n);
+    i18n.__ = function (...args) {
+        const result = _original__(...args);
+        if (store.get("i18n") === 'ar' && typeof result === 'string') {
+            return '\u2068' + result + '\u2069';
+        }
+        return result;
+    };
+    // register: global was used above, so update the global reference too
+    global.__ = i18n.__;
 
     timeLeftTip = i18n.__("time-left");
     positiveTimingTip = i18n.__("positive-timing");//this will be used in this file frequently
@@ -2060,8 +2074,10 @@ ipcMain.on('update-feedback', function (event, message) {
         fetch('https://gitee.com/roderickqiu/wnr-backup/raw/master/update.json')
             .then(res => res.json())
             .then(json => {
-                for (let updateIterator = 0; updateIterator < json.content[store.get('i18n')].length; updateIterator++) {
-                    updateMessage += (updateIterator + 1).toString() + ". " + json.content[store.get('i18n')][updateIterator] + '\r';
+                const updateContent = getLanguageValue(json.content, store.get('i18n'));
+                if (!Array.isArray(updateContent)) throw new Error('Missing update content');
+                for (let updateIterator = 0; updateIterator < updateContent.length; updateIterator++) {
+                    updateMessage += (updateIterator + 1).toString() + ". " + updateContent[updateIterator] + '\r';
                 }
                 customDialog("update_on", i18n.__('update'), i18n.__('update-content') + "\r" + updateMessage, "shell.openExternal(\"https://scris.lanzoui.com/b01n0tb4j\");");
             })
@@ -2235,7 +2251,7 @@ function settings(mode) {
         if (win != null && settingsWin == null) {
             settingsWin = new BrowserWindow({
                 parent: win,
-                width: Math.floor((isChinese ? 420 : 472) * ratio),
+                width: Math.floor(getSettingsWindowWidth(store.get('i18n')) * ratio),
                 height: Math.floor(636 * ratio),
                 backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
                 maximizable: false,
@@ -2873,7 +2889,7 @@ ipcMain.on("zoom-ratio-change", function (event, message) {
     ratio = ratioList[message];
     win.setMinimumSize(Math.floor(349 * ratio), Math.floor(444 * ratio));
     win.setSize(Math.floor(360 * ratio), Math.floor(459 * ratio), true);
-    settingsWin.setSize(Math.floor((isChinese ? 420 : 472) * ratio), Math.floor(636 * ratio), true);
+    settingsWin.setSize(Math.floor(getSettingsWindowWidth(store.get('i18n')) * ratio), Math.floor(636 * ratio), true);
     win.webContents.send('zoom-ratio-feedback');
 })
 
@@ -2882,4 +2898,3 @@ ipcMain.on("theme-color-changed", function () {
     if (floatingWin != null) floatingWin.webContents.send('theme-color-changed');
     if (externalTitleWin != null) externalTitleWin.webContents.send('theme-color-changed');
 })
-

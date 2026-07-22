@@ -34,7 +34,9 @@ const config = {
             "en-US",
             "zh-CN",
             "zh-TW",
-            "ko-KR"
+            "ko-KR",
+            "ar-TN",
+            "fr-FR"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",
