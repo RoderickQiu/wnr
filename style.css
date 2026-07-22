@@ -614,8 +614,10 @@ li input:nth-last-child(4)::after {
     position: absolute;
     flex-direction: column;
     top: 70px;
-    margin: 24px 0 0 18px;
-    width: 89%;
+    left: 18px;
+    right: 18px;
+    width: auto;
+    margin: 24px 0 0;
     overflow-y: auto;
     overflow-x: hidden;
     height: 525px;
