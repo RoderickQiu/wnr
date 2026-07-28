@@ -923,9 +923,7 @@
                     isClockWorking = 0;//to stop
                     ipc.send("tray-image-change", "stop");
                     if (store.get("alarmtip") !== false) {
-                        var alarmtipMinutes = [3, 5, 10, 15, 20, 30, 60];
-                        var alarmtipIdx = store.get("alarmtip-duration");
-                        var alarmtipMs = ((alarmtipIdx >= 0 && alarmtipIdx < alarmtipMinutes.length) ? alarmtipMinutes[alarmtipIdx] : 10) * 60 * 1000;
+                        var alarmtipMs = require('./inactivity-duration')(store);
                         pausingTimeout = setInterval(function () {
                             ipc.send("notify", {
                                 title: i18n.__('alarm-for-not-using-wnr-dialog-box-title'),

@@ -690,10 +690,10 @@ function domString(type) {
                         <p class="settings-msg">${ i18n.__('webdav-sync-enabled-tip') }</p>
                     </div>
                     <div class="col-3 text-right">
-                        <label class="switch-slide">
-                            <input type="checkbox" id="selection-webdav-sync-enabled" hidden>
+                        <span class="switch-slide">
+                            <input type="checkbox" id="selection-webdav-sync-enabled" class="sr-only" role="switch">
                             <label for="selection-webdav-sync-enabled" class="switch-slide-label"></label>
-                        </label>
+                        </span>
                     </div>
                 </div>
                 <div class="small text-muted webdav-sync-actions">
@@ -1453,7 +1453,7 @@ async function webDavSyncInitializer() {
     $("#webdav-sync-username").val(config.username).on("input", function () {
         handleWebDavConfigInput();
     });
-    $("#webdav-sync-password").val(config.password || '').on("input", function () {
+    $("#webdav-sync-password").val('').attr('placeholder', config.hasPassword ? '••••••••' : '').on("input", function () {
         scheduleWebDavPasswordPersist();
     });
     $("#webdav-sync-remote-path").val(config.remotePath).on("input", function () {

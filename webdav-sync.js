@@ -10,7 +10,11 @@ const WEBDAV_UNSYNCED_EXIT_MARKER_KEY = 'webdav-sync-unsynced-exit';
 const WEBDAV_CREDENTIAL_SERVICE = 'wnr.webdav-sync';
 const WEBDAV_EXCLUDED_CONFIG_KEYS = ['webdav-sync', 'version', 'previous-language', 'just-back', 'just-launched', 'just-relaunched', 'settings-goto', WEBDAV_UNSYNCED_EXIT_MARKER_KEY];
 const WEBDAV_REQUEST_TIMEOUT_MS = 8000;
+const WEBDAV_MAX_RESPONSE_BYTES = 16 * 1024 * 1024;
+const WEBDAV_MANIFEST_FILE = 'manifest.json';
+const WEBDAV_APPLY_JOURNAL_FILE = 'webdav-apply-journal.json';
 const WEBDAV_SYNC_LOG_FILE = 'webdav-sync.log';
+const WEBDAV_SYNC_LOG_MAX_BYTES = 1024 * 1024;
 const WEBDAV_SYNC_INTENT_PRIORITY = {
     manualPull: 1,
     manualPush: 2,
@@ -165,10 +169,12 @@ function createWebDavSyncService(deps) {
         getStatisticsStore,
         getRecapStore,
         showExitDialog,
-        hideExitDialog
+        hideExitDialog,
+        isSettingsWebContents
     } = deps;
 
     let webDavWatchersStarted = false;
+    let webDavFileWatchers = [];
     let webDavAutoPushTimer = null;
     let lastSyncedCoreSignature = null;
     let webDavSyncStatus = {
@@ -185,6 +191,11 @@ function createWebDavSyncService(deps) {
     let ipcHandlersRegistered = false;
     let cachedWebDavPassword = '';
     let cachedWebDavCredentialError = '';
+    let credentialMutation = Promise.resolve();
+    let retryTimer = null;
+    let retryAttempt = 0;
+    let logWriteQueue = Promise.resolve();
+    let startupDeadlineAt = 0;
 
     function getStores() {
         return {
@@ -279,6 +290,7 @@ function createWebDavSyncService(deps) {
     }
 
     async function persistNonSensitiveWebDavConfig(nextConfig) {
+        return credentialMutation = credentialMutation.then(async function () {
         let store = getStoreOrNull();
         if (store == null) return getStoredWebDavConfigSnapshot();
 
@@ -292,14 +304,21 @@ function createWebDavSyncService(deps) {
             mergedConfig.enabled = false;
         }
         delete mergedConfig.password;
+        let previousConfig = getStoredWebDavConfigSnapshot();
+        if (buildWebDavCredentialAccount(previousConfig) !== buildWebDavCredentialAccount(mergedConfig) && cachedWebDavPassword !== '') {
+            await setCredentialPassword(mergedConfig, cachedWebDavPassword);
+            await deleteCredentialPassword(previousConfig);
+        }
         store.set(WEBDAV_SYNC_CONFIG_KEY, mergedConfig);
         store.delete('webdav-sync.password');
         setWebDavAutoSyncReady(false, 'settings-updated');
         await refreshCachedWebDavPassword(mergedConfig);
         return getStoredWebDavConfigSnapshot();
+        });
     }
 
     async function setWebDavPassword(password) {
+        return credentialMutation = credentialMutation.then(async function () {
         let normalizedPassword = String(password || '');
         let config = getStoredWebDavConfigSnapshot();
         await setCredentialPassword(config, normalizedPassword);
@@ -311,9 +330,11 @@ function createWebDavSyncService(deps) {
         return {
             hasPassword: normalizedPassword !== ''
         };
+        });
     }
 
     async function clearWebDavPassword() {
+        return credentialMutation = credentialMutation.then(async function () {
         let config = getStoredWebDavConfigSnapshot();
         await deleteCredentialPassword(config);
         let store = getStoreOrNull();
@@ -329,6 +350,7 @@ function createWebDavSyncService(deps) {
         return {
             hasPassword: false
         };
+        });
     }
 
     async function getWebDavConfigUiState() {
@@ -340,8 +362,7 @@ function createWebDavSyncService(deps) {
             && String(config.remotePath || '').trim() !== '';
         return Object.assign({}, config, {
             enabled: config.enabled === true && isConfigured,
-            hasPassword: cachedWebDavPassword !== '',
-            password: cachedWebDavPassword
+            hasPassword: cachedWebDavPassword !== ''
         });
     }
 
@@ -349,7 +370,14 @@ function createWebDavSyncService(deps) {
         try {
             const logPath = path.join(app.getPath('userData'), WEBDAV_SYNC_LOG_FILE);
             const line = `[${ new Date().toISOString() }] ${ event }${ detail ? ' | ' + detail : '' }\n`;
-            fs.appendFileSync(logPath, line, 'utf8');
+            logWriteQueue = logWriteQueue.then(async function () {
+                let stat = await fs.promises.stat(logPath).catch(function () { return null; });
+                if (stat && stat.size >= WEBDAV_SYNC_LOG_MAX_BYTES) {
+                    await fs.promises.unlink(logPath + '.1').catch(function () {});
+                    await fs.promises.rename(logPath, logPath + '.1');
+                }
+                await fs.promises.appendFile(logPath, line, 'utf8');
+            }).catch(console.log);
         } catch (e) {
             console.log(e);
         }
@@ -432,6 +460,7 @@ function createWebDavSyncService(deps) {
                 webDavAutoPushTimer = null;
             }
             clearQueuedAutoPushes('disabled-by-user');
+            if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
         }
 
         appendWebDavSyncLog('auto-sync-toggle', `${ normalizedEnabled ? 'enabled' : 'disabled' }${ reason ? ' | ' + reason : '' }`);
@@ -1206,7 +1235,7 @@ function createWebDavSyncService(deps) {
 
     async function readResponseTextSafe(response) {
         try {
-            return await response.text();
+            return await readBoundedResponseText(response);
         } catch (e) {
             return '';
         }
@@ -1214,20 +1243,47 @@ function createWebDavSyncService(deps) {
 
     async function fetchWebDav(url, options) {
         const controller = new AbortController();
+        const remainingStartupMs = startupDeadlineAt > 0 ? Math.max(1, startupDeadlineAt - Date.now()) : WEBDAV_REQUEST_TIMEOUT_MS;
         const timeout = setTimeout(function () {
             controller.abort();
-        }, WEBDAV_REQUEST_TIMEOUT_MS);
+        }, Math.min(WEBDAV_REQUEST_TIMEOUT_MS, remainingStartupMs));
 
         try {
-            return await fetch(url, Object.assign({}, options, {
+            let response = await fetch(url, Object.assign({}, options, {
                 signal: controller.signal
             }));
+            response.webDavAbortController = controller;
+            response.webDavTimeout = timeout;
+            return response;
         } catch (e) {
             if (e && e.name === 'AbortError') throw createWebDavError(i18n.__('webdav-sync-timeout'));
             throw createWebDavError(i18n.__('webdav-sync-connection-failed'), e && e.message ? e.message : String(e));
-        } finally {
-            clearTimeout(timeout);
         }
+    }
+
+    async function readBoundedResponseText(response) {
+        try {
+            let declared = Number(response.headers && response.headers.get && response.headers.get('content-length'));
+            if (declared > WEBDAV_MAX_RESPONSE_BYTES) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), 'response too large');
+            if (response.body && typeof response.body.on === 'function') {
+                let chunks = [], size = 0;
+                for await (let chunk of response.body) {
+                    size += chunk.length;
+                    if (size > WEBDAV_MAX_RESPONSE_BYTES) {
+                        response.webDavAbortController.abort();
+                        throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), 'response too large');
+                    }
+                    chunks.push(chunk);
+                }
+                return Buffer.concat(chunks).toString('utf8');
+            }
+            let text = await response.text();
+            if (Buffer.byteLength(text, 'utf8') > WEBDAV_MAX_RESPONSE_BYTES) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), 'response too large');
+            return text;
+        } catch (e) {
+            if (e && e.name === 'AbortError') throw createWebDavError(i18n.__('webdav-sync-timeout'));
+            throw e;
+        } finally { clearTimeout(response.webDavTimeout); }
     }
 
     async function ensureWebDavDirectory(config, authHeaders) {
@@ -1294,8 +1350,12 @@ function createWebDavSyncService(deps) {
             });
         }
 
-        if (response.status === 200) return true;
-        if (response.status === 404) return false;
+        if (response.status === 200) {
+            clearTimeout(response.webDavTimeout);
+            if (response.body && typeof response.body.destroy === 'function') response.body.destroy();
+            return true;
+        }
+        if (response.status === 404) { clearTimeout(response.webDavTimeout); return false; }
         if (response.status === 401 || response.status === 403) throw createWebDavError(i18n.__('webdav-sync-auth-failed'));
 
         let responseText = await readResponseTextSafe(response);
@@ -1330,6 +1390,7 @@ function createWebDavSyncService(deps) {
     async function hasExistingRemoteWebDavData() {
         let config = validateWebDavSyncConfig();
         let authHeaders = buildWebDavAuthHeaders(config);
+        if (await remoteFileExists(buildWebDavFileUrl(config, WEBDAV_MANIFEST_FILE), authHeaders)) return true;
         for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
             let fileInfo = WEBDAV_SYNC_FILES[i];
             let fileUrl = buildWebDavFileUrl(config, fileInfo.fileName);
@@ -1346,6 +1407,8 @@ function createWebDavSyncService(deps) {
 
         await ensureWebDavDirectory(config, authHeaders);
 
+        if (await remoteFileExists(buildWebDavFileUrl(config, WEBDAV_MANIFEST_FILE), authHeaders)) existingFiles.push(WEBDAV_MANIFEST_FILE);
+
         for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
             let fileInfo = WEBDAV_SYNC_FILES[i];
             let fileUrl = buildWebDavFileUrl(config, fileInfo.fileName);
@@ -1360,9 +1423,12 @@ function createWebDavSyncService(deps) {
             };
         }
 
+        let generation = `${ Date.now() }-${ Math.random().toString(16).slice(2) }`;
+        let manifest = { version: 1, generation: generation, files: {} };
         for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
             let fileInfo = WEBDAV_SYNC_FILES[i];
-            let response = await fetchWebDav(buildWebDavFileUrl(config, fileInfo.fileName), {
+            let generationFile = `${ generation }-${ fileInfo.fileName }`;
+            let response = await fetchWebDav(buildWebDavFileUrl(config, generationFile), {
                 method: 'PUT',
                 headers: Object.assign({
                     'Content-Type': 'application/json; charset=utf-8'
@@ -1370,12 +1436,24 @@ function createWebDavSyncService(deps) {
                 body: JSON.stringify(payloadMap[fileInfo.key], null, 2)
             });
 
-            if ([200, 201, 204].includes(response.status)) continue;
+            if ([200, 201, 204].includes(response.status)) {
+                clearTimeout(response.webDavTimeout);
+                manifest.files[fileInfo.key] = generationFile;
+                continue;
+            }
             if (response.status === 401 || response.status === 403) throw createWebDavError(i18n.__('webdav-sync-auth-failed'));
 
             let responseText = await readResponseTextSafe(response);
             throw createWebDavError(i18n.__('webdav-sync-upload-failed'), responseText);
         }
+
+        let manifestResponse = await fetchWebDav(buildWebDavFileUrl(config, WEBDAV_MANIFEST_FILE), {
+            method: 'PUT',
+            headers: Object.assign({ 'Content-Type': 'application/json; charset=utf-8' }, authHeaders),
+            body: JSON.stringify(manifest, null, 2)
+        });
+        clearTimeout(manifestResponse.webDavTimeout);
+        if (![200, 201, 204].includes(manifestResponse.status)) throw createWebDavError(i18n.__('webdav-sync-upload-failed'));
 
         await runWebDavSyncTestHook('before-upload-complete');
 
@@ -1390,9 +1468,22 @@ function createWebDavSyncService(deps) {
         let authHeaders = buildWebDavAuthHeaders(config);
         let fetchedPayloads = {};
 
+        let remoteFiles = {};
+        let manifestResponse = await fetchWebDav(buildWebDavFileUrl(config, WEBDAV_MANIFEST_FILE), { method: 'GET', headers: authHeaders });
+        if (manifestResponse.status === 200) {
+            let manifest;
+            try { manifest = JSON.parse(await readBoundedResponseText(manifestResponse)); } catch (e) { throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), e.message); }
+            if (!manifest || manifest.version !== 1 || !manifest.files) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'));
+            remoteFiles = manifest.files;
+        } else {
+            clearTimeout(manifestResponse.webDavTimeout);
+            if (manifestResponse.status !== 404) throw createWebDavError(i18n.__('webdav-sync-download-failed'));
+        }
         for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
             let fileInfo = WEBDAV_SYNC_FILES[i];
-            let response = await fetchWebDav(buildWebDavFileUrl(config, fileInfo.fileName), {
+            let remoteFileName = remoteFiles[fileInfo.key] || fileInfo.fileName;
+            if (!/^[A-Za-z0-9._-]+$/.test(remoteFileName)) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'));
+            let response = await fetchWebDav(buildWebDavFileUrl(config, remoteFileName), {
                 method: 'GET',
                 headers: authHeaders
             });
@@ -1405,7 +1496,7 @@ function createWebDavSyncService(deps) {
             }
 
             try {
-                fetchedPayloads[fileInfo.key] = JSON.parse(await response.text());
+                fetchedPayloads[fileInfo.key] = JSON.parse(await readBoundedResponseText(response));
             } catch (e) {
                 throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), e && e.message ? e.message : '');
             }
@@ -1416,7 +1507,11 @@ function createWebDavSyncService(deps) {
     }
 
     function applyRemoteWebDavPayloads(fetchedPayloads) {
-        applyRemoteWebDavPayloadsToStores(getStores(), fetchedPayloads);
+        let stores = getStores();
+        let journalPath = path.join(app.getPath('userData'), WEBDAV_APPLY_JOURNAL_FILE);
+        fs.writeFileSync(journalPath, JSON.stringify({ config: cloneStoreData(stores.store.store), statistics: cloneStoreData(stores.statistics.store), recap: cloneStoreData(stores.recapStore.store) }), 'utf8');
+        applyRemoteWebDavPayloadsToStores(stores, fetchedPayloads);
+        fs.unlinkSync(journalPath);
     }
 
     async function downloadWebDavSync() {
@@ -1501,6 +1596,8 @@ function createWebDavSyncService(deps) {
     }
 
     async function executePullOperation(operation, statusKey, source) {
+        if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+        retryAttempt = 0;
         try {
             await runWithWebDavSyncSuppressed(async function () {
                 await downloadWebDavSync();
@@ -1618,6 +1715,7 @@ function createWebDavSyncService(deps) {
                 setWebDavAutoSyncReady(true, 'manual-push-success');
             }
             setWebDavSyncStatus('lastPush', 'success', i18n.__('webdav-sync-upload-ok'), '', source);
+            retryAttempt = 0;
             appendWebDavSyncLog('auto-push-success', `${ reason } | task=${ uploadTask.taskId }${ stale ? ' | stale' : '' }`);
             return result;
         } catch (e) {
@@ -1629,7 +1727,12 @@ function createWebDavSyncService(deps) {
     }
 
     async function performStartupWebDavSync() {
-        await requestWebDavIntent('startupPull');
+        startupDeadlineAt = Date.now() + WEBDAV_REQUEST_TIMEOUT_MS;
+        try {
+            await requestWebDavIntent('startupPull');
+        } finally {
+            startupDeadlineAt = 0;
+        }
     }
 
     function clearWebDavWatchers() {
@@ -1638,9 +1741,9 @@ function createWebDavSyncService(deps) {
             clearTimeout(webDavAutoPushTimer);
             webDavAutoPushTimer = null;
         }
-        if (stores.store != null && stores.store.path) fs.unwatchFile(stores.store.path);
-        if (stores.statistics != null && stores.statistics.path) fs.unwatchFile(stores.statistics.path);
-        if (stores.recapStore != null && stores.recapStore.path) fs.unwatchFile(stores.recapStore.path);
+        if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+        webDavFileWatchers.forEach(function (watcher) { watcher.close(); });
+        webDavFileWatchers = [];
         webDavWatchersStarted = false;
     }
 
@@ -1665,6 +1768,10 @@ function createWebDavSyncService(deps) {
             } catch (e) {
                 console.log(e);
                 appendWebDavSyncLog('auto-push-timer-failed', e.detail || e.message || '');
+                if (isWebDavSyncEnabled() && retryAttempt < 5) {
+                    let waitMs = Math.min(60000, 1000 * Math.pow(2, retryAttempt++)) * (0.75 + Math.random() * 0.5);
+                    retryTimer = setTimeout(function () { scheduleAutoWebDavPush('retry'); }, waitMs);
+                }
             }
         }, 1500);
     }
@@ -1673,16 +1780,26 @@ function createWebDavSyncService(deps) {
         let stores = getStores();
         if (webDavWatchersStarted) return;
 
-        [
+        let watchedFiles = [
             { path: stores.store.path, reason: 'config' },
             { path: stores.statistics.path, reason: 'statistics' },
             { path: stores.recapStore.path, reason: 'recap' }
-        ].forEach(function (item) {
-            fs.watchFile(item.path, { interval: 1000 }, function (curr, prev) {
-                if (curr.mtimeMs === prev.mtimeMs) return;
-                appendWebDavSyncLog('watcher-change-detected', item.reason);
-                scheduleAutoWebDavPush(item.reason);
+        ];
+        let filesByDirectory = new Map();
+        watchedFiles.forEach(function (item) {
+            let directory = path.dirname(item.path);
+            if (!filesByDirectory.has(directory)) filesByDirectory.set(directory, new Map());
+            filesByDirectory.get(directory).set(path.basename(item.path), item.reason);
+        });
+        filesByDirectory.forEach(function (files, directory) {
+            let watcher = fs.watch(directory, { persistent: false }, function (eventType, fileName) {
+                let reason = files.get(String(fileName || ''));
+                if (!reason) return;
+                appendWebDavSyncLog('watcher-change-detected', reason);
+                scheduleAutoWebDavPush(reason);
             });
+            watcher.on('error', function (e) { appendWebDavSyncLog('watcher-error', e.message || String(e)); });
+            webDavFileWatchers.push(watcher);
         });
 
         webDavWatchersStarted = true;
@@ -1717,6 +1834,19 @@ function createWebDavSyncService(deps) {
             cachedWebDavCredentialError = e && e.message ? e.message : String(e);
         }
         await refreshCachedWebDavPassword();
+        let journalPath = path.join(app.getPath('userData'), WEBDAV_APPLY_JOURNAL_FILE);
+        if (fs.existsSync(journalPath)) {
+            try {
+                let snapshot = JSON.parse(fs.readFileSync(journalPath, 'utf8'));
+                let stores = getStores();
+                applyFullStoreData(stores.store, snapshot.config);
+                applyFullStoreData(stores.statistics, snapshot.statistics);
+                applyFullStoreData(stores.recapStore, snapshot.recap);
+                fs.unlinkSync(journalPath);
+            } catch (e) {
+                appendWebDavSyncLog('apply-journal-recovery-failed', e.message || String(e));
+            }
+        }
         webDavCoordinator.lastObservedSignature = computeCoreSyncSignature();
     }
 
@@ -1754,23 +1884,32 @@ function createWebDavSyncService(deps) {
             return getWebDavSyncStatus();
         });
 
-        ipcMain.handle('webdav-config:getUiState', async function () {
+        function requireSettingsSender(event) {
+            if (typeof isSettingsWebContents !== 'function' || !isSettingsWebContents(event.sender)) throw new Error('WebDAV settings IPC denied');
+        }
+
+        ipcMain.handle('webdav-config:getUiState', async function (event) {
+            requireSettingsSender(event);
             return await getWebDavConfigUiState();
         });
 
         ipcMain.handle('webdav-config:setEnabled', async function (event, payload) {
+            requireSettingsSender(event);
             return setWebDavSyncEnabled(payload && payload.enabled === true, 'settings-toggle');
         });
 
         ipcMain.handle('webdav-config:setNonSensitive', async function (event, payload) {
+            requireSettingsSender(event);
             return await persistNonSensitiveWebDavConfig(payload || {});
         });
 
         ipcMain.handle('webdav-config:setPassword', async function (event, payload) {
+            requireSettingsSender(event);
             return await setWebDavPassword(payload && payload.password);
         });
 
-        ipcMain.handle('webdav-config:clearPassword', async function () {
+        ipcMain.handle('webdav-config:clearPassword', async function (event) {
+            requireSettingsSender(event);
             return await clearWebDavPassword();
         });
 
@@ -1825,6 +1964,8 @@ module.exports = {
         WEBDAV_SYNC_CONFIG_KEY: WEBDAV_SYNC_CONFIG_KEY,
         WEBDAV_AUTO_SYNC_READY_KEY: WEBDAV_AUTO_SYNC_READY_KEY,
         WEBDAV_UNSYNCED_EXIT_MARKER_KEY: WEBDAV_UNSYNCED_EXIT_MARKER_KEY,
+        WEBDAV_MANIFEST_FILE: WEBDAV_MANIFEST_FILE,
+        WEBDAV_MAX_RESPONSE_BYTES: WEBDAV_MAX_RESPONSE_BYTES,
         WEBDAV_EXCLUDED_CONFIG_KEYS: WEBDAV_EXCLUDED_CONFIG_KEYS.slice(),
         cloneStoreData: cloneStoreData,
         createWebDavError: createWebDavError,

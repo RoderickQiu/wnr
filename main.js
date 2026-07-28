@@ -20,6 +20,7 @@ try {
 }
 const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
+const getAlarmtipDurationMs = require('./inactivity-duration');
 const { getLanguageValue } = require('./update-language');
 const { getSettingsWindowWidth } = require('./settings-window');
 
@@ -194,17 +195,6 @@ function createWindow(loadMainPage = true) {
     });
 }
 
-function getAlarmtipDurationMs() {
-    const idx = store.get('alarmtip-duration');
-    const minutes = [3, 5, 10, 15, 20, 30, 60];
-    if (idx === 7) {
-        const custom = store.get('alarmtip-duration-custom');
-        return (custom && custom > 0 ? custom : 45) * 60 * 1000;
-    }
-    const n = (idx >= 0 && idx < minutes.length) ? minutes[idx] : 10;
-    return n * 60 * 1000;
-}
-
 function alarmSet() {
     resetAlarm = setTimeout(function () {
         if (store.get('alarmtip') !== false && isAlarmDialogClosed && isAlarmTipOn) {
@@ -216,7 +206,7 @@ function alarmSet() {
             }
             customDialog("on", i18n.__('alarm-for-not-using-wnr-dialog-box-title'), i18n.__('alarm-for-not-using-wnr-dialog-box-content'), "isAlarmDialogClosed = true;win.show();win.moveTop();alarmSet();");
         }
-    }, getAlarmtipDurationMs())
+    }, getAlarmtipDurationMs(store))
 }
 
 function relaunchSolution() {
@@ -467,6 +457,8 @@ app.on('ready', async () => {
     });
 
     createWindow(false);
+    win.loadFile('placeholder.html');
+    completeStartupSyncPhase();
     require("@electron/remote/main").enable(win.webContents);
 
     if (process.env.NODE_ENV === "portable") {
@@ -501,7 +493,10 @@ app.on('ready', async () => {
             return recapStore;
         },
         showExitDialog: showWebDavExitDialog,
-        hideExitDialog: hideWebDavExitDialog
+        hideExitDialog: hideWebDavExitDialog,
+        isSettingsWebContents: function (contents) {
+            return settingsWin != null && !settingsWin.isDestroyed() && settingsWin.webContents === contents;
+        }
     });
     await webDavSyncService.initialize();
     webDavSyncService.registerIpcHandlers();
