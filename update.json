@@ -1,48 +1,51 @@
 {
-	"version" : "1.32.0",
+	"version" : "1.33.0",
 	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
-			"修复了许多 bug：MINI 模式下倒计时在剩余约一分钟时可能卡住或无法正常结束，MINI 模式下单纯计时与正计时颜色显示错误，首次工作时间全屏导致多余弹窗，以及关闭「未使用 wnr 时发出提醒」后仍显示「你已经暂停了很久」的弹窗。",
-			"新增「单纯计时设置」折叠面板，可自定义默认倒计时时长，独立于预设任务。",
-			"长休息设置更细化：新增「每两次」及 +1 分钟、+2 分钟选项。",
-			"统计页新增「完成回顾」选项卡，自动记录已完成任务（标题、备注等），按日期分组展示。"
+			"新增 WebDAV 云同步：你可以在设置中上传或下载设置、统计和回顾数据，也可以开启自动同步，在多台设备之间保持数据更新。",
+			"新增韩语、阿拉伯语和法语界面。阿拉伯语界面也针对从右向左的阅读方式进行了优化。",
+			"「未使用 wnr 时发出提醒」现在可以选择 3、5、10、15、20、30 或 60 分钟，也可以设置自定义时间。",
+			"改进计时体验：正计时可以更清楚地重置；MINI 模式结束后不会意外再次打开；全屏计时中的返回按钮也会在适当的时候隐藏。",
+			"优化设置与统计页面：说明内容更容易浏览，按钮更容易点击，统计图表也会正确使用你的自定义颜色。"
 		],
 		"zh-TW" : [
-			"修復多項 bug：MINI 模式下倒計時在剩餘約一分鐘時可能卡住或無法正常結束，MINI 模式下單純計時與正計時顏色顯示錯誤，首次工作時間全屏導致多餘彈窗，以及關閉「未使用 wnr 時發出提醒」後仍顯示「你已經暫停了很久」的彈窗。",
-			"新增「單純計時設置」摺疊面板，可自定義默認倒計時時長，獨立於預設任務。",
-			"長休息設定更細化：新增「每兩次」及 +1 分鐘、+2 分鐘選項。",
-			"統計頁新增「完成回顧」選項卡，自動記錄已完成任務（標題、備註等），按日期分組展示。"
+			"新增 WebDAV 雲端同步：你可以在設定中上傳或下載設定、統計與回顧資料，也可以開啟自動同步，在多台裝置之間保持資料更新。",
+			"新增韓語、阿拉伯語和法語介面。阿拉伯語介面也針對由右至左的閱讀方式進行了最佳化。",
+			"「未使用 wnr 時發出提醒」現在可以選擇 3、5、10、15、20、30 或 60 分鐘，也可以設定自訂時間。",
+			"改進計時體驗：正計時可以更清楚地重設；MINI 模式結束後不會意外再次開啟；全螢幕計時中的返回按鈕也會在適當的時候隱藏。",
+			"最佳化設定與統計頁面：說明內容更容易瀏覽，按鈕更容易點擊，統計圖表也會正確使用你的自訂顏色。"
 		],
 		"en" : [
-			"Fixed multiple bugs: countdown in mini mode could freeze or fail to finish in the last minute, wrong colors for simple countdown and stopwatch in mini mode, extra dialog on first work period in fullscreen, and \"You've been pausing long\" still showing when \"Notify when you are not using wnr\" is off.",
-			"Added \"Simple countdown settings\" collapse panel to customise default countdown duration, independent of predefined tasks.",
-			"Finer long break options: added \"Every 2\" and +1 min / +2 min.",
-			"Statistics: new \"Recap\" tab that records completed tasks (title, note, etc.), grouped by date."
+			"Added WebDAV cloud sync. You can upload or download your settings, statistics, and recap data from Settings, or turn on automatic sync to keep your data up to date across devices.",
+			"wnr is now available in Korean, Arabic, and French. The Arabic interface has also been adapted for right-to-left reading.",
+			"You can now choose when wnr reminds you to start again: 3, 5, 10, 15, 20, 30, or 60 minutes, plus a custom duration.",
+			"Improved timers: the stopwatch reset is clearer, mini mode no longer reopens after a timer has ended, and the back button now hides correctly during fullscreen sessions.",
+			"Improved Settings and Statistics: explanations are easier to browse, buttons are easier to click, and charts now use your custom colors correctly."
 		]
 	},
 	"introduce" : {
-		"id" : "introduced-1.32.0",
+		"id" : "introduced-1.33.0",
 		"zh-CN" : {
-			"title" : "<b>欢迎升级至 1.32.0：</b>新功能概览",
+			"title" : "<b>欢迎升级至 1.33.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 修复多项 bug：MINI 模式倒计时卡住、MINI 模式下单纯计时与正计时颜色显示错误、首次工作时间全屏致多余弹窗、关闭「未使用 wnr 时发出提醒」后仍显示「你已经暂停了很久」等。</p><p>2. 统计页新增「完成回顾」选项卡，自动记录已完成任务，按日期分组。</p><p>3. 新增「单纯计时设置」折叠面板，可自定义默认倒计时时长，独立于预设任务。</p><p>4. 长休息设置更细化：新增「每两次」及 +1 分钟、+2 分钟选项。</p>",
+				"universal" : "<p>1. 新增 WebDAV 云同步，可手动或自动同步设置、统计和回顾数据。</p><p>2. 新增韩语、阿拉伯语和法语界面。</p><p>3. 未使用 wnr 时的提醒支持更多时间选项和自定义时间。</p><p>4. 修复 MINI 模式、全屏计时、按钮点击和自定义颜色显示等问题。</p><p>5. 设置与统计页面现在更清晰、更容易使用。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"zh-TW" : {
-			"title" : "<b>歡迎升級至 1.32.0：</b>新功能概覽",
+			"title" : "<b>歡迎升級至 1.33.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 修復多項 bug：MINI 模式倒計時卡住、MINI 模式下單純計時與正計時顏色顯示錯誤、首次工作時間全屏致多餘彈窗、關閉「未使用 wnr 時發出提醒」後仍顯示「你已經暫停了很久」等。</p><p>2. 統計頁新增「完成回顧」選項卡，自動記錄已完成任務，按日期分組。</p><p>3. 新增「單純計時設置」摺疊面板，可自定義默認倒計時時長，獨立於預設任務。</p><p>4. 長休息設定更細化：新增「每兩次」及 +1 分鐘、+2 分鐘選項。</p>",
+				"universal" : "<p>1. 新增 WebDAV 雲端同步，可手動或自動同步設定、統計與回顧資料。</p><p>2. 新增韓語、阿拉伯語和法語介面。</p><p>3. 未使用 wnr 時的提醒支援更多時間選項和自訂時間。</p><p>4. 修復 MINI 模式、全螢幕計時、按鈕點擊和自訂顏色顯示等問題。</p><p>5. 設定與統計頁面現在更清晰、更容易使用。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"en" : {
-			"title" : "<b>Welcome to v1.32.0!</b>",
+			"title" : "<b>Welcome to v1.33.0!</b>",
 			"description" : {
-				"universal" : "<p>1. Bug fixes: mini mode countdown freeze, simple countdown and stopwatch wrong colors, extra fullscreen dialog on first work period, and \"You've been pausing long\" still showing when \"Notify when not using wnr\" is off.</p><p>2. Statistics: new \"Recap\" tab records completed tasks, grouped by date.</p><p>3. \"Simple countdown settings\" collapse panel: customise default countdown duration, independent of predefined tasks.</p><p>4. Finer long break options: \"Every 2\" and +1 min / +2 min.</p>",
+				"universal" : "<p>1. Added WebDAV cloud sync for your settings, statistics, and recap data.</p><p>2. Added Korean, Arabic, and French interfaces.</p><p>3. Added more reminder intervals, including a custom duration.</p><p>4. Fixed issues with mini mode, fullscreen timers, click targets, and custom colors.</p><p>5. Made Settings and Statistics clearer and easier to use.</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
