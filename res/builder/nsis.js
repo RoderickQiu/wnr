@@ -35,7 +35,10 @@ const config = {
             "zh-CN",
             "zh-TW",
             "ko-KR",
-            "ar-TN",
+            // NSIS ships one generic Arabic MUI translation under the ar-SA LCID.
+            // Other regional LCIDs leave uninstall strings undefined and fail
+            // because electron-builder treats makensis warnings as errors.
+            "ar-SA",
             "fr-FR"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
