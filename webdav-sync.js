@@ -15,6 +15,11 @@ const WEBDAV_MANIFEST_FILE = 'manifest.json';
 const WEBDAV_APPLY_JOURNAL_FILE = 'webdav-apply-journal.json';
 const WEBDAV_SYNC_LOG_FILE = 'webdav-sync.log';
 const WEBDAV_SYNC_LOG_MAX_BYTES = 1024 * 1024;
+const {
+    sanitizePredefinedTasks,
+    remapDefaultTaskIndex,
+    isValidRemotePredefinedTasks
+} = require('./predefined-tasks');
 const WEBDAV_SYNC_INTENT_PRIORITY = {
     manualPull: 1,
     manualPush: 2,
@@ -131,6 +136,19 @@ function applyFullStoreData(targetStore, snapshot) {
     targetStore.set(snapshot);
 }
 
+function assertRemoteStorePayloads(payloads, invalidMessage) {
+    for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
+        let key = WEBDAV_SYNC_FILES[i].key;
+        let value = payloads[key];
+        if (value === null || typeof value !== 'object' || Array.isArray(value)) {
+            throw createWebDavError(invalidMessage);
+        }
+    }
+    if (!isValidRemotePredefinedTasks(payloads.config['predefined-tasks'])) {
+        throw createWebDavError(invalidMessage);
+    }
+}
+
 function applyRemoteWebDavPayloadsToStores(stores, fetchedPayloads) {
     let store = stores.store;
     let statistics = stores.statistics;
@@ -143,6 +161,11 @@ function applyRemoteWebDavPayloadsToStores(stores, fetchedPayloads) {
     try {
         let configPayload = cloneStoreData(fetchedPayloads.config);
         configPayload[WEBDAV_SYNC_CONFIG_KEY] = localWebDavConfig;
+        if (Object.prototype.hasOwnProperty.call(configPayload, 'predefined-tasks')) {
+            let originalTasks = configPayload['predefined-tasks'];
+            configPayload['default-task'] = remapDefaultTaskIndex(originalTasks, configPayload['default-task']);
+            configPayload['predefined-tasks'] = sanitizePredefinedTasks(originalTasks);
+        }
 
         applyFullStoreData(store, configPayload);
         applyFullStoreData(statistics, fetchedPayloads.statistics);
@@ -1363,13 +1386,7 @@ function createWebDavSyncService(deps) {
     }
 
     function validateRemoteStorePayloads(payloads) {
-        for (let i = 0; i < WEBDAV_SYNC_FILES.length; i++) {
-            let key = WEBDAV_SYNC_FILES[i].key;
-            let value = payloads[key];
-            if (value === null || typeof value !== 'object' || Array.isArray(value)) {
-                throw createWebDavError(i18n.__('webdav-sync-invalid-remote'));
-            }
-        }
+        assertRemoteStorePayloads(payloads, i18n.__('webdav-sync-invalid-remote'));
     }
 
     function notifyWebDavWarning(message) {
@@ -1972,6 +1989,7 @@ module.exports = {
         toWebDavErrorPayload: toWebDavErrorPayload,
         getLatestWebDavFailureDetailFromStatus: getLatestWebDavFailureDetailFromStatus,
         buildSyncConfigPayloadFromStore: buildSyncConfigPayloadFromStore,
-        applyRemoteWebDavPayloadsToStores: applyRemoteWebDavPayloadsToStores
+        applyRemoteWebDavPayloadsToStores: applyRemoteWebDavPayloadsToStores,
+        assertRemoteStorePayloads: assertRemoteStorePayloads
     }
 };

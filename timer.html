@@ -312,22 +312,19 @@
     </div>
 
     <script>
-        var executeAfterRecorder = "";
-
-        function fullscreenCustomDialog(mode, title, msg, executeAfter) {
+        function fullscreenCustomDialog(mode, title, msg) {
             if (mode === "on") {
                 $("#fullscreen-custom-dialog").removeClass("d-none");
                 $("#dialog-title").text(title);
                 $("#dialog-msg").text(msg);
-                executeAfterRecorder = executeAfter;
             } else {
                 $("#fullscreen-custom-dialog").addClass("d-none");
-                ipc.send("eval", executeAfterRecorder);
+                ipc.send("fullscreen-dialog-dismissed");
             }
         }
 
         ipc.on("fullscreen-custom-dialog", function (event, msg) {
-            fullscreenCustomDialog("on", msg.title, msg.message, msg.executeAfter);
+            fullscreenCustomDialog("on", msg.title, msg.message);
         })
     </script>
 

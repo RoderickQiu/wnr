@@ -84,7 +84,6 @@
         </div>
     </div><!-- for things with 'work' mark, when it's resting, the color should be changed -->
     <script>
-        let executeAfter = "";
         let msgNode = $("#dialog-msg");
         let detailNode = $("#dialog-detail");
         let currentDialogKind = "default";
@@ -95,7 +94,7 @@
                 ipc.send("custom-dialog-action", { action: "primary", exitSessionId: currentExitSessionId });
                 return;
             }
-            ipc.send("custom-dialog", { mode: "off", executeAfter: executeAfter });
+            ipc.send("custom-dialog", { mode: "off" });
         }
 
         function button3() {
@@ -103,7 +102,7 @@
                 ipc.send("custom-dialog-action", { action: "tertiary", exitSessionId: currentExitSessionId });
                 return;
             }
-            ipc.send("custom-dialog", { mode: "button3_update", executeAfter: executeAfter });
+            ipc.send("custom-dialog", { mode: "button3_update" });
         }
 
         function cancel() {
@@ -162,7 +161,6 @@
             $("#dialog-msg").text(message.msg);
             detailNode.text("").addClass("d-none");
             $("#dialog-spinner").addClass("d-none");
-            executeAfter = message.executeAfter;
             ipc.send("custom-dialog-fit", Math.round(msgNode.height() / parseFloat(msgNode.css('line-height'))));
             document.onkeydown = function () {
             };

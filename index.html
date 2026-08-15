@@ -572,7 +572,7 @@
         }
 
         function defaultSet(name, workTime, restTime, loops, focusWhenWorking, focusWhenResting) {
-            $("#expand-left").html(name);
+            $("#expand-left").text(name == null ? "" : String(name));
             // $("#work-time").val(shi.ArabicNumberTimeParser(workTime, {
             //     as: 'm',
             //     lang: store.get("i18n").replace(/-/g, '_'),
@@ -653,7 +653,7 @@
             }
         }
 
-        store.get("predefined-tasks").forEach(function (item, index, array) {
+        require("./predefined-tasks").sanitizePredefinedTasks(store.get("predefined-tasks")).forEach(function (item, index) {
             if (store.get("default-task") === index) {
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
                 if (store.get("infinity")) infinityMode();
@@ -685,9 +685,15 @@
                     store.set("just-relaunched", false);
                 }
             }
-            $("#dropdown-itemlist").append("<a class='dropdown-item' href='javascript:defaultSet(\"" +
-                    item.name + "\", " + item.workTime + ", " + item.restTime + ", " + item.loops + "," +
-                    item.focusWhenWorking + "," + item.focusWhenResting + ")'>" + item.name + "</a>");
+            let taskLink = document.createElement("a");
+            taskLink.className = "dropdown-item";
+            taskLink.href = "#";
+            taskLink.textContent = item.name;
+            taskLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
+            });
+            document.getElementById("dropdown-itemlist").appendChild(taskLink);
         });
 
         setTimeout(function () {

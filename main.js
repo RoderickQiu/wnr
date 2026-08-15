@@ -20,6 +20,7 @@ try {
 }
 const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
+const { persistSanitizedPredefinedTasks } = require('./predefined-tasks');
 const getAlarmtipDurationMs = require('./inactivity-duration');
 const { getLanguageValue } = require('./update-language');
 const { getSettingsWindowWidth } = require('./settings-window');
@@ -52,6 +53,7 @@ let startupSyncPending = true;
 let startupWindowReady = false;
 let webDavSyncService = null;
 let localExitFallbackInProgress = false;
+let pendingDialogAction = { type: 'none', payload: null };
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
 let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'], i//locale code
@@ -204,7 +206,7 @@ function alarmSet() {
                 app.focus();
                 isAlarmDialogClosed = false;
             }
-            customDialog("on", i18n.__('alarm-for-not-using-wnr-dialog-box-title'), i18n.__('alarm-for-not-using-wnr-dialog-box-content'), "isAlarmDialogClosed = true;win.show();win.moveTop();alarmSet();");
+            customDialog("on", i18n.__('alarm-for-not-using-wnr-dialog-box-title'), i18n.__('alarm-for-not-using-wnr-dialog-box-content'), "alarm-ack");
         }
     }, getAlarmtipDurationMs(store))
 }
@@ -761,6 +763,7 @@ app.on('ready', async () => {
             console.log(e);
         }
     }//alternated the former default time settings
+    predefinedTasks = persistSanitizedPredefinedTasks(store);
 
     powerMonitor.on('lock-screen', () => {
         if (store.get("should-stop-locked") !== true) {
@@ -842,7 +845,7 @@ app.on('ready', async () => {
         if (store.get("use-times") > 8)
             setTimeout(function () {
                 customDialog("select_on", i18n.__('suggest-star'),
-                    i18n.__('suggest-star-msg'), "shell.openExternal(\"https://github.com/RoderickQiu/wnr\");");
+                    i18n.__('suggest-star-msg'), "suggest-star");
                 store.set("suggest-star", "suggested");
             }, 1000);
     }
@@ -852,7 +855,7 @@ app.on('ready', async () => {
             let isNotified = store.has("windows-7-notification");
             if (isNotified === false) {
                 customDialog("on", i18n.__('old-windows-compatibility-notification'), i18n.__('old-windows-compatibility-notification-msg'),
-                    "store.set(\"windows-7-notification\", 1);");
+                    "windows7-notify");
             }
         }
     }
@@ -881,22 +884,140 @@ function hasLiveCustomDialogWindow() {
         && !customDialogWin.webContents.isDestroyed();
 }
 
-function customDialog(mode, title, msg, executeAfter) {
+function isCustomDialogSender(contents) {
+    return customDialogWin != null
+        && !customDialogWin.isDestroyed()
+        && customDialogWin.webContents === contents;
+}
+
+function setPendingDialogAction(action, payload) {
+    pendingDialogAction = {
+        type: typeof action === 'string' && action !== '' ? action : 'none',
+        payload: payload == null ? null : payload
+    };
+}
+
+function clearPendingDialogAction() {
+    pendingDialogAction = { type: 'none', payload: null };
+}
+
+function runTimeEndDialogAction(mode) {
+    timeEndDialogDispose(mode);
+    if (win == null || win.isDestroyed()) return;
     if (isMaximized) {
+        if (hasFloating && ((mode === 'work' && !restTimeFocused) || (mode === 'rest' && !workTimeFocused))) {
+            win.hide();
+        }
+        return;
+    }
+    if (store.get("top") === true) win.setAlwaysOnTop(true, 'floating');
+    if (hasFloating) win.hide();
+}
+
+function runPendingDialogAction() {
+    let action = pendingDialogAction;
+    clearPendingDialogAction();
+    try {
+        switch (action.type) {
+            case 'alarm-ack':
+                isAlarmDialogClosed = true;
+                if (win != null && !win.isDestroyed()) {
+                    win.show();
+                    win.moveTop();
+                }
+                alarmSet();
+                break;
+            case 'suggest-star':
+                shell.openExternal("https://github.com/RoderickQiu/wnr");
+                break;
+            case 'windows7-notify':
+                store.set("windows-7-notification", 1);
+                break;
+            case 'force-long-focus':
+                if (win != null && !win.isDestroyed()) win.webContents.send("force-long-focus-granted");
+                break;
+            case 'time-end-work':
+                runTimeEndDialogAction("work");
+                break;
+            case 'time-end-rest':
+                runTimeEndDialogAction("rest");
+                break;
+            case 'all-task-end':
+                if (win != null && !win.isDestroyed()) win.loadFile('index.html');
+                setFullScreenMode(false);
+                if (store.get("top") !== true) {
+                    if (win != null && !win.isDestroyed()) {
+                        win.setAlwaysOnTop(false);
+                        win.moveTop();
+                    }
+                } else if (win != null && !win.isDestroyed()) {
+                    win.setAlwaysOnTop(true, 'floating');
+                }
+                if (sleepBlockerId) {
+                    if (powerSaveBlocker.isStarted(sleepBlockerId)) {
+                        powerSaveBlocker.stop(sleepBlockerId);
+                    }
+                }
+                break;
+            case 'recap-delete':
+                if (win != null && !win.isDestroyed()) win.webContents.send('recap-delete-execute', action.payload);
+                break;
+            case 'update-lanzous':
+                shell.openExternal("https://scris.lanzoui.com/b01n0tb4j");
+                break;
+            case 'can-redo':
+                if (win != null && !win.isDestroyed()) win.webContents.send('can-redo-exec');
+                break;
+            case 'delete-all-data':
+                store.clear();
+                statistics.clear();
+                styleCache.clear();
+                timingData.clear();
+                recapStore.clear();
+                relaunchSolution();
+                break;
+            case 'window-close':
+                requestAppExitWithGuard({
+                    source: 'window-close',
+                    interactive: true,
+                    mayMutateLocal: true,
+                    beforeExitMutation: function () {
+                        statisticsWriter();
+                    },
+                    beforeFinalize: function () {
+                        multiScreenSolution("off");
+                    }
+                });
+                break;
+            case 'relaunch':
+                try { store.set('just-relaunched', true); }
+                catch (e) { console.log(e); }
+                relaunchSolution();
+                break;
+            case 'none':
+            default:
+                break;
+        }
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function customDialog(mode, title, msg, action, payload) {
+    if (isMaximized) {
+        setPendingDialogAction(action, payload);
         win.webContents.send("fullscreen-custom-dialog", {
             title: title,
-            message: msg,
-            executeAfter: executeAfter
+            message: msg
         })
         return;
     }
-    if (executeAfter == null) executeAfter = "";
     if (mode === "on" || mode === "select_on" || mode === "update_on") {
+        setPendingDialogAction(action, payload);
         if (hasLiveCustomDialogWindow()) {
             customDialogWin.webContents.send("dialog-init", {
                 title: title,
                 msg: msg,
-                executeAfter: executeAfter,
                 type: getCustomDialogModeType(mode)
             });
             customDialogWin.show();
@@ -911,14 +1032,12 @@ function customDialog(mode, title, msg, executeAfter) {
         }
     } else if (mode === "off") {
         if (hasLiveCustomDialogWindow()) customDialogWin.hide();
-        try {
-            eval(executeAfter);
-        } catch (e) {
-            console.log(e);
-        }
+        runPendingDialogAction();
     } else if (mode === "cancel") {
+        clearPendingDialogAction();
         if (hasLiveCustomDialogWindow()) customDialogWin.hide();
     } else if (mode === "button3_update") {
+        clearPendingDialogAction();
         shell.openExternal("https://github.com/RoderickQiu/wnr/releases/latest");
 
         if (hasLiveCustomDialogWindow()) customDialogWin.hide();
@@ -926,10 +1045,15 @@ function customDialog(mode, title, msg, executeAfter) {
 }
 
 ipcMain.on("custom-dialog", (event, msg) => {
-    if (msg.mode === "on")
-        customDialog(msg.mode, msg.title, msg.msg, msg.executeAfter);
-    else
-        customDialog(msg.mode, "", "", msg.executeAfter);
+    if (!isCustomDialogSender(event.sender)) return;
+    if (msg.mode === "off" || msg.mode === "cancel" || msg.mode === "button3_update") {
+        customDialog(msg.mode);
+    }
+})
+
+ipcMain.on("fullscreen-dialog-dismissed", (event) => {
+    if (win == null || win.isDestroyed() || event.sender !== win.webContents) return;
+    runPendingDialogAction();
 })
 
 ipcMain.on("custom-dialog-action", (event, message) => {
@@ -1770,7 +1894,7 @@ app.on('activate', () => {
 
 ipcMain.on('force-long-focus-request', function () {
     if (win != null)
-        customDialog("select_on", i18n.__("force-long-focus-request"), i18n.__("force-long-focus-request-tip"), "win.webContents.send(\"force-long-focus-granted\");");
+        customDialog("select_on", i18n.__("force-long-focus-request"), i18n.__("force-long-focus-request-tip"), "force-long-focus");
 })
 
 ipcMain.on('focus-mode-settings', function (event, message) {
@@ -1876,15 +2000,6 @@ function personliazationNotificationSolution(i) {
     return [title, msg];
 }
 
-ipcMain.on('eval', function (event, message) {
-    try {
-        eval(message);
-        console.log("Eval succeeded, code: " + message);
-    } catch (e) {
-        console.log("Eval failed, msg: " + e)
-    }
-})
-
 ipcMain.on('warning-giver-workend', function () {
     statisticsWriter();
 
@@ -1913,14 +2028,14 @@ ipcMain.on('warning-giver-workend', function () {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
                 customDialog("on", personal[0], personal[1]
-                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"work\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) win.hide();");
+                    + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "time-end-work");
             }, 1500);
         } else {
             setTimeout(function () {
+                setPendingDialogAction("time-end-work");
                 win.webContents.send("fullscreen-custom-dialog", {
                     title: personal[0],
-                    message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                    executeAfter: "timeEndDialogDispose('work'); if (hasFloating && !restTimeFocused) { win.hide(); }"
+                    message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : "")
                 })
             }, 1500)
         }
@@ -1957,14 +2072,14 @@ ipcMain.on('warning-giver-restend', function (event, isFirstCycle) {
                 win.setAlwaysOnTop(false);
                 setTimeout(function () {
                     customDialog("on", personal[0], personal[1]
-                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "timeEndDialogDispose(\"rest\"); if(store.get(\"top\") === true) { win.setAlwaysOnTop(true, 'floating'); } if (hasFloating) { win.hide(); }");
+                        + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""), "time-end-rest");
                 }, 1500)
             } else {
                 setTimeout(function () {
+                    setPendingDialogAction("time-end-rest");
                     win.webContents.send("fullscreen-custom-dialog", {
                         title: personal[0],
-                        message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : ""),
-                        executeAfter: "timeEndDialogDispose('rest'); if (hasFloating && !workTimeFocused) { win.hide(); }"
+                        message: personal[1] + " " + (hasMultiDisplays ? "\r" + i18n.__('has-multi-displays') : "")
                     })
                 }, 1500)
             }
@@ -2015,17 +2130,7 @@ ipcMain.on('warning-giver-all-task-end', function () {
         } else {
             win.setAlwaysOnTop(false);
             setTimeout(function () {
-                customDialog("on", personal[0], personal[1],
-                    "win.loadFile('index.html');\n" +
-                    "setFullScreenMode(false);\n" +
-                    //"win.maximizable = false;\n" +
-                    "if (store.get(\"top\") !== true) {\n" +
-                    "   win.setAlwaysOnTop(false);//cancel unnecessary always-on-top\n" +
-                    "   win.moveTop(); }\n" +
-                    "else win.setAlwaysOnTop(true,'floating');\n" +
-                    "if (sleepBlockerId) {\n" +
-                    "   if (powerSaveBlocker.isStarted(sleepBlockerId)) {\n" +
-                    "       powerSaveBlocker.stop(sleepBlockerId); } }");
+                customDialog("on", personal[0], personal[1], "all-task-end");
             }, 1000);
         }
     }
@@ -2058,8 +2163,7 @@ ipcMain.on('recap-delete-confirm', function (event, data) {
     } else if (data.type === 'date') {
         confirmMsg = i18n.__('recap-delete-date-confirm') + " " + data.date + "?";
     }
-    customDialog("select_on", i18n.__('recap-delete-title'), confirmMsg, 
-        "win.webContents.send('recap-delete-execute', " + JSON.stringify(data) + ");");
+    customDialog("select_on", i18n.__('recap-delete-title'), confirmMsg, "recap-delete", data);
 })
 
 ipcMain.on('update-feedback', function (event, message) {
@@ -2074,7 +2178,7 @@ ipcMain.on('update-feedback', function (event, message) {
                 for (let updateIterator = 0; updateIterator < updateContent.length; updateIterator++) {
                     updateMessage += (updateIterator + 1).toString() + ". " + updateContent[updateIterator] + '\r';
                 }
-                customDialog("update_on", i18n.__('update'), i18n.__('update-content') + "\r" + updateMessage, "shell.openExternal(\"https://scris.lanzoui.com/b01n0tb4j\");");
+                customDialog("update_on", i18n.__('update'), i18n.__('update-content') + "\r" + updateMessage, "update-lanzous");
             })
             .catch(() => {
                 notificationSolution(i18n.__('update-web-problem'), i18n.__('update-web-problem-msg'), "normal");
@@ -2090,14 +2194,15 @@ ipcMain.on('alert', function (event, message) {
 })
 
 ipcMain.on('can-redo-alert', function () {
-    customDialog("off", "", "", "");
+    clearPendingDialogAction();
+    if (hasLiveCustomDialogWindow()) customDialogWin.hide();
     customDialog("select_on", i18n.__("can-redo-title"), i18n.__("can-redo-msg"),
-        "win.webContents.send('can-redo-exec');");
+        "can-redo");
 })
 
 ipcMain.on('delete-all-data', function () {
     if (settingsWin != null) {
-        customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "store.clear();statistics.clear();styleCache.clear();timingData.clear();recapStore.clear();relaunchSolution()");
+        customDialog("select_on", i18n.__('delete-all-data-dialog-box-title'), i18n.__('delete-all-data-dialog-box-content'), "delete-all-data");
     }
 })
 
@@ -2105,7 +2210,7 @@ function windowCloseChk() {
     if ((process.env.NODE_ENV !== "development") && win != null) {
         win.show();
         customDialog("select_on", "wnr", i18n.__('window-close-dialog-box-title'),
-            "requestAppExitWithGuard({ source: 'window-close', interactive: true, mayMutateLocal: true, beforeExitMutation: function () { statisticsWriter(); }, beforeFinalize: function () { multiScreenSolution(\"off\"); } });");
+            "window-close");
     } else {
         requestAppExitWithGuard({
             source: 'window-close',
@@ -2479,10 +2584,7 @@ ipcMain.on("relaunch-dialog", function (event, message) {
         store.delete("previous-language");
     }
     
-    customDialog("on", "wnr", messageText,
-        "try { store.set('just-relaunched', true); }" +
-        "catch (e) { console.log(e); }\n" +
-        "relaunchSolution();");
+    customDialog("on", "wnr", messageText, "relaunch");
 })
 
 ipcMain.on("open-external-title-win", function (event, message) {

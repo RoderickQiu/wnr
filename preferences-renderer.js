@@ -785,7 +785,8 @@ function autoCheckInitializer() {
 }
 
 //defaults settings
-let defaultArray = store.get("predefined-tasks");
+const predefinedTasksUtil = require("./predefined-tasks");
+let defaultArray = predefinedTasksUtil.sanitizePredefinedTasks(store.get("predefined-tasks"));
 const newItem = {
     name: "new item",
     workTime: 30,
@@ -803,7 +804,7 @@ function predefinedInitializer() {
 }
 
 function planEdit(index) {
-    defaultArray[index].name = $("#title" + index).val();
+    defaultArray[index].name = predefinedTasksUtil.sanitizeTaskName($("#title" + index).val());
     if (!isNaN(Number($("#work-time" + index).val())) && Number($("#work-time" + index).val()) >= 0.083) defaultArray[index].workTime = $("#work-time" + index).val();
     else $("#work-time" + index).val(defaultArray[index].workTime);
     if (!isNaN(Number($("#rest-time" + index).val())) && Number($("#rest-time" + index).val()) >= 0.083) defaultArray[index].restTime = $("#rest-time" + index).val();
@@ -816,26 +817,119 @@ function planEdit(index) {
 }
 
 function planAppend(item, index) {
-    $("#itemlist-ul").append(
-        "<li id='item" + index + "'> <input name='title' id='title" + index + "' type='text' class='rest' maxlength='15' value='" +
-        item.name + "' onchange='planEdit(" + index + ")' /> <br /><div class='text-muted small'>" +
-        i18n.__('predefined-tasks-settings-tip-part-1') + " <input id='work-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.workTime + "' onchange='planEdit(" + index + ")' oninput='if (Number(value) > 1000) value = 1000' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
-        i18n.__('min') +
-        i18n.__('predefined-tasks-settings-tip-part-2') + " <input id='rest-time" + index + "' class='hotkeyset' type='number' value='" +
-        item.restTime + "' onchange='planEdit(" + index + ")' oninput='if (Number(value) > 1000) value = 1000' style='ime-mode:Disabled' title=" + i18n.__('what-can-be-here-predefined-tasks') + " /> " +
-        i18n.__('min') +
-        i18n.__('predefined-tasks-settings-tip-part-3') + " <input id='loops" + index + "' class='hotkeyset' type='number' value='" +
-        item.loops + "' onchange='planEdit(" + index + ")' oninput='if (value.length > 2) value = value.slice(0, 2)' style='ime-mode:Disabled' /> " +
-        i18n.__('time(s)') +
-        "<br />" + i18n.__('focus-when-working') + " <input id='focus-when-working" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />&nbsp;&nbsp;|&nbsp;" +
-        i18n.__('focus-when-resting') + " <input id='focus-when-resting" + index + "' type='checkbox' onchange='planEdit(" + index + ")' />\
-                        <br /><span id='set-as-default-task-container" + index + "'><a id='set-as-default" + index + "' class='rest underlined' href='javascript:setAsDefault(" + index + ")'>" + i18n.__('set-as-default-task') + "</a></span>\
-                        <span id='deleter" + index + "'>| <a href='javascript:planErase(" + index + ")' class='work underlined'>" + i18n.__('delete') + "</a></span>\
-                        </div><hr /></li>"
-    );
-    document.getElementById("focus-when-working" + index).checked = item.focusWhenWorking;
-    document.getElementById("focus-when-resting" + index).checked = item.focusWhenResting;
+    let li = document.createElement("li");
+    li.id = "item" + index;
+
+    let titleInput = document.createElement("input");
+    titleInput.name = "title";
+    titleInput.id = "title" + index;
+    titleInput.type = "text";
+    titleInput.className = "rest";
+    titleInput.maxLength = 15;
+    titleInput.value = item.name;
+    titleInput.addEventListener("change", function () { planEdit(index); });
+
+    let details = document.createElement("div");
+    details.className = "text-muted small";
+
+    let workInput = document.createElement("input");
+    workInput.id = "work-time" + index;
+    workInput.className = "hotkeyset";
+    workInput.type = "number";
+    workInput.value = item.workTime;
+    workInput.style.imeMode = "Disabled";
+    workInput.title = i18n.__("what-can-be-here-predefined-tasks");
+    workInput.addEventListener("change", function () { planEdit(index); });
+    workInput.addEventListener("input", function () {
+        if (Number(workInput.value) > 1000) workInput.value = 1000;
+    });
+
+    let restInput = document.createElement("input");
+    restInput.id = "rest-time" + index;
+    restInput.className = "hotkeyset";
+    restInput.type = "number";
+    restInput.value = item.restTime;
+    restInput.style.imeMode = "Disabled";
+    restInput.title = i18n.__("what-can-be-here-predefined-tasks");
+    restInput.addEventListener("change", function () { planEdit(index); });
+    restInput.addEventListener("input", function () {
+        if (Number(restInput.value) > 1000) restInput.value = 1000;
+    });
+
+    let loopsInput = document.createElement("input");
+    loopsInput.id = "loops" + index;
+    loopsInput.className = "hotkeyset";
+    loopsInput.type = "number";
+    loopsInput.value = item.loops;
+    loopsInput.style.imeMode = "Disabled";
+    loopsInput.addEventListener("change", function () { planEdit(index); });
+    loopsInput.addEventListener("input", function () {
+        if (loopsInput.value.length > 2) loopsInput.value = loopsInput.value.slice(0, 2);
+    });
+
+    let focusWork = document.createElement("input");
+    focusWork.id = "focus-when-working" + index;
+    focusWork.type = "checkbox";
+    focusWork.addEventListener("change", function () { planEdit(index); });
+
+    let focusRest = document.createElement("input");
+    focusRest.id = "focus-when-resting" + index;
+    focusRest.type = "checkbox";
+    focusRest.addEventListener("change", function () { planEdit(index); });
+
+    let defaultContainer = document.createElement("span");
+    defaultContainer.id = "set-as-default-task-container" + index;
+    let defaultLink = document.createElement("a");
+    defaultLink.id = "set-as-default" + index;
+    defaultLink.className = "rest underlined";
+    defaultLink.href = "#";
+    defaultLink.textContent = i18n.__("set-as-default-task");
+    defaultLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        setAsDefault(index);
+    });
+    defaultContainer.appendChild(defaultLink);
+
+    let deleter = document.createElement("span");
+    deleter.id = "deleter" + index;
+    deleter.appendChild(document.createTextNode("| "));
+    let deleteLink = document.createElement("a");
+    deleteLink.href = "#";
+    deleteLink.className = "work underlined";
+    deleteLink.textContent = i18n.__("delete");
+    deleteLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        planErase(index);
+    });
+    deleter.appendChild(deleteLink);
+
+    details.appendChild(document.createTextNode(i18n.__("predefined-tasks-settings-tip-part-1") + " "));
+    details.appendChild(workInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("min") + i18n.__("predefined-tasks-settings-tip-part-2") + " "));
+    details.appendChild(restInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("min") + i18n.__("predefined-tasks-settings-tip-part-3") + " "));
+    details.appendChild(loopsInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("time(s)")));
+    details.appendChild(document.createElement("br"));
+    details.appendChild(document.createTextNode(i18n.__("focus-when-working") + " "));
+    details.appendChild(focusWork);
+    details.appendChild(document.createTextNode("\u00a0\u00a0|\u00a0"));
+    details.appendChild(document.createTextNode(i18n.__("focus-when-resting") + " "));
+    details.appendChild(focusRest);
+    details.appendChild(document.createElement("br"));
+    details.appendChild(defaultContainer);
+    details.appendChild(deleter);
+
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(titleInput);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(document.createElement("br"));
+    li.appendChild(details);
+    li.appendChild(document.createElement("hr"));
+    document.getElementById("itemlist-ul").appendChild(li);
+
+    focusWork.checked = item.focusWhenWorking;
+    focusRest.checked = item.focusWhenResting;
 }
 
 function planErase(index) {
@@ -876,7 +970,7 @@ function setAsDefault(index) {
 }
 
 //task reserved
-let reservedUseDefaultArray = store.get("predefined-tasks");
+let reservedUseDefaultArray = predefinedTasksUtil.sanitizePredefinedTasks(store.get("predefined-tasks"));
 let reservedArray = store.has("reserved") ? store.get("reserved") : [];
 let newReservedItem = {
     id: store.get("reserved-record") + 1,
@@ -893,32 +987,91 @@ function reservedInitializer() {
 }
 
 function reservedAppend(item, index) {
-    $("#reservation-list").append('<li id="reserved-' + index + '">\
-                ' + i18n.__('task-reservation-time-setting') + ' <input id="reserved-time-' + index + '" type="time"\
-                onchange="reservedEdit(' + index + ')" value="' + item.time + '" /><br/>'
-        + i18n.__('task-reservation-follow-plan') +
-        '<div class="dropdown dropdown-default">\
-            <a class="btn btn-outline-secondary dropdown-toggle dropdown-reserved-button"\
-                id="dropdown-reserved-button-' + index + '" data-toggle="dropdown" aria-haspopup="true"\
-                        aria-expanded="false">\
-                        <span id="dropdown-reserved-title-' + index + '">' + reservedUseDefaultArray[item.plan].name + '</span>\
-                    </a>\
-                    <div class="dropdown-menu" class="dropdown-menu-reserved"\
-                        aria-labelledby="dropdown-reserved-button-' + index + '">\
-                        <div id="dropdown-itemlist-' + index + '" value="' + item.plan + '"></div>\
-                    </div>\
-                </div><br />' +
-        i18n.__('task-reservation-cycle') +
-        '<input type="number" id="reserved-cycle-' + index + '" class="reserved-cycle"\
-                    onchange="reservedEdit(' + index + ')" value="' + item.cycle + '"\
-                    oninput="value = value.replace(/[89e.-]+/g, \'\').slice(0, 7);"\
-                    style="ime-mode:Disabled" /><br />\
-                <span id="deleter' + index + '"><a href="javascript:reservedErase(' + index + ')" class="work underlined">' + i18n.__('delete') + '</a></span></div><hr />\
-                </li>'
-    );
+    let selectedPlan = reservedUseDefaultArray[item.plan] || reservedUseDefaultArray[0];
+    let selectedPlanIndex = reservedUseDefaultArray[item.plan] ? item.plan : 0;
 
-    reservedUseDefaultArray.forEach(function (defaultArrayItem, defaultArrayIndex, defaultArray) {
-        $("#dropdown-itemlist-" + index).append("<a class='dropdown-item' value='" + defaultArrayIndex + "' href='javascript:reservedEditDropdownTrigger(" + index + ',' + defaultArrayIndex + ")' >" + defaultArrayItem.name + "</a>");
+    let li = document.createElement("li");
+    li.id = "reserved-" + index;
+
+    let timeInput = document.createElement("input");
+    timeInput.id = "reserved-time-" + index;
+    timeInput.type = "time";
+    timeInput.value = item.time == null ? "" : String(item.time);
+    timeInput.addEventListener("change", function () { reservedEdit(index); });
+
+    let dropdown = document.createElement("div");
+    dropdown.className = "dropdown dropdown-default";
+
+    let dropdownButton = document.createElement("a");
+    dropdownButton.className = "btn btn-outline-secondary dropdown-toggle dropdown-reserved-button";
+    dropdownButton.id = "dropdown-reserved-button-" + index;
+    dropdownButton.setAttribute("data-toggle", "dropdown");
+    dropdownButton.setAttribute("aria-haspopup", "true");
+    dropdownButton.setAttribute("aria-expanded", "false");
+
+    let dropdownTitle = document.createElement("span");
+    dropdownTitle.id = "dropdown-reserved-title-" + index;
+    dropdownTitle.textContent = selectedPlan ? selectedPlan.name : "";
+    dropdownButton.appendChild(dropdownTitle);
+
+    let dropdownMenu = document.createElement("div");
+    dropdownMenu.className = "dropdown-menu dropdown-menu-reserved";
+    dropdownMenu.setAttribute("aria-labelledby", dropdownButton.id);
+
+    let dropdownItemlist = document.createElement("div");
+    dropdownItemlist.id = "dropdown-itemlist-" + index;
+    dropdownItemlist.setAttribute("value", selectedPlanIndex);
+    dropdownMenu.appendChild(dropdownItemlist);
+    dropdown.appendChild(dropdownButton);
+    dropdown.appendChild(dropdownMenu);
+
+    let cycleInput = document.createElement("input");
+    cycleInput.type = "number";
+    cycleInput.id = "reserved-cycle-" + index;
+    cycleInput.className = "reserved-cycle";
+    cycleInput.value = item.cycle == null ? "" : String(item.cycle);
+    cycleInput.style.imeMode = "Disabled";
+    cycleInput.addEventListener("change", function () { reservedEdit(index); });
+    cycleInput.addEventListener("input", function () {
+        cycleInput.value = cycleInput.value.replace(/[89e.-]+/g, "").slice(0, 7);
+    });
+
+    let deleter = document.createElement("span");
+    deleter.id = "deleter" + index;
+    let deleteLink = document.createElement("a");
+    deleteLink.href = "#";
+    deleteLink.className = "work underlined";
+    deleteLink.textContent = i18n.__("delete");
+    deleteLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        reservedErase(index);
+    });
+    deleter.appendChild(deleteLink);
+
+    li.appendChild(document.createTextNode(i18n.__("task-reservation-time-setting") + " "));
+    li.appendChild(timeInput);
+    li.appendChild(document.createElement("br"));
+    li.appendChild(document.createTextNode(i18n.__("task-reservation-follow-plan")));
+    li.appendChild(dropdown);
+    li.appendChild(document.createElement("br"));
+    li.appendChild(document.createTextNode(i18n.__("task-reservation-cycle")));
+    li.appendChild(cycleInput);
+    li.appendChild(document.createElement("br"));
+    li.appendChild(deleter);
+    li.appendChild(document.createElement("hr"));
+    document.getElementById("reservation-list").appendChild(li);
+
+    reservedUseDefaultArray.forEach(function (defaultArrayItem, defaultArrayIndex) {
+        let planLink = document.createElement("a");
+        planLink.className = "dropdown-item";
+        planLink.setAttribute("value", defaultArrayIndex);
+        planLink.href = "#";
+        planLink.textContent = defaultArrayItem.name;
+        planLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            reservedEditDropdownTrigger(index, defaultArrayIndex);
+        });
+        dropdownItemlist.appendChild(planLink);
     });
 }
 
