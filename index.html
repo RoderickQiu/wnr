@@ -59,27 +59,57 @@
             return shi.humanTimeParser(raw, { as: "m", to: "m", ignoreError: true });
         }
 
-        function canStartTimer() {
+        function parseLoopCount() {
+            let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+            return Number(String($("#loop").val()).replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), ""));
+        }
+
+        function startInvalidReason() {
             if (onlyrest) {
-                let rest = parseMinutes($("#rest-time-onlyrest").val());
-                return !isNaN(rest) && rest >= 5 / 60 && rest <= 1440;
+                let raw = String($("#rest-time-onlyrest").val() || "").trim();
+                if (raw === "") return i18n.__('field-invalid-empty');
+                let rest = parseMinutes(raw);
+                if (isNaN(rest) || rest < 5 / 60) return i18n.__('field-invalid-time');
+                if (rest > 1440) return i18n.__('field-invalid-too-long');
+                return null;
             }
             if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
-                return false;
-            let work = parseMinutes($("#work-time").val());
-            let rest = getBreakPercentage() !== 0 ? work * getBreakPercentage() : parseMinutes($("#rest-time").val());
-            let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
-            let loops = store.get("infinity") ? 1 : Number(String($("#loop").val()).replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), ""));
-            return !isNaN(work) && !isNaN(rest) && work >= 5 / 60 && rest >= 5 / 60 && work <= 1440 && rest <= 1440
-                    && (store.get("infinity") || (loops >= 1 && loops === Math.floor(loops) && (work + rest) * loops <= 1440));
+                return i18n.__('field-invalid-both-focus');
+            let workRaw = String($("#work-time").val() || "").trim();
+            let restRaw = String($("#rest-time").val() || "").trim();
+            let loopRaw = String($("#loop").val() || "").trim();
+            if (workRaw === "" || (getBreakPercentage() === 0 && restRaw === "") || (!store.get("infinity") && loopRaw === ""))
+                return i18n.__('field-invalid-empty');
+            let work = parseMinutes(workRaw);
+            let rest = getBreakPercentage() !== 0 ? work * getBreakPercentage() : parseMinutes(restRaw);
+            if (isNaN(work) || isNaN(rest) || work < 5 / 60 || rest < 5 / 60) return i18n.__('field-invalid-time');
+            if (work > 1440 || rest > 1440) return i18n.__('field-invalid-too-long');
+            if (!store.get("infinity")) {
+                let loops = parseLoopCount();
+                if (isNaN(loops) || loops < 1 || loops !== Math.floor(loops)) return i18n.__('field-invalid-loop');
+                if ((work + rest) * loops > 1440) return i18n.__('field-invalid-too-long');
+            }
+            return null;
+        }
+
+        function canStartTimer() {
+            return startInvalidReason() === null;
+        }
+
+        function refreshStartValidity() {
+            let reason = startInvalidReason();
+            if (reason) {
+                $("#start-invalid").text(reason).removeClass("d-none");
+                $("#bottom-btn").prop("disabled", true);
+            } else {
+                $("#start-invalid").text("").addClass("d-none");
+                $("#bottom-btn").prop("disabled", false);
+            }
         }
 
         function keyDownSubmitter() {
-            if (!canStartTimer()) {
-                if (!onlyrest && document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
-                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
-                return;
-            }
+            refreshStartValidity();
+            if (!canStartTimer()) return;
             if (onlyrest)
                 window.location.href =
                         "timer.html?title=&work-time=0.7777&rest-time="
@@ -89,8 +119,6 @@
                         + "&restored=false"
                         + "&times=0&discount=&continueloop="
                         + document.getElementById("focus-continueloop-set-onlyrest").checked;
-            else if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
-                ipc.send("alert", i18n.__('all-focus-mode-warn'));
             else if (((document.getElementById("focus-work-set").checked && shi.humanTimeParser($("#work-time").val(), {
                 as: "m",
                 to: "m",
@@ -215,7 +243,7 @@
                     <input id="focus-continueloop-set-onlyrest" type="checkbox"
                            onchange="onlyRestEdgeCaseSolution()" />
                     <span id="continueloop" class="focuser extreme-small onlyRest text-left">
-                        <script>document.write(i18n.__('continueloop-part-1') + "<br />" + i18n.__('continueloop-part-2'))</script>
+                        <script>document.write(i18n.__('continueloop-part-1') + " " + i18n.__('continueloop-part-2'))</script>
                     </span>
                 </center>
             </div>
@@ -224,7 +252,7 @@
                 $('#label-countdown').text(i18n.__('field-label-countdown'));
                 $('#unit-countdown').text(i18n.__('field-unit-minutes'));
                 $('#rest-time-onlyrest').removeAttr('placeholder');
-                $('#rest-time-onlyrest').attr('title', i18n.__('only-rest-time') + i18n.__('what-can-be-here-index'));
+                $('#rest-time-onlyrest').attr('title', i18n.__('what-can-be-here-index'));
                 $("#focus-rest-set-onlyrest").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#focus-continueloop-set-onlyrest").attr('title', i18n.__('continueloop-tip'));
                 $('#back-onlyrest').attr('title', i18n.__('back'));
@@ -286,6 +314,7 @@
                 <span class="focuser extreme-small rest">
                     <script>document.write(i18n.__('focus-toggle'))</script>
                 </span>
+                <div class="home-coupling d-none" id="percentage-break-home-hint"></div>
             </div>
             <div class="align-content-center field-block">
                 <label class="field-label text-muted" for="loop" id="label-loop"></label>
@@ -312,27 +341,32 @@
                         </div>
                     </div>
                 </div>
+                <div class="home-coupling d-none" id="infinity-loops-home-hint"></div>
             </div>
             <script>
                 $('#label-work').text(i18n.__('field-label-work'));
                 $('#label-rest').text(i18n.__('field-label-rest'));
                 $('#label-loop').text(i18n.__('field-label-loop'));
                 $('#unit-work, #unit-rest').text(i18n.__('field-unit-minutes'));
+                $('#percentage-break-home-hint').text(i18n.__('percentage-break-home-hint'));
+                $('#infinity-loops-home-hint').text(i18n.__('settings-coupling-infinity-loops'));
                 $('#work-time, #rest-time, #loop').removeAttr('placeholder');
                 $('#title').attr('placeholder', i18n.__('title'));
                 $('#note').attr('placeholder', i18n.__('note'));
                 $('#first-work-discount').attr('placeholder', i18n.__('first-work-discount'));
                 $('#first-work-discount').attr('title', i18n.__('first-work-discount-tip'));
-                $('#work-time').attr('title', i18n.__('work-time') + i18n.__('what-can-be-here-index'));
+                $('#work-time, #rest-time, #rest-time-onlyrest').attr('title', i18n.__('what-can-be-here-index'));
                 $('#title').attr('title', i18n.__('title'));
-                $('#rest-time').attr('title', i18n.__('rest-time') + i18n.__('what-can-be-here-index'));
-                $('#loop').attr('title', i18n.__('loop'));
+                $('#loop').attr('title', i18n.__('field-label-loop'));
                 $('#note').attr('title', i18n.__('note'));
                 $("#focus-work-set").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#focus-rest-set").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $(".focuser").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#continueloop").attr('title', i18n.__('continueloop-tip'));
-                $("#work-time, #rest-time, #rest-time-onlyrest, #loop").on("focus click", function () { this.select(); });
+                $("#work-time, #rest-time, #rest-time-onlyrest, #loop").on("focus click", function () {
+                    if (this.readOnly) return;
+                    this.select();
+                });
             </script>
         </div>
         <div id="all-sum" class="extreme-small font-weight-bold text-muted text-center">
@@ -341,23 +375,10 @@
             <script>document.write(i18n.__('all-sum-part-2'));</script>
             <span id="to-num-h">--</span>:<span
                 id="to-num-min">--</span>
-            <div class="extreme-small font-weight-normal" id="focus-notify-box">
+            <div class="extreme-small font-weight-normal work d-none" id="start-invalid"></div>
+            <div class="extreme-small font-weight-normal" id="focus-notify-box" style="display: none;">
                 <br />
-                <span id="notify-pre">
-                    <script>document.write(i18n.__('focus-notify-pre'));</script>
-                </span>
-                <span id="work-notify">
-                    <script>document.write(i18n.__('focus-notify-working'));</script>
-                </span>
-                <span id="rest-notify">
-                    <script>document.write(i18n.__('focus-notify-resting'));</script>
-                </span>
-                <span id="only-rest-notify">
-                    <script>document.write(i18n.__('onlyrest'));</script>
-                </span>
-                <span id="notify-body">
-                    <script>document.write(i18n.__('focus-notify-body'));</script>
-                </span>
+                <span id="focus-notify-text"></span>
             </div>
         </div>
         <button id="bottom-btn" type="button" class="btn btn-outline-primary" onclick="keyDownSubmitter()">
@@ -566,6 +587,7 @@
             }
 
             try {
+                applyHomeCoupling();
                 updateParsedHints();
                 if (onlyrest) {
                     let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
@@ -573,11 +595,11 @@
                         to: "m",
                         ignoreError: true
                     });
-                    if (!isNaN(restTimeGet))
-                        if (restTimeGet > 0 && restTimeGet <= 1440)
-                            sumGet(restTimeGet);
-                        else allClear();
+                    if (!isNaN(restTimeGet) && restTimeGet >= 5 / 60 && restTimeGet <= 1440)
+                        sumGet(restTimeGet);
                     else allClear();
+                } else if (store.get("infinity")) {
+                    allClear();
                 } else {
                     let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
                     let workTimeGet = shi.humanTimeParser($("#work-time").val(), {
@@ -589,13 +611,6 @@
                     if (getBreakPercentage() !== 0) {
                         let calculatedRestTime = workTimeGet * getBreakPercentage();
                         restTimeGet = removeRedundantEnd(calculatedRestTime);
-                        // Format the display value for the input field
-                        // $("#rest-time").val(shi.ArabicNumberTimeParser(restTimeGet, {
-                        //     lang: store.get("i18n").toString().replace("-", "_"),
-                        //     as: "m",
-                        //     to: "m",
-                        //     ignoreError: true
-                        // }));
                         $("#rest-time").val(restTimeGet);
                     } else
                         restTimeGet = shi.humanTimeParser($("#rest-time").val(), {
@@ -604,16 +619,16 @@
                             ignoreError: true
                         });
                     let loopGet = $("#loop").val().replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), "");
-                    if (workTimeGet > 0 && restTimeGet > 0 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && ((workTimeGet + restTimeGet) * loopGet) && (loopGet == Math.floor(loopGet))) {
+                    if (workTimeGet >= 5 / 60 && restTimeGet >= 5 / 60 && workTimeGet <= 1440 && restTimeGet <= 1440 && loopGet >= 1 && loopGet <= 1440 && (loopGet == Math.floor(loopGet))) {
                         sumGet((workTimeGet + restTimeGet) * loopGet);
                     } else {
                         allClear();
                     }
-                    if (store.get("infinity")) infinityMode();
                 }
             } catch {
                 allClear();
             }
+            refreshStartValidity();
         }
 
         function allClear() {
@@ -622,26 +637,40 @@
             $("#to-num-min").html("--");
         }
 
-        function infinityMode() {
-            $("#loop").val(i18n.__('infinity'));
-            allClear();
+        function applyHomeCoupling() {
+            let percentageOn = !onlyrest && getBreakPercentage() !== 0;
+            let rest = document.getElementById("rest-time");
+            if (rest) {
+                rest.readOnly = percentageOn;
+                rest.title = percentageOn ? i18n.__('percentage-break-home-hint') : i18n.__('what-can-be-here-index');
+            }
+            $("#percentage-break-home-hint").toggleClass("d-none", !percentageOn);
+
+            let infinityOn = !onlyrest && store.get("infinity") === true;
+            let loop = document.getElementById("loop");
+            if (loop) loop.readOnly = infinityOn;
+            $("#infinity-loops-home-hint").toggleClass("d-none", !infinityOn);
         }
 
         function focusNotifier() {
             let workFocus = onlyrest ? false : document.getElementById("focus-work-set").checked;
             let restFocus = onlyrest ? false : document.getElementById("focus-rest-set").checked;
             let onlyRestFocus = onlyrest ? document.getElementById("focus-rest-set-onlyrest").checked : false;
-            if ((workFocus || restFocus || onlyRestFocus) && ((workFocus !== restFocus) || onlyRestFocus)) {
-                if (workFocus) $("#work-notify").css("display", "inline");
-                else $("#work-notify").css("display", "none");
-                if (restFocus) $("#rest-notify").css("display", "inline");
-                else $("#rest-notify").css("display", "none");
-                if (onlyRestFocus) $("#only-rest-notify").css("display", "inline");
-                else $("#only-rest-notify").css("display", "none");
+            if (workFocus && restFocus) {
+                $("#focus-notify-box").css("display", "none");
+            } else if (workFocus) {
+                $("#focus-notify-text").text(i18n.__('focus-preview-work'));
+                $("#focus-notify-box").css("display", "inline");
+            } else if (restFocus) {
+                $("#focus-notify-text").text(i18n.__('focus-preview-rest'));
+                $("#focus-notify-box").css("display", "inline");
+            } else if (onlyRestFocus) {
+                $("#focus-notify-text").text(i18n.__('focus-preview-countdown'));
                 $("#focus-notify-box").css("display", "inline");
             } else {
                 $("#focus-notify-box").css("display", "none");
             }
+            refreshStartValidity();
         }
 
         function onlyRestEdgeCaseSolution() {
@@ -753,7 +782,6 @@
         require("./predefined-tasks").sanitizePredefinedTasks(store.get("predefined-tasks")).forEach(function (item, index) {
             if (store.get("default-task") === index) {
                 defaultSet(item.name, item.workTime, item.restTime, item.loops, item.focusWhenWorking, item.focusWhenResting);
-                if (store.get("infinity")) infinityMode();
                 if (store.get("autostarttask") && store.get("just-launched") &&
                         (!store.get("just-relaunched"))) {//auto-send the form is autostarttask is on
                     if (item.focusWhenWorking && item.focusWhenResting)

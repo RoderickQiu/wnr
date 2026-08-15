@@ -54,35 +54,8 @@ function initializeSettingsTipToggles(container) {
     });
 }
 
-let settingsNeedsRelaunch = false;
-try {
-    settingsNeedsRelaunch = sessionStorage.getItem('wnr-settings-needs-relaunch') === '1';
-} catch (e) { }
-
 function requestSettingsRelaunch() {
-    settingsNeedsRelaunch = true;
-    try {
-        sessionStorage.setItem('wnr-settings-needs-relaunch', '1');
-    } catch (e) { }
-}
-
-function flushPendingSettingsRelaunch() {
-    let pending = settingsNeedsRelaunch;
-    try {
-        pending = pending || sessionStorage.getItem('wnr-settings-needs-relaunch') === '1';
-    } catch (e) { }
-    if (!pending) return;
-    settingsNeedsRelaunch = false;
-    try {
-        sessionStorage.removeItem('wnr-settings-needs-relaunch');
-    } catch (e) { }
-    ipc.send('relauncher');
-}
-
-try {
-    require('@electron/remote').getCurrentWindow().on('close', flushPendingSettingsRelaunch);
-} catch (e) {
-    window.addEventListener('beforeunload', flushPendingSettingsRelaunch);
+    ipc.send('relaunch-dialog');
 }
 
 function setSettingsCoupling(id, show, text) {
@@ -322,7 +295,7 @@ function collapseSolution(obj, parent) {
                 </p>
             </div>
             <div class="col-3 text-right">
-                <a class="btn btn-sm btn-outline-primary dropdown-toggle" data-toggle="collapse" href="#collapsed-${ id }" role="button"
+                <a class="btn btn-sm btn-outline-primary settings-collapse-toggle" data-toggle="collapse" href="#collapsed-${ id }" role="button"
                    aria-expanded="false" aria-controls="collapse-${ id }" id="collapse-toggle-${ id }">
                     ${ i18n.__("unfold") }
                 </a>
@@ -371,7 +344,6 @@ function dropdownSolution(obj, parent) {
                     ${ tipped ? i18n.__(id + '-tip') : "" }
                 </p>
                 <p class="settings-coupling d-none" id="coupling-${ id }"></p>
-                ${ relaunch ? `<p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>` : '' }
             </div>
             <div class="col-4 text-right">
                 <div class="dropdown d-inline">
@@ -462,7 +434,6 @@ function selectionSoluion(obj, parent, inner) {
                     ${ tipped ? i18n.__(id + '-tip') : "" }
                 </p>
                 <p class="settings-coupling d-none" id="coupling-${ id }"></p>
-                ${ relaunch ? `<p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>` : '' }
             </div>
             <div class="col-${ inner ? 4 : 3 } text-right">
                 <label class="switch-slide">
@@ -824,7 +795,6 @@ function domString(type) {
                         <a href=\"javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/locales/README.md')\">${ i18n.__('language-contribute-tip-part-2') }</a>
                         ${ i18n.__('feedback-tip-part-4') }
                 </p>
-                <p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>
             </div>
             <div class="col-4 text-right">
                 <div class="dropdown d-inline">
@@ -1955,8 +1925,7 @@ async function webDavSyncDownload() {
 
 //locker
 function lockerInitializer() {
-    $('#passcode-locker').attr('placeholder', i18n.__('locker-settings-input'));
-    $('#passcode-locker-again').attr('placeholder', i18n.__('locker-settings-input-again'));
+    $('#passcode-locker, #passcode-locker-again').removeAttr('placeholder');
 }
 
 function lock(passcode, again) {

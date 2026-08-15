@@ -105,6 +105,7 @@ function isInDark() {
             '#settings-container .settings-section-anchor {border-bottom-color: #ffffff18;}' +
             '#settings-header {border-bottom-color: #aaaaaa33;}' +
             '.settings-back-to-top {color: #aaaaaa;}' +
+            '.home-coupling {color: #999999;}' +
             '.settings-section-nav-item {color: #999999;}' +
             '.settings-section-nav-item:hover, .settings-section-nav-item.is-current {color: #5490ea;}' +
             '#dialog-msg {color: #ccc;}' +

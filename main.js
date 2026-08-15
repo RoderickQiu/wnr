@@ -2587,7 +2587,7 @@ ipcMain.on("relaunch-dialog", function (event, message) {
         store.delete("previous-language");
     }
     
-    customDialog("on", "wnr", messageText, "relaunch");
+    customDialog("select_on", "wnr", messageText, "relaunch");
 })
 
 ipcMain.on("open-external-title-win", function (event, message) {

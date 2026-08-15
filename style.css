@@ -394,6 +394,16 @@ li input:nth-last-child(4)::after {
     margin: 4px 0 0;
 }
 
+#settings-container .settings-collapse-toggle {
+    display: inline-block;
+    max-width: 100%;
+    padding: 2px 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: middle;
+}
+
 .locker-field-label {
     display: block;
     font-size: small;
@@ -565,6 +575,32 @@ li input:nth-last-child(4)::after {
 
 .field-unit.is-hidden {
     display: none;
+}
+
+.home-coupling {
+    display: block;
+    width: 192px;
+    font-size: 11px;
+    line-height: 1.45;
+    margin: 4px 0 0 1px;
+    color: #6c757d;
+    -webkit-user-select: none;
+}
+
+#set input[readonly],
+#set-onlyrest input[readonly] {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+#bottom-btn:disabled,
+#bottom-btn.btn-onlyRest:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+}
+
+#start-invalid {
+    margin-top: 2px;
 }
 
 #set .dropdown-menu {
