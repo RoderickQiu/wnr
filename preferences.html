@@ -18,7 +18,8 @@
     <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
-<body>
+<body class="settings-page">
+    <div id="settings-drag-strip"></div>
     <!-- loader -->
     <div id="loader-wrapper">
         <div id="loader"></div>
@@ -40,15 +41,18 @@
             <i class="iconfont icon-close" id="exit-and-save"></i>
         </a>
         <script>
-            $('#exit-and-save').attr('title', i18n.__('exit-and-save'));
+            $('#exit-and-save').attr('title', i18n.__('close'));
             if (process.platform === "darwin") $("#controller").css("display", "none");
         </script>
     </div>
-    <div class="d-flex h3 rest" id="settings-title">
-        <script>document.write(i18n.__('settings'));</script>
+    <div id="settings-header">
+        <div class="d-flex h3 rest" id="settings-title">
+            <script>document.write(i18n.__('settings'));</script>
+        </div>
+        <button type="button" class="settings-back-to-top" id="settings-back-to-top" onclick="scrollSettingsToTop()"></button>
+        <nav id="settings-section-nav"></nav>
     </div>
-    <div id="settings-title-hr"></div>
-    <div class="d-flex" id="settings-container">
+    <div id="settings-container">
     </div>
     <script src="preferences-renderer.js"></script>
     <script src="preferences-items.js"></script>

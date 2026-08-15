@@ -19,6 +19,10 @@ function preferenceCreator(items, container, inner) {
         }
     }
     initializeSettingsTipToggles(container);
+    if (!inner) {
+        refreshSettingsCoupling();
+        initializeSettingsSectionNav(container);
+    }
 }
 
 function initializeSettingsTipToggles(container) {
@@ -50,16 +54,256 @@ function initializeSettingsTipToggles(container) {
     });
 }
 
+let settingsNeedsRelaunch = false;
+try {
+    settingsNeedsRelaunch = sessionStorage.getItem('wnr-settings-needs-relaunch') === '1';
+} catch (e) { }
+
+function requestSettingsRelaunch() {
+    settingsNeedsRelaunch = true;
+    try {
+        sessionStorage.setItem('wnr-settings-needs-relaunch', '1');
+    } catch (e) { }
+}
+
+function flushPendingSettingsRelaunch() {
+    let pending = settingsNeedsRelaunch;
+    try {
+        pending = pending || sessionStorage.getItem('wnr-settings-needs-relaunch') === '1';
+    } catch (e) { }
+    if (!pending) return;
+    settingsNeedsRelaunch = false;
+    try {
+        sessionStorage.removeItem('wnr-settings-needs-relaunch');
+    } catch (e) { }
+    ipc.send('relauncher');
+}
+
+try {
+    require('@electron/remote').getCurrentWindow().on('close', flushPendingSettingsRelaunch);
+} catch (e) {
+    window.addEventListener('beforeunload', flushPendingSettingsRelaunch);
+}
+
+function setSettingsCoupling(id, show, text) {
+    let line = $('#coupling-' + id);
+    if (line.length === 0) return;
+    line.text(text || '');
+    line.toggleClass('d-none', !show);
+}
+
+function setSelectionDisabled(id, disabled) {
+    let selection = $('#selection-' + id);
+    if (selection.length === 0) return;
+    selection.prop('disabled', !!disabled);
+}
+
+function setDropdownDisabled(id, disabled) {
+    let button = $('#dropdown-button-' + id);
+    if (button.length === 0) return;
+    button.toggleClass('disabled', !!disabled);
+    button.attr('aria-disabled', disabled ? 'true' : 'false');
+    button.attr('tabindex', disabled ? '-1' : '0');
+}
+
+function hasReservedSessions() {
+    let reserved = store.get('reserved');
+    if (Array.isArray(reserved)) return reserved.length > 0;
+    return !!(reserved && String(reserved) !== '');
+}
+
+function hasDefaultPlan() {
+    if (!store.has('default-task')) return false;
+    let index = Number(store.get('default-task'));
+    return !isNaN(index) && index >= 0;
+}
+
+function refreshSettingsCoupling() {
+    let percentageOn = Number(store.has('percentage-break-mode') ? store.get('percentage-break-mode') : 0) !== 0;
+    let infinityOn = store.get('infinity') === true;
+    let reservedOn = hasReservedSessions();
+    let defaultOn = hasDefaultPlan();
+    let looseOff = Number(store.has('loose-mode-dropdown') ? store.get('loose-mode-dropdown') : 0) === 0;
+    let continueAfterLock = store.get('timing-after-locked') === true;
+    let autostartBlocked = !defaultOn || reservedOn;
+    let autostartReason = '';
+    if (reservedOn) autostartReason = i18n.__('settings-coupling-autostart-reserved');
+    else if (!defaultOn) autostartReason = i18n.__('settings-coupling-autostart-no-default');
+
+    setSettingsCoupling('percentage-break-mode', percentageOn, i18n.__('settings-coupling-percentage-rest'));
+    $('input[id^="rest-time"]').prop('readonly', percentageOn);
+    $('.settings-coupling-plan-rest').toggleClass('d-none', !percentageOn);
+
+    $('input[id^="loops"]').prop('readonly', infinityOn);
+    $('.settings-coupling-plan-loops').toggleClass('d-none', !infinityOn);
+    setDropdownDisabled('disable-back', infinityOn);
+    setSettingsCoupling('disable-back', infinityOn, i18n.__('settings-coupling-infinity-cancel'));
+
+    setSelectionDisabled('autostarttask', autostartBlocked);
+    setSettingsCoupling('autostarttask', autostartBlocked, autostartReason);
+
+    setSelectionDisabled('force-screen-lock-mode', !(looseOff && continueAfterLock));
+    setSettingsCoupling('force-screen-lock-mode', !(looseOff && continueAfterLock), i18n.__('settings-coupling-force-lock'));
+}
+
+function saveSettingsViewState() {
+    let open = [];
+    $('#settings-container .collapse.show').each(function () {
+        open.push(this.id);
+    });
+    let container = document.getElementById('settings-container');
+    sessionStorage.setItem('wnr-settings-view', JSON.stringify({
+        scroll: container ? container.scrollTop : 0,
+        open: open
+    }));
+}
+
+function restoreSettingsViewState() {
+    let raw = sessionStorage.getItem('wnr-settings-view');
+    if (!raw) return;
+    sessionStorage.removeItem('wnr-settings-view');
+    let state = null;
+    try {
+        state = JSON.parse(raw);
+    } catch (e) {
+        return;
+    }
+    if (!state) return;
+    if (state.open) {
+        for (let i = 0; i < state.open.length; i++) {
+            let collapse = document.getElementById(state.open[i]);
+            if (!collapse) continue;
+            collapse.classList.add('show');
+            if (state.open[i].indexOf('collapsed-') === 0) {
+                $('#collapse-toggle-' + state.open[i].slice('collapsed-'.length)).text(i18n.__('fold') + ' ');
+            }
+        }
+    }
+    if (typeof state.scroll === 'number') {
+        requestAnimationFrame(function () {
+            layoutSettingsHeader();
+            let container = document.getElementById('settings-container');
+            if (container) container.scrollTop = state.scroll;
+            syncSettingsSectionNav(container);
+        });
+    } else {
+        layoutSettingsHeader();
+    }
+}
+
 function titleSolution(obj, parent) {
     let id = obj.id;
+    let topLevel = parent.is('#settings-container');
     parent.append(`
-    <div class="row w-100 align-items-center">
+    <div class="row w-100 align-items-center${ topLevel ? ' settings-section-anchor' : '' }"${ topLevel ? ' id="settings-anchor-' + id + '" data-section="' + id + '"' : '' }>
         <div class="col-12">
-            <small class="text-grey settings-title">${ i18n.__(id) }</small>
+            <${ topLevel ? 'div' : 'small' } class="settings-title${ topLevel ? ' settings-section-heading' : ' text-grey' }">${ i18n.__(id) }</${ topLevel ? 'div' : 'small' }>
         </div>
     </div>
     <br />
     `);
+}
+
+function settingsContainerEl() {
+    return document.getElementById('settings-container');
+}
+
+function sectionScrollTop(container, target) {
+    return target.getBoundingClientRect().top - container.getBoundingClientRect().top + container.scrollTop;
+}
+
+function markSettingsSectionCurrent(sectionId) {
+    let items = document.querySelectorAll('.settings-section-nav-item');
+    for (let i = 0; i < items.length; i++) {
+        items[i].classList.toggle('is-current', items[i].getAttribute('data-section') === sectionId);
+        if (items[i].getAttribute('data-section') !== sectionId) items[i].blur();
+    }
+}
+
+function scrollSettingsToTop() {
+    let el = settingsContainerEl();
+    if (!el) return;
+    let first = el.querySelector('.settings-section-anchor');
+    if (first) markSettingsSectionCurrent(first.getAttribute('data-section'));
+    if (typeof el.scrollTo === 'function') el.scrollTo({ top: 0, behavior: 'smooth' });
+    else el.scrollTop = 0;
+}
+
+function scrollSettingsToSection(id) {
+    let el = settingsContainerEl();
+    let target = document.getElementById('settings-anchor-' + id);
+    if (!el || !target) return;
+    markSettingsSectionCurrent(id);
+    let top = Math.max(0, sectionScrollTop(el, target));
+    if (typeof el.scrollTo === 'function') el.scrollTo({ top: top, behavior: 'smooth' });
+    else el.scrollTop = top;
+}
+
+function layoutSettingsHeader() {
+    let header = document.getElementById('settings-header');
+    let el = settingsContainerEl();
+    if (!header || !el) return;
+    let bottom = header.offsetTop + header.offsetHeight;
+    el.style.top = bottom + 'px';
+    el.style.height = Math.max(160, window.innerHeight - bottom - 12) + 'px';
+}
+
+function syncSettingsSectionNav(el) {
+    if (!el) return;
+    document.body.classList.toggle('settings-scrolled', el.scrollTop > 24);
+    let anchors = el.querySelectorAll('.settings-section-anchor');
+    if (!anchors.length) return;
+
+    let current = anchors[0].getAttribute('data-section');
+    let nearBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 8;
+    if (nearBottom) {
+        current = anchors[anchors.length - 1].getAttribute('data-section');
+    } else {
+        let probe = el.getBoundingClientRect().top + 20;
+        for (let i = 0; i < anchors.length; i++) {
+            if (anchors[i].getBoundingClientRect().top <= probe) {
+                current = anchors[i].getAttribute('data-section');
+            }
+        }
+    }
+    markSettingsSectionCurrent(current);
+}
+
+function initializeSettingsSectionNav(container) {
+    let el = $(container)[0] || settingsContainerEl();
+    let button = document.getElementById('settings-back-to-top');
+    let nav = document.getElementById('settings-section-nav');
+    if (!el) return;
+
+    if (button) {
+        button.setAttribute('title', i18n.__('settings-back-to-top'));
+        button.setAttribute('aria-label', i18n.__('settings-back-to-top'));
+        button.textContent = '↑';
+        button.onclick = scrollSettingsToTop;
+    }
+
+    if (nav) {
+        nav.innerHTML = '';
+        let anchors = el.querySelectorAll('.settings-section-anchor');
+        for (let i = 0; i < anchors.length; i++) {
+            let id = anchors[i].getAttribute('data-section');
+            let item = document.createElement('button');
+            item.type = 'button';
+            item.className = 'settings-section-nav-item';
+            item.setAttribute('data-section', id);
+            item.textContent = i18n.__(id);
+            item.onclick = function (sectionId) {
+                return function () { scrollSettingsToSection(sectionId); };
+            }(id);
+            nav.appendChild(item);
+        }
+        nav.style.display = anchors.length ? 'flex' : 'none';
+    }
+
+    layoutSettingsHeader();
+    el.addEventListener('scroll', function () { syncSettingsSectionNav(el); }, { passive: true });
+    window.addEventListener('resize', layoutSettingsHeader);
+    syncSettingsSectionNav(el);
 }
 
 function collapseSolution(obj, parent) {
@@ -126,6 +370,8 @@ function dropdownSolution(obj, parent) {
                 <p class="settings-msg${ tipped ? '' : ' d-none' }">
                     ${ tipped ? i18n.__(id + '-tip') : "" }
                 </p>
+                <p class="settings-coupling d-none" id="coupling-${ id }"></p>
+                ${ relaunch ? `<p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>` : '' }
             </div>
             <div class="col-4 text-right">
                 <div class="dropdown d-inline">
@@ -179,11 +425,13 @@ function dropdownSolution(obj, parent) {
 }
 
 function dropdownTrigger(id, choiceId, choiceMsg, relaunch, after) {
+    if ($('#dropdown-button-' + id).hasClass('disabled')) return;
     $('#dropdown-button-' + id).html(choiceMsg);
     console.log(id, choiceId, choiceMsg, relaunch, after);
     store.set(id, choiceId);
     after(choiceId);//do after execution jobs
-    if (relaunch) ipc.send("relaunch-dialog");
+    if (relaunch) requestSettingsRelaunch();
+    refreshSettingsCoupling();
 }
 
 /*
@@ -213,6 +461,8 @@ function selectionSoluion(obj, parent, inner) {
                 <p class="settings-msg${ tipped ? '' : ' d-none' }" id="msg-${ id }">
                     ${ tipped ? i18n.__(id + '-tip') : "" }
                 </p>
+                <p class="settings-coupling d-none" id="coupling-${ id }"></p>
+                ${ relaunch ? `<p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>` : '' }
             </div>
             <div class="col-${ inner ? 4 : 3 } text-right">
                 <label class="switch-slide">
@@ -230,7 +480,8 @@ function selectionSoluion(obj, parent, inner) {
     selection.on("click", function () {
         store.set(id, $('#selection-' + id).prop("checked"));
         after($('#selection-' + id).prop("checked"));//do after execution jobs
-        if (relaunch) ipc.send("relaunch-dialog");
+        if (relaunch) requestSettingsRelaunch();
+        refreshSettingsCoupling();
     });
 }
 
@@ -256,6 +507,8 @@ function customSolution(type, parent) {
             hotkeyInitializer();
             break;
         case "data-management":
+            break;
+        case "webdav-sync":
             webDavSyncInitializer();
             break;
         case "locker":
@@ -571,6 +824,7 @@ function domString(type) {
                         <a href=\"javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/locales/README.md')\">${ i18n.__('language-contribute-tip-part-2') }</a>
                         ${ i18n.__('feedback-tip-part-4') }
                 </p>
+                <p class="settings-coupling settings-restart-hint">${ i18n.__('settings-applies-after-restart') }</p>
             </div>
             <div class="col-4 text-right">
                 <div class="dropdown d-inline">
@@ -644,11 +898,11 @@ function domString(type) {
                     ${ i18n.__('statistics-import-tip') }
                 </p>
             </li>
-            <li>
-                ${ i18n.__('webdav-sync-msg') }
-                <p class="small text-muted">
-                    ${ i18n.__('webdav-sync-tip') }
-                </p>
+            </ul><br/>`;
+            break;
+        case "webdav-sync":
+            appendDOMString = `
+            <div class="w-100">
                 <div class="small text-muted webdav-sync-form">
                     <div class="row no-gutters align-items-center webdav-sync-form-row">
                         <div class="col-4 webdav-sync-form-label">
@@ -714,8 +968,8 @@ function domString(type) {
                     </a>
                 </p>
                 <pre class="small text-muted d-none" id="webdav-sync-detail"></pre>
-            </li>
-            </ul><br/>`;
+            </div>
+            <br/>`;
             break;
         case "locker":
             appendDOMString = `
@@ -724,15 +978,22 @@ function domString(type) {
             <small class="text-grey">
                 ${ i18n.__('locker-now-status') }<span class="font-weight-bold rest">
                 ${ store.get('islocked') ? i18n.__('on') : i18n.__('off') } </span> ${ i18n.__('period-symbol') }
-            </small><br /><br/>
+            </small>
+            <p class="settings-coupling locker-lock-out-hint">${ i18n.__('locker-lock-out-hint') }</p>
+            <label class="locker-field-label" for="passcode-locker">${ i18n.__('locker-settings-input') }</label>
             <input id="passcode-locker" maxlength="11" name="passcode-locker"
             onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());"
             type="password" />
-            <br />
+            <label class="locker-field-label" for="passcode-locker-again">${ i18n.__('locker-settings-input-again') }</label>
             <input id="passcode-locker-again" maxlength="11" name="passcode-locker-again"
             onkeydown="if(event.keyCode === 13) lock($('#passcode-locker').val(), $('#passcode-locker-again').val());"
             type="password" />
-            <br /><br/>
+            <div class="locker-submit-row">
+                <a class="btn btn-sm btn-outline-primary" id="locker-submit"
+                   href="javascript:lock($('#passcode-locker').val(), $('#passcode-locker-again').val());">
+                    ${ store.get('islocked') ? i18n.__('locker-turn-off') : i18n.__('locker-turn-on') }
+                </a>
+            </div>
             <small class="text-grey settings-title">
             ${ store.get('islocked') ? i18n.__('locker-settings-input-tip-lock-mode-on') : i18n.__('locker-settings-input-tip-lock-mode-off') }
             </small></div></div>
@@ -765,12 +1026,18 @@ $(function () {
             $("#collapse-toggle-data-management").text(i18n.__("fold") + " ");
             window.location.hash = "#collapsed-data-management";
             break;
+        case "webdav-sync":
+            $("#collapsed-webdav-sync").addClass("show");
+            $("#collapse-toggle-webdav-sync").text(i18n.__("fold") + " ");
+            window.location.hash = "#collapsed-webdav-sync";
+            break;
         case "locker":
             $("#collapsed-locker").addClass("show");
             $("#collapse-toggle-locker").text(i18n.__("fold") + " ");
             break;
     }
     store.set("settings-goto", "settings");
+    restoreSettingsViewState();
 })
 
 //autocheck
@@ -802,10 +1069,14 @@ function planEdit(index) {
     defaultArray[index].name = predefinedTasksUtil.sanitizeTaskName($("#title" + index).val());
     if (!isNaN(Number($("#work-time" + index).val())) && Number($("#work-time" + index).val()) >= 0.083) defaultArray[index].workTime = $("#work-time" + index).val();
     else $("#work-time" + index).val(defaultArray[index].workTime);
-    if (!isNaN(Number($("#rest-time" + index).val())) && Number($("#rest-time" + index).val()) >= 0.083) defaultArray[index].restTime = $("#rest-time" + index).val();
-    else $("#rest-time" + index).val(defaultArray[index].restTime);
-    if (!isNaN(Number($("#loops" + index).val())) && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
-    else $("#loops" + index).val(defaultArray[index].loops);
+    if (!$("#rest-time" + index).prop("readonly")) {
+        if (!isNaN(Number($("#rest-time" + index).val())) && Number($("#rest-time" + index).val()) >= 0.083) defaultArray[index].restTime = $("#rest-time" + index).val();
+        else $("#rest-time" + index).val(defaultArray[index].restTime);
+    }
+    if (!$("#loops" + index).prop("readonly")) {
+        if (!isNaN(Number($("#loops" + index).val())) && Number($("#loops" + index).val()) >= 1) defaultArray[index].loops = $("#loops" + index).val();
+        else $("#loops" + index).val(defaultArray[index].loops);
+    }
     defaultArray[index].focusWhenWorking = !!document.getElementById("focus-when-working" + index).checked;
     defaultArray[index].focusWhenResting = !!document.getElementById("focus-when-resting" + index).checked;
     store.set("predefined-tasks", defaultArray);
@@ -905,6 +1176,14 @@ function planAppend(item, index) {
     details.appendChild(document.createTextNode(" " + i18n.__("min") + i18n.__("predefined-tasks-settings-tip-part-3") + " "));
     details.appendChild(loopsInput);
     details.appendChild(document.createTextNode(" " + i18n.__("time(s)")));
+    let restCoupling = document.createElement("div");
+    restCoupling.className = "settings-coupling settings-coupling-plan-rest d-none";
+    restCoupling.textContent = i18n.__("settings-coupling-percentage-rest");
+    details.appendChild(restCoupling);
+    let loopsCoupling = document.createElement("div");
+    loopsCoupling.className = "settings-coupling settings-coupling-plan-loops d-none";
+    loopsCoupling.textContent = i18n.__("settings-coupling-infinity-loops");
+    details.appendChild(loopsCoupling);
     details.appendChild(document.createElement("br"));
     details.appendChild(document.createTextNode(i18n.__("focus-when-working") + " "));
     details.appendChild(focusWork);
@@ -962,6 +1241,7 @@ function setAsDefault(index) {
         $('#title' + index).removeClass("work");
         $('#title' + index).addClass("rest");
     }
+    refreshSettingsCoupling();
 }
 
 //task reserved
@@ -1256,8 +1536,11 @@ function languageSetting(val) {
     if (store.get('i18n') !== val) {
         store.set("previous-language", store.get('i18n'));
         store.set("i18n", val);
+        for (let i in languageList) {
+            if (languageList[i] === val) $("#language-dropdown-button").text(languageNameList[i]);
+        }
+        requestSettingsRelaunch();
     }
-    ipc.send("relaunch-dialog");
 }
 
 // theme color

@@ -29,6 +29,11 @@ if (store.get("islocked") !== true) {
                 }
             ],
         }, {
+            type: "dropdown",
+            id: "default-page",
+            choices: ['normal-timing', 'stopwatch-mode', 'simple-countdown'],
+            def: 0
+        }, {
             type: "collapse",
             id: "task-reservation",
             inner: [
@@ -211,22 +216,9 @@ if (store.get("islocked") !== true) {
             ]
         }, {
             type: "title",
-            id: "global-settings"
+            id: "settings-section-look"
         }, {
             type: "i18n"
-        }, {
-            type: "dropdown",
-            id: "zoom-ratio",
-            choices: ['zoom-0.75', 'zoom-0.9', 'zoom-1', 'zoom-1.1', 'zoom-1.25'],
-            def: 2,
-            after: zoomRatioAfter
-        }, {
-            type: "dropdown",
-            id: "start-from-which-day",
-            choices: ['from-monday', 'from-sunday'],
-            tipped: false,
-            def: 1,
-            after: startFromWhichDayAfter
         }, {
             type: "dropdown",
             id: "dark-or-white",
@@ -235,9 +227,25 @@ if (store.get("islocked") !== true) {
             choices: ['auto-switch', 'light', 'dark'],
             def: 0
         }, {
-            type: "selection",
-            id: "autostart",
-            after: autostartAfter
+            type: "dropdown",
+            id: "zoom-ratio",
+            choices: ['zoom-0.75', 'zoom-0.9', 'zoom-1', 'zoom-1.1', 'zoom-1.25'],
+            def: 2,
+            after: zoomRatioAfter
+        }, {
+            type: "collapse",
+            id: "theme-color",
+            tipped: false,
+            inner: [{
+                type: "theme-color"
+            }]
+        }, {
+            type: "dropdown",
+            id: "start-from-which-day",
+            choices: ['from-monday', 'from-sunday'],
+            tipped: false,
+            def: 1,
+            after: startFromWhichDayAfter
         }, {
             type: "selection",
             id: "dock-hide",
@@ -249,10 +257,12 @@ if (store.get("islocked") !== true) {
             tipped: false,
             relaunch: true
         }, {
-            type: "dropdown",
-            id: "default-page",
-            choices: ['normal-timing', 'stopwatch-mode', 'simple-countdown'],
-            def: 0
+            type: "title",
+            id: "settings-section-data"
+        }, {
+            type: "selection",
+            id: "autostart",
+            after: autostartAfter
         }, {
             type: "autocheck"
         }, {
@@ -275,16 +285,15 @@ if (store.get("islocked") !== true) {
             }]
         }, {
             type: "collapse",
-            id: "locker",
+            id: "webdav-sync",
             inner: [{
-                type: "locker"
+                type: "webdav-sync"
             }]
         }, {
             type: "collapse",
-            id: "theme-color",
-            tipped: false,
+            id: "locker",
             inner: [{
-                type: "theme-color"
+                type: "locker"
             }]
         }
     ], $("#settings-container"), false);
@@ -391,6 +400,7 @@ function startFromWhichDayAfter(val) {
 
 function zoomRatioAfter(val) {
     ipc.send('zoom-ratio-change', val);
+    saveSettingsViewState();
     location.reload()
 }
 

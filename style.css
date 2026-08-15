@@ -387,6 +387,33 @@ li input:nth-last-child(4)::after {
     padding-top: 5px;
 }
 
+.settings-coupling {
+    font-size: x-small;
+    color: #6c757d !important;
+    line-height: 1.45;
+    margin: 4px 0 0;
+}
+
+.locker-field-label {
+    display: block;
+    font-size: small;
+    margin: 10px 0 2px;
+}
+
+.locker-submit-row {
+    margin: 12px 0 8px;
+}
+
+#settings-container input[readonly].hotkeyset {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+#settings-container .dropdown-toggle.disabled {
+    pointer-events: none;
+    opacity: 0.45;
+}
+
 .settings-tip-toggle {
     width: 18px;
     height: 18px;
@@ -638,22 +665,104 @@ li input:nth-last-child(4)::after {
     -webkit-user-select: text;
 }
 
-#settings-title {
+html:has(body.settings-page),
+body.settings-page {
     -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: none;
-    position: absolute;
-    top: 24px;
-    left: 20px;
-    z-index: -9999;
 }
 
-#settings-title-hr {
+#settings-drag-strip {
     position: absolute;
-    top: 75px;
-    left: 20px;
-    right: 20px;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 36px;
+    z-index: 1;
+    -webkit-app-region: drag;
+}
+
+#settings-header {
+    position: absolute;
+    top: 36px;
+    left: 0;
+    right: 0;
+    z-index: 4;
+    padding: 12px 20px 10px;
     border-bottom: #33333322 solid 1px;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
+#settings-title {
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    position: relative;
+    top: auto;
+    left: auto;
+    z-index: 3;
+    padding-right: 40px;
+}
+
+#settings-section-nav {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 14px;
+    margin-top: 10px;
+}
+
+.settings-section-nav-item {
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #6c757d;
+    font-size: 12px;
+    line-height: 1.4;
+    cursor: pointer;
+    -webkit-app-region: no-drag;
+}
+
+.settings-section-nav-item:hover {
+    color: #5490ea;
+}
+
+.settings-section-nav-item:focus {
+    outline: none;
+}
+
+.settings-section-nav-item.is-current {
+    color: #5490ea;
+}
+
+.settings-back-to-top {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    z-index: 4;
+    width: 36px;
+    height: 36px;
+    margin: 0;
+    padding: 0;
+    border: none;
+    background: transparent;
+    color: #6c757d;
+    font-size: 20px;
+    line-height: 36px;
+    text-align: center;
+    cursor: pointer;
+    visibility: hidden;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
+body.settings-scrolled .settings-back-to-top {
+    visibility: visible;
+}
+
+.settings-back-to-top:hover,
+.settings-back-to-top:focus {
+    color: #5490ea;
+    outline: none;
 }
 
 #predefined-tasks-sidebar {
@@ -662,20 +771,39 @@ li input:nth-last-child(4)::after {
 
 #settings-container {
     -webkit-app-region: no-drag;
-    /* let it clickable */
     -webkit-user-select: text;
     position: absolute;
-    flex-direction: column;
-    top: 70px;
+    display: block;
+    top: 136px;
     left: 18px;
     right: 18px;
     width: auto;
-    margin: 24px 0 0;
+    margin: 0;
+    padding: 18px 2px 24px;
     overflow-y: auto;
     overflow-x: hidden;
-    height: 525px;
+    height: 484px;
     word-break: normal;
     font-size: 14px;
+}
+
+#settings-container .settings-section-anchor {
+    margin: 10px 0 2px;
+    padding: 4px 0 10px;
+    border-bottom: 1px solid #33333318;
+}
+
+#settings-container .settings-section-anchor:first-child {
+    margin-top: 0;
+}
+
+#settings-container .settings-section-heading {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    line-height: 1.3;
+    color: #5490ea;
 }
 
 #settings-container::-webkit-scrollbar-track {
@@ -1302,7 +1430,13 @@ li input:nth-last-child(4)::after {
 /*  RTL: Absolute-positioned elements  */
 [dir="rtl"] #settings-title {
     left: auto;
-    right: 20px;
+    right: auto;
+    padding-right: 0;
+    padding-left: 40px;
+}
+[dir="rtl"] .settings-back-to-top {
+    right: auto;
+    left: 12px;
 }
 [dir="rtl"] #settings-helper {
     right: auto;
@@ -1329,7 +1463,8 @@ li input:nth-last-child(4)::after {
     left: auto;
     right: 27px;
 }
-[dir="rtl"] #settings-container .settings-title {
+[dir="rtl"] #settings-container .settings-title,
+[dir="rtl"] #settings-container .settings-section-heading {
     text-align: right !important;
     width: 100%;
     display: block;

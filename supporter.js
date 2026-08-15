@@ -101,6 +101,12 @@ function isInDark() {
             '.switch-slide-label:after {background: #ccc !important;}' +
             '.card {background-color: #191919; border: 1px solid rgba(255,255,255,.125);} ' +
             '.settings-title {color: #ddd;}' +
+            '#settings-container .settings-section-heading {color: #5490ea;}' +
+            '#settings-container .settings-section-anchor {border-bottom-color: #ffffff18;}' +
+            '#settings-header {border-bottom-color: #aaaaaa33;}' +
+            '.settings-back-to-top {color: #aaaaaa;}' +
+            '.settings-section-nav-item {color: #999999;}' +
+            '.settings-section-nav-item:hover, .settings-section-nav-item.is-current {color: #5490ea;}' +
             '#dialog-msg {color: #ccc;}' +
             '.dropdown-default {color: #aaa;}' +
             '.dropdown-toggle::before {color: #aaa;}' +
