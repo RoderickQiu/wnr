@@ -650,64 +650,59 @@ function domString(type) {
                     ${ i18n.__('webdav-sync-tip') }
                 </p>
                 <div class="small text-muted webdav-sync-form">
-                    <div class="row align-items-center webdav-sync-form-row">
-                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                    <div class="row no-gutters align-items-center webdav-sync-form-row">
+                        <div class="col-4 webdav-sync-form-label">
                             <label for="webdav-sync-url">${ i18n.__('webdav-sync-url') }</label>
                         </div>
-                        <div class="col-7 col-md-8">
-                            <input id="webdav-sync-url" name="webdav-sync-url" type="text" />
+                        <div class="col-8">
+                            <input id="webdav-sync-url" name="webdav-sync-url" type="text"
+                                   placeholder="${ i18n.__('webdav-sync-url-placeholder') }" />
                         </div>
                     </div>
-                    <div class="row align-items-center webdav-sync-form-row">
-                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                    <div class="row no-gutters align-items-center webdav-sync-form-row">
+                        <div class="col-4 webdav-sync-form-label">
                             <label for="webdav-sync-username">${ i18n.__('webdav-sync-username') }</label>
                         </div>
-                        <div class="col-7 col-md-8">
+                        <div class="col-8">
                             <input id="webdav-sync-username" name="webdav-sync-username" type="text" />
                         </div>
                     </div>
-                    <div class="row align-items-center webdav-sync-form-row">
-                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                    <div class="row no-gutters align-items-center webdav-sync-form-row">
+                        <div class="col-4 webdav-sync-form-label">
                             <label for="webdav-sync-password">${ i18n.__('webdav-sync-password') }</label>
                         </div>
-                        <div class="col-7 col-md-8">
+                        <div class="col-8">
                             <input id="webdav-sync-password" name="webdav-sync-password" type="password" />
                         </div>
                     </div>
-                    <div class="row align-items-center webdav-sync-form-row">
-                        <div class="col-5 col-md-4 webdav-sync-form-label">
+                    <div class="row no-gutters align-items-center webdav-sync-form-row">
+                        <div class="col-4 webdav-sync-form-label">
                             <label for="webdav-sync-remote-path">${ i18n.__('webdav-sync-remote-path') }</label>
                         </div>
-                        <div class="col-7 col-md-8">
+                        <div class="col-8">
                             <input id="webdav-sync-remote-path" name="webdav-sync-remote-path" type="text"
                                    placeholder="${ i18n.__('webdav-sync-remote-path-placeholder') }" />
                         </div>
                     </div>
                 </div>
-                <div class="row w-100 align-items-center webdav-sync-toggle-row">
+                <div class="row no-gutters w-100 align-items-center webdav-sync-toggle-row">
                     <div class="col-9 text-left">
                         <label>${ i18n.__('webdav-sync-enabled') }</label><br />
                         <p class="settings-msg">${ i18n.__('webdav-sync-enabled-tip') }</p>
                     </div>
                     <div class="col-3 text-right">
-                        <span class="switch-slide">
-                            <input type="checkbox" id="selection-webdav-sync-enabled" class="sr-only" role="switch">
+                        <label class="switch-slide">
+                            <input type="checkbox" id="selection-webdav-sync-enabled" hidden role="switch">
                             <label for="selection-webdav-sync-enabled" class="switch-slide-label"></label>
-                        </span>
+                        </label>
                     </div>
                 </div>
                 <div class="small text-muted webdav-sync-actions">
-                    <a class="rest underlined" href="javascript:webDavSyncTest()">
-                        ${ i18n.__('webdav-sync-test') + i18n.__('period-symbol') }
-                    </a>
-                    &nbsp;|&nbsp;
-                    <a class="rest underlined" href="javascript:webDavSyncUpload()">
-                        ${ i18n.__('webdav-sync-upload') + i18n.__('period-symbol') }
-                    </a>
-                    &nbsp;|&nbsp;
-                    <a class="rest underlined" href="javascript:webDavSyncDownload()">
-                        ${ i18n.__('webdav-sync-download') + i18n.__('period-symbol') }
-                    </a>
+                    <a class="rest underlined" href="javascript:webDavSyncTest()">${ i18n.__('webdav-sync-test') }</a>
+                    <span class="webdav-sync-action-sep">|</span>
+                    <a class="rest underlined" href="javascript:webDavSyncUpload()">${ i18n.__('webdav-sync-upload') }</a>
+                    <span class="webdav-sync-action-sep">|</span>
+                    <a class="rest underlined" href="javascript:webDavSyncDownload()">${ i18n.__('webdav-sync-download') }</a>
                 </div>
                 <p class="small text-muted" id="webdav-sync-auto-status"></p>
                 <p class="small text-muted" id="webdav-sync-startup-status"></p>
@@ -1537,8 +1532,7 @@ async function ensureWebDavConfigComplete() {
     let config = await getWebDavSyncConfigUiState();
     let isComplete = String(config.url || '').trim() !== ''
         && String(config.username || '').trim() !== ''
-        && config.hasPassword === true
-        && String(config.remotePath || '').trim() !== '';
+        && config.hasPassword === true;
 
     if (isComplete) return true;
 

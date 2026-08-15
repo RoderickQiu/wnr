@@ -96,7 +96,7 @@
                             <span class="small">
                 <script>document.write(i18n.__('statistics-work-time'));</script>
             </span><br />
-                            <h3 class="rest">
+                            <h3 class="work">
                                 <span id="work-time">--</span>
                             </h3>
                         </td>
@@ -104,7 +104,7 @@
                             <span class="small">
                 <script>document.write(i18n.__('statistics-rest-time'));</script>
             </span><br />
-                            <h3 class="work">
+                            <h3 class="rest">
                                 <span id="rest-time">--</span>
                             </h3>
                         </td>
@@ -146,7 +146,7 @@
                         <span class="xx-small">
                             <script>document.write(i18n.__('statistics-work-time'));</script>
                         </span><br />
-                        <b class="rest">
+                        <b class="work">
                             <span id="work-time-with-chart">--</span>
                         </b>
                     </div>
@@ -154,7 +154,7 @@
                         <span class="xx-small">
                             <script>document.write(i18n.__('statistics-rest-time'));</script>
                         </span><br />
-                        <b class="work">
+                        <b class="rest">
                             <span id="rest-time-with-chart">--</span>
                         </b>
                     </div>
@@ -339,11 +339,16 @@
             switchMainMode(mainMode);
         });
         
+        function setStatsNav(mainId, periodId) {
+            $("#top-bar a, #time-statistics-sub-bar a").removeClass("is-current");
+            $("#" + mainId).addClass("is-current");
+            if (periodId) $("#" + periodId).addClass("is-current");
+        }
+
         function switchMainMode(mode) {
             mainMode = mode;
             if (mainMode === "recap") {
-                $("#recap-main").css("font-weight", "bold");
-                $("#time-statistics-main").css("font-weight", "normal");
+                setStatsNav("recap-main");
                 $("#time-statistics-sub-bar").css("display", "none");
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "none");
@@ -354,7 +359,7 @@
                 
                 let recapListHtml = "";
                 if (entries.length === 0) {
-                    recapListHtml = "<p class='text-muted text-center' style='padding: 20px; margin-top: 10px'>" + i18n.__('recap-empty') + "</p>";
+                    recapListHtml = "<p class='text-muted text-center' style='padding: 20px; margin-top: 10px'>" + i18n.__('recap-empty') + "<br /><a href='javascript:backer()' class='rest'>" + i18n.__('recap-empty-action') + "</a></p>";
                 } else {
                     let currentDate = "";
                     let dateEntries = {};
@@ -375,8 +380,8 @@
                         dateEntries[entryDate].forEach(function(entry) {
                             let timeStr = new Date(entry.timestamp).toLocaleTimeString();
                             let method = entry.method !== undefined ? entry.method : 1;
-                            let borderColor = "#5490ea";
-                            let titleClass = "rest";
+                            let borderColor = "#ea5454";
+                            let titleClass = "work";
                             if (method === 3) {
                                 borderColor = "#17a2b8";
                                 titleClass = "positive";
@@ -399,8 +404,7 @@
                 }
                 $("#recap-list").html(recapListHtml);
             } else if (mainMode === "time-statistics") {
-                $("#recap-main").css("font-weight", "normal");
-                $("#time-statistics-main").css("font-weight", "bold");
+                setStatsNav("time-statistics-main", statisticsMode);
                 $("#time-statistics-sub-bar").css("display", "block");
                 $("#statistics-recap").css("display", "none");
                 switchMode(statisticsMode);
@@ -422,6 +426,7 @@
 
         function switchMode(mode) {
             statisticsMode = mode;
+            setStatsNav("time-statistics-main", statisticsMode);
             var rtlTimerEls = $('#work-time, #rest-time, #onlyrest-time, #positive-time, #sum, #work-time-with-chart, #rest-time-with-chart, #only-rest-time-with-chart, #positive-time-with-chart, #sum-with-chart');
             if (store.get("i18n").startsWith("ar")) {
                 rtlTimerEls.addClass('rtl-timer');
@@ -429,12 +434,6 @@
                 rtlTimerEls.removeClass('rtl-timer');
             }
             if (statisticsMode === "today") {
-                $("#today").css("font-weight", "bold");
-                $("#yesterday").css("font-weight", "normal");
-                $("#this-week").css("font-weight", "normal");
-                $("#this-year").css("font-weight", "normal");
-                $("#all-time").css("font-weight", "normal");
-
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
                 $("#statistics-recap").css("display", "none");
@@ -445,12 +444,6 @@
                 $("#positive-time").text(getStyledTime(statistics.has(yearMonDay) ? num(statistics.get(yearMonDay).positive) : "0"));
                 $("#sum").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0"));
             } else if (statisticsMode === "yesterday") {
-                $("#today").css("font-weight", "normal");
-                $("#yesterday").css("font-weight", "bold");
-                $("#this-week").css("font-weight", "normal");
-                $("#this-year").css("font-weight", "normal");
-                $("#all-time").css("font-weight", "normal");
-
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
                 $("#statistics-recap").css("display", "none");
@@ -461,12 +454,6 @@
                 $("#positive-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? num(statistics.get(yesterdayYearMonDay).positive) : "0"));
                 $("#sum").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0"));
             } else if (statisticsMode === "this-week") {
-                $("#today").css("font-weight", "normal");
-                $("#yesterday").css("font-weight", "normal");
-                $("#this-week").css("font-weight", "bold");
-                $("#this-year").css("font-weight", "normal");
-                $("#all-time").css("font-weight", "normal");
-
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
                 $("#statistics-recap").css("display", "none");
@@ -504,12 +491,6 @@
                 }
                 new schart('graph', options);//statistics graph
             } else if (statisticsMode === "this-year") {
-                $("#today").css("font-weight", "normal");
-                $("#yesterday").css("font-weight", "normal");
-                $("#this-week").css("font-weight", "normal");
-                $("#this-year").css("font-weight", "bold");
-                $("#all-time").css("font-weight", "normal");
-
                 $("#statistics-with-chart").css("display", "block");
                 $("#statistics-no-chart").css("display", "none");
                 $("#statistics-recap").css("display", "none");
@@ -553,12 +534,6 @@
                 }
                 new schart('graph', options);//statistics graph
             } else if (statisticsMode === "all-time") {
-                $("#today").css("font-weight", "normal");
-                $("#yesterday").css("font-weight", "normal");
-                $("#this-week").css("font-weight", "normal");
-                $("#this-year").css("font-weight", "normal");
-                $("#all-time").css("font-weight", "bold");
-
                 $("#statistics-with-chart").css("display", "none");
                 $("#statistics-no-chart").css("display", "block");
                 $("#statistics-recap").css("display", "none");

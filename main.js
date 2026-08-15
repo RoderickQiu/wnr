@@ -79,9 +79,9 @@ function createWindow(loadMainPage = true) {
     //create the main window
     win = new BrowserWindow({
         width: 360,
-        height: 459,
+        height: 488,
         minWidth: 349,
-        minHeight: 444,
+        minHeight: 468,
         frame: false,
         backgroundColor: "#fefefe",
         resizable: true,
@@ -570,8 +570,11 @@ app.on('ready', async () => {
 
     if (win != null) {
         if (styleCache.has("win-size")) {
-            if (styleCache.get("win-size").width < 1000 && styleCache.get("win-size").height < 900)
-                win.setSize(styleCache.get("win-size").width, styleCache.get("win-size").height);
+            let saved = styleCache.get("win-size");
+            if (saved.width < 1000 && saved.height < 900) {
+                if (saved.height === 540 || saved.height < 488) saved.height = 488;
+                win.setSize(saved.width, saved.height);
+            }
         }
         win.on('resized', () => {
             styleCache.set("win-size", { "width": win.getSize()[0], "height": win.getSize()[1] });
@@ -2984,8 +2987,8 @@ ipcMain.on("floating-conversation", function (event, message) {
 
 ipcMain.on("zoom-ratio-change", function (event, message) {
     ratio = ratioList[message];
-    win.setMinimumSize(Math.floor(349 * ratio), Math.floor(444 * ratio));
-    win.setSize(Math.floor(360 * ratio), Math.floor(459 * ratio), true);
+    win.setMinimumSize(Math.floor(349 * ratio), Math.floor(468 * ratio));
+    win.setSize(Math.floor(360 * ratio), Math.floor(488 * ratio), true);
     settingsWin.setSize(Math.floor(getSettingsWindowWidth(store.get('i18n')) * ratio), Math.floor(636 * ratio), true);
     win.webContents.send('zoom-ratio-feedback');
 })

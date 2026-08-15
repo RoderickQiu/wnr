@@ -321,9 +321,9 @@ function createWebDavSyncService(deps) {
         let mergedConfig = Object.assign({}, currentConfig, {
             url: String(nextConfig.url || '').trim(),
             username: String(nextConfig.username || ''),
-            remotePath: String(nextConfig.remotePath || '').trim()
+            remotePath: normalizeWebDavRemotePath(nextConfig.remotePath)
         });
-        if (mergedConfig.url === '' || mergedConfig.username === '' || mergedConfig.remotePath === '') {
+        if (mergedConfig.url === '' || mergedConfig.username === '') {
             mergedConfig.enabled = false;
         }
         delete mergedConfig.password;
@@ -381,8 +381,7 @@ function createWebDavSyncService(deps) {
         await refreshCachedWebDavPassword(config);
         let isConfigured = String(config.url || '').trim() !== ''
             && String(config.username || '').trim() !== ''
-            && cachedWebDavPassword !== ''
-            && String(config.remotePath || '').trim() !== '';
+            && cachedWebDavPassword !== '';
         return Object.assign({}, config, {
             enabled: config.enabled === true && isConfigured,
             hasPassword: cachedWebDavPassword !== ''
@@ -446,7 +445,7 @@ function createWebDavSyncService(deps) {
 
     function isWebDavConfigured() {
         let config = getWebDavSyncConfig();
-        return config.url !== '' && config.username !== '' && config.password !== '' && config.remotePath !== '';
+        return config.url !== '' && config.username !== '' && config.password !== '';
     }
 
     function isWebDavAutoSyncReady() {
@@ -1239,9 +1238,18 @@ function createWebDavSyncService(deps) {
         return buildWebDavBaseUrl(config) + '/' + encodeURIComponent(fileName);
     }
 
+    function isPrivateOrLocalWebDavHost(hostname) {
+        let host = String(hostname || '').toLowerCase();
+        if (host === 'localhost' || host === '127.0.0.1' || host === '::1') return true;
+        if (/^10(?:\.\d{1,3}){3}$/.test(host)) return true;
+        if (/^192\.168(?:\.\d{1,3}){2}$/.test(host)) return true;
+        if (/^172\.(1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2}$/.test(host)) return true;
+        return false;
+    }
+
     function validateWebDavSyncConfig() {
         let config = getWebDavSyncConfig();
-        if (config.url === '' || config.username === '' || config.password === '' || config.remotePath === '') {
+        if (config.url === '' || config.username === '' || config.password === '') {
             throw createWebDavError(i18n.__('webdav-sync-missing-config'));
         }
         let parsedUrl = null;
@@ -1250,7 +1258,8 @@ function createWebDavSyncService(deps) {
         } catch (e) {
             throw createWebDavError(i18n.__('webdav-sync-invalid-url'));
         }
-        if (parsedUrl.protocol.toLowerCase() !== 'https:') {
+        let protocol = parsedUrl.protocol.toLowerCase();
+        if (protocol !== 'https:' && !(protocol === 'http:' && isPrivateOrLocalWebDavHost(parsedUrl.hostname))) {
             throw createWebDavError(i18n.__('webdav-sync-https-required'));
         }
         return config;

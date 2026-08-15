@@ -55,7 +55,31 @@
 
         var isForceLongFocus = false;
 
+        function parseMinutes(raw) {
+            return shi.humanTimeParser(raw, { as: "m", to: "m", ignoreError: true });
+        }
+
+        function canStartTimer() {
+            if (onlyrest) {
+                let rest = parseMinutes($("#rest-time-onlyrest").val());
+                return !isNaN(rest) && rest >= 5 / 60 && rest <= 1440;
+            }
+            if (document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
+                return false;
+            let work = parseMinutes($("#work-time").val());
+            let rest = getBreakPercentage() !== 0 ? work * getBreakPercentage() : parseMinutes($("#rest-time").val());
+            let timesSingular = i18n.__('times').replace(new RegExp('s(?!\w)', "g"), "");
+            let loops = store.get("infinity") ? 1 : Number(String($("#loop").val()).replace(new RegExp(i18n.__('times') + '|' + timesSingular, "g"), ""));
+            return !isNaN(work) && !isNaN(rest) && work >= 5 / 60 && rest >= 5 / 60 && work <= 1440 && rest <= 1440
+                    && (store.get("infinity") || (loops >= 1 && loops === Math.floor(loops) && (work + rest) * loops <= 1440));
+        }
+
         function keyDownSubmitter() {
+            if (!canStartTimer()) {
+                if (!onlyrest && document.getElementById("focus-work-set").checked && document.getElementById("focus-rest-set").checked)
+                    ipc.send("alert", i18n.__('all-focus-mode-warn'));
+                return;
+            }
             if (onlyrest)
                 window.location.href =
                         "timer.html?title=&work-time=0.7777&rest-time="
@@ -175,13 +199,17 @@
         </div>
         <div id="set-onlyrest" class="container-fluid">
             <div class="align-content-center">
-                <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
-                       class="onlyRest lead text-center" required />
+                <label class="field-label onlyRest" for="rest-time-onlyrest"><span id="label-countdown"></span><span class="field-parsed" id="parsed-countdown"></span></label>
+                <span class="time-input-cluster only-rest">
+                    <input name="rest-time-onlyrest" id="rest-time-onlyrest" type="text" onkeyup="allSet()"
+                           class="onlyRest lead" required />
+                    <span class="field-unit onlyRest is-hidden" id="unit-countdown"></span>
+                </span>
                 <br /><br />
                 <center>
                     <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
                     <span class="focuser extreme-small onlyRest text-left" id="focuser-onlyrest">
-                        <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                        <script>document.write(i18n.__('focus-toggle'))</script>
                     </span>
                     &nbsp;
                     <input id="focus-continueloop-set-onlyrest" type="checkbox"
@@ -193,7 +221,9 @@
             </div>
             <br />
             <script>
-                $('#rest-time-onlyrest').attr('placeholder', i18n.__('only-rest-time'));
+                $('#label-countdown').text(i18n.__('field-label-countdown'));
+                $('#unit-countdown').text(i18n.__('field-unit-minutes'));
+                $('#rest-time-onlyrest').removeAttr('placeholder');
                 $('#rest-time-onlyrest').attr('title', i18n.__('only-rest-time') + i18n.__('what-can-be-here-index'));
                 $("#focus-rest-set-onlyrest").attr('title', i18n.__('full-screen-focus-mode-tip'));
                 $("#focus-continueloop-set-onlyrest").attr('title', i18n.__('continueloop-tip'));
@@ -234,25 +264,31 @@
                     </a>
                 </div>
             </div>
-            <br /><br />
-            <div class="align-content-center">
-                <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
-                       required />
+            <div class="align-content-center field-block">
+                <label class="field-label work" for="work-time"><span id="label-work"></span><span class="field-parsed" id="parsed-work"></span></label>
+                <span class="time-input-cluster">
+                    <input name="work-time" id="work-time" type="text" onkeyup="allSet()" class="work lead" autofocus
+                           required />
+                    <span class="field-unit work is-hidden" id="unit-work"></span>
+                </span>
                 <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small work">
-                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                    <script>document.write(i18n.__('focus-toggle'))</script>
                 </span>
             </div>
-            <br />
-            <div class="align-content-center">
-                <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+            <div class="align-content-center field-block">
+                <label class="field-label rest" for="rest-time"><span id="label-rest"></span><span class="field-parsed" id="parsed-rest"></span></label>
+                <span class="time-input-cluster">
+                    <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
+                    <span class="field-unit rest is-hidden" id="unit-rest"></span>
+                </span>
                 <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
                 <span class="focuser extreme-small rest">
-                    <script>document.write(i18n.__('focus-mode-part-1') + "<br />" + i18n.__('focus-mode-part-2'))</script>
+                    <script>document.write(i18n.__('focus-toggle'))</script>
                 </span>
             </div>
-            <br />
-            <div class="align-content-center">
+            <div class="align-content-center field-block">
+                <label class="field-label text-muted" for="loop" id="label-loop"></label>
                 <input name="loop" id="loop" type="text" onkeyup="allSet()" class="small text-muted" required />
                 <div class="dropdown dropleft dropdown-default" id="dropdown-extend">
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
@@ -277,12 +313,13 @@
                     </div>
                 </div>
             </div>
-            <br />
             <script>
-                $('#work-time').attr('placeholder', i18n.__('work-time'));
+                $('#label-work').text(i18n.__('field-label-work'));
+                $('#label-rest').text(i18n.__('field-label-rest'));
+                $('#label-loop').text(i18n.__('field-label-loop'));
+                $('#unit-work, #unit-rest').text(i18n.__('field-unit-minutes'));
+                $('#work-time, #rest-time, #loop').removeAttr('placeholder');
                 $('#title').attr('placeholder', i18n.__('title'));
-                $('#rest-time').attr('placeholder', i18n.__('rest-time'));
-                $('#loop').attr('placeholder', i18n.__('loop'));
                 $('#note').attr('placeholder', i18n.__('note'));
                 $('#first-work-discount').attr('placeholder', i18n.__('first-work-discount'));
                 $('#first-work-discount').attr('title', i18n.__('first-work-discount-tip'));
@@ -455,6 +492,65 @@
             }
         }
 
+        function isBareNumber(raw) {
+            return /^\d+(\.\d+)?$/.test(String(raw == null ? "" : raw).trim());
+        }
+
+        function formatParsedMinutes(minutes) {
+            let n = Number(minutes);
+            if (Math.abs(n - Math.round(n)) < 0.05) n = Math.round(n);
+            else n = Math.round(n * 10) / 10;
+            return "= " + n + i18n.__('min');
+        }
+
+        function placeFieldUnit(input, unit) {
+            if (!input || !unit) return;
+            if (unit.classList.contains("is-hidden")) {
+                unit.style.left = "";
+                input.style.paddingRight = "";
+                return;
+            }
+            let cs = window.getComputedStyle(input);
+            if (!placeFieldUnit.probe) {
+                placeFieldUnit.probe = document.createElement("span");
+                placeFieldUnit.probe.setAttribute("aria-hidden", "true");
+                placeFieldUnit.probe.style.cssText = "position:absolute;left:-9999px;top:0;white-space:pre;visibility:hidden;";
+                document.body.appendChild(placeFieldUnit.probe);
+            }
+            let probe = placeFieldUnit.probe;
+            probe.style.font = cs.font;
+            probe.style.letterSpacing = cs.letterSpacing;
+            probe.textContent = input.value || "";
+            let textW = Math.ceil(probe.getBoundingClientRect().width);
+            let padLeft = parseFloat(cs.paddingLeft) || 0;
+            unit.style.left = (padLeft + textW + 4) + "px";
+            input.style.paddingRight = (unit.offsetWidth + 8) + "px";
+        }
+
+        function updateParsedHints() {
+            function one(inputSel, parsedSel, unitSel) {
+                let raw = String($(inputSel).val() || "").trim();
+                let mins = parseMinutes(raw);
+                let hasOwnUnit = raw !== "" && !isBareNumber(raw);
+                $(unitSel).toggleClass("is-hidden", raw === "" || hasOwnUnit);
+                if (hasOwnUnit && !isNaN(mins) && mins > 0) {
+                    $(parsedSel).text(formatParsedMinutes(mins));
+                } else {
+                    $(parsedSel).text("");
+                }
+                placeFieldUnit(document.querySelector(inputSel), document.querySelector(unitSel));
+            }
+            one("#work-time", "#parsed-work", "#unit-work");
+            if (!onlyrest && getBreakPercentage() === 0) one("#rest-time", "#parsed-rest", "#unit-rest");
+            else {
+                $("#parsed-rest").text("");
+                $("#unit-rest").toggleClass("is-hidden", getBreakPercentage() !== 0);
+                placeFieldUnit(document.getElementById("rest-time"), document.getElementById("unit-rest"));
+            }
+            if (onlyrest) one("#rest-time-onlyrest", "#parsed-countdown", "#unit-countdown");
+            else $("#parsed-countdown").text("");
+        }
+
         function getBreakPercentage() {
             let value = store.get("percentage-break-mode");
             let percentage = [0, 0.05, 0.07, 0.1, 0.15, 0.2, 0.25, 0.3];
@@ -470,6 +566,7 @@
             }
 
             try {
+                updateParsedHints();
                 if (onlyrest) {
                     let restTimeGet = shi.humanTimeParser($("#rest-time-onlyrest").val(), {
                         as: "m",
@@ -695,6 +792,13 @@
             });
             document.getElementById("dropdown-itemlist").appendChild(taskLink);
         });
+        if (!$("#work-time").val()) {
+            $("#work-time").val(25);
+            if (!$("#rest-time").val()) $("#rest-time").val(5);
+            if (!$("#loop").val() && !store.get("infinity"))
+                $("#loop").val(4 + " " + i18n.__("times"));
+            allSet();
+        }
 
         setTimeout(function () {
             focusNotifier();

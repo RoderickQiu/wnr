@@ -219,7 +219,7 @@ li input:nth-last-child(4)::after {
 }
 
 #rest-time-onlyrest {
-    min-width: 225px;
+    min-width: 0;
 }
 
 .text-grey {
@@ -484,7 +484,60 @@ li input:nth-last-child(4)::after {
 }
 
 #set {
-    transform: translate(5px, -20px);
+    transform: translate(5px, -8px);
+}
+
+#dropdown-tasks {
+    margin-bottom: 10px;
+}
+
+.field-block {
+    margin-bottom: 12px;
+}
+
+.field-label {
+    display: block;
+    width: 192px;
+    font-size: 11px;
+    line-height: 1.3;
+    margin: 0 0 2px 1px;
+    -webkit-user-select: none;
+}
+
+.field-parsed {
+    margin-left: 6px;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+.time-input-cluster {
+    position: relative;
+    display: inline-block;
+    width: 192px;
+    vertical-align: middle;
+}
+
+.time-input-cluster.only-rest {
+    width: 225px;
+}
+
+.time-input-cluster input[type="text"] {
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.field-unit {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-40%);
+    font-size: 12px;
+    line-height: 1;
+    pointer-events: none;
+    -webkit-user-select: none;
+}
+
+.field-unit.is-hidden {
+    display: none;
 }
 
 #set .dropdown-menu {
@@ -675,6 +728,8 @@ li input:nth-last-child(4)::after {
 }
 
 #settings-container .webdav-sync-form-row {
+    margin-left: 0;
+    margin-right: 0;
     margin-bottom: 6px;
 }
 
@@ -695,11 +750,26 @@ li input:nth-last-child(4)::after {
 
 #settings-container .webdav-sync-form input {
     width: 100%;
+    min-width: 0;
     margin-bottom: 0;
+    text-overflow: ellipsis;
 }
 
 #settings-container .webdav-sync-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
     margin-top: 8px;
+    gap: 4px 8px;
+}
+
+#settings-container .webdav-sync-action-sep {
+    opacity: 0.4;
+}
+
+#settings-container .switch-slide input,
+#settings-container .switch-slide input::after {
+    display: none !important;
 }
 
 #settings-container .webdav-sync-toggle-row > .text-left > label {
@@ -1089,6 +1159,12 @@ li input:nth-last-child(4)::after {
     line-height: 2;
     font-weight: 500 !important;
     -webkit-app-region: no-drag;
+}
+
+#top-bar a.is-current,
+#time-statistics-sub-bar a.is-current {
+    font-weight: 700 !important;
+    border-bottom: 1.5px solid #6c757d;
 }
 
 #time-statistics-sub-bar a {
