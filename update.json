@@ -3,16 +3,19 @@
 	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
-			"首页的工作和休息时间加了标签，点开始却没反应时会说明哪里不对。",
-			"WebDAV 远程文件夹不用再必填。"
+			"首页的工作和休息时间加了标签，也可以写「1小时」这类说法并看到换算。不能开始时会说明原因；打开专心模式会先告诉你这段时间会锁住屏幕。",
+			"设置按使用场景重新排过，互相影响的选项会写在旁边，比如按比例休息、无限循环、自动开始默认任务。锁定模式的密码栏也理顺了。改语言或外观时会先问要不要重启。",
+			"WebDAV 现在可以连家里或公司的内网服务器，远程文件夹也可以不填。"
 		],
 		"zh-TW" : [
-			"首頁的工作和休息時間加了標籤，點開始卻沒反應時會說明哪裡不對。",
-			"WebDAV 遠端資料夾不用再必填。"
+			"首頁的工作和休息時間加了標籤，也可以寫「1小時」這類說法並看到換算。不能開始時會說明原因；打開專心模式會先告訴你這段時間會鎖住屏幕。",
+			"設置按使用場景重新排過，互相影響的選項會寫在旁邊，比如按比例休息、無限循環、自動開始默認任務。鎖定模式的密碼欄也理順了。改語言或外觀時會先問要不要重啟。",
+			"WebDAV 現在可以連家裡或公司的內網伺服器，遠端資料夾也可以不填。"
 		],
 		"en" : [
-			"Work and rest on the home screen are labeled. If Start does nothing, wnr now says what is wrong.",
-			"The WebDAV remote folder is no longer required."
+			"Work and rest on the home screen are labeled. You can type things like \"1 hour\" and see the conversion. If a session cannot start, wnr says why. Turning on Focus first tells you that period will lock the screen.",
+			"Settings is rearranged by how you use it. Options that affect each other now say so on the spot, such as percentage rest, Infinity, and auto-starting the default plan. Lock mode is easier to turn on or off. Changing language or appearance asks before restarting.",
+			"WebDAV can now connect to a home or office intranet server. The remote folder can also be left empty."
 		]
 	},
 	"introduce" : {
@@ -20,7 +23,7 @@
 		"zh-CN" : {
 			"title" : "<b>欢迎升级至 1.34.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 首页时间加了标签，点开始没反应时会说明哪里不对。</p><p>2. WebDAV 远程文件夹不用再必填。</p>",
+				"universal" : "<p>1. 首页时间加了标签，不能开始会说明原因，专心模式会先提醒会锁屏。</p><p>2. 设置按使用场景重排，互相影响的选项会写在旁边；改语言或外观会先问要不要重启。</p><p>3. WebDAV 可以连家里或公司内网，远程文件夹也可以不填。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
@@ -28,7 +31,7 @@
 		"zh-TW" : {
 			"title" : "<b>歡迎升級至 1.34.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 首頁時間加了標籤，點開始沒反應時會說明哪裡不對。</p><p>2. WebDAV 遠端資料夾不用再必填。</p>",
+				"universal" : "<p>1. 首頁時間加了標籤，不能開始會說明原因，專心模式會先提醒會鎖屏。</p><p>2. 設置按使用場景重排，互相影響的選項會寫在旁邊；改語言或外觀會先問要不要重啟。</p><p>3. WebDAV 可以連家裡或公司內網，遠端資料夾也可以不填。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
@@ -36,7 +39,7 @@
 		"en" : {
 			"title" : "<b>Welcome to v1.34.0!</b>",
 			"description" : {
-				"universal" : "<p>1. Home times are labeled. If Start does nothing, it says what is wrong.</p><p>2. The WebDAV remote folder is no longer required.</p>",
+				"universal" : "<p>1. Home times are labeled; if you cannot start, it says why. Focus warns you before it locks the screen.</p><p>2. Settings is rearranged by use. Related options explain themselves. Changing language or appearance asks before restart.</p><p>3. WebDAV can connect to a home or office intranet. The remote folder can also be left empty.</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
