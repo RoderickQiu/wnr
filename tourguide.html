@@ -16,47 +16,41 @@
 
 <body>
     <script src="supporter.js"></script>
-    <div class="d-flex mx-auto justify-content-center align-items-center text-dark" id="main">
-        <div id="tourguide" class="justify-content-center text-center small">
-            <div id="tourguide-content">
-                <img src="res/icons/wnrIcon.png" width="40px" /><br /><br />
-                <p class="h1 rest" id="title">
-                    <script>document.write(i18n.__('tourguide-welcome'))</script>
-                </p>
-                <p class="h5 rest font-weight-lighter" id="subtitle">
-                    <script>document.write(i18n.__('tourguide-your-software'))</script>
-                </p>
-                <br />
-                <ul>
-                    <li>
-                        <script>document.write(i18n.__('tourguide-1'))</script>
-                    </li>
-                    <li>
-                        <script>document.write(i18n.__('tourguide-2'))</script>
-                    </li>
-                    <li>
-                        <script>document.write(i18n.__('tourguide-3'))</script>
-                    </li>
-                    <li>
-                        <script>document.write(i18n.__('tourguide-4'))</script>
-                    </li>
-                </ul>
-                <div class="lead text-muted" id="content">
-                </div>
-                <div id="finish" class="text-center">
-                    <br />
-                    <a id="tourguide-close" href="javascript:window.close()" class="btn btn-primary">
-                        <script>document.write(i18n.__('tourguide-finish'))</script>
-                    </a>
-                    <script>
-                        $('#tourguide-close').attr('title', i18n.__('tourguide-finish-tip'));
-                    </script>
-                </div>
-                <br />
-            </div>
+    <main id="tourguide">
+        <img class="tour-mark" src="res/icons/wnrIcon.png" alt="" />
+        <h1 class="tour-title" id="title">
+            <script>document.write(i18n.__('tourguide-welcome'))</script>
+        </h1>
+        <p class="tour-subtitle" id="subtitle">
+            <script>document.write(i18n.__('tourguide-your-software'))</script>
+        </p>
+        <!-- the app's own dial, drawn once as the window opens -->
+        <div class="tour-dial" aria-hidden="true">
+            <svg viewBox="0 0 100 100">
+                <circle class="dial-track" cx="50" cy="50" r="46"></circle>
+                <circle class="dial-progress tour-dial-arc" cx="50" cy="50" r="46" pathLength="100"></circle>
+            </svg>
+            <span class="tour-dial-time">25:00</span>
         </div>
-        <img id="tourguide-img" src="res/tourguide/2-1.png" />
-    </div>
+        <dl class="tour-features">
+            <script>
+                // each line reads "Label: description"; show the label on its own line
+                [1, 2, 3, 4].forEach(function (n) {
+                    const line = i18n.__('tourguide-' + n);
+                    const split = line.search(/[:：]/);
+                    const term = split > 0 ? line.slice(0, split) : '';
+                    const desc = split > 0 ? line.slice(split + 1).trim() : line;
+                    document.write('<div class="tour-feature">' + (term ? '<dt>' + term + '</dt>' : '') + '<dd>' + desc + '</dd></div>');
+                });
+            </script>
+        </dl>
+        <a id="tourguide-close" href="javascript:window.close()" class="btn btn-solid tour-start">
+            <script>document.write(i18n.__('tourguide-finish'))</script>
+        </a>
+        <script>
+            $('#tourguide-close').attr('title', i18n.__('tourguide-finish-tip'));
+        </script>
+    </main>
     <script src="renderer.js"></script>
 </body>
 

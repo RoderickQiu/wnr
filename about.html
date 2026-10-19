@@ -27,60 +27,34 @@
                 if (process.platform === "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div class="container-fluid align-self-center">
-            <div class="row justify-content-center">
-                <div class="col-2 align-self-start">
-                    <img src="res/icons/wnrIcon.png" width="100%" />
-                </div>
-                <div class="col-8" id="about-content">
-                    <h1>wnr</h1>
-                    <p class="small text-muted">
-                        <script>document.write(i18n.__('version') + require("./package.json").version);</script>
-                        |
-                        <a href="javascript:updateChecker(2)" class="rest underlined">
-                            <span id="manually">
-                                <script>document.write(i18n.__('manually-check-for-update'));</script>
-                            </span>
-                        </a>
-                    </p>
-
-                    <h3>
-                        <script>document.write(i18n.__('info'));</script>
-                    </h3>
-                    <p class="small text-muted">&nbsp; (c) <a class="rest"
-                                                              href="javascript:require('electron').shell.openExternal('https://r-q.name')">Roderick
-                        Qiu</a> and
-                        Contributors.
-                    </p>
-                    <p class="small text-muted">
-                        <a class="rest"
-                           href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">
-                            <script>document.write(i18n.__('homepage'));</script>
-                        </a> |
-                        <a class="rest"
-                           href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">
-                            <script>document.write(i18n.__('on-github'));</script>
-                        </a>
-                        | <a class="rest" href="mailto:scrisqiu@hotmail.com">
-                        <script>document.write(i18n.__('email-to'));</script>
-                    </a>
-                    </p>
-
-                    <h3>
-                        <script>document.write(i18n.__('license-info'));</script>
-                    </h3>
-                    <ul>
-                        <li class="small text-muted">This software follows <a class="rest"
-                                                                              href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/LICENSE')">MPL2.0</a>
-                            License.
-                        </li>
-                        <li class="small text-muted">To see dependencies' licenses, go to <a class="rest"
-                                                                                             href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md')">NOTICE.md</a>.
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+        <main class="about-card" id="about-content">
+            <img class="about-mark" src="res/icons/wnrIcon.png" alt="" />
+            <h1 class="about-name">wnr</h1>
+            <p class="about-version">
+                <script>document.write(i18n.__('version') + require("./package.json").version);</script>
+            </p>
+            <a href="javascript:updateChecker(2)" class="btn btn-sm btn-outline-primary">
+                <span id="manually"><script>document.write(i18n.__('manually-check-for-update'));</script></span>
+            </a>
+            <nav class="about-links">
+                <a href="javascript:require('electron').shell.openExternal(require('./package.json').homepage)">
+                    <script>document.write(i18n.__('homepage'));</script>
+                </a>
+                <a href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/')">
+                    <script>document.write(i18n.__('on-github'));</script>
+                </a>
+                <a href="mailto:scrisqiu@hotmail.com">
+                    <script>document.write(i18n.__('email-to'));</script>
+                </a>
+            </nav>
+            <p class="about-legal">
+                &copy; <a href="javascript:require('electron').shell.openExternal('https://r-q.name')">Roderick Qiu</a>
+                and contributors. Licensed under
+                <a href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/LICENSE')">MPL 2.0</a>;
+                see <a href="javascript:require('electron').shell.openExternal('https://github.com/RoderickQiu/wnr/blob/master/NOTICE.md')">NOTICE.md</a>
+                for dependencies' licenses.
+            </p>
+        </main>
     </div>
     <script src="renderer.js"></script>
 </body>

@@ -1118,43 +1118,6 @@ body.settings-scrolled .settings-back-to-top {
     -webkit-user-select: text;
 }
 
-#about-content {
-    height: 100%;
-    border-left: color-mix(in srgb, var(--ink) 13%, transparent) solid 1px;
-}
-
-#about-content p {
-    line-height: 67%;
-}
-
-#tourguide {
-    position: absolute;
-    width: 80%;
-    height: 100%;
-    -webkit-app-region: drag;
-}
-
-#tourguide-content {
-    position: absolute;
-    line-height: 1.5;
-    text-align: left;
-    top: 12%;
-    border: none;
-    outline: none;
-    -webkit-app-region: no-drag;
-    /* let it clickable */
-    -webkit-user-select: text;
-}
-
-#tourguide-img {
-    position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 100%;
-    bottom: 0;
-    z-index: -9999;
-}
-
 #switch a {
     font-size: 24px;
     padding: 6px;
@@ -2583,6 +2546,167 @@ body.settings-page, .settings-page #settings-header {
 
 #floating-stopper #stopper i::before {
     font-size: 13px;
+}
+
+/*  Onboarding tour  */
+#tourguide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 56px 32px 28px;
+    -webkit-app-region: drag;
+    -webkit-user-select: none;
+}
+
+.tour-mark {
+    width: 34px;
+    height: 34px;
+}
+
+.tour-title {
+    margin: 18px 0 4px;
+    color: var(--ink);
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.2;
+}
+
+.tour-subtitle {
+    margin: 0;
+    color: var(--ink-2);
+    font-size: 14px;
+}
+
+.tour-dial {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 132px;
+    height: 132px;
+    margin: 30px auto 28px;
+    color: var(--work);
+}
+
+.tour-dial svg {
+    position: absolute;
+    inset: 0;
+    overflow: visible;
+    transform: rotate(-90deg);
+}
+
+.tour-dial .dial-track, .tour-dial .dial-progress {
+    stroke-width: 3;
+}
+
+.tour-dial .tour-dial-arc {
+    stroke-dasharray: 72 100;
+    animation: tour-dial-draw 1.4s cubic-bezier(.2, .7, .2, 1) .2s both;
+}
+
+@keyframes tour-dial-draw {
+    from {
+        stroke-dasharray: 0 100;
+    }
+}
+
+.tour-dial-time {
+    font-size: 30px;
+    font-weight: 200;
+    letter-spacing: -.02em;
+    font-variant-numeric: tabular-nums;
+}
+
+.tour-features {
+    display: grid;
+    gap: 14px;
+    margin: 0 0 auto;
+}
+
+.tour-feature dt {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.tour-feature dd {
+    margin: 1px 0 0;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    line-height: 1.45;
+}
+
+.tour-start {
+    width: 100%;
+    margin-top: 24px;
+    padding: 9px 0;
+    border-radius: 10px;
+    font-size: 14px;
+    -webkit-app-region: no-drag;
+}
+
+/*  About  */
+.about-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: auto;
+    text-align: center;
+}
+
+.about-mark {
+    width: 64px;
+    height: 64px;
+}
+
+.about-name {
+    margin: 14px 0 2px;
+    color: var(--ink);
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.about-version {
+    margin: 0 0 12px;
+    color: var(--ink-2);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+}
+
+.about-links {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+    margin: 26px 0 18px;
+}
+
+.about-links a {
+    padding: 4px 11px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--fill);
+    color: var(--ink) !important;
+    font-size: 12px;
+    text-decoration: none;
+}
+
+.about-links a:hover {
+    background: var(--fill-2);
+}
+
+.about-legal {
+    max-width: 420px;
+    margin: 0;
+    color: var(--ink-3);
+    font-size: 11px;
+    line-height: 1.6;
+}
+
+.about-legal a {
+    border: 0;
+    color: var(--ink-2);
 }
 
 /*  Timer: the dial is the one bold element of the app  */
