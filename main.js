@@ -18,7 +18,7 @@ try {
     keytar = null;
 }
 // window backgrounds match the --canvas token in style.css, so nothing flashes on load
-const CANVAS_LIGHT = "#fcfcfd", CANVAS_DARK = "#1c1c1e";
+const CANVAS_LIGHT = "#fefefe", CANVAS_DARK = "#191919";
 const { createWebDavSyncService } = require('./webdav-sync');
 const { persistSanitizedPredefinedTasks } = require('./predefined-tasks');
 const getAlarmtipDurationMs = require('./inactivity-duration');

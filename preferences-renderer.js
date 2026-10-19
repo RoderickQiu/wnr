@@ -562,7 +562,7 @@ function domString(type) {
                         <br /><br />
                     </div>
                     <div class="align-self-start text-left small">
-                        <a class="btn btn-outline-primary btn-sm plan-add" href="javascript:planAdd()">
+                        <a class="text-info underlined" href="javascript:planAdd()">
                             ${ i18n.__('add') }
                         </a><br/>
                         <span class="text-muted small">
@@ -817,54 +817,61 @@ function domString(type) {
             <br/>`;
             break;
         case "data-management":
-            // the messages end with ":" for the old inline sentence layout
-            let dataLabel = function (key) {
-                return i18n.__(key).replace(/[:：]\s*$/, '');
-            };
             appendDOMString = `
-            <div class="data-actions">
-                <div class="data-action">
-                    <div class="data-action-text">${ dataLabel('delete-all-data-msg') }</div>
-                    <a class="btn btn-sm btn-outline-primary btn-destructive" href="javascript:call('delete-all-data')">
-                        ${ i18n.__('delete-all-data') }
-                    </a>
-                </div>
-                <div class="data-action">
-                    <div class="data-action-text">
-                        ${ dataLabel('settings-backup-msg') }
-                        <p class="settings-coupling">${ i18n.__('settings-backup-tip') }</p>
-                    </div>
-                    <a class="btn btn-sm btn-outline-primary" href="javascript:settingsBackup('settings')">
-                        ${ i18n.__('copy') }
-                    </a>
-                </div>
-                <div class="data-action data-action-stacked">
-                    <label class="data-action-text" for="settings-import-input">${ dataLabel('settings-import-msg') }</label>
-                    <input id="settings-import-input" name="settings-import-input" class="data-action-input"
-                           onkeydown="if(event.keyCode === 13) settingsImport($('#settings-import-input').val(),'settings');"
-                           type="password" />
-                    <script> $('#settings-import-input').attr('placeholder', i18n.__('settings-import'));</script>
-                    <p class="settings-coupling">${ i18n.__('settings-import-tip') }</p>
-                </div>
-                <div class="data-action">
-                    <div class="data-action-text">
-                        ${ dataLabel('statistics-backup-msg') }
-                        <p class="settings-coupling">${ i18n.__('statistics-backup-tip') }</p>
-                    </div>
-                    <a class="btn btn-sm btn-outline-primary" href="javascript:settingsBackup('statistics')">
-                        ${ i18n.__('copy') }
-                    </a>
-                </div>
-                <div class="data-action data-action-stacked">
-                    <label class="data-action-text" for="statistics-import-input">${ dataLabel('statistics-import-msg') }</label>
-                    <input id="statistics-import-input" name="statistics-import-input" class="data-action-input"
-                           onkeydown="if(event.keyCode === 13) settingsImport($('#statistics-import-input').val(),'statistics');"
-                           type="password" />
-                    <script> $('#statistics-import-input').attr('placeholder', i18n.__('statistics-import'));</script>
-                    <p class="settings-coupling">${ i18n.__('statistics-import-tip') }</p>
-                </div>
-            </div>
-            <br/>`;
+            <ul>
+            <li>
+                ${ i18n.__('delete-all-data-msg') }
+                <p class="small text-muted">
+                    <a class="rest underlined" href="javascript:call('delete-all-data')">
+                        ${ i18n.__('delete-all-data') + i18n.__('period-symbol') }
+                    </a>&nbsp;
+                </p>
+            </li>
+            <!-- settings backup -->
+            <li>
+                ${ i18n.__('settings-backup-msg') }
+                <p class="small text-muted">
+                    <a class="rest underlined" href="javascript:settingsBackup('settings')">
+                        ${ i18n.__('copy') + i18n.__('period-symbol') }
+                    </a>&nbsp;
+                    ${ i18n.__('settings-backup-tip') }
+                </p>
+            </li>
+            <!-- settings import -->
+            <li>
+                ${ i18n.__('settings-import-msg') }
+                <br />
+                <input id="settings-import-input" name="settings-import-input"
+                       onkeydown="if(event.keyCode === 13) settingsImport($('#settings-import-input').val(),'settings');"
+                       type="password" />
+                <script> $('#settings-import-input').attr('placeholder', i18n.__('settings-import'));</script>
+                <p class="small text-muted">
+                    ${ i18n.__('settings-import-tip') }
+                </p>
+            </li>
+            <!-- statistics backup -->
+            <li>
+                ${ i18n.__('statistics-backup-msg') }
+                <p class="small text-muted">
+                    <a class="rest underlined" href="javascript:settingsBackup('statistics')">
+                        ${ i18n.__('copy') + i18n.__('period-symbol') }
+                    </a>&nbsp;
+                    ${ i18n.__('statistics-backup-tip') }
+                </p>
+            </li>
+            <!-- statistics import -->
+            <li>
+                ${ i18n.__('statistics-import-msg') }
+                <br />
+                <input id="statistics-import-input" name="statistics-import-input"
+                       onkeydown="if(event.keyCode === 13) settingsImport($('#statistics-import-input').val(),'statistics');"
+                       type="password" />
+                <script> $('#statistics-import-input').attr('placeholder', i18n.__('statistics-import'));</script>
+                <p class="small text-muted">
+                    ${ i18n.__('statistics-import-tip') }
+                </p>
+            </li>
+            </ul><br/>`;
             break;
         case "webdav-sync":
             appendDOMString = `
@@ -917,10 +924,12 @@ function domString(type) {
                         </label>
                     </div>
                 </div>
-                <div class="webdav-sync-actions">
-                    <a class="btn btn-sm btn-outline-primary" href="javascript:webDavSyncTest()">${ i18n.__('webdav-sync-test') }</a>
-                    <a class="btn btn-sm btn-outline-primary" href="javascript:webDavSyncUpload()">${ i18n.__('webdav-sync-upload') }</a>
-                    <a class="btn btn-sm btn-outline-primary" href="javascript:webDavSyncDownload()">${ i18n.__('webdav-sync-download') }</a>
+                <div class="small text-muted webdav-sync-actions">
+                    <a class="rest underlined" href="javascript:webDavSyncTest()">${ i18n.__('webdav-sync-test') }</a>
+                    <span class="webdav-sync-action-sep">|</span>
+                    <a class="rest underlined" href="javascript:webDavSyncUpload()">${ i18n.__('webdav-sync-upload') }</a>
+                    <span class="webdav-sync-action-sep">|</span>
+                    <a class="rest underlined" href="javascript:webDavSyncDownload()">${ i18n.__('webdav-sync-download') }</a>
                 </div>
                 <p class="small text-muted" id="webdav-sync-auto-status"></p>
                 <p class="small text-muted" id="webdav-sync-startup-status"></p>
@@ -1064,7 +1073,7 @@ function planAppend(item, index) {
 
     let workInput = document.createElement("input");
     workInput.id = "work-time" + index;
-    workInput.className = "plan-number";
+    workInput.className = "hotkeyset";
     workInput.type = "number";
     workInput.value = item.workTime;
     workInput.style.imeMode = "Disabled";
@@ -1076,7 +1085,7 @@ function planAppend(item, index) {
 
     let restInput = document.createElement("input");
     restInput.id = "rest-time" + index;
-    restInput.className = "plan-number";
+    restInput.className = "hotkeyset";
     restInput.type = "number";
     restInput.value = item.restTime;
     restInput.style.imeMode = "Disabled";
@@ -1088,7 +1097,7 @@ function planAppend(item, index) {
 
     let loopsInput = document.createElement("input");
     loopsInput.id = "loops" + index;
-    loopsInput.className = "plan-number";
+    loopsInput.className = "hotkeyset";
     loopsInput.type = "number";
     loopsInput.value = item.loops;
     loopsInput.style.imeMode = "Disabled";
@@ -1111,7 +1120,7 @@ function planAppend(item, index) {
     defaultContainer.id = "set-as-default-task-container" + index;
     let defaultLink = document.createElement("a");
     defaultLink.id = "set-as-default" + index;
-    defaultLink.className = "plan-action";
+    defaultLink.className = "rest underlined";
     defaultLink.href = "#";
     defaultLink.textContent = i18n.__("set-as-default-task");
     defaultLink.addEventListener("click", function (event) {
@@ -1122,10 +1131,10 @@ function planAppend(item, index) {
 
     let deleter = document.createElement("span");
     deleter.id = "deleter" + index;
-    deleter.className = "plan-delete-wrap";
+    deleter.appendChild(document.createTextNode("| "));
     let deleteLink = document.createElement("a");
     deleteLink.href = "#";
-    deleteLink.className = "plan-action plan-delete";
+    deleteLink.className = "work underlined";
     deleteLink.textContent = i18n.__("delete");
     deleteLink.addEventListener("click", function (event) {
         event.preventDefault();
@@ -1133,31 +1142,13 @@ function planAppend(item, index) {
     });
     deleter.appendChild(deleteLink);
 
-    // a card per plan: title and default action, the three numbers, then focus chips and delete
-    li.className = "plan-card";
-    let head = document.createElement("div");
-    head.className = "plan-head";
-    head.appendChild(titleInput);
-    head.appendChild(defaultContainer);
-    head.appendChild(deleter);
-
-    details.className = "plan-fields";
-    [[i18n.__("field-label-work"), workInput, i18n.__("field-unit-minutes")],
-        [i18n.__("field-label-rest"), restInput, i18n.__("field-unit-minutes")],
-        [i18n.__("field-label-loop"), loopsInput, ""]].forEach(function (field) {
-        let label = document.createElement("label");
-        label.className = "plan-field";
-        let name = document.createElement("span");
-        name.textContent = field[0];
-        label.appendChild(name);
-        label.appendChild(field[1]);
-        if (field[2]) {
-            let unit = document.createElement("span");
-            unit.textContent = field[2];
-            label.appendChild(unit);
-        }
-        details.appendChild(label);
-    });
+    details.appendChild(document.createTextNode(i18n.__("predefined-tasks-settings-tip-part-1") + " "));
+    details.appendChild(workInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("min") + i18n.__("predefined-tasks-settings-tip-part-2") + " "));
+    details.appendChild(restInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("min") + i18n.__("predefined-tasks-settings-tip-part-3") + " "));
+    details.appendChild(loopsInput);
+    details.appendChild(document.createTextNode(" " + i18n.__("time(s)")));
     let restCoupling = document.createElement("div");
     restCoupling.className = "settings-coupling settings-coupling-plan-rest d-none";
     restCoupling.textContent = i18n.__("settings-coupling-percentage-rest");
@@ -1166,24 +1157,22 @@ function planAppend(item, index) {
     loopsCoupling.className = "settings-coupling settings-coupling-plan-loops d-none";
     loopsCoupling.textContent = i18n.__("settings-coupling-infinity-loops");
     details.appendChild(loopsCoupling);
+    details.appendChild(document.createElement("br"));
+    details.appendChild(document.createTextNode(i18n.__("focus-when-working") + " "));
+    details.appendChild(focusWork);
+    details.appendChild(document.createTextNode("\u00a0\u00a0|\u00a0"));
+    details.appendChild(document.createTextNode(i18n.__("focus-when-resting") + " "));
+    details.appendChild(focusRest);
+    details.appendChild(document.createElement("br"));
+    details.appendChild(defaultContainer);
+    details.appendChild(deleter);
 
-    let foot = document.createElement("div");
-    foot.className = "plan-foot";
-    [[focusWork, i18n.__("focus-when-working"), "work"],
-        [focusRest, i18n.__("focus-when-resting"), "rest"]].forEach(function (option) {
-        let chip = document.createElement("label");
-        chip.className = "focus-chip";
-        chip.dataset.phase = option[2];
-        let text = document.createElement("span");
-        text.textContent = option[1];
-        chip.appendChild(option[0]);
-        chip.appendChild(text);
-        foot.appendChild(chip);
-    });
-
-    li.appendChild(head);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(titleInput);
+    li.appendChild(document.createTextNode(" "));
+    li.appendChild(document.createElement("br"));
     li.appendChild(details);
-    li.appendChild(foot);
+    li.appendChild(document.createElement("hr"));
     document.getElementById("itemlist-ul").appendChild(li);
 
     focusWork.checked = item.focusWhenWorking;

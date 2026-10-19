@@ -170,23 +170,16 @@
                 <script>document.write(i18n.__('infinity'));</script>
             </span>
             <span id="stop-count" class="text-center small text-muted"></span>
-            <span id="time-cnt-blank"></span>
-            <!-- the ring shows the time left in this period; its colour follows the phase class -->
-            <div id="timer-dial" class="work">
-                <svg class="dial-ring" viewBox="0 0 100 100" aria-hidden="true">
-                    <circle class="dial-track" cx="50" cy="50" r="47"></circle>
-                    <circle class="dial-progress" cx="50" cy="50" r="47" pathLength="100"></circle>
-                </svg>
-                <div class="dial-face">
-                    <div id="work-rest" class="text-center work">
-                        <script>document.write(i18n.__('working'));</script>
-                    </div>
-                    <div id="now-timing" class="text-center work" dir="ltr"></div>
-                </div>
+            <span id="time-cnt-blank"><br /><br /></span>
+            <div id="work-rest" class="text-center work">
+                <script>document.write(i18n.__('working'));</script>
             </div>
-            <div class="timer-controls">
-            <div class="stopper-cell"><a id="stopper" href="javascript:stopAndCount()"><i
+            <br />
+            <div id="now-timing" class="text-center h1 work"></div>
+            <br />
+            <div class="text-center"><a id="stopper" href="javascript:stopAndCount()" class="text-muted"><i
                     class="iconfont icon-pause"></i></a></div>
+            <br />
             <div class="text-center text-muted" id="more-options">
                 <a href="javascript:backcheck()" class="text-muted" id="back-index"><i class="iconfont icon-previous"
                 ></i><span
@@ -200,7 +193,7 @@
                     <script>document.write(i18n.__('skip'));</script>
                 </span><i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
-            </div>
+                <br />
             </div>
             <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
                    onkeydown="if(event.keyCode === 13) recheck($('#passcode-rechecker').val());" />
@@ -722,7 +715,6 @@
             method: methodFromStart
         });
 
-        let timerDial = document.getElementById("timer-dial");
         let $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"),
                 $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
@@ -1361,8 +1353,6 @@
                 $("#time-adjust-dropdown").css("display", "none");
                 $("#work-rest").text("");
                 $nowTiming.text(i18n.__('ended'));
-                timerDial.classList.add("is-ended");
-                setDialProgress(0);
                 isClockWorking = 0;
                 $("#stopper").text("");
                 $bottomBar.css("width", "0%");
@@ -1528,22 +1518,18 @@
                 }
             }
 
-            // clock-style countdown ("24:50", "1:04:09"); digits read left-to-right in every locale
+            // "24m 50s", or "1h 4m 9s" once there are hours; Arabic keeps each unit with its number
             function renderTime(hours, minutes, seconds) {
-                $nowTiming.text((hours > 0 ? hours + ":" + positionCover(minutes) : minutes) + ":" + positionCover(seconds));
-                $nowTiming.toggleClass("has-hours", hours > 0);
-            }
-
-            // remaining share of the period, 0..1; the ring animates between ticks
-            function setDialProgress(value, snap) {
-                if (snap) {// jump without animating backwards (stopwatch wrapping to a new minute)
-                    timerDial.classList.add("dial-snap");
-                    timerDial.style.setProperty("--progress", value);
-                    void timerDial.offsetWidth;
-                    timerDial.classList.remove("dial-snap");
-                    return;
+                if (store.get("i18n").startsWith("ar")) {
+                    $nowTiming.addClass('rtl-timer').html(
+                        (hours > 0 ? '\u2068' + h.trim() + ' ' + hours + '\u2069' + ' ' : '') +
+                        '\u2068' + min.trim() + ' ' + minutes + '\u2069' +
+                        ' ' +
+                        '\u2068' + s.trim() + ' ' + seconds + '\u2069'
+                    );
+                } else {
+                    $nowTiming.removeClass('rtl-timer').text((hours > 0 ? hours + h : '') + minutes + min + seconds + s);
                 }
-                timerDial.style.setProperty("--progress", Math.max(0, Math.min(1, value)));
             }
 
             function positionCover(str) {//cover the positions of '0'
@@ -1590,7 +1576,6 @@
 
                 seconds -= hours * 3600 + minutes * 60;
                 renderTime(hours, minutes, seconds);
-                setDialProgress(seconds / 60, seconds === 0);
 
                 timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                 if (systemName !== "darwin") $timeBar.html(timeGot);
@@ -1626,7 +1611,6 @@
                     remainMinutes = hours * 60 + minutes;
 
                     naturalProgress = Math.round(Number(progress) * 100);
-                    setDialProgress(Number(progress));
                     if (progress !== lastRecordedProgress) {
                         lastRecordedProgress = progress;
                         ipc.send("progress-bar-set", {

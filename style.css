@@ -9,9 +9,9 @@
 
     --font-ui: system-ui, -apple-system, "Segoe UI Variable Text", "Segoe UI", "PingFang SC", "Microsoft YaHei UI", sans-serif;
 
-    --canvas: #fcfcfd;
-    --ink: #1d1d1f;
-    --ink-2: #6e6e73;
+    --canvas: #fefefe;
+    --ink: #212529;
+    --ink-2: #6c757d;
     --ink-3: #a1a1a6;
     --hairline: #e3e3e8;
     --fill: #f2f2f5;
@@ -24,9 +24,9 @@
 }
 
 :root[data-theme="dark"] {
-    --canvas: #1c1c1e;
+    --canvas: #191919;
     --ink: #f2f2f4;
-    --ink-2: #98989f;
+    --ink-2: #6c757d;
     --ink-3: #6b6b70;
     --hairline: #38383c;
     --fill: #2c2c2e;
@@ -80,6 +80,10 @@ input {
     background-color: transparent;
 }
 
+input:focus, input:active {
+    font-weight: bolder;
+}
+
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
@@ -90,18 +94,18 @@ input[type="time"] {
 
 input[type="text"], input[type="number"], input[type="password"] {
     border-color: transparent;
-    border-bottom-width: 1.5px;
+    border-bottom-width: 3px;
     border-radius: 0%;
     margin: 1px;
 }
 
 input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
-    border-bottom-width: 1.5px;
+    border-bottom-width: 3px;
     border-bottom-color: color-mix(in srgb, var(--ink) 20%, transparent);
 }
 
 input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {
-    border-bottom-width: 1.5px;
+    border-bottom-width: 3px;
     border-bottom-color: color-mix(in srgb, var(--ink) 13%, transparent);
 }
 
@@ -258,7 +262,7 @@ li input:nth-last-child(4)::after {
 }
 
 .text-grey {
-    color: var(--ink-2);
+    color: #6c757d;
 }
 
 .positive, .positive::-webkit-input-placeholder, .positive:hover {
@@ -640,25 +644,7 @@ li input:nth-last-child(4)::after {
 }
 
 #dropdown-button-extend {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border: 0;
-    border-radius: 999px;
-    background: var(--fill);
-    color: var(--ink-2);
-    font-size: 11.5px;
-    text-decoration: none;
-    transition: background-color .15s, color .15s;
-}
-
-#dropdown-button-extend:hover, #dropdown-button-extend[aria-expanded=true] {
-    background: var(--fill-2);
-    color: var(--ink);
-}
-
-#dropdown-button-extend::before {
-    color: var(--ink-3);
+    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
 }
 
 #dropdown-menu-button, #dropdown-menu-menu {
@@ -674,25 +660,18 @@ li input:nth-last-child(4)::after {
     overflow: auto;
 }
 
-#dropdown-menu-button {
-    height: 34px;
-    font-size: 14px;
-}
-
 #dropdown-menu-button #expand-right {
+    text-align: right;
+    display: inline-block;
     position: absolute;
-    right: 12px;
-    color: var(--ink-3);
-    font-size: 11px;
+    right: 7px;
 }
 
 #dropdown-menu-button #expand-left {
+    text-align: left;
+    display: inline-block;
     position: absolute;
-    left: 12px;
-    right: 32px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    left: 2px;
 }
 
 #dropdown-menu-button::after {
@@ -983,19 +962,29 @@ body.settings-scrolled .settings-back-to-top {
 }
 
 #settings-container .dropdown .btn, #dropdown-menu-button {
-    padding: 4px 10px;
-    border: 0;
-    border-radius: 7px;
-    background-color: var(--fill);
-    color: var(--ink) !important;
-    font-size: 12.5px;
-    font-weight: 400;
-    transition: background-color .15s;
+    border-color: transparent;
+    border-radius: 0;
+    border-bottom-width: 3px;
+    padding: .375rem .375rem;
+    font-size: .875rem;
+    color: var(--ink-2);
+    transition: all .08s;
+    border-bottom-color: color-mix(in srgb, var(--ink) 8%, transparent);
 }
 
-#settings-container .dropdown .btn:hover, #dropdown-menu-button:hover,
-#settings-container .dropdown .btn[aria-expanded=true], #dropdown-menu-button[aria-expanded=true] {
-    background-color: var(--fill-2);
+#settings-container .dropdown .btn:hover, #dropdown-menu-button:hover {
+    background-color: transparent;
+    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
+    font-weight: bolder;
+    border-bottom-color: color-mix(in srgb, var(--ink) 21%, transparent);
+}
+
+#settings-container .dropdown .btn:focus, #settings-container .dropdown .btn[aria-expanded=true], #dropdown-menu-button:focus, #dropdown-menu-button[aria-expanded=true] {
+    background-color: transparent;
+    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
+    font-weight: bolder;
+    border-bottom-color: color-mix(in srgb, var(--ink) 21%, transparent);
+    outline: none;
 }
 
 #settings-container .dropdown .btn:after {
@@ -1005,6 +994,10 @@ body.settings-scrolled .settings-back-to-top {
 #settings-container .card-body {
     padding: 1.8rem .65rem 0 .75rem;
     margin-top: 3px;
+}
+
+#settings-container .btn {
+    border: 1px solid #007bff;
 }
 
 #settings-container .row {
@@ -1377,7 +1370,7 @@ body.settings-scrolled .settings-back-to-top {
     min-height: 30px;
 }
 
-#top-bar a {
+#top-bar a, #index-topbar a {
     color: var(--ink-2) !important;
     line-height: 2;
     font-weight: 500 !important;
@@ -1562,69 +1555,77 @@ body.settings-scrolled .settings-back-to-top {
     display: block;
 }
 
-/*  Buttons: tinted for actions, neutral for dismissals, solid for the one default action.
-    --tint is the accent a button takes: rest blue by default, the countdown colour on
-    .btn-onlyRest.  */
-.btn {
-    --tint: var(--rest);
-    border: 0;
-    border-radius: 8px;
-    font-weight: 500;
-    transition: background-color .15s, color .15s, transform .1s;
-    -webkit-app-region: no-drag;
+.btn-outline-primary {
+    color: var(--rest);
+    border-color: var(--rest);
 }
 
-.btn-sm {
-    padding: 3px 10px;
-    border-radius: 6px;
-    font-size: 12px;
-    line-height: 1.6;
-}
-
-.btn:not(:disabled):not(.disabled):active {
-    transform: scale(.97);
+.btn-primary:hover, .btn-outline-primary:hover {
+    background-color: var(--rest);
+    border-color: var(--rest);
+    color: #fff;
 }
 
 .btn-onlyRest {
-    --tint: var(--only-rest);
+    color: var(--only-rest);
+    border-color: var(--only-rest);
 }
 
-.btn-outline-primary, .btn-onlyRest {
-    color: var(--tint) !important;
-    background-color: color-mix(in srgb, var(--tint) 11%, transparent);
+.btn-onlyRest:hover {
+    color: #fff;
+    background-color: var(--only-rest);
+    border-color: var(--only-rest);
 }
 
-.btn-outline-primary:hover, .btn-onlyRest:hover,
-.btn-outline-primary:not(:disabled):not(.disabled):active {
-    color: var(--tint) !important;
-    background-color: color-mix(in srgb, var(--tint) 18%, transparent);
+/* the one default action of a dialog */
+.btn-solid {
+    color: #fff !important;
+    background-color: var(--rest) !important;
+    border-color: var(--rest) !important;
 }
 
-.btn-outline-secondary {
+.btn-solid:hover {
+    background-color: color-mix(in srgb, var(--rest) 88%, #000) !important;
+}
+
+/* dialogs, About and recap keep their tinted and neutral buttons */
+:is(#dialog-buttons, .about-card, .recap-empty) .btn {
+    border: 0;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+:is(#dialog-buttons, .about-card, .recap-empty) .btn-outline-primary {
+    color: var(--rest) !important;
+    background-color: color-mix(in srgb, var(--rest) 11%, transparent);
+}
+
+:is(#dialog-buttons, .about-card, .recap-empty) .btn-outline-primary:hover {
+    background-color: color-mix(in srgb, var(--rest) 18%, transparent);
+}
+
+:is(#dialog-buttons, .about-card, .recap-empty) .btn-outline-secondary {
     color: var(--ink) !important;
     background-color: var(--fill);
 }
 
-.btn-outline-secondary:hover,
-.btn-outline-secondary:not(:disabled):not(.disabled):active {
-    color: var(--ink) !important;
+:is(#dialog-buttons, .about-card, .recap-empty) .btn-outline-secondary:hover {
     background-color: var(--fill-2);
 }
 
-.btn-primary, .btn-solid {
-    color: #fff !important;
-    background-color: var(--tint) !important;
+/* home: clicking the word next to a Focus toggle toggles it */
+label.focus-toggle {
+    display: inline;
+    margin: 0;
+    vertical-align: baseline;
 }
 
-.btn-primary:hover, .btn-solid:hover {
-    background-color: color-mix(in srgb, var(--tint) 88%, #000) !important;
+#focus-rest-set-onlyrest:disabled::after,
+label.focus-toggle:has(input:disabled) .focuser {
+    color: var(--ink-2) !important;
 }
 
-.btn.disabled, .btn:disabled {
-    opacity: .4;
-}
-
-/*  Home  */
+/*  Segmented control (statistics)  */
 .segmented {
     display: flex;
     width: fit-content;
@@ -1664,417 +1665,13 @@ body.settings-scrolled .settings-back-to-top {
     box-shadow: none;
 }
 
-.field-label {
-    font-size: 12px;
-    font-weight: 500;
+/* dark switches, as before the token change: a dark track with a light knob */
+:root[data-theme="dark"] .switch-slide-label {
+    background: #333;
 }
 
-#set input[type="text"]:focus, #set-onlyrest input[type="text"]:focus {
-    border-bottom-color: currentColor;
-}
-
-.focus-chip {
-    --chip: var(--rest);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    margin: 0 0 0 10px;
-    padding: 3px 10px 3px 8px;
-    border-radius: 999px;
-    background: var(--fill);
-    color: var(--ink-2);
-    font-size: 11.5px;
-    line-height: 1.4;
-    vertical-align: middle;
-    -webkit-app-region: no-drag;
-    -webkit-user-select: none;
-    transition: background-color .15s, color .15s;
-}
-
-.focus-chip[data-phase="work"] {--chip: var(--work);}
-.focus-chip[data-phase="only-rest"] {--chip: var(--only-rest);}
-
-.focus-chip input[type="checkbox"] {
-    flex: none;
-    color: inherit;
-    width: 8px;
-    height: 8px;
-    margin: 0;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1.5px currentColor;
-    cursor: default;
-}
-
-.focus-chip input[type="checkbox"]::after {
-    content: none !important;
-}
-
-.focus-chip:has(input:checked) {
-    background: color-mix(in srgb, var(--chip) 14%, transparent);
-    color: var(--chip);
-}
-
-.focus-chip:has(input:checked) input {
-    background: currentColor;
-}
-
-.focus-chip:has(input:disabled) {
-    opacity: .45;
-}
-
-.chip-row {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 18px;
-}
-
-.chip-row .focus-chip {
-    margin: 0;
-}
-
-#all-sum {
-    font-size: 12px;
-}
-
-#all-sum-num, #to-num-h, #to-num-min {
-    color: var(--ink);
-    font-weight: 500;
-    font-variant-numeric: tabular-nums;
-}
-
-#bottom-btn {
-    height: 40px;
-    border-radius: 10px;
-    font-size: 15px;
-    color: #fff !important;
-    background-color: var(--tint) !important;
-}
-
-#bottom-btn:hover {
-    background-color: color-mix(in srgb, var(--tint) 88%, #000) !important;
-}
-
-#controller a, #controller a .iconfont {
-    color: var(--ink-3) !important;
-    transition: color .15s;
-}
-
-#controller a:hover, #controller a:hover .iconfont {
-    color: var(--ink-2) !important;
-}
-
-#controller .controller-msg-spacing {
-    color: var(--hairline) !important;
-}
-
-/*  Settings: grouped rows on a sunken page, like the platform's own settings  */
-.settings-page {
-    --page: var(--fill);
-    --group: #ffffff;
-    --control: color-mix(in srgb, var(--ink) 7%, transparent);
-    --control-hover: color-mix(in srgb, var(--ink) 12%, transparent);
-}
-
-:root[data-theme="dark"] .settings-page {
-    --page: var(--canvas);
-    --group: var(--fill);
-}
-
-body.settings-page, .settings-page #settings-header {
-    background-color: var(--page);
-}
-
-#settings-header {
-    border-bottom: 0;
-}
-
-#settings-title {
-    color: var(--ink) !important;
-    font-size: 20px;
-    font-weight: 600;
-    line-height: 1.3;
-}
-
-#settings-section-nav {
-    gap: 2px;
-    margin-top: 8px;
-    margin-inline-start: -8px;
-}
-
-.settings-section-nav-item {
-    padding: 3px 8px;
-    border-radius: 999px;
-    color: var(--ink-2);
-    font-size: 12px;
-    transition: background-color .15s, color .15s;
-}
-
-.settings-section-nav-item:hover {
-    background: var(--control);
-    color: var(--ink);
-}
-
-.settings-section-nav-item.is-current, :where([data-theme="dark"]) .settings-section-nav-item.is-current {
-    background: color-mix(in srgb, var(--rest) 14%, transparent);
-    color: var(--rest);
-    font-weight: 500;
-}
-
-#settings-container > br {
-    display: none;
-}
-
-#settings-container .settings-section-anchor {
-    margin: 22px 0 6px;
-    padding: 0 14px;
-    border-bottom: 0;
-}
-
-#settings-container .settings-section-anchor:first-child {
-    margin-top: 2px;
-}
-
-#settings-container .settings-section-heading {
-    color: var(--ink-2);
-    font-size: 12.5px;
-    font-weight: 600;
-    letter-spacing: 0;
-}
-
-/* each top-level row is one line of its section's group */
-#settings-container > .row:not(.settings-section-anchor) {
-    padding: 9px 14px;
-    background: var(--group);
-    box-shadow: inset 0 -1px 0 var(--hairline);
-}
-
-#settings-container > .settings-section-anchor + br + .row {
-    border-radius: 10px 10px 0 0;
-}
-
-#settings-container > .row:not(.settings-section-anchor):has(+ br + .settings-section-anchor),
-#settings-container > .row:not(.settings-section-anchor):last-of-type {
-    border-radius: 0 0 10px 10px;
-    box-shadow: none;
-}
-
-#settings-container > .settings-section-anchor + br + .row:has(+ br + .settings-section-anchor) {
-    border-radius: 10px;
-}
-
-#settings-container label {
-    margin-bottom: 0;
-}
-
-#settings-container .card {
-    background: transparent;
-    border: 0;
-}
-
-#settings-container .dropdown .btn {
-    background-color: var(--control);
-}
-
-#settings-container .dropdown .btn:hover, #settings-container .dropdown .btn[aria-expanded=true] {
-    background-color: var(--control-hover);
-}
-
-.settings-tip-toggle {
-    width: 16px;
-    height: 16px;
-    margin: 0 0 2px 5px;
-    border-color: color-mix(in srgb, var(--ink-3) 70%, transparent);
-    color: var(--ink-3);
-    font-size: 10.5px;
-    line-height: 14px;
-}
-
-.switch-slide-label {
-    width: 38px;
-    height: 22px;
-    margin-left: auto;
-    border-radius: 11px;
-    background: color-mix(in srgb, var(--ink) 16%, transparent);
-    transition: background-color .2s ease;
-}
-
-.switch-slide-label:after {
-    width: 18px;
-    height: 18px;
-    top: 2px;
-    left: 2px;
-    background: #fff !important;
-    box-shadow: 0 1px 2px rgb(0 0 0 / .22), 0 0 0 .5px rgb(0 0 0 / .05);
-    transition: left .2s ease;
-}
-
-.switch-slide input:checked + label:after {
-    left: 18px;
-}
-
-[dir="rtl"] .switch-slide input:checked + label:after {
-    left: auto;
-    right: 18px;
-}
-
-/* predefined plans: one card per plan inside the settings group */
-#predefined-tasks .d-flex {
-    display: block !important;
-}
-
-#itemlist {
-    width: 100%;
-    min-width: 0;
-}
-
-#itemlist-ul {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr);
-    gap: 8px;
-    margin: 0;
-    padding: 0 !important;
-    list-style: none;
-}
-
-.plan-card {
-    padding: 10px 12px;
-    border-radius: 10px;
-    background: var(--control);
-    line-height: 1.4;
-}
-
-.plan-head {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.plan-head input[name="title"] {
-    flex: 1 1 0;
-    min-width: 0;
-    width: 0;
-    margin: 0;
-    font-size: 14px;
-    font-weight: 600;
-}
-
-.plan-fields {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 6px 14px;
-    margin: 6px 0 8px;
-    color: var(--ink-2);
-    font-size: 12px;
-}
-
-.plan-field {
-    display: inline-flex;
-    align-items: baseline;
-    gap: 5px;
-}
-
-#settings-container .plan-number {
-    width: 3.4em;
-    margin: 0;
-    padding: 1px 4px;
-    border: 0;
-    border-radius: 5px;
-    background: var(--group);
-    color: var(--ink);
-    text-align: center;
-    font-variant-numeric: tabular-nums;
-}
-
-.plan-fields .settings-coupling {
-    flex-basis: 100%;
-    margin: 0;
-}
-
-.plan-foot {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 6px;
-}
-
-.plan-foot .focus-chip {
-    margin: 0;
-    background: var(--group);
-}
-
-.plan-delete-wrap {
-    margin-inline-start: -4px;
-}
-
-#settings-container .plan-head input[name="title"]:not(:hover):not(:focus) {
-    border-bottom-color: transparent;
-}
-
-.plan-action {
-    padding: 2px 8px;
-    border: 0;
-    border-radius: 6px;
-    color: var(--rest);
-    font-size: 12px;
-    white-space: nowrap;
-    text-decoration: none !important;
-}
-
-.plan-action:hover {
-    background: var(--control);
-}
-
-.plan-delete {
-    color: var(--work);
-}
-
-.plan-add {
-    margin-top: 10px;
-}
-
-/* app data management: one action per row */
-.data-actions {
-    display: grid;
-    gap: 12px;
-    padding: 2px 0;
-}
-
-.data-action {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 12px;
-}
-
-.data-action-stacked {
-    display: grid;
-    gap: 4px;
-}
-
-.data-action-text {
-    margin: 0;
-    font-size: 13px;
-    line-height: 1.4;
-}
-
-#settings-container .data-action-input {
-    width: 100%;
-    padding: 4px 8px;
-    border: 0;
-    border-radius: 6px;
-    background: var(--control);
-}
-
-.data-action .btn {
-    flex: none;
-}
-
-/* destructive actions stay red whatever the phase palette is */
-.btn-destructive {
-    --tint: #e5484d;
+:root[data-theme="dark"] .switch-slide-label:after {
+    background: #ccc !important;
 }
 
 /*  Statistics and recap  */
@@ -2445,109 +2042,6 @@ body.settings-page, .settings-page #settings-header {
     padding: 24vh 8px 0;
 }
 
-/*  Mini window: a small copy of the timer dial  */
-#floating-container {
-    position: fixed;
-    inset: 0;
-}
-
-#floating-unhover {
-    position: absolute;
-    inset: 0;
-    display: grid;
-    place-content: center;
-    justify-items: center;
-}
-
-#mini-dial {
-    position: absolute;
-    inset: 5px;
-    transition: --progress .3s linear;
-}
-
-#mini-dial svg {
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    transform: rotate(-90deg);
-}
-
-.mini-track, .mini-progress {
-    fill: none;
-    stroke-width: 4;
-}
-
-.mini-track {
-    stroke: var(--hairline);
-}
-
-.mini-progress {
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-dasharray: calc(var(--progress) * 100) 100;
-}
-
-#time-left {
-    position: relative;
-    margin: 0;
-    font-size: 19px !important;
-    font-weight: 300;
-    line-height: 1.05;
-    font-variant-numeric: tabular-nums;
-}
-
-#time-left.h6 {
-    font-size: 14px !important;
-}
-
-#time-left-msg {
-    position: relative;
-    font-size: 10px;
-    line-height: 1.2;
-    opacity: .8;
-}
-
-#floating-bottom-bar {
-    display: none !important;
-}
-
-#floating-hover {
-    position: absolute;
-    inset: 0;
-}
-
-#floating-hover:hover {
-    background-color: color-mix(in srgb, var(--canvas) 92%, transparent);
-}
-
-#floating-hover a {
-    border: 0;
-    color: var(--ink-2) !important;
-}
-
-#floating-hover a:hover {
-    color: var(--ink) !important;
-}
-
-#floating-recover, #floating-close, #floating-back, #floating-skipper {
-    padding: 5px 6px;
-    font-size: 11px;
-}
-
-#floating-stopper #stopper {
-    display: inline-block;
-    width: 32px;
-    height: 32px;
-    border-radius: 50%;
-    background: var(--fill);
-    line-height: 32px;
-    text-align: center;
-}
-
-#floating-stopper #stopper i::before {
-    font-size: 13px;
-}
-
 /*  Onboarding tour  */
 #tourguide {
     position: absolute;
@@ -2564,7 +2058,7 @@ body.settings-page, .settings-page #settings-header {
     height: 34px;
 }
 
-.tour-title {
+#tourguide .tour-title {
     margin: 18px 0 4px;
     color: var(--ink);
     font-size: 26px;
@@ -2578,49 +2072,11 @@ body.settings-page, .settings-page #settings-header {
     font-size: 14px;
 }
 
-.tour-dial {
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: 132px;
-    height: 132px;
-    margin: 30px auto 28px;
-    color: var(--work);
-}
-
-.tour-dial svg {
-    position: absolute;
-    inset: 0;
-    overflow: visible;
-    transform: rotate(-90deg);
-}
-
-.tour-dial .dial-track, .tour-dial .dial-progress {
-    stroke-width: 3;
-}
-
-.tour-dial .tour-dial-arc {
-    stroke-dasharray: 72 100;
-    animation: tour-dial-draw 1.4s cubic-bezier(.2, .7, .2, 1) .2s both;
-}
-
-@keyframes tour-dial-draw {
-    from {
-        stroke-dasharray: 0 100;
-    }
-}
-
-.tour-dial-time {
-    font-size: 30px;
-    font-weight: 200;
-    letter-spacing: -.02em;
-    font-variant-numeric: tabular-nums;
-}
-
 .tour-features {
     display: grid;
-    gap: 14px;
-    margin: 0 0 auto;
+    gap: 16px;
+    margin: auto 0;
+    padding-bottom: 8%;
 }
 
 .tour-feature dt {
@@ -2740,170 +2196,21 @@ body.settings-page, .settings-page #settings-header {
     font-weight: 600;
 }
 
-/*  Timer: the dial is the one bold element of the app  */
-@property --progress {
-    syntax: '<number>';
-    inherits: true;
-    initial-value: 1;
-}
-
-#timer-dial {
-    --dial: min(62vw, 50vh);
-    position: relative;
-    display: grid;
-    place-items: center;
-    width: var(--dial);
-    height: var(--dial);
-    margin: 6px auto 12px;
-    transition: --progress 1s linear;
-    -webkit-user-select: none;
-}
-
-#timer-dial.dial-snap {
-    transition: none;
-}
-
-.dial-ring {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    overflow: visible;
-    transform: rotate(-90deg);
-}
-
-.dial-track, .dial-progress {
-    fill: none;
-    stroke-width: 2.2;
-}
-
-.dial-track {
-    stroke: var(--hairline);
-}
-
-.dial-progress {
-    stroke: currentColor;
-    stroke-linecap: round;
-    stroke-dasharray: calc(var(--progress) * 100) 100;
-    transition: stroke .6s ease;
-}
-
-#timer-dial.is-ended .dial-progress {
-    opacity: 0;
-}
-
-.dial-face {
-    position: relative;
-    display: grid;
-    justify-items: center;
-    gap: calc(var(--dial) * .025);
-}
-
-#work-rest {
-    font-size: max(12px, calc(var(--dial) * .058));
-    font-weight: 500;
-    line-height: 1.2;
-}
-
+/*  Timer countdown: the size follows the window width, as dynamicResizer() used to
+    (2.5rem at the default 376px width); tabular figures keep the digits from shifting  */
 #now-timing {
-    font-size: calc(var(--dial) * .23);
-    font-weight: 200;
-    line-height: 1;
-    letter-spacing: -.02em;
+    font-size: calc(1.25rem + 5.32vw);
     font-variant-numeric: tabular-nums;
+}
+
+#now-timing.rtl-timer,
+.rtl-timer {
+    direction: rtl;
     unicode-bidi: isolate;
 }
 
-#now-timing.has-hours {
-    font-size: calc(var(--dial) * .17);
-}
-
-/* .display-1 marks fullscreen focus (timer.html checks for it); the dial already scales */
-#now-timing.display-1 {
-    font-size: calc(var(--dial) * .23) !important;
-    font-weight: 200;
-}
-
-#now-timing.display-1.has-hours {
-    font-size: calc(var(--dial) * .17) !important;
-}
-
-.timer-controls {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    column-gap: 14px;
-    width: min(300px, 86vw);
-    margin: 0 auto 10px;
-}
-
-.timer-controls #more-options {
-    display: contents;
-}
-
-#skipper-space {
-    display: none !important;
-}
-
-.stopper-cell {
-    grid-column: 2;
-    grid-row: 1;
-}
-
-#back-index {
-    grid-column: 1;
-    grid-row: 1;
-    justify-self: end;
-}
-
-#skipper-container {
-    grid-column: 3;
-    grid-row: 1;
-    justify-self: start;
-}
-
-#stopper {
-    display: block;
-    width: 48px;
-    height: 48px;
-    border: 0;
-    border-radius: 50%;
-    background: var(--fill);
-    color: var(--ink);
-    line-height: 48px;
-    text-align: center;
-    text-decoration: none;
-    transition: background-color .15s, transform .1s;
-}
-
-#stopper:hover {
-    background: var(--fill-2);
-}
-
-#stopper:active {
-    transform: scale(.95);
-}
-
 #stopper i::before {
-    font-size: 18px;
-}
-
-#back-index, #skipper-container {
-    border: 0;
-    border-radius: 8px;
-    padding: 6px 8px;
-    color: var(--ink-2) !important;
-    text-decoration: none;
-    transition: background-color .15s;
-}
-
-#back-index:hover, #skipper-container:hover {
-    background: var(--fill);
-}
-
-#back-index .controller-msg, #skipper-container .controller-msg {
-    font-size: 12px;
-    transform: none;
+    font-size: 2rem;
 }
 
 .quiet-button {
@@ -3033,12 +2340,6 @@ body {
     background-color: var(--canvas);
 }
 
-/* Bootstrap's greys, mapped onto the tokens */
-.text-muted, .text-grey {color: var(--ink-2) !important;}
-.text-dark {color: var(--ink) !important;}
-hr {border-color: var(--hairline);}
-h1, h2, h3, h4, h5, .settings-title {color: var(--ink);}
-.card {background-color: var(--canvas); border-color: var(--hairline);}
 .dropdown-menu {background-color: var(--popover); color: var(--ink);}
 .dropdown-item {color: var(--ink);}
 .dropdown-item:hover, .dropdown-item:focus {background-color: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink);}
@@ -3046,7 +2347,54 @@ h1, h2, h3, h4, h5, .settings-title {color: var(--ink);}
 #loader-wrapper .loader-section {background: var(--canvas);}
 
 /* frameless dark windows need an edge against dark desktops */
+/* dark appearance as it always looked; menus and the in-timer dialogs use the newer surfaces */
+:where([data-theme="dark"], [data-theme="dark"] *)::-webkit-scrollbar-track {background-color: #191919;}
+:where([data-theme="dark"], [data-theme="dark"] *)::-webkit-scrollbar-thumb {background-color: #999999;}
+:where([data-theme="dark"]) input[type="range"] {background-color: #aaaaaa33;}
+:where([data-theme="dark"]) hr {border-color: #666666;}
+:where([data-theme="dark"]) #title {color: #bbbbbb;}
+:where([data-theme="dark"]) :is(#settings-title, #predefined-tasks-sidebar, #settings-sidebar) {border-color: #aaaaaa33;}
+:where([data-theme="dark"]) .settings-sidebar-block {color: #fefefe; background-color: #191919;}
+:where([data-theme="dark"]) label,
+:where([data-theme="dark"]) li,
+:where([data-theme="dark"]) select,
+:where([data-theme="dark"]) #personalization input[type="text"],
+:where([data-theme="dark"]) input[type="password"],
+:where([data-theme="dark"]) #settings-container input[type="number"],
+:where([data-theme="dark"]) input[type="time"],
+:where([data-theme="dark"]) .settings-sidebar-block {color: #bbbbbb !important;}
+:where([data-theme="dark"]) #settings-container input[type="text"],
+:where([data-theme="dark"]) #settings-container input[type="number"],
+:where([data-theme="dark"]) #settings-container input[type="password"],
+:where([data-theme="dark"]) #extend-form input,
+:where([data-theme="dark"]) #settings-container .dropdown .btn,
+:where([data-theme="dark"]) #dropdown-menu-button {border-bottom-color: #cccccc23 !important; color: #aaaaaa;}
+:where([data-theme="dark"]) .work {color: var(--work) !important;}
+:where([data-theme="dark"]) .rest {color: var(--rest) !important;}
+:where([data-theme="dark"]) .text-info,
+:where([data-theme="dark"]) .work.positive {color: #17a2b8 !important;}
+:where([data-theme="dark"]) :is(input[type="text"], input[type="number"], input[type="password"]):focus,
+:where([data-theme="dark"]) #settings-container :is(input[type="text"], input[type="number"]):focus,
+:where([data-theme="dark"]) #settings-container .dropdown .btn:focus,
+:where([data-theme="dark"]) #dropdown-menu-button:focus {border-bottom-color: #cccccc33 !important;}
+:where([data-theme="dark"]) :is(input[type="text"], input[type="number"], input[type="password"]):hover,
+:where([data-theme="dark"]) #settings-container :is(input[type="text"], input[type="number"]):hover,
+:where([data-theme="dark"]) #settings-container .dropdown .btn:hover,
+:where([data-theme="dark"]) #dropdown-menu-button:hover {border-bottom-color: #cccccc28 !important;}
+:where([data-theme="dark"]) .hotkey-setting {color: #aaaaaa;}
 :where(html[data-theme="dark"]) {border: #ffffff33 1px solid;}
+:where([data-theme="dark"]) .card {background-color: #191919; border: 1px solid rgba(255, 255, 255, .125);}
+:where([data-theme="dark"]) .settings-title {color: #ddd;}
+:where([data-theme="dark"]) #settings-container .settings-section-heading {color: #5490ea;}
+:where([data-theme="dark"]) #settings-container .settings-section-anchor {border-bottom-color: #ffffff18;}
+:where([data-theme="dark"]) #settings-header {border-bottom-color: #aaaaaa33;}
+:where([data-theme="dark"]) .settings-back-to-top {color: #aaaaaa;}
+:where([data-theme="dark"]) .home-coupling {color: #999999;}
+:where([data-theme="dark"]) .settings-section-nav-item {color: #999999;}
+:where([data-theme="dark"]) :is(.settings-section-nav-item:hover, .settings-section-nav-item.is-current) {color: #5490ea;}
+:where([data-theme="dark"]) .dropdown-default {color: #aaa;}
+:where([data-theme="dark"]) .dropdown-toggle::before {color: #aaa;}
+:where([data-theme="dark"]) #emergency-exit-link {color: #aaaaaa;}
 
 /* keyboard focus is visible; pointer focus is not */
 :focus {outline: none;}
@@ -3166,12 +2514,6 @@ input[type="text"]:focus-visible, input[type="number"]:focus-visible, input[type
 :where([data-phase-colors]) .rest.onlyRest input[type="range"]::-webkit-slider-thumb {background: var(--only-rest) !important;}
 :where([data-phase-colors]) .onlyRest input[type="checkbox"]::after,
 :where([data-phase-colors]) .rest.onlyRest input[type="checkbox"]::after {color: var(--only-rest) !important;}
-
-#predefined-tasks-edit .text-info {
-    color: var(--rest) !important;
-    text-decoration: none;
-    font-weight: 500;
-}
 
 /* pages cross-fade into each other (home, timer, statistics share the main window) */
 @view-transition {
