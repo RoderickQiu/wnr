@@ -1,45 +1,54 @@
 {
-	"version" : "1.34.0",
+	"version" : "1.35.0",
 	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
-			"首页的工作和休息时间加了标签，也可以写「1小时」这类说法并看到换算。不能开始时会说明原因；打开专心模式会先告诉你这段时间会锁住屏幕。",
-			"设置按使用场景重新排过，互相影响的选项会写在旁边，比如按比例休息、无限循环、自动开始默认任务。锁定模式的密码栏也理顺了。改语言或外观时会先问要不要重启。",
-			"WebDAV 现在可以连家里或公司的内网服务器，远程文件夹也可以不填。"
+			"现在需要 Windows 10 或 macOS 13 及以上版本。Windows 7 和 8 请继续使用 1.34.0。",
+			"手动跳过会直接进入下一段，不再弹出「时间到」并等你关掉。想要以前的样子，打开「跳过后弹出确认」。",
+			"严格全屏可以加一个「紧急退出」：照着输入一串随机字符（不能粘贴）就能结束；开了锁定模式则输入密码。",
+			"重新设计了使用统计，新手引导、关于、对话框和菜单等界面也做了优化。",
+			"Windows 任务栏缩略图上可以暂停和跳过；任务栏和 Dock 的右键菜单可以直接开始正计时或单纯计时。",
+			"macOS 上的通知又能正常弹出了，每天自动检查更新也恢复了。"
 		],
 		"zh-TW" : [
-			"首頁的工作和休息時間加了標籤，也可以寫「1小時」這類說法並看到換算。不能開始時會說明原因；打開專心模式會先告訴你這段時間會鎖住屏幕。",
-			"設置按使用場景重新排過，互相影響的選項會寫在旁邊，比如按比例休息、無限循環、自動開始默認任務。鎖定模式的密碼欄也理順了。改語言或外觀時會先問要不要重啟。",
-			"WebDAV 現在可以連家裡或公司的內網伺服器，遠端資料夾也可以不填。"
+			"現在需要 Windows 10 或 macOS 13 及以上版本。Windows 7 和 8 請繼續使用 1.34.0。",
+			"手動跳過會直接進入下一段，不再彈出「時間到」並等你關掉。想要以前的樣子，打開「跳過後彈出確認」。",
+			"嚴格全屏可以加一個「緊急退出」：照著輸入一串隨機字符（不能貼上）就能結束；開了鎖定模式則輸入密碼。",
+			"重新設計了使用統計，新手引導、關於、對話框和選單等介面也做了優化。",
+			"Windows 工作列縮圖上可以暫停和跳過；工作列和 Dock 的右鍵選單可以直接開始正計時或單純計時。",
+			"macOS 上的通知又能正常彈出了，每天自動檢查更新也恢復了。"
 		],
 		"en" : [
-			"Work and rest on the home screen are labeled. You can type things like \"1 hour\" and see the conversion. If a session cannot start, wnr says why. Turning on Focus first tells you that period will lock the screen.",
-			"Settings is rearranged by how you use it. Options that affect each other now say so on the spot, such as percentage rest, Infinity, and auto-starting the default plan. Lock mode is easier to turn on or off. Changing language or appearance asks before restarting.",
-			"WebDAV can now connect to a home or office intranet server. The remote folder can also be left empty."
+			"wnr now needs Windows 10 or macOS 13 or later. On Windows 7 or 8, please stay on 1.34.0.",
+			"Skipping goes straight to the next period instead of showing the time-up dialog and waiting. Turn on \"Confirm after skipping\" to get the old behaviour back.",
+			"Strict fullscreen can have an emergency exit: type a block of random characters exactly (no pasting) to end the session, or the lock passcode if lock mode is on.",
+			"Statistics is redesigned, and the tour, About window, dialogs and menus are polished too.",
+			"On Windows, the taskbar thumbnail has pause and skip buttons. The taskbar and Dock menus can start a stopwatch or simple countdown directly.",
+			"Notifications show up on macOS again, and the daily update check runs again."
 		]
 	},
 	"introduce" : {
-		"id" : "introduced-1.34.0",
+		"id" : "introduced-1.35.0",
 		"zh-CN" : {
-			"title" : "<b>欢迎升级至 1.34.0！</b>",
+			"title" : "<b>欢迎升级至 1.35.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 首页时间加了标签，不能开始会说明原因，专心模式会先提醒会锁屏。</p><p>2. 设置按使用场景重排，互相影响的选项会写在旁边；改语言或外观会先问要不要重启。</p><p>3. WebDAV 可以连家里或公司内网，远程文件夹也可以不填。</p>",
+				"universal" : "<p>1. 跳过会直接进入下一段，不再弹窗等你关掉；想要旧行为可以打开「跳过后弹出确认」。</p><p>2. 严格全屏可以在设置里加一个「紧急退出」。</p><p>3. 重新设计了使用统计，其他界面也做了优化。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"zh-TW" : {
-			"title" : "<b>歡迎升級至 1.34.0！</b>",
+			"title" : "<b>歡迎升級至 1.35.0！</b>",
 			"description" : {
-				"universal" : "<p>1. 首頁時間加了標籤，不能開始會說明原因，專心模式會先提醒會鎖屏。</p><p>2. 設置按使用場景重排，互相影響的選項會寫在旁邊；改語言或外觀會先問要不要重啟。</p><p>3. WebDAV 可以連家裡或公司內網，遠端資料夾也可以不填。</p>",
+				"universal" : "<p>1. 跳過會直接進入下一段，不再彈窗等你關掉；想要舊行為可以打開「跳過後彈出確認」。</p><p>2. 嚴格全屏可以在設置裡加一個「緊急退出」。</p><p>3. 重新設計了使用統計，其他介面也做了優化。</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
 		},
 		"en" : {
-			"title" : "<b>Welcome to v1.34.0!</b>",
+			"title" : "<b>Welcome to v1.35.0!</b>",
 			"description" : {
-				"universal" : "<p>1. Home times are labeled; if you cannot start, it says why. Focus warns you before it locks the screen.</p><p>2. Settings is rearranged by use. Related options explain themselves. Changing language or appearance asks before restart.</p><p>3. WebDAV can connect to a home or office intranet. The remote folder can also be left empty.</p>",
+				"universal" : "<p>1. Skipping goes straight to the next period. Turn on \"Confirm after skipping\" for the old dialog.</p><p>2. Strict fullscreen can have an emergency exit; turn it on in settings.</p><p>3. Statistics is redesigned, and other screens are polished too.</p>",
 				"darwin" : "",
 				"win32" : ""
 			}
