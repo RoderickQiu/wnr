@@ -4,6 +4,7 @@ const Platform = builder.Platform
 require("./env_commit")
 
 const config = {
+    "electronFuses": require("./fuses"),
     "directories": {
         "output": "packaged/"
     },

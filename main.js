@@ -1,7 +1,7 @@
 const {
     app, BrowserWindow, ipcMain, Tray, Menu,
     globalShortcut, dialog, shell, powerSaveBlocker,
-    powerMonitor, nativeTheme, screen, TouchBar, Notification, nativeImage
+    powerMonitor, nativeTheme, screen, TouchBar, Notification, nativeImage, session
 }
     = require('electron');
 const Store = require('electron-store');
@@ -437,9 +437,31 @@ app.on('will-quit', () => {
 })
 
 //when created the app, triggers
+// Every window shows local pages with Node integration, so none of them may be navigated or
+// opened to anything else; web and mail links go to the system instead.
+const APP_FILE_URL = require('url').pathToFileURL(__dirname).href;
+function openOutside(url) {
+    if (/^(https?|mailto):/i.test(url)) shell.openExternal(url);
+}
+app.on('web-contents-created', (event, contents) => {
+    contents.on('will-navigate', (navigation, url) => {
+        if (url.startsWith(APP_FILE_URL + '/')) return;
+        navigation.preventDefault();
+        openOutside(url);
+    });
+    contents.setWindowOpenHandler(({ url }) => {
+        openOutside(url);
+        return { action: 'deny' };
+    });
+});
+// the pages need no web permissions beyond writing the backup tokens to the clipboard
+const ALLOWED_PERMISSIONS = ['clipboard-sanitized-write'];
+
 //some apis can be only used inside ready
 app.on('ready', async () => {
     require('@electron/remote/main').initialize();
+    session.defaultSession.setPermissionRequestHandler((contents, permission, callback) => callback(ALLOWED_PERMISSIONS.includes(permission)));
+    session.defaultSession.setPermissionCheckHandler((contents, permission) => ALLOWED_PERMISSIONS.includes(permission));
 
     hasGotSingleInstanceLock = app.requestSingleInstanceLock();
     if (!hasGotSingleInstanceLock) {
