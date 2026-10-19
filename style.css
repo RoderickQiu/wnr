@@ -80,10 +80,6 @@ input {
     background-color: transparent;
 }
 
-input:focus, input:active {
-    font-weight: bolder;
-}
-
 input::-webkit-outer-spin-button, input::-webkit-inner-spin-button {
     -webkit-appearance: none;
 }
@@ -94,18 +90,18 @@ input[type="time"] {
 
 input[type="text"], input[type="number"], input[type="password"] {
     border-color: transparent;
-    border-bottom-width: 3px;
+    border-bottom-width: 1.5px;
     border-radius: 0%;
     margin: 1px;
 }
 
 input[type="text"]:focus, input[type="number"]:focus, input[type="password"]:focus {
-    border-bottom-width: 3px;
+    border-bottom-width: 1.5px;
     border-bottom-color: color-mix(in srgb, var(--ink) 20%, transparent);
 }
 
 input[type="text"]:hover, input[type="number"]:hover, input[type="password"]:hover {
-    border-bottom-width: 3px;
+    border-bottom-width: 1.5px;
     border-bottom-color: color-mix(in srgb, var(--ink) 13%, transparent);
 }
 
@@ -358,7 +354,11 @@ li input:nth-last-child(4)::after {
 }
 
 .dropdown-menu {
-    border-width: 1.5px;
+    padding: 5px;
+    border: 0;
+    border-radius: 10px;
+    box-shadow: var(--popover-shadow);
+    font-size: 12px;
     margin-top: 9px;
     -webkit-app-region: no-drag;
     /* let it clickable */
@@ -366,25 +366,17 @@ li input:nth-last-child(4)::after {
 }
 
 .dropdown-item {
+    padding: 5px 10px;
+    border: 0;
+    border-radius: 6px;
     font-size: 12px;
-    line-height: 200%;
+    line-height: 1.6;
 }
 
 .time-bar-focus {
     left: auto !important;
     right: auto !important;
     text-align: center;
-}
-
-.btn-outline-primary {
-    color: var(--rest);
-    border-color: var(--rest);
-}
-
-.btn-primary:hover, .btn-outline-primary:hover {
-    background-color: var(--rest);
-    border-color: var(--rest);
-    color: #fff;
 }
 
 .header-resize {
@@ -544,17 +536,6 @@ li input:nth-last-child(4)::after {
     cursor: not-allowed;
 }
 
-.btn-onlyRest {
-    color: var(--only-rest);
-    border-color: var(--only-rest);
-}
-
-.btn-onlyRest:hover {
-    color: #fff;
-    background-color: var(--only-rest);
-    border-color: var(--only-rest);
-}
-
 #controller .dropdown-toggle::before, #controller .dropdown-toggle::after {
     color: var(--rest);
 }
@@ -659,7 +640,25 @@ li input:nth-last-child(4)::after {
 }
 
 #dropdown-button-extend {
-    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
+    display: inline-flex;
+    align-items: center;
+    padding: 3px 10px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--fill);
+    color: var(--ink-2);
+    font-size: 11.5px;
+    text-decoration: none;
+    transition: background-color .15s, color .15s;
+}
+
+#dropdown-button-extend:hover, #dropdown-button-extend[aria-expanded=true] {
+    background: var(--fill-2);
+    color: var(--ink);
+}
+
+#dropdown-button-extend::before {
+    color: var(--ink-3);
 }
 
 #dropdown-menu-button, #dropdown-menu-menu {
@@ -675,18 +674,25 @@ li input:nth-last-child(4)::after {
     overflow: auto;
 }
 
+#dropdown-menu-button {
+    height: 34px;
+    font-size: 14px;
+}
+
 #dropdown-menu-button #expand-right {
-    text-align: right;
-    display: inline-block;
     position: absolute;
-    right: 7px;
+    right: 12px;
+    color: var(--ink-3);
+    font-size: 11px;
 }
 
 #dropdown-menu-button #expand-left {
-    text-align: left;
-    display: inline-block;
     position: absolute;
-    left: 2px;
+    left: 12px;
+    right: 32px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 #dropdown-menu-button::after {
@@ -890,10 +896,6 @@ body.settings-scrolled .settings-back-to-top {
     border: 0;
 }
 
-#settings-container .btn {
-    border: 1px solid #007bff;
-}
-
 #settings-container input[type="text"], #settings-container input[type="number"], #settings-container input[type="password"], #passcode-rechecker, #extend-form input {
     border-bottom-color: color-mix(in srgb, var(--ink) 8%, transparent);
 }
@@ -981,29 +983,19 @@ body.settings-scrolled .settings-back-to-top {
 }
 
 #settings-container .dropdown .btn, #dropdown-menu-button {
-    border-color: transparent;
-    border-radius: 0;
-    border-bottom-width: 3px;
-    padding: .375rem .375rem;
-    font-size: .875rem;
-    color: var(--ink-2);
-    transition: all .08s;
-    border-bottom-color: color-mix(in srgb, var(--ink) 8%, transparent);
+    padding: 4px 10px;
+    border: 0;
+    border-radius: 7px;
+    background-color: var(--fill);
+    color: var(--ink) !important;
+    font-size: 12.5px;
+    font-weight: 400;
+    transition: background-color .15s;
 }
 
-#settings-container .dropdown .btn:hover, #dropdown-menu-button:hover {
-    background-color: transparent;
-    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
-    font-weight: bolder;
-    border-bottom-color: color-mix(in srgb, var(--ink) 21%, transparent);
-}
-
-#settings-container .dropdown .btn:focus, #settings-container .dropdown .btn[aria-expanded=true], #dropdown-menu-button:focus, #dropdown-menu-button[aria-expanded=true] {
-    background-color: transparent;
-    color: color-mix(in srgb, var(--ink-2) 56%, transparent);
-    font-weight: bolder;
-    border-bottom-color: color-mix(in srgb, var(--ink) 21%, transparent);
-    outline: none;
+#settings-container .dropdown .btn:hover, #dropdown-menu-button:hover,
+#settings-container .dropdown .btn[aria-expanded=true], #dropdown-menu-button[aria-expanded=true] {
+    background-color: var(--fill-2);
 }
 
 #settings-container .dropdown .btn:after {
@@ -1422,7 +1414,7 @@ body.settings-scrolled .settings-back-to-top {
     min-height: 30px;
 }
 
-#top-bar a, #index-topbar a {
+#top-bar a {
     color: var(--ink-2) !important;
     line-height: 2;
     font-weight: 500 !important;
@@ -1497,11 +1489,11 @@ body.settings-scrolled .settings-back-to-top {
 }
 
 .tipsy {
-    font-size: 12px;
     position: absolute;
-    padding: 5px;
     z-index: 100000;
-    opacity: 0.8;
+    padding: 0;
+    font-size: 11.5px;
+    pointer-events: none;
 }
 
 .tipsy-arrow {
@@ -1539,14 +1531,19 @@ body.settings-scrolled .settings-back-to-top {
     margin-bottom: -5px;
 }
 
+.tipsy-arrow {
+    display: none;
+}
+
 .tipsy-inner {
-    background-color: color-mix(in srgb, var(--ink-2) 76%, transparent);
-    color: #FFF;
-    max-width: 200px;
-    margin-top: 1px;
-    padding: 5px 8px 4px 8px;
-    text-align: center;
-    border-radius: 3px;
+    max-width: 220px;
+    padding: 5px 9px;
+    border-radius: 7px;
+    background-color: color-mix(in srgb, var(--ink) 90%, transparent);
+    color: var(--canvas);
+    line-height: 1.4;
+    text-align: start;
+    box-shadow: 0 4px 14px rgb(0 0 0 / .16);
 }
 
 .hotkey-set-label {
@@ -1602,6 +1599,212 @@ body.settings-scrolled .settings-back-to-top {
     text-align: right !important;
     width: 100%;
     display: block;
+}
+
+/*  Buttons: tinted for actions, neutral for dismissals, solid for the one default action.
+    --tint is the accent a button takes: rest blue by default, the countdown colour on
+    .btn-onlyRest.  */
+.btn {
+    --tint: var(--rest);
+    border: 0;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: background-color .15s, color .15s, transform .1s;
+    -webkit-app-region: no-drag;
+}
+
+.btn-sm {
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.btn:not(:disabled):not(.disabled):active {
+    transform: scale(.97);
+}
+
+.btn-onlyRest {
+    --tint: var(--only-rest);
+}
+
+.btn-outline-primary, .btn-onlyRest {
+    color: var(--tint) !important;
+    background-color: color-mix(in srgb, var(--tint) 11%, transparent);
+}
+
+.btn-outline-primary:hover, .btn-onlyRest:hover,
+.btn-outline-primary:not(:disabled):not(.disabled):active {
+    color: var(--tint) !important;
+    background-color: color-mix(in srgb, var(--tint) 18%, transparent);
+}
+
+.btn-outline-secondary {
+    color: var(--ink) !important;
+    background-color: var(--fill);
+}
+
+.btn-outline-secondary:hover,
+.btn-outline-secondary:not(:disabled):not(.disabled):active {
+    color: var(--ink) !important;
+    background-color: var(--fill-2);
+}
+
+.btn-primary, .btn-solid {
+    color: #fff !important;
+    background-color: var(--tint) !important;
+}
+
+.btn-primary:hover, .btn-solid:hover {
+    background-color: color-mix(in srgb, var(--tint) 88%, #000) !important;
+}
+
+.btn.disabled, .btn:disabled {
+    opacity: .4;
+}
+
+/*  Home  */
+.segmented {
+    display: flex;
+    width: fit-content;
+    margin: 0 auto 16px;
+    padding: 2px;
+    border-radius: 9px;
+    background: var(--fill);
+    font-size: 12px;
+    line-height: 1.3;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+}
+
+.segment {
+    padding: 4px 11px;
+    border: 0;
+    border-radius: 7px;
+    color: var(--ink-2) !important;
+    text-decoration: none !important;
+    white-space: nowrap;
+    transition: color .15s;
+}
+
+.segment:hover {
+    color: var(--ink) !important;
+}
+
+.segment.is-current {
+    background: var(--popover);
+    color: var(--ink) !important;
+    font-weight: 500;
+    box-shadow: 0 1px 2px rgb(0 0 0 / .08), 0 0 0 .5px rgb(0 0 0 / .06);
+}
+
+:root[data-theme="dark"] .segment.is-current {
+    background: var(--fill-2);
+    box-shadow: none;
+}
+
+.field-label {
+    font-size: 12px;
+    font-weight: 500;
+}
+
+#set input[type="text"]:focus, #set-onlyrest input[type="text"]:focus {
+    border-bottom-color: currentColor;
+}
+
+.focus-chip {
+    --chip: var(--rest);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin: 0 0 0 10px;
+    padding: 3px 10px 3px 8px;
+    border-radius: 999px;
+    background: var(--fill);
+    color: var(--ink-2);
+    font-size: 11.5px;
+    line-height: 1.4;
+    vertical-align: middle;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: none;
+    transition: background-color .15s, color .15s;
+}
+
+.focus-chip[data-phase="work"] {--chip: var(--work);}
+.focus-chip[data-phase="only-rest"] {--chip: var(--only-rest);}
+
+.focus-chip input[type="checkbox"] {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin: 0;
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 1.5px currentColor;
+    cursor: default;
+}
+
+.focus-chip input[type="checkbox"]::after {
+    content: none !important;
+}
+
+.focus-chip:has(input:checked) {
+    background: color-mix(in srgb, var(--chip) 14%, transparent);
+    color: var(--chip);
+}
+
+.focus-chip:has(input:checked) input {
+    background: currentColor;
+}
+
+.focus-chip:has(input:disabled) {
+    opacity: .45;
+}
+
+.chip-row {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+}
+
+.chip-row .focus-chip {
+    margin: 0;
+}
+
+#all-sum {
+    font-size: 12px;
+}
+
+#all-sum-num, #to-num-h, #to-num-min {
+    color: var(--ink);
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+#bottom-btn {
+    height: 40px;
+    border-radius: 10px;
+    font-size: 15px;
+    color: #fff !important;
+    background-color: var(--tint) !important;
+}
+
+#bottom-btn:hover {
+    background-color: color-mix(in srgb, var(--tint) 88%, #000) !important;
+}
+
+#controller a, #controller a .iconfont {
+    color: var(--ink-3) !important;
+    transition: color .15s;
+}
+
+#controller a:hover, #controller a:hover .iconfont {
+    color: var(--ink-2) !important;
+}
+
+#controller .controller-msg-spacing {
+    color: var(--hairline) !important;
 }
 
 /*  Timer: the dial is the one bold element of the app  */
@@ -1905,7 +2108,7 @@ h1, h2, h3, h4, h5, .settings-title {color: var(--ink);}
 .card {background-color: var(--canvas); border-color: var(--hairline);}
 .dropdown-menu {background-color: var(--popover); color: var(--ink);}
 .dropdown-item {color: var(--ink);}
-.dropdown-item:hover, .dropdown-item:focus {background-color: var(--fill); color: var(--ink);}
+.dropdown-item:hover, .dropdown-item:focus {background-color: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink);}
 .dropdown-divider {border-top-color: var(--hairline);}
 #loader-wrapper .loader-section {background: var(--canvas);}
 
@@ -1955,8 +2158,6 @@ input[type="text"]:focus-visible, input[type="number"]:focus-visible, input[type
 :where([data-phase-colors]) #floating-container .rest .iconfont {color: var(--rest) !important;}
 :where([data-phase-colors]) select > option:focus {background-color: var(--rest);}
 :where([data-phase-colors]) :is(.rest:focus, .rest:hover)::-webkit-input-placeholder {color: color-mix(in srgb, var(--rest) 76%, transparent) !important;}
-:where([data-phase-colors]) :is(.btn-primary, .btn-outline-primary) {color: var(--rest); border-color: var(--rest);}
-:where([data-phase-colors]) :is(.btn-primary:hover, .btn-outline-primary:hover) {background-color: var(--rest); border-color: var(--rest); color: #fff !important;}
 
 /* work */
 :where([data-phase-colors]) #focus-work-set::after,
@@ -2000,8 +2201,6 @@ input[type="text"]:focus-visible, input[type="number"]:focus-visible, input[type
 :where([data-phase-colors]) #focus-rest-set-onlyrest:checked::after,
 :where([data-phase-colors]) #focus-continueloop-set-onlyrest::after,
 :where([data-phase-colors]) #focus-continueloop-set-onlyrest:checked::after {color: var(--only-rest) !important;}
-:where([data-phase-colors]) .btn-onlyRest {color: var(--only-rest); border-color: var(--only-rest);}
-:where([data-phase-colors]) .btn-onlyRest:hover {color: #fff; background-color: var(--only-rest); border-color: var(--only-rest);}
 :where([data-phase-colors]) .onlyRest,
 :where([data-phase-colors]) .onlyRest::-webkit-input-placeholder,
 :where([data-phase-colors]) .onlyRest:hover,
@@ -2034,3 +2233,9 @@ input[type="text"]:focus-visible, input[type="number"]:focus-visible, input[type
 :where([data-phase-colors]) .rest.onlyRest input[type="range"]::-webkit-slider-thumb {background: var(--only-rest) !important;}
 :where([data-phase-colors]) .onlyRest input[type="checkbox"]::after,
 :where([data-phase-colors]) .rest.onlyRest input[type="checkbox"]::after {color: var(--only-rest) !important;}
+
+#predefined-tasks-edit .text-info {
+    color: var(--rest) !important;
+    text-decoration: none;
+    font-weight: 500;
+}

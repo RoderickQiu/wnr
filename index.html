@@ -226,6 +226,15 @@
             </div>
         </div>
         <div id="set-onlyrest" class="container-fluid">
+            <div class="segmented" role="tablist">
+                <a class="segment" role="tab" href="javascript:onlyRest('out')">
+                    <script>document.write(i18n.__('dropdown-normal-timing'));</script>
+                </a><a class="segment" role="tab" href="javascript:liberalTiming()">
+                    <script>document.write(i18n.__('dropdown-stopwatch-mode'));</script>
+                </a><span class="segment is-current" role="tab" aria-selected="true">
+                    <script>document.write(i18n.__('dropdown-simple-countdown'));</script>
+                </span>
+            </div>
             <div class="align-content-center">
                 <label class="field-label onlyRest" for="rest-time-onlyrest"><span id="label-countdown"></span><span class="field-parsed" id="parsed-countdown"></span></label>
                 <span class="time-input-cluster only-rest">
@@ -233,19 +242,21 @@
                            class="onlyRest lead" required />
                     <span class="field-unit onlyRest is-hidden" id="unit-countdown"></span>
                 </span>
-                <br /><br />
-                <center>
-                    <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
-                    <span class="focuser extreme-small onlyRest text-left" id="focuser-onlyrest">
-                        <script>document.write(i18n.__('focus-toggle'))</script>
-                    </span>
-                    &nbsp;
-                    <input id="focus-continueloop-set-onlyrest" type="checkbox"
-                           onchange="onlyRestEdgeCaseSolution()" />
-                    <span id="continueloop" class="focuser extreme-small onlyRest text-left">
-                        <script>document.write(i18n.__('continueloop-part-1') + " " + i18n.__('continueloop-part-2'))</script>
-                    </span>
-                </center>
+                <div class="chip-row">
+                    <label class="focus-chip" data-phase="only-rest">
+                        <input id="focus-rest-set-onlyrest" type="checkbox" onchange="focusNotifier()" />
+                        <span class="focuser" id="focuser-onlyrest">
+                            <script>document.write(i18n.__('focus-toggle'))</script>
+                        </span>
+                    </label>
+                    <label class="focus-chip" data-phase="only-rest">
+                        <input id="focus-continueloop-set-onlyrest" type="checkbox"
+                               onchange="onlyRestEdgeCaseSolution()" />
+                        <span id="continueloop" class="focuser">
+                            <script>document.write(i18n.__('continueloop-part-1') + " " + i18n.__('continueloop-part-2'))</script>
+                        </span>
+                    </label>
+                </div>
             </div>
             <br />
             <script>
@@ -259,14 +270,12 @@
             </script>
         </div>
         <div id="set" class="container-fluid">
-            <div class="extreme-small text-grey text-center" id="index-topbar">
-                <b>
+            <div class="segmented" id="index-topbar" role="tablist">
+                <span class="segment is-current" role="tab" aria-selected="true">
                     <script>document.write(i18n.__('dropdown-normal-timing'));</script>
-                </b>&nbsp;|
-                <a href="javascript:liberalTiming()">
+                </span><a class="segment" role="tab" href="javascript:liberalTiming()">
                     <script>document.write(i18n.__('dropdown-stopwatch-mode'));</script>
-                </a>&nbsp;|
-                <a href="javascript:onlyRest('in')">
+                </a><a class="segment" role="tab" href="javascript:onlyRest('in')">
                     <script>document.write(i18n.__('dropdown-simple-countdown'));</script>
                 </a>
             </div>
@@ -299,10 +308,12 @@
                            required />
                     <span class="field-unit work is-hidden" id="unit-work"></span>
                 </span>
-                <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
-                <span class="focuser extreme-small work">
-                    <script>document.write(i18n.__('focus-toggle'))</script>
-                </span>
+                <label class="focus-chip" data-phase="work">
+                    <input id="focus-work-set" type="checkbox" onchange="focusNotifier()" />
+                    <span class="focuser">
+                        <script>document.write(i18n.__('focus-toggle'))</script>
+                    </span>
+                </label>
             </div>
             <div class="align-content-center field-block">
                 <label class="field-label rest" for="rest-time"><span id="label-rest"></span><span class="field-parsed" id="parsed-rest"></span></label>
@@ -310,10 +321,12 @@
                     <input name="rest-time" id="rest-time" type="text" onkeyup="allSet()" class="rest lead" required />
                     <span class="field-unit rest is-hidden" id="unit-rest"></span>
                 </span>
-                <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
-                <span class="focuser extreme-small rest">
-                    <script>document.write(i18n.__('focus-toggle'))</script>
-                </span>
+                <label class="focus-chip" data-phase="rest">
+                    <input id="focus-rest-set" type="checkbox" onchange="focusNotifier()" />
+                    <span class="focuser">
+                        <script>document.write(i18n.__('focus-toggle'))</script>
+                    </span>
+                </label>
                 <div class="home-coupling d-none" id="percentage-break-home-hint"></div>
             </div>
             <div class="align-content-center field-block">
@@ -323,8 +336,8 @@
                     <a class="dropdown-toggle" href="#" role="button" id="dropdown-button-extend"
                        data-toggle="dropdown"
                        aria-haspopup="true" aria-expanded="false" data-offset="0, 21">
-                        <span class="dropdown-default extreme-small">
-                            <script>document.write(i18n.__('extend-part-1') + "<br />" + i18n.__('extend-part-2'))</script>
+                        <span class="dropdown-default">
+                            <script>document.write(i18n.__('extend-part-1') + (/^(zh|ko)/.test(store.get("i18n")) ? "" : " ") + i18n.__('extend-part-2'))</script>
                         </span>
                     </a>
                     <div class="dropdown-menu p-1" id="dropdown-menu-extend"
@@ -369,7 +382,7 @@
                 });
             </script>
         </div>
-        <div id="all-sum" class="extreme-small font-weight-bold text-muted text-center">
+        <div id="all-sum" class="text-muted text-center">
             <script>document.write(i18n.__('all-sum-part-1'));</script>
             <span id="all-sum-num">---</span>
             <script>document.write(i18n.__('all-sum-part-2'));</script>
@@ -435,7 +448,6 @@
             if (mode === 'in') {
                 $("#set").hide();
                 $("#set-onlyrest").show();
-                $("#statistics-back").show();
                 $("#logo-bar").hide();
                 onlyrest = true;
                 let countdownTime = store.has("simple-countdown-time") ? store.get("simple-countdown-time") : 2;
@@ -674,25 +686,17 @@
         }
 
         function onlyRestEdgeCaseSolution() {
-            function disableOnlyRestFocusButton(flag) {
+            function disableOnlyRestFocusButton(flag) {// the chip greys itself out (style.css)
                 if (flag) $("#focus-rest-set-onlyrest").attr("disabled", "disabled");
                 else $("#focus-rest-set-onlyrest").removeAttr("disabled");
-
-                let s = document.createElement('style');
-                if (flag) s.innerText = "#focus-rest-set-onlyrest::after {color: #6c757d;}";
-                else if (!onlyrest) s.innerText = "#focus-rest-set-onlyrest::after {color: #5490ea;}";
-                else s.innerText = "#focus-rest-set-onlyrest::after {color: #a26ae5;}";
-                document.body.appendChild(s);
-            }//to disable the focus button
+            }
 
             if (document.getElementById("focus-continueloop-set-onlyrest").checked) {
                 document.getElementById("focus-rest-set-onlyrest").checked = false;
                 focusNotifier();
 
-                $("#focuser-onlyrest").css("color", "#6c757d");
                 disableOnlyRestFocusButton(true);
             } else {
-                $("#focuser-onlyrest").css("color", (!onlyrest) ? "#5490ea" : "#a26ae5");
                 disableOnlyRestFocusButton(false);
             }
         }

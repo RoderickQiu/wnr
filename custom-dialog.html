@@ -35,10 +35,36 @@
             min-width: 0;
         }
 
+        #dialog-title {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            margin: 0 0 6px;
+            color: var(--ink);
+            font-size: 13px;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+
+        /* the app mark, so a dialog over another app says where it came from */
+        #dialog-title::before {
+            content: "";
+            flex: none;
+            width: 16px;
+            height: 16px;
+            background: url("res/icons/wnrIcon.png") center / contain no-repeat;
+        }
+
+        /* main.js sizes the window from the message's line count at this line-height */
         #dialog-msg,
         #dialog-detail {
             width: 100%;
             margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        #dialog-msg {
+            color: var(--ink-2);
         }
 
         #dialog-buttons {
@@ -58,25 +84,22 @@
     <div class="d-flex mx-auto text-dark" id="main">
         <div id="timer" class="justify-content-left align-content-left text-left"
              style="transform: translateY(2px); width: 210px; -webkit-app-region: drag; -webkit-user-select: none;">
-            <p class="small text-grey font-weight-bolder" style="margin-left: 0" id="dialog-title">wnr</p>
+            <p id="dialog-title">wnr</p>
             <div id="dialog-spinner" class="d-none mb-2">
                 <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
             </div>
-            <p id="dialog-msg" class="small" style="line-height: 1.5">Message</p>
+            <p id="dialog-msg" class="small">Message</p>
             <p id="dialog-detail" class="small text-muted d-none" style="line-height: 1.5"></p>
             <div id="dialog-buttons" style="width:210px" class="text-right">
-                <a type="button" id="dialog-cancel" class="btn btn-outline-secondary btn-sm text-right d-none"
-                   style="font-size: 12px"
+                <a type="button" id="dialog-cancel" class="btn btn-outline-secondary btn-sm d-none"
                    href="javascript:cancel()">
                     <script>document.write(i18n.__('cancel'))</script>
                 </a>
-                <a type="button" id="dialog-button-3" class="btn btn-outline-primary btn-sm text-right d-none"
-                   style="font-size: 12px"
+                <a type="button" id="dialog-button-3" class="btn btn-outline-primary btn-sm d-none"
                    href="javascript:button3()">
                     <script>document.write(i18n.__('cancel'))</script>
                 </a>
-                <a type="button" id="dialog-ok" class="btn btn-outline-primary btn-sm text-right"
-                   style="font-size: 12px"
+                <a type="button" id="dialog-ok" class="btn btn-solid btn-sm"
                    href="javascript:ok()">
                     <script>document.write(i18n.__('ok'))</script>
                 </a>

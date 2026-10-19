@@ -129,3 +129,9 @@ let newRestColor = store.get("theme-color")[0];
 let newWorkColor = store.get("theme-color")[1];
 let newPositiveColor = store.get("theme-color")[2];
 let newOnlyRestColor = store.get("theme-color")[3];
+// every page uses the custom accent colours (buttons, links, dialogs); theme.js adds the
+// phase-specific rules on the timer pages
+document.documentElement.style.setProperty('--rest', newRestColor);
+document.documentElement.style.setProperty('--work', newWorkColor);
+document.documentElement.style.setProperty('--positive', newPositiveColor);
+document.documentElement.style.setProperty('--only-rest', newOnlyRestColor);
