@@ -1574,3 +1574,186 @@ body.settings-scrolled .settings-back-to-top {
     width: 100%;
     display: block;
 }
+
+/*  Appearance and phase colours
+    supporter.js sets html[data-theme="dark|light"]; theme.js sets html[data-phase-colors]
+    and the --work/--rest/--positive/--only-rest properties. These rules used to be injected
+    at the end of <body>, so they stay last here, and :where() keeps each selector's own
+    specificity unchanged.  */
+
+:root {
+    --work: #ea5454;
+    --rest: #5490ea;
+    --positive: #17a2b8;
+    --only-rest: #a26ae5;
+}
+
+:where(html[data-theme="light"]) body {background-color: #fefefe;}
+
+:where([data-theme="dark"], [data-theme="dark"] *)::-webkit-scrollbar-track {background-color: #191919;}
+:where([data-theme="dark"], [data-theme="dark"] *)::-webkit-scrollbar-thumb {background-color: #999999;}
+:where([data-theme="dark"]) .dropdown-menu {border-color: #aaaaaa; background-color: #393939;}
+:where([data-theme="dark"]) .dropdown-item:hover {background-color: #555555; color: #fefefe;}
+:where([data-theme="dark"]) input[type="range"] {background-color: #aaaaaa33;}
+:where([data-theme="dark"]) body {background-color: #191919;}
+:where([data-theme="dark"]) hr {border-color: #666666;}
+:where([data-theme="dark"]) #title,
+:where([data-theme="dark"]) h1,
+:where([data-theme="dark"]) h3 {color: #bbbbbb;}
+:where([data-theme="dark"]) :is(#settings-title, #predefined-tasks-sidebar, #settings-sidebar, #about-content) {border-color: #aaaaaa33;}
+:where([data-theme="dark"]) .settings-sidebar-block {color: #fefefe; background-color: #191919;}
+:where([data-theme="dark"]) #loader-wrapper .loader-section {background: #191919;}
+:where([data-theme="dark"]) .dropdown-item,
+:where([data-theme="dark"]) .dropdown-item .text-info,
+:where([data-theme="dark"]) label,
+:where([data-theme="dark"]) li,
+:where([data-theme="dark"]) select,
+:where([data-theme="dark"]) #personalization input[type="text"],
+:where([data-theme="dark"]) input[type="password"],
+:where([data-theme="dark"]) #settings-container input[type="number"],
+:where([data-theme="dark"]) input[type="time"],
+:where([data-theme="dark"]) .settings-sidebar-block {color: #bbbbbb !important;}
+:where([data-theme="dark"]) #settings-container input[type="text"],
+:where([data-theme="dark"]) #settings-container input[type="number"],
+:where([data-theme="dark"]) #settings-container input[type="password"],
+:where([data-theme="dark"]) #extend-form input,
+:where([data-theme="dark"]) #settings-container .dropdown .btn,
+:where([data-theme="dark"]) #dropdown-menu-button {border-bottom-color: #cccccc23 !important; color: #aaaaaa;}
+:where([data-theme="dark"]) .work {color: var(--work) !important;}
+:where([data-theme="dark"]) .rest {color: var(--rest) !important;}
+:where([data-theme="dark"]) .text-info,
+:where([data-theme="dark"]) .work.positive {color: #17a2b8 !important;}
+:where([data-theme="dark"]) :is(input[type="text"], input[type="number"], input[type="password"]):focus,
+:where([data-theme="dark"]) #settings-container :is(input[type="text"], input[type="number"]):focus,
+:where([data-theme="dark"]) #settings-container .dropdown .btn:focus,
+:where([data-theme="dark"]) #dropdown-menu-button:focus {border-bottom-color: #cccccc33 !important;}
+:where([data-theme="dark"]) :is(input[type="text"], input[type="number"], input[type="password"]):hover,
+:where([data-theme="dark"]) #settings-container :is(input[type="text"], input[type="number"]):hover,
+:where([data-theme="dark"]) #settings-container .dropdown .btn:hover,
+:where([data-theme="dark"]) #dropdown-menu-button:hover {border-bottom-color: #cccccc28 !important;}
+:where([data-theme="dark"]) .hotkey-setting {color: #aaaaaa;}
+:where(html[data-theme="dark"]) {border: #ffffff33 1px solid;}
+:where([data-theme="dark"]) .switch-slide-label {background: #333;}
+:where([data-theme="dark"]) .switch-slide-label:after {background: #ccc !important;}
+:where([data-theme="dark"]) .card {background-color: #191919; border: 1px solid rgba(255, 255, 255, .125);}
+:where([data-theme="dark"]) .settings-title {color: #ddd;}
+:where([data-theme="dark"]) #settings-container .settings-section-heading {color: #5490ea;}
+:where([data-theme="dark"]) #settings-container .settings-section-anchor {border-bottom-color: #ffffff18;}
+:where([data-theme="dark"]) #settings-header {border-bottom-color: #aaaaaa33;}
+:where([data-theme="dark"]) .settings-back-to-top {color: #aaaaaa;}
+:where([data-theme="dark"]) .home-coupling {color: #999999;}
+:where([data-theme="dark"]) .settings-section-nav-item {color: #999999;}
+:where([data-theme="dark"]) :is(.settings-section-nav-item:hover, .settings-section-nav-item.is-current) {color: #5490ea;}
+:where([data-theme="dark"]) #dialog-msg {color: #ccc;}
+:where([data-theme="dark"]) .dropdown-default {color: #aaa;}
+:where([data-theme="dark"]) .dropdown-toggle::before {color: #aaa;}
+:where([data-theme="dark"]) #fullscreen-custom-dialog {background-color: #191919;}
+:where([data-theme="dark"]) #emergency-exit-panel {background-color: #191919; border-color: #aaaaaa55;}
+:where([data-theme="dark"]) :is(#emergency-exit-msg, #emergency-exit-target, #emergency-exit-input) {color: #ccc;}
+:where([data-theme="dark"]) #emergency-exit-input {border-color: #cccccc33;}
+:where([data-theme="dark"]) #emergency-exit-link {color: #aaaaaa;}
+
+/* rest */
+:where([data-phase-colors]) input[type="range"]::-webkit-slider-thumb,
+:where([data-phase-colors]) .switch-slide input:checked + label,
+:where([data-phase-colors]) .rest input[type="range"]::-webkit-slider-thumb {background: var(--rest);}
+:where([data-phase-colors]) input[type="checkbox"]::after,
+:where([data-phase-colors]) .rest,
+:where([data-phase-colors]) .rest::-webkit-input-placeholder,
+:where([data-phase-colors]) .rest:hover,
+:where([data-phase-colors]) #controller .dropdown-toggle::before,
+:where([data-phase-colors]) #controller .dropdown-toggle::after,
+:where([data-phase-colors]) .rest input[type="checkbox"]::after,
+:where([data-phase-colors]) #rest-time,
+:where([data-phase-colors]) #work-rest.rest,
+:where([data-phase-colors]) #now-timing.rest,
+:where([data-phase-colors]) #fullscreen-experience-tip .rest,
+:where([data-phase-colors]) #fullscreen-too-long-tip .rest,
+:where([data-phase-colors]) .rest .iconfont,
+:where([data-phase-colors]) #external.rest,
+:where([data-phase-colors]) #external.rest .iconfont,
+:where([data-phase-colors]) #time-left.rest,
+:where([data-phase-colors]) #time-left-msg.rest,
+:where([data-phase-colors]) #floating-container .rest,
+:where([data-phase-colors]) #floating-container .rest .iconfont {color: var(--rest) !important;}
+:where([data-phase-colors]) select > option:focus {background-color: var(--rest);}
+:where([data-phase-colors]) :is(.rest:focus, .rest:hover)::-webkit-input-placeholder {color: color-mix(in srgb, var(--rest) 76%, transparent) !important;}
+:where([data-phase-colors]) :is(.btn-primary, .btn-outline-primary) {color: var(--rest); border-color: var(--rest);}
+:where([data-phase-colors]) :is(.btn-primary:hover, .btn-outline-primary:hover) {background-color: var(--rest); border-color: var(--rest); color: #fff !important;}
+
+/* work */
+:where([data-phase-colors]) #focus-work-set::after,
+:where([data-phase-colors]) #focus-work-set:checked::after,
+:where([data-phase-colors]) .work,
+:where([data-phase-colors]) .work::-webkit-input-placeholder,
+:where([data-phase-colors]) .work:hover,
+:where([data-phase-colors]) #work-time,
+:where([data-phase-colors]) #work-rest,
+:where([data-phase-colors]) #now-timing,
+:where([data-phase-colors]) #external,
+:where([data-phase-colors]) #external .iconfont,
+:where([data-phase-colors]) .work .iconfont,
+:where([data-phase-colors]) #time-left.work,
+:where([data-phase-colors]) #time-left-msg.work,
+:where([data-phase-colors]) #floating-container .work,
+:where([data-phase-colors]) #floating-container .work .iconfont {color: var(--work) !important;}
+:where([data-phase-colors]) :is(.work:focus, .work:hover)::-webkit-input-placeholder {color: color-mix(in srgb, var(--work) 76%, transparent) !important;}
+:where([data-phase-colors]) .work input[type="range"]::-webkit-slider-thumb,
+:where([data-phase-colors]) .work input[type="checkbox"]::after {background: var(--work); color: var(--work);}
+
+/* stopwatch */
+:where([data-phase-colors]) .positive,
+:where([data-phase-colors]) .positive::-webkit-input-placeholder,
+:where([data-phase-colors]) .positive:hover,
+:where([data-phase-colors]) #work-rest.positive,
+:where([data-phase-colors]) #now-timing.positive,
+:where([data-phase-colors]) #external.positive,
+:where([data-phase-colors]) #external.positive .iconfont,
+:where([data-phase-colors]) .positive .iconfont,
+:where([data-phase-colors]) #time-left.positive,
+:where([data-phase-colors]) #time-left-msg.positive,
+:where([data-phase-colors]) #floating-container .positive,
+:where([data-phase-colors]) #floating-container .positive .iconfont {color: var(--positive) !important;}
+:where([data-phase-colors]) :is(.positive:focus, .positive:hover)::-webkit-input-placeholder {color: var(--positive) !important;}
+:where([data-phase-colors]) .positive input[type="range"]::-webkit-slider-thumb {background: var(--positive) !important;}
+:where([data-phase-colors]) .positive input[type="checkbox"]::after {color: var(--positive) !important;}
+
+/* simple countdown */
+:where([data-phase-colors]) #focus-rest-set-onlyrest::after,
+:where([data-phase-colors]) #focus-rest-set-onlyrest:checked::after,
+:where([data-phase-colors]) #focus-continueloop-set-onlyrest::after,
+:where([data-phase-colors]) #focus-continueloop-set-onlyrest:checked::after {color: var(--only-rest) !important;}
+:where([data-phase-colors]) .btn-onlyRest {color: var(--only-rest); border-color: var(--only-rest);}
+:where([data-phase-colors]) .btn-onlyRest:hover {color: #fff; background-color: var(--only-rest); border-color: var(--only-rest);}
+:where([data-phase-colors]) .onlyRest,
+:where([data-phase-colors]) .onlyRest::-webkit-input-placeholder,
+:where([data-phase-colors]) .onlyRest:hover,
+:where([data-phase-colors]) .rest.onlyRest,
+:where([data-phase-colors]) .rest.onlyRest::-webkit-input-placeholder,
+:where([data-phase-colors]) .rest.onlyRest:hover,
+:where([data-phase-colors]) #work-rest.onlyRest,
+:where([data-phase-colors]) #now-timing.onlyRest,
+:where([data-phase-colors]) #work-rest.rest.onlyRest,
+:where([data-phase-colors]) #now-timing.rest.onlyRest,
+:where([data-phase-colors]) #external.onlyRest,
+:where([data-phase-colors]) #external.rest.onlyRest,
+:where([data-phase-colors]) #external.onlyRest .iconfont,
+:where([data-phase-colors]) #external.rest.onlyRest .iconfont,
+:where([data-phase-colors]) .onlyRest .iconfont,
+:where([data-phase-colors]) .rest.onlyRest .iconfont,
+:where([data-phase-colors]) #time-left.onlyRest,
+:where([data-phase-colors]) #time-left.rest.onlyRest,
+:where([data-phase-colors]) #time-left-msg.onlyRest,
+:where([data-phase-colors]) #time-left-msg.rest.onlyRest,
+:where([data-phase-colors]) #floating-container .onlyRest,
+:where([data-phase-colors]) #floating-container .rest.onlyRest,
+:where([data-phase-colors]) #floating-container .onlyRest .iconfont,
+:where([data-phase-colors]) #floating-container .rest.onlyRest .iconfont {color: var(--only-rest) !important;}
+:where([data-phase-colors]) .onlyRest:focus::-webkit-input-placeholder,
+:where([data-phase-colors]) .onlyRest:hover::-webkit-input-placeholder,
+:where([data-phase-colors]) .rest.onlyRest:focus::-webkit-input-placeholder,
+:where([data-phase-colors]) .rest.onlyRest:hover::-webkit-input-placeholder {color: var(--only-rest) !important;}
+:where([data-phase-colors]) .onlyRest input[type="range"]::-webkit-slider-thumb,
+:where([data-phase-colors]) .rest.onlyRest input[type="range"]::-webkit-slider-thumb {background: var(--only-rest) !important;}
+:where([data-phase-colors]) .onlyRest input[type="checkbox"]::after,
+:where([data-phase-colors]) .rest.onlyRest input[type="checkbox"]::after {color: var(--only-rest) !important;}
