@@ -212,6 +212,8 @@
 	"when-time-end": "Notifier quand une période se termine",
 	"when-time-end-tip": "Choisissez comment être notifié après le travail / le repos.",
 	"when-work-or-rest-end-tip": "Pour \"Dialogue\", la période suivante ne démarrera pas avant que vous fermiez la boîte de dialogue, ou le minuteur reprendra automatiquement. En sélectionnant \"Pas de pop-up\" plutôt que \"Son uniquement\", la fenêtre de wnr ne remontera pas en haut de l'écran une fois le minuteur terminé, et seule une notification sera affichée.",
+	"skip-confirm": "Confirmer après un saut",
+	"skip-confirm-tip": "Activé : sauter affiche la même boîte de dialogue qu'à la fin d'une période, et la suivante attend que vous la fermiez. Désactivé : la période suivante démarre immédiatement.",
 	"dropdown-notification-no-popup": "Pas de pop-up",
 	"when-work-time-end": "Quand le travail se termine",
 	"dropdown-dialog": "Dialogue",

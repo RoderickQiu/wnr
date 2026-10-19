@@ -147,6 +147,9 @@ if (store.get("islocked") !== true) {
                     def: 0,
                     tipped: false,
                     after: whenRestTimeEndAfter
+                }, {
+                    type: "selection",
+                    id: "skip-confirm"
                 }
             ]
         }, {

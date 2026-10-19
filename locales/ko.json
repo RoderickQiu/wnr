@@ -212,6 +212,8 @@
 	"when-time-end": "기간이 끝날 때 알림",
 	"when-time-end-tip": "작업/휴식 후 알림 방식을 선택하세요.",
 	"when-work-or-rest-end-tip": "\"대화상자\"를 선택하면 대화상자를 닫기 전까지 다음 기간이 시작되지 않으며, 그렇지 않으면 타이머가 자동으로 재개됩니다. \"소리만\" 대신 \"팝업 없음\"을 선택하면 타이머가 끝나도 wnr 창이 최상단으로 팝업되지 않고 알림만 표시됩니다.",
+	"skip-confirm": "건너뛴 후 확인",
+	"skip-confirm-tip": "켜면 건너뛸 때 기간이 끝날 때와 같은 대화 상자가 표시되며, 닫아야 다음 기간이 시작됩니다. 끄면 다음 기간이 바로 시작됩니다.",
 	"dropdown-notification-no-popup": "팝업 없음",
 	"when-work-time-end": "작업 시간이 끝나면",
 	"dropdown-dialog": "대화상자",

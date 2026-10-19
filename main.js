@@ -2003,7 +2003,7 @@ function personliazationNotificationSolution(i) {
     return [title, msg];
 }
 
-ipcMain.on('warning-giver-workend', function () {
+ipcMain.on('warning-giver-workend', function (event, isSkip) {
     statisticsWriter();
 
     fullScreenProtection = false;
@@ -2016,12 +2016,12 @@ ipcMain.on('warning-giver-workend', function () {
             nonFocusSolution("work");
         }
         let personal = personliazationNotificationSolution(0);
-        if (isScreenLocked || store.get("when-work-time-end") === 2) {
+        if (!isSkip && (isScreenLocked || store.get("when-work-time-end") === 2)) {
             notificationSolution(personal[0],
                 personal[1], "normal");
         }
 
-        if (store.get("no-check-work-time-end")) {
+        if (isSkip || store.get("no-check-work-time-end")) {
             noCheckTimeSolution("work");
             setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
             if (hasFloating && win != null && !restTimeFocused) {
@@ -2047,7 +2047,7 @@ ipcMain.on('warning-giver-workend', function () {
     traySolution(isFullscreenMode);
 })
 
-ipcMain.on('warning-giver-restend', function (event, isFirstCycle) {
+ipcMain.on('warning-giver-restend', function (event, isFirstCycle, isSkip) {
     statisticsWriter();
 
     fullScreenProtection = false;
@@ -2061,11 +2061,11 @@ ipcMain.on('warning-giver-restend', function (event, isFirstCycle) {
         }
         if (!isFirstCycle) {
             let personal = personliazationNotificationSolution(2);
-            if (isScreenLocked || store.get("when-rest-time-end") === 2) {
+            if (!isSkip && (isScreenLocked || store.get("when-rest-time-end") === 2)) {
                 notificationSolution(personal[0],
                     personal[1], "normal");
             }
-            if (store.get("no-check-rest-time-end")) {
+            if (isSkip || store.get("no-check-rest-time-end")) {
                 noCheckTimeSolution("rest");
                 setTimeout(() => win.webContents.send("alter-start-stop", "start"), 1000);
                 if (hasFloating && win != null && !workTimeFocused) {

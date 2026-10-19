@@ -187,7 +187,7 @@
                     <script>document.write(i18n.__('back'));</script>
                 </span></a>
                 <span id="skipper-space" class="should-lock">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
-                <a href="javascript:skipper()" class="text-muted" id="skipper-container">
+                <a href="javascript:skipper(true)" class="text-muted" id="skipper-container">
                     <span
                             class="focuser extreme-small controller-msg" id="skipper-label">
                     <script>document.write(i18n.__('skip'));</script>
@@ -795,6 +795,7 @@
                     naturalProgress = 0.00,
                     lastFloatingSecond = -1,
                     wasCounting = true,
+                    skippedByUser = false,
                     shouldNap,
                     napInterval = 0,
                     lastNapSecond = 0,
@@ -870,7 +871,7 @@
                     return;
                 }
 
-                if (message === "skipper") skipper();
+                if (message === "skipper") skipper(true);
                 else if (message === "back") {
                     if (methodFromStart === 3 || ((!store.get("islocked")) && (!isFeatureDisabled(store.get('disable-backing'), method))))
                         backcheck();
@@ -985,6 +986,10 @@
             }
 
             function warningGiver(isend) {
+                // a manual skip already says "go on", so it gets no end-of-period dialog unless asked for
+                let isSkip = skippedByUser && isend !== 0 && store.get("skip-confirm") !== true;
+                skippedByUser = false;
+                let noCheck = isSkip || (method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"));
                 if (isFirstTimeOnlyRest) {
                     isFirstTimeOnlyRest = false;
                     if (restTimeFocused) ipc.send("only-rest-fullscreen");
@@ -1031,9 +1036,9 @@
                     else
                         player.src = store.get("custom-all-time-end-sound");
                 }
-                player.loop = !store.get("sound-play-once");
+                player.loop = !isSkip && !store.get("sound-play-once");
                 player.play();
-                if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end"))) {
+                if (noCheck) {
                     $("#skipper-container").css("display", "none");
                     $("#skipper-space").css("display", "none");
                     setTimeout(function () {
@@ -1087,9 +1092,9 @@
                 
                 if (isend === 0) ipc.send('warning-giver-all-task-end');
                 else {
-                    if (isend === 1) ipc.send('warning-giver-workend');
-                    else ipc.send('warning-giver-restend');
-                    if ((method === 2 && store.get("no-check-work-time-end")) || (method === 1 && store.get("no-check-rest-time-end")))
+                    if (isend === 1) ipc.send('warning-giver-workend', isSkip);
+                    else ipc.send('warning-giver-restend', false, isSkip);
+                    if (noCheck)
                         if (!isClockWorking) stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
                         player.loop = false;
@@ -1324,7 +1329,7 @@
                 else return ((times + 1) % (longBreakFrequence * 2)) === 0; // new long break optimization
             }
 
-            function skipper() {
+            function skipper(isManual) {
                 workTime= originalWorkTime;
                 canOpenFloating = true;
                 hasSoonFinishTipPosted = false;
@@ -1364,7 +1369,10 @@
                             restTime = originalRestTime;
                             isLongRest = false;
                         }
-                        if (methodFromStart !== 3) themeChanger();
+                        if (methodFromStart !== 3) {
+                            skippedByUser = isManual === true;
+                            themeChanger();
+                        }
                     } else if (times === loop * 2) {
                         ender();
                     }
@@ -1403,7 +1411,10 @@
                                 
                                 isLongRest = false;
                             }
-                            if (methodFromStart !== 3) themeChanger();
+                            if (methodFromStart !== 3) {
+                                skippedByUser = isManual === true;
+                                themeChanger();
+                            }
                         } else if (times === loop * 2) {
                             ender();
                         }

@@ -251,6 +251,8 @@
 	"when-time-end": "一段工作或休息结束时发出提醒种类",
 	"when-time-end-tip": "调整在工作或休息后发出怎样的提醒。",
 	"when-work-or-rest-end-tip": "若选择“确认框”则将在确认之前不会开启下一段时间；若选择“仅铃声”则将自动开始下一段时间，但 wnr 窗口仍会弹出到页面最前端；若选择“通知且不弹出”，则将只收到一条通知，而 wnr 窗口将不会重新跳出。",
+	"skip-confirm": "跳过后弹出确认",
+	"skip-confirm-tip": "打开后，点击跳过会弹出和时段结束时相同的对话框，关闭后才开始下一时段。关闭此项则直接开始下一时段。",
 	"dropdown-notification-no-popup": "通知且不弹出",
 	"when-work-time-end": "工作时间结束后",
 	"dropdown-dialog": "确认框",

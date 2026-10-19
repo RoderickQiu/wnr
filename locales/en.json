@@ -212,6 +212,8 @@
 	"when-time-end": "Notify when a period will end",
 	"when-time-end-tip": "Choose how to notify you after work / rest.",
 	"when-work-or-rest-end-tip": "For \"Dialog\", the next period won't start before you close the dialog, or the timer will automatically resume. By selecting \"No Pop-Up\" rather than \"Only Sound\", the wnr window will not pop up to the top once the timer is finished, and only a notification will be shown.",
+	"skip-confirm": "Confirm after skipping",
+	"skip-confirm-tip": "When on, skipping shows the same dialog as when a period ends, and the next period waits until you close it. When off, the next period starts right away.",
 	"dropdown-notification-no-popup": "No Pop-Up",
 	"when-work-time-end": "When work time end",
 	"dropdown-dialog": "Dialog",
