@@ -91,7 +91,6 @@ is also included in every copy of wnr.
 - iconfont, ALIMAMA MUX, for license go to [the site](https://www.iconfont.cn/).
 - dotenv, motdotla, BSD-2-Clause License.
 - electron-debug, sindresorhus, MIT License.
-- node-fetch, node-fetch, MIT License.
 - node-notifier, mikaelbr, MIT License.
 - popper.js, popperjs, MIT License.
 - schart.js, lin-xin, MIT License.

@@ -11,14 +11,12 @@ let i18n = require("i18n");
 let cmdOrCtrl = require('cmd-or-ctrl');
 const { TouchBarLabel, TouchBarButton, TouchBarSpacer } = TouchBar;
 const notifier = require('node-notifier')
-const fetch = require('node-fetch');
 let keytar = null;
 try {
     keytar = require('keytar');
 } catch (error) {
     keytar = null;
 }
-const winReleaseId = require('win-release-id');
 const { createWebDavSyncService } = require('./webdav-sync');
 const { persistSanitizedPredefinedTasks } = require('./predefined-tasks');
 const getAlarmtipDurationMs = require('./inactivity-duration');
@@ -92,7 +90,6 @@ function createWindow(loadMainPage = true) {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true,
             spellcheck: false,
             backgroundThrottling: false
         },
@@ -270,7 +267,6 @@ function addScreenSolution(windowNumber, display) {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true,
             spellcheck: false
         },
         titleBarStyle: "hiddenInset",
@@ -300,7 +296,6 @@ function addLooseMultiScreenSolution(windowNumber, display) {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true,
             spellcheck: false
         },
         titleBarStyle: "hiddenInset",
@@ -833,7 +828,6 @@ app.on('ready', async () => {
             nodeIntegration: true,
             webgl: false,
             contextIsolation: false,
-            enableRemoteModule: true,
             spellcheck: false
         },
         skipTaskbar: true
@@ -851,16 +845,6 @@ app.on('ready', async () => {
                     i18n.__('suggest-star-msg'), "suggest-star");
                 store.set("suggest-star", "suggested");
             }, 1000);
-    }
-
-    if (process.platform === "win32") {
-        if (winReleaseId() === -1 && win != null) {
-            let isNotified = store.has("windows-7-notification");
-            if (isNotified === false) {
-                customDialog("on", i18n.__('old-windows-compatibility-notification'), i18n.__('old-windows-compatibility-notification-msg'),
-                    "windows7-notify");
-            }
-        }
     }
 
     await loadMainWindowAfterStartupInit();
@@ -932,9 +916,6 @@ function runPendingDialogAction() {
                 break;
             case 'suggest-star':
                 shell.openExternal("https://github.com/RoderickQiu/wnr");
-                break;
-            case 'windows7-notify':
-                store.set("windows-7-notification", 1);
                 break;
             case 'force-long-focus':
                 if (win != null && !win.isDestroyed()) win.webContents.send("force-long-focus-granted");
@@ -1242,9 +1223,23 @@ function showOrHide() {
             }
 }
 
+// macOS refuses UNNotification for apps without a Developer ID signature (Electron 43+),
+// so fall back to an AppleScript notification once the native one has failed
+let isNativeNotificationRefused = false;
+
+function scriptNotification(title, body) {
+    require('child_process').execFile('osascript', ['-e',
+        'on run argv\ndisplay notification (item 2 of argv) with title (item 1 of argv)\nend run',
+        String(title), String(body)], function (error) {
+        if (error) console.log(error);
+    });
+}
+
 // possible funcs: normal, hide-or-show
 function notificationSolution(title, body, func) {
-    if (process.env.NODE_ENV === "portable" || !Notification.isSupported()) {
+    if (isNativeNotificationRefused) {
+        scriptNotification(title, body);
+    } else if (process.env.NODE_ENV === "portable" || !Notification.isSupported()) {
         notifier.notify({
                 sound: true,
                 timeout: 5,
@@ -1260,7 +1255,11 @@ function notificationSolution(title, body, func) {
     } else {//use native notification api
         let notification = new Notification({ title: title, body: body });
         notification.once("failed", (event, error) => {
-            console.log(event + error);
+            console.log(error);
+            if (process.platform === "darwin") {
+                isNativeNotificationRefused = true;
+                scriptNotification(title, body);
+            }
         });
         notification.once("click", (event) => {
             if (func === "hide-or-show" && win != null) win.show();
@@ -1643,28 +1642,10 @@ function settingsWinContextMenuSolution() {
     }
 }
 
-function getWindowsReleaseVersion() {
-    const os = require('os');
-    const release = os.release();
-    if (release.startsWith('10.0.2')) {
-        return 11;
-    } else if (release.startsWith('10.0.1')) {
-        return 10;
-    } else if (release.startsWith('6.2') || release.startsWith('6.3')) {
-        return 8;
-    } else if (release.startsWith('6.1')) {
-        return 7;
-    } else return 0;
-}
-
 ipcMain.on("open-notification-settings", function (event, msg) {
     switch (process.platform) {
         case "win32":
-            if (getWindowsReleaseVersion() >= 10) shell.openExternal('ms-settings:notifications');
-            else
-                customDialog("on", "wnr", (getWindowsReleaseVersion() === 8) ?
-                    i18n.__("open-notification-settings-windows-8-tip") :
-                    i18n.__("open-notification-settings-windows-7-tip"), "");
+            shell.openExternal('ms-settings:notifications');
             break;
         case "darwin":
             shell.openExternal("x-apple.systempreferences:com.apple.preference.notifications");
@@ -2179,6 +2160,12 @@ ipcMain.on('recap-delete-confirm', function (event, data) {
     customDialog("select_on", i18n.__('recap-delete-title'), confirmMsg, "recap-delete", data);
 })
 
+ipcMain.handle("fetch-latest-version", async () => {
+    const res = await fetch('https://gitee.com/roderickqiu/wnr-backup/raw/master/package.json');
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return (await res.json()).version;
+})
+
 ipcMain.on('update-feedback', function (event, message) {
     // another button usage: button3_update
     if (message === "update-available") {
@@ -2323,7 +2310,6 @@ function about() {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true,
                     spellcheck: false
                 },
             });
@@ -2376,7 +2362,6 @@ function settings(mode) {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true,
                     spellcheck: false
                 },
                 titleBarStyle: "hidden"
@@ -2447,7 +2432,6 @@ function tourguide() {
                     nodeIntegration: true,
                     webgl: false,
                     contextIsolation: false,
-                    enableRemoteModule: true,
                     spellcheck: false
                 },
             });
@@ -2657,7 +2641,6 @@ function externalTitle(title, notes) {
                         nodeIntegration: true,
                         webgl: false,
                         contextIsolation: false,
-                        enableRemoteModule: true,
                         spellcheck: false
                     },
                     skipTaskbar: true
@@ -2753,7 +2736,6 @@ function floating() {
                         nodeIntegration: true,
                         webgl: false,
                         contextIsolation: false,
-                        enableRemoteModule: true,
                         spellcheck: false
                     },
                     skipTaskbar: true

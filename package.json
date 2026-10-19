@@ -42,16 +42,14 @@
 		"i18n": "0.15.3",
 		"jquery": "3.7.1",
 		"keytar": "7.9.0",
-		"node-fetch": "2.7.0",
 		"node-notifier": "10.0.1",
 		"node-shi": "0.4.2",
 		"popper.js": "1.16.1",
-		"schart.js": "3.0.4",
-		"win-release-id": "1.0.6"
+		"schart.js": "3.0.4"
 	},
 	"devDependencies": {
 		"cross-env": "10.1.0",
-		"electron": "22.3.27",
-		"electron-builder": "26.0.12"
+		"electron": "44.9.0",
+		"electron-builder": "26.15.3"
 	}
 }

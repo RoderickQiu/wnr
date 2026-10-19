@@ -7,10 +7,10 @@ jobs :
   build-windows :
     runs-on : windows-latest
     steps :
-      - uses : actions/checkout@v2
-      - uses : actions/setup-node@v3
+      - uses : actions/checkout@v4
+      - uses : actions/setup-node@v4
         with :
-          node-version : 20
+          node-version : 24
       - name : Install deps
         run : yarn
       - name : Build windows nsis installer
@@ -26,10 +26,10 @@ jobs :
   build-macos :
     runs-on : macos-latest
     steps :
-      - uses : actions/checkout@v2
-      - uses : actions/setup-node@v3
+      - uses : actions/checkout@v4
+      - uses : actions/setup-node@v4
         with :
-          node-version : 20
+          node-version : 24
       - name : Install deps
         run : yarn
       - name : Build macos version
@@ -43,10 +43,10 @@ jobs :
   build-linux :
     runs-on : ubuntu-latest
     steps :
-      - uses : actions/checkout@v2
-      - uses : actions/setup-node@v3
+      - uses : actions/checkout@v4
+      - uses : actions/setup-node@v4
         with :
-          node-version : 20
+          node-version : 24
       - name : Install deps
         run : yarn
       - name : Build AppImage

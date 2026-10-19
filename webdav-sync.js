@@ -1297,7 +1297,7 @@ function createWebDavSyncService(deps) {
         try {
             let declared = Number(response.headers && response.headers.get && response.headers.get('content-length'));
             if (declared > WEBDAV_MAX_RESPONSE_BYTES) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), 'response too large');
-            if (response.body && typeof response.body.on === 'function') {
+            if (response.body && typeof response.body[Symbol.asyncIterator] === 'function') {
                 let chunks = [], size = 0;
                 for await (let chunk of response.body) {
                     size += chunk.length;
@@ -1307,7 +1307,7 @@ function createWebDavSyncService(deps) {
                     }
                     chunks.push(chunk);
                 }
-                return Buffer.concat(chunks).toString('utf8');
+                return Buffer.concat(chunks.map(chunk => Buffer.from(chunk))).toString('utf8');
             }
             let text = await response.text();
             if (Buffer.byteLength(text, 'utf8') > WEBDAV_MAX_RESPONSE_BYTES) throw createWebDavError(i18n.__('webdav-sync-invalid-remote'), 'response too large');
@@ -1384,7 +1384,8 @@ function createWebDavSyncService(deps) {
 
         if (response.status === 200) {
             clearTimeout(response.webDavTimeout);
-            if (response.body && typeof response.body.destroy === 'function') response.body.destroy();
+            if (response.body && typeof response.body.cancel === 'function') response.body.cancel().catch(function () { });
+            else if (response.body && typeof response.body.destroy === 'function') response.body.destroy();
             return true;
         }
         if (response.status === 404) { clearTimeout(response.webDavTimeout); return false; }

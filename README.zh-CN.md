@@ -81,7 +81,6 @@ yarn appimage # linux AppImage打包
 - node-md5，pvorb，BSD-3-Clause 许可证。
 - dotenv，motdotla，BSD-2-Clause 许可证。
 - electron-debug，sindresorhus，MIT 许可证。
-- node-fetch，node-fetch，MIT 许可证。
 - node-notifier，mikaelbr，MIT 许可证。
 - popper.js，popperjs，MIT 许可证。
 - schart.js，lin-xin，MIT 许可证。

@@ -81,7 +81,6 @@ yarn appimage # linux AppImage打包
 - node-md5，pvorb，BSD-3-Clause 許可證。
 - dotenv，motdotla，BSD-2-Clause 許可證。
 - electron-debug，sindresorhus，MIT 許可證。
-- node-fetch，node-fetch，MIT 許可證。
 - node-notifier，mikaelbr，MIT 許可證。
 - popper.js，popperjs，MIT 許可證。
 - schart.js，lin-xin，MIT 許可證。
