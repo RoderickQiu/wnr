@@ -1421,10 +1421,8 @@ body.settings-scrolled .settings-back-to-top {
     -webkit-app-region: no-drag;
 }
 
-#top-bar a.is-current,
-#time-statistics-sub-bar a.is-current {
-    font-weight: 700 !important;
-    border-bottom: 1.5px solid var(--ink-2);
+#top-bar a.is-current {
+    font-weight: 500 !important;
 }
 
 #time-statistics-sub-bar a {
@@ -2114,6 +2112,374 @@ body.settings-page, .settings-page #settings-header {
 /* destructive actions stay red whatever the phase palette is */
 .btn-destructive {
     --tint: #e5484d;
+}
+
+/*  Statistics and recap  */
+#top-bar.segmented {
+    width: fit-content;
+    top: 9%;
+    font-weight: 400;
+}
+
+#top-bar .segment {
+    line-height: 1.3;
+}
+
+#time-statistics-sub-bar {
+    top: 15.5%;
+    min-height: 0;
+}
+
+.pill-tabs {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2px;
+}
+
+#time-statistics-sub-bar .pill-tab {
+    display: inline-block;
+    min-height: 0;
+    padding: 3px 9px;
+    border: 0;
+    border-radius: 999px;
+    color: var(--ink-2) !important;
+    font-size: 12px;
+    line-height: 1.4;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background-color .15s, color .15s;
+}
+
+#time-statistics-sub-bar .pill-tab:hover {
+    color: var(--ink) !important;
+}
+
+#time-statistics-sub-bar .pill-tab.is-current {
+    color: var(--ink) !important;
+    font-weight: 600;
+}
+
+/* back sits in the tab row instead of the bottom corner */
+.statistics-page-back, #statistics-back {
+    top: 9%;
+    bottom: auto;
+    left: 14px;
+    transform: translateY(-50%);
+    font-size: 18px;
+}
+
+#statistics-back a {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: 50%;
+    color: var(--ink-2) !important;
+    text-decoration: none;
+}
+
+#statistics-back a:hover {
+    background: var(--fill);
+    color: var(--ink) !important;
+}
+
+#statistics-back a .iconfont {
+    color: inherit !important;
+}
+
+#stats-view {
+    position: absolute;
+    top: 22%;
+    right: 24px;
+    bottom: 16px;
+    left: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 8vh;
+    overflow: hidden;
+    text-align: center;
+    -webkit-app-region: no-drag;
+    -webkit-user-select: text;
+}
+
+.stats-hero {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    margin: 6px 0 18px;
+}
+
+.stats-hero-label {
+    color: var(--ink-2);
+    font-size: 12px;
+}
+
+.stats-hero-value {
+    font-size: 38px;
+    font-weight: 300;
+    line-height: 1.15;
+    font-variant-numeric: tabular-nums;
+}
+
+.stats-compare {
+    color: var(--ink-2);
+    font-size: 12px;
+}
+
+.stats-compare:empty {
+    display: none;
+}
+
+#stats-view.has-chart:not(.is-empty) {
+    padding-bottom: 3vh;
+}
+
+#stats-view.has-chart .stats-hero {
+    margin: 0 0 10px;
+}
+
+#stats-view.has-chart .stats-hero-value {
+    font-size: 30px;
+}
+
+#stats-view #statistics-graph {
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+/* the four kinds as a two-by-two legend, the total beneath */
+.stats-legend {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, max-content));
+    justify-content: center;
+    gap: 8px 28px;
+    font-size: 13px;
+}
+
+.legend-item {
+    --phase: var(--work);
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    min-width: 0;
+    white-space: nowrap;
+}
+
+.legend-item[data-phase="rest"] {--phase: var(--rest);}
+.legend-item[data-phase="only-rest"] {--phase: var(--only-rest);}
+.legend-item[data-phase="positive"] {--phase: var(--positive);}
+
+.legend-dot {
+    flex: none;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--phase);
+}
+
+.legend-label {
+    color: var(--ink-2);
+}
+
+.legend-value {
+    color: var(--ink);
+    font-variant-numeric: tabular-nums;
+}
+
+.legend-item.is-zero {
+    opacity: .45;
+}
+
+.stats-total {
+    margin-top: 16px;
+    color: var(--ink-2);
+    font-size: 13px;
+}
+
+.stats-total .legend-value {
+    font-weight: 600;
+}
+
+.stats-empty {
+    display: none;
+    color: var(--ink-2);
+    font-size: 13px;
+}
+
+/* empty states start at the same height on every tab, whatever follows the first line */
+#stats-view.is-empty {
+    justify-content: flex-start;
+    padding-top: 17vh;
+}
+
+#stats-view.is-empty > :not(.stats-empty) {
+    display: none !important;
+}
+
+#stats-view.is-empty .stats-empty {
+    display: block;
+}
+
+/* shared by the statistics and recap empty states */
+.empty-state {
+    max-width: 280px;
+    margin-inline: auto;
+    text-align: center;
+}
+
+.empty-title {
+    margin: 0 0 6px;
+    text-wrap: balance;
+    color: var(--ink);
+    font-size: 14px;
+}
+
+.empty-hint {
+    margin: 0 0 4px;
+    text-wrap: balance;
+    word-break: keep-all;
+    color: var(--ink-2);
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.empty-state .btn {
+    margin-top: 12px;
+}
+
+.stats-empty .btn {
+    border: 0;
+    border-radius: 6px;
+    color: var(--rest) !important;
+    background-color: color-mix(in srgb, var(--rest) 11%, transparent);
+}
+
+#statistics-graph {
+    height: auto;
+}
+
+.bar-chart {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+}
+
+.chart-grid {
+    stroke: var(--hairline);
+    stroke-width: 1;
+}
+
+.chart-axis {
+    fill: var(--ink-3);
+    font-size: 9px;
+    font-variant-numeric: tabular-nums;
+}
+
+.chart-axis.is-current {
+    fill: var(--ink);
+    font-weight: 600;
+}
+
+.bar-work {fill: var(--work);}
+.bar-rest {fill: var(--rest);}
+.bar-only-rest {fill: var(--only-rest);}
+.bar-positive {fill: var(--positive);}
+
+#statistics-recap {
+    top: 15%;
+    right: 24px;
+    bottom: 16px;
+    left: 24px;
+    width: auto;
+    height: auto;
+}
+
+#recap-list {
+    height: 100%;
+    padding: 0 4px;
+    overflow-y: auto;
+    text-align: start;
+}
+
+.recap-day + .recap-day {
+    margin-top: 16px;
+}
+
+.recap-date {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 2px 6px;
+    color: var(--ink-2);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.recap-entry {
+    --phase: var(--work);
+    position: relative;
+    margin-bottom: 6px;
+    padding: 8px 28px 8px 12px;
+    border-radius: 8px;
+    background: var(--fill);
+    box-shadow: inset 3px 0 0 var(--phase);
+}
+
+.recap-entry[data-phase="only-rest"] {--phase: var(--only-rest);}
+.recap-entry[data-phase="positive"] {--phase: var(--positive);}
+
+.recap-title {
+    color: var(--ink);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.recap-note {
+    margin-top: 2px;
+    color: var(--ink-2);
+    font-size: 12px;
+}
+
+.recap-time {
+    display: block;
+    margin-top: 4px;
+    color: var(--ink-3);
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+.recap-delete {
+    border: 0;
+    color: var(--ink-3) !important;
+    font-size: 15px;
+    line-height: 1;
+    text-decoration: none !important;
+    opacity: 0;
+    transition: opacity .15s;
+}
+
+.recap-entry .recap-delete {
+    position: absolute;
+    top: 7px;
+    right: 9px;
+}
+
+.recap-entry:hover .recap-delete, .recap-date:hover .recap-delete, .recap-delete:focus-visible {
+    opacity: 1;
+}
+
+/* the recap list starts 7vh higher than the statistics view (no period tabs), so its empty
+   state starts 7vh further down to put the first line at the same height */
+.recap-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 24vh 8px 0;
 }
 
 /*  Timer: the dial is the one bold element of the app  */

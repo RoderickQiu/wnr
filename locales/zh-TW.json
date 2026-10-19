@@ -536,5 +536,18 @@
 	"settings-applies-after-restart": "重啟後生效",
 	"settings-restart-now": "立即重啟",
 	"settings-back-to-top": "回到頂部",
-	"settings-section-webdav": "WebDAV"
+	"settings-section-webdav": "WebDAV",
+	"stats-more-than-yesterday": "比昨天多 %s",
+	"stats-less-than-yesterday": "比昨天少 %s",
+	"stats-same-as-yesterday": "和昨天一樣",
+	"stats-more-than-day-before": "比前天多 %s",
+	"stats-less-than-day-before": "比前天少 %s",
+	"stats-same-as-day-before": "和前天一樣",
+	"stats-more-than-last-week": "比上週多 %s",
+	"stats-less-than-last-week": "比上週少 %s",
+	"stats-same-as-last-week": "和上週一樣",
+	"stats-last-year": "去年：%s",
+	"stats-empty-today": "今天還沒有紀錄。",
+	"stats-empty": "這段時間沒有紀錄。",
+	"recap-empty-hint": "為計時寫上標題或備註，時段結束後就會記錄在這裡。"
 }

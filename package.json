@@ -44,8 +44,7 @@
 		"keytar": "7.9.0",
 		"node-notifier": "10.0.1",
 		"node-shi": "0.4.2",
-		"popper.js": "1.16.1",
-		"schart.js": "3.0.4"
+		"popper.js": "1.16.1"
 	},
 	"devDependencies": {
 		"cross-env": "10.1.0",

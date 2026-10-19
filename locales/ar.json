@@ -541,5 +541,18 @@
 	"settings-applies-after-restart": "يُطبَّق بعد إعادة التشغيل",
 	"settings-restart-now": "إعادة التشغيل الآن",
 	"settings-back-to-top": "العودة إلى الأعلى",
-	"settings-section-webdav": "WebDAV"
+	"settings-section-webdav": "WebDAV",
+	"stats-more-than-yesterday": "%s أكثر من أمس",
+	"stats-less-than-yesterday": "%s أقل من أمس",
+	"stats-same-as-yesterday": "مثل أمس",
+	"stats-more-than-day-before": "%s أكثر من اليوم السابق",
+	"stats-less-than-day-before": "%s أقل من اليوم السابق",
+	"stats-same-as-day-before": "مثل اليوم السابق",
+	"stats-more-than-last-week": "%s أكثر من الأسبوع الماضي",
+	"stats-less-than-last-week": "%s أقل من الأسبوع الماضي",
+	"stats-same-as-last-week": "مثل الأسبوع الماضي",
+	"stats-last-year": "العام الماضي: %s",
+	"stats-empty-today": "لا يوجد تسجيل اليوم بعد.",
+	"stats-empty": "لا يوجد تسجيل في هذه الفترة.",
+	"recap-empty-hint": "أضف عنوانًا أو ملاحظة للمؤقت، وسيظهر هنا عند انتهاء الفترة."
 }

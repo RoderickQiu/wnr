@@ -541,5 +541,18 @@
 	"settings-applies-after-restart": "Applies after restart",
 	"settings-restart-now": "Restart now",
 	"settings-back-to-top": "Back to top",
-	"settings-section-webdav": "WebDAV"
+	"settings-section-webdav": "WebDAV",
+	"stats-more-than-yesterday": "%s more than yesterday",
+	"stats-less-than-yesterday": "%s less than yesterday",
+	"stats-same-as-yesterday": "Same as yesterday",
+	"stats-more-than-day-before": "%s more than the day before",
+	"stats-less-than-day-before": "%s less than the day before",
+	"stats-same-as-day-before": "Same as the day before",
+	"stats-more-than-last-week": "%s more than last week",
+	"stats-less-than-last-week": "%s less than last week",
+	"stats-same-as-last-week": "Same as last week",
+	"stats-last-year": "Last year: %s",
+	"stats-empty-today": "Nothing recorded today yet.",
+	"stats-empty": "Nothing recorded in this period.",
+	"recap-empty-hint": "Give a timer a title or a note, and it is listed here when the period ends."
 }

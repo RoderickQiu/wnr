@@ -66,133 +66,39 @@
                 if (process.platform === "darwin") $("#controller").css("display", "none");
             </script>
         </div>
-        <div id="top-bar" class="extreme-small">
-            <a id="recap-main" href="javascript:switchMainMode('recap')">
+        <div id="top-bar" class="segmented" role="tablist">
+            <a id="recap-main" class="segment" role="tab" href="javascript:switchMainMode('recap')">
                 <script>document.write(i18n.__('recap'));</script>
-            </a> | <a id="time-statistics-main" href="javascript:switchMainMode('time-statistics')">
+            </a><a id="time-statistics-main" class="segment" role="tab" href="javascript:switchMainMode('time-statistics')">
                 <script>document.write(i18n.__('time-statistics'));</script>
             </a>
         </div>
-        <div id="time-statistics-sub-bar" class="extreme-small" style="display: none;">
-            <a id="today" href="javascript:switchMode('today')">
-                <script>document.write(i18n.__('today'));</script>
-            </a> | <a id="yesterday" href="javascript:switchMode('yesterday')">
-            <script>document.write(i18n.__('yesterday'));</script>
-        </a> | <a id="this-week" href="javascript:switchMode('this-week')">
-            <script>document.write(i18n.__('this-week'));</script>
-        </a> | <a id="this-year" href="javascript:switchMode('this-year')">
-            <script>document.write(i18n.__('this-year'));</script>
-        </a>
-            | <a id="all-time" href="javascript:switchMode('all-time')">
-            <script>document.write(i18n.__('all-time'));</script>
-        </a>
+        <div id="time-statistics-sub-bar" class="pill-tabs" style="display: none;">
+            <script>
+                ['today', 'yesterday', 'this-week', 'this-year', 'all-time'].forEach(function (period) {
+                    document.write('<a id="' + period + '" class="pill-tab" href="javascript:switchMode(\'' + period + '\')">' + i18n.__(period) + '</a>');
+                });
+            </script>
         </div>
-        <div id="statistics-no-chart">
-            <br />
-            <table width="100%" style="line-height: 2.5">
-                <tbody>
-                    <tr>
-                        <td>
-                            <span class="small">
-                <script>document.write(i18n.__('statistics-work-time'));</script>
-            </span><br />
-                            <h3 class="work">
-                                <span id="work-time">--</span>
-                            </h3>
-                        </td>
-                        <td>
-                            <span class="small">
-                <script>document.write(i18n.__('statistics-rest-time'));</script>
-            </span><br />
-                            <h3 class="rest">
-                                <span id="rest-time">--</span>
-                            </h3>
-                        </td>
-                    </tr>
-                    <tr>&nbsp;</tr>
-                    <tr>
-                        <td>
-                            <span class="small">
-                <script>document.write(i18n.__('statistics-onlyrest-time'));</script>
-            </span><br />
-                            <h3 class="onlyRest">
-                                <span id="onlyrest-time">--</span>
-                            </h3>
-                        </td>
-                        <td>
-                            <span class="small">
-                <script>document.write(i18n.__('statistics-positive-time'));</script>
-            </span><br />
-                            <h3 class="positive">
-                                <span id="positive-time">--</span>
-                            </h3>
-                        </td>
-                    </tr>
-                    <tr>&nbsp;</tr>
-                </tbody>
-            </table>
-            <span class="small">
-                <script>document.write(i18n.__('statistics-time-sum'));</script>
-            </span><br />
-            <h2 class="text-muted">
-                <span id="sum">--</span>
-            </h2>
-        </div>
-        <div id="statistics-with-chart">
-            <br />
-            <div class="container small" style="padding: 0">
-                <div class="row">
-                    <div class="col" style="padding: 0">
-                        <span class="xx-small">
-                            <script>document.write(i18n.__('statistics-work-time'));</script>
-                        </span><br />
-                        <b class="work">
-                            <span id="work-time-with-chart">--</span>
-                        </b>
-                    </div>
-                    <div class="col" style="padding: 0">
-                        <span class="xx-small">
-                            <script>document.write(i18n.__('statistics-rest-time'));</script>
-                        </span><br />
-                        <b class="rest">
-                            <span id="rest-time-with-chart">--</span>
-                        </b>
-                    </div>
-                    <div class="col" style="padding: 0">
-                        <span class="xx-small">
-                            <script>document.write(i18n.__('statistics-onlyrest-time'));</script>
-                        </span><br />
-                        <b class="onlyRest">
-                            <span id="only-rest-time-with-chart">--</span>
-                        </b>
-                    </div>
-                    <div class="col" style="padding: 0">
-                        <span class="xx-small">
-                            <script>document.write(i18n.__('statistics-positive-time'));</script>
-                        </span><br />
-                        <b class="positive">
-                            <span id="positive-time-with-chart">--</span>
-                        </b>
-                    </div>
-                    <div class="col" style="padding: 0">
-                        <span class="xx-small">
-                            <script>document.write(i18n.__('statistics-time-sum'));</script>
-                        </span><br />
-                        <b class="text-muted">
-                            <span id="sum-with-chart">--</span>
-                        </b>
-                    </div>
-                </div>
+        <!-- one view for every period: the work time first, then how the time was spent -->
+        <div id="stats-view">
+            <div class="stats-hero">
+                <span class="stats-hero-label"><script>document.write(i18n.__('statistics-work-time'));</script></span>
+                <span class="stats-hero-value work" id="stats-work">--</span>
+                <span class="stats-compare" id="stats-compare"></span>
             </div>
-            <hr />
-            <div id="statistics-graph">
-                <canvas id="graph"></canvas>
+            <div id="statistics-graph" aria-hidden="true"></div>
+            <div class="stats-legend" id="stats-breakdown"></div>
+            <div class="stats-total" id="stats-total"></div>
+            <div class="stats-empty empty-state" id="stats-empty">
+                <p class="empty-title" id="stats-empty-text"></p>
+                <a class="btn btn-sm btn-outline-primary" href="javascript:backer()">
+                    <script>document.write(i18n.__('recap-empty-action'));</script>
+                </a>
             </div>
         </div>
-        <div id="statistics-recap" style="height: 70%;">
-            <br />
-            <div id="recap-list" style="text-align: left; max-height: 100%; overflow-y: auto">
-            </div>
+        <div id="statistics-recap">
+            <div id="recap-list"></div>
         </div>
     </div>
 
@@ -207,7 +113,6 @@
             window.location.href = "index.html";
         }
 
-        const schart = require("schart.js");
         let statistics = null;
         let recapStore = null;
 
@@ -350,59 +255,10 @@
             if (mainMode === "recap") {
                 setStatsNav("recap-main");
                 $("#time-statistics-sub-bar").css("display", "none");
-                $("#statistics-with-chart").css("display", "none");
-                $("#statistics-no-chart").css("display", "none");
+                $("#stats-view").css("display", "none");
                 $("#statistics-recap").css("display", "block");
                 
-                let entries = recapStore.has('entries') ? recapStore.get('entries') : [];
-                entries.sort((a, b) => b.timestamp - a.timestamp);
-                
-                let recapListHtml = "";
-                if (entries.length === 0) {
-                    recapListHtml = "<p class='text-muted text-center' style='padding: 20px; margin-top: 10px'>" + i18n.__('recap-empty') + "<br /><a href='javascript:backer()' class='rest'>" + i18n.__('recap-empty-action') + "</a></p>";
-                } else {
-                    let currentDate = "";
-                    let dateEntries = {};
-                    entries.forEach(function(entry) {
-                        let entryDate = new Date(entry.timestamp).toLocaleDateString();
-                        if (!dateEntries[entryDate]) {
-                            dateEntries[entryDate] = [];
-                        }
-                        dateEntries[entryDate].push(entry);
-                    });
-                    
-                    Object.keys(dateEntries).sort().reverse().forEach(function(entryDate) {
-                        recapListHtml += "<div style='margin-bottom: 10px; margin-left: 30px'>";
-                        recapListHtml += "<strong class='text-muted'>" + entryDate + "</strong>";
-                        recapListHtml += " <a href='javascript:deleteRecapByDate(\"" + entryDate + "\")' class='text-muted extreme-small' style='margin-left: 8px; cursor: pointer;' title='" + i18n.__('recap-delete-date') + "'>×</a>";
-                        recapListHtml += "</div>";
-                        
-                        dateEntries[entryDate].forEach(function(entry) {
-                            let timeStr = new Date(entry.timestamp).toLocaleTimeString();
-                            let method = entry.method !== undefined ? entry.method : 1;
-                            let borderColor = "#ea5454";
-                            let titleClass = "work";
-                            if (method === 3) {
-                                borderColor = "#17a2b8";
-                                titleClass = "positive";
-                            } else if (entry.isOnlyRest !== undefined && entry.isOnlyRest) {
-                                borderColor = "#a26ae5";
-                                titleClass = "onlyRest";
-                            }
-                            recapListHtml += "<div style='margin-left: 30px; margin-top: 8px; padding: 8px; border-left: 3px solid " + borderColor + "; position: relative;'>";
-                            recapListHtml += "<a href='javascript:deleteRecapEntry(" + entry.timestamp + ")' class='text-muted extreme-small' style='position: absolute; right: 8px; top: 8px; cursor: pointer;' title='" + i18n.__('recap-delete-entry') + "'>×</a>";
-                            if (entry.title) {
-                                recapListHtml += "<div class='" + titleClass + "' style='font-weight: bold; padding-right: 20px;'>" + entry.title + "</div>";
-                            }
-                            if (entry.note) {
-                                recapListHtml += "<div class='text-muted small' style='margin-top: 4px; padding-right: 20px;'>" + entry.note + "</div>";
-                            }
-                            recapListHtml += "<div class='text-grey extreme-small' style='margin-top: 4px;'>" + timeStr + "</div>";
-                            recapListHtml += "</div>";
-                        });
-                    });
-                }
-                $("#recap-list").html(recapListHtml);
+                renderRecap();
             } else if (mainMode === "time-statistics") {
                 setStatsNav("time-statistics-main", statisticsMode);
                 $("#time-statistics-sub-bar").css("display", "block");
@@ -424,127 +280,218 @@
             }
         }
 
+        // titles and notes are user text (and arrive from other devices through WebDAV sync),
+        // so they are always escaped before going into the page
+        function escapeHtml(text) {
+            return String(text).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function renderRecap() {
+            let entries = recapStore.has('entries') ? recapStore.get('entries') : [];
+            entries.sort((a, b) => b.timestamp - a.timestamp);
+
+            let html = "";
+            if (entries.length === 0) {
+                html = "<div class='recap-empty empty-state'><p class='empty-title'>" + escapeHtml(i18n.__('recap-empty')) + "</p>" +
+                    "<p class='empty-hint'>" + escapeHtml(i18n.__('recap-empty-hint')) + "</p>" +
+                    "<a class='btn btn-sm btn-outline-primary' href='javascript:backer()'>" + escapeHtml(i18n.__('recap-empty-action')) + "</a></div>";
+            } else {
+                // newest first; keys keep that insertion order (sorting the date strings misordered them)
+                let byDate = new Map();
+                entries.forEach(function (entry) {
+                    let date = new Date(entry.timestamp).toLocaleDateString();
+                    if (!byDate.has(date)) byDate.set(date, []);
+                    byDate.get(date).push(entry);
+                });
+                const todayKey = new Date().toLocaleDateString();
+                const yesterdayKey = new Date(Date.now() - 86400000).toLocaleDateString();
+                byDate.forEach(function (dayEntries, date) {
+                    // the key stays the locale date string: deleting a day matches on it
+                    let label = date === todayKey ? i18n.__('today') : date === yesterdayKey ? i18n.__('yesterday')
+                        : new Date(dayEntries[0].timestamp).toLocaleDateString(store.get("i18n"), { weekday: 'short', month: 'short', day: 'numeric' });
+                    html += "<section class='recap-day'><header class='recap-date'><span>" + escapeHtml(label) + "</span>" +
+                        "<a class='recap-delete' href='#' data-date='" + escapeHtml(date) + "' title='" + escapeHtml(i18n.__('recap-delete-date')) + "'>\u00d7</a></header>";
+                    dayEntries.forEach(function (entry) {
+                        let method = entry.method !== undefined ? entry.method : 1;
+                        let phase = method === 3 ? "positive" : (entry.isOnlyRest ? "only-rest" : "work");
+                        html += "<article class='recap-entry' data-phase='" + phase + "'>";
+                        html += "<a class='recap-delete' href='#' data-timestamp='" + Number(entry.timestamp) + "' title='" + escapeHtml(i18n.__('recap-delete-entry')) + "'>\u00d7</a>";
+                        if (entry.title) html += "<div class='recap-title'>" + escapeHtml(entry.title) + "</div>";
+                        if (entry.note) html += "<div class='recap-note'>" + escapeHtml(entry.note) + "</div>";
+                        html += "<time class='recap-time'>" + escapeHtml(new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + "</time>";
+                        html += "</article>";
+                    });
+                    html += "</section>";
+                });
+            }
+            $("#recap-list").html(html);
+            $("#recap-list .recap-delete").on("click", function (event) {
+                event.preventDefault();
+                if (this.dataset.timestamp) deleteRecapEntry(Number(this.dataset.timestamp));
+                else deleteRecapByDate(this.dataset.date);
+            });
+        }
+
+        // Stacked columns, one per day or month; colours come from the phase custom properties.
+        function drawBars(labels, series, currentIndex) {
+            const W = 320, H = 116, left = 22, right = 2, top = 4, bottom = 18;
+            const plotW = W - left - right, plotH = H - top - bottom;
+            const totals = labels.map(function (_, i) {
+                return series.reduce(function (sum, item) { return sum + (Number(item.data[i]) || 0); }, 0);
+            });
+            const max = Math.max.apply(null, totals.concat([0]));
+            const rawStep = max > 0 ? max / 3 : 1;
+            const magnitude = Math.pow(10, Math.floor(Math.log10(rawStep)));
+            const step = [1, 2, 2.5, 5, 10].map(function (m) { return m * magnitude; }).find(function (v) { return v >= rawStep; });
+            const ceiling = step * 3;
+            const y = function (v) { return top + plotH - (v / ceiling) * plotH; };
+            const slot = plotW / labels.length, barW = Math.min(18, slot * 0.56);
+            let svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" class="bar-chart" role="img">';
+            for (let t = 0; t <= 3; t++) {
+                const v = step * t, yy = y(v);
+                svg += '<line class="chart-grid" x1="' + left + '" x2="' + (W - right) + '" y1="' + yy + '" y2="' + yy + '"></line>';
+                svg += '<text class="chart-axis" x="' + (left - 6) + '" y="' + (yy + 3) + '" text-anchor="end">' + (Math.round(v * 10) / 10) + '</text>';
+            }
+            labels.forEach(function (label, i) {
+                const x = left + slot * i + (slot - barW) / 2;
+                let base = 0;
+                let tip = label + ' \u2014 ' + series.map(function (item) { return item.name + ' ' + getStyledTime(Math.round((Number(item.data[i]) || 0) * 60)); }).join(', ');
+                svg += '<g><title>' + escapeHtml(tip) + '</title>';
+                series.forEach(function (item, k) {
+                    const v = Number(item.data[i]) || 0;
+                    if (v <= 0) return;
+                    const y1 = y(base + v), h = y(base) - y1;
+                    const isTop = series.slice(k + 1).every(function (rest) { return !(Number(rest.data[i]) > 0); });
+                    svg += '<rect class="bar-' + item.phase + '" x="' + x + '" y="' + y1 + '" width="' + barW + '" height="' + Math.max(0.5, h - (isTop ? 0 : 1)) + '"' + (isTop ? ' rx="2.5"' : '') + '></rect>';
+                    base += v;
+                });
+                svg += '</g>';
+                svg += '<text class="chart-axis' + (i === currentIndex ? ' is-current' : '') + '" x="' + (left + slot * i + slot / 2) + '" y="' + (H - 6) + '" text-anchor="middle">' + escapeHtml(label) + '</text>';
+            });
+            svg += '</svg>';
+            document.getElementById("statistics-graph").innerHTML = svg;
+        }
+
+        // weekday and month names in the app's language
+        const chartLocale = store.get("i18n");
+        function weekdayLabels() {
+            const fmt = new Intl.DateTimeFormat(chartLocale, { weekday: 'short' });
+            const first = store.get("start-from-monday") ? 5 : 4;// 2026-01-04 was a Sunday
+            return [0, 1, 2, 3, 4, 5, 6].map(function (d) { return fmt.format(new Date(2026, 0, first + d)); });
+        }
+        function monthLabels() {
+            const fmt = new Intl.DateTimeFormat(chartLocale, { month: 'narrow' });
+            return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(function (m) { return fmt.format(new Date(2026, m, 1)); });
+        }
+        function chartSeries(work, rest, onlyRest, positive) {
+            return [
+                { phase: 'work', name: i18n.__('statistics-work-time'), data: work },
+                { phase: 'rest', name: i18n.__('statistics-rest-time'), data: rest },
+                { phase: 'only-rest', name: i18n.__('statistics-onlyrest-time'), data: onlyRest },
+                { phase: 'positive', name: i18n.__('statistics-positive-time'), data: positive }
+            ];
+        }
+
+        // totals of one day, with missing fields counted as zero
+        function dayTotals(date) {
+            const key = date.getFullYear().toString() + months[date.getMonth()] + date.getDate().toString();
+            const day = statistics.has(key) ? statistics.get(key) : {};
+            return { work: num(day.workTime), rest: num(day.restTime), onlyRest: num(day.onlyRest), positive: num(day.positive) };
+        }
+
+        function weekTotals(weeksBack) {
+            const start = new Date();
+            start.setDate(start.getDate() - getDayCustomizable(start) - 7 * weeksBack);
+            const sum = { work: 0, rest: 0, onlyRest: 0, positive: 0 };
+            for (let d = 0; d < 7; d++) {
+                const day = new Date(start);
+                day.setDate(start.getDate() + d);
+                const t = dayTotals(day);
+                for (const k in sum) sum[k] += t[k];
+            }
+            return sum;
+        }
+
+        function daysAgo(n) {
+            const d = new Date();
+            d.setDate(d.getDate() - n);
+            return d;
+        }
+
+        // "20m more than yesterday" and the like
+        function comparison(now, before, keyPrefix) {
+            const delta = now - before;
+            if (now === 0 && before === 0) return "";// nothing to compare
+            if (delta === 0) return i18n.__('stats-same-as-' + keyPrefix);
+            return i18n.__('stats-' + (delta > 0 ? 'more' : 'less') + '-than-' + keyPrefix, getStyledTime(Math.abs(delta)));
+        }
+
+        function renderStats(totals, compareText, chart) {
+            const kinds = [
+                { key: 'work', phase: 'work', label: i18n.__('field-label-work') },
+                { key: 'rest', phase: 'rest', label: i18n.__('field-label-rest') },
+                { key: 'onlyRest', phase: 'only-rest', label: i18n.__('onlyrest') },
+                { key: 'positive', phase: 'positive', label: i18n.__('positive') }
+            ];
+            const sum = kinds.reduce(function (total, kind) { return total + totals[kind.key]; }, 0);
+            const isRtl = store.get("i18n").startsWith("ar");
+            $("#stats-work").text(getStyledTime(totals.work)).toggleClass('rtl-timer', isRtl);
+            $("#stats-compare").text(compareText || "");
+
+            // an empty period shows only a note and a way to start, not a page of zeros
+            const empty = sum === 0;
+            $("#stats-view").toggleClass("is-empty", empty);
+            $("#stats-empty-text").text(statisticsMode === 'today' ? i18n.__('stats-empty-today') : i18n.__('stats-empty'));
+            $("#statistics-graph").toggle(!empty && !!chart);
+            if (empty) return;
+
+            if (chart) drawBars(chart.labels, chartSeries(chart.work, chart.rest, chart.onlyRest, chart.positive), chart.current);
+
+            $("#stats-breakdown").html(kinds.map(function (kind) {
+                const minutes = totals[kind.key];
+                return '<div class="legend-item' + (minutes === 0 ? ' is-zero' : '') + '" data-phase="' + kind.phase + '">' +
+                    '<span class="legend-dot"></span><span class="legend-label">' + escapeHtml(kind.label) + '</span>' +
+                    '<span class="legend-value' + (isRtl ? ' rtl-timer' : '') + '">' + escapeHtml(getStyledTime(minutes)) + '</span></div>';
+            }).join(''));
+            $("#stats-total").html('<span>' + escapeHtml(i18n.__('statistics-time-sum')) + '</span> ' +
+                '<span class="legend-value' + (isRtl ? ' rtl-timer' : '') + '">' + escapeHtml(getStyledTime(sum)) + '</span>');
+        }
+
         function switchMode(mode) {
             statisticsMode = mode;
             setStatsNav("time-statistics-main", statisticsMode);
-            var rtlTimerEls = $('#work-time, #rest-time, #onlyrest-time, #positive-time, #sum, #work-time-with-chart, #rest-time-with-chart, #only-rest-time-with-chart, #positive-time-with-chart, #sum-with-chart');
-            if (store.get("i18n").startsWith("ar")) {
-                rtlTimerEls.addClass('rtl-timer');
-            } else {
-                rtlTimerEls.removeClass('rtl-timer');
+            $("#statistics-recap").css("display", "none");
+            $("#stats-view").css("display", "");
+            $("#stats-view").toggleClass("has-chart", mode === "this-week" || mode === "this-year");
+
+            if (mode === "today") {
+                const today = dayTotals(daysAgo(0));
+                renderStats(today, comparison(today.work, dayTotals(daysAgo(1)).work, 'yesterday'));
+            } else if (mode === "yesterday") {
+                const yesterday = dayTotals(daysAgo(1));
+                renderStats(yesterday, comparison(yesterday.work, dayTotals(daysAgo(2)).work, 'day-before'));
+            } else if (mode === "this-week") {
+                const week = weekTotals(0);
+                renderStats(week, comparison(week.work, weekTotals(1).work, 'last-week'), {
+                    labels: weekdayLabels(), current: getDayCustomizable(new Date()),
+                    work: thisWeekWorkTimesInHour, rest: thisWeekRestTimesInHour, onlyRest: thisWeekOnlyRestTimesInHour, positive: thisWeekPositiveTimesInHour
+                });
+            } else if (mode === "this-year") {
+                const yearKey = statistics.get("year");
+                const year = statistics.has(yearKey) ? statistics.get(yearKey) : {};
+                const lastYearKey = String(Number(yearKey) - 1);
+                const lastYear = statistics.has(lastYearKey) ? num(statistics.get(lastYearKey).workTime) : 0;
+                renderStats({ work: num(year.workTime), rest: num(year.restTime), onlyRest: num(year.onlyRest), positive: num(year.positive) },
+                    lastYear > 0 ? i18n.__('stats-last-year', getStyledTime(lastYear)) : "", {
+                        labels: monthLabels(), current: new Date().getMonth(),
+                        work: thisYearWorkTimesInHour, rest: thisYearRestTimesInHour, onlyRest: thisYearOnlyRestTimesInHour, positive: thisYearPositiveTimesInHour
+                    });
+            } else if (mode === "all-time") {
+                renderStats({ work: allTimeWorkTimeSum, rest: allTimeRestTimeSum, onlyRest: num(allTimeOnlyRestTimeSum), positive: num(allTimePositiveTimeSum) }, "");
             }
-            if (statisticsMode === "today") {
-                $("#statistics-with-chart").css("display", "none");
-                $("#statistics-no-chart").css("display", "block");
-                $("#statistics-recap").css("display", "none");
-
-                $("#work-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).workTime : "0"));
-                $("#rest-time").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).restTime : "0"));
-                $("#onlyrest-time").text(getStyledTime(statistics.has(yearMonDay) ? num(statistics.get(yearMonDay).onlyRest) : "0"));
-                $("#positive-time").text(getStyledTime(statistics.has(yearMonDay) ? num(statistics.get(yearMonDay).positive) : "0"));
-                $("#sum").text(getStyledTime(statistics.has(yearMonDay) ? statistics.get(yearMonDay).sum : "0"));
-            } else if (statisticsMode === "yesterday") {
-                $("#statistics-with-chart").css("display", "none");
-                $("#statistics-no-chart").css("display", "block");
-                $("#statistics-recap").css("display", "none");
-
-                $("#work-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).workTime : "0"));
-                $("#rest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).restTime : "0"));
-                $("#onlyrest-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? num(statistics.get(yesterdayYearMonDay).onlyRest) : "0"));
-                $("#positive-time").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? num(statistics.get(yesterdayYearMonDay).positive) : "0"));
-                $("#sum").text(getStyledTime(statistics.has(yesterdayYearMonDay) ? statistics.get(yesterdayYearMonDay).sum : "0"));
-            } else if (statisticsMode === "this-week") {
-                $("#statistics-with-chart").css("display", "block");
-                $("#statistics-no-chart").css("display", "none");
-                $("#statistics-recap").css("display", "none");
-
-                $("#work-time-with-chart").text(getStyledTime(thisWeekWorkTimeSum));
-                $("#rest-time-with-chart").text(getStyledTime(thisWeekRestTimeSum));
-                $("#only-rest-time-with-chart").text(getStyledTime(num(thisWeekOnlyRestTimeSum)));
-                $("#positive-time-with-chart").text(getStyledTime(num(thisWeekPositiveTimeSum)));
-                $("#sum-with-chart").text(getStyledTime(thisWeekTimeSum));
-
-                let options = {
-                    type: 'line',
-                    legend: {
-                        display: false
-                    },
-                    bgColor: isDarkMode ? '#191919' : '#ffffff',
-                    labels: store.get("start-from-monday")
-                            ? ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-                            : ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'],
-                    topPadding: 19,
-                    bottomPadding: 39,
-                    datasets: [{
-                        fillColor: newWorkColor + 'cc',
-                        data: thisWeekWorkTimesInHour
-                    }, {
-                        fillColor: newRestColor + 'cc',
-                        data: thisWeekRestTimesInHour
-                    }, {
-                        fillColor: newOnlyRestColor + 'cc',
-                        data: thisWeekOnlyRestTimesInHour
-                    }, {
-                        fillColor: newPositiveColor + 'cc',
-                        data: thisWeekPositiveTimesInHour
-                    }]
-                }
-                new schart('graph', options);//statistics graph
-            } else if (statisticsMode === "this-year") {
-                $("#statistics-with-chart").css("display", "block");
-                $("#statistics-no-chart").css("display", "none");
-                $("#statistics-recap").css("display", "none");
-
-                $("#work-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).workTime : "0"));
-                if ($("#work-time-with-chart").text().length >= 10) $("#work-time-with-chart").addClass("xx-small");
-                $("#rest-time-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).restTime : "0"));
-                if ($("#rest-time-with-chart").text().length >= 10) $("#rest-time-with-chart").addClass("xx-small");
-                $("#only-rest-time-with-chart").text(getStyledTime((statistics.has(statistics.get("year")) ? num(statistics.get(statistics.get("year")).onlyRest) : "0")));
-                if ($("#only-rest-time-with-chart").text().length >= 10) $("#only-rest-time-with-chart").addClass("xx-small");
-                $("#positive-time-with-chart").text(getStyledTime((statistics.has(statistics.get("year")) ? num(statistics.get(statistics.get("year")).positive) : "0")));
-                if ($("#positive-time-with-chart").text().length >= 10) $("#positive-time-with-chart").addClass("xx-small");
-                $("#sum-with-chart").text(getStyledTime(statistics.has(statistics.get("year")) ? statistics.get(statistics.get("year")).sum : "0"));
-                if ($("#sum-with-chart").text().length >= 10) $("#sum-with-chart").addClass("xx-small");
-
-                let options = {
-                    type: 'line',
-                    legend: {
-                        display: false
-                    },
-                    bgColor: isDarkMode ? '#191919' : '#ffffff',
-                    labels: months,
-                    xRorate: 45,
-                    yEqual: 3,
-                    topPadding: 19,
-                    bottomPadding: 59,
-                    showValue: false,
-                    datasets: [{
-                        fillColor: newWorkColor + 'cc',
-                        data: thisYearWorkTimesInHour
-                    }, {
-                        fillColor: newRestColor + 'cc',
-                        data: thisYearRestTimesInHour
-                    }, {
-                        fillColor: newOnlyRestColor + 'cc',
-                        data: thisYearOnlyRestTimesInHour
-                    }, {
-                        fillColor: newPositiveColor + 'cc',
-                        data: thisYearPositiveTimesInHour
-                    }]
-                }
-                new schart('graph', options);//statistics graph
-            } else if (statisticsMode === "all-time") {
-                $("#statistics-with-chart").css("display", "none");
-                $("#statistics-no-chart").css("display", "block");
-                $("#statistics-recap").css("display", "none");
-
-                $("#work-time").text(getStyledTime(allTimeWorkTimeSum));
-                $("#rest-time").text(getStyledTime(allTimeRestTimeSum));
-                $("#onlyrest-time").text(getStyledTime(allTimeOnlyRestTimeSum));
-                $("#positive-time").text(getStyledTime(allTimePositiveTimeSum));
-                $("#sum").text(getStyledTime(allTimeTimeSum));
-            }
-        }//to show the stuffs
+        }
         
         function deleteRecapEntry(timestamp) {
             ipc.send('recap-delete-confirm', { type: 'entry', timestamp: timestamp });

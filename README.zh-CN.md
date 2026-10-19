@@ -83,6 +83,5 @@ yarn appimage # linux AppImage打包
 - electron-debug，sindresorhus，MIT 许可证。
 - node-notifier，mikaelbr，MIT 许可证。
 - popper.js，popperjs，MIT 许可证。
-- schart.js，lin-xin，MIT 许可证。
 - cross-env，kentcdodds，MIT 许可证。
 - **node，nodejs，**[**许可证**](https://github.com/nodejs/node/blob/master/LICENSE) 。

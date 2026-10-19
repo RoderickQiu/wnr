@@ -93,6 +93,5 @@ is also included in every copy of wnr.
 - electron-debug, sindresorhus, MIT License.
 - node-notifier, mikaelbr, MIT License.
 - popper.js, popperjs, MIT License.
-- schart.js, lin-xin, MIT License.
 - cross-env, kentcdodds, MIT License.
 - **node, nodejs, [License](https://github.com/nodejs/node/blob/master/LICENSE)**.

@@ -541,5 +541,18 @@
 	"settings-applies-after-restart": "다시 시작한 뒤에 적용됩니다",
 	"settings-restart-now": "지금 다시 시작",
 	"settings-back-to-top": "맨 위로",
-	"settings-section-webdav": "WebDAV"
+	"settings-section-webdav": "WebDAV",
+	"stats-more-than-yesterday": "어제보다 %s 더",
+	"stats-less-than-yesterday": "어제보다 %s 덜",
+	"stats-same-as-yesterday": "어제와 같음",
+	"stats-more-than-day-before": "그저께보다 %s 더",
+	"stats-less-than-day-before": "그저께보다 %s 덜",
+	"stats-same-as-day-before": "그저께와 같음",
+	"stats-more-than-last-week": "지난주보다 %s 더",
+	"stats-less-than-last-week": "지난주보다 %s 덜",
+	"stats-same-as-last-week": "지난주와 같음",
+	"stats-last-year": "작년: %s",
+	"stats-empty-today": "오늘은 아직 기록이 없습니다.",
+	"stats-empty": "이 기간에는 기록이 없습니다.",
+	"recap-empty-hint": "타이머에 제목이나 메모를 적으면 시간이 끝날 때 여기에 기록됩니다."
 }
