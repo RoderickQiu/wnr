@@ -170,16 +170,23 @@
                 <script>document.write(i18n.__('infinity'));</script>
             </span>
             <span id="stop-count" class="text-center small text-muted"></span>
-            <span id="time-cnt-blank"><br /><br /></span>
-            <div id="work-rest" class="text-center work">
-                <script>document.write(i18n.__('working'));</script>
+            <span id="time-cnt-blank"></span>
+            <!-- the ring shows the time left in this period; its colour follows the phase class -->
+            <div id="timer-dial" class="work">
+                <svg class="dial-ring" viewBox="0 0 100 100" aria-hidden="true">
+                    <circle class="dial-track" cx="50" cy="50" r="47"></circle>
+                    <circle class="dial-progress" cx="50" cy="50" r="47" pathLength="100"></circle>
+                </svg>
+                <div class="dial-face">
+                    <div id="work-rest" class="text-center work">
+                        <script>document.write(i18n.__('working'));</script>
+                    </div>
+                    <div id="now-timing" class="text-center work" dir="ltr"></div>
+                </div>
             </div>
-            <br />
-            <div id="now-timing" class="text-center h1 work"></div>
-            <br />
-            <div class="text-center"><a id="stopper" href="javascript:stopAndCount()" class="text-muted"><i
+            <div class="timer-controls">
+            <div class="stopper-cell"><a id="stopper" href="javascript:stopAndCount()"><i
                     class="iconfont icon-pause"></i></a></div>
-            <br />
             <div class="text-center text-muted" id="more-options">
                 <a href="javascript:backcheck()" class="text-muted" id="back-index"><i class="iconfont icon-previous"
                 ></i><span
@@ -193,7 +200,7 @@
                     <script>document.write(i18n.__('skip'));</script>
                 </span><i class="iconfont icon-fastforward" id="skipper"></i>
                 </a>
-                <br />
+            </div>
             </div>
             <input name="passcode-locker" id="passcode-rechecker" type="password" maxlength="11"
                    onkeydown="if(event.keyCode === 13) recheck($('#passcode-rechecker').val());" />
@@ -213,46 +220,27 @@
                         i18n.__('fullscreen-experience-tip-mistake') + '</a>');</script>
             </div>
             <!-- container -->
-            <div class="dropdown">
-                <button title="Time Adjustment" class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="time-adjust-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <script>document.write(i18n.__('time_adjustment'));</script>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <!-- decrease5minutes -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-5)">
-                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-5-minutes'));</script>
-                      </a>
-                    <!-- increase5minutes -->
-                    <a class="dropdown-item" href="javascript:adjustTime(5)" >
-                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-5-minutes'));</script>
-                      </a>
-                    <div class="dropdown-divider"></div>
-
-                    <!-- decrease1minutes -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-1)" >
-                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-1-minute'));</script>
-                    </a>
-                    <!-- increase1minutes -->
-                    <a class="dropdown-item" href="javascript:adjustTime(1)" >
-                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-1-minute'));</script>
-                    </a>
-                    <div class="dropdown-divider"></div>
-
-                    <!-- decrease15seconds -->
-                    <a class="dropdown-item" href="javascript:adjustTime(-0.25)" >
-                        <i class="iconfont icon-previous"></i> <script>document.write(i18n.__('decrease-15-seconds'));</script>
-                    </a>
-                    <!-- increase15seconds -->
-                    <a class="dropdown-item" href="javascript:adjustTime(0.25)">
-                        <i class="iconfont icon-fastforward"></i> <script>document.write(i18n.__('increase-15-seconds'));</script>
-                    </a>
-                    <div class="dropdown-divider"></div>
-
-          
-                    <a class="dropdown-item" href="javascript:mistake()" id="mistake-button">
-                        <script>document.write(i18n.__('fullscreen-experience-tip-mistake'));</script>
-                    </a>
+            <button type="button" class="quiet-button" id="time-adjust-dropdown" popovertarget="time-adjust-menu">
+                <script>document.write(i18n.__('time_adjustment'));</script><i class="iconfont icon-caret-down" aria-hidden="true"></i>
+            </button>
+            <div id="time-adjust-menu" class="wnr-popover" popover>
+                <div class="adjust-grid">
+                    <script>
+                        [[5, 'decrease-5-minutes', 'increase-5-minutes', 'min'],
+                            [1, 'decrease-1-minute', 'increase-1-minute', 'min'],
+                            [0.25, 'decrease-15-seconds', 'increase-15-seconds', 's']].forEach(function (row) {
+                            const amount = row[3] === 's' ? 15 : row[0];
+                            document.write('<span class="adjust-amount">' + amount + i18n.__(row[3]).trim() + '</span>' +
+                                '<button type="button" class="adjust-step" title="' + i18n.__(row[1]) + '" aria-label="' + i18n.__(row[1]) +
+                                '" onclick="adjustTime(-' + row[0] + ')">\u2212</button>' +
+                                '<button type="button" class="adjust-step" title="' + i18n.__(row[2]) + '" aria-label="' + i18n.__(row[2]) +
+                                '" onclick="adjustTime(' + row[0] + ')">+</button>');
+                        });
+                    </script>
                 </div>
+                <a class="popover-action" href="javascript:mistake()" id="mistake-button">
+                    <script>document.write(i18n.__('fullscreen-experience-tip-mistake'));</script>
+                </a>
             </div>
             <script>       
                 $(document).ready(function() {
@@ -265,19 +253,6 @@
                         }
                     }
                     
-                    // Add CSS for disabled state
-                    $("<style>")
-                        .prop("type", "text/css")
-                        .html(`
-                            .dropdown-item.disabled {
-                                color: #6c757d !important;
-                                cursor: not-allowed !important;
-                            }
-                            .dropdown-item.disabled:hover {
-                                background-color: transparent !important;
-                            }
-                        `)
-                        .appendTo("head");
                 });
             </script>
 
@@ -358,26 +333,6 @@
         })
     </script>
 
-    <script>
-        function dynamicResizer() {//dynamically resize the countdown text as the window resizes
-            let hdWidth = document.body.getBoundingClientRect().width;
-            let defaultWidth = 376;
-            let scale = hdWidth / defaultWidth;
-
-            $("#now-timing").css("font-size", (2.5 * ((scale - 1) / 2 + 1)) + 'rem');
-            if (hdWidth > 630) {
-                $("#now-timing").css("font-family", "SourceHanSansCNLight, sans-serif");
-                if (hdWidth < 800) $("#now-timing").css("font-weight", "bolder");
-                else $("#now-timing").css("font-weight", "normal");
-            } else {
-                $("#now-timing").css("font-family", "SourceHanSansCN, sans-serif");
-                $("#now-timing").css("font-weight", "normal");
-            }
-        }
-
-        dynamicResizer();
-        window.onresize = dynamicResizer;
-    </script>
 
     <script>
         store.set("just-back", false);
@@ -768,6 +723,7 @@
             method: methodFromStart
         });
 
+        let timerDial = document.getElementById("timer-dial");
         let $nowTiming = $("#now-timing"), $bottomBar = $("#bottom-bar"), $timeBar = $("#time-bar"),
                 $timeBarMacOS = $("#time-bar-macos");//cache frequently using doms
 
@@ -1403,6 +1359,8 @@
                 $("#time-adjust-dropdown").css("display", "none");
                 $("#work-rest").text("");
                 $nowTiming.text(i18n.__('ended'));
+                timerDial.classList.add("is-ended");
+                setDialProgress(0);
                 isClockWorking = 0;
                 $("#stopper").text("");
                 $bottomBar.css("width", "0%");
@@ -1568,6 +1526,24 @@
                 }
             }
 
+            // clock-style countdown ("24:50", "1:04:09"); digits read left-to-right in every locale
+            function renderTime(hours, minutes, seconds) {
+                $nowTiming.text((hours > 0 ? hours + ":" + positionCover(minutes) : minutes) + ":" + positionCover(seconds));
+                $nowTiming.toggleClass("has-hours", hours > 0);
+            }
+
+            // remaining share of the period, 0..1; the ring animates between ticks
+            function setDialProgress(value, snap) {
+                if (snap) {// jump without animating backwards (stopwatch wrapping to a new minute)
+                    timerDial.classList.add("dial-snap");
+                    timerDial.style.setProperty("--progress", value);
+                    void timerDial.offsetWidth;
+                    timerDial.classList.remove("dial-snap");
+                    return;
+                }
+                timerDial.style.setProperty("--progress", Math.max(0, Math.min(1, value)));
+            }
+
             function positionCover(str) {//cover the positions of '0'
                 let num;
                 str >= 10 ? num = str : num = "0" + str;
@@ -1611,17 +1587,8 @@
                 }
 
                 seconds -= hours * 3600 + minutes * 60;
-                if (store.get("i18n").startsWith("ar")) {
-    $nowTiming.addClass('rtl-timer').html(
-        '\u2068' + h.trim() + ' ' + hours + '\u2069' +
-        ' ' +
-        '\u2068' + min.trim() + ' ' + minutes + '\u2069' +
-        ' ' +
-        '\u2068' + s.trim() + ' ' + seconds + '\u2069'
-    );
-} else {
-    $nowTiming.removeClass('rtl-timer').text(hours + h + minutes + min + seconds + s);
-}
+                renderTime(hours, minutes, seconds);
+                setDialProgress(seconds / 60, seconds === 0);
 
                 timeGot = positionCover(nowTime.getHours()) + ":" + positionCover(nowTime.getMinutes());
                 if (systemName !== "darwin") $timeBar.html(timeGot);
@@ -1657,6 +1624,7 @@
                     remainMinutes = hours * 60 + minutes;
 
                     naturalProgress = Math.round(Number(progress) * 100);
+                    setDialProgress(Number(progress));
                     if (progress !== lastRecordedProgress) {
                         lastRecordedProgress = progress;
                         ipc.send("progress-bar-set", {
@@ -1695,17 +1663,7 @@
                     }
 
                     seconds -= hours * 3600 + minutes * 60;
-                    if (store.get("i18n").startsWith("ar")) {
-    $nowTiming.addClass('rtl-timer').html(
-        '\u2068' + h.trim() + ' ' + hours + '\u2069' +
-        ' ' +
-        '\u2068' + min.trim() + ' ' + minutes + '\u2069' +
-        ' ' +
-        '\u2068' + s.trim() + ' ' + seconds + '\u2069'
-    );
-} else {
-    $nowTiming.removeClass('rtl-timer').text(hours + h + minutes + min + seconds + s);
-}
+                    renderTime(hours, minutes, seconds);
 
                     if (hours === 0 && minutes === 0 && seconds < 10) canOpenFloating = false;
 

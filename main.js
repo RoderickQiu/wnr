@@ -17,6 +17,8 @@ try {
 } catch (error) {
     keytar = null;
 }
+// window backgrounds match the --canvas token in style.css, so nothing flashes on load
+const CANVAS_LIGHT = "#fcfcfd", CANVAS_DARK = "#1c1c1e";
 const { createWebDavSyncService } = require('./webdav-sync');
 const { persistSanitizedPredefinedTasks } = require('./predefined-tasks');
 const getAlarmtipDurationMs = require('./inactivity-duration');
@@ -81,7 +83,7 @@ function createWindow(loadMainPage = true) {
         minWidth: 349,
         minHeight: 468,
         frame: false,
-        backgroundColor: "#fefefe",
+        backgroundColor: CANVAS_LIGHT,
         resizable: true,
         maximizable: true,
         show: false,
@@ -260,7 +262,7 @@ function addScreenSolution(windowNumber, display) {
         x: display.bounds.x,
         y: display.bounds.y,
         frame: false,
-        backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+        backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
         show: true,
         hasShadow: true,
         webPreferences: {
@@ -289,7 +291,7 @@ function addLooseMultiScreenSolution(windowNumber, display) {
         x: display.bounds.x,
         y: display.bounds.y,
         frame: false,
-        backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+        backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
         show: true,
         hasShadow: true,
         webPreferences: {
@@ -814,7 +816,7 @@ app.on('ready', async () => {
         //parent: win,
         width: Math.floor(240 * ratio),
         height: Math.floor(130 * ratio),
-        backgroundColor: "#fefefe",
+        backgroundColor: CANVAS_LIGHT,
         resizable: false,
         maximizable: false,
         minimizable: false,
@@ -1065,17 +1067,17 @@ function theThemeHasChanged() {
         if (nativeTheme.shouldUseDarkColors) {
             styleCache.set('isdark', true);
             if (win != null) {
-                win.setBackgroundColor('#191919');
+                win.setBackgroundColor(CANVAS_DARK);
                 win.webContents.send('darkModeChanges');
             }
-            if (customDialogWin != null) customDialogWin.setBackgroundColor('#191919');
+            if (customDialogWin != null) customDialogWin.setBackgroundColor(CANVAS_DARK);
         } else {
             styleCache.set('isdark', false);
             if (win != null) {
-                win.setBackgroundColor('#fefefe');
+                win.setBackgroundColor(CANVAS_LIGHT);
                 win.webContents.send('darkModeChanges');
             }
-            if (customDialogWin != null) customDialogWin.setBackgroundColor('#fefefe');
+            if (customDialogWin != null) customDialogWin.setBackgroundColor(CANVAS_LIGHT);
         }
     }
 }
@@ -1675,30 +1677,30 @@ function isDarkMode() {
         if (store.has("dark-or-white") && store.get("dark-or-white") !== 0) {
             if (store.get("dark-or-white") === 1) {
                 if (win != null) {
-                    win.setBackgroundColor('#fefefe');
+                    win.setBackgroundColor(CANVAS_LIGHT);
                     win.webContents.send('darkModeChanges');
                 }
                 if (customDialogWin != null) {
-                    customDialogWin.setBackgroundColor('#fefefe');
+                    customDialogWin.setBackgroundColor(CANVAS_LIGHT);
                     customDialogWin.webContents.send('darkModeChanges');
                 }
                 if (settingsWin != null) {
-                    settingsWin.setBackgroundColor('#fefefe');
+                    settingsWin.setBackgroundColor(CANVAS_LIGHT);
                     settingsWin.webContents.send('darkModeChanges-settings');
                 }
                 styleCache.set('isdark', false);
                 return false;
             } else {
                 if (win != null) {
-                    win.setBackgroundColor('#191919');
+                    win.setBackgroundColor(CANVAS_DARK);
                     win.webContents.send('darkModeChanges');
                 }
                 if (customDialogWin != null) {
-                    customDialogWin.setBackgroundColor('#191919');
+                    customDialogWin.setBackgroundColor(CANVAS_DARK);
                     customDialogWin.webContents.send('darkModeChanges');
                 }
                 if (settingsWin != null) {
-                    settingsWin.setBackgroundColor('#191919');
+                    settingsWin.setBackgroundColor(CANVAS_DARK);
                     settingsWin.webContents.send('darkModeChanges-settings');
                 }
                 styleCache.set('isdark', true);
@@ -1716,29 +1718,29 @@ function darkModeSettingsFinder() {
     if (nativeTheme.shouldUseDarkColors && store.get("dark-or-white") !== 1) {
         styleCache.set('isdark', true);
         if (win != null) {
-            win.setBackgroundColor('#191919');
+            win.setBackgroundColor(CANVAS_DARK);
             win.webContents.send('darkModeChanges');
         }
         if (customDialogWin != null) {
-            customDialogWin.setBackgroundColor('#191919');
+            customDialogWin.setBackgroundColor(CANVAS_DARK);
             customDialogWin.webContents.send('darkModeChanges');
         }
         if (settingsWin != null) {
-            settingsWin.setBackgroundColor('#191919');
+            settingsWin.setBackgroundColor(CANVAS_DARK);
             settingsWin.webContents.send('darkModeChanges-settings');
         }
     } else {
         styleCache.set('isdark', false);
         if (win != null) {
-            win.setBackgroundColor('#fefefe');
+            win.setBackgroundColor(CANVAS_LIGHT);
             win.webContents.send('darkModeChanges');
         }
         if (customDialogWin != null) {
-            customDialogWin.setBackgroundColor('#fefefe');
+            customDialogWin.setBackgroundColor(CANVAS_LIGHT);
             customDialogWin.webContents.send('darkModeChanges');
         }
         if (settingsWin != null) {
-            settingsWin.setBackgroundColor('#fefefe');
+            settingsWin.setBackgroundColor(CANVAS_LIGHT);
             settingsWin.webContents.send('darkModeChanges-settings');
         }
     }
@@ -2298,7 +2300,7 @@ function about() {
                 parent: win,
                 width: Math.floor(720 * ratio),
                 height: Math.floor(520 * ratio),
-                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
                 resizable: false,
                 maximizable: false,
                 minimizable: false,
@@ -2352,7 +2354,7 @@ function settings(mode) {
                 parent: win,
                 width: Math.floor(getSettingsWindowWidth(store.get('i18n')) * ratio),
                 height: Math.floor(636 * ratio),
-                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
                 maximizable: false,
                 minimizable: false,
                 frame: false,
@@ -2420,7 +2422,7 @@ function tourguide() {
                 parent: win,
                 width: Math.floor(400 * ratio),
                 height: Math.floor(720 * ratio),
-                backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
                 resizable: false,
                 maximizable: false,
                 minimizable: false,
@@ -2629,7 +2631,7 @@ function externalTitle(title, notes) {
                     height: Math.floor(84 * ratio),
                     x: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").x : 33,
                     y: styleCache.has("external-title-axis") ? styleCache.get("external-title-axis").y : 33,
-                    backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                    backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
                     maximizable: false,
                     minimizable: false,
                     frame: false,
@@ -2723,7 +2725,7 @@ function floating() {
                     height: Math.floor(84 * ratio),
                     x: styleCache.has("floating-axis") ? styleCache.get("floating-axis").x : 33,
                     y: styleCache.has("floating-axis") ? styleCache.get("floating-axis").y : 33,
-                    backgroundColor: isDarkMode() ? "#191919" : "#fefefe",
+                    backgroundColor: isDarkMode() ? CANVAS_DARK : CANVAS_LIGHT,
                     resizable: false,
                     maximizable: false,
                     minimizable: false,
