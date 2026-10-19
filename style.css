@@ -1191,6 +1191,75 @@ body.settings-scrolled .settings-back-to-top {
     -webkit-user-select: none;
 }
 
+#emergency-exit-link {
+    position: fixed;
+    bottom: 18px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    width: max-content;
+    color: #6c757d;
+    opacity: .35;
+    transition: opacity .16s;
+    -webkit-app-region: no-drag;
+}
+
+#emergency-exit-link:hover {
+    opacity: .9;
+    text-decoration: none;
+}
+
+#emergency-exit-panel {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    right: 0;
+    width: 420px;
+    max-width: calc(100% - 32px);
+    margin: 0 auto;
+    transform: translateY(-50%);
+    padding: 18px 18px 14px 18px;
+    border: .7px solid rgba(0, 0, 0, .35);
+    border-radius: 0.25rem;
+    box-shadow: 1px 15px 30px rgba(70, 71, 71, 0.55);
+    background-color: #fefefe;
+    z-index: 1000;
+    -webkit-app-region: no-drag;
+}
+
+#emergency-exit-msg {
+    line-height: 1.5;
+}
+
+#emergency-exit-target {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2px 10px;
+    font-family: Menlo, Consolas, "Courier New", monospace;
+    font-size: 15px;
+    letter-spacing: 1px;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+#emergency-exit-input {
+    width: 100%;
+    margin-bottom: 8px;
+    padding: 6px 8px;
+    font-family: Menlo, Consolas, "Courier New", monospace;
+    font-size: 15px;
+    letter-spacing: 1px;
+    border: 1px solid #33333325;
+    border-radius: 0.25rem;
+    background: transparent;
+    outline: none;
+    resize: none;
+}
+
+#emergency-exit-input.is-typo {
+    border-color: #ea5454;
+}
+
 #dialog-buttons {
     z-index: 900;
     -webkit-app-region: no-drag;

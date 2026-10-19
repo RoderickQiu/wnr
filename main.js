@@ -1054,6 +1054,16 @@ ipcMain.on("custom-dialog", (event, msg) => {
     }
 })
 
+ipcMain.on("emergency-exit-focus", (event, wantsFocus) => {
+    if (win == null || win.isDestroyed() || event.sender !== win.webContents) return;
+    if (wantsFocus) {
+        win.setFocusable(true);
+        win.focus();
+    } else if (isFullscreenMode && !isLoose && process.env.NODE_ENV !== "development") {
+        win.setFocusable(false);
+    }
+})
+
 ipcMain.on("fullscreen-dialog-dismissed", (event) => {
     if (win == null || win.isDestroyed() || event.sender !== win.webContents) return;
     runPendingDialogAction();

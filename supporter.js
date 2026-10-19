@@ -112,6 +112,10 @@ function isInDark() {
             '.dropdown-default {color: #aaa;}' +
             '.dropdown-toggle::before {color: #aaa;}' +
             '#fullscreen-custom-dialog {background-color: #191919;}' +
+            '#emergency-exit-panel {background-color: #191919; border-color: #aaaaaa55;} ' +
+            '#emergency-exit-msg, #emergency-exit-target, #emergency-exit-input {color: #ccc;} ' +
+            '#emergency-exit-input {border-color: #cccccc33;} ' +
+            '#emergency-exit-link {color: #aaaaaa;} ' +
             '</style>'
         );
     } else {

@@ -115,6 +115,9 @@ function refreshSettingsCoupling() {
     setSelectionDisabled('autostarttask', autostartBlocked);
     setSettingsCoupling('autostarttask', autostartBlocked, autostartReason);
 
+    setDropdownDisabled('emergency-exit', !looseOff);
+    setSettingsCoupling('emergency-exit', !looseOff, i18n.__('settings-coupling-emergency-exit'));
+
     setSelectionDisabled('force-screen-lock-mode', !(looseOff && continueAfterLock));
     setSettingsCoupling('force-screen-lock-mode', !(looseOff && continueAfterLock), i18n.__('settings-coupling-force-lock'));
 }

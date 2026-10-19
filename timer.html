@@ -311,6 +311,36 @@
         </div>
     </div>
 
+    <a id="emergency-exit-link" class="small d-none" href="javascript:openEmergencyExit()">
+        <script>document.write(i18n.__('emergency-exit-link'))</script>
+    </a>
+
+    <div id="emergency-exit-panel" class="text-left d-none" role="dialog" aria-modal="true"
+         aria-labelledby="emergency-exit-title">
+        <p class="small text-grey font-weight-bolder" id="emergency-exit-title">
+            <script>document.write(i18n.__('emergency-exit-link'))</script>
+        </p>
+        <p class="small" id="emergency-exit-msg">
+            <script>document.write(i18n.__('emergency-exit-msg'))</script>
+        </p>
+        <p id="emergency-exit-target"></p>
+        <textarea id="emergency-exit-input" rows="3" spellcheck="false" autocomplete="off"
+                  autocorrect="off" autocapitalize="off"></textarea>
+        <div class="d-flex justify-content-between align-items-center">
+            <span class="small text-muted" id="emergency-exit-progress"></span>
+            <span>
+                <a type="button" class="btn btn-outline-secondary btn-sm" style="font-size: 12px"
+                   href="javascript:closeEmergencyExit()">
+                    <script>document.write(i18n.__('cancel'))</script>
+                </a>
+                <a type="button" class="btn btn-outline-primary btn-sm disabled" style="font-size: 12px"
+                   id="emergency-exit-confirm" href="javascript:confirmEmergencyExit()">
+                    <script>document.write(i18n.__('emergency-exit-confirm'))</script>
+                </a>
+            </span>
+        </div>
+    </div>
+
     <script>
         function fullscreenCustomDialog(mode, title, msg) {
             if (mode === "on") {
@@ -469,6 +499,99 @@
             else if (passcode === store.get('lockerpasscode') || md5(passcode).toString() === store.get('lockerpasscode')) backRelauncher();
             else ipc.send("alert", i18n.__('locker-settings-input-tip-wrong-password'));
         }
+
+        //emergency exit from strict fullscreen: type random text, or the passcode in lock mode
+        const emergencyExitLengths = [0, 32, 96];
+        // no 0/O/o, 1/l/I: the point is effort, not misreading
+        const emergencyExitChars = "abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+        let emergencyExitText = "";
+
+        function emergencyExitLevel() {
+            let level = Number(store.get("emergency-exit"));
+            return emergencyExitLengths[level] ? level : 0;
+        }
+
+        function isStrictFullscreen() {
+            return $nowTiming.hasClass("display-1") && methodFromStart !== 3 && store.get("loose-mode") !== true;
+        }
+
+        function refreshEmergencyExit() {
+            let available = emergencyExitLevel() > 0 && isStrictFullscreen();
+            $("#emergency-exit-link").toggleClass("d-none", !available);
+            if (!available) closeEmergencyExit();
+        }
+
+        function randomEmergencyExitText(length) {
+            let picks = new Uint32Array(length), text = "";
+            crypto.getRandomValues(picks);
+            for (let i = 0; i < length; i++) text += emergencyExitChars[picks[i] % emergencyExitChars.length];
+            return text;
+        }
+
+        function openEmergencyExit() {
+            if (!isStrictFullscreen() || emergencyExitLevel() === 0) return;
+            // strict fullscreen makes the window unfocusable, which would swallow every key
+            ipc.send("emergency-exit-focus", true);
+            if (store.get("islocked")) {
+                $("#passcode-rechecker").css("display", "inline").trigger("focus");
+                return;
+            }
+            emergencyExitText = randomEmergencyExitText(emergencyExitLengths[emergencyExitLevel()]);
+            let target = $("#emergency-exit-target").empty();
+            for (let i = 0; i < emergencyExitText.length; i += 8)
+                target.append($("<span>").text(emergencyExitText.slice(i, i + 8)));
+            $("#emergency-exit-input").val("");
+            updateEmergencyExit();
+            $("#emergency-exit-link").addClass("d-none");
+            $("#emergency-exit-panel").removeClass("d-none");
+            setTimeout(function () {
+                $("#emergency-exit-input").trigger("focus");
+            }, 50);
+        }
+
+        function closeEmergencyExit() {
+            if ($("#emergency-exit-panel").hasClass("d-none")) return;
+            $("#emergency-exit-panel").addClass("d-none");
+            $("#emergency-exit-input").val("");
+            emergencyExitText = "";
+            ipc.send("emergency-exit-focus", false);
+            if (emergencyExitLevel() > 0 && isStrictFullscreen()) $("#emergency-exit-link").removeClass("d-none");
+        }
+
+        function emergencyExitTyped() {
+            return $("#emergency-exit-input").val().replace(/\s/g, "");
+        }
+
+        function updateEmergencyExit() {
+            let typed = emergencyExitTyped();
+            let typo = !emergencyExitText.startsWith(typed);
+            let done = typed === emergencyExitText && typed !== "";
+            $("#emergency-exit-input").toggleClass("is-typo", typo);
+            $("#emergency-exit-progress").text(typo ? i18n.__("emergency-exit-typo")
+                : typed.length + " / " + emergencyExitText.length);
+            $("#emergency-exit-confirm").toggleClass("disabled", !done);
+        }
+
+        function confirmEmergencyExit() {
+            if (emergencyExitText === "" || emergencyExitTyped() !== emergencyExitText) return;
+            emergencyExitText = "";
+            backRelauncher();
+        }
+
+        $("#emergency-exit-input").on("input", updateEmergencyExit).on("beforeinput", function (e) {
+            let type = e.originalEvent.inputType || "";
+            if (type === "insertFromPaste" || type === "insertFromDrop" || type === "insertReplacementText") e.preventDefault();
+        }).on("paste drop contextmenu", function (e) {
+            e.preventDefault();
+        }).on("keydown", function (e) {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                confirmEmergencyExit();
+            } else if (e.key === "Escape") closeEmergencyExit();
+        });
+        $("#emergency-exit-target").on("copy cut dragstart", function (e) {
+            e.preventDefault();
+        });
 
         function backcheck() {
             if (hasSoonFinishTipPosted) return;// ban stopping after tip posted
@@ -754,6 +877,7 @@
                 $timeBarMacOS.addClass("time-bar-focus");
                 $nowTiming.addClass("display-1");
                 $nowTiming.removeClass("h1");
+                refreshEmergencyExit();
                 if (times > 0) {
                     if (!store.get("no-check-time-end")) stopperTimeout = setTimeout(stopper, 500);
                     ipc.once('warning-closed', function () {
@@ -1189,6 +1313,7 @@
                             $("#fullscreen-experience-tip").css("display", "none");
                         }
                     }
+                    refreshEmergencyExit();
                     warningGiver(1);
                 } else {
                     if (isFeatureDisabled(store.get('disable-pausing'), 1)) {
@@ -1260,6 +1385,7 @@
                     if (shouldNap) {
                         lastNapSecond = workTime / 1000;
                     }
+                    refreshEmergencyExit();
                     warningGiver(2);
                 }
             }
@@ -1295,6 +1421,7 @@
                     $nowTiming.removeClass("display-1");
                     $nowTiming.addClass("h1");
                 }
+                refreshEmergencyExit();
                 warningGiver(0);
             }
             function adjustTime(minutes){

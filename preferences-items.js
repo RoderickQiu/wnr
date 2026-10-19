@@ -75,6 +75,11 @@ if (store.get("islocked") !== true) {
             def: 0,
             after: looseModeAfter
         }, {
+            type: "dropdown",
+            id: "emergency-exit",
+            choices: ['off', 'emergency-exit-short', 'emergency-exit-long'],
+            def: 0
+        }, {
             type: "selection",
             id: "force-screen-lock-mode"
         }, {
