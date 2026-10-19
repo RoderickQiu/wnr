@@ -2482,6 +2482,109 @@ body.settings-page, .settings-page #settings-header {
     padding: 24vh 8px 0;
 }
 
+/*  Mini window: a small copy of the timer dial  */
+#floating-container {
+    position: fixed;
+    inset: 0;
+}
+
+#floating-unhover {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-content: center;
+    justify-items: center;
+}
+
+#mini-dial {
+    position: absolute;
+    inset: 5px;
+    transition: --progress .3s linear;
+}
+
+#mini-dial svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: rotate(-90deg);
+}
+
+.mini-track, .mini-progress {
+    fill: none;
+    stroke-width: 4;
+}
+
+.mini-track {
+    stroke: var(--hairline);
+}
+
+.mini-progress {
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-dasharray: calc(var(--progress) * 100) 100;
+}
+
+#time-left {
+    position: relative;
+    margin: 0;
+    font-size: 19px !important;
+    font-weight: 300;
+    line-height: 1.05;
+    font-variant-numeric: tabular-nums;
+}
+
+#time-left.h6 {
+    font-size: 14px !important;
+}
+
+#time-left-msg {
+    position: relative;
+    font-size: 10px;
+    line-height: 1.2;
+    opacity: .8;
+}
+
+#floating-bottom-bar {
+    display: none !important;
+}
+
+#floating-hover {
+    position: absolute;
+    inset: 0;
+}
+
+#floating-hover:hover {
+    background-color: color-mix(in srgb, var(--canvas) 92%, transparent);
+}
+
+#floating-hover a {
+    border: 0;
+    color: var(--ink-2) !important;
+}
+
+#floating-hover a:hover {
+    color: var(--ink) !important;
+}
+
+#floating-recover, #floating-close, #floating-back, #floating-skipper {
+    padding: 5px 6px;
+    font-size: 11px;
+}
+
+#floating-stopper #stopper {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--fill);
+    line-height: 32px;
+    text-align: center;
+}
+
+#floating-stopper #stopper i::before {
+    font-size: 13px;
+}
+
 /*  Timer: the dial is the one bold element of the app  */
 @property --progress {
     syntax: '<number>';
