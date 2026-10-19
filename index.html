@@ -474,6 +474,12 @@
             onlyRest("in");
         });
 
+        // jump list (Windows) and dock menu (macOS) entries
+        ipc.on('quick-start', function (event, mode) {
+            if (mode === 'stopwatch') liberalTiming();
+            else if (mode === 'countdown') onlyRest('in');
+        });
+
         function liberalTiming() {
             window.location.href =
                     "timer.html?title=" + i18n.__('positive')

@@ -950,8 +950,11 @@
                     return;
                 }
 
-                if (message === "skipper") skipper(true);
-                else if (message === "back") {
+                if (message === "skipper") {
+                    // remote skips (hotkey, mini window, taskbar) follow the rules of the Skip button
+                    if ($("#skipper-container").css("display") !== "none") skipper(true);
+                    else ipc.send("alert", i18n.__("skipping-disabled"));
+                } else if (message === "back") {
                     if (methodFromStart === 3 || ((!store.get("islocked")) && (!isFeatureDisabled(store.get('disable-backing'), method))))
                         backcheck();
                     else

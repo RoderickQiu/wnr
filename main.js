@@ -447,13 +447,16 @@ app.on('ready', async () => {
         app.exit();
         return;
     }
-    app.on('second-instance', () => {
+    app.on('second-instance', (event, argv) => {
         if (win != null) {
             if (win.isMinimized()) win.restore();
             if (!win.isVisible()) win.show();
             win.focus();
         }
+        quickStart(quickStartModeFromArgv(argv));
     });
+    pendingQuickStart = quickStartModeFromArgv(process.argv);
+    setQuickStartTasks();
 
     createWindow(false);
     win.loadFile('placeholder.html');
@@ -1457,6 +1460,16 @@ function macOSFullscreenSolution(isFullScreen) {
             const dockMenu = Menu.buildFromTemplate([{
                 label: i18n.__('show-or-hide'),
                 click: () => showOrHide()
+            }, {
+                type: 'separator'
+            }, {
+                label: i18n.__('positive'),
+                enabled: !isTimerWin,
+                click: () => quickStart('stopwatch')
+            }, {
+                label: i18n.__('onlyrest'),
+                enabled: !isTimerWin,
+                click: () => quickStart('countdown')
             }]);
 
             app.dock.setMenu(dockMenu);
@@ -2470,6 +2483,70 @@ function tourguide() {
 async function loadMainWindowAfterStartupInit() {
     if (win == null) return;
     await win.loadFile('index.html');
+    if (pendingQuickStart != null) {
+        quickStart(pendingQuickStart);
+        pendingQuickStart = null;
+    }
+}
+
+// Quick starts: the Windows jump list launches wnr with --wnr-start=<mode>, which reaches the
+// running instance through 'second-instance'; the macOS dock menu calls quickStart() directly.
+const QUICK_START_MODES = ['stopwatch', 'countdown'];
+let pendingQuickStart = null;
+
+function quickStartModeFromArgv(argv) {
+    const arg = (argv || []).find(a => typeof a === 'string' && a.startsWith('--wnr-start='));
+    if (!arg) return null;
+    const mode = arg.slice('--wnr-start='.length);
+    return QUICK_START_MODES.includes(mode) ? mode : null;
+}
+
+function quickStart(mode) {
+    if (mode == null || win == null || win.isDestroyed()) return;
+    if (isTimerWin) return;// never interrupt a running timer
+    if (!win.isVisible()) win.show();
+    win.focus();
+    win.webContents.send('quick-start', mode);
+}
+
+function setQuickStartTasks() {
+    if (process.platform !== 'win32') return;
+    // in development the executable is electron.exe and needs the app path first
+    const prefix = app.isPackaged ? '' : '"' + app.getAppPath() + '" ';
+    app.setUserTasks([{
+        program: process.execPath,
+        arguments: prefix + '--wnr-start=stopwatch',
+        iconPath: process.execPath,
+        iconIndex: 0,
+        title: i18n.__('positive'),
+        description: i18n.__('positive-msg')
+    }, {
+        program: process.execPath,
+        arguments: prefix + '--wnr-start=countdown',
+        iconPath: process.execPath,
+        iconIndex: 0,
+        title: i18n.__('onlyrest'),
+        description: i18n.__('onlyrest')
+    }]);
+}
+
+// Windows taskbar thumbnail buttons while a timer runs
+function setTimerThumbarButtons(isTiming) {
+    if (process.platform !== 'win32' || win == null || win.isDestroyed()) return;
+    if (!isTiming) {
+        win.setThumbarButtons([]);
+        return;
+    }
+    const icon = name => nativeImage.createFromPath(path.join(__dirname, 'res/icons/thumbar-' + name + '.png'));
+    win.setThumbarButtons([{
+        tooltip: i18n.__('start-or-stop'),
+        icon: icon('play-pause'),
+        click: () => { if (win != null) win.webContents.send('start-or-stop'); }
+    }, {
+        tooltip: i18n.__('skipper'),
+        icon: icon('skip'),
+        click: () => { if (win != null) win.webContents.send('remote-control-msg', 'skipper'); }
+    }]);
 }
 
 function appendWebDavSyncLog(event, detail) {
@@ -2887,6 +2964,7 @@ ipcMain.on("timer-win", function (event, message) {
         traySolution();
         macOSFullscreenSolution();
         touchBarSolution("timer");
+        setTimerThumbarButtons(true);
     } else {
         if (win != null) {
             win.focus();
@@ -2915,6 +2993,7 @@ ipcMain.on("timer-win", function (event, message) {
         traySolution();
         macOSFullscreenSolution();
         touchBarSolution("index");
+        setTimerThumbarButtons(false);
         multiScreenSolution("off");
 
         if (tray != null) {
