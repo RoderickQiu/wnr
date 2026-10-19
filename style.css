@@ -3172,3 +3172,18 @@ input[type="text"]:focus-visible, input[type="number"]:focus-visible, input[type
     text-decoration: none;
     font-weight: 500;
 }
+
+/* pages cross-fade into each other (home, timer, statistics share the main window) */
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root), ::view-transition-new(root) {
+    animation-duration: .18s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    @view-transition {
+        navigation: none;
+    }
+}
