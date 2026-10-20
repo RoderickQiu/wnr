@@ -1,8 +1,9 @@
 {
-	"version" : "1.35.0",
+	"version" : "1.35.1",
 	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
+			"修复了 1.35.0 在 Windows 上打开后没有窗口、无法使用的问题。",
 			"现在需要 Windows 10 或 macOS 13 及以上版本。Windows 7 和 8 请继续使用 1.34.0。",
 			"手动跳过会直接进入下一段，不再弹出「时间到」并等你关掉。想要以前的样子，打开「跳过后弹出确认」。",
 			"严格全屏可以加一个「紧急退出」：照着输入一串随机字符（不能粘贴）就能结束；开了锁定模式则输入密码。",
@@ -11,6 +12,7 @@
 			"macOS 上的通知又能正常弹出了，每天自动检查更新也恢复了。"
 		],
 		"zh-TW" : [
+			"修復了 1.35.0 在 Windows 上打開後沒有視窗、無法使用的問題。",
 			"現在需要 Windows 10 或 macOS 13 及以上版本。Windows 7 和 8 請繼續使用 1.34.0。",
 			"手動跳過會直接進入下一段，不再彈出「時間到」並等你關掉。想要以前的樣子，打開「跳過後彈出確認」。",
 			"嚴格全屏可以加一個「緊急退出」：照著輸入一串隨機字符（不能貼上）就能結束；開了鎖定模式則輸入密碼。",
@@ -19,6 +21,7 @@
 			"macOS 上的通知又能正常彈出了，每天自動檢查更新也恢復了。"
 		],
 		"en" : [
+			"Fixes wnr not opening on Windows in 1.35.0.",
 			"wnr now needs Windows 10 or macOS 13 or later. On Windows 7 or 8, please stay on 1.34.0.",
 			"Skipping goes straight to the next period instead of showing the time-up dialog and waiting. Turn on \"Confirm after skipping\" to get the old behaviour back.",
 			"Strict fullscreen can have an emergency exit: type a block of random characters exactly (no pasting) to end the session, or the lock passcode if lock mode is on.",
@@ -30,7 +33,7 @@
 	"introduce" : {
 		"id" : "introduced-1.35.0",
 		"zh-CN" : {
-			"title" : "<b>欢迎升级至 1.35.0！</b>",
+			"title" : "<b>欢迎升级至 1.35.1！</b>",
 			"description" : {
 				"universal" : "<p>1. 跳过会直接进入下一段，不再弹窗等你关掉；想要旧行为可以打开「跳过后弹出确认」。</p><p>2. 严格全屏可以在设置里加一个「紧急退出」。</p><p>3. 重新设计了使用统计，其他界面也做了优化。</p>",
 				"darwin" : "",
@@ -38,7 +41,7 @@
 			}
 		},
 		"zh-TW" : {
-			"title" : "<b>歡迎升級至 1.35.0！</b>",
+			"title" : "<b>歡迎升級至 1.35.1！</b>",
 			"description" : {
 				"universal" : "<p>1. 跳過會直接進入下一段，不再彈窗等你關掉；想要舊行為可以打開「跳過後彈出確認」。</p><p>2. 嚴格全屏可以在設置裡加一個「緊急退出」。</p><p>3. 重新設計了使用統計，其他介面也做了優化。</p>",
 				"darwin" : "",
@@ -46,7 +49,7 @@
 			}
 		},
 		"en" : {
-			"title" : "<b>Welcome to v1.35.0!</b>",
+			"title" : "<b>Welcome to v1.35.1!</b>",
 			"description" : {
 				"universal" : "<p>1. Skipping goes straight to the next period. Turn on \"Confirm after skipping\" for the old dialog.</p><p>2. Strict fullscreen can have an emergency exit; turn it on in settings.</p><p>3. Statistics is redesigned, and other screens are polished too.</p>",
 				"darwin" : "",
