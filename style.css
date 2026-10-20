@@ -736,6 +736,11 @@ body.settings-page {
     -webkit-app-region: drag;
 }
 
+/* the close button sits inside the drag strip; it has to stack above it or it can't be clicked */
+.settings-page #controller {
+    z-index: 5;
+}
+
 #settings-header {
     position: absolute;
     top: 36px;
