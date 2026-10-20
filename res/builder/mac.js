@@ -50,4 +50,5 @@ builder.build({
     })
     .catch(e => {
         console.error(e)
+        process.exitCode = 1 // so CI fails instead of passing with no build
     })

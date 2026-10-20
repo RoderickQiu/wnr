@@ -15,6 +15,8 @@ jobs :
         run : yarn
       - name : Build windows nsis installer
         run : npm run nsis
+      - name : Check the windows build opens a window
+        run : powershell -NoProfile -ExecutionPolicy Bypass -File res/builder/smoke-win.ps1
       - name : Build windows 7zip protable version
         run : npm run 7zip
       - uses : actions/upload-artifact@v4
