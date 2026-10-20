@@ -1,5 +1,5 @@
 {
-	"version" : "1.35.1",
+	"version" : "1.35.0-patch",
 	"feature-introduction" : true,
 	"content" : {
 		"zh-CN" : [
@@ -33,7 +33,7 @@
 	"introduce" : {
 		"id" : "introduced-1.35.0",
 		"zh-CN" : {
-			"title" : "<b>欢迎升级至 1.35.1！</b>",
+			"title" : "<b>欢迎升级至 1.35.0！</b>",
 			"description" : {
 				"universal" : "<p>1. 跳过会直接进入下一段，不再弹窗等你关掉；想要旧行为可以打开「跳过后弹出确认」。</p><p>2. 严格全屏可以在设置里加一个「紧急退出」。</p><p>3. 重新设计了使用统计，其他界面也做了优化。</p>",
 				"darwin" : "",
@@ -41,7 +41,7 @@
 			}
 		},
 		"zh-TW" : {
-			"title" : "<b>歡迎升級至 1.35.1！</b>",
+			"title" : "<b>歡迎升級至 1.35.0！</b>",
 			"description" : {
 				"universal" : "<p>1. 跳過會直接進入下一段，不再彈窗等你關掉；想要舊行為可以打開「跳過後彈出確認」。</p><p>2. 嚴格全屏可以在設置裡加一個「緊急退出」。</p><p>3. 重新設計了使用統計，其他介面也做了優化。</p>",
 				"darwin" : "",
@@ -49,7 +49,7 @@
 			}
 		},
 		"en" : {
-			"title" : "<b>Welcome to v1.35.1!</b>",
+			"title" : "<b>Welcome to v1.35.0!</b>",
 			"description" : {
 				"universal" : "<p>1. Skipping goes straight to the next period. Turn on \"Confirm after skipping\" for the old dialog.</p><p>2. Strict fullscreen can have an emergency exit; turn it on in settings.</p><p>3. Statistics is redesigned, and other screens are polished too.</p>",
 				"darwin" : "",
