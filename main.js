@@ -478,7 +478,6 @@ app.on('ready', async () => {
         quickStart(quickStartModeFromArgv(argv));
     });
     pendingQuickStart = quickStartModeFromArgv(process.argv);
-    setQuickStartTasks();
 
     createWindow(false);
     win.loadFile('placeholder.html');
@@ -589,6 +588,8 @@ app.on('ready', async () => {
 
     timeLeftTip = i18n.__("time-left");
     positiveTimingTip = i18n.__("positive-timing");//this will be used in this file frequently
+    // the jump list titles are translated, so i18n has to be configured first
+    setQuickStartTasks();
 
     if (win != null) {
         if (styleCache.has("win-size")) {
