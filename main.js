@@ -56,7 +56,7 @@ let localExitFallbackInProgress = false;
 let pendingDialogAction = { type: 'none', payload: null };
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'], i//locale code
+let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr', 'vi'], i//locale code
 let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
 let notificationNamesList = ['work-time-end', 'work-time-end-msg', 'rest-time-end', 'rest-time-end-msg', 'all-task-end', 'all-task-end-msg'];
 

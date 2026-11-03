@@ -40,7 +40,8 @@ const config = {
             // Other regional LCIDs leave uninstall strings undefined and fail
             // because electron-builder treats makensis warnings as errors.
             "ar-SA",
-            "fr-FR"
+            "fr-FR",
+            "vi-VN"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",
