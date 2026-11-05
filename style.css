@@ -1382,6 +1382,11 @@ body.settings-scrolled .settings-back-to-top {
     -webkit-app-region: no-drag;
 }
 
+/* a long translation wraps before a separator, never after it */
+#index-topbar .topbar-item {
+    white-space: nowrap;
+}
+
 #top-bar a.is-current {
     font-weight: 500 !important;
 }
