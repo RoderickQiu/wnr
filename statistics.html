@@ -320,7 +320,7 @@
                         html += "<a class='recap-delete' href='#' data-timestamp='" + Number(entry.timestamp) + "' title='" + escapeHtml(i18n.__('recap-delete-entry')) + "'>\u00d7</a>";
                         if (entry.title) html += "<div class='recap-title'>" + escapeHtml(entry.title) + "</div>";
                         if (entry.note) html += "<div class='recap-note'>" + escapeHtml(entry.note) + "</div>";
-                        html += "<time class='recap-time'>" + escapeHtml(new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + "</time>";
+                        html += "<time class='recap-time'>" + escapeHtml(new Date(entry.timestamp).toLocaleTimeString(store.get("i18n"), { hour: '2-digit', minute: '2-digit' })) + "</time>";
                         html += "</article>";
                     });
                     html += "</section>";
