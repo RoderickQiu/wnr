@@ -178,7 +178,7 @@
 	"positive-timing": "Chronomètre activé",
 	"positive-msg": "Un minuteur libre, ou un chronomètre.",
 	"min-already": "a commencé",
-	"what-can-be-here-index": "Vous pouvez saisir des choses comme \"1 heure\", \"2 minutes\" et \"30 secondes\".",
+	"what-can-be-here-index": "Vous pouvez saisir des choses comme \"1 h\", \"2 min\" et \"30 s\".",
 	"what-can-be-here-predefined-tasks": "Vous pouvez saisir des choses comme \"320\", \"16\" et \"0.8\" pour représenter des minutes.",
 	"close-tip-darwin": "La fenêtre est maintenant masquée.",
 	"close-tip-darwin-tip": "Pour quitter l'application, cliquez sur l'icône de wnr dans la barre supérieure et sélectionnez \"Quitter\".",
