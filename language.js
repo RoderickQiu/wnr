@@ -1,6 +1,6 @@
 'use strict';
 
-const LANGUAGE_CODES = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'];
+const LANGUAGE_CODES = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr', 'vi'];
 
 // Maps a system locale (or a stored language) to one of the languages wnr ships.
 // zh-TW, zh-HK, zh-MO and any Hant script read Traditional Chinese; other Chinese reads Simplified;

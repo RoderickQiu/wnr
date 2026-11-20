@@ -24,7 +24,7 @@ let timingData = new Store({ name: 'timing-data' });//just contains timing cache
 isInDark();
 
 const languageList = require('./language').LANGUAGE_CODES,//locale code
-    languageNameList = ['English', '简体中文', '正體中文', '한국어', 'العربية', 'Français'],//real name
+    languageNameList = ['English', '简体中文', '正體中文', '한국어', 'العربية', 'Français', 'Tiếng Việt'],//real name
     isChinese = store.get("i18n").indexOf("zh") !== -1;
 
 i18n.configure({
