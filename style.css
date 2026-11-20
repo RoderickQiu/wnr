@@ -544,9 +544,23 @@ li input:nth-last-child(4)::after {
     color: var(--rest);
 }
 
+/* the form is as wide as the Start button (256px plus the container padding), so the task picker
+   lines up with the button in every language; a longer focus toggle runs past the right edge
+   instead of pushing the whole form to the left */
 #set {
-    transform: translate(5px, -8px);
+    flex: none;
+    width: 286px;
+    transform: translateY(-8px);
 }
+
+#set .field-block {
+    white-space: nowrap;
+}
+
+#set .field-label, #set .home-coupling {
+    white-space: normal;
+}
+
 
 #dropdown-tasks {
     margin-bottom: 10px;
