@@ -1,3 +1,5 @@
+const endSound = require("./end-sound");
+
 function preferenceCreator(items, container, inner) {
     for (let i = 0; i < items.length; i++) {
         switch (items[i].type) {
@@ -1399,59 +1401,71 @@ function personalizationSoundInitializer() {
         $("#custom-notify-sound-rest-time-end").val(store.get("custom-rest-time-end-sound"));
     if (store.has("custom-all-time-end-sound"))
         $("#custom-notify-sound-all-time-end").val(store.get("custom-all-time-end-sound"));
-    let player = document.createElement("audio");//alert player
-    let soundList = ['alarming', 'beep', 'clock', 'tick', 'trumpet', 'whistle', 'horns', 'magic', 'piano', i18n.__('custom')];
+    let soundList = endSound.BUILT_IN_SOUNDS.concat([endSound.CUSTOM_SOUND]);
     for (let i in soundList) {
         $("#work-time-end-sound-select").append("\
                     <a class='dropdown-item' href='javascript:workTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
-            + soundList[i] + "</a>");
+            + soundLabel(soundList[i]) + "</a>");
     }
     for (let i in soundList) {
         $("#rest-time-end-sound-select").append("\
                     <a class='dropdown-item' href='javascript:restTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
-            + soundList[i] + "</a>");
+            + soundLabel(soundList[i]) + "</a>");
     }
     for (let i in soundList) {
         $("#all-time-end-sound-select").append("\
                     <a class='dropdown-item' href='javascript:allTimeEndSoundSetting(\"" + soundList[i] + "\")'>"
-            + soundList[i] + "</a>");
+            + soundLabel(soundList[i]) + "</a>");
     }
+
+    // choices saved before the fix hold the translated word for custom; save them in the new form
+    for (const [key, fallback] of [["work-time-end-sound", "tick"], ["rest-time-end-sound", "tick"], ["time-end-sound", "tick"], ["all-end-sound", "piano"]])
+        if (store.has(key)) store.set(key, endSound.normalizeSoundChoice(store.get(key), fallback));
 
     let workSelection = store.has("work-time-end-sound") ? store.get("work-time-end-sound")
         : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
-    $("#work-time-end-sound-dropdown-button").text(workSelection);
-    if (workSelection === i18n.__('custom'))
+    $("#work-time-end-sound-dropdown-button").text(soundLabel(workSelection));
+    if (endSound.isCustomSound(workSelection))
         $(".custom-notify-sound-work-time-end").css("display", "inline-block");
     else
         $(".custom-notify-sound-work-time-end").css("display", "none");
 
     let restSelection = store.has("rest-time-end-sound") ? store.get("rest-time-end-sound")
         : (store.has("time-end-sound") ? store.get("time-end-sound") : "tick");
-    $("#rest-time-end-sound-dropdown-button").text(restSelection);
-    if (restSelection === i18n.__('custom'))
+    $("#rest-time-end-sound-dropdown-button").text(soundLabel(restSelection));
+    if (endSound.isCustomSound(restSelection))
         $(".custom-notify-sound-rest-time-end").css("display", "inline-block");
     else
         $(".custom-notify-sound-rest-time-end").css("display", "none");
 
     let allSelection = store.has("all-end-sound") ? store.get("all-end-sound") : "piano";
-    $("#all-time-end-sound-dropdown-button").text(allSelection);
-    if (allSelection === i18n.__('custom'))
+    $("#all-time-end-sound-dropdown-button").text(soundLabel(allSelection));
+    if (endSound.isCustomSound(allSelection))
         $(".custom-notify-sound-all-time-end").css("display", "inline-block");
     else
         $(".custom-notify-sound-all-time-end").css("display", "none");
 }
 
+// sound names are shown as they are; only the custom choice is translated
+function soundLabel(value) {
+    return endSound.isCustomSound(value) ? i18n.__('custom') : value;
+}
+
+function previewSound(val) {
+    let player = document.createElement("audio");//alert player
+    player.src = endSound.builtInSoundPath(val);
+    player.loop = false;
+    player.play();
+}
+
 function workTimeEndSoundSetting(val) {
     store.set("work-time-end-sound", val);
     store.set("time-end-sound", val);
-    $("#work-time-end-sound-dropdown-button").text(val);
-    if (val !== i18n.__('custom'))
+    $("#work-time-end-sound-dropdown-button").text(soundLabel(val));
+    if (!endSound.isCustomSound(val))
         try {
             $(".custom-notify-sound-work-time-end").css("display", "none");
-            let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
-            player.loop = false;
-            player.play();
+            previewSound(val);
         } catch (e) {
             console.log(e);
         }
@@ -1461,14 +1475,11 @@ function workTimeEndSoundSetting(val) {
 
 function restTimeEndSoundSetting(val) {
     store.set("rest-time-end-sound", val);
-    $("#rest-time-end-sound-dropdown-button").text(val);
-    if (val !== i18n.__('custom'))
+    $("#rest-time-end-sound-dropdown-button").text(soundLabel(val));
+    if (!endSound.isCustomSound(val))
         try {
             $(".custom-notify-sound-rest-time-end").css("display", "none");
-            let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
-            player.loop = false;
-            player.play();
+            previewSound(val);
         } catch (e) {
             console.log(e);
         }
@@ -1478,14 +1489,11 @@ function restTimeEndSoundSetting(val) {
 
 function allTimeEndSoundSetting(val) {
     store.set("all-end-sound", val);
-    $("#all-time-end-sound-dropdown-button").text(val);
-    if (val !== i18n.__('custom'))
+    $("#all-time-end-sound-dropdown-button").text(soundLabel(val));
+    if (!endSound.isCustomSound(val))
         try {
             $(".custom-notify-sound-all-time-end").css("display", "none");
-            let player = document.createElement("audio");//alert player
-            player.src = path.join(__dirname, "\\res\\sound\\" + val + ".mp3");
-            player.loop = false;
-            player.play();
+            previewSound(val);
         } catch (e) {
             console.log(e);
         }

@@ -417,14 +417,7 @@ function soundAfter(val) {
     amplifyMedia(player, amplifierList[val]);
     let workSelection = store.has('work-time-end-sound') ? store.get('work-time-end-sound')
         : (store.has('time-end-sound') ? store.get('time-end-sound') : 'tick');
-    if (workSelection !== i18n.__('custom'))
-        player.src = path.join(__dirname, '\\res\\sound\\' + workSelection + '.mp3');
-    else {
-        let customWork = store.get('custom-work-time-end-sound');
-        if (!customWork || customWork === '')
-            customWork = path.join(__dirname, '\\res\\sound\\tick.mp3');
-        player.src = customWork;
-    }
+    player.src = require('./end-sound').resolveSoundSource(workSelection, [store.get('custom-work-time-end-sound')], 'tick');
     player.loop = false;
     player.play();
 }
