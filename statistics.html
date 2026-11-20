@@ -458,7 +458,25 @@
             }).join(''));
             $("#stats-total").html('<span>' + escapeHtml(i18n.__('statistics-time-sum')) + '</span> ' +
                 '<span class="legend-value' + (isRtl ? ' rtl-timer' : '') + '">' + escapeHtml(getStyledTime(sum)) + '</span>');
+            fitStatsLayout();
         }
+
+        // Long labels or large totals can be wider than the window. The legend then first narrows
+        // its column gap, then puts each value under its label, instead of letting text spill.
+        function overflows(el) {
+            return el.scrollWidth > el.clientWidth + 0.5;
+        }
+
+        function fitStatsLayout() {
+            const legend = document.getElementById("stats-breakdown");
+            legend.classList.remove("is-tight", "is-stacked");
+            const spills = () => [...legend.children].some(overflows) || overflows(legend);
+            if (legend.offsetParent === null || !spills()) return;
+            legend.classList.add("is-tight");
+            if (spills()) legend.classList.replace("is-tight", "is-stacked");
+        }
+
+        window.addEventListener("resize", fitStatsLayout);
 
         function switchMode(mode) {
             statisticsMode = mode;

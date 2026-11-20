@@ -1859,6 +1859,26 @@ label.focus-toggle:has(input:disabled) .focuser {
     opacity: .45;
 }
 
+/* set by fitStatsLayout() when the legend is wider than the window: first a narrower gap,
+   then each value under its label */
+.stats-legend.is-tight {
+    column-gap: 14px;
+}
+
+.stats-legend.is-stacked .legend-item {
+    display: grid;
+    grid-template-columns: 7px max-content;
+    justify-content: start;
+    justify-items: start;
+    column-gap: 7px;
+    row-gap: 1px;
+    text-align: start;
+}
+
+.stats-legend.is-stacked .legend-value {
+    grid-column: 2;
+}
+
 .stats-total {
     margin-top: 16px;
     color: var(--ink-2);
