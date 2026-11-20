@@ -446,7 +446,10 @@
             $("#stats-view").toggleClass("is-empty", empty);
             $("#stats-empty-text").text(statisticsMode === 'today' ? i18n.__('stats-empty-today') : i18n.__('stats-empty'));
             $("#statistics-graph").toggle(!empty && !!chart);
-            if (empty) return;
+            if (empty) {
+                fitStatsLayout();
+                return;
+            }
 
             if (chart) drawBars(chart.labels, chartSeries(chart.work, chart.rest, chart.onlyRest, chart.positive), chart.current);
 
@@ -461,13 +464,20 @@
             fitStatsLayout();
         }
 
-        // Long labels or large totals can be wider than the window. The legend then first narrows
-        // its column gap, then puts each value under its label, instead of letting text spill.
+        // Long labels or large totals can be wider than the window. The period tabs then tighten
+        // their padding, and the legend first narrows its column gap, then puts each value under
+        // its label, instead of letting text spill or wrap a tab onto a second row.
         function overflows(el) {
             return el.scrollWidth > el.clientWidth + 0.5;
         }
 
         function fitStatsLayout() {
+            const bar = document.getElementById("time-statistics-sub-bar");
+            bar.classList.remove("is-tight");
+            const tabs = bar.querySelectorAll(".pill-tab");
+            const wraps = () => tabs.length > 0 && tabs[tabs.length - 1].offsetTop > tabs[0].offsetTop + 2;
+            if (bar.offsetParent !== null && wraps()) bar.classList.add("is-tight");
+
             const legend = document.getElementById("stats-breakdown");
             legend.classList.remove("is-tight", "is-stacked");
             const spills = () => [...legend.children].some(overflows) || overflows(legend);

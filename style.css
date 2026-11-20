@@ -1692,6 +1692,7 @@ label.focus-toggle:has(input:disabled) .focuser {
 
 #time-statistics-sub-bar {
     top: 15.5%;
+    width: calc(100% - 16px);
     min-height: 0;
 }
 
@@ -1723,6 +1724,12 @@ label.focus-toggle:has(input:disabled) .focuser {
 #time-statistics-sub-bar .pill-tab.is-current {
     color: var(--ink) !important;
     font-weight: 600;
+}
+
+/* set by fitStatsLayout() when the five tabs would not fit on one row */
+#time-statistics-sub-bar.is-tight .pill-tab {
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 /* back sits in the tab row instead of the bottom corner */
