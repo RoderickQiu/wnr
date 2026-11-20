@@ -23,7 +23,7 @@ let timingData = new Store({ name: 'timing-data' });//just contains timing cache
 
 isInDark();
 
-const languageList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'],//locale code
+const languageList = require('./language').LANGUAGE_CODES,//locale code
     languageNameList = ['English', '简体中文', '正體中文', '한국어', 'العربية', 'Français'],//real name
     isChinese = store.get("i18n").indexOf("zh") !== -1;
 

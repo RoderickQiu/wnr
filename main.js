@@ -24,6 +24,7 @@ const { persistSanitizedPredefinedTasks } = require('./predefined-tasks');
 const getAlarmtipDurationMs = require('./inactivity-duration');
 const { getLanguageValue } = require('./update-language');
 const { getSettingsWindowWidth } = require('./settings-window');
+const { LANGUAGE_CODES, resolveLanguage } = require('./language');
 
 //keep a global reference of the objects, or the window will be closed automatically when the garbage collecting.
 let win = null, settingsWin = null, aboutWin = null, tourWin = null, floatingWin = null, externalTitleWin = null,
@@ -56,7 +57,7 @@ let localExitFallbackInProgress = false;
 let pendingDialogAction = { type: 'none', payload: null };
 
 let months = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'jul', 'aug', 'sep', 'oct', 'nov', 'dec'];
-let languageCodeList = ['en', 'zh-CN', 'zh-TW', 'ko', 'ar', 'fr'], i//locale code
+let languageCodeList = LANGUAGE_CODES, i//locale code
 let ratioList = [0.75, 0.9, 1, 1.1, 1.25], ratio = 1;//zoom ratio
 let notificationNamesList = ['work-time-end', 'work-time-end-msg', 'rest-time-end', 'rest-time-end-msg', 'all-task-end', 'all-task-end-msg'];
 
@@ -66,6 +67,15 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';//prevent seeing this
 
 //use native notification, declare package.json/build/appId beforehand
 app.on('ready', () => app.setAppUserModelId('com.scrisstudio.wnr'));
+
+// The stored language is always one wnr ships, so the Languages selector can show it. A first run
+// (or the old 'zh' value) takes it from the system; an unsupported code falls back to English.
+function normalizeStoredLanguage() {
+    let stored = store.get("i18n");
+    if (stored === undefined || stored === 'zh' || languageCodeList.indexOf(stored) === -1)
+        store.set("i18n", resolveLanguage(stored === undefined || stored === 'zh' ? app.getLocale() : stored));
+    isChinese = store.get("i18n").indexOf("zh") !== -1;
+}
 
 function completeStartupSyncPhase() {
     startupSyncPending = false;
@@ -541,37 +551,13 @@ app.on('ready', async () => {
             return `${ value }-[${ locale }]`;
         }
     });
-    if (store.get("i18n") === undefined) {
-        let lang = app.getLocale();
-        if (lang.indexOf("zh") !== -1) {
-            if ((lang.charAt(3) === 'T' && lang.charAt(4) === 'W') && (lang.charAt(3) === 'H' && lang.charAt(4) === 'K')) lang = 'zh-TW';
-            else lang = 'zh-CN';
-            isChinese = true;
-        } else {
-            for (i in languageCodeList) {
-                if (lang.indexOf(languageCodeList[i]) !== -1) {
-                    lang = languageCodeList[i];
-                    break;
-                }
-            }
-            isChinese = false;
-        }
-        store.set('i18n', lang);
-    } else {
-        isChinese = store.get("i18n").indexOf("zh") !== -1;
-        if (store.get("i18n") === 'zh') {
-            let lang = app.getLocale();
-            if ((lang.charAt(3) === 'T' && lang.charAt(4) === 'W') && (lang.charAt(3) === 'H' && lang.charAt(4) === 'K')) lang = 'zh-TW';
-            else lang = 'zh-CN';
-            store.set('i18n', lang);
-        }
-    }
+    normalizeStoredLanguage();
     i18n.setLocale(store.get("i18n"));//set the locale
 
     //prevent wnr from running more than one instance
 
     await webDavSyncService.performStartupSync();
-    isChinese = store.get("i18n").indexOf("zh") !== -1;
+    normalizeStoredLanguage();
     i18n.setLocale(store.get("i18n"));
 
     // Auto-isolate Arabic i18n output so Latin runs render correctly
