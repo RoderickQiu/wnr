@@ -14,7 +14,7 @@
 	"rest-time-end": "Votre temps de repos est terminé !",
 	"rest-time-end-msg": "Au travail !",
 	"all-task-end": "Planning terminé !",
-	"all-task-end-msg": "Vous pouvez maintenant définir un autre planning.",
+	"all-task-end-msg": "Vous pouvez lancer un nouveau planning.",
 	"update": "Nouvelle version disponible !",
 	"update-msg": "Une nouvelle version de wnr est disponible. \rPour profiter pleinement de wnr, il est recommandé de télécharger et d'installer la mise à jour.",
 	"update-content": "Nouveautés : ",

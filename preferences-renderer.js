@@ -599,51 +599,51 @@ function domString(type) {
         case "personalization-notification":
             appendDOMString = `
             <div class="w-100 row">
-            <div class="col-5">
+            <div class="col-12">
             <label class="personalization-notification-label settings-msg settings-msg text-muted" id="work-time-end"></label>
             </div>
-            <div class="col-7 text-right">
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="work-time-end"
                    onchange="personalizedNotification()"
                    type="text" />
             </div>
-            <div class="col-5">
+            <div class="col-12">
             <label class="personalization-notification-label settings-msg settings-msg text-muted"
                          id="work-time-end-msg"></label>
             </div>
-            <div class="col-7 text-right">             
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="work-time-end-msg"
                    onchange="personalizedNotification()"
                    type="text" />
             </div>
-            <div class="col-5">
+            <div class="col-12">
             <label class="personalization-notification-label settings-msg text-muted" id="rest-time-end"></label>
             </div>
-            <div class="col-7 text-right">  
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="rest-time-end"
                    onchange="personalizedNotification()"
                    type="text" />
             </div>
-            <div class="col-5">
+            <div class="col-12">
             <label class="personalization-notification-label settings-msg text-muted" id="rest-time-end-msg"></label>
             </div>
-            <div class="col-7 text-right">  
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="rest-time-end-msg"
                    onchange="personalizedNotification()"
                    type="text" />
             </div>
-            <div class="col-5">  
+            <div class="col-12">  
             <label class="personalization-notification-label settings-msg text-muted" id="all-task-end"></label>
             </div>
-            <div class="col-7 text-right">  
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="all-task-end"
                    onchange="personalizedNotification()"
                    type="text" />
             </div>
-            <div class="col-5"> 
+            <div class="col-12"> 
             <label class="personalization-notification-label settings-msg text-muted" id="all-task-end-msg"></label> 
             </div>
-            <div class="col-7 text-right"> 
+            <div class="col-12">
             <input class="personalization-notification" maxlength="64" name="all-task-end-msg"
                    onchange="personalizedNotification()"
                    type="text" />

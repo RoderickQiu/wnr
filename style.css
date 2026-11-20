@@ -561,7 +561,6 @@ li input:nth-last-child(4)::after {
     white-space: normal;
 }
 
-
 #dropdown-tasks {
     margin-bottom: 10px;
 }
@@ -911,9 +910,16 @@ body.settings-scrolled .settings-back-to-top {
     padding-inline-end: 1rem;
 }
 
+/* as wide as its column, so the default text shown as the placeholder is not cut */
 #settings-container .personalization-notification {
-    width: 150px;
+    width: 100%;
     margin-bottom: 6px;
+}
+
+/* each label sits above its input, on the reading side */
+#settings-container .personalization-notification-label {
+    display: block;
+    text-align: start;
 }
 
 #settings-container .hotkey-set-input {
