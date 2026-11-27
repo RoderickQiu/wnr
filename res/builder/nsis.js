@@ -41,7 +41,8 @@ const config = {
             // because electron-builder treats makensis warnings as errors.
             "ar-SA",
             "fr-FR",
-            "vi-VN"
+            "vi-VN",
+            "es-ES"
         ],
         "guid": "B5BF1EA0-B474-40D3-B31E-6AD92477CCAF",
         "license": "LICENSE",
