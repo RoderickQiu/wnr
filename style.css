@@ -544,8 +544,21 @@ li input:nth-last-child(4)::after {
     color: var(--rest);
 }
 
+/* the form is as wide as the Start button (256px plus the container padding), so the task picker
+   lines up with the button in every language; a longer focus toggle runs past the right edge
+   instead of pushing the whole form to the left */
 #set {
-    transform: translate(5px, -8px);
+    flex: none;
+    width: 286px;
+    transform: translateY(-8px);
+}
+
+#set .field-block {
+    white-space: nowrap;
+}
+
+#set .field-label, #set .home-coupling {
+    white-space: normal;
 }
 
 #dropdown-tasks {
@@ -897,9 +910,16 @@ body.settings-scrolled .settings-back-to-top {
     padding-inline-end: 1rem;
 }
 
+/* as wide as its column, so the default text shown as the placeholder is not cut */
 #settings-container .personalization-notification {
-    width: 150px;
+    width: 100%;
     margin-bottom: 6px;
+}
+
+/* each label sits above its input, on the reading side */
+#settings-container .personalization-notification-label {
+    display: block;
+    text-align: start;
 }
 
 #settings-container .hotkey-set-input {
@@ -1382,6 +1402,11 @@ body.settings-scrolled .settings-back-to-top {
     -webkit-app-region: no-drag;
 }
 
+/* a long translation wraps before a separator, never after it */
+#index-topbar .topbar-item {
+    white-space: nowrap;
+}
+
 #top-bar a.is-current {
     font-weight: 500 !important;
 }
@@ -1692,6 +1717,7 @@ label.focus-toggle:has(input:disabled) .focuser {
 
 #time-statistics-sub-bar {
     top: 15.5%;
+    width: calc(100% - 16px);
     min-height: 0;
 }
 
@@ -1723,6 +1749,12 @@ label.focus-toggle:has(input:disabled) .focuser {
 #time-statistics-sub-bar .pill-tab.is-current {
     color: var(--ink) !important;
     font-weight: 600;
+}
+
+/* set by fitStatsLayout() when the five tabs would not fit on one row */
+#time-statistics-sub-bar.is-tight .pill-tab {
+    padding-right: 5px;
+    padding-left: 5px;
 }
 
 /* back sits in the tab row instead of the bottom corner */
@@ -1857,6 +1889,26 @@ label.focus-toggle:has(input:disabled) .focuser {
 
 .legend-item.is-zero {
     opacity: .45;
+}
+
+/* set by fitStatsLayout() when the legend is wider than the window: first a narrower gap,
+   then each value under its label */
+.stats-legend.is-tight {
+    column-gap: 14px;
+}
+
+.stats-legend.is-stacked .legend-item {
+    display: grid;
+    grid-template-columns: 7px max-content;
+    justify-content: start;
+    justify-items: start;
+    column-gap: 7px;
+    row-gap: 1px;
+    text-align: start;
+}
+
+.stats-legend.is-stacked .legend-value {
+    grid-column: 2;
 }
 
 .stats-total {

@@ -297,7 +297,7 @@
 	"focus-when-resting": "Focus when resting",
 	"set-as-default-task": "Set this as default",
 	"predefined-tasks-settings-tip": "The plan with the red title is the default plan. If infinity mode is on, the loops settings will be ignored. ",
-	"predefined-tasks-settings-tip-part-1": "Firstly , work for ",
+	"predefined-tasks-settings-tip-part-1": "Firstly, work for ",
 	"predefined-tasks-settings-tip-part-2": ", then rest for ",
 	"predefined-tasks-settings-tip-part-3": "; loop for ",
 	"languages": "Languages",

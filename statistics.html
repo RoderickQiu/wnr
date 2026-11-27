@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <script src="view-transition.js"></script>
     <title>wnr</title>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
@@ -320,7 +321,7 @@
                         html += "<a class='recap-delete' href='#' data-timestamp='" + Number(entry.timestamp) + "' title='" + escapeHtml(i18n.__('recap-delete-entry')) + "'>\u00d7</a>";
                         if (entry.title) html += "<div class='recap-title'>" + escapeHtml(entry.title) + "</div>";
                         if (entry.note) html += "<div class='recap-note'>" + escapeHtml(entry.note) + "</div>";
-                        html += "<time class='recap-time'>" + escapeHtml(new Date(entry.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })) + "</time>";
+                        html += "<time class='recap-time'>" + escapeHtml(new Date(entry.timestamp).toLocaleTimeString(store.get("i18n"), { hour: '2-digit', minute: '2-digit' })) + "</time>";
                         html += "</article>";
                     });
                     html += "</section>";
@@ -445,7 +446,10 @@
             $("#stats-view").toggleClass("is-empty", empty);
             $("#stats-empty-text").text(statisticsMode === 'today' ? i18n.__('stats-empty-today') : i18n.__('stats-empty'));
             $("#statistics-graph").toggle(!empty && !!chart);
-            if (empty) return;
+            if (empty) {
+                fitStatsLayout();
+                return;
+            }
 
             if (chart) drawBars(chart.labels, chartSeries(chart.work, chart.rest, chart.onlyRest, chart.positive), chart.current);
 
@@ -457,7 +461,32 @@
             }).join(''));
             $("#stats-total").html('<span>' + escapeHtml(i18n.__('statistics-time-sum')) + '</span> ' +
                 '<span class="legend-value' + (isRtl ? ' rtl-timer' : '') + '">' + escapeHtml(getStyledTime(sum)) + '</span>');
+            fitStatsLayout();
         }
+
+        // Long labels or large totals can be wider than the window. The period tabs then tighten
+        // their padding, and the legend first narrows its column gap, then puts each value under
+        // its label, instead of letting text spill or wrap a tab onto a second row.
+        function overflows(el) {
+            return el.scrollWidth > el.clientWidth + 0.5;
+        }
+
+        function fitStatsLayout() {
+            const bar = document.getElementById("time-statistics-sub-bar");
+            bar.classList.remove("is-tight");
+            const tabs = bar.querySelectorAll(".pill-tab");
+            const wraps = () => tabs.length > 0 && tabs[tabs.length - 1].offsetTop > tabs[0].offsetTop + 2;
+            if (bar.offsetParent !== null && wraps()) bar.classList.add("is-tight");
+
+            const legend = document.getElementById("stats-breakdown");
+            legend.classList.remove("is-tight", "is-stacked");
+            const spills = () => [...legend.children].some(overflows) || overflows(legend);
+            if (legend.offsetParent === null || !spills()) return;
+            legend.classList.add("is-tight");
+            if (spills()) legend.classList.replace("is-tight", "is-stacked");
+        }
+
+        window.addEventListener("resize", fitStatsLayout);
 
         function switchMode(mode) {
             statisticsMode = mode;

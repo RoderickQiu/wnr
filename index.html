@@ -2,6 +2,7 @@
 <html>
 
 <head>
+    <script src="view-transition.js"></script>
     <title>wnr</title>
     <meta charset="UTF-8" />
     <meta http-equiv="Content-Type" content="text/html" />
@@ -51,7 +52,14 @@
             ipc.send("tourguide");
         }
 
-        const shi = require("node-shi");
+        // node-shi reads Simplified Chinese units only, so Traditional 小時 / 鐘頭 are mapped first
+        const shi = (function () {
+            const lib = require("node-shi");
+            return {
+                humanTimeParser: (raw, options) => lib.humanTimeParser(
+                    raw == null ? raw : String(raw).replace(/小時|鐘頭/g, "小时"), options)
+            };
+        })();
 
         var isForceLongFocus = false;
 
@@ -262,13 +270,13 @@
             <div class="extreme-small text-grey text-center" id="index-topbar">
                 <b>
                     <script>document.write(i18n.__('dropdown-normal-timing'));</script>
-                </b>&nbsp;|
+                </b><span class="topbar-item">&nbsp;|
                 <a href="javascript:liberalTiming()">
                     <script>document.write(i18n.__('dropdown-stopwatch-mode'));</script>
-                </a>&nbsp;|
+                </a></span><span class="topbar-item">&nbsp;|
                 <a href="javascript:onlyRest('in')">
                     <script>document.write(i18n.__('dropdown-simple-countdown'));</script>
-                </a>
+                </a></span>
             </div>
             <div class="dropdown dropdown-default" id="dropdown-tasks">
                 <a class="btn btn-outline-secondary dropdown-toggle" id="dropdown-menu-button"
