@@ -52,12 +52,12 @@
             ipc.send("tourguide");
         }
 
-        // node-shi reads Simplified Chinese units only, so Traditional 小時 / 鐘頭 are mapped first
+        // decimal commas and Traditional 小時 / 鐘頭 are normalized before node-shi reads them
+        const { normalizeDurationText } = require("./duration");
         const shi = (function () {
             const lib = require("node-shi");
             return {
-                humanTimeParser: (raw, options) => lib.humanTimeParser(
-                    raw == null ? raw : String(raw).replace(/小時|鐘頭/g, "小时"), options)
+                humanTimeParser: (raw, options) => lib.humanTimeParser(normalizeDurationText(raw), options)
             };
         })();
 
@@ -155,7 +155,7 @@
                         + "&work-time-focused=" + document.getElementById("focus-work-set").checked
                         + "&rest-time-focused=" + document.getElementById("focus-rest-set").checked
                         + "&restored=false"
-                        + "&times=0&continueloop=false&discount=" + $("#first-work-discount").val();
+                        + "&times=0&continueloop=false&discount=" + normalizeDurationText($("#first-work-discount").val());
         }
 
         ipc.on("force-long-focus-granted", function () {
