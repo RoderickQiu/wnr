@@ -15,8 +15,10 @@ test('shipped languages match by primary subtag; anything else is English', () =
     assert.equal(resolveLanguage('fr-CA'), 'fr');
     assert.equal(resolveLanguage('ko-KR'), 'ko');
     assert.equal(resolveLanguage('ar-EG'), 'ar');
+    assert.equal(resolveLanguage('es-MX'), 'es');
+    assert.equal(resolveLanguage('es_419'), 'es');
     assert.equal(resolveLanguage('en-GB'), 'en');
     assert.equal(resolveLanguage('zh-CN'), 'zh-CN');
-    for (const locale of ['de', 'de-DE', 'ja', 'pt-BR', 'es', '', undefined, null, 42])
+    for (const locale of ['de', 'de-DE', 'ja', 'pt-BR', '', undefined, null, 42])
         assert.equal(resolveLanguage(locale), 'en', String(locale));
 });
